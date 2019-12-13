@@ -19,7 +19,7 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     steps:
       - name: install zsh on linux
-        run: sudo apt-get update && sudo apt-get install zsh -y
+        run: sudo apt-get install zsh -y
         if: matrix.os == 'ubuntu'
 
       - uses: actions/checkout@v1.0.0
