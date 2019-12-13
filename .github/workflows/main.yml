@@ -18,9 +18,9 @@ jobs:
     name: bootstrap
     runs-on: ${{ matrix.os }}-latest
     steps:
-      - name: install zsh on linux
-        run: sudo apt-get install zsh -y
-        if: matrix.os == 'ubuntu'
+      - name: install bash on mac
+        run: brew install bash
+        if: matrix.os == 'macos'
 
       - uses: actions/checkout@v1.0.0
 
