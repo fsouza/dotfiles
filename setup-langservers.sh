@@ -26,6 +26,7 @@ function opam_setup {
 		ocamlfind \
 		yojson \
 		stdlib-shims \
+		ppx_yojson_conv_lib \
 		menhir
 }
 
