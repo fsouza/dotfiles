@@ -19,7 +19,7 @@ update-spell:
 		curl -sLO http://ftp.vim.org/vim/runtime/spell/en.utf-8.spl && \
 		curl -sLO http://ftp.vim.org/vim/runtime/spell/pt.utf-8.spl
 
-.PHONY
+.PHONY: plug-setup
 plug-setup:
 	if which nvim; then nvim --headless +'PlugInstall|qa' +cq; fi
 
