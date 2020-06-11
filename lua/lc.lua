@@ -17,10 +17,12 @@ function M.setup()
 
   lsp.bashls.setup({
     cmd = { "vim-nodels", "bash-language-server", "start" };
+    on_attach = on_attach;
   })
 
   lsp.cssls.setup({
     cmd = { "vim-nodels", "css-laguageserver", "--stdio" };
+    on_attach = on_attach;
   })
 
   lsp.gopls.setup({
@@ -32,18 +34,22 @@ function M.setup()
         ST1000 = false;
       };
     };
+    on_attach = on_attach;
   })
 
   lsp.html.setup({
     cmd = { "vim-nodels", "html-langserver", "--stdio" };
+    on_attach = on_attach;
   })
 
   lsp.jsonls.setup({
     cmd = { "vim-nodels", "vscode-json-languageserver", "--stdio" };
+    on_attach = on_attach;
   })
 
   lsp.ocamllsp.setup({
     cmd = { "vim-ocaml-lsp" };
+    on_attach = on_attach;
   })
 
   lsp.pyls.setup({
@@ -60,12 +66,16 @@ function M.setup()
       };
     };
     on_attach = on_attach;
+    on_attach = on_attach;
   })
 
-  lsp.rust_analyzer.setup({})
+  lsp.rust_analyzer.setup({
+    on_attach = on_attach;
+  })
 
   lsp.tsserver.setup({
     cmd = { "vim-nodels", "typescript-language-server", "--stdio" };
+    on_attach = on_attach;
   })
 
   lsp.vimls.setup({
@@ -75,6 +85,7 @@ function M.setup()
 
   lsp.yamlls.setup({
     cmd = { "vim-nodels", "yaml-language-server", "--stdio" };
+    on_attach = on_attach;
   })
 end
 
