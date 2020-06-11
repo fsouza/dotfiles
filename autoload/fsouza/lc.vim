@@ -1,5 +1,5 @@
 function fsouza#lc#LC_attached(enable_autoformat)
-	if get(g:, "LC_enable_mappings", 1) != 0 && get(b:, "LC_enable_mappings", 1) != 0
+	if get(g:, 'LC_enable_mappings', 1) != 0 && get(b:, 'LC_enable_mappings', 1) != 0
 		setlocal omnifunc=v:lua.vim.lsp.omnifunc
 
 		nmap <silent> <buffer> <localleader>gd <cmd>lua vim.lsp.buf.definition()<CR>
@@ -24,7 +24,7 @@ function fsouza#lc#LC_attached(enable_autoformat)
 endfunction
 
 function s:lc_autoformat()
-	if get(g:, "LC_autoformat", 1) != 0 && get(b:, "LC_autoformat", 1) != 0
-		lua require("lc").formatting_sync({timeout_ms=500})
+	if get(g:, 'LC_autoformat', 1) != 0 && get(b:, 'LC_autoformat', 1) != 0
+		lua require('lc').formatting_sync({timeout_ms=500})
 	endif
 endfunction

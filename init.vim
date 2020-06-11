@@ -1,6 +1,6 @@
 nnoremap <Space> <nop>
-let mapleader = " "
-let maplocalleader = " "
+let mapleader = ' '
+let maplocalleader = ' '
 
 let $VIMHOME = resolve(expand('<sfile>:p:h'))
 let $PATH = $VIMHOME.'/bin:'.$PATH

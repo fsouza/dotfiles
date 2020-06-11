@@ -1,1 +1,1 @@
-lua require("lc").setup()
+lua require('lc').setup()
