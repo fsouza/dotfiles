@@ -66,7 +66,6 @@ function M.setup()
       };
     };
     on_attach = on_attach;
-    on_attach = on_attach;
   })
 
   lsp.rust_analyzer.setup({
