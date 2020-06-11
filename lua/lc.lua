@@ -1,17 +1,29 @@
 local M = {}
 
+local function on_attach(client, _)
+  local all_clients = vim.lsp.get_active_clients()
+  for _, c in pairs(all_clients) do
+    if c.name == client.name then
+      client = c
+    end
+  end
+
+  local enable_autoformat = client.resolved_capabilities.document_formatting
+  vim.api.nvim_call_function("fsouza#lc#LC_attached", { enable_autoformat })
+end
+
 function M.setup()
-  local lsp = require "nvim_lsp"
+  local lsp = require("nvim_lsp")
 
-  lsp.bashls.setup {
+  lsp.bashls.setup({
     cmd = { "vim-nodels", "bash-language-server", "start" };
-  }
+  })
 
-  lsp.cssls.setup {
+  lsp.cssls.setup({
     cmd = { "vim-nodels", "css-laguageserver", "--stdio" };
-  }
+  })
 
-  lsp.gopls.setup {
+  lsp.gopls.setup({
     init_options = {
       deepCompletion = false;
       staticcheck = true;
@@ -20,21 +32,21 @@ function M.setup()
         ST1000 = false;
       };
     };
-  }
+  })
 
-  lsp.html.setup {
+  lsp.html.setup({
     cmd = { "vim-nodels", "html-langserver", "--stdio" };
-  }
+  })
 
-  lsp.jsonls.setup {
+  lsp.jsonls.setup({
     cmd = { "vim-nodels", "vscode-json-languageserver", "--stdio" };
-  }
+  })
 
-  lsp.ocamllsp.setup {
+  lsp.ocamllsp.setup({
     cmd = { "vim-ocaml-lsp" };
-  }
+  })
 
-  lsp.pyls.setup {
+  lsp.pyls.setup({
     cmd = { "python", "-m", "pyls" };
     settings = {
       pyls = {
@@ -47,28 +59,27 @@ function M.setup()
         };
       };
     };
-  }
+    on_attach = on_attach;
+  })
 
-  lsp.rust_analyzer.setup{}
+  lsp.rust_analyzer.setup({})
 
-  lsp.tsserver.setup {
+  lsp.tsserver.setup({
     cmd = { "vim-nodels", "typescript-language-server", "--stdio" };
-  }
+  })
 
-  lsp.vimls.setup {
+  lsp.vimls.setup({
     cmd = { "vim-nodels",  "vim-language-server", "--stdio" };
-  }
+    on_attach = on_attach;
+  })
 
-  lsp.yamlls.setup {
+  lsp.yamlls.setup({
     cmd = { "vim-nodels", "yaml-language-server", "--stdio" };
-  }
+  })
 end
 
 -- TODO: nvim-lsp will eventually support this, so once the pending PR is
 -- merged, we should delete this code.
---
--- We also need something better than pcall (perhaps only set the autocmd on
--- servers that have formatting capabilities).
 local function formatting_params(options)
   local sts = vim.bo.softtabstop
   options = vim.tbl_extend("keep", options or {}, {
@@ -82,13 +93,11 @@ local function formatting_params(options)
 end
 
 function M.formatting_sync(options, timeout_ms)
-  pcall(function ()
-    local params = formatting_params(options)
-    local result = vim.lsp.buf_request_sync(0, "textDocument/formatting", params, timeout_ms)
-    if not result then return end
-    result = result[1].result
-    vim.lsp.util.apply_text_edits(result)
-  end)
+  local params = formatting_params(options)
+  local result = vim.lsp.buf_request_sync(0, "textDocument/formatting", params, timeout_ms)
+  if not result then return end
+  result = result[1].result
+  vim.lsp.util.apply_text_edits(result)
 end
 
 function M.nvim_lsp_enabled_for_current_ft()
@@ -97,21 +106,7 @@ function M.nvim_lsp_enabled_for_current_ft()
   for _ in pairs(clients) do
     length = length + 1
   end
-  if length > 0 then
-    return true
-  end
-
-  local ft = vim.bo.filetype
-  local configs = require "nvim_lsp/configs"
-  for _, config in pairs(configs) do
-    for _, config_ft in pairs(config["document_config"]["default_config"]["filetypes"]) do
-      if config_ft == ft then
-        return true
-      end
-    end
-  end
-
-  return false
+  return length > 0
 end
 
 return M
