@@ -10,8 +10,6 @@ function s:lc_autoformat()
 	endif
 endfunction
 
-command! Whatever call s:lc_autoformat()
-
 function s:lc_init()
 	if s:nvim_lsp_enabled_for_current_ft() && get(g:, 'LC_enable_mappings', 1) != 0 && get(b:, 'LC_enable_mappings', 1) != 0
 		setlocal omnifunc=v:lua.vim.lsp.omnifunc
