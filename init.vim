@@ -40,7 +40,7 @@ filetype plugin indent on
 
 call mkdir($VIMHOME.'/undo-dir', 'p')
 
-set completeopt=menu,longest
+set completeopt=menu,longest,noselect
 set hidden noshowcmd
 set laststatus=0
 set ruler rulerformat=%-14.(%l,%c\ \ \ %o%)
