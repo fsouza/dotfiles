@@ -2,12 +2,9 @@ nnoremap <Space> <nop>
 let mapleader = " "
 let maplocalleader = " "
 
-let $VIMHOME = expand('~/.config/nvim')
-if !isdirectory($VIMHOME)
-	let $VIMHOME = expand('~/.vim')
-endif
-
+let $VIMHOME = resolve(expand('<sfile>:p:h'))
 let $PATH = $VIMHOME.'/bin:'.$PATH
+
 if isdirectory($VIRTUALENVS)
 	let $PATH = $VIRTUALENVS.'/vim/bin:'.$PATH
 	let g:python3_host_prog = $VIRTUALENVS.'/vim/bin/python'
