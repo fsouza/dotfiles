@@ -1,6 +1,6 @@
 function s:lc_autoformat()
 	if get(g:, "LC_autoformat", 1) != 0 && get(b:, "LC_autoformat", 1) != 0
-		lua require"lc".formatting_sync({timeout_ms=500})
+		lua require("lc").formatting_sync({timeout_ms=500})
 	endif
 endfunction
 
