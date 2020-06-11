@@ -1,17 +1,17 @@
-lua require'lc'.setup()
+lua require("lc").setup()
 
 function s:nvim_lsp_enabled_for_current_ft()
-	return 1
+	return luaeval("require(\"lc\").nvim_lsp_enabled_for_current_ft()")
 endfunction
 
 function s:lc_autoformat()
-	if get(g:, 'LC_autoformat', 1) != 0 && get(b:, 'LC_autoformat', 1) != 0
-		lua require'lc'.formatting_sync{timeout_ms=500}
+	if get(g:, "LC_autoformat", 1) != 0 && get(b:, "LC_autoformat", 1) != 0
+		lua require"lc".formatting_sync{timeout_ms=500}
 	endif
 endfunction
 
 function s:lc_init()
-	if s:nvim_lsp_enabled_for_current_ft() && get(g:, 'LC_enable_mappings', 1) != 0 && get(b:, 'LC_enable_mappings', 1) != 0
+	if s:nvim_lsp_enabled_for_current_ft() && get(g:, "LC_enable_mappings", 1) != 0 && get(b:, "LC_enable_mappings", 1) != 0
 		setlocal omnifunc=v:lua.vim.lsp.omnifunc
 
 		nmap <silent> <buffer> <localleader>gd <cmd>lua vim.lsp.buf.definition()<CR>
