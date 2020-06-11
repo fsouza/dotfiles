@@ -17,6 +17,8 @@ function fsouza#lc#LC_attached(enable_autoformat)
 		nmap <silent> <buffer> <localleader>T <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 		nmap <silent> <buffer> <localleader>t <cmd>lua vim.lsp.buf.document_symbol()<CR>
 		nmap <silent> <buffer> <localleader>q <cmd>lua vim.lsp.buf.references()<CR>
+		nmap <silent> <buffer> <localleader>cc <cmd>lua vim.lsp.buf.code_action()<CR>
+		nmap <silent> <buffer> <localleader>d <cmd>lua vim.lsp.util.show_line_diagnostics()<CR>
 
 		if a:enable_autoformat
 			autocmd BufWritePre <buffer> call s:lc_autoformat()
