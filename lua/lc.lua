@@ -1,18 +1,18 @@
 local M = {}
 
-local function on_attach(client, _)
-  local all_clients = vim.lsp.get_active_clients()
-  for _, c in pairs(all_clients) do
-    if c.name == client.name then
-      client = c
+function M.setup()
+  local function on_attach(client, _)
+    local all_clients = vim.lsp.get_active_clients()
+    for _, c in pairs(all_clients) do
+      if c.name == client.name then
+        client = c
+      end
     end
+
+    local enable_autoformat = client.resolved_capabilities.document_formatting
+    vim.api.nvim_call_function("fsouza#lc#LC_attached", { enable_autoformat })
   end
 
-  local enable_autoformat = client.resolved_capabilities.document_formatting
-  vim.api.nvim_call_function("fsouza#lc#LC_attached", { enable_autoformat })
-end
-
-function M.setup()
   local lsp = require("nvim_lsp")
 
   lsp.bashls.setup({
@@ -109,15 +109,6 @@ function M.formatting_sync(options, timeout_ms)
   if not result then return end
   result = result[1].result
   vim.lsp.util.apply_text_edits(result)
-end
-
-function M.nvim_lsp_enabled_for_current_ft()
-  local clients = vim.lsp.buf_get_clients()
-  local length = 0
-  for _ in pairs(clients) do
-    length = length + 1
-  end
-  return length > 0
 end
 
 return M
