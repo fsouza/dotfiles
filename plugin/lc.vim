@@ -1,1 +1,3 @@
-lua require('lc').setup()
+if has('nvim')
+	lua require('lc').setup()
+end
