@@ -16,12 +16,6 @@ endif
 
 call plug#begin($VIMHOME.'/plugged')
 Plug 'editorconfig/editorconfig-vim'
-Plug 'fsouza/coc.nvim',
-			\ {
-			\ 'do': 'npx yarn install --frozen-lockfile',
-			\ 'for': ['sh', 'c', 'cpp', 'css', 'dockerfile', 'go', 'gomod', 'html', 'javascript', 'json', 'markdown', 'ocaml', 'python', 'rust', 'typescript', 'vim', 'yaml'],
-			\ 'on': 'CocUpdateSync'
-			\ }
 Plug 'godlygeek/tabular'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -29,6 +23,7 @@ Plug 'justinmk/vim-dirvish'
 Plug 'justinmk/vim-sneak'
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 Plug 'michaeljsmith/vim-indent-object'
+Plug 'neovim/nvim-lsp'
 Plug 'ocaml/vim-ocaml', { 'for': 'ocaml' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'tpope/vim-commentary'
