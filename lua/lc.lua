@@ -1,91 +1,93 @@
 local M = {}
 
 function M.setup()
-  local function on_attach(client, _)
-    local all_clients = vim.lsp.get_active_clients()
-    for _, c in pairs(all_clients) do
-      if c.name == client.name then
-        client = c
+  pcall(function ()
+    local function on_attach(client, _)
+      local all_clients = vim.lsp.get_active_clients()
+      for _, c in pairs(all_clients) do
+        if c.name == client.name then
+          client = c
+        end
       end
+
+      local enable_autoformat = client.resolved_capabilities.document_formatting
+      vim.api.nvim_call_function('fsouza#lc#LC_attached', { enable_autoformat })
     end
 
-    local enable_autoformat = client.resolved_capabilities.document_formatting
-    vim.api.nvim_call_function('fsouza#lc#LC_attached', { enable_autoformat })
-  end
+    local lsp = require('nvim_lsp')
 
-  local lsp = require('nvim_lsp')
+    lsp.bashls.setup({
+      cmd = { 'vim-nodels', 'bash-language-server', 'start' };
+      on_attach = on_attach;
+    })
 
-  lsp.bashls.setup({
-    cmd = { 'vim-nodels', 'bash-language-server', 'start' };
-    on_attach = on_attach;
-  })
+    lsp.cssls.setup({
+      cmd = { 'vim-nodels', 'css-laguageserver', '--stdio' };
+      on_attach = on_attach;
+    })
 
-  lsp.cssls.setup({
-    cmd = { 'vim-nodels', 'css-laguageserver', '--stdio' };
-    on_attach = on_attach;
-  })
-
-  lsp.gopls.setup({
-    init_options = {
-      deepCompletion = false;
-      staticcheck = true;
-      analyses = {
-        unusedparams = true;
-        ST1000 = false;
+    lsp.gopls.setup({
+      init_options = {
+        deepCompletion = false;
+        staticcheck = true;
+        analyses = {
+          unusedparams = true;
+          ST1000 = false;
+        };
       };
-    };
-    on_attach = on_attach;
-  })
+      on_attach = on_attach;
+    })
 
-  lsp.html.setup({
-    cmd = { 'vim-nodels', 'html-langserver', '--stdio' };
-    on_attach = on_attach;
-  })
+    lsp.html.setup({
+      cmd = { 'vim-nodels', 'html-langserver', '--stdio' };
+      on_attach = on_attach;
+    })
 
-  lsp.jsonls.setup({
-    cmd = { 'vim-nodels', 'vscode-json-languageserver', '--stdio' };
-    on_attach = on_attach;
-  })
+    lsp.jsonls.setup({
+      cmd = { 'vim-nodels', 'vscode-json-languageserver', '--stdio' };
+      on_attach = on_attach;
+    })
 
-  lsp.ocamllsp.setup({
-    cmd = { 'vim-ocaml-lsp' };
-    on_attach = on_attach;
-  })
+    lsp.ocamllsp.setup({
+      cmd = { 'vim-ocaml-lsp' };
+      on_attach = on_attach;
+    })
 
-  lsp.pyls.setup({
-    cmd = { 'python', '-m', 'pyls' };
-    settings = {
-      pyls = {
-        plugins = {
-          jedi_completion = {
-            enabled = true;
-            fuzzy = true;
-            include_params = false;
+    lsp.pyls.setup({
+      cmd = { 'python', '-m', 'pyls' };
+      settings = {
+        pyls = {
+          plugins = {
+            jedi_completion = {
+              enabled = true;
+              fuzzy = true;
+              include_params = false;
+            };
           };
         };
       };
-    };
-    on_attach = on_attach;
-  })
+      on_attach = on_attach;
+    })
 
-  lsp.rust_analyzer.setup({
-    on_attach = on_attach;
-  })
+    lsp.rust_analyzer.setup({
+      on_attach = on_attach;
+    })
 
-  lsp.tsserver.setup({
-    cmd = { 'vim-nodels', 'typescript-language-server', '--stdio' };
-    on_attach = on_attach;
-  })
+    lsp.tsserver.setup({
+      cmd = { 'vim-nodels', 'typescript-language-server', '--stdio' };
+      on_attach = on_attach;
+    })
 
-  lsp.vimls.setup({
-    cmd = { 'vim-nodels',  'vim-language-server', '--stdio' };
-    on_attach = on_attach;
-  })
+    lsp.vimls.setup({
+      cmd = { 'vim-nodels',  'vim-language-server', '--stdio' };
+      on_attach = on_attach;
+    })
 
-  lsp.yamlls.setup({
-    cmd = { 'vim-nodels', 'yaml-language-server', '--stdio' };
-    on_attach = on_attach;
-  })
+    lsp.yamlls.setup({
+      cmd = { 'vim-nodels', 'yaml-language-server', '--stdio' };
+      on_attach = on_attach;
+    })
+  end)
 end
 
 -- TODO: nvim-lsp will eventually support this, so once the pending PR is
