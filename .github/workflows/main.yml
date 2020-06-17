@@ -24,6 +24,7 @@ jobs:
 
       - name: install neovim nightly
         run: |
+          echo $PATH # debugging
           if [ "${{ matrix.os }}" = "ubuntu" ]; then
             suffix=linux64
           else
