@@ -97,9 +97,13 @@ local setup_lsp_diagnostics = function(ns)
 
   for _, level in pairs({''; 'Error'; 'Warning'; 'Information'; 'Hint'}) do
     local base_group = 'LspDiagnostics' .. level
-    local sign_group = base_group .. 'Sign'
-    nvim_set_hl(ns, base_group, diagnostics)
+    local default_group = 'LspDiagnosticsDefault' .. level
+    local virtual_text_group = 'LspDiagnosticsVirtualText' .. level
+    local sign_group = 'LspDiagnosticsSign' .. level
     nvim_set_hl(ns, sign_group, diagnostics_sign)
+    nvim_set_hl(ns, base_group, diagnostics)
+    nvim_set_hl(ns, virtual_text_group, diagnostics)
+    nvim_set_hl(ns, default_group, diagnostics)
   end
 end
 

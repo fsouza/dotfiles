@@ -1,14 +1,15 @@
-local M = {}
-
+local lsp_diagnostic = require('vim.lsp.diagnostic')
 local api = vim.api
 local lsp = vim.lsp
 local vcmd = vim.cmd
 local vfn = vim.fn
 
+local M = {}
+
 function M.show_line_diagnostics()
   local indent = '  '
   local lines = {'Diagnostics:'; ''}
-  local line_diagnostics = lsp.util.get_line_diagnostics()
+  local line_diagnostics = lsp_diagnostic.get_line_diagnostics()
   if vim.tbl_isempty(line_diagnostics) then
     return
   end
@@ -53,7 +54,7 @@ end
 
 function M.list_file_diagnostics()
   local bufnr = api.nvim_get_current_buf()
-  local diagnostics = lsp.util.diagnostics_by_buf[bufnr]
+  local diagnostics = lsp_diagnostic.get(bufnr)
   if not diagnostics then
     return
   end
@@ -64,7 +65,9 @@ end
 
 function M.list_workspace_diagnostics()
   local items_list = {}
-  for bufnr, diagnostics in pairs(lsp.util.diagnostics_by_buf) do
+  for _, buffer in ipairs(vfn.getbufinfo()) do
+    local bufnr = buffer.bufnr
+    local diagnostics = lsp_diagnostic.get(bufnr)
     local d_items = items_from_diagnostics(bufnr, diagnostics)
     for _, item in ipairs(d_items) do
       table.insert(items_list, item)
