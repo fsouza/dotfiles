@@ -1,19 +1,23 @@
 local api = vim.api
-local themes = require('themes')
 
 local M = {}
 
-local _default_theme
+local themes: {string:number} = {
+    none = require('themes.none')();
+    popup = require('themes.popup')();
+}
 
-local _themes = {}
+local _default_theme = themes.none
 
-function M.set_popup_bufnr(bufnr)
+local _themes: {number:number} = {}
+
+function M.set_popup_bufnr(bufnr: number)
   if bufnr then
     _themes[bufnr] = themes.popup
   end
 end
 
-function M.set_default_theme(theme_ns)
+function M.set_default_theme(theme_ns: number)
   _default_theme = theme_ns
 end
 
@@ -27,21 +31,20 @@ end
 
 function M.setup()
   vim.o.background = 'light'
-  _default_theme = themes.none
-  local cb = function(bufnr)
+  local cb = function(bufnr: number)
     local theme = _themes[bufnr] or _default_theme
     api.nvim_set_hl_ns(theme)
     vim.schedule(gc)
   end
   local ns = api.nvim_create_namespace('fsouza.color')
   api.nvim_set_decoration_provider(ns, {
-    on_win = function(_, _, bufnr)
+    on_win = function(_: string, _: number, bufnr: number)
       cb(bufnr)
     end;
-    on_line = function(_, _, bufnr)
+    on_line = function(_: string, _: number, bufnr: number)
       cb(bufnr)
     end;
-    on_buf = function(_, bufnr)
+    on_buf = function(_: string, bufnr: number)
       cb(bufnr)
     end;
   })

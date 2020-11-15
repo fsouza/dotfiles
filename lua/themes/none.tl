@@ -3,7 +3,7 @@ local nvim_set_hl = api.nvim_set_hl
 
 local colors = require('themes.colors')
 
-local basics = function(ns)
+local basics = function(ns: number)
   nvim_set_hl(ns, 'CursorColumn', {bg = colors.lighter_gray})
   nvim_set_hl(ns, 'CursorLine', {bg = colors.lighter_gray})
   nvim_set_hl(ns, 'CursorLineNr', {bold = true; bg = colors.lighter_gray})
@@ -28,7 +28,7 @@ local basics = function(ns)
   nvim_set_hl(ns, 'Error', {fg = colors.red})
 end
 
-local noners = function(ns)
+local noners = function(ns: number)
   local noners = {
     'Boolean';
     'Character';
@@ -73,29 +73,29 @@ local noners = function(ns)
     'Underlined';
     'htmlBold';
   }
-  for _, group in pairs(noners) do
+  for _, group in ipairs(noners) do
     nvim_set_hl(ns, group, {})
   end
 end
 
-local reversers = function(ns)
+local reversers = function(ns: number)
   local reversers = {'MoreMsg'; 'StatusLine'; 'StatusLineNC'; 'Visual'};
-  for _, group in pairs(reversers) do
+  for _, group in ipairs(reversers) do
     nvim_set_hl(ns, group, {reverse = true})
   end
 end
 
-local setup_lsp_reference = function(ns)
-  for _, ref_type in pairs({'Text'; 'Read'; 'Write'}) do
+local setup_lsp_reference = function(ns: number)
+  for _, ref_type in ipairs({'Text'; 'Read'; 'Write'}) do
     nvim_set_hl(ns, 'LspReference' .. ref_type, {bg = colors.light_gray})
   end
 end
 
-local setup_lsp_diagnostics = function(ns)
+local setup_lsp_diagnostics = function(ns: number)
   local diagnostics_floating = {fg = colors.black}
   local diagnostics_sign = {link = 'SignColumn'}
 
-  for _, level in pairs({'Error'; 'Warning'; 'Information'; 'Hint'}) do
+  for _, level in ipairs({'Error'; 'Warning'; 'Information'; 'Hint'}) do
     local sign_group = 'LspDiagnosticsSign' .. level
     local floating_group = 'LspDiagnosticsFloating' .. level
 
@@ -104,21 +104,21 @@ local setup_lsp_diagnostics = function(ns)
   end
 end
 
-local setup_lsp_codelens = function(ns)
+local setup_lsp_codelens = function(ns: number)
   nvim_set_hl(ns, 'LspCodeLensVirtualText', {fg = colors.gray})
 end
 
-local language_highlights = function(ns)
+local language_highlights = function(ns: number)
   setup_lsp_diagnostics(ns)
   setup_lsp_reference(ns)
   setup_lsp_codelens(ns)
 end
 
-local custom_groups = function(ns)
+local custom_groups = function(ns: number)
   nvim_set_hl(ns, 'HlYank', {bg = colors.pink})
 end
 
-return function(name)
+return function(name: string): number
   name = name or 'fsouza__none'
   local ns = api.nvim_create_namespace(name)
   basics(ns)
