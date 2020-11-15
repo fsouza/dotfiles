@@ -224,6 +224,10 @@ local attached = function(bufnr, client)
       })
     end
 
+    if client.resolved_capabilities.execute_command then
+      require('lc.commands').on_attach({bufnr = bufnr; client = client})
+    end
+
     vim.schedule(function()
       helpers.create_mappings(mappings, bufnr)
     end)
