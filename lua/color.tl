@@ -1,13 +1,9 @@
 local api = vim.api
+local themes = require('themes')
 
 local M = {}
 
-local themes: {string:number} = {
-    none = require('themes.none')();
-    popup = require('themes.popup')();
-}
-
-local _default_theme = themes.none
+local _default_theme: number
 
 local _themes: {number:number} = {}
 
@@ -31,6 +27,7 @@ end
 
 function M.setup()
   vim.o.background = 'light'
+  _default_theme = themes.none
   local cb = function(bufnr: number)
     local theme = _themes[bufnr] or _default_theme
     api.nvim_set_hl_ns(theme)
