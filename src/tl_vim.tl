@@ -41,11 +41,18 @@ end
 local type VimFn = record
     expand: function(string): string
     complete_info: function(): VimCompInfo
-    -- ['completion#trigger_completion']: function()
 end
 
 local type VimGlobalOptions = record
     background: string
+end
+
+global type LoopStat = record
+    type: string
+end
+
+local type VimLoop = record
+    fs_stat: function(string, function(string, LoopStat))
 end
 
 local type Vim = record
@@ -57,6 +64,7 @@ local type Vim = record
     g: {string:any}
     schedule: function(function())
     startswith: function(string, string): boolean
+    loop: VimLoop
 end
 
 global vim: Vim
