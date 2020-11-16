@@ -4,19 +4,25 @@ local api = vim.api
 local nvim_buf_set_keymap = api.nvim_buf_set_keymap
 local vcmd = vim.cmd
 
-function M.cmd_map(cmd)
+function M.cmd_map(cmd: string): string
   return string.format('<cmd>%s<cr>', cmd)
 end
 
-function M.vcmd_map(cmd)
+function M.vcmd_map(cmd: string): string
   return string.format([[<cmd>'<,'>%s<cr>]], cmd)
 end
 
-function M.create_mappings(mappings, bufnr)
+local type Mapping = record
+    lhs: string
+    rhs: string
+    opts: {string:boolean}
+end
+
+function M.create_mappings(mappings: {string:{Mapping}}, bufnr: number)
   local fn = api.nvim_set_keymap
   if bufnr then
-    fn = function(...)
-      nvim_buf_set_keymap(bufnr, ...)
+    fn = function(mode: string, lhs: string, rhs: string, opts: {string:boolean})
+      nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
     end
   end
 
@@ -27,11 +33,17 @@ function M.create_mappings(mappings, bufnr)
   end
 end
 
-function M.exec_cmds(cmd_list)
+function M.exec_cmds(cmd_list: {string})
   vcmd(table.concat(cmd_list, '\n'))
 end
 
-function M.augroup(name, commands)
+local type Autocmd = record
+    events: {string}
+    targets: {string}
+    command: string
+end
+
+function M.augroup(name: string, commands: {Autocmd})
   vcmd('augroup ' .. name)
   vcmd('autocmd!')
   for _, c in ipairs(commands) do
@@ -41,7 +53,7 @@ function M.augroup(name, commands)
   vcmd('augroup END')
 end
 
-function M.ensure_path_relative_to_prefix(prefix, path)
+function M.ensure_path_relative_to_prefix(prefix: string, path: string): string
   if not vim.endswith(prefix, '/') then
     prefix = prefix .. '/'
   end
@@ -51,7 +63,7 @@ function M.ensure_path_relative_to_prefix(prefix, path)
   return path
 end
 
-function M.rewrite_wrap(fn)
+function M.rewrite_wrap(fn: function())
   local cursor = api.nvim_win_get_cursor(0)
   local orig_lineno, orig_colno = cursor[1], cursor[2]
   local orig_line = api.nvim_buf_get_lines(0, orig_lineno - 1, orig_lineno, true)[1]

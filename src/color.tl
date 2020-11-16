@@ -1,5 +1,5 @@
 local api = vim.api
-local themes = require('themes')
+local themes = require('themes.init')
 
 local M = {}
 
