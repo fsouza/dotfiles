@@ -3,7 +3,7 @@ local M = {}
 -- returns the autofmt configuration in a tuple (<enabled>, <timeout_ms).
 --
 -- For enabled, we first look at vim.b, then vim.g (and it defaults to true).
-function M.config()
+function M.config(): {any}
   local timeout_ms = vim.b.autoformat_timeout_ms or 500
   if vim.b.autoformat ~= nil then
     return vim.b.autoformat, timeout_ms
@@ -14,7 +14,7 @@ function M.config()
   return true, timeout_ms
 end
 
-local toggle = function(ns)
+local toggle = function(ns: {string: any})
   if ns.autoformat == false then
     ns.autoformat = true
   else

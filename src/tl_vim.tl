@@ -62,6 +62,7 @@ local type Vim = record
     fn: VimFn
     o: VimGlobalOptions
     g: {string:any}
+    b: {string:any}
     schedule: function(function())
     startswith: function(string, string): boolean
     loop: VimLoop
