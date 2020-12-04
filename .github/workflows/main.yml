@@ -36,7 +36,7 @@ jobs:
       - name: install neovim
         run: |
           cd ~/neovim
-          make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_FIND_FRAMEWORK=LAST" BUNDLED_CMAKE_FLAG="-DUSE_BUNDLED_GPERF=OFF
+          make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_FIND_FRAMEWORK=LAST" BUNDLED_CMAKE_FLAG="-DUSE_BUNDLED_GPERF=OFF"
           echo "${HOME}/neovim/build/bin" >> "${GITHUB_PATH}"
 
       - name: install deps on mac
