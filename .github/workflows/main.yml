@@ -104,6 +104,7 @@ jobs:
           key: "${{ matrix.os }}-${{ hashFiles('langservers/setup.sh') }}"
 
       - name: bootstrap from config dir
+        if: matrix.os == 'macos-latest'
         env:
           NVIM_DEBUG: 1
         run: |
@@ -111,4 +112,5 @@ jobs:
           make -j -f $HOME/.config/nvim/Makefile bootstrap
 
       - name: run luacheck from config dir
+        if: matrix.os == 'macos-latest'
         run: make -f $HOME/.config/nvim/Makefile luacheck
