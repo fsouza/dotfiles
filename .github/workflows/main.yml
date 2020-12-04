@@ -18,14 +18,26 @@ jobs:
     name: bootstrap
     runs-on: ${{ matrix.os }}
     steps:
-      - name: install neovim nightly
+      - name: neovim-cache
+        uses: action/cache@v2.1.3
+        with:
+          path: ~/neovim
+          key: "${{ matrix.os }}-neovim"
+
+      - name: clone neovim if needed
         run: |
-          if [ "${{ matrix.os }}" = "ubuntu-20.04" ]; then
-            suffix=linux64
-          else
-            suffix=macos
+          if ! [ -d ~/neovim ]; then
+            git clone https://github.com/neovim/neovim.git ~/neovim
           fi
-          curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-${suffix}.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
+
+      - name: update neovim
+        run: git -C ~/neovim pull origin master
+
+      - name: install neovim
+        run: |
+          cd ~/neovim
+          make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_FIND_FRAMEWORK=LAST" BUNDLED_CMAKE_FLAG="-DUSE_BUNDLED_GPERF=OFF
+          echo "${HOME}/neovim/build/bin" >> "${GITHUB_PATH}"
 
       - name: install deps on mac
         if: matrix.os == 'macos-latest'
