@@ -45,6 +45,7 @@ jobs:
         run: git -C ~/neovim pull origin master
 
       - name: install neovim
+        if: matrix.os == 'macos-latest'
         run: |
           cd ~/neovim
           make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXTRA_FLAGS="-DCMAKE_FIND_FRAMEWORK=LAST" BUNDLED_CMAKE_FLAG="-DUSE_BUNDLED_GPERF=OFF"
