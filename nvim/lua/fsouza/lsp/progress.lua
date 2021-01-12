@@ -6,6 +6,10 @@ local helpers = require('fsouza.lib.nvim_helpers')
 local M = {}
 
 function M.on_progress_update()
+  if vfn.mode() ~= 'n' then
+    return
+  end
+
   local messages = lsp_util.get_progress_messages()
 
   local function format_message(msg)
