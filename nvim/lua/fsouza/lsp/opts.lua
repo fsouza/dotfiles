@@ -29,16 +29,6 @@ local function attached(bufnr, client)
             [[lua require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics()]]);
           opts = {silent = true};
         };
-        {
-          lhs = '<c-j>';
-          rhs = helpers.cmd_map([[lua vim.lsp.diagnostic.goto_next()]]);
-          opts = {silent = true};
-        };
-        {
-          lhs = '<c-k>';
-          rhs = helpers.cmd_map([[lua vim.lsp.diagnostic.goto_prev()]]);
-          opts = {silent = true};
-        };
       };
       i = {};
       x = {};
