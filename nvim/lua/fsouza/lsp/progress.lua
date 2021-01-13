@@ -5,6 +5,11 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
+local echomsg = require('fsouza.lib.debounce').debounce(2000, vim.schedule_wrap(
+                                                          function(msg)
+    vcmd(string.format('echomsg %s', msg))
+  end))
+
 function M.on_progress_update()
   if vfn.mode() ~= 'n' then
     return
@@ -31,7 +36,7 @@ function M.on_progress_update()
   end
 
   for _, message in ipairs(messages) do
-    vcmd(string.format('echomsg %s', format_message(message)))
+    echomsg.call(format_message(message))
   end
 end
 
