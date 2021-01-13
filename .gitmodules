@@ -73,9 +73,6 @@
 [submodule "findr.vim"]
 	path = nvim/pack/fsouza/start/findr.vim
 	url = https://github.com/conweller/findr.vim.git
-[submodule "vim-dispatch"]
-	path = nvim/pack/fsouza/start/vim-dispatch
-	url = https://github.com/tpope/vim-dispatch.git
 [submodule "vim-wordmotion"]
 	path = nvim/pack/fsouza/start/vim-wordmotion
 	url = https://github.com/chaoren/vim-wordmotion.git
