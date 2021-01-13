@@ -1,14 +1,10 @@
-local vcmd = vim.cmd
 local vfn = vim.fn
 local lsp_util = vim.lsp.util
 local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
-local echomsg = require('fsouza.lib.debounce').debounce(2000, vim.schedule_wrap(
-                                                          function(msg)
-    vcmd(string.format('echomsg %s', msg))
-  end))
+local debounced_print = require('fsouza.lib.debounce').debounce(2000, print)
 
 function M.on_progress_update()
   if vfn.mode() ~= 'n' then
@@ -32,11 +28,11 @@ function M.on_progress_update()
       suffix = string.format(' (%s)', msg.percentage)
     end
 
-    return vfn.shellescape(string.format('%s%s%s', prefix, msg.message, suffix))
+    return string.format('%s%s%s', prefix, msg.message, suffix)
   end
 
   for _, message in ipairs(messages) do
-    echomsg.call(format_message(message))
+    debounced_print.call(format_message(message))
   end
 end
 
