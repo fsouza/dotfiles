@@ -15,10 +15,6 @@ function tmux {
 	fi
 }
 
-function stream_tmux {
-	_go_to_tmux stream
-}
-
 if [ -z "$TMUX" ] && [ -n "$(command -v tmux)" ] && [[ $- =~ i ]]; then
 	_go_to_tmux
 fi

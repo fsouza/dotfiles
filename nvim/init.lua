@@ -99,6 +99,7 @@ set autoindent
 set relativenumber
 set smartindent
 set noswapfile
+set nowrap
 set undofile
 ]])
 end
