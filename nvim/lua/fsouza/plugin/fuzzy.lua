@@ -3,7 +3,10 @@ local M = {}
 local vfn = vim.fn
 
 function M.fuzzy_here()
-  require('findr').init(require('findr.sources.files'), vfn.expand('%:p:h'))
+  local dir_path = vfn.expand('%:p:h')
+  if vim.startswith(dir_path, '/') then
+    require('findr').init(require('findr.sources.files'), dir_path)
+  end
 end
 
 function M.rg(input)
