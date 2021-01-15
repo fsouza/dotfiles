@@ -70,6 +70,3 @@
 [submodule "vim-maximizer"]
 	path = nvim/pack/fsouza/start/vim-maximizer
 	url = https://github.com/szw/vim-maximizer.git
-[submodule "vim-wordmotion"]
-	path = nvim/pack/fsouza/start/vim-wordmotion
-	url = https://github.com/chaoren/vim-wordmotion.git
