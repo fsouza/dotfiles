@@ -67,6 +67,3 @@
 [submodule "vim-fugitive"]
 	path = nvim/pack/fsouza/start/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
-[submodule "vim-maximizer"]
-	path = nvim/pack/fsouza/start/vim-maximizer
-	url = https://github.com/szw/vim-maximizer.git
