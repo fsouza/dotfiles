@@ -5,7 +5,7 @@ local vfn = vim.fn
 function M.fuzzy_here()
   local dir_path = vfn.expand('%:p:h')
   if vim.startswith(dir_path, '/') then
-    require('findr').init(require('findr.sources.files'), dir_path)
+    vfn['fzf#vim#files'](dir_path)
   end
 end
 
