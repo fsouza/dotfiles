@@ -30,12 +30,12 @@ local function attached(bufnr, client)
           opts = {silent = true};
         };
         {
-          lhs = '<c-j>';
+          lhs = '<c-n>';
           rhs = helpers.cmd_map([[lua vim.lsp.diagnostic.goto_next()]]);
           opts = {silent = true};
         };
         {
-          lhs = '<c-k>';
+          lhs = '<c-p>';
           rhs = helpers.cmd_map([[lua vim.lsp.diagnostic.goto_prev()]]);
           opts = {silent = true};
         };

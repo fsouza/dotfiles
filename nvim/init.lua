@@ -128,8 +128,6 @@ local function global_mappings()
         rhs = [[(v:count > 8 ? "m'" . v:count : '') . 'k']];
         opts = {expr = true; noremap = true};
       };
-      {lhs = '<c-n>'; rhs = helpers.cmd_map('cnext'); opts = {silent = true}};
-      {lhs = '<c-p>'; rhs = helpers.cmd_map('cprevious'); opts = {silent = true}};
     };
     i = {
       {lhs = '<c-d>'; rhs = '<del>'; opts = {noremap = true}};
