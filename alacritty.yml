@@ -178,3 +178,4 @@ key_bindings:
   - { key: Space, mods: Shift|Control, action: None }
   - { key: Return, mods: Shift, chars: "\x1b[13;2u" }
   - { key: Return, mods: Control, chars: "\x1b[13;5u" }
+  - { key: Key6, mods: Control, chars: "\x1e" }

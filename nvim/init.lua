@@ -23,9 +23,6 @@ local function initial_mappings()
   -- Remap the leader key.
   nvim_set_keymap('n', '<Space>', '', {})
   vim.g.mapleader = ' '
-
-  -- <leader>w for writing (with update instead of 'write')
-  nvim_set_keymap('n', '<leader>w', '<cmd>update<cr>', {})
 end
 
 local function bootstrap_env()
@@ -133,7 +130,6 @@ local function global_mappings()
       };
       {lhs = '<c-n>'; rhs = helpers.cmd_map('cnext'); opts = {silent = true}};
       {lhs = '<c-p>'; rhs = helpers.cmd_map('cprevious'); opts = {silent = true}};
-      {lhs = '<leader>j'; rhs = helpers.cmd_map('e #'); opts = {silent = true}};
     };
     i = {
       {lhs = '<c-d>'; rhs = '<del>'; opts = {noremap = true}};
