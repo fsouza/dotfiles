@@ -21,7 +21,7 @@ function gimme {
 function refresh_go_tools {
 	(
 		go install golang.org/x/tools/cmd/goimports@master &&
-			honnef.co/go/tools/cmd/staticcheck@master &&
+			go install honnef.co/go/tools/cmd/staticcheck@master &&
 			go install github.com/go-delve/delve/cmd/dlv@master
 	)
 }
