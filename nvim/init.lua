@@ -130,6 +130,7 @@ local function global_mappings()
         rhs = [[(v:count > 8 ? "m'" . v:count : '') . 'k']];
         opts = {expr = true; noremap = true};
       };
+      {lhs = '<leader>w'; rhs = helpers.cmd_map('update')};
     };
     i = {
       {lhs = '<c-d>'; rhs = '<del>'; opts = {noremap = true}};
