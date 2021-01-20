@@ -67,3 +67,6 @@
 [submodule "vim-fugitive"]
 	path = nvim/pack/fsouza/start/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
+[submodule "vim-wordmotion"]
+	path = nvim/pack/fsouza/start/vim-wordmotion
+	url = https://github.com/chaoren/vim-wordmotion.git
