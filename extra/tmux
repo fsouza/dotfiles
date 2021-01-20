@@ -14,9 +14,3 @@ function tmux {
 		command tmux $@
 	fi
 }
-
-if [ -z "$TMUX" ] && [ -n "$(command -v tmux)" ] && [[ $- =~ i ]]; then
-	_go_to_tmux
-fi
-
-export TMUX_SESSION=$(tmux display-message -p '#S')
