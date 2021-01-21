@@ -89,6 +89,8 @@ local function global_options()
   vim.o.backup = false
   vim.o.inccommand = 'split'
   vim.o.jumpoptions = 'stack'
+  vim.o.scrolloff = 2
+  vim.o.sidescrolloff = 6
 end
 
 local function set_non_global_options()
