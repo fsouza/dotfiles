@@ -43,7 +43,7 @@ function v() {
 	if [ -z "${name}" ]; then
 		ls -F "${VIRTUALENVS}" | grep '/$' | sed -e 's,/$,,'
 	elif [ -d "${virtualenvpath}" ]; then
-		_activate_virtualenv
+		_activate_virtualenv "${virtualenvpath}"
 	else
 		echo >&2 "virtualenv ${name} not found"
 		return 1
