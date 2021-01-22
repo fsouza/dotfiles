@@ -6,6 +6,7 @@ export GOBIN=$HOME/bin GOPATH=$HOME/.go GIMME_SILENT_ENV=1 GIMME_TYPE=binary
 export EDITOR=vim PAGER=less MANPAGER=less
 export RIPGREP_CONFIG_PATH=${HOME}/.config/rgrc
 
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 prepend_to_path \
 	"${basedir}"/extra/gimme \
 	/usr/local/sbin \
@@ -15,13 +16,11 @@ prepend_to_path \
 	"${basedir}"/bin \
 	"${GOBIN}"
 
-if ! [[ -v VIM ]]; then
-	source "${basedir}"/extra/brew
-	cond_source "${HOME}/.gimme/envs/gotip.env"
+source "${basedir}"/extra/brew
+cond_source "${HOME}/.gimme/envs/gotip.env"
 
-	if command -v fnm &>/dev/null; then
-		eval "$(fnm env)"
-	fi
+if command -v fnm &>/dev/null; then
+	eval "$(fnm env)"
 fi
 
 cond_source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
