@@ -21,6 +21,19 @@ function _enable_bare_python() {
 	unset -f python &>/dev/null || true
 }
 
+function _activate_virtualenv() {
+	virtualenvpath=${1}
+	if [ -z "${oldpath}" ]; then
+		export oldpath=$PATH
+	fi
+	export PATH=${virtualenvpath}/bin:$PATH
+	alias cdvirtualenv='cd ${virtualenvpath}'
+	alias cdsitepackages='cd ${virtualenvpath}/lib/python*/site-packages'
+	export VIRTUAL_ENV=${virtualenvpath}
+	_enable_bare_python
+	hash -r
+}
+
 function v() {
 	name=${1}
 	if [[ ${name} == "@" ]]; then
@@ -30,15 +43,7 @@ function v() {
 	if [ -z "${name}" ]; then
 		ls -F "${VIRTUALENVS}" | grep '/$' | sed -e 's,/$,,'
 	elif [ -d "${virtualenvpath}" ]; then
-		if [ -z "${oldpath}" ]; then
-			export oldpath=$PATH
-		fi
-		export PATH=${virtualenvpath}/bin:$PATH
-		alias cdvirtualenv='cd ${virtualenvpath}'
-		alias cdsitepackages='cd ${virtualenvpath}/lib/python*/site-packages'
-		export VIRTUAL_ENV=${virtualenvpath}
-		_enable_bare_python
-		hash -r
+		_activate_virtualenv
 	else
 		echo >&2 "virtualenv ${name} not found"
 		return 1
@@ -107,8 +112,9 @@ function cv() {
 	fi
 }
 
-if [ -z "${VIRTUAL_ENV}" ]; then
-	_disable_bare_python
+_disable_bare_python
+if [ -n "${VIRTUAL_ENV}" ]; then
+	_activate_virtualenv "${VIRTUAL_ENV}"
 fi
 export PIP_REQUIRE_VIRTUALENV=1
 export VIRTUAL_ENV_DISABLE_PROMPT=1
