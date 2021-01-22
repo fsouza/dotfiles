@@ -24,7 +24,7 @@ if command -v fnm &>/dev/null; then
 fi
 
 cond_source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
-source "${basedir}/extra/z/z.sh"
+cond_source "${basedir}/extra/z/z.sh"
 
 source "${basedir}"/extra/virtualenv
 source "${basedir}"/extra/gpg-agent
@@ -71,7 +71,6 @@ bindkey '^xe' edit-command-line
 bindkey '^x^e' edit-command-line
 
 alias bump_dotfiles="git -C ${basedir} pull && git -C ${basedir} submodule update --init --recursive && ${basedir}/bin/setup"
-alias j=z
 
 source "${basedir}"/extra/fzf
 unset basedir
