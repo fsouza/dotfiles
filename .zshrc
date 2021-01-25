@@ -70,6 +70,9 @@ zle -N edit-command-line
 bindkey '^xe' edit-command-line
 bindkey '^x^e' edit-command-line
 
+autoload -U select-word-style
+select-word-style bash
+
 alias bump_dotfiles="git -C ${basedir} pull && git -C ${basedir} submodule update --init --recursive && ${basedir}/bin/setup"
 
 source "${basedir}"/extra/fzf
