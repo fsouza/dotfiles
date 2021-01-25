@@ -37,9 +37,10 @@ function _activate_virtualenv() {
 function v() {
 	name=${1}
 	if [[ ${name} == "@" ]]; then
-		name=$(basename "$PWD")
+		virtualenvpath=${PWD}/venv
+	else
+		virtualenvpath=${VIRTUALENVS}/${name}
 	fi
-	virtualenvpath=${VIRTUALENVS}/${name}
 	if [ -z "${name}" ]; then
 		ls -F "${VIRTUALENVS}" | grep '/$' | sed -e 's,/$,,'
 	elif [ -d "${virtualenvpath}" ]; then
@@ -76,15 +77,20 @@ function _find_python() {
 
 function mkv() {
 	test -d "${VIRTUALENVS}" || mkdir -p "${VIRTUALENVS}"
-	name=${1:-$(basename "${PWD}")}
-
-	# create the env only if it doesn't exist yet
-	if ! [ -d "${VIRTUALENVS}/${name}" ]; then
-		_virtualenv -p "$(_find_python)" "${VIRTUALENVS}"/"${name}" &&
-			"${VIRTUALENVS}/${name}/bin/pip" install --upgrade pip
+	name=${1}
+	if [ -n "${name}" ]; then
+		virtualenvpath=${VIRTUALENVS}/${name}
+	else
+		virtualenvpath=${PWD}/venv
 	fi
 
-	v "${name}"
+	# create the env only if it doesn't exist yet
+	if ! [ -d "${virtualenvpath}" ]; then
+		_virtualenv -p "$(_find_python)" "${virtualenvpath}" &&
+			"${virtualenvpath}/bin/pip" install --upgrade pip
+	fi
+
+	_activate_virtualenv "${virtualenvpath}"
 }
 
 function rmv() {
