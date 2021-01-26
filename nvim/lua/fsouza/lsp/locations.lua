@@ -85,24 +85,19 @@ local function peek_location_callback(_, _, result)
   require('fsouza.color').set_popup_winid(win_id)
 end
 
-function M.preview_definition()
-  local params = lsp_util.make_position_params()
-  lsp.buf_request(0, 'textDocument/definition', params, peek_location_callback)
+local function make_lsp_loc_action(method)
+  return function()
+    local params = lsp_util.make_position_params()
+    lsp.buf_request(0, method, params, peek_location_callback)
+  end
 end
 
-function M.preview_declaration()
-  local params = lsp_util.make_position_params()
-  lsp.buf_request(0, 'textDocument/declaration', params, peek_location_callback)
-end
+M.preview_definition = make_lsp_loc_action('textDocument/definition')
 
-function M.preview_implementation()
-  local params = lsp_util.make_position_params()
-  lsp.buf_request(0, 'textDocument/implementation', params, peek_location_callback)
-end
+M.preview_declaration = make_lsp_loc_action('textDocument/declaration')
 
-function M.preview_type_definition()
-  local params = lsp_util.make_position_params()
-  lsp.buf_request(0, 'textDocument/typeDefinition', params, peek_location_callback)
-end
+M.preview_implementation = make_lsp_loc_action('textDocument/implementation')
+
+M.preview_type_definition = make_lsp_loc_action('textDocument/typeDefinition')
 
 return M
