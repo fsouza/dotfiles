@@ -5,12 +5,17 @@ set -eu
 function _clone_or_update() {
 	repo=$1
 	path=$2
+	version=$3
 
-	if [ -d "${path}" ]; then
+	if ! [ -d "${path}" ]; then
+		git clone --recurse-submodules "${repo}" "${path}"
+	elif [ -z "${version}" ]; then
 		git -C "${path}" pull
 		git -C "${path}" submodules update --init --recursive
 	else
-		git clone --recurse-submodules "${repo}" "${path}"
+		git -C "${path}" fetch
+		git -C "${path}" checkout "${version}"
+		git -C "${path}" submodules update --init --recursive
 	fi
 }
 
@@ -93,7 +98,7 @@ function install_lua_lsp() {
 		ninja_file=ninja/linux.ninja
 	fi
 	path=${cache_dir}/lua-language-server
-	_clone_or_update https://github.com/sumneko/lua-language-server "${path}" &&
+	_clone_or_update https://github.com/sumneko/lua-language-server "${path}" d1181d6b09bae0161070aa087c291f259ced5b95 &&
 		pushd "${path}" &&
 		cd 3rd/luamake &&
 		ninja -f "${ninja_file}" &&
