@@ -8,8 +8,9 @@ function _clone_or_update() {
 
 	if [ -d "${path}" ]; then
 		git -C "${path}" pull
+		git -C "${path}" submodules update --init --recursive
 	else
-		git clone "${repo}" "${path}"
+		git clone --recurse-submodules "${repo}" "${path}"
 	fi
 }
 
