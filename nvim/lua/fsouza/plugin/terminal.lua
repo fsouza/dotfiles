@@ -1,4 +1,5 @@
 local api = vim.api
+local vcmd = vim.cmd
 local vfn = vim.fn
 
 local M = {}
@@ -75,6 +76,13 @@ end
 
 function M.run_in_main_term(...)
   M.run('j', ...)
+end
+
+function M.cr()
+  vcmd([[
+only
+wincmd F
+]])
 end
 
 return M
