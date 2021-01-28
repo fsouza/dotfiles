@@ -79,8 +79,13 @@ function M.run_in_main_term(...)
 end
 
 function M.cr()
+  local cfile = vfn.expand('<cfile>')
+  if vfn.filereadable(cfile) == 0 then
+    return
+  end
+
   vcmd([[
-only
+silent! only
 wincmd F
 ]])
 end
