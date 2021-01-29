@@ -52,7 +52,7 @@ function v() {
 }
 
 function d() {
-	if [[ ! -v oldpath ]]; then
+	if ! [[ -v VIRTUAL_ENV ]]; then
 		echo >&2 "no virtualenv active"
 		return 1
 	fi
