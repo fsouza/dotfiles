@@ -10,7 +10,28 @@ local function should_use_ts(node)
   end
 
   local node_type = node:type()
-  local node_types = {'local_function'; 'function_declaration'; 'method_declaration'; 'type_spec'}
+
+  -- this should _probably_ be defined per language or via queries?
+  local node_types = {
+    -- generic
+    'local_function';
+    'function_declaration';
+    'method_declaration';
+    'type_spec';
+
+    -- typescript
+    'class';
+    'function';
+    'type_alias_declaration';
+    'interface_declaration';
+    'method_definition';
+    'variable_declarator';
+    'public_field_definition';
+
+    -- python
+    'class_definition';
+    'function_definition';
+  }
   for _, t in pairs(node_types) do
     if node_type == t then
       return true
