@@ -11,7 +11,6 @@ function git_config {
 	fi
 	git config user.name "$name"
 	git config user.email "${email}"
-	git config user.signingkey "${email}"
 }
 
 function gh_clone {

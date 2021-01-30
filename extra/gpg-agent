@@ -1,6 +1,0 @@
-if [[ ${OSTYPE} == darwin* ]]; then
-	pinentry=$(which pinentry-mac)
-else
-	pinentry=$(which pinentry)
-fi
-gpg-agent --daemon --disable-scdaemon --log-file ~/.cache/gpg-agent.log --default-cache-ttl 86400 --max-cache-ttl 86400 --pinentry-program ${pinentry} 2>/dev/null

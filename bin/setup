@@ -40,10 +40,6 @@ for dir in "${xdg_dirs[@]}"; do
 	fi
 done
 
-mkdir -p ~/.gnupg
-chmod 700 ~/.gnupg
-ln -sf "${basedir}"/gpg.conf ~/.gnupg/gpg.conf
-
 if [ -f "${basedir}"/bin/"${os}"-setup ]; then
 	"${basedir}"/bin/"${os}"-setup
 fi

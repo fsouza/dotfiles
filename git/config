@@ -1,12 +1,8 @@
 [user]
 	useConfigOnly = true
-[commit]
-	gpgsign = true
-[gpg]
-	program = gpg
 [core]
 	editor = nvim
-	excludesfile = ~/.config/git/gitignore
+	excludesfile = ~/.config/git/ignore
 	filemode = true
 [diff]
 	compactionHeuristic = 1
@@ -26,8 +22,6 @@
 	rebase = true
 [rebase]
 	autoStash = true
-[credential]
-	helper = !zsh -c 'exec ${HOMEBREW_PREFIX}/opt/git/libexec/git-core/git-credential-netrc get'
 [fetch]
 	prune = true
 [protocol]
