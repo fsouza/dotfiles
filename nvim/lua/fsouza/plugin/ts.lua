@@ -68,7 +68,7 @@ do
         enable = true;
         keymaps = {
           am = '@function.outer';
-          ['im'] = '@function.inner';
+          im = '@function.inner';
           al = '@block.outer';
           il = '@block.inner';
           ac = '@class.outer';
