@@ -1,7 +1,7 @@
 basedir=$(dirname "$(realpath "${(%):-%N}")")
 source "${basedir}"/extra/init-functions
 
-export MANPATH=/usr/share/man:/usr/local/share/man:"${basedir}"/extra/z
+export MANPATH=/usr/share/man:/usr/local/share/man
 export GOBIN=$HOME/bin GOPATH=$HOME/.go GIMME_SILENT_ENV=1 GIMME_TYPE=binary
 export EDITOR=vim PAGER=less MANPAGER=less
 export RIPGREP_CONFIG_PATH=${HOME}/.config/rgrc
@@ -24,10 +24,10 @@ if command -v fnm &>/dev/null; then
 fi
 
 cond_source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
-cond_source "${basedir}/extra/z/z.sh"
 
 source "${basedir}"/extra/virtualenv
 
+source "${basedir}"/extra/zl
 source "${basedir}"/extra/git
 source "${basedir}"/extra/go
 source "${basedir}"/extra/mail
