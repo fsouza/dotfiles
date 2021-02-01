@@ -1,7 +1,0 @@
-export _ZL_DATA=${HOME}/.cache/zlua
-export _ZL_NO_CHECK=1
-export _ZL_EXCLUDE_DIRS=("${HOME}"/gd)
-
-if [ -f "${HOMEBREW_PREFIX}/opt/z.lua/share/z.lua/z.lua" ]; then
-	 eval "$(lua "${HOMEBREW_PREFIX}"/opt/z.lua/share/z.lua/z.lua --init zsh once)"
-fi

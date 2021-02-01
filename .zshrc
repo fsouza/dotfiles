@@ -27,7 +27,7 @@ cond_source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
 
 source "${basedir}"/extra/virtualenv
 
-source "${basedir}"/extra/zl
+source "${basedir}"/extra/z
 source "${basedir}"/extra/git
 source "${basedir}"/extra/go
 source "${basedir}"/extra/mail

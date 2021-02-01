@@ -1,0 +1,7 @@
+if command -v zoxide &>/dev/null; then
+	export _ZO_DATA=${HOME}/.cache/zlua
+	export _ZO_NO_CHECK=1
+	export _ZO_EXCLUDE_DIRS=("${HOME}"/gd)
+
+	eval "$(zoxide init zsh)"
+fi
