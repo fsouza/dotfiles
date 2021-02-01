@@ -93,7 +93,7 @@ end
 
 local function setup_lsp_diagnostics(ns)
   local diagnostics_floating = {link = 'Normal'}
-  local diagnostics_sign = {fg = colors.red; bg = colors.lighter_gray}
+  local diagnostics_sign = {fg = colors.red; bg = colors.lighter_gray; bold = true}
 
   for _, level in pairs({'Error'; 'Warning'; 'Information'; 'Hint'}) do
     local sign_group = 'LspDiagnosticsSign' .. level

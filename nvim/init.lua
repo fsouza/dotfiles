@@ -94,6 +94,7 @@ end
 local function set_non_global_options()
   vcmd([[
 set autoindent
+set number
 set relativenumber
 set smartindent
 set noswapfile
