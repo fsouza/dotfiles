@@ -67,3 +67,6 @@
 [submodule "vim-wordmotion"]
 	path = nvim/pack/fsouza/start/vim-wordmotion
 	url = https://github.com/chaoren/vim-wordmotion.git
+[submodule "teleport.vim"]
+	path = nvim/pack/fsouza/start/teleport.vim
+	url = https://github.com/PsychoLlama/teleport.vim
