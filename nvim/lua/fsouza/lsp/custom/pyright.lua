@@ -2,45 +2,55 @@ local loop = vim.loop
 
 local M = {}
 
-local function set_from_env_var(settings)
+local function set_from_env_var()
   local virtual_env = os.getenv('VIRTUAL_ENV')
   if virtual_env then
-    settings.python.pythonPath = string.format('%s/bin/python', virtual_env)
-    return true
+    return virtual_env
   end
-  return false
+  return nil
 end
 
-local function set_from_poetry(settings)
+local function set_from_poetry()
   if loop.fs_stat('poetry.lock') then
     local f = io.popen('poetry env info -p 2>/dev/null', 'r')
     if f then
       local virtual_env = f:read()
-      settings.python.pythonPath = string.format('%s/bin/python', virtual_env)
       f:close()
-      return true
+      return virtual_env
     end
   end
-  return false
+  return nil
 end
 
-local function set_from_pipenv(settings)
+local function set_from_pipenv()
   if loop.fs_stat('Pipfile.lock') then
     local f = io.popen('pipenv --venv')
     if f then
       local virtual_env = f:read()
-      settings.python.pythonPath = string.format('%s/bin/python', virtual_env)
       f:close()
-      return true
+      return virtual_env
     end
   end
-  return false
+  return nil
+end
+
+local function set_from_venv_folder()
+  if loop.fs_stat('venv/bin/python') then
+    return string.format('%s/venv', loop.cwd())
+  end
+  return nil
 end
 
 local function detect_virtual_env(settings)
-  local detectors = {set_from_env_var; set_from_poetry; set_from_pipenv}
+  local detectors = {set_from_env_var; set_from_poetry; set_from_pipenv; set_from_venv_folder}
   for _, detect in ipairs(detectors) do
-    if detect(settings) then
+    local virtual_env = detect()
+    if virtual_env ~= nil then
+      local stdlib = prequire('posix.stdlib')
+      if stdlib then
+        stdlib.setenv('VIRTUAL_ENV', virtual_env)
+      end
+      settings.python.pythonPath = string.format('%s/bin/python', virtual_env)
       return
     end
   end
