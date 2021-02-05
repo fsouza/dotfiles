@@ -50,36 +50,25 @@ local function attached(bufnr, client)
 
     if client.resolved_capabilities.completion ~= nil and client.resolved_capabilities.completion ~=
       false then
-      require('completion').on_attach({
-        trigger_on_delete = 1;
-        auto_change_source = 1;
-        confirm_key = [[\<C-y>]];
-        enable_server_trigger = 0;
-        matching_ignore_case = 1;
-        matching_smart_case = 1;
-        matching_strategy_list = {'exact'; 'fuzzy'};
-        chain_complete_list = {
-          default = {
-            {complete_items = {'lsp'}};
-            {complete_items = {'buffers'}};
-            {mode = {'<c-p>'}};
-            {mode = {'<c-n>'}};
-          };
-        };
-      })
+      require('fsouza.lsp.completion').on_attach(bufnr)
+
       table.insert(mappings.i, {
         lhs = '<c-x><c-o>';
         rhs = 'v:lua.f.complete()';
         opts = {expr = true; silent = true};
       })
+      table.insert(mappings.i, {
+        lhs = '<c-y>';
+        rhs = [[compe#confirm('<c-y>')]];
+        opts = {expr = true; silent = true};
+      })
+      table.insert(mappings.i, {
+        lhs = '<c-e>';
+        rhs = [[compe#close('<c-e>')]];
+        opts = {expr = true; silent = true};
+      })
       table.insert(mappings.i,
                    {lhs = '<cr>'; rhs = 'v:lua.f.cr()'; opts = {expr = true; noremap = true}})
-      require('fsouza.color').add_popup_cb(function()
-        local winid = require('completion.hover').winnr
-        if api.nvim_win_is_valid(winid) then
-          return winid
-        end
-      end)
     end
 
     if client.resolved_capabilities.rename ~= nil and client.resolved_capabilities.rename ~= false then

@@ -37,9 +37,6 @@
 [submodule "nvim-lspconfig"]
 	path = nvim/pack/fsouza/start/nvim-lspconfig
 	url = https://github.com/neovim/nvim-lspconfig.git
-[submodule "completion-nvim"]
-	path = nvim/pack/fsouza/start/completion-nvim
-	url = https://github.com/nvim-lua/completion-nvim.git
 [submodule "vim-commentary"]
 	path = nvim/pack/fsouza/start/vim-commentary
 	url = https://github.com/tpope/vim-commentary.git
@@ -67,3 +64,6 @@
 [submodule "vim-wordmotion"]
 	path = nvim/pack/fsouza/start/vim-wordmotion
 	url = https://github.com/chaoren/vim-wordmotion.git
+[submodule "nvim-compe"]
+	path = nvim/pack/fsouza/start/nvim-compe
+	url = https://github.com/hrsh7th/nvim-compe.git

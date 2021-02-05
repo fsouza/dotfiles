@@ -1,13 +1,15 @@
-local trigger_completion = vim.fn['completion#trigger_completion']
+local trigger_completion = vim.fn['compe#complete']
 local helpers = require('fsouza.lib.nvim_helpers')
 
 return function()
-  vim.g.completion_enable_auto_popup = 1
+  local bufnr = vim.api.nvim_get_current_buf()
+  require('fsouza.lsp.completion').enable_autocomplete(bufnr)
   helpers.augroup('nvim_complete_switch_off', {
     {
       events = {'InsertLeave'};
-      targets = {'<buffer>'};
-      command = [[let g:completion_enable_auto_popup = 0]];
+      targets = {string.format([[<buffer=%d>]], bufnr)};
+      command = string.format([[lua require('fsouza.lsp.completion').disable_autocomplete(%d)]],
+                              bufnr);
     };
   })
   return trigger_completion()
