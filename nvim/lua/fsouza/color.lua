@@ -17,8 +17,7 @@ local augroup_name = 'fsouza__colors_auto_disable'
 
 local gc_interval_ms = 5000
 
--- Should we support more than one cb?
-function M.add_popup_cb(cb)
+function M.set_popup_cb(cb)
   state.popup_cb = cb
 end
 
