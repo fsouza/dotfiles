@@ -14,7 +14,7 @@ function M.enable_autocomplete(bufnr)
 end
 
 function M.on_attach(bufnr)
-  setup(true, bufnr)
+  setup(false, bufnr)
   require('fsouza.color').set_popup_cb(function()
     local wins = api.nvim_list_wins()
     for _, winid in ipairs(wins) do
