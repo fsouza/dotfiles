@@ -48,27 +48,8 @@ local function attached(bufnr, client)
       require('fsouza.lsp.shell_post').on_attach({bufnr = bufnr; client = client})
     end
 
-    if client.resolved_capabilities.completion ~= nil and client.resolved_capabilities.completion ~=
-      false then
+    if client.resolved_capabilities.completion then
       require('fsouza.lsp.completion').on_attach(bufnr)
-
-      table.insert(mappings.i, {
-        lhs = '<c-x><c-o>';
-        rhs = 'v:lua.f.complete()';
-        opts = {expr = true; silent = true};
-      })
-      table.insert(mappings.i, {
-        lhs = '<c-y>';
-        rhs = [[compe#confirm('<c-y>')]];
-        opts = {expr = true; silent = true};
-      })
-      table.insert(mappings.i, {
-        lhs = '<c-e>';
-        rhs = [[compe#close('<c-e>')]];
-        opts = {expr = true; silent = true};
-      })
-      table.insert(mappings.i,
-                   {lhs = '<cr>'; rhs = 'v:lua.f.cr()'; opts = {expr = true; noremap = true}})
     end
 
     if client.resolved_capabilities.rename ~= nil and client.resolved_capabilities.rename ~= false then
@@ -106,7 +87,7 @@ local function attached(bufnr, client)
     end
 
     if client.resolved_capabilities.document_formatting then
-      require('fsouza.lsp.formatting').register_client(client, bufnr)
+      require('fsouza.lsp.formatting').on_attach(client, bufnr)
     end
 
     if client.resolved_capabilities.document_highlight then

@@ -27,7 +27,7 @@ local function should_skip_server(server_name)
   return langservers_skip_set[server_name] ~= nil
 end
 
-function M.register_client(client, bufnr)
+function M.on_attach(client, bufnr)
   if should_skip_buffer(bufnr) then
     return
   end

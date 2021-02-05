@@ -1,11 +1,15 @@
 local api = vim.api
+local helpers = require('fsouza.lib.nvim_helpers')
+
 local M = {}
+
+local default_autocomplete = true
 
 local function setup(autocomplete, bufnr)
   require('compe').setup({
     enabled = true;
     autocomplete = autocomplete;
-    source = {buffer = true; nvim_lsp = true; nvim_treesitter = true; path = true};
+    source = {nvim_lsp = true; nvim_treesitter = true};
   }, bufnr)
 end
 
@@ -13,8 +17,12 @@ function M.enable_autocomplete(bufnr)
   setup(true, bufnr)
 end
 
+function M.reattach(bufnr)
+  setup(default_autocomplete, bufnr)
+end
+
 function M.on_attach(bufnr)
-  setup(false, bufnr)
+  setup(default_autocomplete, bufnr)
   require('fsouza.color').set_popup_cb(function()
     local wins = api.nvim_list_wins()
     for _, winid in ipairs(wins) do
@@ -22,6 +30,16 @@ function M.on_attach(bufnr)
         return winid
       end
     end
+  end)
+
+  vim.schedule(function()
+    helpers.create_mappings({
+      i = {
+        {lhs = '<cr>'; rhs = 'v:lua.f.cr()'; opts = {expr = true; noremap = true}};
+        {lhs = '<c-x><c-o>'; rhs = 'v:lua.f.complete()'; opts = {expr = true; silent = true}};
+        {lhs = '<c-y>'; rhs = [[compe#confirm('<c-y>')]]; opts = {expr = true; silent = true}};
+      };
+    }, bufnr)
   end)
 end
 

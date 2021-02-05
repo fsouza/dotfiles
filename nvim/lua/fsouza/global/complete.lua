@@ -8,7 +8,7 @@ return function()
     {
       events = {'InsertLeave'};
       targets = {string.format([[<buffer=%d>]], bufnr)};
-      command = string.format([[lua require('fsouza.lsp.completion').on_attach(%d)]], bufnr);
+      command = string.format([[lua require('fsouza.lsp.completion').reattach(%d)]], bufnr);
     };
   })
   return trigger_completion()
