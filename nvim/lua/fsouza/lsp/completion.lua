@@ -3,7 +3,7 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
-local default_autocomplete = true
+local default_autocomplete = false
 
 local function setup(autocomplete, bufnr)
   require('compe').setup({
