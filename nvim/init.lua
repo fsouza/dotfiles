@@ -118,19 +118,6 @@ local function global_mappings()
     {lhs = '<c-d>'; rhs = '<del>'; opts = {noremap = true}};
   }
   local maps = {
-    n = {
-      {
-        lhs = 'j';
-        rhs = [[(v:count > 8 ? "m'" . v:count : '') . 'j']];
-        opts = {expr = true; noremap = true};
-      };
-      {
-        lhs = 'k';
-        rhs = [[(v:count > 8 ? "m'" . v:count : '') . 'k']];
-        opts = {expr = true; noremap = true};
-      };
-      {lhs = '<leader>w'; rhs = helpers.cmd_map('update')};
-    };
     i = {
       {lhs = '<c-d>'; rhs = '<del>'; opts = {noremap = true}};
       {lhs = '<c-f>'; rhs = '<right>'; opts = {noremap = true}};
