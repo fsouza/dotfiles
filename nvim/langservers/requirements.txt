@@ -69,7 +69,7 @@ pyflakes==2.2.0
     # via flake8
 regex==2020.7.14
     # via black
-reorder-python-imports==2.3.6
+reorder_python_imports==2.4.0
     # via -r requirements.in
 tokenize-rt==4.0.0
     # via add-trailing-comma
