@@ -131,7 +131,7 @@ function M.autofmt_and_write(bufnr)
       end
       if result then
         apply_edits(result, bufnr)
-        vcmd('noautocmd update')
+        vcmd('update')
       end
     end)
   end)
