@@ -17,19 +17,10 @@ local function execute(pat, ...)
   end
 end
 
-local function download_virtualenv_pyz()
-  local file_name = cache_dir .. '/virtualenv.pyz'
-  if not loop.fs_stat(file_name) then
-    execute([[curl -sLo %s https://bootstrap.pypa.io/virtualenv.pyz]], file_name)
-  end
-  return file_name
-end
-
 local function ensure_virtualenv()
   local venv_dir = cache_dir .. '/venv'
   if not loop.fs_stat(venv_dir) then
-    local venv_pyz = download_virtualenv_pyz()
-    execute([[python3 %s -p python3 %s]], venv_pyz, venv_dir)
+    execute([[python3 -m venv %s]], venv_dir)
   end
   execute([[%s/venv/bin/pip install --upgrade -r ./langservers/requirements.txt]], cache_dir)
   return venv_dir
