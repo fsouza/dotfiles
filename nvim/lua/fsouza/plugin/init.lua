@@ -32,10 +32,6 @@ local function setup_autofmt_commands()
   vcmd([[command! ToggleGlobalAutofmt lua require('fsouza.lib.autofmt').toggle_g()]])
 end
 
-local function setup_completion()
-  vim.g.completion_enable_auto_popup = 0
-end
-
 local function setup_hlyank()
   helpers.augroup('yank_highlight', {
     {
@@ -112,18 +108,7 @@ local function trigger_ft()
 end
 
 local function setup_shortcuts()
-  require('fsouza.plugin.shortcut').register('Vimfiles', vfn.stdpath('config'))
   require('fsouza.plugin.shortcut').register('Dotfiles', vfn.expand('~/.dotfiles'))
-end
-
-local function setup_git_messenger()
-  helpers.augroup('git-messenger-popup', {
-    {
-      events = {'FileType'};
-      targets = {'gitmessengerpopup'};
-      command = [[lua require('fsouza.plugin.popup').set_theme_to_gitmessenger_popup()]];
-    };
-  })
 end
 
 local function setup_terminal_mappings_and_commands()
@@ -155,7 +140,6 @@ do
   schedule(function()
     require('fsouza.lib.cleanup').setup()
   end)
-  schedule(setup_completion)
   schedule(setup_editorconfig)
   schedule(setup_global_ns)
   schedule(setup_fuzzy_mappings)
@@ -168,7 +152,6 @@ do
   schedule(setup_spell)
   schedule(setup_prettierd)
   schedule(setup_shortcuts)
-  schedule(setup_git_messenger)
   schedule(function()
     require('colorizer').setup({'css'; 'javascript'; 'html'; 'lua'; 'htmldjango'})
   end)
