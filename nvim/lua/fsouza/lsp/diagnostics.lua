@@ -45,7 +45,15 @@ function M.list_file_diagnostics()
 end
 
 function M.list_workspace_diagnostics()
-  render_diagnostics(vim.lsp.diagnostic.get_all())
+  local all_diagnostics = vim.lsp.diagnostic.get_all()
+  local all_items = {}
+  for bufnr, diagnostics in pairs(all_diagnostics) do
+    local buffer_items = items_from_diagnostics(bufnr, diagnostics)
+    for _, item in ipairs(buffer_items) do
+      table.insert(all_items, item)
+    end
+  end
+  render_diagnostics(all_items)
 end
 
 function M.diagnostics_count(bufnr)
