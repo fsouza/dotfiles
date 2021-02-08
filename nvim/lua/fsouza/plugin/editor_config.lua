@@ -130,7 +130,8 @@ function M.set_config()
 
   cmd.run('editorconfig', {args = {filename}}, nil, function(result)
     if result.exit_status ~= 0 then
-      error(string.format('failed to run editorconfig: %d - %s', result.exit_status, result.stderr))
+      print(string.format('failed to run editorconfig: %d - %s', result.exit_status, result.stderr))
+      return
     end
 
     local opts = parse_output(result.stdout)
