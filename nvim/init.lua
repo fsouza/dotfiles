@@ -23,8 +23,6 @@ local function initial_mappings()
   -- Remap the leader key.
   nvim_set_keymap('n', '<Space>', '', {})
   vim.g.mapleader = ' '
-
-  nvim_set_keymap('n', 'q:', ':q', {noremap = true})
 end
 
 local function bootstrap_env()
