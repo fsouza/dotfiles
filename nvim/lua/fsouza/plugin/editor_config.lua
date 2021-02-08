@@ -123,6 +123,11 @@ function M.set_config()
     return
   end
 
+  -- assume it's a relative path
+  if not vim.startswith(filename, '/') then
+    filename = string.format('%s/%s', vim.loop.cwd(), filename)
+  end
+
   cmd.run('editorconfig', {args = {filename}}, nil, function(result)
     if result.exit_status ~= 0 then
       error(string.format('failed to run editorconfig: %d - %s', result.exit_status, result.stderr))
