@@ -8,6 +8,7 @@ return function()
     {
       events = {'InsertLeave'};
       targets = {string.format([[<buffer=%d>]], bufnr)};
+      modifiers = {'++once'};
       command = string.format([[lua require('fsouza.lsp.completion').reattach(%d)]], bufnr);
     };
   })
