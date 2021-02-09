@@ -52,10 +52,13 @@ local function setup_langservers()
 end
 
 local function install_autoload_plugins()
-  vfn.mkdir(site_dir .. '/autoload', 'p')
-  execute(
-    [[curl -sLo %s/autoload/fzf.vim https://raw.githubusercontent.com/junegunn/fzf/HEAD/plugin/fzf.vim]],
-    site_dir)
+  local plugins = {
+    ['fzf.vim'] = 'https://raw.githubusercontent.com/junegunn/fzf/HEAD/plugin/fzf.vim';
+    ['plug.vim'] = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim';
+  }
+  for file_name, url in pairs(plugins) do
+    execute([[curl --create-dirs -sLo %s/autoload/%s %s]], site_dir, file_name, url)
+  end
 end
 
 do

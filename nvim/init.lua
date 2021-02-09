@@ -143,6 +143,10 @@ do
   folding()
   global_vars()
 
+  if os.getenv('NVIM_PLUG') then
+    require('fsouza.vim-plug')()
+  end
+
   schedule(function()
     require('fsouza.plugin')
   end)
