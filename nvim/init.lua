@@ -145,6 +145,7 @@ do
 
   if os.getenv('NVIM_PLUG') then
     require('fsouza.vim-plug')()
+    return
   end
 
   schedule(function()
