@@ -19,7 +19,6 @@ function M.enable_autocomplete(bufnr)
 end
 
 function M.reattach(bufnr)
-  vim.fn['compe#documentation#close']()
   setup(default_autocomplete, bufnr)
 end
 
