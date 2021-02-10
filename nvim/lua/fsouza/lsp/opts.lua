@@ -223,7 +223,6 @@ end
 
 function M.with_defaults(opts)
   local capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities.textDocument.completion.completionItem.snippetSupport = true
 
   return vim.tbl_extend('keep', opts, {
     handlers = require('fsouza.lsp.handlers');

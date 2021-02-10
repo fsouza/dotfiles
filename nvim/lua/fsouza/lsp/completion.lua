@@ -4,29 +4,31 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
-local default_autocomplete = false
-
-local function setup(autocomplete, bufnr)
-  require('compe').setup({
-    enabled = true;
-    autocomplete = autocomplete;
-    preselect = 'disable';
-    source = {nvim_lsp = true; nvim_treesitter = true};
-  }, bufnr)
+local function setup()
+  vim.g.completion_enable_auto_popup = 0
+  require('completion').on_attach({
+    trigger_on_delete = 1;
+    auto_change_source = 1;
+    confirm_key = [[\<C-y>]];
+    enable_server_trigger = 0;
+    enable_snippet = 'snippets.nvim';
+    matching_ignore_case = 1;
+    matching_smart_case = 1;
+    matching_strategy_list = {'exact'; 'fuzzy'};
+    chain_complete_list = {default = {{complete_items = {'lsp'}}; {complete_items = {'ts'}}}};
+  })
 end
 
-local function enable_autocomplete(bufnr)
-  setup(true, bufnr)
+local function enable_autocomplete()
+  vim.g.completion_enable_auto_popup = 1
 end
 
 function M.on_attach(bufnr)
-  setup(default_autocomplete, bufnr)
+  setup()
   require('fsouza.color').set_popup_cb(function()
-    local wins = api.nvim_list_wins()
-    for _, winid in ipairs(wins) do
-      if api.nvim_win_is_valid(winid) and pcall(api.nvim_win_get_var, winid, 'compe_documentation') then
-        return winid
-      end
+    local winid = require('completion.hover').winnr
+    if api.nvim_win_is_valid(winid) then
+      return winid
     end
   end)
 
@@ -43,7 +45,6 @@ function M.on_attach(bufnr)
           rhs = helpers.i_luaeval_map([[require('fsouza.lsp.completion').complete()]]);
           opts = {silent = true};
         };
-        {lhs = '<c-y>'; rhs = [[compe#confirm('<c-y>')]]; opts = {expr = true; silent = true}};
       };
     }, bufnr)
   end)
@@ -51,7 +52,7 @@ end
 
 function M.complete()
   local bufnr = vim.api.nvim_get_current_buf()
-  enable_autocomplete(bufnr)
+  enable_autocomplete()
   helpers.augroup('nvim_complete_switch_off', {
     {
       events = {'InsertLeave'};
@@ -60,11 +61,11 @@ function M.complete()
       command = string.format([[lua require('fsouza.lsp.completion').exit(%d)]], bufnr);
     };
   })
-  return vfn['compe#complete']()
+  return vfn['completion#trigger_completion']()
 end
 
-function M.exit(bufnr)
-  setup(false, bufnr)
+function M.exit()
+  vim.g.completion_enable_auto_popup = 0
 end
 
 local function key_for_comp_info(comp_info)
