@@ -144,7 +144,7 @@ do
   global_vars()
 
   if os.getenv('NVIM_PLUG') then
-    require('fsouza.vim-plug')()
+    require('fsouza.vim-plug').setup()
     return
   end
 

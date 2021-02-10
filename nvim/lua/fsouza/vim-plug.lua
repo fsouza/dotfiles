@@ -1,5 +1,7 @@
 local vfn = vim.fn
 
+local M = {}
+
 local plugs = {
   {repo = 'chaoren/vim-wordmotion'};
   {repo = 'godlygeek/tabular'};
@@ -13,7 +15,6 @@ local plugs = {
   {repo = 'neovim/nvim-lspconfig'};
   {repo = 'norcalli/nvim-colorizer.lua'};
   {repo = 'nvim-lua/completion-nvim'};
-  {repo = 'nvim-treesitter/completion-treesitter'};
   {repo = 'nvim-treesitter/nvim-treesitter'};
   {repo = 'nvim-treesitter/nvim-treesitter-textobjects'};
   {repo = 'nvim-treesitter/playground'};
@@ -26,7 +27,7 @@ local plugs = {
   {repo = 'tpope/vim-surround'};
 }
 
-return function()
+function M.setup()
   local dir = vfn.stdpath('data') .. '/site/pack/vim-plug/start'
   vfn['plug#begin'](dir)
   for _, plug in ipairs(plugs) do
@@ -34,3 +35,14 @@ return function()
   end
   vfn['plug#end']()
 end
+
+function M.replug()
+  package.loaded['fsouza.vim-plug'] = nil
+  require('fsouza.vim-plug').setup()
+end
+
+function M.setup_command()
+  vim.cmd([[command! Replug lua require('fsouza.vim-plug').replug()]])
+end
+
+return M

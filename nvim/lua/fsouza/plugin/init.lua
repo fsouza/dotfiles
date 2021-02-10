@@ -138,6 +138,9 @@ end
 do
   local schedule = vim.schedule
   schedule(function()
+    require('fsouza.vim-plug').setup_command()
+  end)
+  schedule(function()
     require('fsouza.lib.cleanup').setup()
   end)
   schedule(setup_editorconfig)
