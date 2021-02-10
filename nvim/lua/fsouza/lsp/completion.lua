@@ -15,7 +15,7 @@ local function setup()
     matching_ignore_case = 1;
     matching_smart_case = 1;
     matching_strategy_list = {'exact'; 'fuzzy'};
-    chain_complete_list = {default = {{complete_items = {'lsp'}}; {complete_items = {'ts'}}}};
+    chain_complete_list = {default = {{complete_items = {'lsp'}}}};
   })
 end
 
