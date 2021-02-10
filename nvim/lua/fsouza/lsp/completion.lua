@@ -1,4 +1,5 @@
 local api = vim.api
+local vfn = vim.fn
 local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
@@ -14,12 +15,8 @@ local function setup(autocomplete, bufnr)
   }, bufnr)
 end
 
-function M.enable_autocomplete(bufnr)
+local function enable_autocomplete(bufnr)
   setup(true, bufnr)
-end
-
-function M.reattach(bufnr)
-  setup(default_autocomplete, bufnr)
 end
 
 function M.on_attach(bufnr)
@@ -36,12 +33,53 @@ function M.on_attach(bufnr)
   vim.schedule(function()
     helpers.create_mappings({
       i = {
-        {lhs = '<cr>'; rhs = 'v:lua.f.cr()'; opts = {expr = true; noremap = true}};
-        {lhs = '<c-x><c-o>'; rhs = 'v:lua.f.complete()'; opts = {expr = true; silent = true}};
+        {
+          lhs = '<cr>';
+          rhs = helpers.i_luaeval_map([[require('fsouza.lsp.completion').cr()]]);
+          opts = {noremap = true};
+        };
+        {
+          lhs = '<c-x><c-o>';
+          rhs = helpers.i_luaeval_map([[require('fsouza.lsp.completion').complete()]]);
+          opts = {silent = true};
+        };
         {lhs = '<c-y>'; rhs = [[compe#confirm('<c-y>')]]; opts = {expr = true; silent = true}};
       };
     }, bufnr)
   end)
+end
+
+function M.complete()
+  local bufnr = vim.api.nvim_get_current_buf()
+  enable_autocomplete(bufnr)
+  helpers.augroup('nvim_complete_switch_off', {
+    {
+      events = {'InsertLeave'};
+      targets = {string.format([[<buffer=%d>]], bufnr)};
+      modifiers = {'++once'};
+      command = string.format([[lua require('fsouza.lsp.completion').exit(%d)]], bufnr);
+    };
+  })
+  return vfn['compe#complete']()
+end
+
+function M.exit(bufnr)
+  setup(false, bufnr)
+end
+
+local function key_for_comp_info(comp_info)
+  if comp_info.mode == '' then
+    return [[<cr>]]
+  end
+  if comp_info.pum_visible == 1 and comp_info.selected == -1 then
+    return [[<c-e><cr>]]
+  end
+  return [[<cr>]]
+end
+
+function M.cr()
+  local r = key_for_comp_info(vfn.complete_info())
+  return api.nvim_replace_termcodes(r, true, false, true)
 end
 
 return M
