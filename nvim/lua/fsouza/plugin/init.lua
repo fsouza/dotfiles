@@ -42,10 +42,6 @@ local function setup_hlyank()
   })
 end
 
-local function setup_global_ns()
-  _G.f = require('fsouza.global')
-end
-
 local function setup_word_replace()
   helpers.create_mappings({
     n = {
@@ -144,7 +140,6 @@ do
     require('fsouza.lib.cleanup').setup()
   end)
   schedule(setup_editorconfig)
-  schedule(setup_global_ns)
   schedule(setup_fuzzy_mappings)
   schedule(setup_hlyank)
   schedule(function()

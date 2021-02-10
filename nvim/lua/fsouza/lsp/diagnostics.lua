@@ -75,7 +75,6 @@ function M.on_attach()
       command = [[lua require('fsouza.lsp.diagnostics').on_diagnostics_changed()]];
     };
   })
-  vim.o.rulerformat = [[%25(%l,%c   %o    %1*%{v:lua.f.lsp.diagnostic_ruler()}%*%)]]
 end
 
 return M
