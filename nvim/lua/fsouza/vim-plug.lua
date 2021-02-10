@@ -1,29 +1,29 @@
 local vfn = vim.fn
 
 local plugs = {
+  {repo = 'chaoren/vim-wordmotion'};
+  {repo = 'godlygeek/tabular'};
+  {repo = 'hrsh7th/nvim-compe'};
+  {repo = 'hrsh7th/vim-vsnip'};
+  {repo = 'junegunn/fzf.vim'};
   {repo = 'justinmk/vim-dirvish'};
   {repo = 'justinmk/vim-sneak'};
   {repo = 'kana/vim-textobj-user'};
-  {repo = 'mg979/vim-visual-multi'};
-  {repo = 'norcalli/nvim-colorizer.lua'};
-  {repo = 'sheerun/vim-polyglot'};
-  {repo = 'thinca/vim-textobj-between'};
-  {repo = 'tpope/vim-repeat'};
-  {repo = 'tpope/vim-surround'};
-  {repo = 'godlygeek/tabular'};
-  {repo = 'junegunn/fzf.vim'};
-  {repo = 'neovim/nvim-lspconfig'};
-  {repo = 'tpope/vim-commentary'};
   {repo = 'mattn/emmet-vim'};
-  {repo = 'rhysd/git-messenger.vim'};
+  {repo = 'mg979/vim-visual-multi'};
+  {repo = 'michaeljsmith/vim-indent-object'};
+  {repo = 'neovim/nvim-lspconfig'};
+  {repo = 'norcalli/nvim-colorizer.lua'};
   {repo = 'nvim-treesitter/nvim-treesitter'};
   {repo = 'nvim-treesitter/nvim-treesitter-textobjects'};
   {repo = 'nvim-treesitter/playground'};
-  {repo = 'michaeljsmith/vim-indent-object'};
+  {repo = 'rhysd/git-messenger.vim'};
+  {repo = 'sheerun/vim-polyglot'};
+  {repo = 'thinca/vim-textobj-between'};
+  {repo = 'tpope/vim-commentary'};
   {repo = 'tpope/vim-fugitive'};
-  {repo = 'chaoren/vim-wordmotion'};
-  {repo = 'hrsh7th/nvim-compe'};
-  {repo = 'hrsh7th/vim-vsnip'};
+  {repo = 'tpope/vim-repeat'};
+  {repo = 'tpope/vim-surround'};
 }
 
 return function()
