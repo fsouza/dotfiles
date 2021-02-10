@@ -1,4 +1,4 @@
-if command -v poetry &>/dev/null; then
-	mkdir -p ~/.zfunc
- 	poetry completions zsh >~/.zfunc/_poetry
+if command -v poetry &>/dev/null && ! [ -f ~/.cache/zsh/zfunc/_poetry ]; then
+	mkdir -p ~/.cache/zsh/zfunc
+ 	poetry completions zsh >~/.cache/zsh/zfunc/_poetry
 fi

@@ -1,10 +1,14 @@
 basedir=$(dirname "$(realpath "${(%):-%N}")")
 source "${basedir}"/extra/init-functions
 
+mkdir -p ~/.cache/{go,node,zsh}
+
 export MANPATH=/usr/share/man:/usr/local/share/man
-export GOBIN=$HOME/bin GOPATH=$HOME/.go GIMME_SILENT_ENV=1 GIMME_TYPE=binary
+export GOBIN=$HOME/bin GOPATH=$HOME/.cache/go GIMME_SILENT_ENV=1 GIMME_TYPE=binary
 export EDITOR=vim PAGER=less MANPAGER=less
 export RIPGREP_CONFIG_PATH=${HOME}/.config/rgrc
+export LESSHISTFILE=${HOME}/.cache/lesshst
+export NODE_REPL_HISTORY=${HOME}/.cache/node/history
 
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 prepend_to_path \
@@ -45,12 +49,12 @@ export PS1="％ " PS2="\\ "
 
 source "${basedir}"/extra/tmux
 
-fpath=(/usr/local/share/zsh-completions ~/.zfunc $fpath)
+fpath=(/usr/local/share/zsh-completions ~/.cache/zsh/zfunc $fpath)
 export ZLE_SPACE_SUFFIX_CHARS=$'|&'
 
-autoload -Uz compinit && compinit -u
+autoload -Uz compinit && compinit -d "${HOME}/.cache/zsh/zcompdump" -u
 
-export HISTFILE="$HOME/.history"
+export HISTFILE="$HOME/.cache/zsh/history"
 export HISTSIZE=1234567890
 export SAVEHIST=$HISTSIZE
 
