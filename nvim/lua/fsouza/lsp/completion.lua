@@ -61,7 +61,8 @@ function M.complete()
       command = string.format([[lua require('fsouza.lsp.completion').exit(%d)]], bufnr);
     };
   })
-  return vfn['completion#trigger_completion']()
+  require('completion').triggerCompletion()
+  return ''
 end
 
 function M.exit()
