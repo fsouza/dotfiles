@@ -28,10 +28,6 @@ defaults write -g NSAutomaticQuoteSubstitutionEnabled -bool false
 # Disable smart dashes as they’re annoying when typing code
 defaults write -g NSAutomaticDashSubstitutionEnabled -bool false
 
-# Trackpad: enable tap to click for this user and for the login screen
-defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-
 # Use fn on keyboards
 defaults write -g com.apple.keyboard.fnState -int 1
 
@@ -54,10 +50,6 @@ defaults write com.apple.screensaver askForPasswordDelay -int 0
 
 # Finder: show all filename extensions
 defaults write -g AppleShowAllExtensions -bool true
-
-# Mojave colors
-defaults write -g AppleAccentColor -string "-1"
-defaults write -g AppleHighlightColor "0.847059 0.847059 0.862745 Graphite"
 
 # When performing a search, search the current folder by default
 defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
@@ -134,12 +126,6 @@ defaults write com.apple.dock wvous-bl-modifier -int 0
 defaults write com.apple.dock wvous-br-corner -int 2
 defaults write com.apple.dock wvous-br-modifier -int 0
 
-# Don’t display the annoying prompt when quitting iTerm
-defaults write com.googlecode.iterm2 PromptOnQuit -bool false
-
-# Use plain text mode for new TextEdit documents
-defaults write com.apple.TextEdit RichText -int 0
-
 # controlstrip
 defaults write com.apple.controlstrip FullCustomized -array com.apple.system.group.brightness \
 	com.apple.system.mission-control \
@@ -153,44 +139,3 @@ defaults write com.apple.controlstrip MiniCustomized -array com.apple.system.bri
 	com.apple.system.mute
 
 defaults write com.apple.touchbar.agent PresentationModeFnModes -dict appWithControlStrip fullControlStrip
-
-# Amethyst config
-
-defaults write com.amethyst.Amethyst floating '(
-	{
-		id = "com.todoist.mac.Todoist";
-		"window-titles" = ();
-	},
-	{
-		id = "com.agilebits.onepassword7";
-		"window-titles" = ();
-	},
-	{
-		id = "com.apple.systempreferences";
-		"window-titles" = ();
-	}
-)'
-
-defaults write com.amethyst.Amethyst float-small-windows 1
-
-defaults write com.amethyst.Amethyst layouts '(
-	tall,
-	wide,
-	fullscreen,
-	column,
-	bsp
-)'
-
-defaults write com.amethyst.Amethyst new-windows-to-main 1
-
-defaults write com.amethyst.Amethyst window-margins 1
-defaults write com.amethyst.Amethyst window-margin-size 15
-
-defaults write com.amethyst.Amethyst enables-layout-hud-on-space-change 0
-
-defaults write com.amethyst.Amethyst mouse-resize-windows 1
-defaults write com.amethyst.Amethyst mouse-swaps-windows 1
-
-defaults write com.amethyst.Amethyst restore-layouts-on-launch 1
-
-defaults read com.amethyst.Amethyst &>/dev/null
