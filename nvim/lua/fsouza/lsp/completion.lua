@@ -11,7 +11,7 @@ local function setup()
     auto_change_source = 1;
     confirm_key = [[\<C-y>]];
     enable_server_trigger = 0;
-    enable_snippet = 'snippets.nvim';
+    sorting = 'none';
     matching_ignore_case = 1;
     matching_smart_case = 1;
     matching_strategy_list = {'exact'; 'fuzzy'};
