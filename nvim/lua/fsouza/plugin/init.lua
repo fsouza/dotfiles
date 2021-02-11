@@ -86,7 +86,7 @@ local function setup_prettierd()
     {
       events = {'FileType'};
       targets = auto_fmt_fts;
-      command = [[lua require('fsouza.plugin.prettierd').enable_auto_format(vim.fn.expand('<abuf>'))]];
+      command = [[lua require('fsouza.plugin.prettierd').setup_autofmt(vim.fn.expand('<abuf>'))]];
     };
     {
       events = {'FileType'};

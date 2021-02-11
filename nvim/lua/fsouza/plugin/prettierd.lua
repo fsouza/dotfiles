@@ -1,4 +1,5 @@
 local api = vim.api
+local vcmd = vim.cmd
 local vfn = vim.fn
 local loop = vim.loop
 local cmd = require('fsouza.lib.cmd')
@@ -81,7 +82,7 @@ function M.format(bufnr, cb, is_retry)
     helpers.rewrite_wrap(function()
       local write = false
       for i, line in ipairs(new_lines) do
-        if line ~= lines[i] then
+        if line ~= lines[i + 1] then
           write = true
           break
         end
@@ -127,29 +128,19 @@ function M.format(bufnr, cb, is_retry)
   end)
 end
 
-function M.auto_format(bufnr)
-  local enable, timeout_ms = require('fsouza.lib.autofmt').config()
-  if not enable then
-    return
-  end
-
-  local finished = false
-  pcall(function()
-    M.format(bufnr, function()
-      finished = true
-    end)
+function M.autofmt_and_write(bufnr)
+  M.format(bufnr, function()
+    vcmd('update')
   end)
-  vim.wait(timeout_ms, function()
-    return finished == true
-  end, 25)
 end
 
-function M.enable_auto_format(bufnr)
+function M.setup_autofmt(bufnr)
   helpers.augroup('prettierd_autofmt_' .. bufnr, {
     {
-      events = {'BufWritePre'};
+      events = {'BufWritePost'};
       targets = {string.format('<buffer=%d>', bufnr)};
-      command = string.format([[lua require('fsouza.plugin.prettierd').auto_format(%d)]], bufnr);
+      command = string.format([[lua require('fsouza.plugin.prettierd').autofmt_and_write(%d)]],
+                              bufnr);
     };
   })
 end

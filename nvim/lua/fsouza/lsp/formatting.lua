@@ -118,7 +118,7 @@ function M.autofmt(bufnr)
 end
 
 function M.autofmt_and_write(bufnr)
-  local enable, _ = require('fsouza.lib.autofmt').config()
+  local enable = require('fsouza.lib.autofmt').is_enabled()
   if not enable then
     return
   end
