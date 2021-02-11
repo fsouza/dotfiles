@@ -104,7 +104,7 @@ local function codelenses(bufnr)
   clients[bufnr].lsp_client.request('textDocument/codeLens', params, codelenses_handler, bufnr)
 end
 
-function M.codelens(bufnr)
+local function codelens(bufnr)
   local debouncer_key = bufnr
   local debounced = debouncers[debouncer_key]
   if debounced == nil then
@@ -131,8 +131,8 @@ local function execute_codelenses(bufnr, items)
     return
   end
 
-  local function run(codelens)
-    client.lsp_client.request('workspace/executeCommand', codelens.command, function(err)
+  local function run(clens)
+    client.lsp_client.request('workspace/executeCommand', clens.command, function(err)
       if not err then
         vcmd([[checktime]])
       end
@@ -163,7 +163,7 @@ local function execute_codelenses(bufnr, items)
   end
 end
 
-function M.execute()
+local function execute()
   local winid = api.nvim_get_current_win()
   local bufnr = api.nvim_win_get_buf(winid)
   local cursor = api.nvim_win_get_cursor(winid)
@@ -188,7 +188,7 @@ function M.on_attach(opts)
     supports_command = opts.supports_command;
   }
   vim.schedule(function()
-    M.codelens(bufnr)
+    codelens(bufnr)
   end)
 
   local augroup_id = 'lsp_codelens_' .. bufnr
@@ -196,14 +196,16 @@ function M.on_attach(opts)
     {
       events = {'InsertLeave'; 'BufWritePost'};
       targets = {string.format('<buffer=%d>', bufnr)};
-      command = string.format([[lua require('fsouza.lsp.code_lens').codelens(%d)]], bufnr);
+      command = helpers.fn_cmd(function()
+        codelens(bufnr)
+      end);
     };
   })
 
   vim.schedule(function()
     local hook_id = augroup_id
     require('fsouza.lsp.buf_diagnostic').register_hook(hook_id, function()
-      M.codelens(bufnr)
+      codelens(bufnr)
     end)
     api.nvim_buf_attach(bufnr, false, {
       on_detach = function()
@@ -217,13 +219,7 @@ function M.on_attach(opts)
 
   if opts.mapping then
     helpers.create_mappings({
-      n = {
-        {
-          lhs = opts.mapping;
-          rhs = helpers.fn_map(require('fsouza.lsp.code_lens').execute);
-          {silent = true};
-        };
-      };
+      n = {{lhs = opts.mapping; rhs = helpers.fn_map(execute); {silent = true}}};
     }, bufnr)
   end
 end

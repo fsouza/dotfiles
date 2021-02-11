@@ -37,7 +37,9 @@ local function setup_hlyank()
     {
       events = {'TextYankPost'};
       targets = {'*'};
-      command = [[lua require('vim.highlight').on_yank({higroup = 'HlYank'; timeout = 200; on_macro = false})]];
+      command = helpers.fn_cmd(function()
+        require('vim.highlight').on_yank({higroup = 'HlYank'; timeout = 200; on_macro = false})
+      end);
     };
   })
 end
@@ -86,7 +88,9 @@ local function setup_prettierd()
     {
       events = {'FileType'};
       targets = auto_fmt_fts;
-      command = [[lua require('fsouza.plugin.prettierd').setup_autofmt(vim.fn.expand('<abuf>'))]];
+      command = helpers.fn_cmd(function()
+        require('fsouza.plugin.prettierd').setup_autofmt(vim.fn.expand('<abuf>'))
+      end);
     };
     {
       events = {'FileType'};

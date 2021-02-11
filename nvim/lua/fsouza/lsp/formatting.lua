@@ -6,8 +6,6 @@ local vcmd = vim.cmd
 local loop = vim.loop
 local helpers = require('fsouza.lib.nvim_helpers')
 
-local fmt_clients = {}
-
 local langservers_skip_set = {tsserver = true}
 
 local function should_skip_buffer(bufnr)
@@ -25,33 +23,6 @@ end
 
 local function should_skip_server(server_name)
   return langservers_skip_set[server_name] ~= nil
-end
-
-function M.on_attach(client, bufnr)
-  if should_skip_buffer(bufnr) then
-    return
-  end
-
-  if should_skip_server(client.name) then
-    return
-  end
-
-  if fmt_clients[bufnr] and fmt_clients[bufnr].id ~= client.id then
-    print(string.format([[[DEBUG] overriding client %s with %s]], fmt_clients[bufnr].name,
-                        client.name))
-  end
-  fmt_clients[bufnr] = client
-
-  helpers.augroup('lsp_autofmt_' .. bufnr, {
-    {
-      events = {'BufWritePost'};
-      targets = {string.format('<buffer=%d>', bufnr)};
-      command = string.format([[lua require('fsouza.lsp.formatting').autofmt_and_write(%d)]], bufnr);
-    };
-  })
-
-  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>f',
-                          helpers.fn_map(require('fsouza.lsp.formatting').fmt), {silent = true})
 end
 
 local function formatting_params(bufnr)
@@ -75,8 +46,8 @@ local function apply_edits(result, bufnr)
   end)
 end
 
-local function fmt(bufnr, cb)
-  local client = fmt_clients[bufnr]
+local function fmt(client, bufnr, cb)
+  bufnr = bufnr or api.nvim_get_current_buf()
   if not client then
     error(string.format('cannot format the buffer %d, no lsp client registered', bufnr))
   end
@@ -87,43 +58,13 @@ local function fmt(bufnr, cb)
   end
 end
 
-function M.fmt()
-  fmt(api.nvim_get_current_buf(), nil)
-end
-
-function M.fmt_sync(bufnr, timeout_ms)
-  local result
-  local _, cancel = fmt(bufnr, function(_, _, result_, _)
-    result = result_
-  end)
-
-  vim.wait(timeout_ms or 200, function()
-    return result ~= nil
-  end, 10)
-
-  if not result then
-    cancel()
-    return
-  end
-  apply_edits(result, bufnr)
-end
-
-function M.autofmt(bufnr)
-  local enable, timeout_ms = require('fsouza.lib.autofmt').config()
-  if enable then
-    pcall(function()
-      M.fmt_sync(bufnr, timeout_ms)
-    end)
-  end
-end
-
-function M.autofmt_and_write(bufnr)
+local function autofmt_and_write(client, bufnr)
   local enable = require('fsouza.lib.autofmt').is_enabled()
   if not enable then
     return
   end
   pcall(function()
-    fmt(bufnr, function(_, _, result, _)
+    fmt(client, bufnr, function(_, _, result, _)
       local curr_buf = api.nvim_get_current_buf()
       if curr_buf ~= bufnr or api.nvim_get_mode().mode ~= 'n' then
         return
@@ -134,6 +75,36 @@ function M.autofmt_and_write(bufnr)
       end
     end)
   end)
+end
+
+function M.on_attach(client, bufnr)
+  if should_skip_buffer(bufnr) then
+    return
+  end
+
+  if should_skip_server(client.name) then
+    return
+  end
+
+  helpers.augroup('lsp_autofmt_' .. bufnr, {
+    {
+      events = {'BufWritePost'};
+      targets = {string.format('<buffer=%d>', bufnr)};
+      command = helpers.fn_cmd(function()
+        autofmt_and_write(client, bufnr)
+      end);
+    };
+  })
+
+  helpers.create_mappings({
+    n = {
+      lhs = '<leader>f';
+      rhs = helpers.fn_map(function()
+        fmt(client, bufnr)
+      end);
+      opts = {silent = true};
+    };
+  }, bufnr)
 end
 
 return M

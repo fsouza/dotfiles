@@ -6,7 +6,7 @@ local M = {}
 
 local debounced_print = require('fsouza.lib.debounce').debounce(2000, print)
 
-function M.on_progress_update()
+local function on_progress_update()
   if vfn.mode() ~= 'n' then
     return
   end
@@ -38,10 +38,7 @@ end
 
 function M.on_attach()
   helpers.augroup('fsouza__lsp_progress', {
-    {
-      events = {'User LspProgressUpdate'};
-      command = [[lua require('fsouza.lsp.progress').on_progress_update()]];
-    };
+    {events = {'User LspProgressUpdate'}; command = helpers.fn_cmd(on_progress_update)};
   })
 end
 

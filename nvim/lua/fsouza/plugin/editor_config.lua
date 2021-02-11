@@ -8,19 +8,6 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
-local function set_enabled(v)
-  local commands = {}
-  if v then
-    table.insert(commands, {
-      events = {'BufNewFile'; 'BufReadPost'; 'BufFilePost'};
-      targets = {'*'};
-      command = [[lua require('fsouza.plugin.editor_config').set_config()]];
-    });
-  end
-  helpers.augroup('editorconfig', commands)
-  M.set_config()
-end
-
 local function parse_output(data)
   local lines = vim.split(data, '\n')
   local opts = {}
@@ -48,13 +35,21 @@ local function get_vim_fileformat(editorconfig_eol)
   return m[editorconfig_eol] or 'unix'
 end
 
+local trim_whitespace_cmd = helpers.fn_cmd(function()
+  local view = vfn.winsaveview()
+  pcall(function()
+    vcmd([[silent! keeppatterns %s/\v\s+$//]])
+  end)
+  vfn.winrestview(view)
+end)
+
 local function handle_whitespaces(bufnr, v)
   local commands = {}
   if v == 'true' then
     table.insert(commands, {
       events = {'BufWritePre'};
       targets = {string.format('<buffer=%d>', bufnr)};
-      command = [[lua require('fsouza.plugin.editor_config').trim_whitespace()]];
+      command = trim_whitespace_cmd;
     })
   end
   helpers.augroup('editorconfig_trim_trailing_whitespace_' .. bufnr, commands)
@@ -105,15 +100,7 @@ local function set_opts(bufnr, opts)
   end)
 end
 
-function M.enable()
-  set_enabled(true)
-end
-
-function M.disable()
-  set_enabled(false)
-end
-
-function M.set_config()
+local function set_config()
   local bufnr = api.nvim_get_current_buf()
   if not vim.bo[bufnr].modifiable or vim.bo[bufnr].readonly then
     return
@@ -139,12 +126,27 @@ function M.set_config()
   end)
 end
 
-function M.trim_whitespace()
-  local view = vfn.winsaveview()
-  pcall(function()
-    vcmd([[silent! keeppatterns %s/\v\s+$//]])
-  end)
-  vfn.winrestview(view)
+local set_config_cmd = helpers.fn_cmd(set_config)
+
+local function set_enabled(v)
+  local commands = {}
+  if v then
+    table.insert(commands, {
+      events = {'BufNewFile'; 'BufReadPost'; 'BufFilePost'};
+      targets = {'*'};
+      command = set_config_cmd;
+    });
+  end
+  helpers.augroup('editorconfig', commands)
+  set_config()
+end
+
+function M.enable()
+  set_enabled(true)
+end
+
+function M.disable()
+  set_enabled(false)
 end
 
 return M

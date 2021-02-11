@@ -24,18 +24,22 @@ function M.vcmd_map(cmd)
   return string.format([[<cmd>'<,'>%s<cr>]], cmd)
 end
 
-function M.i_luaeval_map(cmd)
-  return string.format([[<c-r>=luaeval("%s")<CR>]], cmd)
+function M.fn_cmd(fn)
+  local id = register_cb(fn)
+  return string.format([[lua require('fsouza.lib.nvim_helpers').fns['%s']()]], id)
 end
 
 function M.fn_map(fn)
-  local id = register_cb(fn)
-  return M.cmd_map(string.format([[lua require('fsouza.lib.nvim_helpers').fns['%s']()]], id))
+  return M.cmd_map(M.fn_cmd(fn))
 end
 
 function M.vfn_map(fn)
+  return M.vcmd_map(M.fn_cmd(fn))
+end
+
+function M.ifn_map(fn)
   local id = register_cb(fn)
-  return M.vcmd_map(string.format([[lua require('fsouza.lib.nvim_helpers').fns['%s']()]], id))
+  return string.format([[<c-r>=luaeval("require('fsouza.lib.nvim_helpers').fns['%s']()")<CR>]], id)
 end
 
 function M.create_mappings(mappings, bufnr)

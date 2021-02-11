@@ -71,7 +71,7 @@ local function setup_autocmd()
       events = {'ColorScheme'};
       targets = {'*'};
       modifiers = {'++once'};
-      command = [[lua require('fsouza.color').disable()]];
+      command = helpers.fn_cmd(M.disable);
     };
   })
 end

@@ -186,8 +186,6 @@ local function attached(bufnr, client)
 
     require('fsouza.lsp.progress').on_attach()
 
-    require('fsouza.lsp.diagnostics').on_attach()
-
     vim.schedule(function()
       helpers.create_mappings(mappings, bufnr)
     end)

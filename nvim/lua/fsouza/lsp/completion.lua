@@ -23,6 +23,39 @@ local function enable_autocomplete()
   vim.g.completion_enable_auto_popup = 1
 end
 
+local function key_for_comp_info(comp_info)
+  if comp_info.mode == '' then
+    return [[<cr>]]
+  end
+  if comp_info.pum_visible == 1 and comp_info.selected == -1 then
+    return [[<c-e><cr>]]
+  end
+  return [[<cr>]]
+end
+
+local function cr()
+  local r = key_for_comp_info(vfn.complete_info())
+  return api.nvim_replace_termcodes(r, true, false, true)
+end
+
+local function exit()
+  vim.g.completion_enable_auto_popup = 0
+end
+
+local function complete()
+  enable_autocomplete()
+  helpers.augroup('fsouza__nvim_completion_switch_off', {
+    {
+      events = {'InsertLeave'};
+      targets = {'<buffer>'};
+      modifiers = {'++once'};
+      command = helpers.fn_cmd(exit);
+    };
+  })
+  require('completion').triggerCompletion()
+  return ''
+end
+
 function M.on_attach(bufnr)
   setup()
   require('fsouza.color').set_popup_cb(function()
@@ -35,53 +68,11 @@ function M.on_attach(bufnr)
   vim.schedule(function()
     helpers.create_mappings({
       i = {
-        {
-          lhs = '<cr>';
-          rhs = helpers.i_luaeval_map([[require('fsouza.lsp.completion').cr()]]);
-          opts = {noremap = true};
-        };
-        {
-          lhs = '<c-x><c-o>';
-          rhs = helpers.i_luaeval_map([[require('fsouza.lsp.completion').complete()]]);
-          opts = {silent = true};
-        };
+        {lhs = '<cr>'; rhs = helpers.ifn_map(cr); opts = {noremap = true}};
+        {lhs = '<c-x><c-o>'; rhs = helpers.ifn_map(complete); opts = {silent = true}};
       };
     }, bufnr)
   end)
-end
-
-function M.complete()
-  local bufnr = vim.api.nvim_get_current_buf()
-  enable_autocomplete()
-  helpers.augroup('nvim_complete_switch_off', {
-    {
-      events = {'InsertLeave'};
-      targets = {string.format([[<buffer=%d>]], bufnr)};
-      modifiers = {'++once'};
-      command = string.format([[lua require('fsouza.lsp.completion').exit(%d)]], bufnr);
-    };
-  })
-  require('completion').triggerCompletion()
-  return ''
-end
-
-function M.exit()
-  vim.g.completion_enable_auto_popup = 0
-end
-
-local function key_for_comp_info(comp_info)
-  if comp_info.mode == '' then
-    return [[<cr>]]
-  end
-  if comp_info.pum_visible == 1 and comp_info.selected == -1 then
-    return [[<c-e><cr>]]
-  end
-  return [[<cr>]]
-end
-
-function M.cr()
-  local r = key_for_comp_info(vfn.complete_info())
-  return api.nvim_replace_termcodes(r, true, false, true)
 end
 
 return M

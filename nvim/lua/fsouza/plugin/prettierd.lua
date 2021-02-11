@@ -128,7 +128,7 @@ function M.format(bufnr, cb, is_retry)
   end)
 end
 
-function M.autofmt_and_write(bufnr)
+local function autofmt_and_write(bufnr)
   local enable = require('fsouza.lib.autofmt').is_enabled()
   if not enable then
     return
@@ -143,8 +143,9 @@ function M.setup_autofmt(bufnr)
     {
       events = {'BufWritePost'};
       targets = {string.format('<buffer=%d>', bufnr)};
-      command = string.format([[lua require('fsouza.plugin.prettierd').autofmt_and_write(%d)]],
-                              bufnr);
+      command = helpers.fn_cmd(function()
+        autofmt_and_write(bufnr)
+      end);
     };
   })
 end

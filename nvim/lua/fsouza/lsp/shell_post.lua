@@ -13,7 +13,7 @@ local function read_buffer(bufnr)
   return lines
 end
 
-function M.notify(bufnr)
+local function notify(bufnr)
   if not clients_by_buf[bufnr] then
     return
   end
@@ -50,7 +50,9 @@ function M.on_attach(opts)
     {
       events = {'FileChangedShellPost'};
       targets = {string.format('<buffer=%d>', bufnr)};
-      command = string.format([[lua require('fsouza.lsp.shell_post').notify(%d)]], bufnr);
+      command = helpers.fn_cmd(function()
+        notify(bufnr)
+      end);
     };
   })
 end

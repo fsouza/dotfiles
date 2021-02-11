@@ -8,7 +8,7 @@ function M.register(fn)
   table.insert(cbs, fn)
 end
 
-function M.cleanup()
+local function cleanup()
   local finished = 0
   for _, cb in pairs(cbs) do
     vim.schedule(function()
@@ -23,13 +23,8 @@ function M.cleanup()
 end
 
 function M.setup()
-  helpers.augroup('lua_lib_cleanup', {
-    {
-      events = {'VimLeavePre'};
-      targets = {'*'};
-      command = [[lua require('fsouza.lib.cleanup').cleanup()]];
-    };
-  })
+  helpers.augroup('fsouza__lua_lib_cleanup',
+                  {{events = {'VimLeavePre'}; targets = {'*'}; command = helpers.fn_cmd(cleanup)}})
 end
 
 return M
