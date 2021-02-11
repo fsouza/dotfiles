@@ -51,8 +51,7 @@ function M.on_attach(client, bufnr)
   })
 
   api.nvim_buf_set_keymap(bufnr, 'n', '<leader>f',
-                          helpers.cmd_map([[lua require('fsouza.lsp.formatting').fmt()]]),
-                          {silent = true})
+                          helpers.fn_map(require('fsouza.lsp.formatting').fmt), {silent = true})
 end
 
 local function formatting_params(bufnr)

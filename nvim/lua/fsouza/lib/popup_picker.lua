@@ -82,14 +82,15 @@ function M.open(lines, cb)
     n = {
       {
         lhs = '<esc>';
-        rhs = helpers.cmd_map(string.format([[lua require('fsouza.lib.popup_picker').close(%d)]],
-                                            winid));
+        rhs = helpers.fn_map(function()
+          require('fsouza.lib.popup_picker').close(winid)
+        end);
       };
       {
         lhs = '<cr>';
-        rhs = helpers.cmd_map(string.format(
-                                [[lua require('fsouza.lib.popup_picker').handle_selection(%d)]],
-                                winid));
+        rhs = helpers.fn_map(function()
+          require('fsouza.lib.popup_picker').handle_selection(winid)
+        end);
       };
       {lhs = '<c-n>'; rhs = '<down>'; opts = {noremap = true}};
       {lhs = '<c-p>'; rhs = '<up>'; opts = {noremap = true}};

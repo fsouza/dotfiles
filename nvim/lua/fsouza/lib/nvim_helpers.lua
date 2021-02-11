@@ -1,9 +1,20 @@
-local M = {}
+local M = {fns = {}}
 
 local api = vim.api
 local nvim_buf_set_keymap = api.nvim_buf_set_keymap
 local vcmd = vim.cmd
 local vfn = vim.fn
+
+math.randomseed(os.time())
+
+local function register_cb(fn)
+  local id = tostring(math.random(1e3))
+  if M.fns[id] then
+    return register_cb(fn)
+  end
+  M.fns[id] = fn
+  return id
+end
 
 function M.cmd_map(cmd)
   return string.format('<cmd>%s<cr>', cmd)
@@ -15,6 +26,16 @@ end
 
 function M.i_luaeval_map(cmd)
   return string.format([[<c-r>=luaeval("%s")<CR>]], cmd)
+end
+
+function M.fn_map(fn)
+  local id = register_cb(fn)
+  return M.cmd_map(string.format([[lua require('fsouza.lib.nvim_helpers').fns['%s']()]], id))
+end
+
+function M.vfn_map(fn)
+  local id = register_cb(fn)
+  return M.vcmd_map(string.format([[lua require('fsouza.lib.nvim_helpers').fns['%s']()]], id))
 end
 
 function M.create_mappings(mappings, bufnr)

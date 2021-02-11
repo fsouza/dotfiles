@@ -10,17 +10,17 @@ local function setup_fuzzy_mappings()
       {lhs = '<leader>;'; rhs = helpers.cmd_map('FzfCommands'); opts = {silent = true}};
       {
         lhs = '<leader>zj';
-        rhs = helpers.cmd_map([[lua require('fsouza.plugin.fuzzy').fuzzy_here()]]);
+        rhs = helpers.fn_map(require('fsouza.plugin.fuzzy').fuzzy_here);
         opts = {silent = true};
       };
       {
         lhs = '<leader>gg';
-        rhs = helpers.cmd_map([[lua require('fsouza.plugin.fuzzy').rg()]]);
+        rhs = helpers.fn_map(require('fsouza.plugin.fuzzy').rg);
         opts = {silent = true};
       };
       {
         lhs = '<leader>gw';
-        rhs = helpers.cmd_map([[lua require('fsouza.plugin.fuzzy').rg_cword()]]);
+        rhs = helpers.fn_map(require('fsouza.plugin.fuzzy').rg_cword);
         opts = {silent = true};
       };
     };
@@ -47,7 +47,7 @@ local function setup_word_replace()
     n = {
       {
         lhs = '<leader>e';
-        rhs = helpers.cmd_map([[lua require('fsouza.plugin.word_sub').run()]]);
+        rhs = helpers.fn_map(require('fsouza.plugin.word_sub').run);
         opts = {silent = true};
       };
     };
@@ -112,17 +112,23 @@ local function setup_terminal_mappings_and_commands()
     n = {
       {
         lhs = '<c-t>j';
-        rhs = helpers.cmd_map([[lua require('fsouza.plugin.terminal').open('j')]]);
+        rhs = helpers.fn_map(function()
+          require('fsouza.plugin.terminal').open('j')
+        end);
         opts = {silent = true};
       };
       {
         lhs = '<c-t>k';
-        rhs = helpers.cmd_map([[lua require('fsouza.plugin.terminal').open('k')]]);
+        rhs = helpers.fn_map(function()
+          require('fsouza.plugin.terminal').open('k')
+        end);
         opts = {silent = true};
       };
       {
         lhs = '<c-t>l';
-        rhs = helpers.cmd_map([[lua require('fsouza.plugin.terminal').open('l')]]);
+        rhs = helpers.fn_map(function()
+          require('fsouza.plugin.terminal').open('l')
+        end);
         opts = {silent = true};
       };
     };

@@ -9,36 +9,26 @@ local function attached(bufnr, client)
       n = {
         {
           lhs = '<leader>l';
-          rhs = helpers.cmd_map([[lua vim.lsp.diagnostic.show_line_diagnostics()]]);
+          rhs = helpers.fn_map(vim.lsp.diagnostic.show_line_diagnostics);
           opts = {silent = true};
         };
         {
           lhs = '<leader>df';
-          rhs = helpers.cmd_map([[lua require('fsouza.lsp.diagnostics').list_file_diagnostics()]]);
+          rhs = helpers.fn_map(require('fsouza.lsp.diagnostics').list_file_diagnostics);
           opts = {silent = true};
         };
         {
           lhs = '<leader>dw';
-          rhs = helpers.cmd_map(
-            [[lua require('fsouza.lsp.diagnostics').list_workspace_diagnostics()]]);
+          rhs = helpers.fn_map(require('fsouza.lsp.diagnostics').list_workspace_diagnostics);
           opts = {silent = true};
         };
         {
           lhs = '<leader>cl';
-          rhs = helpers.cmd_map(
-            [[lua require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics()]]);
+          rhs = helpers.fn_map(require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics);
           opts = {silent = true};
         };
-        {
-          lhs = '<c-n>';
-          rhs = helpers.cmd_map([[lua vim.lsp.diagnostic.goto_next()]]);
-          opts = {silent = true};
-        };
-        {
-          lhs = '<c-p>';
-          rhs = helpers.cmd_map([[lua vim.lsp.diagnostic.goto_prev()]]);
-          opts = {silent = true};
-        };
+        {lhs = '<c-n>'; rhs = helpers.fn_map(vim.lsp.diagnostic.goto_next); opts = {silent = true}};
+        {lhs = '<c-p>'; rhs = helpers.fn_map(vim.lsp.diagnostic.goto_prev); opts = {silent = true}};
       };
       i = {};
       x = {};
@@ -55,7 +45,7 @@ local function attached(bufnr, client)
     if client.resolved_capabilities.rename ~= nil and client.resolved_capabilities.rename ~= false then
       table.insert(mappings.n, {
         lhs = '<leader>r';
-        rhs = helpers.cmd_map('lua vim.lsp.buf.rename()');
+        rhs = helpers.fn_map(vim.lsp.buf.rename);
         opts = {silent = true};
       })
     end
@@ -63,12 +53,12 @@ local function attached(bufnr, client)
     if client.resolved_capabilities.code_action then
       table.insert(mappings.n, {
         lhs = '<leader>cc';
-        rhs = helpers.cmd_map([[lua require('fsouza.lsp.code_action').code_action()]]);
+        rhs = helpers.fn_map(require('fsouza.lsp.code_action').code_action);
         opts = {silent = true};
       })
       table.insert(mappings.x, {
         lhs = '<leader>cc';
-        rhs = helpers.vcmd_map([[lua require('fsouza.lsp.code_action').visual_code_action()]]);
+        rhs = helpers.vfn_map(require('fsouza.lsp.code_action').visual_code_action);
         opts = {silent = true};
       })
     end
@@ -76,12 +66,12 @@ local function attached(bufnr, client)
     if client.resolved_capabilities.declaration then
       table.insert(mappings.n, {
         lhs = '<leader>gy';
-        rhs = helpers.cmd_map('lua vim.lsp.buf.declaration()');
+        rhs = helpers.fn_map(vim.lsp.buf.declaration);
         opts = {silent = true};
       })
       table.insert(mappings.n, {
         lhs = '<leader>py';
-        rhs = helpers.cmd_map([[lua require('fsouza.lsp.locations').preview_declaration()]]);
+        rhs = helpers.fn_map(require('fsouza.lsp.locations').preview_declaration);
         opts = {silent = true};
       })
     end
@@ -93,12 +83,12 @@ local function attached(bufnr, client)
     if client.resolved_capabilities.document_highlight then
       table.insert(mappings.n, {
         lhs = '<leader>s';
-        rhs = helpers.cmd_map('lua vim.lsp.buf.document_highlight()');
+        rhs = helpers.fn_map(vim.lsp.buf.document_highlight);
         opts = {silent = true};
       })
       table.insert(mappings.n, {
         lhs = '<leader>S';
-        rhs = helpers.cmd_map('lua vim.lsp.buf.clear_references()');
+        rhs = helpers.fn_map(vim.lsp.buf.clear_references);
         opts = {silent = true};
       })
     end
@@ -106,17 +96,15 @@ local function attached(bufnr, client)
     if client.resolved_capabilities.document_symbol then
       table.insert(mappings.n, {
         lhs = '<leader>t';
-        rhs = helpers.cmd_map('lua vim.lsp.buf.document_symbol()');
+        rhs = helpers.fn_map(vim.lsp.buf.document_symbol);
         opts = {silent = true};
       })
-      table.insert(mappings.n,
-                   {lhs = '<leader>v'; rhs = helpers.cmd_map('Vista!!'); opts = {silent = true}})
     end
 
     if client.resolved_capabilities.find_references then
       table.insert(mappings.n, {
         lhs = '<leader>q';
-        rhs = helpers.cmd_map('lua vim.lsp.buf.references()');
+        rhs = helpers.fn_map(vim.lsp.buf.references);
         opts = {silent = true};
       })
     end
@@ -124,12 +112,12 @@ local function attached(bufnr, client)
     if client.resolved_capabilities.goto_definition then
       table.insert(mappings.n, {
         lhs = '<leader>gd';
-        rhs = helpers.cmd_map('lua vim.lsp.buf.definition()');
+        rhs = helpers.fn_map(vim.lsp.buf.definition);
         opts = {silent = true};
       })
       table.insert(mappings.n, {
         lhs = '<leader>pd';
-        rhs = helpers.cmd_map([[lua require('fsouza.lsp.locations').preview_definition()]]);
+        rhs = helpers.fn_map(require('fsouza.lsp.locations').preview_definition);
         opts = {silent = true};
       })
     end
@@ -137,7 +125,7 @@ local function attached(bufnr, client)
     if client.resolved_capabilities.hover then
       table.insert(mappings.n, {
         lhs = '<leader>i';
-        rhs = helpers.cmd_map('lua vim.lsp.buf.hover()');
+        rhs = helpers.fn_map(vim.lsp.buf.hover);
         opts = {silent = true};
       })
     end
@@ -145,12 +133,12 @@ local function attached(bufnr, client)
     if client.resolved_capabilities.implementation then
       table.insert(mappings.n, {
         lhs = '<leader>gi';
-        rhs = helpers.cmd_map('lua vim.lsp.buf.implementation()');
+        rhs = helpers.fn_map(vim.lsp.buf.implementation);
         opts = {silent = true};
       })
       table.insert(mappings.n, {
         lhs = '<leader>pi';
-        rhs = helpers.cmd_map([[lua require('fsouza.lsp.locations').preview_implementation()]]);
+        rhs = helpers.fn_map(require('fsouza.lsp.locations').preview_implementation);
         opts = {silent = true};
       })
     end
@@ -158,7 +146,7 @@ local function attached(bufnr, client)
     if client.resolved_capabilities.signature_help then
       table.insert(mappings.i, {
         lhs = '<c-k>';
-        rhs = helpers.cmd_map('lua vim.lsp.buf.signature_help()');
+        rhs = helpers.fn_map(vim.lsp.buf.signature_help);
         opts = {silent = true};
       })
     end
@@ -166,12 +154,12 @@ local function attached(bufnr, client)
     if client.resolved_capabilities.type_definition then
       table.insert(mappings.n, {
         lhs = '<leader>gt';
-        rhs = helpers.cmd_map('lua vim.lsp.buf.type_definition()');
+        rhs = helpers.fn_map(vim.lsp.buf.type_definition);
         opts = {silent = true};
       })
       table.insert(mappings.n, {
         lhs = '<leader>pt';
-        rhs = helpers.cmd_map([[lua require('fsouza.lsp.locations').preview_type_definition()]]);
+        rhs = helpers.fn_map(require('fsouza.lsp.locations').preview_type_definition);
         opts = {silent = true};
       })
     end
@@ -179,7 +167,7 @@ local function attached(bufnr, client)
     if client.resolved_capabilities.workspace_symbol then
       table.insert(mappings.n, {
         lhs = '<leader>T';
-        rhs = helpers.cmd_map('lua vim.lsp.buf.workspace_symbol()');
+        rhs = helpers.fn_map(vim.lsp.buf.workspace_symbol);
         opts = {silent = true};
       })
     end

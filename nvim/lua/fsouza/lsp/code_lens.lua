@@ -220,7 +220,7 @@ function M.on_attach(opts)
       n = {
         {
           lhs = opts.mapping;
-          rhs = helpers.cmd_map([[lua require('fsouza.lsp.code_lens').execute()]]);
+          rhs = helpers.fn_map(require('fsouza.lsp.code_lens').execute);
           {silent = true};
         };
       };
