@@ -47,7 +47,6 @@ local function apply_edits(result, bufnr)
 end
 
 local function fmt(client, bufnr, cb)
-  bufnr = bufnr or api.nvim_get_current_buf()
   if not client then
     error(string.format('cannot format the buffer %d, no lsp client registered', bufnr))
   end
