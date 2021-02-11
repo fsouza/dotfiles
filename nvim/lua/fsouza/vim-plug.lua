@@ -1,4 +1,6 @@
+local vcmd = vim.cmd
 local vfn = vim.fn
+local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
@@ -39,10 +41,20 @@ end
 function M.replug()
   package.loaded['fsouza.vim-plug'] = nil
   require('fsouza.vim-plug').setup()
+  vcmd('PlugUpdate --sync|PlugClean')
+  M.setup_command()
 end
 
 function M.setup_command()
   vim.cmd([[command! Replug lua require('fsouza.vim-plug').replug()]])
+  helpers.augroup('fsouza__auto_plug', {
+    {
+      events = {'BufWritePost'};
+      targets = {vfn.expand('~/.dotfiles/nvim/lua/fsouza/vim-plug.lua')};
+      modifiers = {'++once'};
+      command = 'Replug';
+    };
+  })
 end
 
 return M
