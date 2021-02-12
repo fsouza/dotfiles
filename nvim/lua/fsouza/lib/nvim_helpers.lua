@@ -5,13 +5,8 @@ local nvim_buf_set_keymap = api.nvim_buf_set_keymap
 local vcmd = vim.cmd
 local vfn = vim.fn
 
-math.randomseed(os.time())
-
 local function register_cb(fn)
-  local id = tostring(math.random(1e3))
-  if M.fns[id] then
-    return register_cb(fn)
-  end
+  local id = tostring(fn)
   M.fns[id] = fn
   return id
 end

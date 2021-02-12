@@ -35,13 +35,13 @@ local function get_vim_fileformat(editorconfig_eol)
   return m[editorconfig_eol] or 'unix'
 end
 
-local trim_whitespace_cmd = helpers.fn_cmd(function()
+local function trim_whitespace()
   local view = vfn.winsaveview()
   pcall(function()
     vcmd([[silent! keeppatterns %s/\v\s+$//]])
   end)
   vfn.winrestview(view)
-end)
+end
 
 local function handle_whitespaces(bufnr, v)
   local commands = {}
@@ -49,7 +49,7 @@ local function handle_whitespaces(bufnr, v)
     table.insert(commands, {
       events = {'BufWritePre'};
       targets = {string.format('<buffer=%d>', bufnr)};
-      command = trim_whitespace_cmd;
+      command = helpers.fn_cmd(trim_whitespace);
     })
   end
   helpers.augroup('editorconfig_trim_trailing_whitespace_' .. bufnr, commands)
@@ -126,15 +126,13 @@ local function set_config()
   end)
 end
 
-local set_config_cmd = helpers.fn_cmd(set_config)
-
 local function set_enabled(v)
   local commands = {}
   if v then
     table.insert(commands, {
       events = {'BufNewFile'; 'BufReadPost'; 'BufFilePost'};
       targets = {'*'};
-      command = set_config_cmd;
+      command = helpers.fn_cmd(set_config);
     });
   end
   helpers.augroup('editorconfig', commands)
