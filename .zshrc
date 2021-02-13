@@ -15,8 +15,6 @@ source "${basedir}"/extra/brew
 
 prepend_to_path \
 	"${basedir}"/extra/gimme \
-	/usr/local/sbin \
-	/usr/local/bin \
 	"${HOME}"/.cargo/bin \
 	"${HOME}"/.local/bin \
 	"${basedir}"/bin \
