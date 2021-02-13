@@ -11,6 +11,8 @@ export LESSHISTFILE=${HOME}/.cache/lesshst
 export NODE_REPL_HISTORY=${HOME}/.cache/node/history
 
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin
+source "${basedir}"/extra/brew
+
 prepend_to_path \
 	"${basedir}"/extra/gimme \
 	/usr/local/sbin \
@@ -20,7 +22,6 @@ prepend_to_path \
 	"${basedir}"/bin \
 	"${GOBIN}"
 
-source "${basedir}"/extra/brew
 cond_source "${HOME}/.gimme/envs/gotip.env"
 
 if command -v fnm &>/dev/null; then
@@ -44,7 +45,6 @@ source "${basedir}"/extra/alacritty
 cond_source "${basedir}/extra/local-functions"
 cond_source "${basedir}/extra/$(uname -s)-functions"
 
-export NO_COLOR=1
 export PS1="％ " PS2="\\ "
 
 source "${basedir}"/extra/tmux
