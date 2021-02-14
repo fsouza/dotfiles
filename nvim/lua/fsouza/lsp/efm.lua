@@ -169,8 +169,7 @@ local function get_python_tools()
   local local_repos_mapping = {['black'] = 'https://github.com/psf/black'}
   local pre_commit_config = read_precommit_config(pre_commit_config_file_path)
   local tools = {}
-  for i = #pre_commit_config.repos, 1, -1 do
-    local repo = pre_commit_config.repos[i]
+  for _, repo in ipairs(pre_commit_config.repos) do
     local repo_url = repo.repo
     if repo.repo == 'local' then
       if repo.hooks[1] then
