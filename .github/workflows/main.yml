@@ -77,14 +77,14 @@ jobs:
         uses: actions/cache@v2.1.4
         with:
           path: ~/.cache/nvim/langservers
-          key: "${{ matrix.os }}-${{ hashFiles('langservers/setup.sh') }}"
+          key: "${{ matrix.os }}-${{ hashFiles('nvim/langservers/setup.sh') }}"
 
       - name: hererocks cache
         id: nvim-hererocks-cache
         uses: actions/cache@v2.1.4
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ matrix.os }}-${{ hashFiles('Makefile') }}-${{ hashFiles('scripts/bootstrap.lua') }}"
+          key: "${{ matrix.os }}-${{ hashFiles('nvim/Makefile') }}-${{ hashFiles('nvim/scripts/bootstrap.lua') }}"
 
       - name: get python version
         id: get-python-version
@@ -96,7 +96,7 @@ jobs:
         uses: actions/cache@v2.1.4
         with:
           path: ~/.cache/nvim/venv
-          key: "${{ matrix.os }}-${{ hashFiles('scripts/bootstrap.lua') }}-${{ steps.get-python-version.outputs.version }}"
+          key: "${{ matrix.os }}-${{ hashFiles('nvim/scripts/bootstrap.lua') }}-${{ steps.get-python-version.outputs.version }}"
 
       - name: run setup
         run: ./bin/setup
