@@ -20,7 +20,7 @@ local function notify(bufnr)
 
   local uri = vim.uri_from_bufnr(bufnr)
   local params = {
-    textDocument = {uri = uri; version = api.nvim_buf_get_var(bufnr, 'changedtick')};
+    textDocument = {uri = uri; version = api.nvim_buf_get_changedtick(bufnr)};
     contentChanges = {{text = read_buffer(bufnr)}};
   }
   for _, client in ipairs(clients_by_buf[bufnr]) do

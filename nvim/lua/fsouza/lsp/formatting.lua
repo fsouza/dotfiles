@@ -63,13 +63,13 @@ local function autofmt_and_write(client, bufnr)
     return
   end
   pcall(function()
-    local changed_tick = api.nvim_buf_get_var(bufnr, 'changedtick')
+    local changed_tick = api.nvim_buf_get_changedtick(bufnr)
     fmt(client, bufnr, function(_, _, result, _)
       local curr_buf = api.nvim_get_current_buf()
       if curr_buf ~= bufnr or api.nvim_get_mode().mode ~= 'n' then
         return
       end
-      if changed_tick ~= api.nvim_buf_get_var(bufnr, 'changedtick') then
+      if changed_tick ~= api.nvim_buf_get_changedtick(bufnr) then
         return
       end
       if result then

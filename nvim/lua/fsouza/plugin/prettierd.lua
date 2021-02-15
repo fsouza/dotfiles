@@ -59,7 +59,7 @@ function M.format(bufnr, cb, is_retry)
     wait_for_server(1000)
   end
 
-  local changed_tick = api.nvim_buf_get_var(bufnr, 'changedtick')
+  local changed_tick = api.nvim_buf_get_changedtick(bufnr)
   local fname = api.nvim_buf_get_name(bufnr)
   local lines = api.nvim_buf_get_lines(bufnr, 0, -1, false)
   local cwd = loop.cwd()
@@ -67,7 +67,7 @@ function M.format(bufnr, cb, is_retry)
                                        helpers.ensure_path_relative_to_prefix(cwd, fname)))
 
   local function write_to_buf(data)
-    if changed_tick ~= api.nvim_buf_get_var(bufnr, 'changedtick') then
+    if changed_tick ~= api.nvim_buf_get_changedtick(bufnr) then
       return
     end
 
