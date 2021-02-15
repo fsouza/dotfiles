@@ -34,6 +34,7 @@ function install_ocaml_lsp() {
 	_clone_or_update https://github.com/ocaml/ocaml-lsp.git "${path}" &&
 		pushd "${path}" &&
 		_create_opam_switch_if_needed &&
+		opam exec -- opam install -y . &&
 		opam exec -- dune build --root . &&
 		popd
 }

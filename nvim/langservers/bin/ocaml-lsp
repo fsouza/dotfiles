@@ -6,5 +6,4 @@ ROOT=${NVIM_CACHE_DIR}/langservers
 OCAML_LS_LOCATION=$ROOT/ocaml-lsp
 
 cd "${OCAML_LS_LOCATION}"
-eval "$(opam env)"
-exec ./_build/install/default/bin/ocamllsp
+exec opam exec -- ocamllsp
