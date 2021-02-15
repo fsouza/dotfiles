@@ -108,18 +108,8 @@ do
     }))
   end)
 
-  if_executable('mix', function()
-    lsp.elixirls.setup(opts.with_defaults({
-      cmd = {vfn.stdpath('cache') .. '/langservers/elixir-ls/release/language_server.sh'};
-    }))
-  end)
-
   if_executable('rust-analyzer', function()
     lsp.rust_analyzer.setup(opts.with_defaults({settings = {}}))
-  end)
-
-  if_executable('clojure-lsp', function()
-    lsp.clojure_lsp.setup(opts.with_defaults({}))
   end)
 
   if_executable('ninja', function()
