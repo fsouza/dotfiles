@@ -113,21 +113,6 @@ do
     lsp.rust_analyzer.setup(opts.with_defaults({settings = {}}))
   end)
 
-  if_executable('ninja', function()
-    lsp.sumneko_lua.setup(opts.with_defaults({
-      cmd = {get_local_cmd('lua-lsp')};
-      settings = {
-        Lua = {
-          runtime = {path = vim.split(package.path, ';'); version = 'LuaJIT'};
-          diagnostics = {enable = true; globals = {'vim'}};
-          workspace = {
-            library = {[vfn.expand('$VIMRUNTIME/lua')] = true; [config_dir .. '/lua'] = true};
-          };
-        };
-      };
-    }))
-  end)
-
   if_executable('zig', function()
     lsp.zls.setup(opts.with_defaults({cmd = {cache_dir .. '/langservers/zls/zig-cache/bin/zls'}}))
   end)

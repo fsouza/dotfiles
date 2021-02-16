@@ -91,26 +91,6 @@ function install_efm() {
 	_go_install github.com/mattn/efm-langserver@master
 }
 
-function install_lua_lsp() {
-	if ! command -v ninja &>/dev/null; then
-		echo skipping lua-lsp
-		return
-	fi
-	if [[ $OSTYPE == darwin* ]]; then
-		ninja_file=ninja/macos.ninja
-	elif [[ $OSTYPE == linux* ]]; then
-		ninja_file=ninja/linux.ninja
-	fi
-	path=${cache_dir}/lua-language-server
-	_clone_or_update https://github.com/sumneko/lua-language-server "${path}" &&
-		pushd "${path}" &&
-		cd 3rd/luamake &&
-		ninja -f "${ninja_file}" &&
-		cd ../.. &&
-		./3rd/luamake/luamake rebuild &&
-		popd
-}
-
 function install_zls() {
 	if ! command -v zig &>/dev/null; then
 		echo skipping zls
@@ -146,7 +126,6 @@ install_servers_from_npm &
 install_ocaml_lsp &
 install_rust_analyzer &
 install_gopls &
-install_lua_lsp &
 install_shfmt &
 install_efm &
 install_zls &
