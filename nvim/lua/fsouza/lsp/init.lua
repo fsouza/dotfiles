@@ -1,6 +1,7 @@
 local vfn = vim.fn
 
 local config_dir = vfn.stdpath('config')
+local cache_dir = vfn.stdpath('cache')
 
 local function get_local_cmd(cmd)
   return string.format('%s/langservers/bin/%s', config_dir, cmd)
@@ -125,6 +126,10 @@ do
         };
       };
     }))
+  end)
+
+  if_executable('zig', function()
+    lsp.zls.setup(opts.with_defaults({cmd = {cache_dir .. '/langservers/zls/zig-cache/bin/zls'}}))
   end)
 
   local clangd = os.getenv('HOMEBREW_PREFIX') .. '/opt/llvm/bin/clangd'

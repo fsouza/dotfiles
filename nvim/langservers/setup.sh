@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
 function _clone_or_update() {
 	repo=$1
@@ -109,6 +109,19 @@ function install_lua_lsp() {
 		popd
 }
 
+function install_zls() {
+	if ! command -v zig &>/dev/null; then
+		echo skipping zls
+		return
+	fi
+	path=${cache_dir}/zls
+	_clone_or_update https://github.com/zigtools/zls.git "${path}" &&
+		pushd "${path}" &&
+		zig build -Drelease-safe &&
+		echo '{"enable_snippets":true,"warn_style":true,"enable_semantic_tokens":false,"operator_completions":false}' >zig-cache/bin/zls.json &&
+		popd
+}
+
 cache_dir=${1}
 exit_status=0
 
@@ -134,6 +147,7 @@ install_gopls &
 install_lua_lsp &
 install_shfmt &
 install_efm &
+install_zls &
 wait
 popd
 
