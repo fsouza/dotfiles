@@ -7,14 +7,6 @@ local default_root_markers = {'.git'}
 
 local config_dir = vfn.stdpath('config')
 
-local function setup_blackd_logs_dir()
-  local cache_dir = vfn.stdpath('cache')
-  local setenv = require('posix.stdlib').setenv
-  local logs_dir = cache_dir .. '/blackd-logs'
-  vfn.mkdir(logs_dir, 'p')
-  setenv('BLACKD_LOGS_DIR', logs_dir)
-end
-
 local function get_python_bin(bin_name)
   local result = bin_name
   if os.getenv('VIRTUAL_ENV') then
@@ -27,8 +19,11 @@ local function get_python_bin(bin_name)
 end
 
 local function get_black()
-  local bin = config_dir .. '/langservers/bin/blackd-format'
-  return {formatCommand = bin; formatStdin = true; rootMarkers = {'.git'; ''}}
+  return {
+    formatCommand = string.format('%s --fast --quiet -', get_python_bin('black'));
+    formatStdin = true;
+    rootMarkers = {'.git'; ''};
+  }
 end
 
 local function get_isort()
@@ -137,21 +132,6 @@ local function read_precommit_config(file_path)
   return lyaml.load(content)
 end
 
-local function blackd_cleanup_if_needed(settings)
-  local python_tools = settings.languages.python or {}
-  for _, tool in ipairs(python_tools) do
-    if vim.endswith(tool.formatCommand or '', '/blackd-format') then
-      require('fsouza.lib.cleanup').register(function()
-        local block = require('fsouza.lib.cmd').run('pkill', {args = {'-f'; 'blackd'}}, nil,
-                                                    function()
-        end)
-        block(500)
-      end)
-      break
-    end
-  end
-end
-
 local function get_python_tools()
   local pre_commit_config_file_path = '.pre-commit-config.yaml'
   if not loop.fs_stat(pre_commit_config_file_path) then
@@ -216,12 +196,10 @@ local function get_settings()
   add_if_not_empty('sh', get_shfmt())
   add_if_not_empty('dune', get_dune())
   add_if_not_empty('bzl', get_buildifier())
-  blackd_cleanup_if_needed(settings)
   return settings
 end
 
 function M.gen_config()
-  setup_blackd_logs_dir()
   local settings = get_settings()
   return settings, vim.tbl_keys(settings.languages)
 end
