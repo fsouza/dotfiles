@@ -8,6 +8,8 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local langservers_skip_set = {tsserver = true}
 
+local langservers_no_autofmt = {zls = true}
+
 local function should_skip_buffer(bufnr)
   local file_path = vim.api.nvim_buf_get_name(bufnr)
   local prefix = loop.cwd()
@@ -23,6 +25,10 @@ end
 
 local function should_skip_server(server_name)
   return langservers_skip_set[server_name] ~= nil
+end
+
+local function should_enable_autofmt(server_name)
+  return langservers_no_autofmt[server_name] == nil
 end
 
 local function formatting_params(bufnr)
@@ -47,10 +53,6 @@ local function apply_edits(result, bufnr)
 end
 
 local function fmt(client, bufnr, cb)
-  if not client then
-    error(string.format('cannot format the buffer %d, no lsp client registered', bufnr))
-  end
-
   local _, req_id = client.request('textDocument/formatting', formatting_params(bufnr), cb, bufnr)
   return req_id, function()
     client.cancel_request(req_id)
@@ -89,23 +91,27 @@ function M.on_attach(client, bufnr)
     return
   end
 
-  helpers.augroup('lsp_autofmt_' .. bufnr, {
-    {
-      events = {'BufWritePost'};
-      targets = {string.format('<buffer=%d>', bufnr)};
-      command = helpers.fn_cmd(function()
-        autofmt_and_write(client, bufnr)
-      end);
-    };
-  })
+  if should_enable_autofmt(client.name) then
+    helpers.augroup('lsp_autofmt_' .. bufnr, {
+      {
+        events = {'BufWritePost'};
+        targets = {string.format('<buffer=%d>', bufnr)};
+        command = helpers.fn_cmd(function()
+          autofmt_and_write(client, bufnr)
+        end);
+      };
+    })
+  end
 
   helpers.create_mappings({
     n = {
-      lhs = '<leader>f';
-      rhs = helpers.fn_map(function()
-        fmt(client, bufnr)
-      end);
-      opts = {silent = true};
+      {
+        lhs = '<leader>f';
+        rhs = helpers.fn_map(function()
+          fmt(client, bufnr)
+        end);
+        opts = {silent = true};
+      };
     };
   }, bufnr)
 end
