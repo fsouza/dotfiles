@@ -55,7 +55,7 @@ jobs:
         uses: actions/cache@v2.1.4
         with:
           path: ~/.opam
-          key: "${{ matrix.os }}-${{ steps.get-opam-version.outputs.version }}"
+          key: "${{ matrix.os }}-${{ steps.get-opam-version.outputs.version }}-${{ hashFiles('nvim/langservers/setup.sh') }}"
 
       - name: opam init
         run: opam init --disable-sandboxing -n
