@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@fsouza/prettierd@0.9.2":
-  version "0.9.2"
-  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.9.2.tgz#0266ddaabb78d92d975be643911dc44592ea41d2"
-  integrity sha512-oOF2bw2GsQcNuhdloR0kGbh1Cs053UP+bV7A7RCfWbuG7dxDNlDgqu9CP7NM6Tur5mChdnqXdM4ksT0TbgHinw==
+"@fsouza/prettierd@0.9.3":
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.9.3.tgz#6f9383ace554f1de032d39051cc119909c4af18e"
+  integrity sha512-6iTJijZudShG8Zf2/PY1EXNS5ioYwEQ3Cg1AFAiatu0ZfGz2ArquzY8EPOuZD84mEI6g/LICM0TwT6oUb5LpCA==
   dependencies:
     "@typescript-eslint/typescript-estree" "^4.13.0"
     angular-html-parser "^1.7.1"
