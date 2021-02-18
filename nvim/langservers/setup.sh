@@ -59,7 +59,7 @@ function install_rust_analyzer() {
 }
 
 function install_servers_from_npm() {
-	npm ci
+	npx --yes yarn install --frozen-lockfile
 }
 
 function _go_install() {
