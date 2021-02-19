@@ -7,6 +7,14 @@ local default_root_markers = {'.git'}
 
 local config_dir = vfn.stdpath('config')
 
+local function get_node_bin(bin_name)
+  local local_bin = string.format([[node_modules/.bin/%s]], bin_name)
+  if vfn.executable(local_bin) == 1 then
+    return local_bin
+  end
+  return string.format([[%s/langservers/node_modules/.bin/%s]], config_dir, bin_name)
+end
+
 local function get_python_bin(bin_name)
   local result = bin_name
   if os.getenv('VIRTUAL_ENV') then
@@ -121,6 +129,38 @@ local function get_luaformat()
   return {formatCommand = 'lua-format'; formatStdin = true; rootMarkers = {'.lua-format'; '.git'}}
 end
 
+-- TODO: support formatting with eslintd --fix-to-stdout? Requires moving prettierd here.
+local function get_eslintd_linting()
+  local eslint_config_files = {
+    '.eslintrc.js';
+    '.eslintrc.cjs';
+    '.eslintrc.yaml';
+    '.eslintrc.yml';
+    '.eslintrc.json';
+  }
+  for _, config_file in ipairs(eslint_config_files) do
+    if loop.fs_stat(config_file) then
+      return {
+        lintCommand = string.format('%s --stdin --stdin-filename ${INPUT} --format unix',
+                                    get_node_bin('eslint_d'));
+        lintStdin = true;
+        lintSource = 'eslint';
+        rootMarkers = {
+          '.eslintrc.js';
+          '.eslintrc.cjs';
+          '.eslintrc.yaml';
+          '.eslintrc.yml';
+          '.eslintrc.json';
+          '.git';
+          'package.json';
+        };
+        lintFormats = {'%f:%l:%c: %m'};
+      }
+    end
+  end
+  return {}
+end
+
 local function read_precommit_config(file_path)
   local lyaml = prequire('lyaml')
   if not lyaml then
@@ -196,6 +236,9 @@ local function get_settings()
   add_if_not_empty('sh', get_shfmt())
   add_if_not_empty('dune', get_dune())
   add_if_not_empty('bzl', get_buildifier())
+  local eslint = get_eslintd_linting()
+  add_if_not_empty('javascript', eslint)
+  add_if_not_empty('typescript', eslint)
   return settings
 end
 
