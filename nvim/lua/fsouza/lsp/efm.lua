@@ -129,7 +129,6 @@ local function get_luaformat()
   return {formatCommand = 'lua-format'; formatStdin = true; rootMarkers = {'.lua-format'; '.git'}}
 end
 
--- TODO: support formatting with eslintd --fix-to-stdout? Requires moving prettierd here.
 local function get_eslintd_linting()
   local eslint_config_files = {
     '.eslintrc.js';

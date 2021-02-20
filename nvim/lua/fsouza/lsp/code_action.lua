@@ -51,7 +51,6 @@ function M.code_action()
 end
 
 function M.visual_code_action()
-  -- TODO(fsouza): is there a better approach for this?
   if vfn.visualmode() == '' then
     return
   end
