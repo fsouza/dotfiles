@@ -80,6 +80,15 @@ local function get_autopep8()
   }
 end
 
+local function get_mypy()
+  return {
+    lintCommand = string.format('%s --show-column-numbers', get_python_bin('mypy'));
+    lintSource = 'mypy';
+    lintFormats = {'%f:%l:%c: %trror: %m'; '%f:%l:%c: %tarning: %m'; '%f:%l:%c: %tote: %m'};
+    rootMarkers = {'.flake8'; '.git'; ''};
+  }
+end
+
 local function get_buildifier()
   local nvim_config_path = config_dir
   local bin = nvim_config_path .. '/langservers/bin/buildifierw'
@@ -180,6 +189,7 @@ local function get_python_tools()
 
   local pc_repo_tools = {
     ['https://gitlab.com/pycqa/flake8'] = get_flake8;
+    ['https://github.com/pre-commit/mirrors-mypy'] = get_mypy;
     ['https://github.com/psf/black'] = get_black;
     ['https://github.com/asottile/add-trailing-comma'] = get_add_trailing_comma;
     ['https://github.com/asottile/reorder_python_imports'] = get_reorder_python_imports;
