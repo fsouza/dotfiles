@@ -6,30 +6,18 @@
 #
 add-trailing-comma==2.1.0
     # via -r requirements.in
-aiohttp-cors==0.7.0
-    # via black
-aiohttp==3.6.2
-    # via
-    #   aiohttp-cors
-    #   black
 appdirs==1.4.4
     # via black
 aspy.refactor-imports==2.1.1
     # via reorder-python-imports
-async-timeout==3.0.1
-    # via aiohttp
-attrs==19.3.0
-    # via
-    #   aiohttp
-    #   flake8-bugbear
+attrs==20.3.0
+    # via flake8-bugbear
 autopep8==1.5.5
     # via -r requirements.in
-black[d]==20.8b1
+black==20.8b1
     # via -r requirements.in
-cached-property==1.5.1
+cached-property==1.5.2
     # via aspy.refactor-imports
-chardet==3.0.4
-    # via aiohttp
 click==7.1.2
     # via black
 flake8-bugbear==20.11.1
@@ -47,19 +35,17 @@ flake8==3.8.4
     #   flake8-builtins
     #   flake8-comprehensions
     #   flake8-tidy-imports
-idna==2.10
-    # via yarl
 isort==5.7.0
     # via -r requirements.in
 mccabe==0.6.1
     # via flake8
-multidict==4.7.6
-    # via
-    #   aiohttp
-    #   yarl
 mypy-extensions==0.4.3
-    # via black
-pathspec==0.8.0
+    # via
+    #   black
+    #   mypy
+mypy==0.812
+    # via -r requirements.in
+pathspec==0.8.1
     # via black
 pycodestyle==2.6.0
     # via
@@ -67,21 +53,21 @@ pycodestyle==2.6.0
     #   flake8
 pyflakes==2.2.0
     # via flake8
-regex==2020.7.14
+regex==2020.11.13
     # via black
-reorder_python_imports==2.4.0
+reorder-python-imports==2.4.0
     # via -r requirements.in
-tokenize-rt==4.0.0
+tokenize-rt==4.1.0
     # via add-trailing-comma
-toml==0.10.1
+toml==0.10.2
     # via
     #   autopep8
     #   black
-typed-ast==1.4.1
-    # via black
-typing-extensions==3.7.4.2
+typed-ast==1.4.2
     # via
     #   black
-    #   yarl
-yarl==1.5.0
-    # via aiohttp
+    #   mypy
+typing-extensions==3.7.4.3
+    # via
+    #   black
+    #   mypy

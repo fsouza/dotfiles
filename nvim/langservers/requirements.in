@@ -1,10 +1,11 @@
 add_trailing_comma
 autopep8
-black[d]
+black
 flake8
 flake8-bugbear
 flake8-builtins
 flake8-comprehensions
 flake8-tidy-imports
 isort
+mypy
 reorder_python_imports
