@@ -1,11 +1,12 @@
-local M = {}
-
+local vcmd = vim.cmd
 local vfn = vim.fn
+
+local M = {}
 
 function M.fuzzy_here()
   local dir_path = vfn.expand('%:p:h')
   if vim.startswith(dir_path, '/') then
-    vfn['fzf#vim#files'](dir_path)
+    vcmd('FzfFiles ' .. dir_path)
   end
 end
 
