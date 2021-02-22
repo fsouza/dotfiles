@@ -18,6 +18,7 @@ local function should_use_ts(node)
     'function_declaration';
     'method_declaration';
     'type_spec';
+    'assignment';
 
     -- typescript
     'class';
