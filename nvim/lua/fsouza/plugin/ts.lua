@@ -63,6 +63,10 @@ do
       };
     };
     playground = {enable = true; updatetime = 30};
+    refactor = {
+      smart_rename = {enable = true; keymaps = {smart_rename = 'grr'}};
+      navigation = {enable = true; keymaps = {goto_definition = 'gnd'; list_definitions = 'gnD'}};
+    };
     textobjects = {
       select = {
         enable = true;
