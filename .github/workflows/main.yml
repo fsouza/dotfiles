@@ -60,7 +60,7 @@ jobs:
       - name: opam init
         run: opam init --disable-sandboxing -n
 
-      - uses: actions/setup-node@v2.1.4
+      - uses: actions/setup-node@v2.1.5
         with:
           node-version: "14.x"
 
