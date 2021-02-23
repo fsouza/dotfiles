@@ -6,8 +6,8 @@ local M = {}
 
 local function handle()
   if vim.bo.filetype and vim.bo.filetype ~= '' then
-    local status, ft_plugin = pcall(require, 'fsouza.plugin.ft.' .. vim.bo.filetype)
-    if status then
+    local ft_plugin = prequire('fsouza.plugin.ft.' .. vim.bo.filetype)
+    if ft_plugin then
       local bufnr = api.nvim_get_current_buf()
       pcall(function()
         ft_plugin(bufnr)
