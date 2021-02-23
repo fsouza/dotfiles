@@ -1,7 +1,6 @@
 local wanted_parsers = {
   'bash';
   'c';
-  'clojure';
   'cpp';
   'css';
   'go';
@@ -16,7 +15,6 @@ local wanted_parsers = {
   'query';
   'regex';
   'rust';
-  'teal';
   'toml';
   'tsx';
   'typescript';
