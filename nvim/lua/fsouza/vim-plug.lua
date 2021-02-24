@@ -11,13 +11,13 @@ local plugs = {
   {repo = 'justinmk/vim-dirvish'};
   {repo = 'justinmk/vim-sneak'};
   {repo = 'kana/vim-textobj-user'};
-  {repo = 'hrsh7th/nvim-compe'; opts = {commit = 'c1764beef2ceba2adb62de5ed89475c71f183a57'}};
-  {repo = 'hrsh7th/vim-vsnip'};
   {repo = 'mattn/emmet-vim'};
   {repo = 'mg979/vim-visual-multi'};
   {repo = 'michaeljsmith/vim-indent-object'};
   {repo = 'neovim/nvim-lspconfig'};
+  {repo = 'nvim-lua/completion-nvim'};
   {repo = 'norcalli/nvim-colorizer.lua'};
+  {repo = 'norcalli/snippets.nvim'};
   {repo = 'nvim-treesitter/nvim-treesitter'};
   {repo = 'nvim-treesitter/nvim-treesitter-refactor'};
   {repo = 'nvim-treesitter/nvim-treesitter-textobjects'};
