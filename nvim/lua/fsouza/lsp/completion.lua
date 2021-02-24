@@ -39,7 +39,7 @@ end
 
 local setup_command = helpers.fn_cmd(setup)
 
-local function complete()
+local complete_command = helpers.ifn_map(function()
   enable_autocomplete()
   helpers.augroup('fsouza__completion_switch_off', {
     {
@@ -51,9 +51,7 @@ local function complete()
   })
   require('completion').triggerCompletion()
   return ''
-end
-
-local complete_command = helpers.ifn_map(complete)
+end)
 
 function M.on_attach(bufnr)
   setup()
