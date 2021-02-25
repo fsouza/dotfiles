@@ -61,9 +61,6 @@ do
       };
     };
     playground = {enable = true; updatetime = 30};
-    refactor = {
-      navigation = {enable = true; keymaps = {goto_definition = 'gd'; list_definitions = 'gnD'}};
-    };
     textobjects = {
       select = {
         enable = true;
