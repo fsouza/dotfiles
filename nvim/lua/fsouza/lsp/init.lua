@@ -67,7 +67,7 @@ do
 
     lsp.tsserver.setup(opts.with_defaults({
       cmd = {vim_node_ls; 'typescript-language-server'; '--stdio'};
-      root_dir = opts.root_pattern_with_fallback('package.json', '.git');
+      root_dir = opts.root_pattern_with_fallback('package.json');
     }))
 
     lsp.yamlls.setup(opts.with_defaults({cmd = {vim_node_ls; 'yaml-language-server'; '--stdio'}}))
@@ -77,10 +77,8 @@ do
   end)
 
   if_executable('gopls', function()
-    local util = require('lspconfig/util')
-
     lsp.gopls.setup(opts.with_defaults({
-      root_dir = util.root_pattern('go.mod', '.git');
+      root_dir = opts.root_pattern_with_fallback('go.mod');
       init_options = {
         deepCompletion = false;
         staticcheck = true;
@@ -108,13 +106,13 @@ do
   if_executable('opam', function()
     lsp.ocamllsp.setup(opts.with_defaults({
       cmd = {get_local_cmd('ocaml-lsp')};
-      root_dir = opts.root_pattern_with_fallback('.merlin', 'package.json', '.git');
+      root_dir = opts.root_pattern_with_fallback('.merlin', 'package.json');
     }))
   end)
 
   if_executable('rust-analyzer', function()
     lsp.rust_analyzer.setup(opts.with_defaults({
-      settings = {root_dir = opts.root_pattern_with_fallback('Cargo.toml', '.git')};
+      settings = {root_dir = opts.root_pattern_with_fallback('Cargo.toml')};
     }))
   end)
 
