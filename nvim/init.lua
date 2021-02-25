@@ -26,17 +26,13 @@ local function initial_mappings()
 end
 
 local function bootstrap_env()
-  local stdlib = prequire('posix.stdlib')
-  if stdlib then
-    stdlib.setenv('NVIM_CACHE_DIR', cache_dir)
+  local vim_venv_bin = cache_dir .. '/venv/bin'
+  local hererocks_bin = cache_dir .. '/hr/bin'
+  local langservers_bin = cache_dir .. '/langservers/bin'
 
-    local vim_venv_bin = cache_dir .. '/venv/bin'
-    local hererocks_bin = cache_dir .. '/hr/bin'
-    local langservers_bin = cache_dir .. '/langservers/bin'
-
-    stdlib.setenv('PATH', string.format('%s:%s:%s:%s', langservers_bin, hererocks_bin,
-                                        vim_venv_bin, stdlib.getenv('PATH')))
-  end
+  vim.env.NVIM_CACHE_DIR = cache_dir
+  vim.env.PATH = string.format('%s:%s:%s:%s', langservers_bin, hererocks_bin, vim_venv_bin,
+                               vim.env.PATH)
 end
 
 local function hererocks()
@@ -136,7 +132,7 @@ do
   folding()
   global_vars()
 
-  if os.getenv('NVIM_PLUG') then
+  if vim.env.NVIM_PLUG then
     require('fsouza.vim-plug').setup()
     return
   end

@@ -3,7 +3,7 @@ local loop = vim.loop
 local M = {}
 
 local function set_from_env_var()
-  local virtual_env = os.getenv('VIRTUAL_ENV')
+  local virtual_env = vim.env.VIRTUAL_ENV
   if virtual_env then
     return virtual_env
   end
@@ -46,10 +46,7 @@ local function detect_virtual_env(settings)
   for _, detect in ipairs(detectors) do
     local virtual_env = detect()
     if virtual_env ~= nil then
-      local stdlib = prequire('posix.stdlib')
-      if stdlib then
-        stdlib.setenv('VIRTUAL_ENV', virtual_env)
-      end
+      vim.env.VIRTUAL_ENV = virtual_env
       settings.python.pythonPath = string.format('%s/bin/python', virtual_env)
       return
     end

@@ -17,8 +17,8 @@ end
 
 local function get_python_bin(bin_name)
   local result = bin_name
-  if os.getenv('VIRTUAL_ENV') then
-    local venv_bin_name = os.getenv('VIRTUAL_ENV') .. '/bin/' .. bin_name
+  if vim.env.VIRTUAL_ENV then
+    local venv_bin_name = vim.env.VIRTUAL_ENV .. '/bin/' .. bin_name
     if vfn.executable(venv_bin_name) == 1 then
       result = venv_bin_name
     end

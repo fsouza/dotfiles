@@ -9,7 +9,7 @@ end
 
 local function set_log_level()
   local level = 'ERROR'
-  if os.getenv('NVIM_DEBUG') then
+  if vim.env.NVIM_DEBUG then
     level = 'TRACE'
   end
   require('vim.lsp.log').set_level(level)
