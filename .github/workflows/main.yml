@@ -88,7 +88,7 @@ jobs:
         uses: actions/cache@v2.1.4
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ matrix.os }}-${{ hashFiles('nvim/Makefile') }}-${{ hashFiles('nvim/scripts/bootstrap.lua') }}"
+          key: "${{ matrix.os }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       - name: get python version
         id: get-python-version
