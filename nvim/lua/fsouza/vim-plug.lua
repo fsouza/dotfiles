@@ -17,7 +17,6 @@ local plugs = {
   {repo = 'neovim/nvim-lspconfig'};
   {repo = 'nvim-lua/completion-nvim'};
   {repo = 'norcalli/nvim-colorizer.lua'};
-  {repo = 'norcalli/snippets.nvim'};
   {repo = 'nvim-treesitter/nvim-treesitter'};
   {repo = 'nvim-treesitter/nvim-treesitter-textobjects'};
   {repo = 'nvim-treesitter/playground'};
