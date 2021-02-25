@@ -177,6 +177,7 @@ function M.with_defaults(opts)
     handlers = require('fsouza.lsp.handlers');
     on_attach = on_attach;
     capabilities = capabilities;
+    root_dir = vim.loop.cwd;
   });
 end
 

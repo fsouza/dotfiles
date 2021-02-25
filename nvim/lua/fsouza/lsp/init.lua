@@ -67,7 +67,7 @@ do
 
     lsp.tsserver.setup(opts.with_defaults({
       cmd = {vim_node_ls; 'typescript-language-server'; '--stdio'};
-      filetypes = {'javascript'; 'typescript'; 'typescriptreact'; 'typescript.tsx'};
+      root_dir = opts.root_pattern_with_fallback('package.json', '.git');
     }))
 
     lsp.yamlls.setup(opts.with_defaults({cmd = {vim_node_ls; 'yaml-language-server'; '--stdio'}}))
@@ -77,7 +77,10 @@ do
   end)
 
   if_executable('gopls', function()
+    local util = require('lspconfig/util')
+
     lsp.gopls.setup(opts.with_defaults({
+      root_dir = util.root_pattern('go.mod', '.git');
       init_options = {
         deepCompletion = false;
         staticcheck = true;
@@ -110,7 +113,9 @@ do
   end)
 
   if_executable('rust-analyzer', function()
-    lsp.rust_analyzer.setup(opts.with_defaults({settings = {}}))
+    lsp.rust_analyzer.setup(opts.with_defaults({
+      settings = {root_dir = opts.root_pattern_with_fallback('Cargo.toml', '.git')};
+    }))
   end)
 
   if_executable('zig', function()

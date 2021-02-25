@@ -74,9 +74,6 @@ local function pyright_settings()
 end
 
 function M.get_opts(opts)
-  if not opts.root_dir then
-    opts.root_dir = require('fsouza.lsp.opts').root_pattern_with_fallback('.git')
-  end
   opts.settings = pyright_settings()
   return opts
 end
