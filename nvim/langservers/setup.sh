@@ -11,11 +11,11 @@ function _clone_or_update() {
 		git clone --recurse-submodules "${repo}" "${path}"
 	elif [ -z "${version}" ]; then
 		git -C "${path}" pull
-		git -C "${path}" submodules update --init --recursive
+		git -C "${path}" submodule update --init --recursive
 	else
 		git -C "${path}" fetch
 		git -C "${path}" checkout "${version}"
-		git -C "${path}" submodules update --init --recursive
+		git -C "${path}" submodule update --init --recursive
 	fi
 }
 
