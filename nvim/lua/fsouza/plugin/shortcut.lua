@@ -23,11 +23,13 @@ function M.register(command, path, cd)
         return
       end
       local is_dir = stat.type == 'directory'
-      if is_dir then
-        fzf_dir(path, cd)
-      else
-        vcmd('edit ' .. path)
-      end
+      vim.schedule(function()
+        if is_dir then
+          fzf_dir(path, cd)
+        else
+          vcmd('edit ' .. path)
+        end
+      end)
     end)
   end
   vcmd(string.format([[command! %s lua require('fsouza.plugin.shortcut')['%s']()]], command,
