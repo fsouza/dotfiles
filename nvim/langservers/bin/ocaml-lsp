@@ -2,9 +2,5 @@
 
 set -eu
 
-NVIM_CACHE_DIR=${1}
-ROOT=${NVIM_CACHE_DIR}/langservers
-OCAML_LS_LOCATION=$ROOT/ocaml-lsp
-
-cd "${OCAML_LS_LOCATION}"
+cd "${1}/langservers/ocaml-lsp"
 exec opam exec -- ocamllsp

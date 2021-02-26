@@ -17,5 +17,4 @@ function get_type() {
 	esac
 }
 
-type=$(get_type "${base_name}")
-exec buildifier --lint=fix --warnings=all --type="${type}"
+exec buildifier --lint=fix --warnings=all --type="$(get_type "${base_name}")"
