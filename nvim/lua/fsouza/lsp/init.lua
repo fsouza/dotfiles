@@ -118,6 +118,7 @@ do
 
   if_executable('rust-analyzer', function()
     lsp.rust_analyzer.setup(opts.with_defaults({
+      cmd = {get_cache_cmd('rust-analyzer')};
       settings = {root_dir = opts.root_pattern_with_fallback('Cargo.toml')};
     }))
   end)
