@@ -4,8 +4,8 @@ local vfn = vim.fn
 local loop = vim.loop
 
 local default_root_markers = {'.git'}
-
 local config_dir = vfn.stdpath('config')
+local cache_dir = vfn.stdpath('cache')
 
 local function get_node_bin(bin_name)
   local local_bin = string.format([[node_modules/.bin/%s]], bin_name)
@@ -16,14 +16,13 @@ local function get_node_bin(bin_name)
 end
 
 local function get_python_bin(bin_name)
-  local result = bin_name
   if vim.env.VIRTUAL_ENV then
-    local venv_bin_name = vim.env.VIRTUAL_ENV .. '/bin/' .. bin_name
+    local venv_bin_name = string.format('%s/bin/%s', vim.env.VIRTUAL_ENV, bin_name)
     if vfn.executable(venv_bin_name) == 1 then
-      result = venv_bin_name
+      return venv_bin_name
     end
   end
-  return result
+  return string.format('%s/venv/bin/%s', cache_dir, bin_name)
 end
 
 local function get_black()
@@ -112,12 +111,17 @@ local function get_shellcheck()
 end
 
 local function get_shfmt()
-  return {formatCommand = 'shfmt -'; formatStdin = true; rootMarkers = default_root_markers}
+  return {
+    formatCommand = string.format('%s/langservers/bin/shfmt -', cache_dir);
+    formatStdin = true;
+    rootMarkers = default_root_markers;
+  }
 end
 
 local function get_luacheck()
   return {
-    lintCommand = 'luacheck --formatter plain --filename ${INPUT} -';
+    lintCommand = string.format('%s/hr/bin/luacheck --formatter plain --filename ${INPUT} -',
+                                cache_dir);
     lintStdin = true;
     lintSource = 'luacheck';
     rootMarkers = default_root_markers;

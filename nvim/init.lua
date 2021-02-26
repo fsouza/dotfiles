@@ -25,16 +25,6 @@ local function initial_mappings()
   vim.g.mapleader = ' '
 end
 
-local function bootstrap_env()
-  local vim_venv_bin = cache_dir .. '/venv/bin'
-  local hererocks_bin = cache_dir .. '/hr/bin'
-  local langservers_bin = cache_dir .. '/langservers/bin'
-
-  vim.env.NVIM_CACHE_DIR = cache_dir
-  vim.env.PATH = string.format('%s:%s:%s:%s', langservers_bin, hererocks_bin, vim_venv_bin,
-                               vim.env.PATH)
-end
-
 local function hererocks()
   local lua_version = string.gsub(_VERSION, 'Lua ', '')
   local hererocks_path = cache_dir .. '/hr'
@@ -120,7 +110,6 @@ do
   local schedule = vim.schedule
   initial_mappings()
   hererocks()
-  bootstrap_env()
 
   schedule(function()
     global_options()

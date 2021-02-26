@@ -7,6 +7,10 @@ local function get_local_cmd(cmd)
   return string.format('%s/langservers/bin/%s', config_dir, cmd)
 end
 
+local function get_cache_cmd(cmd)
+  return string.format('%s/langservers/bin/%s', cache_dir, cmd)
+end
+
 local function set_log_level()
   local level = 'ERROR'
   if vim.env.NVIM_DEBUG then
@@ -76,8 +80,9 @@ do
                                            {cmd = {vim_node_ls; 'pyright-langserver'; '--stdio'}})))
   end)
 
-  if_executable('gopls', function()
+  if_executable('go', function()
     lsp.gopls.setup(opts.with_defaults({
+      cmd = {get_cache_cmd('gopls')};
       root_dir = opts.root_pattern_with_fallback('go.mod');
       init_options = {
         deepCompletion = false;
@@ -94,9 +99,10 @@ do
     }))
   end)
 
-  if_executable('efm-langserver', function()
+  if_executable('go', function()
     local settings, filetypes = require('fsouza.lsp.efm').gen_config()
     lsp.efm.setup(opts.with_defaults({
+      cmd = {get_cache_cmd('efm-langserver')};
       init_options = {documentFormatting = true};
       settings = settings;
       filetypes = filetypes;
@@ -105,7 +111,7 @@ do
 
   if_executable('opam', function()
     lsp.ocamllsp.setup(opts.with_defaults({
-      cmd = {get_local_cmd('ocaml-lsp')};
+      cmd = {get_local_cmd('ocaml-lsp'); cache_dir};
       root_dir = opts.root_pattern_with_fallback('.merlin', 'package.json');
     }))
   end)
