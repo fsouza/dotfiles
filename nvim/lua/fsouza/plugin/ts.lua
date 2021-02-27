@@ -20,12 +20,17 @@ local wanted_parsers = {
   'typescript';
 };
 
-local function set_folding()
+local function lang_to_ft(lang)
   local parsers = require('nvim-treesitter.parsers')
+  local obj = parsers.list[lang]
+  return vim.tbl_flatten({{obj.filetype or lang}, obj.used_by or {}})
+end
+
+local function set_folding()
   local helpers = require('fsouza.lib.nvim_helpers')
   local file_types = {}
   for i, lang in ipairs(wanted_parsers) do
-    file_types[i] = parsers.lang_to_ft(lang)
+    file_types[i] = lang_to_ft(lang)
   end
 
   local foldexpr = 'nvim_treesitter#foldexpr()'
