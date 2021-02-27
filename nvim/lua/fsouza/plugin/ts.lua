@@ -23,7 +23,7 @@ local wanted_parsers = {
 local function lang_to_ft(lang)
   local parsers = require('nvim-treesitter.parsers')
   local obj = parsers.list[lang]
-  return vim.tbl_flatten({{obj.filetype or lang}, obj.used_by or {}})
+  return vim.tbl_flatten({{obj.filetype or lang}; obj.used_by or {}})
 end
 
 local function set_folding()
