@@ -130,7 +130,11 @@ local function get_luacheck()
 end
 
 local function get_luaformat()
-  return {formatCommand = 'lua-format'; formatStdin = true; rootMarkers = {'.lua-format'; '.git'}}
+  return {
+    formatCommand = string.format('%s/hr/bin/lua-format', cache_dir);
+    formatStdin = true;
+    rootMarkers = {'.lua-format'; '.git'};
+  }
 end
 
 local function get_eslintd_linting()
