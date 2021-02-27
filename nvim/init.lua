@@ -1,5 +1,3 @@
-local api = vim.api
-local nvim_set_keymap = api.nvim_set_keymap
 local vcmd = vim.cmd
 local vfn = vim.fn
 
@@ -17,11 +15,7 @@ _G.prequire = function(module)
 end
 
 local function initial_mappings()
-  -- Disable ex mode. I'm not that smart.
-  nvim_set_keymap('n', 'Q', '', {})
-
-  -- Remap the leader key.
-  nvim_set_keymap('n', '<Space>', '', {})
+  helpers.create_mappings({n = {{lhs = 'Q'; rhs = ''}; {lhs = '<Space>'; rhs = ''}}})
   vim.g.mapleader = ' '
 end
 
