@@ -43,8 +43,6 @@ source "${basedir}"/extra/zig
 cond_source "${basedir}/extra/local-functions"
 cond_source "${basedir}/extra/$(uname -s)-functions"
 
-export PS1="％ " PS2="\\ "
-
 source "${basedir}"/extra/tmux
 
 fpath=(/usr/local/share/zsh-completions ~/.cache/zsh/zfunc $fpath)
@@ -77,3 +75,5 @@ alias bump_dotfiles="git -C ${basedir} pull && git -C ${basedir} submodule updat
 
 source "${basedir}"/extra/fzf
 unset basedir
+
+PROMPT="％ " PROMPT2="\\ "
