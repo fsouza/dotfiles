@@ -12,8 +12,6 @@
 [status]
 	short = true
 	branch = true
-[help]
-	autocorrect = -1
 [format]
 	pretty = medium
 [push]
