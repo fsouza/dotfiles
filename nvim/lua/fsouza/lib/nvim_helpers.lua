@@ -91,7 +91,7 @@ function M.rewrite_wrap(fn)
   -- already formatted before, the lines below will mostly do the right thing.
   local line_offset = api.nvim_buf_line_count(0) - orig_nlines
   local lineno = orig_lineno + line_offset
-  local col_offset = string.len(api.nvim_buf_get_lines(0, lineno - 1, lineno, true)[1]) -
+  local col_offset = string.len(api.nvim_buf_get_lines(0, lineno - 1, lineno, true)[1] or '') -
                        string.len(orig_line)
   view.lnum = lineno
   view.col = orig_colno + col_offset
