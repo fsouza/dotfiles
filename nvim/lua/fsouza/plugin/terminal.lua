@@ -4,14 +4,13 @@ local vfn = vim.fn
 
 local M = {}
 
-local split_percent = 0.7
+local filetype = 'fsouza_terminal'
 
 -- maps number to a terminal, where a terminal is a table with the following
 -- shape: { bufnr: ..., job_id: ... }
 local terminals = {}
 
 local function set_options(bufnr)
-  local filetype = 'fsouza_terminal'
   api.nvim_buf_set_option(bufnr, 'filetype', filetype)
 end
 
@@ -85,12 +84,10 @@ function M.cr()
     return
   end
 
-  local lines = vim.o.lines * split_percent
-  vcmd(string.format([[
+  vcmd([[
 silent! only
 wincmd F
-resize %d
-]], lines))
+]])
 end
 
 return M
