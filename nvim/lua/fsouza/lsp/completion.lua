@@ -18,10 +18,6 @@ local function setup()
   })
 end
 
-local function enable_autocomplete()
-  vim.g.completion_enable_auto_popup = 1
-end
-
 local function cr_key_for_comp_info(comp_info)
   if comp_info.mode == '' then
     return [[<cr>]]
@@ -32,15 +28,15 @@ local function cr_key_for_comp_info(comp_info)
   return [[<cr>]]
 end
 
-local function cr()
+local cr_cmd = helpers.ifn_map(function()
   local r = cr_key_for_comp_info(vfn.complete_info())
   return api.nvim_replace_termcodes(r, true, false, true)
-end
+end)
 
 local setup_command = helpers.fn_cmd(setup)
 
 local complete_command = helpers.ifn_map(function()
-  enable_autocomplete()
+  vim.g.completion_enable_auto_popup = 1
   helpers.augroup('fsouza__completion_switch_off', {
     {
       events = {'InsertLeave'};
@@ -65,7 +61,7 @@ function M.on_attach(bufnr)
   vim.schedule(function()
     helpers.create_mappings({
       i = {
-        {lhs = '<cr>'; rhs = helpers.ifn_map(cr); opts = {noremap = true}};
+        {lhs = '<cr>'; rhs = cr_cmd; opts = {noremap = true}};
         {lhs = '<c-x><c-o>'; rhs = complete_command; opts = {silent = true}};
       };
     }, bufnr)
