@@ -11,7 +11,7 @@ local function should_use_ts(node)
 
   local node_type = node:type()
 
-  -- this should _probably_ be defined per language or via queries?
+  -- TODO: this should use ts queries
   local node_types = {
     -- generic
     'local_function';
@@ -32,6 +32,9 @@ local function should_use_ts(node)
     -- python
     'class_definition';
     'function_definition';
+
+    -- go
+    'var_spec';
   }
   for _, t in pairs(node_types) do
     if node_type == t then
