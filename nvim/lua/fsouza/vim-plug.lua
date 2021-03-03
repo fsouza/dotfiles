@@ -22,6 +22,7 @@ local plugs = {
   {repo = 'nvim-treesitter/playground'};
   {repo = 'rhysd/git-messenger.vim'};
   {repo = 'sheerun/vim-polyglot'};
+  {repo = 'stsewd/fzf-checkout.vim'};
   {repo = 'thinca/vim-textobj-between'};
   {repo = 'tpope/vim-commentary'};
   {repo = 'tpope/vim-fugitive'};
