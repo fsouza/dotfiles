@@ -7,6 +7,14 @@ local default_root_markers = {'.git'}
 local config_dir = vfn.stdpath('config')
 local cache_dir = vfn.stdpath('cache')
 
+local function quote_arg(arg)
+  return string.format('"%s"', arg)
+end
+
+local function process_args(args)
+  return table.concat(vim.tbl_map(quote_arg, args or {}), ' ')
+end
+
 local function get_node_bin(bin_name)
   local local_bin = string.format([[node_modules/.bin/%s]], bin_name)
   if vfn.executable(local_bin) == 1 then
@@ -25,27 +33,28 @@ local function get_python_bin(bin_name)
   return string.format('%s/venv/bin/%s', cache_dir, bin_name)
 end
 
-local function get_black()
+local function get_black(args)
   return {
-    formatCommand = string.format('%s --fast --quiet -', get_python_bin('black'));
+    formatCommand = string.format('%s --fast --quiet %s -', get_python_bin('black'),
+                                  process_args(args));
     formatStdin = true;
     rootMarkers = {'.git'; ''};
   }
 end
 
-local function get_isort()
+local function get_isort(args)
   return {
-    formatCommand = string.format('%s -', get_python_bin('isort'));
+    formatCommand = string.format('%s %s -', get_python_bin('isort'), process_args(args));
     formatStdin = true;
     rootMarkers = {'.isort.cfg'; '.git'; ''};
   }
 end
 
-local function get_flake8()
+local function get_flake8(args)
   return {
     lintCommand = string.format(
-      '%s --stdin-display-name ${INPUT} --format "%%(path)s:%%(row)d:%%(col)d: %%(code)s %%(text)s" -',
-      get_python_bin('flake8'));
+      '%s --stdin-display-name ${INPUT} --format "%%(path)s:%%(row)d:%%(col)d: %%(code)s %%(text)s" %s -',
+      get_python_bin('flake8'), process_args(args));
     lintStdin = true;
     lintSource = 'flake8';
     lintFormats = {'%f:%l:%c: %m'};
@@ -53,27 +62,27 @@ local function get_flake8()
   }
 end
 
-local function get_add_trailing_comma()
+local function get_add_trailing_comma(args)
   return {
-    formatCommand = string.format('%s --exit-zero-even-if-changed -',
-                                  get_python_bin('add-trailing-comma'));
+    formatCommand = string.format('%s --exit-zero-even-if-changed %s -',
+                                  get_python_bin('add-trailing-comma'), process_args(args));
     formatStdin = true;
     rootMarkers = default_root_markers;
   }
 end
 
-local function get_reorder_python_imports()
+local function get_reorder_python_imports(args)
   return {
-    formatCommand = string.format('%s --exit-zero-even-if-changed -',
-                                  get_python_bin('reorder-python-imports'));
+    formatCommand = string.format('%s --exit-zero-even-if-changed %s -',
+                                  get_python_bin('reorder-python-imports'), process_args(args));
     formatStdin = true;
     rootMarkers = default_root_markers;
   }
 end
 
-local function get_autopep8()
+local function get_autopep8(args)
   return {
-    formatCommand = string.format('%s -', get_python_bin('autopep8'));
+    formatCommand = string.format('%s %s -', get_python_bin('autopep8'), process_args(args));
     formatStdin = true;
     rootMarkers = default_root_markers;
   }
@@ -203,9 +212,13 @@ local function get_python_tools()
         repo_url = local_repos_mapping[repo.hooks[1].id]
       end
     end
+    local args = {}
+    if repo.hooks[1] and vim.tbl_islist(repo.hooks[1].args) then
+      args = repo.hooks[1].args
+    end
     local fn = pc_repo_tools[repo_url]
     if fn then
-      table.insert(tools, fn())
+      table.insert(tools, fn(args))
     end
   end
   return tools
