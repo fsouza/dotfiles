@@ -23,7 +23,6 @@ local function setup_fuzzy_mappings()
         rhs = helpers.fn_map(require('fsouza.plugin.fuzzy').rg_cword);
         opts = {silent = true};
       };
-      {lhs = '<leader>gb'; rhs = helpers.cmd_map('FzfGBranches'); opts = {silent = true}};
     };
   })
 end
