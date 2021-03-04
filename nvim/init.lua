@@ -95,6 +95,11 @@ local function global_mappings()
     {lhs = '<c-p>'; rhs = '<up>'; opts = {noremap = true}};
     {lhs = '<c-n>'; rhs = '<down>'; opts = {noremap = true}};
     {lhs = '<c-d>'; rhs = '<del>'; opts = {noremap = true}};
+    {lhs = '<m-p>'; rhs = '<up>'; opts = {noremap = true}};
+    {lhs = '<m-n>'; rhs = '<down>'; opts = {noremap = true}};
+    {lhs = '<m-b>'; rhs = '<s-left>'; opts = {noremap = true}};
+    {lhs = '<m-f>'; rhs = '<s-right>'; opts = {noremap = true}};
+    {lhs = '<m-d>'; rhs = '<s-right><c-w>'; opts = {noremap = true}};
   }
   local maps = {c = rl_bindings; o = rl_bindings}
   helpers.create_mappings(maps)
