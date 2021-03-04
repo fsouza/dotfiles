@@ -1,4 +1,4 @@
-export VIRTUALENVS=${HOME}/.venvs
+export VIRTUALENVS=${HOME}/.local/share/virtualenvs
 
 VIRTUALENV_PYZ_LOCATION=${VIRTUALENVS}/virtualenv.pyz
 
