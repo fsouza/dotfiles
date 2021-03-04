@@ -109,7 +109,10 @@ function M.format(bufnr, cb, is_retry)
       if is_retry then
         error('failed to connect to prettierd: ' .. err)
       else
-        return M.format(bufnr, cb, true)
+        vim.schedule(function()
+          M.format(bufnr, cb, true)
+        end)
+        return
       end
     end
 
