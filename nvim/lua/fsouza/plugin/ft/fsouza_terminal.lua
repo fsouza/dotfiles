@@ -9,7 +9,6 @@ return function(bufnr)
         rhs = helpers.fn_map(require('fsouza.plugin.terminal').cr);
         opts = {noremap = true};
       };
-      {lhs = [[<c-cr>]]; rhs = helpers.cmd_map([[wincmd gF]]); opts = {noremap = true}};
     };
   }, bufnr)
 end
