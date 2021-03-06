@@ -3,10 +3,6 @@ window:
     x: 2
     y: 2
 
-  dimensions:
-    columns: 238
-    lines: 68
-
   dynamic_padding: true
 
 scrolling:
@@ -24,43 +20,34 @@ font:
   size: 12.0
   use_thin_strokes: false
 
-schemes:
-  default-theme: &default-theme
-    primary:
-      background: "#e8e8e8"
-      foreground: "#000000"
+colors:
+  primary:
+    background: "#ececec"
+    foreground: "#000000"
 
-    normal:
-      black: "#000000"
-      red: "#c91b00"
-      green: "#00c200"
-      yellow: "#606000"
-      blue: "#0225c7"
-      magenta: "#c930c6"
-      cyan: "#00c5c7"
-      white: "#c7c7c7"
+  normal:
+    black: "#000000"
+    red: "#c91b00"
+    green: "#00c200"
+    yellow: "#606000"
+    blue: "#0225c7"
+    magenta: "#c930c6"
+    cyan: "#00c5c7"
+    white: "#c7c7c7"
 
-    bright:
-      black: "#000000"
-      red: "#f2201f"
-      green: "#23aa00"
-      yellow: "#efef00"
-      blue: "#1a8fff"
-      magenta: "#fd28ff"
-      cyan: "#00c5c7"
-      white: "#c7c7c7"
-
-    indexed_colors: []
-
-colors: *default-theme
+  bright:
+    black: "#000000"
+    red: "#f2201f"
+    green: "#23aa00"
+    yellow: "#efef00"
+    blue: "#1a8fff"
+    magenta: "#fd28ff"
+    cyan: "#00c5c7"
+    white: "#c7c7c7"
 
 mouse:
   double_click: { threshold: 100 }
   triple_click: { threshold: 100 }
-
-selection:
-  semantic_escape_chars: ',│`|:"'' ()[]{}<>'
-  save_to_clipboard: true
 
 cursor:
   style:
@@ -74,20 +61,13 @@ shell:
     - --login
 
 key_bindings:
-  - { key: V, mods: Control|Shift, action: Paste }
-  - { key: C, mods: Control|Shift, action: Copy }
-  - { key: V, mods: Command, action: Paste }
-  - { key: C, mods: Command, action: Copy }
-  - { key: F, mods: Alt, chars: "\x1bf" }
   - { key: B, mods: Alt, chars: "\x1bb" }
   - { key: D, mods: Alt, chars: "\x1bd" }
+  - { key: F, mods: Alt, chars: "\x1bf" }
   - { key: H, mods: Alt, chars: "\x1bh" }
   - { key: J, mods: Alt, chars: "\x1bj" }
   - { key: K, mods: Alt, chars: "\x1bk" }
   - { key: L, mods: Alt, chars: "\x1bl" }
-  - { key: Return, mods: Alt, chars: "\x1b\x0d" }
   - { key: Space, mods: Control, chars: "\x00" }
   - { key: Space, mods: Shift|Control, action: None }
-  - { key: Return, mods: Shift, chars: "\x1b[13;2u" }
-  - { key: Return, mods: Control, chars: "\x1b[13;5u" }
   - { key: Key6, mods: Control, chars: "\x1e" }
