@@ -35,14 +35,18 @@ local function set_from_pipenv()
 end
 
 local function set_from_venv_folder()
-  if loop.fs_stat('venv/bin/python') then
-    return string.format('%s/venv', loop.cwd())
+  local folders = {'venv'; '.venv'}
+  for _, folder in pairs(folders) do
+    local venv_candidate = string.format('%s/%s', loop.cwd(), folder)
+    if loop.fs_stat(venv_candidate .. '/bin/python') then
+      return venv_candidate
+    end
   end
   return nil
 end
 
 local function detect_virtual_env(settings)
-  local detectors = {set_from_env_var; set_from_poetry; set_from_pipenv; set_from_venv_folder}
+  local detectors = {set_from_venv_folder; set_from_env_var; set_from_poetry; set_from_pipenv}
   for _, detect in ipairs(detectors) do
     local virtual_env = detect()
     if virtual_env ~= nil then
