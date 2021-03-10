@@ -11,7 +11,7 @@ trim_trailing_whitespace = true
 indent_style = spaces
 indent_size = 4
 
-[BUILD]
+[{BUILD,setup.cfg}]
 indent_style = spaces
 indent_size = 4
 
