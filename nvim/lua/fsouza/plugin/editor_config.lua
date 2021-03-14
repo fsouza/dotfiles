@@ -100,8 +100,8 @@ local function set_opts(bufnr, opts)
   end)
 end
 
-local function set_config()
-  local bufnr = api.nvim_get_current_buf()
+local function set_config(bufnr)
+  bufnr = bufnr or api.nvim_get_current_buf()
   if not vim.bo[bufnr].modifiable or vim.bo[bufnr].readonly then
     return
   end
@@ -126,17 +126,24 @@ local function set_config()
   end)
 end
 
+local set_config_cmd = helpers.fn_cmd(set_config)
+
 local function set_enabled(v)
   local commands = {}
   if v then
     table.insert(commands, {
       events = {'BufNewFile'; 'BufReadPost'; 'BufFilePost'};
       targets = {'*'};
-      command = helpers.fn_cmd(set_config);
+      command = set_config_cmd;
     });
+    vim.schedule(function()
+      local bufs = api.nvim_list_bufs()
+      for _, buf in ipairs(bufs) do
+        set_config(buf)
+      end
+    end)
   end
   helpers.augroup('editorconfig', commands)
-  set_config()
 end
 
 function M.enable()
