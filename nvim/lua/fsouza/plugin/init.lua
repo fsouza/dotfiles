@@ -66,14 +66,6 @@ local function setup_spell()
   })
 end
 
-local function setup_editorconfig()
-  require('fsouza.plugin.editor_config').enable()
-  vim.schedule(function()
-    vcmd([[command! EnableEditorConfig lua require('fsouza.plugin.editor_config').enable()]])
-    vcmd([[command! DisableEditorConfig lua require('fsouza.plugin.editor_config').disable()]])
-  end)
-end
-
 local function setup_prettierd()
   local auto_fmt_fts = {
     'json';
@@ -149,7 +141,6 @@ do
   schedule(function()
     require('fsouza.lib.cleanup').setup()
   end)
-  schedule(setup_editorconfig)
   schedule(setup_fuzzy_mappings)
   schedule(setup_hlyank)
   schedule(function()

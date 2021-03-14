@@ -6,6 +6,7 @@ local M = {}
 
 local plugs = {
   {repo = 'chaoren/vim-wordmotion'};
+  {repo = 'editorconfig/editorconfig-vim'};
   {repo = 'godlygeek/tabular'};
   {repo = 'junegunn/fzf.vim'};
   {repo = 'justinmk/vim-dirvish'};
