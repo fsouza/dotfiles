@@ -102,9 +102,7 @@ local function setup_prettierd()
 end
 
 local function trigger_ft()
-  if vim.bo.filetype and vim.bo.filetype ~= '' then
-    vcmd([[doautocmd FileType ]] .. vim.bo.filetype)
-  end
+  vcmd('doautoall FileType')
 end
 
 local function setup_shortcuts()
