@@ -109,9 +109,8 @@ do
     }))
   end)
 
-  if_executable('opam', function()
+  if_executable('ocamllsp', function()
     lsp.ocamllsp.setup(opts.with_defaults({
-      cmd = {get_local_cmd('ocaml-lsp'); cache_dir};
       root_dir = opts.root_pattern_with_fallback('.merlin', 'package.json');
     }))
   end)

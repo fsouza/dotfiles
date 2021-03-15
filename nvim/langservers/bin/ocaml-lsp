@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-set -eu
-
-cd "${1}/langservers/ocaml-lsp"
-exec opam exec -- ocamllsp

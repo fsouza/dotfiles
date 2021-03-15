@@ -19,27 +19,13 @@ function _clone_or_update() {
 	fi
 }
 
-function _create_opam_switch_if_needed() {
-	if [[ $(opam switch show) != "${PWD}" ]]; then
-		opam switch create . ocaml-base-compiler.4.11.1 --with-test --yes
-	fi
-}
-
 function install_ocaml_lsp() {
 	if ! command -v opam &>/dev/null; then
 		echo skipping ocaml-lsp
 		return
 	fi
-	packages_to_upgrade=(dune ocamlformat)
-	path="${cache_dir}/ocaml-lsp"
-	_clone_or_update https://github.com/ocaml/ocaml-lsp.git "${path}" &&
-		pushd "${path}" &&
-		_create_opam_switch_if_needed &&
-		opam exec -- opam update -y &&
-		opam exec -- opam install -y . &&
-		opam exec -- opam upgrade -y "${packages_to_upgrade[@]}" &&
-		opam exec -- dune build --root . &&
-		popd
+	opam update -y &&
+		opam install -y ocaml-lsp-server ocamlformat
 }
 
 function install_rust_analyzer() {
