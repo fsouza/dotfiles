@@ -8,7 +8,7 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local langservers_skip_set = {tsserver = true}
 
-local langservers_no_autofmt = {zls = true}
+local langservers_noau = {ocamllsp = true; zls = true}
 
 local function should_skip_buffer(bufnr)
   local file_path = vim.api.nvim_buf_get_name(bufnr)
@@ -27,8 +27,8 @@ local function should_skip_server(server_name)
   return langservers_skip_set[server_name] ~= nil
 end
 
-local function should_enable_autofmt(server_name)
-  return langservers_no_autofmt[server_name] == nil
+local function should_use_noau(server_name)
+  return langservers_noau[server_name] ~= nil
 end
 
 local function formatting_params(bufnr)
@@ -76,7 +76,11 @@ local function autofmt_and_write(client, bufnr)
       end
       if result then
         apply_edits(result, bufnr)
-        vcmd('update')
+        if should_use_noau(client.name) then
+          vcmd('noau update')
+        else
+          vcmd('update')
+        end
       end
     end)
   end)
@@ -91,17 +95,15 @@ function M.on_attach(client, bufnr)
     return
   end
 
-  if should_enable_autofmt(client.name) then
-    helpers.augroup('lsp_autofmt_' .. bufnr, {
-      {
-        events = {'BufWritePost'};
-        targets = {string.format('<buffer=%d>', bufnr)};
-        command = helpers.fn_cmd(function()
-          autofmt_and_write(client, bufnr)
-        end);
-      };
-    })
-  end
+  helpers.augroup('lsp_autofmt_' .. bufnr, {
+    {
+      events = {'BufWritePost'};
+      targets = {string.format('<buffer=%d>', bufnr)};
+      command = helpers.fn_cmd(function()
+        autofmt_and_write(client, bufnr)
+      end);
+    };
+  })
 
   helpers.create_mappings({
     n = {
