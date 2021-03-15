@@ -92,7 +92,7 @@ function M.enable()
     if not theme then
       theme = find_theme(winid)
     end
-    api.nvim_set_hl_ns(theme)
+    api.nvim__set_hl_ns(theme)
   end
   if not state.ns then
     state.ns = api.nvim_create_namespace('fsouza__color')
@@ -106,7 +106,7 @@ function M.disable()
   state.enabled = false
   state.themes = {}
   stop_gc_timer()
-  api.nvim_set_hl_ns(0)
+  api.nvim__set_hl_ns(0)
   disable_autocmd()
 end
 
