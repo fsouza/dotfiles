@@ -40,7 +40,12 @@ local function global_vars()
   vim.g.user_emmet_leader_key = [[<C-x>]]
   vim.g.VM_maps = {['Find Under'] = ''}
   vim.g.VM_show_warnings = 0
-  vim.g.wordmotion_extra = {[=[[a-f0-9]\+]=]}
+  vim.g.wordmotion_extra = {
+    [=[\([a-f]\+[0-9]\+[a-f]*[0-9]*\)\+]=];
+    [=[\([0-9]\+[a-f]\+[0-9]*[a-f]*\)\+]=];
+    [=[\([A-F]\+[0-9]\+[A-F]*[0-9]*\)\+]=];
+    [=[\([0-9]\+[A-F]\+[0-9]*[A-F]*\)\+]=];
+  }
 end
 
 local function ui_options()
