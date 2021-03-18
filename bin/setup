@@ -22,7 +22,7 @@ for file in "${home_files[@]}"; do
 done
 
 mkdir -p "${HOME}"/.config
-xdg_files=(tmux.conf tmux."${os}".conf alacritty.yml rgrc)
+xdg_files=(tmux.conf alacritty.yml rgrc)
 for file in "${xdg_files[@]}"; do
 	ln -sf "${basedir}"/"${file}" "${HOME}"/.config/"${file}"
 done
@@ -46,9 +46,7 @@ fi
 
 # bootstrap nvim
 if command -v nvim &>/dev/null; then
-	pushd "${HOME}"/.config/nvim
-	env NVIM_DEBUG=1 make bootstrap
-	popd
+	env NVIM_DEBUG=1 make -f "${HOME}"/.config/nvim/Makefile bootstrap
 fi
 
 touch "${HOME}"/.zsh_sessions_disable
