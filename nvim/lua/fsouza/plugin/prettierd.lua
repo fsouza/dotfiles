@@ -137,7 +137,7 @@ function M.format(bufnr, cb, is_retry)
 end
 
 local function autofmt_and_write(bufnr)
-  local enable = require('fsouza.lib.autofmt').is_enabled()
+  local enable = require('fsouza.lib.autofmt').is_enabled(bufnr)
   if not enable then
     return
   end
