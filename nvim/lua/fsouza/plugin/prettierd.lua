@@ -97,7 +97,7 @@ function M.format(bufnr, cb, is_retry)
       end
 
       if cb ~= nil then
-        cb()
+        api.nvim_buf_call(bufnr, cb)
       end
     end)
   end

@@ -42,11 +42,6 @@ local function formatting_params(bufnr)
 end
 
 local function apply_edits(result, bufnr)
-  local curbuf = api.nvim_get_current_buf()
-  if curbuf ~= bufnr then
-    return
-  end
-
   helpers.rewrite_wrap(function()
     lsp.util.apply_text_edits(result, bufnr)
   end)
@@ -67,20 +62,18 @@ local function autofmt_and_write(client, bufnr)
   pcall(function()
     local changed_tick = api.nvim_buf_get_changedtick(bufnr)
     fmt(client, bufnr, function(_, _, result, _)
-      local curr_buf = api.nvim_get_current_buf()
-      if curr_buf ~= bufnr or api.nvim_get_mode().mode ~= 'n' then
-        return
-      end
       if changed_tick ~= api.nvim_buf_get_changedtick(bufnr) then
         return
       end
       if result then
-        apply_edits(result, bufnr)
-        if should_use_noau(client.name) then
-          vcmd('noau update')
-        else
-          vcmd('update')
-        end
+        api.nvim_buf_call(bufnr, function()
+          apply_edits(result, bufnr)
+          if should_use_noau(client.name) then
+            vcmd('noau update')
+          else
+            vcmd('update')
+          end
+        end)
       end
     end)
   end)
