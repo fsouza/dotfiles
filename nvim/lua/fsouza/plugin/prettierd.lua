@@ -84,7 +84,7 @@ function M.format(bufnr, cb, is_retry)
       error(string.format('failed to format with prettier: %s', data))
     end
 
-    helpers.rewrite_wrap(function()
+    helpers.rewrite_wrap(bufnr, function()
       local write = false
       for i, line in ipairs(new_lines) do
         if line ~= lines[i + 1] then

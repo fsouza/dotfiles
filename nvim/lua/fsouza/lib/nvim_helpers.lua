@@ -77,25 +77,36 @@ function M.ensure_path_relative_to_prefix(prefix, path)
   return path
 end
 
-function M.rewrite_wrap(fn)
-  local cursor = api.nvim_win_get_cursor(0)
-  local orig_lineno, orig_colno = cursor[1], cursor[2]
-  local orig_line = api.nvim_buf_get_lines(0, orig_lineno - 1, orig_lineno, true)[1]
-  local orig_nlines = api.nvim_buf_line_count(0)
-  local view = vfn.winsaveview()
+function M.rewrite_wrap(bufnr, fn)
+  local winid = api.nvim_get_current_win()
+  local win_bufnr = api.nvim_win_get_buf(winid)
+
+  local restore = function()
+  end
+  if bufnr == win_bufnr then
+    local cursor = api.nvim_win_get_cursor(winid)
+    local orig_lineno, orig_colno = cursor[1], cursor[2]
+    local orig_line = api.nvim_buf_get_lines(bufnr, orig_lineno - 1, orig_lineno, true)[1]
+    local orig_nlines = api.nvim_buf_line_count(bufnr)
+    local view = vfn.winsaveview()
+
+    -- note: this isn't 100% correct, if the lines change below the current one,
+    -- the position won't be the same, but this is optmistic: if the file was
+    -- already formatted before, the lines below will mostly do the right thing.
+    restore = function()
+      local line_offset = api.nvim_buf_line_count(bufnr) - orig_nlines
+      local lineno = orig_lineno + line_offset
+      local col_offset = string.len(api.nvim_buf_get_lines(bufnr, lineno - 1, lineno, true)[1] or
+                                      '') - string.len(orig_line)
+      view.lnum = lineno
+      view.col = orig_colno + col_offset
+      vfn.winrestview(view)
+    end
+  end
 
   fn()
 
-  -- note: this isn't 100% correct, if the lines change below the current one,
-  -- the position won't be the same, but this is optmistic: if the file was
-  -- already formatted before, the lines below will mostly do the right thing.
-  local line_offset = api.nvim_buf_line_count(0) - orig_nlines
-  local lineno = orig_lineno + line_offset
-  local col_offset = string.len(api.nvim_buf_get_lines(0, lineno - 1, lineno, true)[1] or '') -
-                       string.len(orig_line)
-  view.lnum = lineno
-  view.col = orig_colno + col_offset
-  vfn.winrestview(view)
+  restore()
 end
 
 return M

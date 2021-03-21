@@ -42,7 +42,7 @@ local function formatting_params(bufnr)
 end
 
 local function apply_edits(result, bufnr)
-  helpers.rewrite_wrap(function()
+  helpers.rewrite_wrap(bufnr, function()
     lsp.util.apply_text_edits(result, bufnr)
   end)
 end
