@@ -2030,10 +2030,10 @@ yaml-language-server-parser@0.1.2:
   resolved "https://registry.yarnpkg.com/yaml-language-server-parser/-/yaml-language-server-parser-0.1.2.tgz#8f660b64f1838e7845412341a9d71a5f3b280f6c"
   integrity sha512-GQ2eRE5GcKBK8XVKBIcMyOfC8WMZmEs6gogtVc6knLKE6pG+e5L/lOMfBxZzAt2lqye5itMggQ9+6stXAVhMsw==
 
-yaml-language-server@^0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/yaml-language-server/-/yaml-language-server-0.16.0.tgz#86b2eb2de1b5186e88464b386b367e54b87de55f"
-  integrity sha512-W+SIUfHRJI97ZGAQZs1uo4keuaRpJip/r5fFPu44ycpY5hZA+yWw1UNzqftApC1QmFH6lwGwQyTZFyDYxGotbw==
+yaml-language-server@^0.17.0:
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/yaml-language-server/-/yaml-language-server-0.17.0.tgz#e1b37e51e5e51d94519afe1bf775ba38d12f6db9"
+  integrity sha512-jugQKTXkLDMq9J6ZN2hl+pTR2lDdSHV+bb8sCGO7//BSX7HFXlX2C5M4jghFeL4AAodBZ5WEHUzHoI7llm5p6g==
   dependencies:
     js-yaml "^3.13.1"
     jsonc-parser "^2.2.1"
