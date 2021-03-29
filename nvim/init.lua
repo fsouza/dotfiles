@@ -15,7 +15,9 @@ _G.prequire = function(module)
 end
 
 local function initial_mappings()
-  helpers.create_mappings({n = {{lhs = 'Q'; rhs = ''}; {lhs = '<Space>'; rhs = ''}}})
+  helpers.create_mappings({
+    n = {{lhs = 'Q'; rhs = ''}; {lhs = '<Space>'; rhs = ''}; {lhs = '<c-t>'; rhs = ''}};
+  })
   vim.g.mapleader = ' '
 end
 
