@@ -109,7 +109,14 @@ local function global_mappings()
     {lhs = '<m-f>'; rhs = '<s-right>'; opts = {noremap = true}};
     {lhs = '<m-d>'; rhs = '<s-right><c-w>'; opts = {noremap = true}};
   }
-  local maps = {c = rl_bindings; o = rl_bindings}
+  local maps = {
+    c = rl_bindings;
+    o = rl_bindings;
+    n = {
+      {lhs = 'j'; rhs = 'gj'; opts = {noremap = true}};
+      {lhs = 'k'; rhs = 'gk'; opts = {noremap = true}};
+    };
+  }
   helpers.create_mappings(maps)
 end
 
