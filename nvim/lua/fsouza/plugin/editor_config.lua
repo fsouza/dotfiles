@@ -80,10 +80,6 @@ local function set_opts(bufnr, opts)
       vim_opts.softtabstop = indent_size
     end
 
-    if k == 'tab_width' then
-      vim_opts.tabstop = tonumber(v)
-    end
-
     if k == 'trim_trailing_whitespace' then
       vim.schedule(function()
         handle_whitespaces(bufnr, v)
