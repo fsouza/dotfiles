@@ -53,9 +53,7 @@ function _go_install() {
 		echo skipping "${@}"
 		return
 	fi
-	(
-		cd /tmp && env GO111MODULE=on GOBIN="${cache_dir}/bin" go get "${@}"
-	)
+	env GOBIN="${cache_dir}/bin" go install "${@}"
 }
 
 function install_gopls() {
