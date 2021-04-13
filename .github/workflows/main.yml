@@ -49,7 +49,7 @@ jobs:
 
       - name: opam cache
         id: opam-cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: ~/.opam
           key: "${{ matrix.os }}-${{ matrix.ocaml-version }}"
@@ -76,14 +76,14 @@ jobs:
 
       - name: langservers cache
         id: nvim-langservers-cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: ~/.cache/nvim/langservers
           key: "${{ matrix.os }}-${{ hashFiles('nvim/langservers/setup.sh') }}"
 
       - name: hererocks cache
         id: nvim-hererocks-cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: ~/.cache/nvim/hr
           key: "${{ matrix.os }}-${{ hashFiles('nvim/scripts/bootstrap.lua') }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
@@ -95,7 +95,7 @@ jobs:
 
       - name: virtualenv cache
         id: nvim-virtualenv-cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: ~/.cache/nvim/venv
           key: "${{ matrix.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}"
