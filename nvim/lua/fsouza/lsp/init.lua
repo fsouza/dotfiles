@@ -71,7 +71,6 @@ do
 
     lsp.tsserver.setup(opts.with_defaults({
       cmd = {vim_node_ls; 'typescript-language-server'; '--stdio'};
-      root_dir = opts.root_pattern_with_fallback('package.json');
     }))
 
     lsp.yamlls.setup(opts.with_defaults({cmd = {vim_node_ls; 'yaml-language-server'; '--stdio'}}))
