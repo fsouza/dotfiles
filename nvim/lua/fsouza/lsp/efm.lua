@@ -146,6 +146,33 @@ local function get_luaformat()
   }
 end
 
+local function get_prettierd()
+  return {
+    formatCommand = string.format('%s ${INPUT}', get_node_bin('prettierd'));
+    formatStdin = true;
+  }
+end
+
+local function get_eslintd_fmt()
+  local eslint_config_files = {
+    '.eslintrc.js';
+    '.eslintrc.cjs';
+    '.eslintrc.yaml';
+    '.eslintrc.yml';
+    '.eslintrc.json';
+  }
+  for _, config_file in ipairs(eslint_config_files) do
+    if loop.fs_stat(config_file) then
+      return {
+        formatCommand = string.format('%s --stdin --stdin-filename ${INPUT} --fix-to-stdout',
+                                      get_node_bin('eslint_d'));
+        formatStdin = true;
+      }
+    end
+  end
+  return {}
+end
+
 local function get_eslintd_linting()
   local eslint_config_files = {
     '.eslintrc.js';
@@ -256,9 +283,30 @@ local function get_settings()
   add_if_not_empty('sh', get_shfmt())
   add_if_not_empty('dune', get_dune())
   add_if_not_empty('bzl', get_buildifier())
+
   local eslint = get_eslintd_linting()
   add_if_not_empty('javascript', eslint)
   add_if_not_empty('typescript', eslint)
+
+  local eslint_fmt = get_eslintd_fmt()
+  add_if_not_empty('javascript', eslint_fmt)
+  add_if_not_empty('typescript', eslint_fmt)
+
+  local prettierd = get_prettierd()
+  local prettierd_fts = {
+    'css';
+    'graphql';
+    'html';
+    'javascript';
+    'json';
+    'typescript';
+    'typescriptreact';
+    'yaml';
+  }
+  for _, ft in ipairs(prettierd_fts) do
+    add_if_not_empty(ft, prettierd)
+  end
+
   return settings
 end
 

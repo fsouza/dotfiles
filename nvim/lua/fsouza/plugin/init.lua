@@ -74,33 +74,6 @@ local function setup_editorconfig()
   end)
 end
 
-local function setup_prettierd()
-  local auto_fmt_fts = {
-    'json';
-    'javascript';
-    'typescript';
-    'css';
-    'html';
-    'typescriptreact';
-    'yaml';
-  }
-  helpers.augroup('auto_prettierd', {
-    {
-      events = {'FileType'};
-      targets = auto_fmt_fts;
-      command = helpers.fn_cmd(function()
-        require('fsouza.plugin.prettierd').setup_autofmt(vim.fn.expand('<abuf>'))
-      end);
-    };
-    {
-      events = {'FileType'};
-      targets = auto_fmt_fts;
-      command = [[nmap <buffer> <silent> <leader>f ]] ..
-        [[<cmd>lua require('fsouza.plugin.prettierd').format(vim.fn.expand('<abuf>'))<cr>]];
-    };
-  })
-end
-
 local function trigger_ft()
   vcmd('doautoall FileType')
 end
@@ -156,7 +129,6 @@ do
   schedule(setup_autofmt_commands)
   schedule(setup_word_replace)
   schedule(setup_spell)
-  schedule(setup_prettierd)
   schedule(setup_shortcuts)
   schedule(function()
     require('colorizer').setup({'css'; 'javascript'; 'html'; 'lua'; 'htmldjango'})
