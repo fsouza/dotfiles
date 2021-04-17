@@ -153,7 +153,7 @@ local function get_prettierd()
   }
 end
 
-local function get_eslintd_fmt()
+local function get_eslintd_config()
   local eslint_config_files = {
     '.eslintrc.js';
     '.eslintrc.cjs';
@@ -164,40 +164,27 @@ local function get_eslintd_fmt()
   for _, config_file in ipairs(eslint_config_files) do
     if loop.fs_stat(config_file) then
       return {
-        formatCommand = string.format('%s --stdin --stdin-filename ${INPUT} --fix-to-stdout',
-                                      get_node_bin('eslint_d'));
-        formatStdin = true;
-      }
-    end
-  end
-  return {}
-end
-
-local function get_eslintd_linting()
-  local eslint_config_files = {
-    '.eslintrc.js';
-    '.eslintrc.cjs';
-    '.eslintrc.yaml';
-    '.eslintrc.yml';
-    '.eslintrc.json';
-  }
-  for _, config_file in ipairs(eslint_config_files) do
-    if loop.fs_stat(config_file) then
-      return {
-        lintCommand = string.format('%s --stdin --stdin-filename ${INPUT} --format unix',
-                                    get_node_bin('eslint_d'));
-        lintStdin = true;
-        lintSource = 'eslint';
-        rootMarkers = {
-          '.eslintrc.js';
-          '.eslintrc.cjs';
-          '.eslintrc.yaml';
-          '.eslintrc.yml';
-          '.eslintrc.json';
-          '.git';
-          'package.json';
+        {
+          formatCommand = string.format('%s --stdin --stdin-filename ${INPUT} --fix-to-stdout',
+                                        get_node_bin('eslint_d'));
+          formatStdin = true;
         };
-        lintFormats = {'%f:%l:%c: %m'};
+        {
+          lintCommand = string.format('%s --stdin --stdin-filename ${INPUT} --format unix',
+                                      get_node_bin('eslint_d'));
+          lintStdin = true;
+          lintSource = 'eslint';
+          rootMarkers = {
+            '.eslintrc.js';
+            '.eslintrc.cjs';
+            '.eslintrc.yaml';
+            '.eslintrc.yml';
+            '.eslintrc.json';
+            '.git';
+            'package.json';
+          };
+          lintFormats = {'%f:%l:%c: %m'};
+        };
       }
     end
   end
@@ -284,13 +271,13 @@ local function get_settings()
   add_if_not_empty('dune', get_dune())
   add_if_not_empty('bzl', get_buildifier())
 
-  local eslint = get_eslintd_linting()
-  add_if_not_empty('javascript', eslint)
-  add_if_not_empty('typescript', eslint)
-
-  local eslint_fmt = get_eslintd_fmt()
-  add_if_not_empty('javascript', eslint_fmt)
-  add_if_not_empty('typescript', eslint_fmt)
+  local eslint_tools = get_eslintd_config()
+  local eslint_fts = {'javascript'; 'typescript'}
+  for _, eslint in ipairs(eslint_tools) do
+    for _, ft in ipairs(eslint_fts) do
+      add_if_not_empty(ft, eslint)
+    end
+  end
 
   local prettierd = get_prettierd()
   local prettierd_fts = {
