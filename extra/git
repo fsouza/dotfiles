@@ -24,6 +24,10 @@ function gh_clone {
 		cd "${dest}" || return
 }
 
+function git_delete_gone_branches {
+	git branch -v | rg '([a-fA-F0-9])+\s\[gone\]' | awk '{print $1}' | xargs git branch -D
+}
+
 function c {
 	gh_clone fsouza "$1" "$2"
 }
