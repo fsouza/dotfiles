@@ -2,6 +2,13 @@
 
 set -euo pipefail
 
+function install_sfmono_user {
+	terminal_app=/System/Applications/Utilities/Terminal.app
+	if [ -d "${terminal_app}" ]; then
+		cp "${terminal_app}"/Contents/Resources/Fonts/* "${HOME}"/Library/Fonts
+	fi
+}
+
 # Increase window resize speed for Cocoa applications
 defaults write -g NSWindowResizeTime -float 0.001
 
@@ -139,3 +146,5 @@ defaults write com.apple.controlstrip MiniCustomized -array com.apple.system.bri
 	com.apple.system.mute
 
 defaults write com.apple.touchbar.agent PresentationModeFnModes -dict appWithControlStrip fullControlStrip
+
+install_sfmono_user
