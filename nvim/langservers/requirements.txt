@@ -14,7 +14,7 @@ attrs==20.3.0
     # via flake8-bugbear
 autopep8==1.5.6
     # via -r requirements.in
-black==20.8b1
+black==21.4b0
     # via -r requirements.in
 cached-property==1.5.2
     # via aspy.refactor-imports
@@ -51,7 +51,7 @@ pyflakes==2.3.0
     # via flake8
 regex==2020.11.13
     # via black
-reorder_python_imports==2.5.0
+reorder-python-imports==2.5.0
     # via -r requirements.in
 tokenize-rt==4.1.0
     # via add-trailing-comma
@@ -59,7 +59,3 @@ toml==0.10.2
     # via
     #   autopep8
     #   black
-typed-ast==1.4.2
-    # via black
-typing-extensions==3.7.4.3
-    # via black
