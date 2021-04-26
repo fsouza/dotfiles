@@ -3,9 +3,9 @@
 set -euo pipefail
 
 function install_sfmono_user {
-	terminal_app=/System/Applications/Utilities/Terminal.app
-	if [ -d "${terminal_app}" ]; then
-		cp "${terminal_app}"/Contents/Resources/Fonts/* "${HOME}"/Library/Fonts
+	fonts_dir=/System/Applications/Utilities/Terminal.app/Contents/Resources/Fonts
+	if [ -d "${fonts_dir}" ]; then
+		cp "${fonts_dir}/"*.otf "${HOME}"/Library/Fonts
 	fi
 }
 
