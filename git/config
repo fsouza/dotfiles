@@ -28,3 +28,5 @@
 	git = !git
 [init]
 	defaultBranch = main
+[advice]
+	detachedHead = false
