@@ -25,6 +25,31 @@ M['textDocument/documentSymbol'] = fzf_symbol_callback
 
 M['workspace/symbol'] = fzf_symbol_callback
 
+local function jump_to_location(location)
+  -- location may be Location or LocationLink
+  local uri = location.uri or location.targetUri
+  if uri == nil then
+    return
+  end
+  local bufnr = vim.uri_to_bufnr(uri)
+  -- Save position in jumplist
+  vim.cmd 'normal! m\''
+
+  -- Push a new item into tagstack
+  local from = {vim.fn.bufnr('%'); vim.fn.line('.'); vim.fn.col('.'); 0}
+  local items = {{tagname = vim.fn.expand('<cword>'); from = from}}
+  vim.fn.settagstack(vim.fn.win_getid(), {items = items}, 't')
+
+  --- Jump to new location (adjusting for UTF-16 encoding of characters)
+  api.nvim_set_current_buf(bufnr)
+  api.nvim_buf_set_option(0, 'buflisted', true)
+  local range = location.range or location.targetSelectionRange
+  local row = range.start.line
+  local col = vim.lsp.util._get_line_byte_from_position(0, range.start)
+  api.nvim_win_set_cursor(0, {row + 1; col})
+  return true
+end
+
 local function fzf_location_callback(_, _, result)
   if result == nil or vim.tbl_isempty(result) then
     return nil
@@ -35,10 +60,10 @@ local function fzf_location_callback(_, _, result)
       local items = lsp.util.locations_to_items(result)
       require('fsouza.lsp.fzf').send(items, 'Locations')
     else
-      lsp.util.jump_to_location(result[1])
+      jump_to_location(result[1])
     end
   else
-    lsp.util.jump_to_location(result)
+    jump_to_location(result)
   end
 end
 
