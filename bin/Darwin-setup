@@ -5,6 +5,7 @@ set -euo pipefail
 function install_sfmono_user {
 	fonts_dir=/System/Applications/Utilities/Terminal.app/Contents/Resources/Fonts
 	if [ -d "${fonts_dir}" ]; then
+		mkdir -p "${HOME}"/Library/Fonts
 		cp "${fonts_dir}/"*.otf "${HOME}"/Library/Fonts
 	fi
 }
