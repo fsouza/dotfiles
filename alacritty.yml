@@ -11,14 +11,14 @@ scrolling:
 
 font:
   normal:
-    family: Roboto Mono
+    family: SF Mono
     style: Light
 
   bold:
-    style: Bold
+    style: Semibold
 
   size: 12.0
-  use_thin_strokes: true
+  use_thin_strokes: false
 
 colors:
   primary:
