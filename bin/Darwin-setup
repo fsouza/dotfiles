@@ -4,7 +4,7 @@ set -euo pipefail
 
 function install_source_code_pro {
 	mkdir -p "${HOME}"/Library/Fonts
-	cp "${basedir}/extra/source-code-pro/OTF/"*.otf "${HOME}"/Library/Fonts
+	cp "${basedir:-${HOME}/.dotfiles}/extra/source-code-pro/OTF/"*.otf "${HOME}"/Library/Fonts
 }
 
 # Increase window resize speed for Cocoa applications
