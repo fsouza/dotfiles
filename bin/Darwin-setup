@@ -2,12 +2,9 @@
 
 set -euo pipefail
 
-function install_sfmono_user {
-	fonts_dir=/System/Applications/Utilities/Terminal.app/Contents/Resources/Fonts
-	if [ -d "${fonts_dir}" ]; then
-		mkdir -p "${HOME}"/Library/Fonts
-		cp "${fonts_dir}/"*.otf "${HOME}"/Library/Fonts
-	fi
+function install_source_code_pro {
+	mkdir -p "${HOME}"/Library/Fonts
+	cp "${basedir}/extra/source-code-pro/OTF/"*.otf "${HOME}"/Library/Fonts
 }
 
 # Increase window resize speed for Cocoa applications
@@ -148,4 +145,4 @@ defaults write com.apple.controlstrip MiniCustomized -array com.apple.system.bri
 
 defaults write com.apple.touchbar.agent PresentationModeFnModes -dict appWithControlStrip fullControlStrip
 
-install_sfmono_user
+install_source_code_pro

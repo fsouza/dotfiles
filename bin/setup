@@ -40,6 +40,7 @@ for dir in "${xdg_dirs[@]}"; do
 	fi
 done
 
+export basedir
 if [ -f "${basedir}"/bin/"${os}"-setup ]; then
 	"${basedir}"/bin/"${os}"-setup
 fi
