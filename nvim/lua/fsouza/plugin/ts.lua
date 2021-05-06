@@ -14,7 +14,6 @@ local wanted_parsers = {
   'python';
   'query';
   'regex';
-  'rust';
   'toml';
   'tsx';
   'typescript';

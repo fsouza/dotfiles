@@ -28,22 +28,6 @@ function install_ocaml_lsp() {
 		opam install -y ocaml-lsp-server ocamlformat
 }
 
-function install_rust_analyzer() {
-	local suffix
-	if ! command -v cargo &>/dev/null; then
-		echo skipping rust-analyzer
-		return
-	fi
-	if [[ $OSTYPE == darwin* ]]; then
-		suffix=mac
-	elif [[ $OSTYPE == linux* ]]; then
-		suffix=linux
-	fi
-	mkdir -p "${cache_dir}/bin"
-	curl -sLo "${cache_dir}/bin/rust-analyzer" "https://github.com/rust-analyzer/rust-analyzer/releases/download/nightly/rust-analyzer-${suffix}"
-	chmod +x "${cache_dir}/bin/rust-analyzer"
-}
-
 function install_servers_from_npm() {
 	npx --yes yarn install --frozen-lockfile
 }
@@ -75,19 +59,6 @@ function install_efm() {
 	_go_install github.com/mattn/efm-langserver@master
 }
 
-function install_zls() {
-	if ! command -v zig &>/dev/null; then
-		echo skipping zls
-		return
-	fi
-	path=${cache_dir}/zls
-	_clone_or_update https://github.com/zigtools/zls.git "${path}" &&
-		pushd "${path}" &&
-		zig build -Drelease-safe &&
-		echo '{"enable_snippets":true,"warn_style":true,"enable_semantic_tokens":false,"operator_completions":false}' >zig-cache/bin/zls.json &&
-		popd
-}
-
 cache_dir=${1}
 exit_status=0
 
@@ -108,11 +79,9 @@ pushd "$(dirname "${0}")"
 mkdir -p "${cache_dir}"
 install_servers_from_npm &
 install_ocaml_lsp &
-install_rust_analyzer &
 install_gopls &
 install_shfmt &
 install_efm &
-install_zls &
 wait
 popd
 

@@ -96,9 +96,7 @@ do
         linksInHover = false;
       };
     }))
-  end)
 
-  if_executable('go', function()
     local settings, filetypes = require('fsouza.lsp.efm').gen_config()
     lsp.efm.setup(opts.with_defaults({
       cmd = {get_cache_cmd('efm-langserver')};
@@ -112,17 +110,6 @@ do
     lsp.ocamllsp.setup(opts.with_defaults({
       root_dir = opts.root_pattern_with_fallback('.merlin', 'package.json');
     }))
-  end)
-
-  if_executable('rust-analyzer', function()
-    lsp.rust_analyzer.setup(opts.with_defaults({
-      cmd = {get_cache_cmd('rust-analyzer')};
-      settings = {root_dir = opts.root_pattern_with_fallback('Cargo.toml')};
-    }))
-  end)
-
-  if_executable('zig', function()
-    lsp.zls.setup(opts.with_defaults({cmd = {cache_dir .. '/langservers/zls/zig-cache/bin/zls'}}))
   end)
 
   local clangd = os.getenv('HOMEBREW_PREFIX') .. '/opt/llvm/bin/clangd'
