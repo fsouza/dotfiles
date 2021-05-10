@@ -150,6 +150,7 @@ local function get_prettierd()
   return {
     formatCommand = string.format('%s ${INPUT}', get_node_bin('prettierd'));
     formatStdin = true;
+    env = {'CORE_D_DOTFILE=.cache/nvim/prettierd'};
   }
 end
 
