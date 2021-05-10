@@ -38,10 +38,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@fsouza/prettierd@^0.11.1":
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.11.1.tgz#17911bc03cb68e40621aee68375b7513b6d4c132"
-  integrity sha512-rzObW2LY27CBwd8P3mT01Xd07xsrFIWIwy7TnsoU3Gd3pIxd9kesH2dPK86w9jVC5D+3ANhP6WlRDgTLVeIHog==
+"@fsouza/prettierd@^0.12.2":
+  version "0.12.2"
+  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.12.2.tgz#2e87b17d0d782a3f985a1ce33fbdf73fefad6133"
+  integrity sha512-Sv01UaLF0D9F6mD65TV6mqEWvI91XC4Bw7dCO8Qpr8XYhpYH7QAgZ4Cev3bu+qjE8r2ulmVsOwVshsouuApm3A==
   dependencies:
     "@typescript-eslint/typescript-estree" "^4.22.1"
     angular-html-parser "^1.7.1"
