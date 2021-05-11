@@ -4,7 +4,7 @@
 	"scripts": {},
 	"license": "ISC",
 	"dependencies": {
-		"@fsouza/prettierd": "^0.12.2",
+		"@fsouza/prettierd": "^0.12.4",
 		"bash-language-server": "^1.17.0",
 		"eslint_d": "^10.1.0",
 		"pyright": "^1.1.138",
