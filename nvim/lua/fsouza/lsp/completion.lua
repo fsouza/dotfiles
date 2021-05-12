@@ -8,7 +8,6 @@ local function setup()
   vim.g.completion_enable_auto_popup = 0
   require('completion').on_attach({
     trigger_on_delete = 1;
-    confirm_key = [[<c-y>]];
     enable_auto_signature = 0;
     enable_server_trigger = 0;
     sorting = 'length';
