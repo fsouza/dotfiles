@@ -150,7 +150,7 @@ local function get_prettierd()
   return {
     formatCommand = string.format('%s ${INPUT}', get_node_bin('prettierd'));
     formatStdin = true;
-    env = {'CORE_D_DOTFILE=.cache/nvim/prettierd'};
+    env = {'XDG_RUNTIME_DIR=' .. cache_dir};
   }
 end
 
@@ -169,6 +169,7 @@ local function get_eslintd_config()
           formatCommand = string.format('%s --stdin --stdin-filename ${INPUT} --fix-to-stdout',
                                         get_node_bin('eslint_d'));
           formatStdin = true;
+          env = {'XDG_RUNTIME_DIR=' .. cache_dir};
         };
         {
           lintCommand = string.format('%s --stdin --stdin-filename ${INPUT} --format unix',
@@ -185,6 +186,7 @@ local function get_eslintd_config()
             'package.json';
           };
           lintFormats = {'%f:%l:%c: %m'};
+          env = {'XDG_RUNTIME_DIR=' .. cache_dir};
         };
       }
     end
