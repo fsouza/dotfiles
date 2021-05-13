@@ -6,7 +6,7 @@
 	"dependencies": {
 		"@fsouza/prettierd": "^0.12.4",
 		"bash-language-server": "^1.17.0",
-		"eslint_d": "^10.1.0",
+		"eslint_d": "^10.1.1",
 		"pyright": "^1.1.138",
 		"typescript": "^4.2.4",
 		"typescript-language-server": "^0.5.1",
