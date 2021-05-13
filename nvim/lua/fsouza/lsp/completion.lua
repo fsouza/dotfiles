@@ -4,20 +4,6 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
-local function setup()
-  vim.g.completion_enable_auto_popup = 0
-  require('completion').on_attach({
-    trigger_on_delete = 1;
-    enable_auto_signature = 0;
-    enable_server_trigger = 0;
-    sorting = 'length';
-    matching_ignore_case = 1;
-    matching_smart_case = 1;
-    matching_strategy_list = {'exact'; 'fuzzy'};
-    chain_complete_list = {default = {{complete_items = {'lsp'}}}};
-  })
-end
-
 local function cr_key_for_comp_info(comp_info)
   if comp_info.mode == '' then
     return [[<cr>]]
@@ -33,28 +19,20 @@ local cr_cmd = helpers.ifn_map(function()
   return api.nvim_replace_termcodes(r, true, false, true)
 end)
 
-local setup_command = helpers.fn_cmd(setup)
-
-local complete_command = helpers.ifn_map(function()
-  vim.g.completion_enable_auto_popup = 1
-  helpers.augroup('fsouza__completion_switch_off', {
-    {
-      events = {'InsertLeave'};
-      targets = {'<buffer>'};
-      modifiers = {'++once'};
-      command = setup_command;
-    };
-  })
-  require('completion').triggerCompletion()
-  return ''
-end)
-
 function M.on_attach(bufnr)
-  setup()
+  require('compe').setup({
+    enabled = true;
+    autocomplete = false;
+    preselect = 'disable';
+    source = {nvim_lsp = true};
+  }, bufnr)
+
   require('fsouza.color').set_popup_cb(function()
-    local winid = require('completion.hover').winnr
-    if api.nvim_win_is_valid(winid) then
-      return winid
+    local wins = api.nvim_list_wins()
+    for _, winid in ipairs(wins) do
+      if api.nvim_win_is_valid(winid) and pcall(api.nvim_win_get_var, winid, 'compe_documentation') then
+        return winid
+      end
     end
   end)
 
@@ -62,7 +40,8 @@ function M.on_attach(bufnr)
     helpers.create_mappings({
       i = {
         {lhs = '<cr>'; rhs = cr_cmd; opts = {noremap = true}};
-        {lhs = '<c-x><c-o>'; rhs = complete_command; opts = {silent = true}};
+        {lhs = '<c-x><c-o>'; rhs = [[compe#complete()]]; opts = {expr = true; silent = true}};
+        {lhs = '<c-y>'; rhs = [[compe#confirm('<c-y>')]]; opts = {expr = true; silent = true}};
       };
     }, bufnr)
   end)
