@@ -8,6 +8,7 @@ local function setup(bufnr, autocomplete)
   require('compe').setup({
     enabled = true;
     autocomplete = autocomplete or false;
+    min_length = 3;
     preselect = 'disable';
     source = {nvim_lsp = true};
   }, bufnr)
