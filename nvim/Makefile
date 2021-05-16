@@ -1,7 +1,7 @@
 mkfile_path := $(realpath $(lastword $(MAKEFILE_LIST)))
 mkfile_dir := $(dir $(mkfile_path))
 
-LUAROCKS := $(if $(shell command -v luarocks 2>/dev/null), luacheck, $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)/hr/bin/luarocks)
+LUAROCKS := $(if $(shell command -v luarocks 2>/dev/null), luarocks, $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)/hr/bin/luarocks)
 
 LUACHECK := $(if $(shell command -v luacheck 2>/dev/null), luacheck, $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)/hr/bin/luacheck)
 
