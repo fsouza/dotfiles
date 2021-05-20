@@ -7,5 +7,5 @@ brew upgrade
 
 brew cleanup -s --prune 3
 if [[ ${OSTYPE} == darwin* ]]; then
-	brew services cleanup
+	brew services cleanup || true
 fi
