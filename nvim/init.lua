@@ -60,6 +60,8 @@ local function ui_options()
   vim.o.mouse = ''
   vim.o.shiftround = true
   vim.o.shortmess = 'filnxtToOFIc'
+  vim.o.number = true
+  vim.o.relativenumber = true
   require('fsouza.color').enable()
 end
 
@@ -76,12 +78,7 @@ local function global_options()
   vim.o.inccommand = 'split'
   vim.o.jumpoptions = 'stack'
   vim.o.scrolloff = 2
-end
-
-local function set_non_global_options()
   vim.o.autoindent = true
-  vim.o.number = true
-  vim.o.relativenumber = true
   vim.o.smartindent = true
   vim.o.swapfile = false
   vim.o.undofile = true
@@ -122,7 +119,6 @@ do
   end)
 
   ui_options()
-  set_non_global_options()
   folding()
   global_vars()
 
