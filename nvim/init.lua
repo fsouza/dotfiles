@@ -79,14 +79,12 @@ local function global_options()
 end
 
 local function set_non_global_options()
-  vcmd([[
-set autoindent
-set number
-set relativenumber
-set smartindent
-set noswapfile
-set undofile
-]])
+  vim.o.autoindent = true
+  vim.o.number = true
+  vim.o.relativenumber = true
+  vim.o.smartindent = true
+  vim.o.swapfile = false
+  vim.o.undofile = true
 end
 
 local function folding()

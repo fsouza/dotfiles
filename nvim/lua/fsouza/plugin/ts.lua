@@ -36,9 +36,9 @@ local function set_folding()
 
   file_types = vim.tbl_flatten(file_types)
   for _, ft in pairs(file_types) do
-    if ft == vim.bo.filetype then
-      vim.wo.foldmethod = 'expr'
-      vim.wo.foldexpr = foldexpr
+    if ft == vim.o.filetype then
+      vim.o.foldmethod = 'expr'
+      vim.o.foldexpr = foldexpr
     end
   end
 

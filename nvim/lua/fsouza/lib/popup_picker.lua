@@ -70,11 +70,11 @@ function M.open(lines, cb)
   close_others(win_var_identifier)
   local winid = api.nvim_open_win(bufnr, true, win_opts)
   cbs[winid] = cb
-  vim.bo.readonly = true
-  vim.bo.modifiable = false
-  vim.wo.cursorline = true
-  vim.wo.number = true
-  vim.wo.wrap = false
+  vim.o.readonly = true
+  vim.o.modifiable = false
+  vim.o.cursorline = true
+  vim.o.number = true
+  vim.o.wrap = false
   vim.w[win_var_identifier] = true
   require('fsouza.color').set_popup_winid(winid)
 
