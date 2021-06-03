@@ -66,7 +66,7 @@ local function ts_range(loc)
     return loc
   end
 
-  local lang = parsers.ft_to_lang(vim.o.filetype)
+  local lang = parsers.ft_to_lang(vim.bo.filetype)
   if not lang or lang == '' then
     return loc
   end
@@ -76,7 +76,7 @@ local function ts_range(loc)
 
   local bufnr = vim.uri_to_bufnr(loc.uri)
   vim.api.nvim_buf_set_option(bufnr, 'buflisted', true)
-  vim.api.nvim_buf_set_option(bufnr, 'filetype', vim.o.filetype)
+  vim.api.nvim_buf_set_option(bufnr, 'filetype', vim.bo.filetype)
 
   local start_pos = loc.range.start
   local end_pos = loc.range['end']
