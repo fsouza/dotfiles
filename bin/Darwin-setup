@@ -7,14 +7,6 @@ function install_source_code_pro {
 	cp "${basedir:-${HOME}/.dotfiles}/extra/source-code-pro/OTF/"*.otf "${HOME}"/Library/Fonts
 }
 
-function install_sf_mono {
-	fonts_dir=/System/Applications/Utilities/Terminal.app/Contents/Resources/Fonts
-	if [ -d "${fonts_dir}" ]; then
-		mkdir -p "${HOME}"/Library/Fonts
-		cp "${fonts_dir}/"*.otf "${HOME}"/Library/Fonts
-	fi
-}
-
 # Increase window resize speed for Cocoa applications
 defaults write -g NSWindowResizeTime -float 0.001
 
