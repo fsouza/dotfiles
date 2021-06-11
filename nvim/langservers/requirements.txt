@@ -14,7 +14,7 @@ attrs==20.3.0
     # via flake8-bugbear
 autopep8==1.5.7
     # via -r requirements.in
-black==21.5b2
+black==21.6b0
     # via -r requirements.in
 cached-property==1.5.2
     # via aspy.refactor-imports
