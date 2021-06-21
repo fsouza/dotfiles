@@ -35,7 +35,7 @@ flake8==3.9.2
     #   flake8-builtins
     #   flake8-comprehensions
     #   flake8-tidy-imports
-isort==5.9.0
+isort==5.9.1
     # via -r requirements.in
 mccabe==0.6.1
     # via flake8
