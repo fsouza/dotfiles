@@ -75,8 +75,9 @@ do
 
     lsp.yamlls.setup(opts.with_defaults({cmd = {vim_node_ls; 'yaml-language-server'; '--stdio'}}))
 
-    lsp.pyright.setup(opts.with_defaults(require('fsouza.lsp.custom.pyright').get_opts(
-                                           {cmd = {vim_node_ls; 'pyright-langserver'; '--stdio'}})))
+    lsp.pyright.setup(opts.with_defaults(require('fsouza.lsp.custom.pyright').get_opts({
+      cmd = {vim_node_ls; 'pyright-langserver'; '--stdio'};
+    })))
   end)
 
   if_executable('go', function()
