@@ -19,10 +19,8 @@ function gimme {
 }
 
 function refresh_go_tools {
-	(
-		go install golang.org/x/tools/cmd/goimports@master &&
-			go install honnef.co/go/tools/cmd/staticcheck@master
-	)
+	go install golang.org/x/tools/cmd/goimports@latest &&
+		go install honnef.co/go/tools/cmd/staticcheck@latest
 }
 
 function update_go_tip {
