@@ -15,7 +15,7 @@ jobs:
         os:
           - ubuntu-20.04
           - macos-latest
-        ocaml-version:
+        ocaml-compiler:
           - 4.12.0
 
     name: bootstrap-${{ matrix.os }}
@@ -52,11 +52,12 @@ jobs:
         uses: actions/cache@v2.1.6
         with:
           path: ~/.opam
-          key: "${{ matrix.os }}-${{ matrix.ocaml-version }}"
+          key: "${{ matrix.os }}-${{ matrix.ocaml-compiler }}"
 
       - uses: avsm/setup-ocaml@v2
         with:
-          ocaml-version: ${{ matrix.ocaml-version }}
+          ocaml-compiler: ${{ matrix.ocaml-compiler }}
+          dune-cache: true
 
       - uses: actions/setup-node@v2.2.0
         with:
