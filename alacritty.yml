@@ -17,7 +17,7 @@ font:
   bold:
     style: Bold
 
-  size: 13.0
+  size: 12.0
   use_thin_strokes: false
 
 colors:
