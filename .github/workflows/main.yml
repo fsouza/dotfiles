@@ -52,7 +52,7 @@ jobs:
         uses: actions/cache@v2.1.6
         with:
           path: ~/.opam
-          key: "${{ matrix.os }}-${{ matrix.ocaml-compiler }}"
+          key: "${{ matrix.os }}-ocaml-${{ matrix.ocaml-compiler }}"
 
       - uses: avsm/setup-ocaml@v2
         with:
