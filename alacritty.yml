@@ -15,7 +15,7 @@ font:
     style: Regular
 
   bold:
-    style: Semibold
+    style: Bold
 
   size: 13.0
   use_thin_strokes: false
