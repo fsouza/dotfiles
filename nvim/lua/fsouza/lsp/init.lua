@@ -61,12 +61,16 @@ do
     local vim_node_ls = get_local_cmd('node-lsp')
     lsp.bashls.setup(opts.with_defaults({cmd = {vim_node_ls; 'bash-language-server'; 'start'}}))
 
-    lsp.cssls.setup(opts.with_defaults({cmd = {vim_node_ls; 'css-languageserver'; '--stdio'}}))
+    lsp.cssls.setup(opts.with_defaults({
+      cmd = {vim_node_ls; 'vscode-css-language-server'; '--stdio'};
+    }))
 
-    lsp.html.setup(opts.with_defaults({cmd = {vim_node_ls; 'html-langserver'; '--stdio'}}))
+    lsp.html.setup(opts.with_defaults({
+      cmd = {vim_node_ls; 'vscode-html-language-server'; '--stdio'};
+    }))
 
     lsp.jsonls.setup(opts.with_defaults({
-      cmd = {vim_node_ls; 'vscode-json-languageserver'; '--stdio'};
+      cmd = {vim_node_ls; 'vscode-json-language-server'; '--stdio'};
     }))
 
     lsp.tsserver.setup(opts.with_defaults({
