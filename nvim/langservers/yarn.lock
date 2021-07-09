@@ -1142,11 +1142,6 @@ json-stringify-safe@~5.0.1:
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
   integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
 
-jsonc-parser@^2.2.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-2.3.1.tgz#59549150b133f2efacca48fe9ce1ec0659af2342"
-  integrity sha512-H8jvkz1O50L3dMZCsLqiuB2tA7muqbSg1AtGEkN0leAqGjsUzDJir3Zwr02BhqdcITPg3ei3mZ+HjMocAknhhg==
-
 jsonc-parser@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-3.0.0.tgz#abdd785701c7e7eaca8a9ec8cf070ca51a745a22"
@@ -1917,19 +1912,7 @@ vscode-html-languageservice@^4.0.5:
     vscode-nls "^5.0.0"
     vscode-uri "^3.0.2"
 
-vscode-json-languageservice@^4.1.0:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/vscode-json-languageservice/-/vscode-json-languageservice-4.1.4.tgz#c83d3d812f8f17ab525724c611d8ff5e8834fc84"
-  integrity sha512-/UqaE58BVFdePM9l971L6xPRLlCLNk01aovf1Pp9hB/8pytmd2s9ZNEnS1JqYyQEJ1k5/fEBsWOdhQlNo4H7VA==
-  dependencies:
-    jsonc-parser "^3.0.0"
-    minimatch "^3.0.4"
-    vscode-languageserver-textdocument "^1.0.1"
-    vscode-languageserver-types "^3.16.0"
-    vscode-nls "^5.0.0"
-    vscode-uri "^3.0.2"
-
-vscode-json-languageservice@^4.1.4:
+vscode-json-languageservice@^4.1.0, vscode-json-languageservice@^4.1.4:
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/vscode-json-languageservice/-/vscode-json-languageservice-4.1.5.tgz#e429987d9e4693d8cd88338fa3c96616772b6e8c"
   integrity sha512-oRVPj2UY6BQ8PQ1LIz/FigUEZQVqsB9msNCFlxRBHE9sSEIJkCbYG6aCB2n7WR17VIisYQdO3MDheuoyI48G2w==
@@ -2118,13 +2101,13 @@ yaml-language-server-parser@0.1.2:
   resolved "https://registry.yarnpkg.com/yaml-language-server-parser/-/yaml-language-server-parser-0.1.2.tgz#8f660b64f1838e7845412341a9d71a5f3b280f6c"
   integrity sha512-GQ2eRE5GcKBK8XVKBIcMyOfC8WMZmEs6gogtVc6knLKE6pG+e5L/lOMfBxZzAt2lqye5itMggQ9+6stXAVhMsw==
 
-yaml-language-server@^0.20.0:
-  version "0.20.0"
-  resolved "https://registry.yarnpkg.com/yaml-language-server/-/yaml-language-server-0.20.0.tgz#5a0ccb8bbb1b398c1586a814ae405d33e20e82e6"
-  integrity sha512-JV5jqB/1p2g4WCW1Gi6Kd3RQQSepdvTQBIDLSSoVzi7Q7kH+6tFkFJlMCBs0qmxLPkaU062d3IxdTWDK/MvvEA==
+yaml-language-server@^0.21.0:
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/yaml-language-server/-/yaml-language-server-0.21.0.tgz#03a339f29bec4e7cc265c1c058a6218d53ed19fd"
+  integrity sha512-lUp4qhxfBlTieoV+pkLJq09QnwL8daYM+3abAvfRLUUKDQaKTS4hM3NjWNVdtVHS/Oc7IFY44F2K2VZ/q5kMAw==
   dependencies:
     js-yaml "^4.1.0"
-    jsonc-parser "^2.2.1"
+    jsonc-parser "^3.0.0"
     request-light "^0.2.4"
     vscode-json-languageservice "^4.1.0"
     vscode-languageserver "^7.0.0"
