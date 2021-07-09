@@ -67,8 +67,6 @@ function M.send(items, prompt)
       '--expect';
       'ctrl-t,ctrl-x,ctrl-v';
       '--multi';
-      '--bind';
-      'ctrl-q:select-all';
       '--preview-window';
       '+{2}-5';
       '--delimiter';
