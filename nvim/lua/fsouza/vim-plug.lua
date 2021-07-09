@@ -7,7 +7,7 @@ local M = {}
 local plugs = {
   {repo = 'chaoren/vim-wordmotion'};
   {repo = 'godlygeek/tabular'};
-  {repo = 'hrsh7th/nvim-compe'};
+  {repo = 'hrsh7th/nvim-compe'; opts = {commit = '29ffeeff545ce50e6b892591d8d47729ca22cac2'}};
   {repo = 'junegunn/fzf.vim'};
   {repo = 'justinmk/vim-dirvish'};
   {repo = 'justinmk/vim-sneak'};
