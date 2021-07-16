@@ -150,7 +150,7 @@ local function get_prettierd()
   return {
     formatCommand = string.format('%s ${INPUT}', get_node_bin('prettierd'));
     formatStdin = true;
-    env = {'XDG_RUNTIME_DIR=' .. cache_dir; 'CORE_D_DOTFILE=prettierd'};
+    env = {'XDG_RUNTIME_DIR=' .. cache_dir};
   }
 end
 
