@@ -14,7 +14,7 @@ attrs==20.3.0
     # via flake8-bugbear
 autopep8==1.5.7
     # via -r requirements.in
-black==21.6b0
+black==21.7b0
     # via -r requirements.in
 cached-property==1.5.2
     # via aspy.refactor-imports
@@ -56,6 +56,6 @@ reorder-python-imports==2.5.0
 tokenize-rt==4.1.0
     # via add-trailing-comma
 toml==0.10.2
-    # via
-    #   autopep8
-    #   black
+    # via autopep8
+tomli==1.0.4
+    # via black
