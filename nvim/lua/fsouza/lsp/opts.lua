@@ -13,8 +13,12 @@ local cmds = {
     require('fsouza.lsp.diagnostics').list_workspace_diagnostics);
   clear_buffer_diagnostics = helpers.fn_map(
     require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics);
-  goto_next_diagnostic = helpers.fn_map(vim.lsp.diagnostic.goto_next);
-  goto_prev_diagnostic = helpers.fn_map(vim.lsp.diagnostic.goto_prev);
+  goto_next_diagnostic = helpers.fn_map(function()
+    vim.lsp.diagnostic.goto_next({popup_opts = {focusable = false}})
+  end);
+  goto_prev_diagnostic = helpers.fn_map(function()
+    vim.lsp.diagnostic.goto_prev({popup_opts = {focusable = false}})
+  end);
   rename = helpers.fn_map(vim.lsp.buf.rename);
   code_action = helpers.fn_map(require('fsouza.lsp.code_action').code_action);
   visual_code_action = helpers.vfn_map(require('fsouza.lsp.code_action').visual_code_action);
