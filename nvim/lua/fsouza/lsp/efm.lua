@@ -208,7 +208,7 @@ end
 local function get_python_tools()
   local pre_commit_config_file_path = '.pre-commit-config.yaml'
   if not loop.fs_stat(pre_commit_config_file_path) then
-    return {get_flake8(); get_black(); get_add_trailing_comma(); get_isort()}
+    return {get_flake8(); get_black(); get_add_trailing_comma(); get_reorder_python_imports()}
   end
 
   local pc_repo_tools = {
