@@ -24,7 +24,8 @@ vim-plug:
 
 .PHONY: kill-daemons
 kill-daemons:
-	pkill prettierd eslint_d || true
+	pkill prettierd || true
+	pkill eslint_d || true
 
 .PHONY: luacheck
 luacheck:
