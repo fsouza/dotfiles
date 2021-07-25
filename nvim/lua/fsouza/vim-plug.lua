@@ -26,6 +26,7 @@ local plugs = {
   {repo = 'tpope/vim-commentary'};
   {repo = 'tpope/vim-fugitive'};
   {repo = 'tpope/vim-repeat'};
+  {repo = 'tpope/vim-rhubarb'};
   {repo = 'tpope/vim-surround'};
 }
 
