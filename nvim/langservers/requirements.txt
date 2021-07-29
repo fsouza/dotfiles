@@ -35,7 +35,7 @@ flake8-comprehensions==3.5.0
     # via -r requirements.in
 flake8-tidy-imports==4.3.0
     # via -r requirements.in
-isort==5.9.2
+isort==5.9.3
     # via -r requirements.in
 mccabe==0.6.1
     # via flake8
@@ -51,7 +51,7 @@ pyflakes==2.3.0
     # via flake8
 regex==2020.11.13
     # via black
-reorder_python_imports==2.6.0
+reorder-python-imports==2.6.0
     # via -r requirements.in
 tokenize-rt==4.1.0
     # via add-trailing-comma
