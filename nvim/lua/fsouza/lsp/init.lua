@@ -57,7 +57,7 @@ do
   local lsp = require('lspconfig')
   local opts = require('fsouza.lsp.opts')
 
-  if_executable('npx', function()
+  if_executable('fnm', function()
     local vim_node_ls = get_local_cmd('node-lsp')
     lsp.bashls.setup(opts.with_defaults({cmd = {vim_node_ls; 'bash-language-server'; 'start'}}))
 
