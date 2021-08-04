@@ -56,7 +56,7 @@ local function handle_whitespaces(bufnr, v)
 end
 
 local function set_opts(bufnr, opts)
-  local vim_opts = {}
+  local vim_opts = {tabstop = 8}
   for k, v in pairs(opts) do
     if k == 'charset' then
       vim_opts.fileencoding, vim_opts.bomb = get_vim_fenc(v)
