@@ -6,7 +6,9 @@ return function(bufnr)
     n = {
       {
         lhs = [[<cr>]];
-        rhs = helpers.fn_map(require('fsouza.plugin.terminal').cr);
+        rhs = helpers.fn_map(function()
+          require('fsouza.plugin.terminal').cr()
+        end);
         opts = {noremap = true};
       };
     };
