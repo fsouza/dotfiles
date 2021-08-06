@@ -4,39 +4,79 @@ local M = {}
 
 local api = vim.api
 
--- some premature optimization. Could make it lazy with a metatable, but
--- probably not needed.
 local cmds = {
-  show_line_diagnostics = helpers.fn_map(vim.lsp.diagnostic.show_line_diagnostics);
-  list_file_diagnostics = helpers.fn_map(require('fsouza.lsp.diagnostics').list_file_diagnostics);
-  list_workspace_diagnostics = helpers.fn_map(
-    require('fsouza.lsp.diagnostics').list_workspace_diagnostics);
-  clear_buffer_diagnostics = helpers.fn_map(
-    require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics);
+  show_line_diagnostics = helpers.fn_map(function()
+    vim.lsp.diagnostic.show_line_diagnostics()
+  end);
+  list_file_diagnostics = helpers.fn_map(function()
+    require('fsouza.lsp.diagnostics').list_file_diagnostics()
+  end);
+  list_workspace_diagnostics = helpers.fn_map(function()
+    require('fsouza.lsp.diagnostics').list_workspace_diagnostics()
+  end);
+  clear_buffer_diagnostics = helpers.fn_map(function()
+    require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics()
+  end);
   goto_next_diagnostic = helpers.fn_map(function()
     vim.lsp.diagnostic.goto_next({popup_opts = {focusable = false}})
   end);
   goto_prev_diagnostic = helpers.fn_map(function()
     vim.lsp.diagnostic.goto_prev({popup_opts = {focusable = false}})
   end);
-  rename = helpers.fn_map(vim.lsp.buf.rename);
-  code_action = helpers.fn_map(require('fsouza.lsp.code_action').code_action);
-  visual_code_action = helpers.vfn_map(require('fsouza.lsp.code_action').visual_code_action);
-  goto_declaration = helpers.fn_map(vim.lsp.buf.declaration);
-  preview_declaration = helpers.fn_map(require('fsouza.lsp.locations').preview_declaration);
-  highlight_references = helpers.fn_map(vim.lsp.buf.document_highlight);
-  clear_references = helpers.fn_map(vim.lsp.buf.clear_references);
-  list_document_symbols = helpers.fn_map(vim.lsp.buf.document_symbol);
-  find_references = helpers.fn_map(vim.lsp.buf.references);
-  goto_definition = helpers.fn_map(vim.lsp.buf.definition);
-  preview_definition = helpers.fn_map(require('fsouza.lsp.locations').preview_definition);
-  display_information = helpers.fn_map(vim.lsp.buf.hover);
-  goto_implementation = helpers.fn_map(vim.lsp.buf.implementation);
-  preview_implementation = helpers.fn_map(require('fsouza.lsp.locations').preview_implementation);
-  display_signature_help = helpers.fn_map(vim.lsp.buf.signature_help);
-  goto_type_definition = helpers.fn_map(vim.lsp.buf.type_definition);
-  preview_type_definition = helpers.fn_map(require('fsouza.lsp.locations').preview_type_definition);
-  query_workspace_symbols = helpers.fn_map(vim.lsp.buf.workspace_symbol);
+  rename = helpers.fn_map(function()
+    vim.lsp.buf.rename()
+  end);
+  code_action = helpers.fn_map(function()
+    require('fsouza.lsp.code_action').code_action()
+  end);
+  visual_code_action = helpers.vfn_map(function()
+    require('fsouza.lsp.code_action').visual_code_action()
+  end);
+  goto_declaration = helpers.fn_map(function()
+    vim.lsp.buf.declaration()
+  end);
+  preview_declaration = helpers.fn_map(function()
+    require('fsouza.lsp.locations').preview_declaration()
+  end);
+  highlight_references = helpers.fn_map(function()
+    vim.lsp.buf.document_highlight()
+  end);
+  clear_references = helpers.fn_map(function()
+    vim.lsp.buf.clear_references()
+  end);
+  list_document_symbols = helpers.fn_map(function()
+    vim.lsp.buf.document_symbol()
+  end);
+  find_references = helpers.fn_map(function()
+    vim.lsp.buf.references()
+  end);
+  goto_definition = helpers.fn_map(function()
+    vim.lsp.buf.definition()
+  end);
+  preview_definition = helpers.fn_map(function()
+    require('fsouza.lsp.locations').preview_definition()
+  end);
+  display_information = helpers.fn_map(function()
+    vim.lsp.buf.hover()
+  end);
+  goto_implementation = helpers.fn_map(function()
+    vim.lsp.buf.implementation()
+  end);
+  preview_implementation = helpers.fn_map(function()
+    require('fsouza.lsp.locations').preview_implementation()
+  end);
+  display_signature_help = helpers.fn_map(function()
+    vim.lsp.buf.signature_help()
+  end);
+  goto_type_definition = helpers.fn_map(function()
+    vim.lsp.buf.type_definition()
+  end);
+  preview_type_definition = helpers.fn_map(function()
+    require('fsouza.lsp.locations').preview_type_definition()
+  end);
+  query_workspace_symbols = helpers.fn_map(function()
+    vim.lsp.buf.workspace_symbol()
+  end);
 }
 
 local function attached(bufnr, client)
