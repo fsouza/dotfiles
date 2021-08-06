@@ -10,7 +10,7 @@ function find_brew {
 
 brew_path=$(find_brew)
 if [ -n "${brew_path}" ]; then
-	eval "$("${brew_path}" shellenv)"
+	eval "$(env -u HOMEBREW_SHELLENV_PREFIX "${brew_path}" shellenv)"
 
 	export HOMEBREW_NO_EMOJI=1
 	export HOMEBREW_NO_GITHUB_API=1
