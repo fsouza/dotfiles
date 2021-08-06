@@ -179,14 +179,12 @@ local function attached(bufnr, client)
                    {lhs = '<leader>T'; rhs = cmds.query_workspace_symbols; opts = {silent = true}})
     end
 
-    -- should use resolved_capabilities here, but this is not supported by nvim
-    -- yet.
-    if client.server_capabilities.codeLensProvider then
+    if client.resolved_capabilities.code_lens then
       require('fsouza.lsp.code_lens').on_attach({
         bufnr = bufnr;
         client = client;
         mapping = '<leader><cr>';
-        can_resolve = client.server_capabilities.codeLensProvider.resolveProvider == true;
+        can_resolve = client.resolved_capabilities.code_lens_resolve;
         supports_command = client.resolved_capabilities.execute_command;
       })
     end
