@@ -10,17 +10,23 @@ local function setup_fuzzy_mappings()
       {lhs = '<leader>;'; rhs = helpers.cmd_map('FzfCommands'); opts = {silent = true}};
       {
         lhs = '<leader>zj';
-        rhs = helpers.fn_map(require('fsouza.plugin.fuzzy').fuzzy_here);
+        rhs = helpers.fn_map(function()
+          require('fsouza.plugin.fuzzy').fuzzy_here()
+        end);
         opts = {silent = true};
       };
       {
         lhs = '<leader>gg';
-        rhs = helpers.fn_map(require('fsouza.plugin.fuzzy').rg);
+        rhs = helpers.fn_map(function()
+          require('fsouza.plugin.fuzzy').rg()
+        end);
         opts = {silent = true};
       };
       {
         lhs = '<leader>gw';
-        rhs = helpers.fn_map(require('fsouza.plugin.fuzzy').rg_cword);
+        rhs = helpers.fn_map(function()
+          require('fsouza.plugin.fuzzy').rg_cword()
+        end);
         opts = {silent = true};
       };
     };
@@ -49,7 +55,9 @@ local function setup_word_replace()
     n = {
       {
         lhs = '<leader>e';
-        rhs = helpers.fn_map(require('fsouza.plugin.word_sub').run);
+        rhs = helpers.fn_map(function()
+          require('fsouza.plugin.word_sub').run()
+        end);
         opts = {silent = true};
       };
     };
@@ -108,8 +116,6 @@ local function setup_terminal_mappings_and_commands()
       };
     };
   })
-  vcmd([[command! -nargs=* Run lua require('fsouza.plugin.terminal').run_in_main_term(<f-args>)]])
-  vcmd([[command! -nargs=* T lua require('fsouza.plugin.terminal').run_in_main_term(<f-args>)]])
 end
 
 do
