@@ -29,7 +29,12 @@ function install_ocaml_lsp() {
 }
 
 function install_servers_from_npm() {
-	npx --yes yarn install --frozen-lockfile
+	if ! command -v fnm &>/dev/null; then
+		echo skipping npm
+		return
+	fi
+	fnm install v16
+	fnm exec --using=v16 npx --yes yarn install --frozen-lockfile
 }
 
 function _go_install() {

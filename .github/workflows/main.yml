@@ -42,10 +42,6 @@ jobs:
           ocaml-compiler: "4.12.0"
           dune-cache: true
 
-      - uses: actions/setup-node@v2.4.0
-        with:
-          node-version: "14.x"
-
       - uses: actions/setup-python@v2.2.2
         with:
           python-version: "3.x"
@@ -79,6 +75,11 @@ jobs:
         with:
           path: ~/.cache/nvim/venv
           key: "${{ matrix.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}"
+
+      - name: install fnm
+        run: |
+          curl -fsSL https://fnm.vercel.app/install | bash
+          echo "${HOME}/.fnm" >> "${GITHUB_PATH}"
 
       - name: run setup
         run: ./bin/setup
