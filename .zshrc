@@ -4,7 +4,6 @@ source "${basedir}"/extra/init-functions
 mkdir -p ~/.cache/{go,node,zsh}
 
 export MANPATH=/usr/share/man:/usr/local/share/man
-export GOBIN=$HOME/bin GOPATH=$HOME/.cache/go GIMME_SILENT_ENV=1 GIMME_TYPE=binary
 export EDITOR=vim PAGER=less MANPAGER=less
 export RIPGREP_CONFIG_PATH=${HOME}/.config/rgrc
 export LESSHISTFILE=${HOME}/.cache/lesshst
@@ -14,13 +13,9 @@ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 source "${basedir}"/extra/brew
 
 prepend_to_path \
-	"${basedir}"/extra/gimme \
 	"${HOME}"/.cargo/bin \
 	"${HOME}"/.local/bin \
-	"${basedir}"/bin \
-	"${GOBIN}"
-
-cond_source "${HOME}/.gimme/envs/gotip.env"
+	"${basedir}"/bin
 
 if command -v fnm &>/dev/null; then
 	eval "$(fnm env)"

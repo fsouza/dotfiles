@@ -1,20 +1,11 @@
-function gimme {
-	if [ -z "$1" ]; then
-		echo >&2 "Please provide the go version"
-		return 1
-	fi
-	if [[ $1 =~ ^- || $1 == "help" ]]; then
-		command gimme "${1}"
+GO_HOME="${HOME}/.cache/go"
+
+function _normalize_name_version {
+	name_or_version=${1}
+	if grep -q '^go' <<<"${name_or_version}"; then
+		echo "${name_or_version}"
 	else
-		if [[ $1 == "tip" ]]; then
-			old_gimme_type=$GIMME_TYPE
-			export GIMME_TYPE=git
-		fi
-		eval "$(command gimme "${1}")"
-		if [ -n "$old_gimme_type" ]; then
-			export GIMME_TYPE=$old_gimme_type
-			unset old_gimme_type
-		fi
+		echo "go${name_or_version}"
 	fi
 }
 
@@ -23,15 +14,29 @@ function refresh_go_tools {
 		go install honnef.co/go/tools/cmd/staticcheck@latest
 }
 
-function update_go_tip {
-	GIMME_DEBUG=2 GIMME_TYPE=git command gimme tip &&
-		go clean -cache &&
-		source "${HOME}/.gimme/envs/gotip.env" &&
-		refresh_go_tools
+function _install_go {
+	name=$(_normalize_name_version "${1}")
+	temp_gobin=$(mktemp -d)
+	env GOBIN="${temp_gobin}" GOPATH="${GO_HOME}/selfpath" go install "golang.org/dl/${name}@latest" &&
+		env HOME="${GO_HOME}" "${temp_gobin}/${name}" download &&
+		rm -rf "${temp_gobin}"
 }
 
-# gimme sets GOROOT, but it's not needed. Let's unset it.
-unset GOROOT
+function use_go {
+	name=$(_normalize_name_version "${1:-gotip}")
 
-# requires Go 1.14+
-export GOFLAGS="-modcacherw"
+	dir="${GO_HOME}/sdk/${name}/bin"
+	if ! [ -d "${dir}" ]; then
+		_install_go "${name}"
+	fi
+
+	export GOBIN="${HOME}/bin" GOPATH="${GO_HOME}/path"
+
+	prepend_to_path "${dir}" "${GOBIN}"
+}
+
+function update_go_tip {
+	_install_go gotip && use_go tip && refresh_go_tools
+}
+
+use_go tip
