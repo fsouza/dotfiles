@@ -75,7 +75,7 @@ local function global_options()
   vim.o.wildmode = 'list:longest'
   vim.o.smarttab = true
   vim.o.backup = false
-  vim.o.inccommand = 'split'
+  vim.o.inccommand = 'nosplit'
   vim.o.jumpoptions = 'stack'
   vim.o.scrolloff = 2
   vim.o.autoindent = true
