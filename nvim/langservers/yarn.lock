@@ -2040,10 +2040,10 @@ type-fest@^0.8.1:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
-typescript-language-server@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-0.6.0.tgz#e09a6def6ff1ef302a61705fead01a79f1715f5a"
-  integrity sha512-gBvRnenOM413yVfZy8dKMs+b+/Zknl2o1M79+XAGbdptOds+VAkbZXrfj0MC1IGdB+hQ6XxuWa4jWfrvBkoFiQ==
+typescript-language-server@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-0.6.1.tgz#201dacbeee5162015859dc08cdfb56140fc1b5c7"
+  integrity sha512-ZqqD4XK1EgITEoW1SaOnNe473K5EMr7vSYwFeqK4Fe37TjNyEwB+2vXuqW01kPujiw7tRpv3teDAl7WtP9AmIw==
   dependencies:
     command-exists "^1.2.6"
     commander "^7.2.0"
