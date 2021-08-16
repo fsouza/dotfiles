@@ -19,7 +19,7 @@ function _install_go {
 
 	if [[ $name == "gotip" ]]; then
 		name_bkp=$name
-		use_go 1.17rc2
+		use_go 1.17
 		name=$name_bkp
 	fi
 
