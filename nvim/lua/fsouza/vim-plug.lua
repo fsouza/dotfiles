@@ -12,6 +12,7 @@ local plugs = {
   {repo = 'justinmk/vim-dirvish'};
   {repo = 'justinmk/vim-sneak'};
   {repo = 'kana/vim-textobj-user'};
+  {repo = 'liuchengxu/vista.vim'};
   {repo = 'mattn/emmet-vim'};
   {repo = 'mg979/vim-visual-multi'};
   {repo = 'michaeljsmith/vim-indent-object'};
