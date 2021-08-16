@@ -16,6 +16,13 @@ function refresh_go_tools {
 
 function _install_go {
 	name=$(_normalize_name_version "${1}")
+
+	if [[ $name == "gotip" ]]; then
+		name_bkp=$name
+		use_go 1.17rc2
+		name=$name_bkp
+	fi
+
 	temp_gobin=$(mktemp -d)
 	env GOBIN="${temp_gobin}" GOPATH="${GO_HOME}/selfpath" go install "golang.org/dl/${name}@latest" &&
 		env HOME="${GO_HOME}" "${temp_gobin}/${name}" download &&
