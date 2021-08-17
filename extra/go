@@ -14,17 +14,29 @@ function refresh_go_tools {
 		go install honnef.co/go/tools/cmd/staticcheck@latest
 }
 
-function _install_go {
-	local name=$(_normalize_name_version "${1}")
+function _bootstrap_go {
+	local BOOTSTRAP_GO="go1.17"
+	local dest_dir=${GO_HOME}/bootstrap
+	local go_binary=${dest_dir}/go/bin/go
+	if ! [ -x "${go_binary}" ]; then
+		mkdir -p "${dest_dir}"
 
-	if [[ $name == "gotip" ]]; then
-		use_go 1.17
+		# some day I'll have to support arm64, that day isn't today.
+		curl -sL "https://golang.org/dl/${BOOTSTRAP_GO}.$(uname -s | tr '[:upper:]' '[:lower:]')-amd64.tar.gz" | tar -C "${dest_dir}" -xzf -
 	fi
+	dirname "${go_binary}"
+}
 
-	local temp_gobin=$(mktemp -d)
-	env GOBIN="${temp_gobin}" GOPATH="${GO_HOME}/selfpath" go install "golang.org/dl/${name}@latest" &&
-		env HOME="${GO_HOME}" "${temp_gobin}/${name}" download &&
-		rm -rf "${temp_gobin}"
+function _install_go {
+	(
+		local name=$(_normalize_name_version "${1}")
+		local temp_gobin=$(mktemp -d)
+		prepend_to_path "$(_bootstrap_go)"
+
+		env GOBIN="${temp_gobin}" GOPATH="${GO_HOME}/selfpath" go install "golang.org/dl/${name}@latest" &&
+			env HOME="${GO_HOME}" "${temp_gobin}/${name}" download &&
+			rm -rf "${temp_gobin}"
+	)
 }
 
 function use_go {
@@ -36,7 +48,6 @@ function use_go {
 	fi
 
 	export GOBIN="${HOME}/bin" GOPATH="${GO_HOME}/path"
-
 	prepend_to_path "${dir}" "${GOBIN}"
 }
 
