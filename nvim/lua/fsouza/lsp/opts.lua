@@ -133,6 +133,11 @@ local function attached(bufnr, client)
     if client.resolved_capabilities.document_symbol then
       table.insert(mappings.n,
                    {lhs = '<leader>t'; rhs = cmds.list_document_symbols; opts = {silent = true}})
+      table.insert(mappings.n, {
+        lhs = '<leader>v';
+        rhs = helpers.cmd_map('Vista nvim_lsp');
+        opts = {silent = true};
+      })
     end
 
     if client.resolved_capabilities.find_references then
