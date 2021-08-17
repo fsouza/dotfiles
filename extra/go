@@ -1,7 +1,7 @@
 GO_HOME="${HOME}/.cache/go"
 
 function _normalize_name_version {
-	name_or_version=${1}
+	local name_or_version=${1}
 	if grep -q '^go' <<<"${name_or_version}"; then
 		echo "${name_or_version}"
 	else
@@ -15,24 +15,22 @@ function refresh_go_tools {
 }
 
 function _install_go {
-	name=$(_normalize_name_version "${1}")
+	local name=$(_normalize_name_version "${1}")
 
 	if [[ $name == "gotip" ]]; then
-		name_bkp=$name
 		use_go 1.17
-		name=$name_bkp
 	fi
 
-	temp_gobin=$(mktemp -d)
+	local temp_gobin=$(mktemp -d)
 	env GOBIN="${temp_gobin}" GOPATH="${GO_HOME}/selfpath" go install "golang.org/dl/${name}@latest" &&
 		env HOME="${GO_HOME}" "${temp_gobin}/${name}" download &&
 		rm -rf "${temp_gobin}"
 }
 
 function use_go {
-	name=$(_normalize_name_version "${1:-gotip}")
+	local name=$(_normalize_name_version "${1:-gotip}")
 
-	dir="${GO_HOME}/sdk/${name}/bin"
+	local dir="${GO_HOME}/sdk/${name}/bin"
 	if ! [ -d "${dir}" ]; then
 		_install_go "${name}"
 	fi

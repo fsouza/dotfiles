@@ -22,7 +22,7 @@ function _enable_bare_python() {
 }
 
 function _activate_virtualenv() {
-	virtualenvpath=${1}
+	local virtualenvpath=${1}
 	if [ -z "${oldpath}" ]; then
 		export oldpath=$PATH
 	fi
@@ -35,7 +35,7 @@ function _activate_virtualenv() {
 }
 
 function v() {
-	name=${1}
+	local name=${1}
 	if [[ ${name} == "@" ]]; then
 		virtualenvpath=${PWD}/venv
 	else
@@ -65,9 +65,9 @@ function d() {
 }
 
 function _find_python() {
-	python=${PYTHON:-python3.9}
+	local python=${PYTHON:-python3.9}
 	if ! command -v "${python}" &>/dev/null && [[ -v HOMEBREW_PREFIX ]]; then
-		path=$(fd -L "${python}"$ --type f "${HOMEBREW_PREFIX}"/opt/python*/bin | head -1)
+		local path=$(fd -L "${python}"$ --type f "${HOMEBREW_PREFIX}"/opt/python*/bin | head -1)
 		if [ -n "$path" ]; then
 			python=$path
 		fi
@@ -77,7 +77,7 @@ function _find_python() {
 
 function mkv() {
 	test -d "${VIRTUALENVS}" || mkdir -p "${VIRTUALENVS}"
-	name=${1}
+	local name=${1}
 	if [ -n "${name}" ]; then
 		virtualenvpath=${VIRTUALENVS}/${name}
 	else
@@ -99,7 +99,7 @@ function rmv() {
 		return 2
 	fi
 	for venv in "${@}"; do
-		venv_dir=${VIRTUALENVS}/${venv}
+		local venv_dir=${VIRTUALENVS}/${venv}
 		rm -rf "${venv_dir}"
 	done
 }

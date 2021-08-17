@@ -24,8 +24,8 @@ function rclone_mount {
 }
 
 function ensure_rclone_mount {
-	remote=$1
-	local_path=$2
+	local remote=$1
+	local local_path=$2
 
 	if ! command -v rclone &>/dev/null; then
 		install_rclone
