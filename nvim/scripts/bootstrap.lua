@@ -54,6 +54,7 @@ end
 local function install_autoload_plugins()
   local plugins = {
     ['fzf.vim'] = 'https://raw.githubusercontent.com/junegunn/fzf/HEAD/plugin/fzf.vim';
+    ['plug.vim'] = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim';
   }
   for file_name, url in pairs(plugins) do
     execute([[curl --create-dirs -sLo %s/autoload/%s %s]], site_dir, file_name, url)

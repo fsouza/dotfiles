@@ -125,8 +125,8 @@ do
   folding()
   global_vars()
 
-  if vim.env.BOOTSTRAP_PACKER then
-    require('fsouza.packed').setup()
+  if vim.env.NVIM_PLUG then
+    require('fsouza.vim-plug').setup()
     return
   end
 
