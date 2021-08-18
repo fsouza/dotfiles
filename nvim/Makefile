@@ -16,11 +16,11 @@ all: luacheck lua-format
 bootstrap:
 	git -C $(mkfile_dir) submodule update --init --recursive
 	cd $(mkfile_dir) && env MACOSX_DEPLOYMENT_TARGET=$(MACOSX_DEPLOYMENT_TARGET) NVIM_BOOTSTRAP=1 nvim --headless -E -u NORC +'set rtp+=$(mkfile_dir)' +'luafile scripts/bootstrap.lua' +qa
-	make -f $(mkfile_path) vim-plug kill-daemons
+	make -f $(mkfile_path) update-packer kill-daemons
 
-.PHONY: vim-plug
-vim-plug:
-	env NVIM_PLUG=1 nvim -E +'PlugUpdate --sync|qa' +cq
+.PHONY: update-packer
+update-packer:
+	env BOOTSTRAP_PACKER=1 nvim -E --headless -c 'autocmd User PackerCompileDone qa'
 
 .PHONY: kill-daemons
 kill-daemons:
