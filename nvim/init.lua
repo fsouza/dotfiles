@@ -64,6 +64,7 @@ local function ui_options()
   vim.o.shortmess = 'filnxtToOFIc'
   vim.o.number = true
   vim.o.relativenumber = true
+  vim.o.lazyredraw = true
   require('fsouza.color').enable()
 end
 
@@ -85,6 +86,7 @@ local function global_options()
   vim.o.swapfile = false
   vim.o.undofile = true
   vim.o.joinspaces = false
+  vim.o.synmaxcol = 300
 end
 
 local function folding()
