@@ -18,7 +18,7 @@ bootstrap:
 
 .PHONY: update-paq
 update-paq:
-	env BOOTSTRAP_PAQ=1 nvim --headless -E +'PaqSync' +qa
+	env BOOTSTRAP_PAQ=1 nvim --headless -E +'PaqSync' +'lua vim.loop.new_timer():start(10000, 0, vim.schedule_wrap(function() vim.cmd("qa") end))' || true
 
 .PHONY: kill-daemons
 kill-daemons:
