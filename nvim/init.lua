@@ -84,6 +84,7 @@ local function global_options()
   vim.o.smartindent = true
   vim.o.swapfile = false
   vim.o.undofile = true
+  vim.o.joinspaces = false
 end
 
 local function folding()
