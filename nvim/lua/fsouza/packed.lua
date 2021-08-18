@@ -22,7 +22,7 @@ end
 function M.setup()
   local packer = load_packer()
   packer.startup({
-    function(use)
+    function(use, use_rocks)
       use('wbthomason/packer.nvim')
       use('chaoren/vim-wordmotion')
       use('godlygeek/tabular')
@@ -48,6 +48,9 @@ function M.setup()
       use('tpope/vim-repeat')
       use('tpope/vim-rhubarb')
       use('tpope/vim-surround')
+
+      use_rocks({'luaformatter'; server = 'https://luarocks.org/dev'})
+      use_rocks({'lyaml'; 'luacheck'})
     end;
     config = {compile_path = string.format('%s/site/plugin/packer_compiled.vim', data_dir)};
   })
@@ -62,15 +65,15 @@ function M.repack()
 end
 
 function M.setup_command()
-  -- vim.cmd([[command! Repack lua require('fsouza.packed').repack()]])
-  -- helpers.augroup('fsouza__auto_repack', {
-  --   {
-  --     events = {'BufWritePost'};
-  --     targets = {vfn.expand('~/.dotfiles/nvim/lua/fsouza/packed.lua')};
-  --     modifiers = {'++once'};
-  --     command = 'Repack';
-  --   };
-  -- })
+  vim.cmd([[command! Repack lua require('fsouza.packed').repack()]])
+  helpers.augroup('fsouza__auto_repack', {
+    {
+      events = {'BufWritePost'};
+      targets = {vfn.expand('~/.dotfiles/nvim/lua/fsouza/packed.lua')};
+      modifiers = {'++once'};
+      command = 'Repack';
+    };
+  })
 end
 
 return M

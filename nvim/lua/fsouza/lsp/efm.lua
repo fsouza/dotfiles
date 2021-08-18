@@ -127,10 +127,15 @@ local function get_shfmt()
   }
 end
 
+local function hererocks_bin(name)
+  local jit_version = string.gsub(jit.version, 'LuaJIT ', '')
+  return string.format('%s/packer_hererocks/%s/bin/%s', cache_dir, jit_version, name)
+end
+
 local function get_luacheck()
   return {
-    lintCommand = string.format('%s/hr/bin/luacheck --formatter plain --filename ${INPUT} -',
-                                cache_dir);
+    lintCommand = string.format('%s --formatter plain --filename ${INPUT} -',
+                                hererocks_bin('luacheck'));
     lintStdin = true;
     lintSource = 'luacheck';
     rootMarkers = default_root_markers;
@@ -140,7 +145,7 @@ end
 
 local function get_luaformat()
   return {
-    formatCommand = string.format('%s/hr/bin/lua-format', cache_dir);
+    formatCommand = string.format(hererocks_bin('lua-format'), cache_dir);
     formatStdin = true;
     rootMarkers = {'.lua-format'; '.git'};
   }

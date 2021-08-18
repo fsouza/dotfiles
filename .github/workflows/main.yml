@@ -69,8 +69,8 @@ jobs:
         id: nvim-hererocks-cache
         uses: actions/cache@v2.1.6
         with:
-          path: ~/.cache/nvim/hr
-          key: "${{ matrix.os }}-${{ hashFiles('nvim/scripts/bootstrap.lua') }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
+          path: ~/.cache/nvim/packer_hererocks
+          key: "${{ matrix.os }}-${{ hashFiles('nvim/lua/fsouza/packed.lua') }}"
 
       - name: get python version
         id: get-python-version

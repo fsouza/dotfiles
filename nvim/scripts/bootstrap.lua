@@ -26,27 +26,6 @@ local function ensure_virtualenv()
   return venv_dir
 end
 
-local function download_hererocks_py()
-  local file_name = cache_dir .. '/hererocks.py'
-  if not loop.fs_stat(file_name) then
-    execute(
-      [[curl -sLo %s https://raw.githubusercontent.com/luarocks/hererocks/master/hererocks.py]],
-      file_name)
-  end
-  return file_name
-end
-
-local function ensure_hererocks()
-  local hr_dir = cache_dir .. '/hr'
-  if not loop.fs_stat(hr_dir) then
-    local hererocks_py = download_hererocks_py()
-    execute([[python3 %s -j latest -r latest %s]], hererocks_py, hr_dir)
-  end
-
-  execute([[%s/bin/luarocks make]], hr_dir)
-  return hr_dir
-end
-
 local function setup_langservers()
   execute([[./langservers/setup.sh %s/langservers]], cache_dir)
 end
@@ -65,7 +44,6 @@ do
     autoload = install_autoload_plugins;
     langservers = setup_langservers;
     virtualenv = ensure_virtualenv;
-    hererocks = ensure_hererocks;
   }
   local done = {}
 

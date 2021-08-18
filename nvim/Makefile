@@ -1,11 +1,9 @@
 mkfile_path := $(realpath $(lastword $(MAKEFILE_LIST)))
 mkfile_dir := $(dir $(mkfile_path))
 
-LUAROCKS := $(if $(shell command -v luarocks 2>/dev/null), luarocks, $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)/hr/bin/luarocks)
+LUACHECK := $(if $(shell command -v luacheck 2>/dev/null), luacheck, $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)/packer_hererocks/*/bin/luacheck)
 
-LUACHECK := $(if $(shell command -v luacheck 2>/dev/null), luacheck, $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)/hr/bin/luacheck)
-
-LUAFORMAT := $(if $(shell command -v lua-format 2>/dev/null), lua-format, $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)/hr/bin/lua-format)
+LUAFORMAT := $(if $(shell command -v lua-format 2>/dev/null), lua-format, $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)/packer_hererocks/*/bin/lua-format)
 
 MACOSX_DEPLOYMENT_TARGET ?= 10.15
 
@@ -34,7 +32,3 @@ luacheck:
 .PHONY: lua-format
 lua-format:
 	cd $(mkfile_dir) && git ls-files -- '*.lua' '*.rockspec' | grep -v ^pack | xargs $(LUAFORMAT) -i
-
-.PHONY: install-lua-format
-install-lua-format:
-	$(LUAROCKS) install --server=https://luarocks.org/dev luaformatter
