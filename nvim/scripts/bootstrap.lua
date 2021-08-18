@@ -43,7 +43,7 @@ local function ensure_hererocks()
     execute([[python3 %s -j latest -r latest %s]], hererocks_py, hr_dir)
   end
 
-  execute([[%s/bin/luarocks make]], hr_dir)
+  execute([[%s/bin/luarocks make --server=https://luarocks.org/dev]], hr_dir)
   return hr_dir
 end
 
