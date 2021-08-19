@@ -9,7 +9,7 @@ local function config_fzf_lua()
   config.globals.previewers.cat.args = ''
   config.globals.files.file_icons = false
   config.globals.files.git_icons = false
-  config.globals.winopts.win_height = 0.90
+  config.globals.winopts.win_height = 0.65
   config.globals.winopts.win_width = 0.90
 end
 
