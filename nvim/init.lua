@@ -35,6 +35,8 @@ local function global_vars()
   vim.g.netrw_home = data_dir
   vim.g.netrw_banner = 0
   vim.g.netrw_liststyle = 3
+  vim.g.fzf_command_prefix = 'Fzf'
+  vim.g.fzf_layout = {window = {width = 0.9; height = 0.6}}
   vim.g.polyglot_disabled = {'markdown'; 'sensible'; 'autoindent'}
   vim.g.user_emmet_mode = 'i'
   vim.g.user_emmet_leader_key = [[<C-x>]]
