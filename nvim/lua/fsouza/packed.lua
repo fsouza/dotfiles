@@ -26,7 +26,6 @@ function M.setup()
     'chaoren/vim-wordmotion';
     'godlygeek/tabular';
     'hrsh7th/nvim-compe';
-    'junegunn/fzf.vim';
     'justinmk/vim-dirvish';
     'justinmk/vim-sneak';
     'kana/vim-textobj-user';
@@ -47,6 +46,8 @@ function M.setup()
     'tpope/vim-repeat';
     'tpope/vim-rhubarb';
     'tpope/vim-surround';
+    'vijaymarupudi/nvim-fzf';
+    'ibhagwan/fzf-lua';
   })
   paq:sync()
 end
