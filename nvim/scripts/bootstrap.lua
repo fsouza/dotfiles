@@ -51,11 +51,18 @@ local function setup_langservers()
   execute([[./langservers/setup.sh %s/langservers]], cache_dir)
 end
 
+local function bat_cache_build()
+  if vfn.executable('bat') == 1 then
+    execute([[bat cache --build]])
+  end
+end
+
 do
   local ops = {
     langservers = setup_langservers;
     virtualenv = ensure_virtualenv;
     hererocks = ensure_hererocks;
+    bat_cache_build = bat_cache_build;
   }
   local done = {}
 
