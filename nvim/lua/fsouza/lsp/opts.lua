@@ -33,7 +33,7 @@ local cmds = {
     require('fsouza.lsp.code_action').visual_code_action()
   end);
   goto_declaration = helpers.fn_map(function()
-    require('fzf-lua').lsp_declarations({jump_to_single_result = true})
+    vim.lsp.buf.declaration()
   end);
   preview_declaration = helpers.fn_map(function()
     require('fsouza.lsp.locations').preview_declaration()
@@ -45,13 +45,13 @@ local cmds = {
     vim.lsp.buf.clear_references()
   end);
   list_document_symbols = helpers.fn_map(function()
-    require('fzf-lua').lsp_document_symbols()
+    require('fsouza.fzf-lua').lsp_document_symbols()
   end);
   find_references = helpers.fn_map(function()
-    require('fzf-lua').lsp_references()
+    vim.lsp.buf.references()
   end);
   goto_definition = helpers.fn_map(function()
-    require('fzf-lua').lsp_definitions({jump_to_single_result = true})
+    vim.lsp.buf.definition()
   end);
   preview_definition = helpers.fn_map(function()
     require('fsouza.lsp.locations').preview_definition()
@@ -60,7 +60,7 @@ local cmds = {
     vim.lsp.buf.hover()
   end);
   goto_implementation = helpers.fn_map(function()
-    require('fzf-lua').lsp_implementations({jump_to_single_result = true})
+    vim.lsp.buf.implementation()
   end);
   preview_implementation = helpers.fn_map(function()
     require('fsouza.lsp.locations').preview_implementation()
@@ -69,13 +69,13 @@ local cmds = {
     vim.lsp.buf.signature_help()
   end);
   goto_type_definition = helpers.fn_map(function()
-    require('fzf-lua').lsp_typedefs({jump_to_single_result = true})
+    vim.lsp.buf.type_definition()
   end);
   preview_type_definition = helpers.fn_map(function()
     require('fsouza.lsp.locations').preview_type_definition()
   end);
   query_workspace_symbols = helpers.fn_map(function()
-    require('fzf-lua').lsp_live_workspace_symbols()
+    require('fsouza.fzf-lua').lsp_live_workspace_symbols()
   end);
 }
 

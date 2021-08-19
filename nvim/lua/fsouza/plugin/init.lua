@@ -2,38 +2,27 @@ local vcmd = vim.cmd
 local vfn = vim.fn
 local helpers = require('fsouza.lib.nvim_helpers')
 
-local function config_fzf_lua()
-  local config = require('fzf-lua.config')
-  config.globals.fzf_layout = 'default'
-  config.globals.default_previewer = 'cat'
-  config.globals.previewers.cat.args = ''
-  config.globals.files.file_icons = false
-  config.globals.files.git_icons = false
-  config.globals.winopts.win_height = 0.65
-  config.globals.winopts.win_width = 0.90
-end
-
 local function setup_fuzzy_mappings()
   helpers.create_mappings({
     n = {
       {
         lhs = '<leader>zb';
         rhs = helpers.fn_map(function()
-          require('fzf-lua').buffers()
+          require('fsouza.fzf-lua').buffers()
         end);
         opts = {silent = true};
       };
       {
         lhs = '<leader>zz';
         rhs = helpers.fn_map(function()
-          require('fzf-lua').files()
+          require('fsouza.fzf-lua').files()
         end);
         opts = {silent = true};
       };
       {
         lhs = '<leader>;';
         rhs = helpers.fn_map(function()
-          require('fzf-lua').commands()
+          require('fsouza.fzf-lua').commands()
         end);
         opts = {silent = true};
       };
@@ -42,7 +31,7 @@ local function setup_fuzzy_mappings()
         rhs = helpers.fn_map(function()
           local dir_path = vfn.expand('%:p:h')
           if vim.startswith(dir_path, '/') then
-            require('fzf-lua').files({cwd = dir_path})
+            require('fsouza.fzf-lua').files({cwd = dir_path})
           end
         end);
         opts = {silent = true};
@@ -50,14 +39,14 @@ local function setup_fuzzy_mappings()
       {
         lhs = '<leader>gg';
         rhs = helpers.fn_map(function()
-          require('fzf-lua').grep()
+          require('fsouza.fzf-lua').grep()
         end);
         opts = {silent = true};
       };
       {
         lhs = '<leader>gw';
         rhs = helpers.fn_map(function()
-          require('fzf-lua').grep_cword()
+          require('fsouza.fzf-lua').grep_cword()
         end);
         opts = {silent = true};
       };
@@ -160,7 +149,6 @@ do
   end)
   schedule(setup_editorconfig)
   schedule(setup_fuzzy_mappings)
-  schedule(config_fzf_lua)
   schedule(setup_hlyank)
   schedule(function()
     require('fsouza.plugin.mkdir').setup()
