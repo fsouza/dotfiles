@@ -31,7 +31,6 @@ function M.setup()
     'kana/vim-textobj-user';
     'liuchengxu/vista.vim';
     'mattn/emmet-vim';
-    'mg979/vim-visual-multi';
     'michaeljsmith/vim-indent-object';
     'neovim/nvim-lspconfig';
     'norcalli/nvim-colorizer.lua';
