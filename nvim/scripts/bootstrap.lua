@@ -51,18 +51,8 @@ local function setup_langservers()
   execute([[./langservers/setup.sh %s/langservers]], cache_dir)
 end
 
-local function install_autoload_plugins()
-  local plugins = {
-    ['fzf.vim'] = 'https://raw.githubusercontent.com/junegunn/fzf/HEAD/plugin/fzf.vim';
-  }
-  for file_name, url in pairs(plugins) do
-    execute([[curl --create-dirs -sLo %s/autoload/%s %s]], site_dir, file_name, url)
-  end
-end
-
 do
   local ops = {
-    autoload = install_autoload_plugins;
     langservers = setup_langservers;
     virtualenv = ensure_virtualenv;
     hererocks = ensure_hererocks;
