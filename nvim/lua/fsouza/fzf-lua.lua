@@ -35,7 +35,7 @@ local function fzf_lua()
       grep = {file_icons = false; git_icons = false; actions = actions};
       oldfiles = {file_icons = false; git_icons = false; actions = actions};
       winopts = {win_height = 0.65; win_width = 0.90; win_border = false};
-      previewers = {bat = {theme = 'monochrome'}};
+      previewers = {bat = {theme = 'monochrome'; args = '--style=numbers --color=always'}};
     })
   end
   return _fzf_lua
