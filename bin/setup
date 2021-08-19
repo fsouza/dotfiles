@@ -27,7 +27,7 @@ for file in "${xdg_files[@]}"; do
 	ln -sf "${basedir}"/"${file}" "${HOME}"/.config/"${file}"
 done
 
-xdg_dirs=(git fd utop nvim)
+xdg_dirs=(git fd utop nvim bat)
 for dir in "${xdg_dirs[@]}"; do
 	link="${HOME}"/.config/"${dir}"
 	if ! [ -L "${link}" ] && [ -d "${link}" ]; then
