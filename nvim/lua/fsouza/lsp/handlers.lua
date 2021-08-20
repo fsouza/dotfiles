@@ -3,8 +3,13 @@ local M = {}
 local api = vim.api
 local lsp = vim.lsp
 
+local non_focusable_handlers = {}
+
 local function popup_callback(err, method, ...)
-  vim.lsp.handlers[method](err, method, ...)
+  if non_focusable_handlers[method] == nil then
+    non_focusable_handlers[method] = vim.lsp.with(vim.lsp.handlers[method], {focusable = false})
+  end
+  non_focusable_handlers[method](err, method, ...)
   for _, winid in ipairs(api.nvim_list_wins()) do
     if pcall(api.nvim_win_get_var, winid, method) then
       require('fsouza.color').set_popup_winid(winid)
