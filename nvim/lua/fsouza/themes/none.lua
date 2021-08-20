@@ -24,15 +24,13 @@ local function basics(ns)
   nvim_set_hl(ns, 'Folded', {bg = colors.lighter_gray})
   nvim_set_hl(ns, 'FoldColumn', {bg = colors.lighter_gray})
   nvim_set_hl(ns, 'Error', {fg = colors.red})
-
-  nvim_set_hl(ns, 'Comment', {fg = colors.dark_gray})
-  nvim_set_hl(ns, 'SpecialComment', {fg = colors.dark_gray})
 end
 
 local function noners(ns)
   local groups = {
     'Boolean';
     'Character';
+    'Comment';
     'Conceal';
     'Conditional';
     'Constant';
@@ -61,6 +59,7 @@ local function noners(ns)
     'Repeat';
     'Special';
     'SpecialChar';
+    'SpecialComment';
     'Statement';
     'StorageClass';
     'String';
