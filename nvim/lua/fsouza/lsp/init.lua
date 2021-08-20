@@ -106,6 +106,8 @@ do
           ST1000 = false;
         };
         linksInHover = false;
+        codelenses = {vendor = false};
+        gofumpt = true;
       };
     }))
 
