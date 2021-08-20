@@ -29,7 +29,7 @@ local function fzf_lua()
     _fzf_lua.setup({
       fzf_args = vim.env.FZF_DEFAULT_OPTS .. ' --border rounded';
       fzf_layout = 'default';
-      buffers = {file_icons = false; git_icons = false; actions = actions};
+      buffers = {file_icons = false; git_icons = false};
       files = {file_icons = false; git_icons = false; actions = actions};
       git = {files = {file_icons = false; git_icons = false; actions = actions}};
       grep = {file_icons = false; git_icons = false; actions = actions};
