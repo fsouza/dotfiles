@@ -33,11 +33,18 @@ local function patch_lsp()
   vim.lsp._unsupported_methood = function()
   end
 
-  -- override show_line_diagnostics so I can get the proper theme in the popup
-  -- window.
+  -- override show_line_diagnostics and show_position_diagnostics so I can get
+  -- the proper theme in the popup window.
   local original_show_line_diagnostics = vim.lsp.diagnostic.show_line_diagnostics
-  vim.lsp.diagnostic.show_line_diagnostics = function(opts)
-    local bufnr, winid = original_show_line_diagnostics(opts)
+  vim.lsp.diagnostic.show_line_diagnostics = function(...)
+    local bufnr, winid = original_show_line_diagnostics(...)
+    require('fsouza.color').set_popup_winid(winid)
+    return bufnr, winid
+  end
+
+  local original_show_position_diagnostics = vim.lsp.diagnostic.show_line_diagnostics
+  vim.lsp.diagnostic.show_position_diagnostics = function(...)
+    local bufnr, winid = original_show_position_diagnostics(...)
     require('fsouza.color').set_popup_winid(winid)
     return bufnr, winid
   end
