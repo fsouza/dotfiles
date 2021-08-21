@@ -7,9 +7,9 @@ local M = {}
 local function fzf_dir(directory, cd)
   if cd then
     api.nvim_set_current_dir(directory)
-    require('fzf-lua').files()
+    require('fsouza.fzf-lua').files()
   else
-    require('fzf-lua').files({cwd = directory})
+    require('fsouza.fzf-lua').files({cwd = directory})
   end
 end
 
