@@ -39,7 +39,12 @@ local function setup_fuzzy_mappings()
       {
         lhs = '<leader>gg';
         rhs = helpers.fn_map(function()
-          require('fsouza.fzf-lua').grep()
+          local search = vfn.input([[rg：]])
+          require('fsouza.fzf-lua').grep({
+            search = search;
+            raw_cmd = [[rg --column -n --hidden --no-heading --color=always -S --glob '!.git' --glob '!.hg' -- ]] ..
+              vfn.shellescape(search);
+          })
         end);
         opts = {silent = true};
       };
