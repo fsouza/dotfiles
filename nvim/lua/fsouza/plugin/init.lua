@@ -51,6 +51,15 @@ local function setup_fuzzy_mappings()
         opts = {silent = true};
       };
     };
+    v = {
+      {
+        lhs = '<leader>gw';
+        rhs = helpers.fn_map(function()
+          require('fsouza.fzf-lua').grep_visual()
+        end);
+        opts = {silent = true};
+      };
+    };
   })
 end
 
