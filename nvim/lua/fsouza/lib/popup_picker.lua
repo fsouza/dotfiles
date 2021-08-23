@@ -73,6 +73,7 @@ function M.open(lines, cb)
   vim.bo.readonly = true
   vim.bo.modifiable = false
   vim.wo.cursorline = true
+  vim.wo.cursorlineopt = 'both'
   vim.wo.number = true
   vim.wo.wrap = false
   vim.w[win_var_identifier] = true
