@@ -111,10 +111,8 @@ end
 
 local function setup_editorconfig()
   require('fsouza.plugin.editor_config').enable()
-  vim.schedule(function()
-    vcmd([[command! EnableEditorConfig lua require('fsouza.plugin.editor_config').enable()]])
-    vcmd([[command! DisableEditorConfig lua require('fsouza.plugin.editor_config').disable()]])
-  end)
+  vcmd([[command! EnableEditorConfig lua require('fsouza.plugin.editor_config').enable()]])
+  vcmd([[command! DisableEditorConfig lua require('fsouza.plugin.editor_config').disable()]])
 end
 
 local function trigger_ft()
@@ -153,6 +151,14 @@ local function setup_terminal_mappings_and_commands()
   })
 end
 
+local function configure_project_nvim()
+  require('project_nvim').setup({detection_methods = {'pattern'}; patterns = {'.git'; '.hg'}})
+end
+
+local function exec_project_nvim()
+  require('project_nvim.project').on_buf_enter()
+end
+
 do
   local schedule = vim.schedule
   schedule(function()
@@ -185,6 +191,8 @@ do
     require('fsouza.plugin.ts')
   end)
   schedule(trigger_ft)
+  schedule(configure_project_nvim)
+  schedule(exec_project_nvim)
   schedule(function()
     vcmd([[doautocmd User PluginReady]])
   end)

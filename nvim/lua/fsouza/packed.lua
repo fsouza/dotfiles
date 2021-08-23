@@ -23,9 +23,12 @@ function M.setup()
   local paq = load_paq()
   paq({
     'savq/paq-nvim';
+
+    'ahmedkhalf/project.nvim';
     'chaoren/vim-wordmotion';
     'godlygeek/tabular';
     'hrsh7th/nvim-compe';
+    'ibhagwan/fzf-lua';
     'justinmk/vim-dirvish';
     'justinmk/vim-sneak';
     'kana/vim-textobj-user';
@@ -46,7 +49,6 @@ function M.setup()
     'tpope/vim-rhubarb';
     'tpope/vim-surround';
     'vijaymarupudi/nvim-fzf';
-    'ibhagwan/fzf-lua';
   })
   paq:sync()
 end
