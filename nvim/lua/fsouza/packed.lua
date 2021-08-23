@@ -24,7 +24,6 @@ function M.setup()
   paq({
     'savq/paq-nvim';
 
-    'ahmedkhalf/project.nvim';
     'chaoren/vim-wordmotion';
     'godlygeek/tabular';
     'hrsh7th/nvim-compe';
