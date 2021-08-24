@@ -36,7 +36,12 @@ function M.setup()
     'michaeljsmith/vim-indent-object';
     'neovim/nvim-lspconfig';
     'norcalli/nvim-colorizer.lua';
-    'nvim-treesitter/nvim-treesitter';
+    {
+      'nvim-treesitter/nvim-treesitter';
+      run = function()
+        vcmd('TSUpdate')
+      end;
+    };
     'nvim-treesitter/nvim-treesitter-textobjects';
     'nvim-treesitter/playground';
     'rhysd/git-messenger.vim';
