@@ -48,6 +48,7 @@ local function fzf_lua()
       git = {files = {file_icons = false; git_icons = false; actions = actions}};
       grep = {file_icons = false; git_icons = false; actions = actions};
       oldfiles = {file_icons = false; git_icons = false; actions = actions};
+      lsp = {file_icons = false; git_icons = false; actions = actions};
       winopts = {win_height = 0.65; win_width = 0.90; win_border = false};
       previewers = {bat = {theme = 'monochrome'; args = '--style=numbers --color=always'}};
     })
