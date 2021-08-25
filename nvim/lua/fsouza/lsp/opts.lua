@@ -75,7 +75,10 @@ local cmds = {
     require('fsouza.lsp.locations').preview_type_definition()
   end);
   query_workspace_symbols = helpers.fn_map(function()
-    require('fsouza.fzf-lua').lsp_live_workspace_symbols()
+    local query = vim.fn.input([[query：]])
+    if query ~= '' then
+      require('fsouza.fzf-lua').lsp_workspace_symbols({query = query})
+    end
   end);
 }
 
