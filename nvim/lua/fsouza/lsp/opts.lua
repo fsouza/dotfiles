@@ -14,6 +14,9 @@ local cmds = {
   list_workspace_diagnostics = helpers.fn_map(function()
     require('fsouza.lsp.diagnostics').list_workspace_diagnostics()
   end);
+  fuzzy_workspace_diagnostics = helpers.fn_map(function()
+    require('fsouza.fzf-lua').lsp_workspace_diagnostics()
+  end);
   clear_buffer_diagnostics = helpers.fn_map(function()
     require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics()
   end);
@@ -89,6 +92,7 @@ local function attached(bufnr, client)
         {lhs = '<leader>l'; rhs = cmds.show_line_diagnostics; opts = {silent = true}};
         {lhs = '<leader>df'; rhs = cmds.list_file_diagnostics; opts = {silent = true}};
         {lhs = '<leader>dw'; rhs = cmds.list_workspace_diagnostics; opts = {silent = true}};
+        {lhs = '<leader>dd'; rhs = cmds.fuzzy_workspace_diagnostics; opts = {silent = true}};
         {lhs = '<leader>cl'; rhs = cmds.clear_buffer_diagnostics; opts = {silent = true}};
         {lhs = '<c-n>'; rhs = cmds.goto_next_diagnostic; opts = {silent = true}};
         {lhs = '<c-p>'; rhs = cmds.goto_prev_diagnostic; opts = {silent = true}};
