@@ -67,7 +67,6 @@ end
 local function global_options()
   vim.o.completeopt = 'menuone,noinsert,noselect'
   vim.o.hidden = true
-  vim.o.backspace = 'indent,eol,start'
   vim.o.hlsearch = false
   vim.o.incsearch = true
   vim.o.wildmenu = true
