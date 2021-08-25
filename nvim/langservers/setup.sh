@@ -19,13 +19,27 @@ function _clone_or_update() {
 	fi
 }
 
+function _install_ocaml_lsp_deps() {
+	opam update -y &&
+		opam install dune ocamlformat ocamlformat-rpc -y
+}
+
+function _build_ocaml_lsp() {
+	dir="${cache_dir}"/ocaml-lsp
+	if ! [ -d "${dir}" ]; then
+		git clone --recurse-submodules http://github.com/ocaml/ocaml-lsp.git "${dir}"
+	fi
+	git -C "${dir}" pull &&
+		git -C "${dir}" submodule update --init --recursive &&
+		make -C "${dir}" all
+}
+
 function install_ocaml_lsp() {
 	if ! command -v opam &>/dev/null; then
 		echo skipping ocaml-lsp
 		return
 	fi
-	opam update -y &&
-		opam install -y ocaml-lsp-server ocamlformat
+	_install_ocaml_lsp_deps && _build_ocaml_lsp
 }
 
 function install_servers_from_npm() {
