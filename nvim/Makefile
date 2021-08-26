@@ -13,7 +13,7 @@ all: luacheck lua-format
 .PHONY: bootstrap
 bootstrap:
 	git -C $(mkfile_dir) submodule update --init --recursive
-	cd $(mkfile_dir) && env MACOSX_DEPLOYMENT_TARGET=$(MACOSX_DEPLOYMENT_TARGET) NVIM_BOOTSTRAP=1 nvim --headless -E -u NORC +'set rtp+=$(mkfile_dir)' +'luafile scripts/bootstrap.lua' +qa
+	python3 $(mkfile_dir)/scripts/bootstrap.py --cache-dir $${HOME}/.cache/nvim
 	make -f $(mkfile_path) update-paq kill-daemons
 
 .PHONY: update-paq
