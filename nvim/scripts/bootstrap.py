@@ -9,10 +9,6 @@ from pathlib import Path
 
 base_dir = (Path(__file__).parent / "..").absolute()
 
-HEREROCKS_URL = (
-    "https://raw.githubusercontent.com/luarocks/hererocks/master/hererocks.py"
-)
-
 
 class CommandError(Exception):
     ...
@@ -75,7 +71,14 @@ async def download_hererocks_py(cache_dir: Path) -> Path:
     filename = cache_dir / "hererocks.py"
 
     if not await exists(filename):
-        await run_cmd("curl", ["-sLo", filename, HEREROCKS_URL])
+        await run_cmd(
+            "curl",
+            [
+                "-sLo",
+                filename,
+                "https://raw.githubusercontent.com/luarocks/hererocks/master/hererocks.py",
+            ],
+        )
 
     return filename
 
@@ -146,7 +149,7 @@ async def install_ocaml_lsp(cache_dir: Path) -> None:
     await run_cmd("make", ["-C", cache_dir / "ocaml-lsp", "all"])
 
 
-async def _go_install(cache_dir: Path, *pkgs: str) -> None:
+async def _go_install(cache_dir: Path, *pkgs: str, cwd: Path | None = None) -> None:
     if not await has_command("go"):
         print(f"skipping go packages: {pkgs}")
         return
@@ -154,7 +157,8 @@ async def _go_install(cache_dir: Path, *pkgs: str) -> None:
     await run_cmd(
         "go",
         ["install", *pkgs],
-        env={"GOBIN": str(cache_dir / "bin")},
+        env={"GOBIN": str(cache_dir / "langservers" / "bin")},
+        cwd=cwd,
     )
 
 
@@ -168,12 +172,7 @@ async def install_gopls(cache_dir: Path) -> None:
         cache_dir / "tools",
     )
 
-    await run_cmd(
-        "go",
-        ["install"],
-        env={"GOBIN": str(cache_dir / "bin")},
-        cwd=cache_dir / "tools" / "gopls",
-    )
+    await _go_install(cache_dir, cwd=cache_dir / "tools" / "gopls")
 
 
 async def install_shfmt(cache_dir: Path) -> None:
