@@ -63,14 +63,14 @@ jobs:
         uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/nvim/langservers
-          key: "${{ matrix.os }}-${{ hashFiles('nvim/langservers/setup.sh') }}"
+          key: "${{ matrix.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}"
 
       - name: hererocks cache
         id: nvim-hererocks-cache
         uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ matrix.os }}-${{ hashFiles('nvim/scripts/bootstrap.lua') }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
+          key: "${{ matrix.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       - name: get python version
         id: get-python-version

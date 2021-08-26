@@ -150,7 +150,9 @@ async def install_ocaml_lsp(langservers_cache_dir: Path) -> None:
 
 
 async def _go_install(
-    langservers_cache_dir: Path, *pkgs: str, cwd: Path | None = None
+    langservers_cache_dir: Path,
+    *pkgs: str,
+    cwd: Path | None = None,
 ) -> None:
     if not await has_command("go"):
         print(f"skipping go packages: {pkgs}")
