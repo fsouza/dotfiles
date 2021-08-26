@@ -134,7 +134,7 @@ async def install_servers_from_npm() -> None:
     )
 
 
-async def install_ocaml_lsp(cache_dir: Path) -> None:
+async def install_ocaml_lsp(langservers_cache_dir: Path) -> None:
     if not await has_command("opam"):
         print("skipping ocaml-lsp")
         return
@@ -144,12 +144,14 @@ async def install_ocaml_lsp(cache_dir: Path) -> None:
 
     await _clone_or_update(
         "https://github.com/ocaml/ocaml-lsp.git",
-        cache_dir / "ocaml-lsp",
+        langservers_cache_dir / "ocaml-lsp",
     )
-    await run_cmd("make", ["-C", cache_dir / "ocaml-lsp", "all"])
+    await run_cmd("make", ["-C", langservers_cache_dir / "ocaml-lsp", "all"])
 
 
-async def _go_install(cache_dir: Path, *pkgs: str, cwd: Path | None = None) -> None:
+async def _go_install(
+    langservers_cache_dir: Path, *pkgs: str, cwd: Path | None = None
+) -> None:
     if not await has_command("go"):
         print(f"skipping go packages: {pkgs}")
         return
@@ -157,39 +159,42 @@ async def _go_install(cache_dir: Path, *pkgs: str, cwd: Path | None = None) -> N
     await run_cmd(
         "go",
         ["install", *pkgs],
-        env={"GOBIN": str(cache_dir / "langservers" / "bin")},
+        env={"GOBIN": str(langservers_cache_dir / "bin")},
         cwd=cwd,
     )
 
 
-async def install_gopls(cache_dir: Path) -> None:
+async def install_gopls(langservers_cache_dir: Path) -> None:
     if not await has_command("go"):
         print("skipping gopls")
         return
 
     await _clone_or_update(
         "https://github.com/golang/tools.git",
-        cache_dir / "tools",
+        langservers_cache_dir / "tools",
     )
 
-    await _go_install(cache_dir, cwd=cache_dir / "tools" / "gopls")
+    await _go_install(
+        langservers_cache_dir,
+        cwd=langservers_cache_dir / "tools" / "gopls",
+    )
 
 
-async def install_shfmt(cache_dir: Path) -> None:
-    await _go_install(cache_dir, "mvdan.cc/sh/v3/cmd/shfmt@master")
+async def install_shfmt(langservers_cache_dir: Path) -> None:
+    await _go_install(langservers_cache_dir, "mvdan.cc/sh/v3/cmd/shfmt@master")
 
 
-async def install_efm(cache_dir: Path) -> None:
-    await _go_install(cache_dir, "github.com/mattn/efm-langserver@master")
+async def install_efm(langservers_cache_dir: Path) -> None:
+    await _go_install(langservers_cache_dir, "github.com/mattn/efm-langserver@master")
 
 
 async def setup_langservers(cache_dir: Path) -> None:
     await asyncio.gather(
         install_servers_from_npm(),
-        install_ocaml_lsp(cache_dir),
-        install_gopls(cache_dir),
-        install_shfmt(cache_dir),
-        install_efm(cache_dir),
+        install_ocaml_lsp(cache_dir / "langservers"),
+        install_gopls(cache_dir / "langservers"),
+        install_shfmt(cache_dir / "langservers"),
+        install_efm(cache_dir / "langservers"),
     )
 
 
