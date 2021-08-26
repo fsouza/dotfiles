@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-import pathlib
+import os
+import shutil
 import sys
+from pathlib import Path
 
-base_dir = (pathlib.Path(__file__).parent / "..").absolute()
+base_dir = (Path(__file__).parent / "..").absolute()
 
 HEREROCKS_URL = (
     "https://raw.githubusercontent.com/luarocks/hererocks/master/hererocks.py"
@@ -16,17 +18,31 @@ class CommandError(Exception):
     ...
 
 
-async def exists(path: pathlib.Path) -> bool:
-    return await asyncio.get_event_loop().run_in_executor(None, path.exists)
+async def exists(path: Path) -> bool:
+    return await asyncio.to_thread(path.exists)
 
 
-async def run_cmd(cmd: str, args: list[object]) -> None:
+async def has_command(cmd: str) -> bool:
+    return bool(await asyncio.to_thread(shutil.which, cmd))
+
+
+async def run_cmd(
+    cmd: str,
+    args: list[object],
+    cwd: Path | None = None,
+    env: dict[str, str] | None = None,
+) -> None:
     str_args = [str(arg) for arg in args]
     proc = await asyncio.create_subprocess_exec(
         cmd,
         *str_args,
         stdout=sys.stdout,
         stderr=sys.stderr,
+        cwd=cwd,
+        env={
+            **os.environ,
+            **(env or {}),
+        },
     )
 
     returncode = await proc.wait()
@@ -36,7 +52,7 @@ async def run_cmd(cmd: str, args: list[object]) -> None:
         )
 
 
-async def ensure_virtualenv(cache_dir: pathlib.Path) -> pathlib.Path:
+async def ensure_virtualenv(cache_dir: Path) -> Path:
     venv_dir = cache_dir / "venv"
 
     if not await exists(venv_dir):
@@ -55,7 +71,7 @@ async def ensure_virtualenv(cache_dir: pathlib.Path) -> pathlib.Path:
     return venv_dir
 
 
-async def download_hererocks_py(cache_dir: pathlib.Path) -> pathlib.Path:
+async def download_hererocks_py(cache_dir: Path) -> Path:
     filename = cache_dir / "hererocks.py"
 
     if not await exists(filename):
@@ -64,7 +80,7 @@ async def download_hererocks_py(cache_dir: pathlib.Path) -> pathlib.Path:
     return filename
 
 
-async def ensure_hererocks(cache_dir: pathlib.Path) -> pathlib.Path:
+async def ensure_hererocks(cache_dir: Path) -> Path:
     hr_dir = cache_dir / "hr"
 
     if not await exists(hr_dir):
@@ -77,22 +93,110 @@ async def ensure_hererocks(cache_dir: pathlib.Path) -> pathlib.Path:
     return hr_dir
 
 
-async def setup_langservers(cache_dir: pathlib.Path) -> None:
-    # TODO: migrate this shell script to Python.
+async def _clone_or_update(repo_url: str, repo_dir: Path) -> None:
+    if not await exists(repo_dir):
+        await run_cmd("git", ["clone", "--recurse-submodules", repo_url, repo_dir])
+
+    await run_cmd("git", ["-C", repo_dir, "pull"])
     await run_cmd(
-        f"{base_dir}/langservers/setup.sh",
-        [cache_dir / "langservers"],
+        "git",
+        ["-C", repo_dir, "submodule", "update", "--init", "--recursive"],
+    )
+
+
+async def install_servers_from_npm() -> None:
+    if not await has_command("fnm"):
+        print("skipping servers from npm")
+        return
+
+    await run_cmd("fnm", ["install", "v16"])
+    await run_cmd(
+        "fnm",
+        [
+            "exec",
+            "--using=v16",
+            "npx",
+            "--yes",
+            "yarn",
+            "install",
+            "--frozen-lockfile",
+        ],
+        cwd=base_dir / "langservers",
+    )
+
+
+async def install_ocaml_lsp(cache_dir: Path) -> None:
+    if not await has_command("opam"):
+        print("skipping ocaml-lsp")
+        return
+
+    await run_cmd("opam", ["update", "-y"])
+    await run_cmd("opam", ["install", "-y", "dune", "ocamlformat", "ocamlformat-rpc"])
+
+    await _clone_or_update(
+        "https://github.com/ocaml/ocaml-lsp.git",
+        cache_dir / "ocaml-lsp",
+    )
+    await run_cmd("make", ["-C", cache_dir / "ocaml-lsp", "all"])
+
+
+async def _go_install(cache_dir: Path, *pkgs: str) -> None:
+    if not await has_command("go"):
+        print(f"skipping go packages: {pkgs}")
+        return
+
+    await run_cmd(
+        "go",
+        ["install", *pkgs],
+        env={"GOBIN": str(cache_dir / "bin")},
+    )
+
+
+async def install_gopls(cache_dir: Path) -> None:
+    if not await has_command("go"):
+        print("skipping gopls")
+        return
+
+    await _clone_or_update(
+        "https://github.com/golang/tools.git",
+        cache_dir / "tools",
+    )
+
+    await run_cmd(
+        "go",
+        ["install"],
+        env={"GOBIN": str(cache_dir / "bin")},
+        cwd=cache_dir / "tools" / "gopls",
+    )
+
+
+async def install_shfmt(cache_dir: Path) -> None:
+    await _go_install(cache_dir, "mvdan.cc/sh/v3/cmd/shfmt@master")
+
+
+async def install_efm(cache_dir: Path) -> None:
+    await _go_install(cache_dir, "github.com/mattn/efm-langserver@master")
+
+
+async def setup_langservers(cache_dir: Path) -> None:
+    await asyncio.gather(
+        install_servers_from_npm(),
+        install_ocaml_lsp(cache_dir),
+        install_gopls(cache_dir),
+        install_shfmt(cache_dir),
+        install_efm(cache_dir),
     )
 
 
 async def try_bat_cache_build() -> None:
-    try:
-        await run_cmd("bat", ["cache", "--build"])
-    except CommandError:
-        pass
+    if not await has_command("bat"):
+        print("skipping bat")
+        return
+
+    await run_cmd("bat", ["cache", "--build"])
 
 
-async def main(cache_dir: pathlib.Path) -> int:
+async def main(cache_dir: Path) -> int:
     await asyncio.gather(
         setup_langservers(cache_dir),
         ensure_virtualenv(cache_dir),
@@ -107,7 +211,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="bootstrap neovim config")
     parser.add_argument(
         "--cache-dir",
-        type=pathlib.Path,
+        type=Path,
         dest="cache_dir",
         required=True,
     )
