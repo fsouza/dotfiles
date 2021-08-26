@@ -27,7 +27,7 @@ async def has_command(cmd: str) -> bool:
 
 
 async def run_cmd(
-    cmd: str,
+    cmd: str | os.PathLike,
     args: list[object],
     cwd: Path | None = None,
     env: dict[str, str] | None = None,
@@ -59,7 +59,7 @@ async def ensure_virtualenv(cache_dir: Path) -> Path:
         await run_cmd("python3", ["-m", "venv", venv_dir])
 
     await run_cmd(
-        f"{venv_dir}/bin/pip",
+        venv_dir / "bin" / "pip",
         [
             "install",
             "--upgrade",
@@ -89,6 +89,12 @@ async def ensure_hererocks(cache_dir: Path) -> Path:
             "python3",
             [hererocks_py, "-j", "latest", "-r", "latest", hr_dir],
         )
+
+    await run_cmd(
+        hr_dir / "bin" / "luarocks",
+        ["make", "--server=https://luarocks.org/dev"],
+        cwd=base_dir,
+    )
 
     return hr_dir
 
