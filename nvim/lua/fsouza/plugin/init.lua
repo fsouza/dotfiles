@@ -174,7 +174,7 @@ do
   schedule(setup_spell)
   schedule(setup_shortcuts)
   schedule(function()
-    require('colorizer').setup({'css'; 'javascript'; 'html'; 'lua'; 'htmldjango'})
+    require('colorizer').setup({'css'; 'javascript'; 'html'; 'lua'; 'htmldjango'; 'yaml'})
   end)
   schedule(setup_terminal_mappings_and_commands)
   schedule(function()
