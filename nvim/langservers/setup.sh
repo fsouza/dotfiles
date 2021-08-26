@@ -3,9 +3,9 @@
 set -euo pipefail
 
 function _clone_or_update() {
-	repo=$1
-	path=$2
-	version=${3:-}
+	local repo=$1
+	local path=$2
+	local version=${3:-}
 
 	if ! [ -d "${path}" ]; then
 		git clone --recurse-submodules "${repo}" "${path}"
@@ -25,7 +25,7 @@ function _install_ocaml_lsp_deps() {
 }
 
 function _build_ocaml_lsp() {
-	dir="${cache_dir}"/ocaml-lsp
+	local dir="${cache_dir}"/ocaml-lsp
 	if ! [ -d "${dir}" ]; then
 		git clone --recurse-submodules http://github.com/ocaml/ocaml-lsp.git "${dir}"
 	fi
@@ -64,7 +64,7 @@ function install_gopls() {
 		echo skipping gopls
 		return
 	fi
-	dir="${cache_dir}/tools"
+	local dir="${cache_dir}/tools"
 	_clone_or_update https://github.com/golang/tools.git "${dir}" &&
 		pushd "${dir}/gopls" &&
 		env GOBIN="${cache_dir}/bin" go install
