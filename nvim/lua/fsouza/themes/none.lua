@@ -72,6 +72,8 @@ local function noners(ns)
     'htmlBold';
     'Title';
     'ModeMsg';
+    'CmpDocumentationBorder';
+    'FloatBorder';
   }
   for _, group in pairs(groups) do
     nvim_set_hl(ns, group, {})
