@@ -26,7 +26,8 @@ function M.setup()
 
     'chaoren/vim-wordmotion';
     'godlygeek/tabular';
-    'hrsh7th/nvim-compe';
+    'hrsh7th/nvim-cmp';
+    'hrsh7th/cmp-nvim-lsp';
     'ibhagwan/fzf-lua';
     'justinmk/vim-dirvish';
     'justinmk/vim-sneak';
