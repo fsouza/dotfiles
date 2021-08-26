@@ -1,6 +1,7 @@
-local helpers = require('fsouza.lib.nvim_helpers')
+do
+  local helpers = require('fsouza.lib.nvim_helpers')
+  local bufnr = vim.api.nvim_get_current_buf()
 
-return function(bufnr)
   helpers.create_mappings({
     t = {{lhs = [[<esc><esc>]]; rhs = [[<c-\><c-n>]]; opts = {noremap = true}}};
     n = {

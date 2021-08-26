@@ -1,6 +1,7 @@
-local helpers = require('fsouza.lib.nvim_helpers')
+do
+  local helpers = require('fsouza.lib.nvim_helpers')
+  local bufnr = vim.api.nvim_get_current_buf()
 
-return function(bufnr)
   helpers.create_mappings({
     n = {
       {lhs = '<c-t>'; rhs = helpers.cmd_map([[call dirvish#open('tabedit', 0)]])};

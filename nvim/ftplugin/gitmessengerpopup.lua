@@ -1,6 +1,7 @@
-local api = vim.api
+do
+  local api = vim.api
+  local bufnr = api.nvim_get_current_buf()
 
-return function(bufnr)
   for _, winid in ipairs(api.nvim_list_wins()) do
     local winbuf = api.nvim_win_get_buf(winid)
     if winbuf == bufnr then
