@@ -13,7 +13,7 @@ all: luacheck lua-format
 .PHONY: bootstrap
 bootstrap:
 	git -C $(mkfile_dir) submodule update --init --recursive
-	python3 $(mkfile_dir)/scripts/bootstrap.py --cache-dir $${HOME}/.cache/nvim
+	python3 $(mkfile_dir)/scripts/bootstrap.py
 	make -f $(mkfile_path) update-paq kill-daemons
 
 .PHONY: update-paq
