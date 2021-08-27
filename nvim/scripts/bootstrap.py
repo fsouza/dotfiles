@@ -141,16 +141,20 @@ async def install_ocaml_lsp(langservers_cache_dir: Path) -> None:
         print("skipping ocaml-lsp")
         return
 
-    await run_cmd("opam", ["update", "-y"])
-    await run_cmd("opam", ["install", "-y", "ocamlformat"])
-
-    repo_dir = await _clone_or_update(
-        "https://github.com/ocaml/ocaml-lsp.git",
-        langservers_cache_dir / "ocaml-lsp",
+    [_, repo_dir] = await asyncio.gather(
+        run_cmd("opam", ["update", "-y"]),
+        _clone_or_update(
+            "https://github.com/ocaml/ocaml-lsp.git",
+            langservers_cache_dir / "ocaml-lsp",
+        ),
     )
+    assert repo_dir is not None
 
     await run_cmd("opam", ["install", "--deps-only", "-y", "."], cwd=repo_dir)
-    await run_cmd("dune", ["build", "@install"], cwd=repo_dir)
+    await asyncio.gather(
+        run_cmd("dune", ["build", "@install"], cwd=repo_dir),
+        run_cmd("opam", ["install", "-y", "ocamlformat"]),
+    )
 
 
 async def _go_install(
