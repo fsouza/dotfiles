@@ -230,10 +230,7 @@ function M.with_defaults(opts)
   return vim.tbl_extend('keep', opts, {
     handlers = require('fsouza.lsp.handlers');
     on_attach = on_attach;
-    capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities, {
-      snippetSupport = false;
-      preselectSupport = false;
-    });
+    capabilities = capabilities;
     root_dir = vim.loop.cwd;
   });
 end

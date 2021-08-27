@@ -5,13 +5,11 @@ local helpers = require('fsouza.lib.nvim_helpers')
 local M = {}
 
 local function setup(bufnr, autocomplete)
-  local cmp = require('cmp')
-  require('cmp.config').set_buffer({
-    completion = {autocomplete = autocomplete or {}};
-    mapping = {
-      ['<c-y>'] = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace; select = true});
-    };
-    sources = {{name = 'nvim_lsp'}};
+  require('compe').setup({
+    enabled = true;
+    autocomplete = autocomplete or false;
+    preselect = 'disable';
+    source = {nvim_lsp = true};
   }, bufnr)
 end
 
@@ -34,12 +32,7 @@ function M.on_attach(bufnr)
   setup(bufnr)
 
   require('fsouza.color').set_popup_cb(function()
-    for _, win in ipairs(vim.api.nvim_list_wins()) do
-      local whl = vim.api.nvim_win_get_option(win, 'winhighlight')
-      if string.match(whl, 'CmpDocumentation') then
-        return win
-      end
-    end
+    return require('compe.float').win
   end)
 
   local setup_cmd = helpers.fn_cmd(function()
@@ -47,7 +40,7 @@ function M.on_attach(bufnr)
   end)
 
   local complete_cmd = helpers.ifn_map(function()
-    setup(bufnr, {'TextChanged'})
+    setup(bufnr, true)
     helpers.augroup('fsouza__completion_switch_off', {
       {
         events = {'InsertLeave'};
@@ -56,8 +49,7 @@ function M.on_attach(bufnr)
         command = setup_cmd;
       };
     })
-    require('cmp').complete()
-    return ''
+    return require('compe')._complete({manual = true})
   end)
 
   vim.schedule(function()
@@ -65,6 +57,7 @@ function M.on_attach(bufnr)
       i = {
         {lhs = '<cr>'; rhs = cr_cmd; opts = {noremap = true}};
         {lhs = '<c-x><c-o>'; rhs = complete_cmd; opts = {noremap = true}};
+        {lhs = '<c-y>'; rhs = [[compe#confirm('<c-y>')]]; opts = {expr = true; silent = true}};
       };
     }, bufnr)
   end)
