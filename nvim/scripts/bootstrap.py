@@ -102,7 +102,7 @@ async def ensure_hererocks(cache_dir: Path) -> Path:
     return hr_dir
 
 
-async def _clone_or_update(repo_url: str, repo_dir: Path) -> None:
+async def _clone_or_update(repo_url: str, repo_dir: Path) -> Path:
     if not await exists(repo_dir):
         await run_cmd("git", ["clone", "--recurse-submodules", repo_url, repo_dir])
 
@@ -111,6 +111,8 @@ async def _clone_or_update(repo_url: str, repo_dir: Path) -> None:
         "git",
         ["-C", repo_dir, "submodule", "update", "--init", "--recursive"],
     )
+
+    return repo_dir
 
 
 async def install_servers_from_npm() -> None:
@@ -140,13 +142,15 @@ async def install_ocaml_lsp(langservers_cache_dir: Path) -> None:
         return
 
     await run_cmd("opam", ["update", "-y"])
-    await run_cmd("opam", ["install", "-y", "dune", "ocamlformat", "ocamlformat-rpc"])
+    await run_cmd("opam", ["install", "-y", "ocamlformat"])
 
-    await _clone_or_update(
+    repo_dir = await _clone_or_update(
         "https://github.com/ocaml/ocaml-lsp.git",
         langservers_cache_dir / "ocaml-lsp",
     )
-    await run_cmd("make", ["-C", langservers_cache_dir / "ocaml-lsp", "all"])
+
+    await run_cmd("opam", ["install", "--deps-only", "-y", "."], cwd=repo_dir)
+    await run_cmd("dune", ["build", "@install"], cwd=repo_dir)
 
 
 async def _go_install(
@@ -171,14 +175,14 @@ async def install_gopls(langservers_cache_dir: Path) -> None:
         print("skipping gopls")
         return
 
-    await _clone_or_update(
+    repo_dir = await _clone_or_update(
         "https://github.com/golang/tools.git",
         langservers_cache_dir / "tools",
     )
 
     await _go_install(
         langservers_cache_dir,
-        cwd=langservers_cache_dir / "tools" / "gopls",
+        cwd=repo_dir / "gopls",
     )
 
 
