@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - macos-latest
+          - macos-11
 
     name: bootstrap-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -28,7 +28,7 @@ jobs:
           curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-${suffix}.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
 
       - name: install build deps on mac
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-11'
         run: |
           brew install bash libyaml
 
@@ -51,7 +51,7 @@ jobs:
           go-version: "1.x"
 
       - name: set MACOSX_DEPLOYMENT_TARGET
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-11'
         run:
           echo MACOSX_DEPLOYMENT_TARGET=$(shell sw_vers -productVersion 2) >>${GITHUB_ENV}
 
