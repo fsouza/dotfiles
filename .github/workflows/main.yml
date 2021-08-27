@@ -16,7 +16,7 @@ jobs:
           - ubuntu-20.04
           - macos-11
 
-    name: bootstrap-${{ runner.os }}
+    name: bootstrap-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: install neovim nightly
