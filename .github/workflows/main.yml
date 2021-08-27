@@ -65,12 +65,17 @@ jobs:
           path: ~/.cache/nvim/langservers
           key: "${{ matrix.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}"
 
+      - name: get luajit version
+        id: get-luajit-version
+        run: |
+          echo "::set-output name=version::$(nvim --version | grep LuaJIT)"
+
       - name: hererocks cache
         id: nvim-hererocks-cache
         uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ matrix.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
+          key: "${{ matrix.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       - name: get python version
         id: get-python-version
