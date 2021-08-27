@@ -90,7 +90,9 @@ jobs:
           echo "${HOME}/.fnm" >> "${GITHUB_PATH}"
 
       - name: run setup
-        run: ./bin/setup
+        run: |
+          eval $(opam env --set-switch)
+          ./bin/setup
 
       - name: run luacheck
         run: make -f $HOME/.config/nvim/Makefile luacheck
