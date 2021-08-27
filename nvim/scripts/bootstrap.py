@@ -157,7 +157,7 @@ async def ensure_hererocks(cache_dir: Path) -> Path:
         hererocks_py = await download_hererocks_py(cache_dir)
         luajit_version = await _find_luajit_version()
         print("###########################################################")
-        print(os.getenv("MACOSX_DEPLOYMENT_TARGET"))
+        print(f"MACOSX_DEPLOYMENT_TARGET={os.getenv('MACOSX_DEPLOYMENT_TARGET')}")
         print("###########################################################")
         await run_cmd(
             "python3",

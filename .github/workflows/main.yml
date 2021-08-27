@@ -53,7 +53,7 @@ jobs:
       - name: set MACOSX_DEPLOYMENT_TARGET
         if: matrix.os == 'macos-11'
         run:
-          echo MACOSX_DEPLOYMENT_TARGET=$(shell sw_vers -productVersion 2) >>${GITHUB_ENV}
+          echo "MACOSX_DEPLOYMENT_TARGET=$(shell sw_vers -productVersion 2)" | tee -a ${GITHUB_ENV}
 
       - name: run setup
         run: |

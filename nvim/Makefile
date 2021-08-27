@@ -5,8 +5,6 @@ LUACHECK := $(if $(shell command -v luacheck 2>/dev/null), luacheck, $(shell nvi
 
 LUAFORMAT := $(if $(shell command -v lua-format 2>/dev/null), lua-format, $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)/hr/bin/lua-format)
 
-MACOSX_DEPLOYMENT_TARGET ?= $(shell sw_vers -productVersion 2>/dev/null)
-
 .PHONY: all
 all: luacheck lua-format
 
