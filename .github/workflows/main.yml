@@ -16,12 +16,12 @@ jobs:
           - ubuntu-20.04
           - macos-11
 
-    name: bootstrap-${{ matrix.os }}
+    name: bootstrap-${{ runner.os }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: install neovim nightly
         run: |
-          if [ "${{ matrix.os }}" = "ubuntu-20.04" ]; then
+          if [ "${{ runner.os }}" = "Linux" ]; then
             suffix=linux64
           else
             suffix=macos
@@ -29,12 +29,12 @@ jobs:
           curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-${suffix}.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
 
       - name: install build deps on mac
-        if: matrix.os == 'macos-11'
+        if: runner.os == 'macOS'
         run: |
           brew install bash shellcheck libyaml bat
 
       - name: install build deps on ubuntu
-        if: matrix.os == 'ubuntu-20.04'
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y shellcheck libyaml-dev
@@ -63,7 +63,9 @@ jobs:
         uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/nvim/langservers
-          key: "${{ matrix.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}"
+          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}"
+          restore-keys:
+            - "${{ matrix.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}"
 
       - name: get luajit version
         id: get-luajit-version
@@ -71,7 +73,7 @@ jobs:
           echo "::set-output name=version::$(nvim --version | grep LuaJIT)"
 
       - name: set MACOSX_DEPLOYMENT_TARGET
-        if: matrix.os == 'macos-11'
+        if: runner.os == 'macOS'
         id: macosx-deployment-target
         run: |
           echo "MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)" >>${GITHUB_ENV}
@@ -82,7 +84,9 @@ jobs:
         uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ matrix.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
+          key: "${{ runner.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
+          restore-keys:
+            - "${{ matrix.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       - name: get python version
         id: get-python-version
@@ -94,7 +98,9 @@ jobs:
         uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/nvim/venv
-          key: "${{ matrix.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}"
+          key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}"
+          restore-keys:
+            - "${{ matrix.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}"
 
       - name: install fnm
         run: |
