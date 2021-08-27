@@ -53,7 +53,7 @@ jobs:
       - name: set MACOSX_DEPLOYMENT_TARGET
         if: matrix.os == 'macos-latest'
         id: macosx-deployment-target
-        run:
+        run: |
           echo "::set-output name=product-version::$(sw_vers -productVersion)"
           echo "MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)" >>${GITHUB_ENV}
 
