@@ -14,7 +14,7 @@ jobs:
       matrix:
         os:
           - ubuntu-20.04
-          - macos-latest
+          - macos-11
 
     name: bootstrap-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -29,7 +29,7 @@ jobs:
           curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-${suffix}.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
 
       - name: install build deps on mac
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-11'
         run: |
           brew install bash shellcheck libyaml bat
 
@@ -71,7 +71,7 @@ jobs:
           echo "::set-output name=version::$(nvim --version | grep LuaJIT)"
 
       - name: set MACOSX_DEPLOYMENT_TARGET
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-11'
         id: macosx-deployment-target
         run: |
           echo "MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)" >>${GITHUB_ENV}
