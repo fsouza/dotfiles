@@ -70,12 +70,19 @@ jobs:
         run: |
           echo "::set-output name=version::$(nvim --version | grep LuaJIT)"
 
+      - name: set MACOSX_DEPLOYMENT_TARGET
+        if: matrix.os == 'macos-latest'
+        id: macosx-deployment-target
+        run: |
+          echo "MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)" >>${GITHUB_ENV}
+          echo "::set-output name=product-version::$(sw_vers -productVersion)"
+
       - name: hererocks cache
         id: nvim-hererocks-cache
         uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ matrix.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
+          key: "${{ matrix.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       - name: get python version
         id: get-python-version
