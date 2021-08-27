@@ -219,7 +219,7 @@ async def install_ocaml_lsp(langservers_cache_dir: Path) -> None:
     assert repo_dir is not None
 
     await run_cmd("opam", ["install", "-y", "ocamlformat"]),
-    await run_cmd("opam", ["install", "--deps-only", "."], cwd=repo_dir)
+    await run_cmd("opam", ["install", "--deps-only", "-y", "."], cwd=repo_dir)
     await run_cmd("dune", ["build", "@install"], cwd=repo_dir)
 
 
