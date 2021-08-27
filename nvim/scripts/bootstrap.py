@@ -44,7 +44,7 @@ async def run_cmd(
     returncode = await proc.wait()
     if returncode != 0:
         raise CommandError(
-            f"command '{cmd} {''.join(str_args)}' exited with status {returncode}",
+            f"command '{cmd} {' '.join(str_args)}' exited with status {returncode}",
         )
 
 
