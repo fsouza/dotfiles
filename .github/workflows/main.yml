@@ -13,7 +13,6 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-20.04
           - macos-latest
 
     name: bootstrap-${{ matrix.os }}
@@ -33,74 +32,22 @@ jobs:
         run: |
           brew install bash shellcheck libyaml bat
 
-      - name: install build deps on ubuntu
-        if: matrix.os == 'ubuntu-20.04'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y shellcheck libyaml-dev
-
       - uses: actions/checkout@v2.3.4
         with:
           submodules: 'recursive'
 
       - run: make shellcheck
 
-      - uses: avsm/setup-ocaml@v2
-        with:
-          ocaml-compiler: "4.12.0"
-          dune-cache: true
-
       - uses: actions/setup-python@v2.2.2
         with:
           python-version: "3.x"
-
-      - uses: actions/setup-go@v2.1.4
-        with:
-          go-version: "1.x"
-
-      - name: langservers cache
-        id: nvim-langservers-cache
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.cache/nvim/langservers
-          key: "${{ matrix.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}"
 
       - name: get luajit version
         id: get-luajit-version
         run: |
           echo "::set-output name=version::$(nvim --version | grep LuaJIT)"
 
-      - name: hererocks cache
-        id: nvim-hererocks-cache
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.cache/nvim/hr
-          key: "${{ matrix.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
-
-      - name: get python version
-        id: get-python-version
-        run: |
-          echo "::set-output name=version::$(python3 --version)"
-
-      - name: virtualenv cache
-        id: nvim-virtualenv-cache
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.cache/nvim/venv
-          key: "${{ matrix.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}"
-
-      - name: install fnm
-        run: |
-          curl -fsSL https://fnm.vercel.app/install | bash
-          echo "${HOME}/.fnm" >> "${GITHUB_PATH}"
-
       - name: run setup
         run: |
           eval $(opam env --set-switch)
           ./bin/setup
-
-      - name: run luacheck
-        run: make -f $HOME/.config/nvim/Makefile luacheck
-
-      - name: run lua-format-check
-        run: make -f $HOME/.config/nvim/Makefile lua-format-check
