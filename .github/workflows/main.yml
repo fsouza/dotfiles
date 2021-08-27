@@ -57,5 +57,4 @@ jobs:
 
       - name: run setup
         run: |
-          eval $(opam env --set-switch)
           ./bin/setup
