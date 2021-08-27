@@ -43,6 +43,15 @@ local function fzf_lua()
     _fzf_lua.setup({
       fzf_args = vim.env.FZF_DEFAULT_OPTS .. ' --border rounded';
       fzf_layout = 'default';
+      fzf_binds = {
+        'ctrl-h:toggle-preview';
+        'ctrl-d:half-page-down';
+        'ctrl-u:half-page-up';
+        'ctrl-f:page-down';
+        'ctrl-b:page-up';
+        'ctrl-a:toggle-all';
+        'ctrl-l:clear-query';
+      };
       buffers = {file_icons = false; git_icons = false};
       files = {file_icons = false; git_icons = false; actions = actions};
       git = {files = {file_icons = false; git_icons = false; actions = actions}};
