@@ -96,3 +96,6 @@ jobs:
 
       - name: run luacheck
         run: make -f $HOME/.config/nvim/Makefile luacheck
+
+      - name: run lua-format-check
+        run: make -f $HOME/.config/nvim/Makefile lua-format-check

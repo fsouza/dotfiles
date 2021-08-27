@@ -32,3 +32,7 @@ luacheck:
 .PHONY: lua-format
 lua-format:
 	cd $(mkfile_dir) && git ls-files -- '*.lua' '*.rockspec' | grep -v ^pack | xargs $(LUAFORMAT) -i
+
+.PHONY: lua-format-check
+lua-format-check:
+	cd $(mkfile_dir) && git ls-files -- '*.lua' '*.rockspec' | grep -v ^pack | xargs $(LUAFORMAT) -i --check
