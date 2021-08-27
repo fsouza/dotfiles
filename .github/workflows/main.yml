@@ -64,8 +64,6 @@ jobs:
         with:
           path: ~/.cache/nvim/langservers
           key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}"
-          restore-keys: |
-            "${{ matrix.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}"
 
       - name: get luajit version
         id: get-luajit-version
@@ -85,8 +83,6 @@ jobs:
         with:
           path: ~/.cache/nvim/hr
           key: "${{ runner.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
-          restore-keys: |
-            "${{ matrix.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       - name: get python version
         id: get-python-version
@@ -99,8 +95,6 @@ jobs:
         with:
           path: ~/.cache/nvim/venv
           key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}"
-          restore-keys: |
-            "${{ matrix.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}"
 
       - name: install fnm
         run: |
