@@ -7,7 +7,7 @@ local M = {}
 local function setup(bufnr, autocomplete)
   local cmp = require('cmp')
   require('cmp.config').set_buffer({
-    completion = {autocomplete = autocomplete or false};
+    completion = {autocomplete = autocomplete or {}};
     mapping = {
       ['<c-y>'] = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace; select = true});
     };
@@ -47,7 +47,7 @@ function M.on_attach(bufnr)
   end)
 
   local complete_cmd = helpers.ifn_map(function()
-    setup(bufnr, true)
+    setup(bufnr, {'TextChanged'})
     helpers.augroup('fsouza__completion_switch_off', {
       {
         events = {'InsertLeave'};
