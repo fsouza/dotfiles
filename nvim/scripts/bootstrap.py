@@ -292,8 +292,8 @@ async def main() -> int:
     cache_dir = await _find_cache_dir()
 
     await asyncio.gather(
-        setup_langservers(cache_dir),
-        ensure_virtualenv(cache_dir),
+        # setup_langservers(cache_dir),
+        # ensure_virtualenv(cache_dir),
         ensure_hererocks(cache_dir),
         bat_cache_build(),
     )
