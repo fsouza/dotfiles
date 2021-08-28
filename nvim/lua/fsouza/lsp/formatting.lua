@@ -8,8 +8,6 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local langservers_skip_set = {tsserver = true}
 
-local langservers_noau = {ocamllsp = true}
-
 local function should_skip_buffer(bufnr)
   local file_path = vim.api.nvim_buf_get_name(bufnr)
   local prefix = loop.cwd()
@@ -25,10 +23,6 @@ end
 
 local function should_skip_server(server_name)
   return langservers_skip_set[server_name] ~= nil
-end
-
-local function should_use_noau(server_name)
-  return langservers_noau[server_name] ~= nil
 end
 
 local function formatting_params(bufnr)
@@ -54,9 +48,17 @@ local function fmt(client, bufnr, cb)
   end
 end
 
+local function buf_is_empty(bufnr)
+  local lines = api.nvim_buf_get_lines(bufnr, 0, 2, false)
+  return #lines == 0 or (#lines == 1 and lines[1] == '')
+end
+
 local function autofmt_and_write(client, bufnr)
   local enable = require('fsouza.lib.autofmt').is_enabled(bufnr)
   if not enable then
+    return
+  end
+  if buf_is_empty(bufnr) then
     return
   end
   pcall(function()
@@ -66,13 +68,9 @@ local function autofmt_and_write(client, bufnr)
         return
       end
       if result then
+        apply_edits(result, bufnr)
         api.nvim_buf_call(bufnr, function()
-          apply_edits(result, bufnr)
-          if should_use_noau(client.name) then
-            vcmd('noau update')
-          else
-            vcmd('update')
-          end
+          vcmd('update')
         end)
       end
     end)
