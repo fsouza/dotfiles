@@ -55,7 +55,7 @@ function M.restart()
       return
     end
 
-    vim.cmd([[edit]])
+    vim.cmd([[silent! edit]])
   end
 
   vim.defer_fn(edit, interval_ms)
