@@ -7,7 +7,7 @@ do
     {ft = 'fsharp'; patterns = {'*.fs'; '*.fsx'; '*.fsi'}};
   }
 
-  local function mapping_to_command(m)
+  helpers.augroup('fsouza__ftdetect', vim.tbl_map(function(m)
     return {
       events = {'BufNewFile'; 'BufRead'};
       targets = m.patterns;
@@ -15,7 +15,5 @@ do
         vim.o.filetype = m.ft
       end);
     }
-  end
-
-  helpers.augroup('fsouza__ftdetect', vim.tbl_map(mapping_to_command, mappings))
+  end, mappings))
 end

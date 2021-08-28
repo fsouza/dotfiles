@@ -35,12 +35,6 @@ local function formatting_params(bufnr)
   return {textDocument = {uri = vim.uri_from_bufnr(bufnr)}; options = options}
 end
 
-local function apply_edits(result, bufnr)
-  helpers.rewrite_wrap(bufnr, function()
-    lsp.util.apply_text_edits(result, bufnr)
-  end)
-end
-
 local function fmt(client, bufnr, cb)
   local _, req_id = client.request('textDocument/formatting', formatting_params(bufnr), cb, bufnr)
   return req_id, function()
@@ -67,9 +61,12 @@ local function autofmt_and_write(client, bufnr)
       if changed_tick ~= api.nvim_buf_get_changedtick(bufnr) then
         return
       end
+
       if result then
-        apply_edits(result, bufnr)
         api.nvim_buf_call(bufnr, function()
+          helpers.rewrite_wrap(function()
+            lsp.util.apply_text_edits(result, bufnr)
+          end)
           vcmd('update')
         end)
       end

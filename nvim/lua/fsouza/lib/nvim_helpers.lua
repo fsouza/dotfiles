@@ -66,10 +66,6 @@ function M.remove_mappings(mappings, bufnr)
   end
 end
 
-function M.exec_cmds(cmd_list)
-  vcmd(table.concat(cmd_list, '\n'))
-end
-
 function M.augroup(name, commands)
   vcmd('augroup ' .. name)
   vcmd('autocmd!')
@@ -85,46 +81,32 @@ function M.reset_augroup(name)
   M.augroup(name, {})
 end
 
-function M.ensure_path_relative_to_prefix(prefix, path)
-  if not vim.endswith(prefix, '/') then
-    prefix = prefix .. '/'
-  end
-  if vim.startswith(path, prefix) then
-    return string.sub(path, string.len(prefix) + 1)
-  end
-  return path
-end
+--- Provides a wrapper to a function that rewrites the current buffer, and does
+--- a best effort to keep the buffer position.
+---
+--- If you want to run this on a buffer that's not the current one, use
+--- nvim_buf_call. See fsouza/lsp/formatting.lua for an example.
+function M.rewrite_wrap(fn)
+  local bufnr = api.nvim_get_current_buf()
 
-function M.rewrite_wrap(bufnr, fn)
-  local winid = api.nvim_get_current_win()
-  local win_bufnr = api.nvim_win_get_buf(winid)
-
-  local restore = function()
-  end
-  if bufnr == win_bufnr then
-    local cursor = api.nvim_win_get_cursor(winid)
-    local orig_lineno, orig_colno = cursor[1], cursor[2]
-    local orig_line = api.nvim_buf_get_lines(bufnr, orig_lineno - 1, orig_lineno, true)[1]
-    local orig_nlines = api.nvim_buf_line_count(bufnr)
-    local view = vfn.winsaveview()
-
-    -- note: this isn't 100% correct, if the lines change below the current one,
-    -- the position won't be the same, but this is optmistic: if the file was
-    -- already formatted before, the lines below will mostly do the right thing.
-    restore = function()
-      local line_offset = api.nvim_buf_line_count(bufnr) - orig_nlines
-      local lineno = orig_lineno + line_offset
-      local col_offset = string.len(api.nvim_buf_get_lines(bufnr, lineno - 1, lineno, true)[1] or
-                                      '') - string.len(orig_line)
-      view.lnum = lineno
-      view.col = orig_colno + col_offset
-      vfn.winrestview(view)
-    end
-  end
+  local cursor = api.nvim_win_get_cursor(0)
+  local orig_lineno, orig_colno = cursor[1], cursor[2]
+  local orig_line = api.nvim_buf_get_lines(bufnr, orig_lineno - 1, orig_lineno, true)[1]
+  local orig_nlines = api.nvim_buf_line_count(bufnr)
+  local view = vfn.winsaveview()
 
   fn()
 
-  restore()
+  -- note: this isn't 100% correct, if the lines change below the current one,
+  -- the position won't be the same, but this is optmistic: if the file was
+  -- already formatted before, the lines below will mostly do the right thing.
+  local line_offset = api.nvim_buf_line_count(bufnr) - orig_nlines
+  local lineno = orig_lineno + line_offset
+  local col_offset = string.len(api.nvim_buf_get_lines(bufnr, lineno - 1, lineno, true)[1] or '') -
+                       string.len(orig_line)
+  view.lnum = lineno
+  view.col = orig_colno + col_offset
+  vfn.winrestview(view)
 end
 
 return M
