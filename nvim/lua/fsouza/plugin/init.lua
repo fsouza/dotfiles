@@ -75,6 +75,10 @@ local function setup_autofmt_commands()
   vcmd([[command! ToggleGlobalAutofmt lua require('fsouza.lib.autofmt').toggle_g()]])
 end
 
+local function setup_lsp_commands()
+  vcmd([[command! LspRestart lua require('fsouza.lsp.detach').restart()]])
+end
+
 local function setup_hlyank()
   helpers.augroup('yank_highlight', {
     {
@@ -183,6 +187,7 @@ do
   schedule(function()
     require('fsouza.plugin.ts')
   end)
+  schedule(setup_lsp_commands)
   schedule(trigger_ft)
   schedule(function()
     vcmd([[doautocmd User PluginReady]])
