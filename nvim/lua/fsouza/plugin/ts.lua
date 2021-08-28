@@ -1,3 +1,5 @@
+local vcmd = vim.cmd
+
 local wanted_parsers = {
   'bash';
   'c';
@@ -52,6 +54,10 @@ local function set_folding()
 end
 
 do
+  vcmd([[packadd! nvim-treesitter]])
+  vcmd([[packadd! nvim-treesitter-textobjects]])
+  vcmd([[packadd! playground]])
+
   local configs = require('nvim-treesitter.configs')
   configs.setup({
     highlight = {enable = false};

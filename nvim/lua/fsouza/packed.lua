@@ -9,7 +9,7 @@ local data_dir = vfn.stdpath('data')
 local function download_paq()
   local dir = string.format('%s/site/pack/paqs/start/paq-nvim', data_dir)
   vfn.system(string.format('git clone https://github.com/savq/paq-nvim.git %s', dir))
-  vcmd('packadd paq-nvim')
+  vcmd('packadd! paq-nvim')
 end
 
 local function load_paq()
@@ -27,23 +27,13 @@ function M.setup()
     'chaoren/vim-wordmotion';
     'godlygeek/tabular';
     'hrsh7th/nvim-compe';
-    'ibhagwan/fzf-lua';
     'justinmk/vim-dirvish';
     'justinmk/vim-sneak';
     'kana/vim-textobj-user';
     'liuchengxu/vista.vim';
     'mattn/emmet-vim';
     'michaeljsmith/vim-indent-object';
-    'neovim/nvim-lspconfig';
     'norcalli/nvim-colorizer.lua';
-    {
-      'nvim-treesitter/nvim-treesitter';
-      run = function()
-        vcmd('TSUpdate')
-      end;
-    };
-    'nvim-treesitter/nvim-treesitter-textobjects';
-    'nvim-treesitter/playground';
     'rhysd/git-messenger.vim';
     'sheerun/vim-polyglot';
     'thinca/vim-textobj-between';
@@ -53,6 +43,18 @@ function M.setup()
     'tpope/vim-rhubarb';
     'tpope/vim-surround';
     'vijaymarupudi/nvim-fzf';
+
+    {'ibhagwan/fzf-lua'; opt = true};
+    {'neovim/nvim-lspconfig'; opt = true};
+    {
+      'nvim-treesitter/nvim-treesitter';
+      run = function()
+        vcmd('TSUpdate')
+      end;
+      opt = true;
+    };
+    {'nvim-treesitter/nvim-treesitter-textobjects'; opt = true};
+    {'nvim-treesitter/playground'; opt = true};
   })
   paq:sync()
 end

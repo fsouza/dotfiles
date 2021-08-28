@@ -61,7 +61,7 @@ do
   end
 
   set_log_level()
-  local lsp = require('lspconfig')
+  local lsp = require('fsouza.lspconfig')
   local opts = require('fsouza.lsp.opts')
 
   if_executable('fnm', function()

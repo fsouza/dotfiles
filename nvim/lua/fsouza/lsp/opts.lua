@@ -247,7 +247,7 @@ function M.with_defaults(opts)
 end
 
 M.root_pattern_with_fallback = function(...)
-  local find_root = require('lspconfig').util.root_pattern(...)
+  local find_root = require('fsouza.lspconfig').util.root_pattern(...)
   return function(startpath)
     return find_root(startpath) or vim.loop.cwd()
   end
