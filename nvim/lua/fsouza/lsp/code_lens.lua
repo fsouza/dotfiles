@@ -232,7 +232,7 @@ function M.on_detach(bufnr)
   if api.nvim_buf_is_valid(bufnr) then
     api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
 
-    if client_opts.mapping then
+    if client_opts and client_opts.mapping then
       helpers.remove_mappings({n = {{lhs = client_opts.mapping}}}, bufnr)
     end
   end
