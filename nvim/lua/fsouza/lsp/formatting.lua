@@ -79,6 +79,10 @@ local function autofmt_and_write(client, bufnr)
   end)
 end
 
+local function augroup_name(bufnr)
+  return 'lsp_autofmt_' .. bufnr
+end
+
 function M.on_attach(client, bufnr)
   if should_skip_buffer(bufnr) then
     return
@@ -88,7 +92,7 @@ function M.on_attach(client, bufnr)
     return
   end
 
-  helpers.augroup('lsp_autofmt_' .. bufnr, {
+  helpers.augroup(augroup_name(bufnr), {
     {
       events = {'BufWritePost'};
       targets = {string.format('<buffer=%d>', bufnr)};
@@ -109,6 +113,13 @@ function M.on_attach(client, bufnr)
       };
     };
   }, bufnr)
+end
+
+function M.on_detach(bufnr)
+  if api.nvim_buf_is_valid(bufnr) then
+    helpers.remove_mappings({n = {{lhs = '<leader>f'}}}, bufnr)
+  end
+  helpers.reset_augroup(augroup_name(bufnr))
 end
 
 return M

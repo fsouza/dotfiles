@@ -40,13 +40,17 @@ local function buf_attach_if_needed(bufnr)
   })
 end
 
+local function augroup_name(bufnr)
+  return 'lsp_shell_post_' .. bufnr
+end
+
 function M.on_attach(opts)
   local bufnr = opts.bufnr
   buf_attach_if_needed(bufnr)
   clients_by_buf[bufnr] = clients_by_buf[bufnr] or {}
   table.insert(clients_by_buf[bufnr], opts.client)
 
-  helpers.augroup('lsp_shell_post_' .. bufnr, {
+  helpers.augroup(augroup_name(bufnr), {
     {
       events = {'FileChangedShellPost'};
       targets = {string.format('<buffer=%d>', bufnr)};
@@ -55,6 +59,11 @@ function M.on_attach(opts)
       end);
     };
   })
+end
+
+function M.on_detach(bufnr)
+  clients_by_buf[bufnr] = nil
+  helpers.reset_augroup(augroup_name(bufnr))
 end
 
 return M

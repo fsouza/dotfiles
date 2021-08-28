@@ -1,7 +1,6 @@
 local M = {fns = {}}
 
 local api = vim.api
-local nvim_buf_set_keymap = api.nvim_buf_set_keymap
 local vcmd = vim.cmd
 local vfn = vim.fn
 
@@ -41,13 +40,28 @@ function M.create_mappings(mappings, bufnr)
   local fn = api.nvim_set_keymap
   if bufnr then
     fn = function(...)
-      nvim_buf_set_keymap(bufnr, ...)
+      api.nvim_buf_set_keymap(bufnr, ...)
     end
   end
 
   for mode, rules in pairs(mappings) do
     for _, m in ipairs(rules) do
       fn(mode, m.lhs, m.rhs, m.opts or {})
+    end
+  end
+end
+
+function M.remove_mappings(mappings, bufnr)
+  local fn = api.nvim_del_keymap
+  if bufnr then
+    fn = function(...)
+      api.nvim_buf_del_keymap(bufnr, ...)
+    end
+  end
+
+  for mode, rules in pairs(mappings) do
+    for _, m in ipairs(rules) do
+      fn(mode, m.lhs)
     end
   end
 end
@@ -65,6 +79,10 @@ function M.augroup(name, commands)
                        c.command))
   end
   vcmd('augroup END')
+end
+
+function M.reset_augroup(name)
+  M.augroup(name, {})
 end
 
 function M.ensure_path_relative_to_prefix(prefix, path)

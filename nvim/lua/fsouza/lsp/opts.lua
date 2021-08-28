@@ -86,6 +86,10 @@ local cmds = {
 }
 
 local function attached(bufnr, client)
+  local register_detach = function(cb)
+    require('fsouza.lsp.detach').register(bufnr, cb)
+  end
+
   vim.schedule(function()
     local mappings = {
       n = {
@@ -103,10 +107,12 @@ local function attached(bufnr, client)
 
     if client.resolved_capabilities.text_document_did_change then
       require('fsouza.lsp.shell_post').on_attach({bufnr = bufnr; client = client})
+      register_detach(require('fsouza.lsp.shell_post').on_detach)
     end
 
     if client.resolved_capabilities.completion then
       require('fsouza.lsp.completion').on_attach(bufnr)
+      register_detach(require('fsouza.lsp.completion').on_detach)
     end
 
     if client.resolved_capabilities.rename ~= nil and client.resolved_capabilities.rename ~= false then
@@ -128,6 +134,7 @@ local function attached(bufnr, client)
 
     if client.resolved_capabilities.document_formatting then
       require('fsouza.lsp.formatting').on_attach(client, bufnr)
+      register_detach(require('fsouza.lsp.formatting').on_detach)
     end
 
     if client.resolved_capabilities.document_highlight then
@@ -199,12 +206,16 @@ local function attached(bufnr, client)
         can_resolve = client.resolved_capabilities.code_lens_resolve;
         supports_command = client.resolved_capabilities.execute_command;
       })
+      register_detach(require('fsouza.lsp.code_lens').on_detach)
     end
 
     require('fsouza.lsp.progress').on_attach()
 
     vim.schedule(function()
       helpers.create_mappings(mappings, bufnr)
+      register_detach(function()
+        helpers.remove_mappings(mappings, bufnr)
+      end)
     end)
   end)
 end

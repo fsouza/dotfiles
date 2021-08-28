@@ -63,4 +63,13 @@ function M.on_attach(bufnr)
   end)
 end
 
+function M.on_detach(bufnr)
+  if api.nvim_buf_is_valid(bufnr) then
+    helpers.remove_mappings({i = {{lhs = '<cr>'}; {lhs = '<c-x><c-o>'}; {lhs = '<c-y>'}}}, bufnr)
+  end
+
+  -- probably a bad idea?
+  require('compe.config')._bufnrs[bufnr] = nil
+end
+
 return M

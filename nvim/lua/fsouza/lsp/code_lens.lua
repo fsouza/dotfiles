@@ -8,6 +8,8 @@ local debouncers = {}
 
 local clients = {}
 
+local ns = api.nvim_create_namespace('fsouza__code_lens')
+
 -- stores result by bufnr & line (range.start.line)
 local code_lenses = {}
 
@@ -59,7 +61,6 @@ local function resolve_code_lenses(client, lenses, cb)
 end
 
 local function render_virtual_text(bufnr)
-  local ns = api.nvim_create_namespace('fsouza__code_lens')
   api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
 
   local prefix = ' '
@@ -179,6 +180,10 @@ local function execute()
   execute_codelenses(bufnr, line_codelenses)
 end
 
+local function augroup_name(bufnr)
+  return 'lsp_codelens_' .. bufnr
+end
+
 function M.on_attach(opts)
   local bufnr = opts.bufnr
   local client = opts.client
@@ -186,12 +191,13 @@ function M.on_attach(opts)
     lsp_client = client;
     supports_resolve = opts.can_resolve;
     supports_command = opts.supports_command;
+    mapping = opts.mapping;
   }
   vim.schedule(function()
     codelens(bufnr)
   end)
 
-  local augroup_id = 'lsp_codelens_' .. bufnr
+  local augroup_id = augroup_name(bufnr)
   helpers.augroup(augroup_id, {
     {
       events = {'InsertLeave'; 'BufWritePost'};
@@ -203,16 +209,12 @@ function M.on_attach(opts)
   })
 
   vim.schedule(function()
-    local hook_id = augroup_id
-    require('fsouza.lsp.buf_diagnostic').register_hook(hook_id, function()
+    require('fsouza.lsp.buf_diagnostic').register_hook(augroup_id, function()
       codelens(bufnr)
     end)
     api.nvim_buf_attach(bufnr, false, {
       on_detach = function()
-        helpers.augroup(augroup_id, {})
-        require('fsouza.lsp.buf_diagnostic').unregister_hook(hook_id)
-        remove_results(bufnr)
-        clients[bufnr] = nil
+        M.on_detach(bufnr)
       end;
     })
   end)
@@ -222,6 +224,26 @@ function M.on_attach(opts)
       n = {{lhs = opts.mapping; rhs = helpers.fn_map(execute); {silent = true}}};
     }, bufnr)
   end
+end
+
+function M.on_detach(bufnr)
+  local client_opts = clients[bufnr]
+
+  if api.nvim_buf_is_valid(bufnr) then
+    api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+
+    if client_opts.mapping then
+      helpers.remove_mappings({n = {{lhs = client_opts.mapping}}}, bufnr)
+    end
+  end
+
+  clients[bufnr] = nil
+  local augroup_id = augroup_name(bufnr)
+  helpers.reset_augroup(augroup_id)
+  require('fsouza.lsp.buf_diagnostic').unregister_hook(augroup_id)
+  remove_results(bufnr)
+  clients[bufnr] = nil
+
 end
 
 return M
