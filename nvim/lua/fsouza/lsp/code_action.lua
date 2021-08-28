@@ -6,7 +6,11 @@ local util = require('vim.lsp.util')
 
 local M = {}
 
-function M.handle_actions(actions)
+local function handle_actions(actions)
+  if not actions or vim.tbl_isempty(actions) then
+    return
+  end
+
   local lines = {}
   for _, action in ipairs(actions) do
     table.insert(lines, action.title)
@@ -43,10 +47,12 @@ end
 function M.code_action()
   code_action_for_line(function(_, _, actions)
     if not actions or vim.tbl_isempty(actions) then
-      return code_action_for_buf()
+      return code_action_for_buf(function(_, _, buf_actions)
+        handle_actions(buf_actions)
+      end)
     end
 
-    M.handle_actions(actions)
+    handle_actions(actions)
   end)
 end
 
@@ -58,6 +64,11 @@ function M.visual_code_action()
 
   local start_pos = vfn.getpos([['<]])
   local end_pos = vfn.getpos([['>]])
+
+  vim.lsp.handlers['textDocument/codeAction'] = function(_, _, actions)
+    handle_actions(actions)
+  end
+
   vim.lsp.buf.range_code_action(nil, {start_pos[2]; start_pos[3]}, {end_pos[2]; end_pos[3]})
 end
 

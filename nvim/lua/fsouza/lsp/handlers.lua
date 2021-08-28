@@ -62,13 +62,6 @@ M['textDocument/documentHighlight'] = function(_, _, result, _)
   lsp.util.buf_highlight_references(bufnr, result)
 end
 
-M['textDocument/codeAction'] = function(_, _, actions)
-  if not actions or vim.tbl_isempty(actions) then
-    return
-  end
-  require('fsouza.lsp.code_action').handle_actions(actions)
-end
-
 M['textDocument/hover'] = popup_callback
 
 M['textDocument/signatureHelp'] = popup_callback
