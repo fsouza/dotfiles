@@ -6,7 +6,7 @@ local api = vim.api
 
 local cmds = {
   show_line_diagnostics = helpers.fn_map(function()
-    vim.lsp.diagnostic.show_line_diagnostics()
+    vim.lsp.diagnostic.show_line_diagnostics({focusable = false})
   end);
   list_file_diagnostics = helpers.fn_map(function()
     require('fsouza.lsp.diagnostics').list_file_diagnostics()
