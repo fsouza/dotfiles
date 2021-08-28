@@ -21,26 +21,49 @@ local function detach(bufnr)
 end
 
 function M.restart()
-  vim.lsp.stop_client(vim.lsp.get_active_clients())
-
-  require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics()
-
-  for _, bufnr in ipairs(api.nvim_list_bufs()) do
-    detach(bufnr)
+  local function extract_client_id(client)
+    return client.id
   end
+
+  local all_clients = vim.lsp.get_active_clients()
+  local original_client_ids = vim.tbl_map(extract_client_id, all_clients)
+
+  local function check_new_clients()
+    local current_client_ids = vim.tbl_map(extract_client_id, vim.lsp.get_active_clients())
+
+    for _, client_id in ipairs(current_client_ids) do
+      if not vim.tbl_contains(original_client_ids, client_id) then
+        return true, #current_client_ids
+      end
+    end
+
+    return false, #current_client_ids
+  end
+
+  vim.lsp.stop_client(all_clients)
 
   local interval_ms = 50
   local edit = nil
   edit = function()
-    local active_clients = vim.lsp.get_active_clients()
-    if #active_clients > 0 then
+    local has_new_clients, total_clients = check_new_clients()
+    if has_new_clients then
+      return
+    end
+
+    if total_clients > 0 then
       vim.defer_fn(edit, interval_ms)
       return
     end
+
     vim.cmd([[edit]])
   end
 
   vim.defer_fn(edit, interval_ms)
+
+  require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics()
+  for _, bufnr in ipairs(api.nvim_list_bufs()) do
+    detach(bufnr)
+  end
 end
 
 return M
