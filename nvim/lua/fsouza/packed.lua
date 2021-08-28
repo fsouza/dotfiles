@@ -35,7 +35,6 @@ function M.setup()
     'michaeljsmith/vim-indent-object';
     'norcalli/nvim-colorizer.lua';
     'rhysd/git-messenger.vim';
-    'sheerun/vim-polyglot';
     'thinca/vim-textobj-between';
     'tpope/vim-commentary';
     'tpope/vim-fugitive';
