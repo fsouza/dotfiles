@@ -53,8 +53,18 @@ local function setup(bufnr, sources)
     mapping = {
       ['<c-y>'] = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace; select = true});
     };
+    snippet = {
+      expand = function(args)
+        local luasnip = prequire('luasnip')
+        if not luasnip then
+          vcmd([[packadd! luasnip]])
+          luasnip = require('luasnip')
+        end
+        luasnip.lsp_expand(args.body)
+      end;
+    };
     sources = sources;
-    documentation = {border = false};
+    documentation = {border = 'none'};
     preselect = cmp.PreselectMode.None;
   }, bufnr)
 end

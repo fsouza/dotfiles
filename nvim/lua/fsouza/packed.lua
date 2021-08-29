@@ -48,6 +48,7 @@ function M.setup()
     {'hrsh7th/cmp-buffer'; opt = true};
     {'hrsh7th/cmp-nvim-lua'; opt = true};
     {'andersevenrud/compe-tmux'; branch = 'cmp'; opt = true};
+    {'l3mon4d3/luasnip'; opt = true};
 
     -- opt stuff
     {'ibhagwan/fzf-lua'; opt = true; pin = true};
