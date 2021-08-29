@@ -41,12 +41,10 @@ local function fzf_lua()
 
     _fzf_lua = require('fzf-lua')
     _fzf_lua.setup({
-      fzf_args = vim.env.FZF_DEFAULT_OPTS .. ' --border rounded';
+      fzf_args = vim.env.FZF_DEFAULT_OPTS;
       fzf_layout = 'default';
       fzf_binds = {
         'ctrl-h:toggle-preview';
-        'ctrl-d:half-page-down';
-        'ctrl-u:half-page-up';
         'ctrl-f:page-down';
         'ctrl-b:page-up';
         'ctrl-a:toggle-all';
@@ -58,9 +56,20 @@ local function fzf_lua()
       grep = {file_icons = false; git_icons = false; actions = actions};
       oldfiles = {file_icons = false; git_icons = false; actions = actions};
       lsp = {file_icons = false; git_icons = false; actions = actions};
-      winopts = {win_height = 0.65; win_width = 0.90; win_border = false};
+      winopts = {win_height = 0.65; win_width = 0.90};
       default_previewer = 'bat';
-      previewers = {bat = {theme = 'monochrome'; args = '--style=numbers --color=always'}};
+      previewers = {
+        bat = {theme = 'monochrome'; args = '--style=numbers --color=always'};
+        builtin = {
+          scrollbar = false;
+          keymap = {
+            toggle_hide = '<c-h>';
+            page_up = '<c-u>';
+            page_down = '<c-d>';
+            page_reset = '<c-r>';
+          };
+        };
+      };
     })
   end
   return _fzf_lua
