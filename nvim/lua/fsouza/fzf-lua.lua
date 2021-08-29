@@ -57,11 +57,8 @@ local function fzf_lua()
       oldfiles = {file_icons = false; git_icons = false; actions = actions};
       lsp = {file_icons = false; git_icons = false; actions = actions};
       winopts = {win_height = 0.65; win_width = 0.90};
-      default_previewer = 'bat';
       previewers = {
-        bat = {theme = 'monochrome'; args = '--style=numbers --color=always'};
         builtin = {
-          scrollbar = false;
           keymap = {
             toggle_hide = '<c-h>';
             page_up = '<c-u>';

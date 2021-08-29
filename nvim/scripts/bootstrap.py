@@ -275,14 +275,6 @@ async def setup_langservers(cache_dir: Path) -> None:
     )
 
 
-async def bat_cache_build() -> None:
-    if not await has_command("bat"):
-        print("skipping bat")
-        return
-
-    await run_cmd("bat", ["cache", "--build"])
-
-
 async def _find_cache_dir() -> Path:
     cache_dir = await _neovim_command("echo stdpath('cache')")
     return Path(cache_dir)
@@ -295,7 +287,6 @@ async def main() -> int:
         setup_langservers(cache_dir),
         ensure_virtualenv(cache_dir),
         ensure_hererocks(cache_dir),
-        bat_cache_build(),
     )
 
     return 0

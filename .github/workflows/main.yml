@@ -31,7 +31,7 @@ jobs:
       - name: install build deps on mac
         if: runner.os == 'macOS'
         run: |
-          brew install bash shellcheck libyaml bat
+          brew install bash shellcheck libyaml
 
       - name: install build deps on ubuntu
         if: runner.os == 'Linux'

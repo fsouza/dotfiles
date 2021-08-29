@@ -60,8 +60,6 @@ local function global_vars()
 end
 
 local function ui_options()
-  vim.o.cursorline = true
-  vim.o.cursorlineopt = 'number'
   vim.o.termguicolors = true
   vim.o.showcmd = false
   vim.o.laststatus = 0
