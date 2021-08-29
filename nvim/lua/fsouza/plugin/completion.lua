@@ -4,13 +4,13 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
-local function setup(bufnr)
+local function setup(bufnr, sources)
   local cmp = require('cmp')
   require('cmp.config').set_buffer({
     mapping = {
       ['<c-y>'] = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace; select = true});
     };
-    sources = {{name = 'nvim_lsp'}; {name = 'buffer'}};
+    sources = sources or {{name = 'nvim_lsp'}; {name = 'buffer'}};
     documentation = {border = false};
     preselect = cmp.PreselectMode.None;
   }, bufnr)
@@ -31,8 +31,8 @@ local cr_cmd = helpers.ifn_map(function()
   return api.nvim_replace_termcodes(r, true, false, true)
 end)
 
-function M.on_attach(bufnr)
-  setup(bufnr)
+function M.on_attach(bufnr, sources)
+  setup(bufnr, sources)
 
   require('fsouza.color').set_popup_cb(function()
     for _, win in ipairs(vim.api.nvim_list_wins()) do
