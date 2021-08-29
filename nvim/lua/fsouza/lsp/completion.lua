@@ -11,6 +11,8 @@ local function setup(bufnr)
       ['<c-y>'] = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace; select = true});
     };
     sources = {{name = 'nvim_lsp'}; {name = 'buffer'}};
+    documentation = {border = false};
+    preselect = cmp.PreselectMode.None;
   }, bufnr)
 end
 
