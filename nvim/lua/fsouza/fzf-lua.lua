@@ -37,6 +37,7 @@ end
 
 local function fzf_lua()
   if _fzf_lua == nil then
+    vim.cmd([[packadd nvim-fzf]])
     vim.cmd([[packadd! fzf-lua]])
 
     local actions = file_actions()

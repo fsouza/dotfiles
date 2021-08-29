@@ -40,7 +40,6 @@ function M.setup()
     'tpope/vim-repeat';
     'tpope/vim-rhubarb';
     'tpope/vim-surround';
-    'vijaymarupudi/nvim-fzf';
 
     -- completion stuff
     'hrsh7th/nvim-cmp';
@@ -62,6 +61,7 @@ function M.setup()
     };
     {'nvim-treesitter/nvim-treesitter-textobjects'; opt = true};
     {'nvim-treesitter/playground'; opt = true};
+    {'vijaymarupudi/nvim-fzf'; opt = true};
   })
   paq:sync()
 end
