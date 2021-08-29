@@ -1,16 +1,59 @@
 local api = vim.api
+local vcmd = vim.cmd
 local vfn = vim.fn
 local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
+local function load_sources(cmp, sources)
+  local source_loaders = {
+    buffer = {
+      pkg = 'cmp-buffer';
+      setup = function()
+        cmp.register_source('buffer', require('cmp_buffer').new())
+      end;
+    };
+    nvim_lua = {
+      pkg = 'cmp-nvim-lua';
+      setup = function()
+        cmp.register_source('nvim_lua', require('cmp_nvim_lua').new())
+      end;
+    };
+    tmux = {
+      pkg = 'compe-tmux';
+      setup = function()
+        cmp.register_source('tmux', require('compe_tmux'))
+      end;
+    };
+    nvim_lsp = {
+      pkg = 'cmp-nvim-lsp';
+      setup = function()
+        require('cmp_nvim_lsp').setup()
+      end;
+    };
+  }
+
+  for _, source in ipairs(sources) do
+    local source_loader = source_loaders[source.name]
+
+    if source_loader then
+      vcmd([[packadd! ]] .. source_loader.pkg)
+      source_loader.setup()
+    end
+  end
+end
+
 local function setup(bufnr, sources)
   local cmp = require('cmp')
+  sources = sources or {{name = 'nvim_lsp'}; {name = 'buffer'}}
+
+  load_sources(cmp, sources)
+
   require('cmp.config').set_buffer({
     mapping = {
       ['<c-y>'] = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace; select = true});
     };
-    sources = sources or {{name = 'nvim_lsp'}; {name = 'buffer'}};
+    sources = sources;
     documentation = {border = false};
     preselect = cmp.PreselectMode.None;
   }, bufnr)

@@ -44,8 +44,10 @@ function M.setup()
 
     -- completion stuff
     'hrsh7th/nvim-cmp';
-    'hrsh7th/cmp-nvim-lsp';
-    'hrsh7th/cmp-buffer';
+    {'hrsh7th/cmp-nvim-lsp'; opt = true};
+    {'hrsh7th/cmp-buffer'; opt = true};
+    {'hrsh7th/cmp-nvim-lua'; opt = true};
+    {'andersevenrud/compe-tmux'; branch = 'cmp'; opt = true};
 
     -- opt stuff
     {'ibhagwan/fzf-lua'; opt = true};

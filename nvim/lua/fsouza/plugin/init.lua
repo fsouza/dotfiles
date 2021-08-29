@@ -1,3 +1,4 @@
+local api = vim.api
 local vcmd = vim.cmd
 local vfn = vim.fn
 local helpers = require('fsouza.lib.nvim_helpers')
@@ -110,7 +111,11 @@ local function setup_spell()
     {
       events = {'FileType'};
       targets = {'gitcommit'; 'markdown'; 'text'};
-      command = [[setlocal spell]];
+      command = helpers.fn_cmd(function()
+        local bufnr = api.nvim_get_current_buf()
+        vim.o.spell = true
+        require('fsouza.plugin.completion').on_attach(bufnr, {{name = 'buffer'}; {name = 'tmux'}})
+      end);
     };
   })
 end
