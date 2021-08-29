@@ -50,7 +50,7 @@ function M.setup()
     {'andersevenrud/compe-tmux'; branch = 'cmp'; opt = true};
 
     -- opt stuff
-    {'ibhagwan/fzf-lua'; opt = true};
+    {'ibhagwan/fzf-lua'; opt = true; pin = true};
     {'neovim/nvim-lspconfig'; opt = true};
     {
       'nvim-treesitter/nvim-treesitter';
