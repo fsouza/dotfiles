@@ -31,6 +31,20 @@ local function hererocks()
   package.cpath = package.cpath .. ';' .. lib_path .. '/?.so'
 end
 
+local function add_paqs_opt_to_path()
+  local packed = require('fsouza.packed')
+  local opt_dir = packed.paq_dir .. 'opt'
+
+  for _, paq in ipairs(packed.paqs) do
+    if paq.opt then
+      local paq_dir = opt_dir .. '/' .. paq.as
+      package.path =
+        package.path .. ';' .. paq_dir .. '/lua/?.lua;' .. paq_dir .. '/lua/?/?.lua;' .. paq_dir ..
+          '/lua/?/init.lua'
+    end
+  end
+end
+
 local function global_vars()
   vim.g.netrw_home = data_dir
   vim.g.netrw_banner = 0
@@ -118,6 +132,7 @@ do
   local schedule = vim.schedule
   initial_mappings()
   hererocks()
+  add_paqs_opt_to_path()
 
   schedule(function()
     global_options()

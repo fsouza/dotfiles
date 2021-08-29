@@ -1,5 +1,4 @@
 local api = vim.api
-local vcmd = vim.cmd
 local vfn = vim.fn
 local helpers = require('fsouza.lib.nvim_helpers')
 
@@ -7,38 +6,25 @@ local M = {}
 
 local function load_sources(cmp, sources)
   local source_loaders = {
-    buffer = {
-      pkg = 'cmp-buffer';
-      setup = function()
-        cmp.register_source('buffer', require('cmp_buffer').new())
-      end;
-    };
-    nvim_lua = {
-      pkg = 'cmp-nvim-lua';
-      setup = function()
-        cmp.register_source('nvim_lua', require('cmp_nvim_lua').new())
-      end;
-    };
-    tmux = {
-      pkg = 'compe-tmux';
-      setup = function()
-        cmp.register_source('tmux', require('compe_tmux'))
-      end;
-    };
-    nvim_lsp = {
-      pkg = 'cmp-nvim-lsp';
-      setup = function()
-        require('cmp_nvim_lsp').setup()
-      end;
-    };
+    buffer = function()
+      cmp.register_source('buffer', require('cmp_buffer').new())
+    end;
+    nvim_lua = function()
+      cmp.register_source('nvim_lua', require('cmp_nvim_lua').new())
+    end;
+    tmux = function()
+      cmp.register_source('tmux', require('compe_tmux'))
+    end;
+    nvim_lsp = function()
+      require('cmp_nvim_lsp').setup()
+    end;
   }
 
   for _, source in ipairs(sources) do
-    local source_loader = source_loaders[source.name]
+    local load = source_loaders[source.name]
 
-    if source_loader then
-      vcmd([[packadd! ]] .. source_loader.pkg)
-      source_loader.setup()
+    if load then
+      load()
     end
   end
 end
@@ -57,7 +43,6 @@ local function setup(bufnr, sources)
       expand = function(args)
         local luasnip = prequire('luasnip')
         if not luasnip then
-          vcmd([[packadd! luasnip]])
           luasnip = require('luasnip')
         end
         luasnip.lsp_expand(args.body)
