@@ -26,7 +26,6 @@ function M.setup()
 
     'chaoren/vim-wordmotion';
     'godlygeek/tabular';
-    'hrsh7th/nvim-compe';
     'justinmk/vim-dirvish';
     'justinmk/vim-sneak';
     'kana/vim-textobj-user';
@@ -43,6 +42,12 @@ function M.setup()
     'tpope/vim-surround';
     'vijaymarupudi/nvim-fzf';
 
+    -- completion stuff
+    'hrsh7th/nvim-cmp';
+    'hrsh7th/cmp-nvim-lsp';
+    'hrsh7th/cmp-buffer';
+
+    -- opt stuff
     {'ibhagwan/fzf-lua'; opt = true};
     {'neovim/nvim-lspconfig'; opt = true};
     {

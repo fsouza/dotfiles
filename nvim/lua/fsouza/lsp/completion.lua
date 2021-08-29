@@ -5,10 +5,12 @@ local helpers = require('fsouza.lib.nvim_helpers')
 local M = {}
 
 local function setup(bufnr)
-  require('compe').setup({
-    enabled = true;
-    preselect = 'disable';
-    source = {nvim_lsp = true; buffer = true};
+  local cmp = require('cmp')
+  require('cmp.config').set_buffer({
+    mapping = {
+      ['<c-y>'] = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace; select = true});
+    };
+    sources = {{name = 'nvim_lsp'}; {name = 'buffer'}};
   }, bufnr)
 end
 
@@ -31,26 +33,26 @@ function M.on_attach(bufnr)
   setup(bufnr)
 
   require('fsouza.color').set_popup_cb(function()
-    return require('compe.float').win
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local whl = vim.api.nvim_win_get_option(win, 'winhighlight')
+      if string.match(whl, 'CmpDocumentation') then
+        return win
+      end
+    end
   end)
 
   vim.schedule(function()
-    helpers.create_mappings({
-      i = {
-        {lhs = '<cr>'; rhs = cr_cmd; opts = {noremap = true}};
-        {lhs = '<c-y>'; rhs = [[compe#confirm('<c-y>')]]; opts = {expr = true; silent = true}};
-      };
-    }, bufnr)
+    helpers.create_mappings({i = {{lhs = '<cr>'; rhs = cr_cmd; opts = {noremap = true}}}}, bufnr)
   end)
 end
 
 function M.on_detach(bufnr)
   if api.nvim_buf_is_valid(bufnr) then
-    helpers.remove_mappings({i = {{lhs = '<cr>'}; {lhs = '<c-x><c-o>'}; {lhs = '<c-y>'}}}, bufnr)
+    helpers.remove_mappings({i = {{lhs = '<cr>'}}}, bufnr)
   end
 
   -- probably a bad idea?
-  require('compe.config')._bufnrs[bufnr] = nil
+  require('cmp.config').buffers[bufnr] = nil
 end
 
 return M
