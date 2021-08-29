@@ -34,7 +34,7 @@ local M = {
     {'l3mon4d3/luasnip'; as = 'luasnip'; opt = true};
 
     -- opt stuff
-    {'ibhagwan/fzf-lua'; as = 'fzf-lua'; opt = true; pin = true};
+    {'ibhagwan/fzf-lua'; as = 'fzf-lua'; opt = true};
     {'neovim/nvim-lspconfig'; as = 'nvim-lspconfig'; opt = true};
     {
       'nvim-treesitter/nvim-treesitter';
