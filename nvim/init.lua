@@ -103,7 +103,14 @@ local function global_mappings()
     {lhs = '<m-f>'; rhs = '<s-right>'; opts = {noremap = true}};
     {lhs = '<m-d>'; rhs = '<s-right><c-w>'; opts = {noremap = true}};
   }
-  local maps = {c = rl_bindings; o = rl_bindings}
+
+  local rl_insert_mode_bindings = {
+    {lhs = '<c-f>'; rhs = '<right>'; opts = {noremap = true}};
+    {lhs = '<c-b>'; rhs = '<left>'; opts = {noremap = true}};
+    {lhs = '<c-d>'; rhs = '<del>'; opts = {noremap = true}};
+  }
+
+  local maps = {c = rl_bindings; o = rl_bindings; i = rl_insert_mode_bindings}
   helpers.create_mappings(maps)
 end
 
