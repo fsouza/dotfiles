@@ -50,13 +50,7 @@ local function fzf_lua()
       grep = {file_icons = false; git_icons = false; actions = actions};
       oldfiles = {file_icons = false; git_icons = false; actions = actions};
       lsp = {file_icons = false; git_icons = false; actions = actions};
-      winopts = {
-        win_height = 0.85;
-        win_width = 0.90;
-        window_on_create = function()
-          vim.wo.cursorlineopt = 'both'
-        end;
-      };
+      winopts = {win_height = 0.85; win_width = 0.90};
       previewers = {
         builtin = {
           keymap = {
