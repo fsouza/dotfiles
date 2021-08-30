@@ -43,13 +43,7 @@ local function fzf_lua()
     _fzf_lua.setup({
       fzf_args = vim.env.FZF_DEFAULT_OPTS;
       fzf_layout = 'default';
-      fzf_binds = {
-        'ctrl-h:toggle-preview';
-        'ctrl-f:page-down';
-        'ctrl-b:page-up';
-        'ctrl-a:toggle-all';
-        'ctrl-l:clear-query';
-      };
+      fzf_binds = {'ctrl-f:page-down'; 'ctrl-b:page-up'; 'ctrl-a:toggle-all'; 'ctrl-l:clear-query'};
       buffers = {file_icons = false; git_icons = false};
       files = {file_icons = false; git_icons = false; actions = actions};
       git = {files = {file_icons = false; git_icons = false; actions = actions}};
@@ -57,7 +51,7 @@ local function fzf_lua()
       oldfiles = {file_icons = false; git_icons = false; actions = actions};
       lsp = {file_icons = false; git_icons = false; actions = actions};
       winopts = {
-        win_height = 0.65;
+        win_height = 0.85;
         win_width = 0.90;
         window_on_create = function()
           vim.wo.cursorlineopt = 'both'
@@ -75,6 +69,7 @@ local function fzf_lua()
       };
     })
   end
+
   return _fzf_lua
 end
 
