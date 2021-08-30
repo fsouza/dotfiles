@@ -62,6 +62,16 @@ local M = {
     {'tbastos/vim-lua'};
     {'Vimjas/vim-python-pep8-indent'};
     {'ziglang/zig.vim'};
+
+    -- telescope
+    {'nvim-lua/plenary.nvim'; opt = true; as = 'plenary.nvim'};
+    {'nvim-telescope/telescope.nvim'; opt = true; as = 'telescope.nvim'};
+    {
+      'nvim-telescope/telescope-fzf-native.nvim';
+      opt = true;
+      run = 'make';
+      as = 'telescope-fzf-native.nvim';
+    };
   };
 }
 
