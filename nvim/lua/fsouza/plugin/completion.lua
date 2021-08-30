@@ -9,9 +9,6 @@ local function load_sources(cmp, sources)
     buffer = function()
       cmp.register_source('buffer', require('cmp_buffer').new())
     end;
-    nvim_lua = function()
-      cmp.register_source('nvim_lua', require('cmp_nvim_lua').new())
-    end;
     tmux = function()
       cmp.register_source('tmux', require('compe_tmux'))
     end;

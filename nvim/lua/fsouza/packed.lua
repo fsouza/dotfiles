@@ -28,7 +28,6 @@ local M = {
     {'hrsh7th/nvim-cmp'; as = 'nvim-cmp'; opt = true};
     {'hrsh7th/cmp-nvim-lsp'; as = 'cmp-nvim-lsp'; opt = true};
     {'hrsh7th/cmp-buffer'; as = 'cmp-buffer'; opt = true};
-    {'hrsh7th/cmp-nvim-lua'; as = 'cmp-nvim-lua'; opt = true};
     {'andersevenrud/compe-tmux'; as = 'compe-tmux'; branch = 'cmp'; opt = true};
     {'l3mon4d3/luasnip'; as = 'luasnip'; opt = true};
 
