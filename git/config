@@ -1,7 +1,6 @@
 [user]
 	useConfigOnly = true
 [core]
-	editor = nvim
 	excludesfile = ~/.config/git/ignore
 	filemode = true
 [diff]

@@ -40,6 +40,5 @@ if [ -x "$NEOVIM_INSTALL_PREFIX/bin/nvim" ]; then
 		nvim +'autocmd User PluginReady ++once lua require("fsouza.fzf-lua").files()' "$@"
 	}
 
-	export EDITOR=nvim
-	export MANPAGER="nvim +'Man!'"
+	export EDITOR=nvim GIT_EDITOR=nvim MANPAGER="nvim +'Man!'"
 fi
