@@ -174,11 +174,7 @@ async def _clone_or_update(repo_url: str, repo_dir: Path) -> Path:
     if not await exists(repo_dir):
         await run_cmd("git", ["clone", "--recurse-submodules", repo_url, repo_dir])
 
-    await run_cmd("git", ["-C", repo_dir, "pull"])
-    await run_cmd(
-        "git",
-        ["-C", repo_dir, "submodule", "update", "--init", "--recursive"],
-    )
+    await run_cmd("git", ["-C", repo_dir, "pull", "--recurse-submodules"])
 
     return repo_dir
 
