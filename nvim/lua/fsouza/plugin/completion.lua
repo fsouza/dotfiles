@@ -30,6 +30,8 @@ local function load_sources(cmp, sources)
 end
 
 local function setup(bufnr, sources)
+  vim.cmd('packadd nvim-cmp')
+
   local cmp = require('cmp')
   sources = sources or {{name = 'nvim_lsp'}; {name = 'buffer'}}
 

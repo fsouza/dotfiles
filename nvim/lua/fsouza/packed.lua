@@ -25,7 +25,7 @@ local M = {
     {'vijaymarupudi/nvim-fzf'};
 
     -- completion stuff
-    {'hrsh7th/nvim-cmp'; as = 'nvim-cmp'};
+    {'hrsh7th/nvim-cmp'; as = 'nvim-cmp'; opt = true};
     {'hrsh7th/cmp-nvim-lsp'; as = 'cmp-nvim-lsp'; opt = true};
     {'hrsh7th/cmp-buffer'; as = 'cmp-buffer'; opt = true};
     {'hrsh7th/cmp-nvim-lua'; as = 'cmp-nvim-lua'; opt = true};
