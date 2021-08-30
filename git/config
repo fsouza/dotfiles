@@ -22,7 +22,6 @@
 	autoStash = true
 [fetch]
 	prune = true
-	recurseSubmodules = true
 [protocol]
 	version = 2
 [alias]
