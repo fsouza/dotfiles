@@ -7,8 +7,7 @@ local function should_qf(selected)
   end
 
   for _, sel in ipairs(selected) do
-    local row = sel[1]
-    if string.match(row, '^.+:%d+:%d+:') then
+    if sel.lnum ~= nil then
       return true
     end
   end
@@ -32,15 +31,15 @@ local function edit_or_qf(prompt_bufnr)
   local selected = picker:get_multi_selection()
 
   if #selected < 1 then
-    selected = {action_state.get_selected_entry()}
+    return actions.file_edit(prompt_bufnr)
   end
-
-  actions.close(prompt_bufnr)
 
   if should_qf(selected) then
     actions.send_selected_to_qflist(prompt_bufnr)
     actions.open_qflist()
+    vcmd('cc')
   else
+    actions.close(prompt_bufnr)
     edit(selected)
   end
 end

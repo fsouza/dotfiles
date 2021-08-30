@@ -7,9 +7,9 @@ local M = {registry = {}}
 local function fzf_dir(directory, cd)
   if cd then
     api.nvim_set_current_dir(directory)
-    require('fsouza.fzf-lua').files()
+    require('telescope.builtin').find_files()
   else
-    require('fsouza.fzf-lua').files({cwd = directory})
+    require('telescope.builtin').find_files({search_dirs = {directory}})
   end
 end
 

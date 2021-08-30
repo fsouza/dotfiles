@@ -34,7 +34,7 @@ local function setup_fuzzy_mappings()
         rhs = helpers.fn_map(function()
           local dir_path = vfn.expand('%:p:h')
           if vim.startswith(dir_path, '/') then
-            require('telescope.builtin').find_files({cwd = dir_path})
+            require('telescope.builtin').find_files({search_dirs = {dir_path}})
           end
         end);
         opts = {silent = true};

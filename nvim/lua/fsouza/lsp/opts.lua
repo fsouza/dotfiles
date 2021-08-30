@@ -55,7 +55,7 @@ local cmds = {
     require('fsouza.lsp.diagnostics').list_workspace_diagnostics()
   end);
   fuzzy_workspace_diagnostics = helpers.fn_map(function()
-    require('fsouza.fzf-lua').lsp_workspace_diagnostics()
+    require('telescope.builtin').lsp_workspace_diagnostics()
   end);
   clear_buffer_diagnostics = helpers.fn_map(function()
     require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics()
@@ -88,7 +88,7 @@ local cmds = {
     vim.lsp.buf.clear_references()
   end);
   list_document_symbols = helpers.fn_map(function()
-    require('fsouza.fzf-lua').lsp_document_symbols()
+    require('telescope.builtin').lsp_document_symbols()
   end);
   find_references = helpers.fn_map(function()
     vim.lsp.buf.references()
@@ -120,7 +120,7 @@ local cmds = {
   query_workspace_symbols = helpers.fn_map(function()
     local query = vim.fn.input([[query：]])
     if query ~= '' then
-      require('fsouza.fzf-lua').lsp_workspace_symbols({query = query})
+      require('telescope.builtin').lsp_workspace_symbols({query = query})
     end
   end);
   symbols_outline = helpers.fn_map(function()

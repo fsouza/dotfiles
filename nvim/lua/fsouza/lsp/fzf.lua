@@ -1,20 +1,20 @@
+local conf = require('telescope.config').values
+local finders = require('telescope.finders')
+local make_entry = require('telescope.make_entry')
+local pickers = require('telescope.pickers')
+
 local M = {}
 
 function M.send(items, prompt)
   prompt = prompt .. '：'
+  local opts = {}
 
-  -- import this early to make sure we're properly configured.
-  local fzf_files = require('fsouza.fzf-lua').fzf_files
-
-  local config = require('fzf-lua.config')
-  local core = require('fzf-lua.core')
-  local opts = config.normalize_opts({prompt = prompt; cwd = vim.fn.getcwd()}, config.globals.lsp)
-  opts.fzf_fn = require('fsouza.tablex').map(function(item)
-    item = core.make_entry_lcol(opts, item)
-    return core.make_entry_file(opts, item)
-  end, items)
-  opts = core.set_fzf_line_args(opts)
-  fzf_files(opts)
+  pickers.new(opts, {
+    prompt_title = prompt;
+    finder = finders.new_table {results = items; entry_maker = make_entry.gen_from_quickfix(opts)};
+    previewer = conf.qflist_previewer(opts);
+    sorter = conf.generic_sorter(opts);
+  }):find()
 end
 
 return M
