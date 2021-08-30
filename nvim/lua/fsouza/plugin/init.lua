@@ -134,6 +134,7 @@ end
 
 local function setup_shortcuts()
   require('fsouza.plugin.shortcut').register('Dotfiles', vfn.expand('~/.dotfiles'))
+  require('fsouza.plugin.shortcut').register('Paqs', require('fsouza.packed').paq_dir)
 end
 
 local function setup_terminal_mappings_and_commands()
