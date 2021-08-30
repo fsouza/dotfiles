@@ -11,21 +11,21 @@ local function setup_fuzzy_mappings()
       {
         lhs = '<leader>zb';
         rhs = helpers.fn_map(function()
-          require('fsouza.fzf-lua').buffers()
+          require('telescope.builtin').buffers()
         end);
         opts = {silent = true};
       };
       {
         lhs = '<leader>zz';
         rhs = helpers.fn_map(function()
-          require('fsouza.fzf-lua').files()
+          require('telescope.builtin').find_files()
         end);
         opts = {silent = true};
       };
       {
         lhs = '<leader>;';
         rhs = helpers.fn_map(function()
-          require('fsouza.fzf-lua').commands()
+          require('telescope.builtin').commands()
         end);
         opts = {silent = true};
       };
@@ -34,7 +34,7 @@ local function setup_fuzzy_mappings()
         rhs = helpers.fn_map(function()
           local dir_path = vfn.expand('%:p:h')
           if vim.startswith(dir_path, '/') then
-            require('fsouza.fzf-lua').files({cwd = dir_path})
+            require('telescope.builtin').find_files({cwd = dir_path})
           end
         end);
         opts = {silent = true};
@@ -44,10 +44,7 @@ local function setup_fuzzy_mappings()
         rhs = helpers.fn_map(function()
           local search = vfn.input([[rg：]])
           if search ~= '' then
-            require('fsouza.fzf-lua').grep({
-              search = search;
-              raw_cmd = string.format([[rg %s -- %s]], rg_opts, vfn.shellescape(search));
-            })
+            require('telescope.builtin').grep_string({search = search; use_regex = true})
           end
         end);
         opts = {silent = true};
@@ -55,7 +52,7 @@ local function setup_fuzzy_mappings()
       {
         lhs = '<leader>gw';
         rhs = helpers.fn_map(function()
-          require('fsouza.fzf-lua').grep_cword({rg_opts = rg_opts})
+          require('telescope.builtin').grep_string()
         end);
         opts = {silent = true};
       };
@@ -64,6 +61,7 @@ local function setup_fuzzy_mappings()
       {
         lhs = '<leader>gw';
         rhs = helpers.fn_map(function()
+          -- TODO: telescope doesn't support this yet. Send a PR?
           require('fsouza.fzf-lua').grep_visual({rg_opts = rg_opts})
         end);
         opts = {silent = true};
@@ -190,7 +188,6 @@ do
     require('fsouza.lib.cleanup').setup()
   end)
   schedule(setup_editorconfig)
-  schedule(setup_fuzzy_mappings)
   schedule(setup_git_messenger)
   schedule(setup_hlyank)
   schedule(function()
@@ -214,6 +211,7 @@ do
   schedule(function()
     require('fsouza.plugin.telescope')
   end)
+  schedule(setup_fuzzy_mappings)
   schedule(trigger_ft)
   schedule(function()
     vcmd([[doautocmd User PluginReady]])

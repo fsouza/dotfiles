@@ -26,10 +26,14 @@ end
 
 local function edit_or_qf(prompt_bufnr)
   local actions = require('telescope.actions')
-  local actions_state = require('telescope.actions.state')
+  local action_state = require('telescope.actions.state')
 
-  local picker = actions_state.get_current_picker(prompt_bufnr)
+  local picker = action_state.get_current_picker(prompt_bufnr)
   local selected = picker:get_multi_selection()
+
+  if #selected < 1 then
+    selected = {action_state.get_selected_entry()}
+  end
 
   actions.close(prompt_bufnr)
 
@@ -49,16 +53,13 @@ do
     defaults = {
       mappings = {
         i = {
-          -- close on escape
           ['<esc>'] = actions.close;
+          ['<c-a>'] = actions.toggle_all;
           ['<tab>'] = actions.toggle_selection + actions.move_selection_next;
           ['<s-tab>'] = actions.toggle_selection + actions.move_selection_previous;
           ['<cr>'] = edit_or_qf;
-        };
-        n = {
-          ['<tab>'] = actions.toggle_selection + actions.move_selection_next;
-          ['<s-tab>'] = actions.toggle_selection + actions.move_selection_previous;
-          ['<cr>'] = edit_or_qf;
+          ['<c-d>'] = actions.preview_scrolling_down;
+          ['<c-u>'] = actions.preview_scrolling_up;
         };
       };
     };
