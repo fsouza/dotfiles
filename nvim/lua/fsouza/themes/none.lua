@@ -120,6 +120,16 @@ local function custom_groups(ns)
   nvim_set_hl(ns, 'HlYank', {bg = colors.orange})
 end
 
+local function telescope(ns)
+  nvim_set_hl(ns, 'TelescopeSelection', {bold = true})
+  nvim_set_hl(ns, 'TelescopeSelectionCaret', {bold = true})
+  nvim_set_hl(ns, 'TelescopeMultiSelection', {link = 'Visual'})
+  nvim_set_hl(ns, 'TelescopeMatching', {fg = colors.red})
+  nvim_set_hl(ns, 'TelescopeNormal', {fg = colors.black})
+  nvim_set_hl(ns, 'TelescopePreviewLine', {link = 'CursorLineNr'})
+  nvim_set_hl(ns, 'TelescopePreviewMatch', {bold = true})
+end
+
 return function(name)
   name = name or 'fsouza__none'
   local ns = api.nvim_create_namespace(name)
@@ -128,5 +138,6 @@ return function(name)
   reversers(ns)
   language_highlights(ns)
   custom_groups(ns)
+  telescope(ns)
   return ns
 end
