@@ -149,7 +149,10 @@ local function attached(bufnr, client)
                    {lhs = '<leader>t'; rhs = cmds.list_document_symbols; opts = {silent = true}})
       table.insert(mappings.n, {
         lhs = '<leader>v';
-        rhs = helpers.cmd_map('Vista nvim_lsp');
+        rhs = helpers.fn_map(function()
+          vim.cmd('packadd vista.vim')
+          vim.cmd('Vista nvim_lsp')
+        end);
         opts = {silent = true};
       })
     end

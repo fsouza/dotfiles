@@ -12,7 +12,6 @@ local M = {
     {'justinmk/vim-dirvish'; as = 'vim-dirvish'};
     {'justinmk/vim-sneak'; as = 'vim-sneak'};
     {'kana/vim-textobj-user'; as = 'vim-textobj-user'};
-    {'liuchengxu/vista.vim'; as = 'vista.vim'};
     {'mattn/emmet-vim'; as = 'emmet-vim'};
     {'michaeljsmith/vim-indent-object'; as = 'vim-indent-object'};
     {'norcalli/nvim-colorizer.lua'; as = 'nvim-colorizer.lua'};
@@ -35,6 +34,7 @@ local M = {
 
     -- opt stuff
     {'ibhagwan/fzf-lua'; as = 'fzf-lua'; opt = true};
+    {'liuchengxu/vista.vim'; as = 'vista.vim'; opt = true};
     {'neovim/nvim-lspconfig'; as = 'nvim-lspconfig'; opt = true};
     {
       'nvim-treesitter/nvim-treesitter';
