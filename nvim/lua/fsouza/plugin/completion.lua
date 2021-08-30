@@ -41,11 +41,7 @@ local function setup(bufnr, sources)
     };
     snippet = {
       expand = function(args)
-        local luasnip = prequire('luasnip')
-        if not luasnip then
-          luasnip = require('luasnip')
-        end
-        luasnip.lsp_expand(args.body)
+        require('luasnip').lsp_expand(args.body)
       end;
     };
     sources = sources;
