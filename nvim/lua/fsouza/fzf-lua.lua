@@ -50,11 +50,12 @@ local function fzf_lua()
       grep = {file_icons = false; git_icons = false; actions = actions};
       oldfiles = {file_icons = false; git_icons = false; actions = actions};
       lsp = {file_icons = false; git_icons = false; actions = actions};
-      winopts = {win_height = 0.85; win_width = 0.90};
+      winopts = {win_height = 0.75; win_width = 0.90};
       previewers = {
         builtin = {
           keymap = {
             toggle_hide = '<c-h>';
+            toggle_full = '<c-o>';
             page_up = '<c-u>';
             page_down = '<c-d>';
             page_reset = '<c-r>';
