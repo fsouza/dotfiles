@@ -3,7 +3,6 @@ local vcmd = vim.cmd
 local api = vim.api
 local nvim_buf_get_option = api.nvim_buf_get_option
 local nvim_buf_set_option = api.nvim_buf_set_option
-local cmd = require('fsouza.lib.cmd')
 local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
@@ -111,7 +110,7 @@ local function set_config(bufnr)
     filename = string.format('%s/%s', vim.loop.cwd(), filename)
   end
 
-  cmd.run('editorconfig', {args = {filename}}, nil, function(result)
+  require('fsouza.lib.cmd').run('editorconfig', {args = {filename}}, nil, function(result)
     if result.exit_status ~= 0 then
       print(string.format('failed to run editorconfig: %d - %s', result.exit_status, result.stderr))
       return

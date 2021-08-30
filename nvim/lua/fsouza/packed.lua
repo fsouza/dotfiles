@@ -3,9 +3,9 @@ local vfn = vim.fn
 local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {
-  paq_dir = vim.fn.stdpath('data') .. '/site/pack/paqs/';
+  paq_dir = vfn.stdpath('data') .. '/site/pack/paqs/';
   paqs = {
-    {'savq/paq-nvim'};
+    {'savq/paq-nvim'; opt = true; as = 'paq-nvim'};
 
     {'chaoren/vim-wordmotion'};
     {'godlygeek/tabular'};
@@ -50,26 +50,42 @@ local M = {
   };
 }
 
-local data_dir = vfn.stdpath('data')
+local function download_paq(fn)
+  local paq_repo_dir = M.paq_dir .. 'opt/paq-nvim'
 
-local function download_paq()
-  local dir = string.format('%s/site/pack/paqs/start/paq-nvim', data_dir)
-  vfn.system(string.format('git clone https://github.com/savq/paq-nvim.git %s', dir))
-  vcmd('packadd! paq-nvim')
+  require('fsouza.lib.cmd').run('git', {
+    args = {
+      'clone';
+      '--depth=1';
+      '--recurse-submodules';
+      'https://github.com/savq/paq-nvim.git';
+      paq_repo_dir;
+    };
+  }, nil, function(result)
+    if result.exit_status ~= 0 then
+      error(string.format('failed to clone paq-nvim: %d - %s', result.exit_status, result.stderr))
+    end
+    vcmd('packadd! paq-nvim')
+    fn(require('paq'))
+  end)
 end
 
-local function load_paq()
-  if not pcall(require, 'paq') then
-    download_paq()
+local function with_paq(fn)
+  local paq = prequire('paq')
+  if paq then
+    fn(paq)
+    return
   end
-  return require('paq')
+
+  download_paq(fn)
 end
 
 function M.setup()
-  local paq = load_paq()
-  paq:setup({paq_dir = M.paq_dir})
-  paq(M.paqs)
-  paq:sync()
+  with_paq(function(paq)
+    paq:setup({paq_dir = M.paq_dir})
+    paq(M.paqs)
+    paq:sync()
+  end)
 end
 
 function M.repack()
