@@ -5,24 +5,24 @@ local helpers = require('fsouza.lib.nvim_helpers')
 local M = {
   paq_dir = vim.fn.stdpath('data') .. '/site/pack/paqs/';
   paqs = {
-    {'savq/paq-nvim'; as = 'paq-nvim'};
+    {'savq/paq-nvim'};
 
-    {'chaoren/vim-wordmotion'; as = 'vim-wordmotion'};
-    {'godlygeek/tabular'; as = 'tabular'};
-    {'justinmk/vim-dirvish'; as = 'vim-dirvish'};
-    {'justinmk/vim-sneak'; as = 'vim-sneak'};
-    {'kana/vim-textobj-user'; as = 'vim-textobj-user'};
-    {'mattn/emmet-vim'; as = 'emmet-vim'};
-    {'michaeljsmith/vim-indent-object'; as = 'vim-indent-object'};
-    {'norcalli/nvim-colorizer.lua'; as = 'nvim-colorizer.lua'};
-    {'rhysd/git-messenger.vim'; as = 'git-messenger.vim'};
-    {'thinca/vim-textobj-between'; as = 'vim-textobj-between'};
-    {'tpope/vim-commentary'; as = 'vim-commentary'};
-    {'tpope/vim-fugitive'; as = 'vim-fugitive'};
-    {'tpope/vim-repeat'; as = 'vim-repeat'};
-    {'tpope/vim-rhubarb'; as = 'vim-rhubarb'};
-    {'tpope/vim-surround'; as = 'vim-surround'};
-    {'vijaymarupudi/nvim-fzf'; as = 'nvim-fzf'};
+    {'chaoren/vim-wordmotion'};
+    {'godlygeek/tabular'};
+    {'justinmk/vim-dirvish'};
+    {'justinmk/vim-sneak'};
+    {'kana/vim-textobj-user'};
+    {'mattn/emmet-vim'};
+    {'michaeljsmith/vim-indent-object'};
+    {'norcalli/nvim-colorizer.lua'};
+    {'rhysd/git-messenger.vim'};
+    {'thinca/vim-textobj-between'};
+    {'tpope/vim-commentary'};
+    {'tpope/vim-fugitive'};
+    {'tpope/vim-repeat'};
+    {'tpope/vim-rhubarb'};
+    {'tpope/vim-surround'};
+    {'vijaymarupudi/nvim-fzf'};
 
     -- completion stuff
     {'hrsh7th/nvim-cmp'; as = 'nvim-cmp'};
@@ -34,7 +34,7 @@ local M = {
 
     -- opt stuff
     {'ibhagwan/fzf-lua'; as = 'fzf-lua'; opt = true};
-    {'liuchengxu/vista.vim'; as = 'vista.vim'; opt = true};
+    {'liuchengxu/vista.vim'; opt = true};
     {'neovim/nvim-lspconfig'; as = 'nvim-lspconfig'; opt = true};
     {
       'nvim-treesitter/nvim-treesitter';

@@ -36,7 +36,7 @@ local function add_paqs_opt_to_path()
   local opt_dir = packed.paq_dir .. 'opt'
 
   for _, paq in ipairs(packed.paqs) do
-    if paq.opt then
+    if paq.opt and paq.as then
       local paq_dir = opt_dir .. '/' .. paq.as
       package.path =
         package.path .. ';' .. paq_dir .. '/lua/?.lua;' .. paq_dir .. '/lua/?/?.lua;' .. paq_dir ..
