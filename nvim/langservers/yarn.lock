@@ -38,14 +38,14 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@fsouza/prettierd@^0.15.0":
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.15.0.tgz#42ea16cf244b7ac1590529e2507373fde71b06c9"
-  integrity sha512-ZsWTJqBtkw2mYuUDlpOFlYR2fOPX4AO1taTdq77/gXp4EyVheG8wLAPbIWS57It2R3nI6m4IOi03V4bX+AQMPQ==
+"@fsouza/prettierd@^0.16.0":
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.16.0.tgz#23df6f62ef84f17990e5c214c969fa0b32578447"
+  integrity sha512-ISBECcmds1SZ0CQGNFaih954Ul7Ig2XfwAGSeWx7/0xS7l3Nm7S6FOV7JPZgfzIebHgk5gjkONFFxzdotbGHbA==
   dependencies:
     core_d "^3.2.0"
     nanolru "^1.0.0"
-    prettier "^2.2.1"
+    prettier "^2.3.2"
 
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
@@ -1652,10 +1652,10 @@ prettier@2.0.5:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.0.5.tgz#d6d56282455243f2f92cc1716692c08aa31522d4"
   integrity sha512-7PtVymN48hGcO4fGjybyBSIWDsLU4H4XlvOHfq91pz9kkGlonzwTfYkaIEwiRg/dAJF9YlbsduBAgtYLi+8cFg==
 
-prettier@^2.2.1:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.3.0.tgz#b6a5bf1284026ae640f17f7ff5658a7567fc0d18"
-  integrity sha512-kXtO4s0Lz/DW/IJ9QdWhAf7/NmPWQXkFr/r/WkR3vyI+0v8amTDxiaQSLzs8NBlytfLWX/7uQUMIW677yLKl4w==
+prettier@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.3.2.tgz#ef280a05ec253712e486233db5c6f23441e7342d"
+  integrity sha512-lnJzDfJ66zkMy58OL5/NY5zp70S7Nz6KqcKkXYzn2tMVrNxvbqaBpg7H3qHaLxCJ5lNMsGuM8+ohS7cZrthdLQ==
 
 progress@^2.0.0:
   version "2.0.3"
