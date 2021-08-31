@@ -113,7 +113,7 @@ local function setup_spell()
       command = helpers.fn_cmd(function()
         local bufnr = vim.api.nvim_get_current_buf()
         vim.o.spell = true
-        require('fsouza.plugin.completion').on_attach(bufnr, {{name = 'buffer'}; {name = 'tmux'}})
+        require('fsouza.plugin.completion').on_attach(bufnr, {'buffer'; 'tmux'})
       end);
     };
   })

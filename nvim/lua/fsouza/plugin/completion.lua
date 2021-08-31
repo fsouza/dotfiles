@@ -4,6 +4,22 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
+local default_source_names = {'nvim_lsp'; 'buffer'}
+
+local function resolve_sources(source_names)
+  local default_opts = {
+    buffer = {
+      get_bufnrs = function()
+        return api.nvim_list_bufs()
+      end;
+    };
+  }
+
+  return vim.tbl_map(function(source_name)
+    return {name = source_name; opts = default_opts[source_name]}
+  end, source_names or default_source_names)
+end
+
 local function load_sources(cmp, sources)
   local source_loaders = {
     buffer = function()
@@ -30,8 +46,6 @@ local function setup(bufnr, sources)
   vim.cmd('packadd nvim-cmp')
 
   local cmp = require('cmp')
-  sources = sources or {{name = 'nvim_lsp'}; {name = 'buffer'}}
-
   load_sources(cmp, sources)
 
   require('cmp.config').set_buffer({
@@ -46,6 +60,12 @@ local function setup(bufnr, sources)
     sources = sources;
     documentation = {border = 'none'};
     preselect = cmp.PreselectMode.None;
+    formatting = {
+      format = function(entry, vim_item)
+        vim_item.menu = ({buffer = '[Buffer]'; nvim_lsp = '[LSP]'})[entry.source.name]
+        return vim_item
+      end;
+    };
   }, bufnr)
 end
 
@@ -64,8 +84,8 @@ local cr_cmd = helpers.ifn_map(function()
   return api.nvim_replace_termcodes(r, true, false, true)
 end)
 
-function M.on_attach(bufnr, sources)
-  setup(bufnr, sources)
+function M.on_attach(bufnr, source_names)
+  setup(bufnr, resolve_sources(source_names))
 
   require('fsouza.color').set_popup_cb(function()
     for _, win in ipairs(vim.api.nvim_list_wins()) do
