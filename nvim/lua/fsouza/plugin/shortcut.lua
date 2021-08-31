@@ -2,7 +2,7 @@ local api = vim.api
 local vcmd = vim.cmd
 local loop = vim.loop
 
-local M = {}
+local M = {registry = {}}
 
 local function fzf_dir(directory, cd)
   if cd then
@@ -13,8 +13,9 @@ local function fzf_dir(directory, cd)
   end
 end
 
-function M.register(command, path, cd)
-  M[command] = function()
+function M.register(command, path)
+  M.registry[command] = function(bang)
+    local cd = bang == '!'
     loop.fs_stat(path, function(err, stat)
       if err then
         return
@@ -29,8 +30,9 @@ function M.register(command, path, cd)
       end)
     end)
   end
-  vcmd(string.format([[command! %s lua require('fsouza.plugin.shortcut')['%s']()]], command,
-                     command))
+  vcmd(string.format(
+         [[command! -bang %s lua require('fsouza.plugin.shortcut').registry['%s'](vim.fn.expand('<bang>'))]],
+         command, command))
 end
 
 return M
