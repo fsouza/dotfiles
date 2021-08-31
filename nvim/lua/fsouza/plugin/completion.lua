@@ -5,7 +5,6 @@ local helpers = require('fsouza.lib.nvim_helpers')
 local M = {}
 
 local default_source_names = {'nvim_lsp'; 'buffer'}
-
 local function resolve_sources(source_names)
   local default_opts = {
     buffer = {
@@ -13,6 +12,7 @@ local function resolve_sources(source_names)
         return api.nvim_list_bufs()
       end;
     };
+    tmux = {all_panes = true};
   }
 
   return vim.tbl_map(function(source_name)
@@ -62,7 +62,8 @@ local function setup(bufnr, sources)
     preselect = cmp.PreselectMode.None;
     formatting = {
       format = function(entry, vim_item)
-        vim_item.menu = ({buffer = '[Buffer]'; nvim_lsp = '[LSP]'})[entry.source.name]
+        local menu = ({nvim_lsp = 'LSP'})[entry.source.name] or entry.source.name
+        vim_item.menu = '「' .. menu .. '」'
         return vim_item
       end;
     };
