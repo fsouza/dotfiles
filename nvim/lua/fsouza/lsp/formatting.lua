@@ -8,6 +8,8 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local langservers_skip_set = {jsonls = true; tsserver = true}
 
+local langservers_org_imports = {gopls = true}
+
 local function should_skip_buffer(bufnr)
   local file_path = vim.api.nvim_buf_get_name(bufnr)
   local prefix = loop.cwd()
@@ -23,6 +25,10 @@ end
 
 local function should_skip_server(server_name)
   return langservers_skip_set[server_name] ~= nil
+end
+
+local function should_organize_imports(server_name)
+  return langservers_org_imports[server_name] ~= nil
 end
 
 local function formatting_params(bufnr)
@@ -47,6 +53,38 @@ local function buf_is_empty(bufnr)
   return #lines == 0 or (#lines == 1 and lines[1] == '')
 end
 
+local function organize_imports_and_write(client, bufnr)
+  local changed_tick = api.nvim_buf_get_changedtick(bufnr)
+  local params = vim.lsp.util.make_given_range_params({1; 1},
+                                                      {api.nvim_buf_line_count(bufnr); 2147483647})
+  params.context = {diagnostics = vim.lsp.diagnostic.get(bufnr, client.id)}
+
+  client.request('textDocument/codeAction', params, function(_, _, actions)
+    if changed_tick ~= api.nvim_buf_get_changedtick(bufnr) then
+      return
+    end
+
+    if not actions or vim.tbl_isempty(actions) then
+      return
+    end
+
+    local code_action = nil
+    for _, action in ipairs(actions) do
+      if action.kind == 'source.organizeImports' then
+        code_action = action
+        break
+      end
+    end
+
+    if code_action and code_action.edit then
+      api.nvim_buf_call(bufnr, function()
+        vim.lsp.util.apply_workspace_edit(code_action.edit)
+        vcmd('update')
+      end)
+    end
+  end, bufnr)
+end
+
 local function autofmt_and_write(client, bufnr)
   local enable = require('fsouza.lib.autofmt').is_enabled(bufnr)
   if not enable then
@@ -67,8 +105,13 @@ local function autofmt_and_write(client, bufnr)
           helpers.rewrite_wrap(function()
             lsp.util.apply_text_edits(result, bufnr)
           end)
+
           vcmd('update')
         end)
+
+        if should_organize_imports(client.name) then
+          organize_imports_and_write(client, bufnr)
+        end
       end
     end)
   end)
