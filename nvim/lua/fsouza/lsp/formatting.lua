@@ -6,7 +6,7 @@ local vcmd = vim.cmd
 local loop = vim.loop
 local helpers = require('fsouza.lib.nvim_helpers')
 
-local langservers_skip_set = {tsserver = true}
+local langservers_skip_set = {jsonls = true; tsserver = true}
 
 local function should_skip_buffer(bufnr)
   local file_path = vim.api.nvim_buf_get_name(bufnr)
