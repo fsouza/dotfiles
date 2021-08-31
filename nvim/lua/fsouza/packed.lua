@@ -11,12 +11,10 @@ local M = {
     {'godlygeek/tabular'};
     {'justinmk/vim-dirvish'};
     {'justinmk/vim-sneak'};
-    {'kana/vim-textobj-user'};
     {'mattn/emmet-vim'};
     {'michaeljsmith/vim-indent-object'};
     {'norcalli/nvim-colorizer.lua'};
     {'rhysd/git-messenger.vim'};
-    {'thinca/vim-textobj-between'};
     {'tpope/vim-commentary'};
     {'tpope/vim-fugitive'};
     {'tpope/vim-repeat'};
