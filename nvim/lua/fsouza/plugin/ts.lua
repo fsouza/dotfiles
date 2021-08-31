@@ -52,12 +52,6 @@ local function set_folding()
 end
 
 do
-  -- Still need packadd for treesitter because of how the parsers are loaded.
-  -- If only they'd allow us to customize the install location x)
-  --
-  -- We use packadd!, which shouldn't be too bad though.
-  vim.cmd([[packadd! nvim-treesitter]])
-
   local configs = require('nvim-treesitter.configs')
   configs.setup({
     highlight = {enable = false};
