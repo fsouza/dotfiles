@@ -69,13 +69,19 @@ do
       select = {
         enable = true;
         keymaps = {
-          am = '@function.outer';
-          im = '@function.inner';
+          af = '@function.outer';
+          ['if'] = '@function.inner';
           al = '@block.outer';
           il = '@block.inner';
           ac = '@class.outer';
           ic = '@class.inner';
         };
+      };
+      move = {
+        enable = true;
+        set_jumps = true;
+        goto_next_start = {['<leader>m'] = '@function.outer'};
+        goto_previous_start = {['<leader>M'] = '@function.outer'};
       };
       swap = {
         enable = true;
