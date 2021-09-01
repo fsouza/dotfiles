@@ -98,7 +98,19 @@ function M.on_attach(bufnr, source_names)
   end)
 
   vim.schedule(function()
-    helpers.create_mappings({i = {{lhs = '<cr>'; rhs = cr_cmd; opts = {noremap = true}}}}, bufnr)
+    helpers.create_mappings({
+      i = {
+        {lhs = '<cr>'; rhs = cr_cmd; opts = {noremap = true}};
+        {
+          lhs = '<c-x><c-o>';
+          rhs = helpers.ifn_map(function()
+            require('cmp').complete()
+            return ''
+          end);
+          opts = {noremap = true};
+        };
+      };
+    }, bufnr)
   end)
 end
 
