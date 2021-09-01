@@ -1,5 +1,5 @@
 add_trailing_comma
-git+https://github.com/fsouza/autoflake.git@support-stdin
+autoimport
 autopep8
 black
 flake8
