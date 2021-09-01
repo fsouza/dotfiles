@@ -50,9 +50,10 @@ local function get_isort(args)
   }
 end
 
-local function get_autoimport()
+local function get_autoflake()
   return {
-    formatCommand = string.format('%s -', get_python_bin('autoimport'));
+    formatCommand = string.format('%s --stdin-display-name ${INPUT} --remove-all-unused-imports -',
+                                  get_python_bin('autoflake'));
     formatStdin = true;
     rootMarkers = default_root_markers;
   }
@@ -67,7 +68,7 @@ local function get_flake8(args)
     lintSource = 'flake8';
     lintFormats = {'%f:%l:%c: %m'};
     rootMarkers = {'.flake8'; '.git'; ''};
-  }, get_autoimport
+  }, get_autoflake
 end
 
 local function get_add_trailing_comma(args)
@@ -218,10 +219,10 @@ local function get_python_tools()
   if not loop.fs_stat(pre_commit_config_file_path) then
     return {
       get_flake8();
-      get_autoimport();
       get_black();
       get_add_trailing_comma();
       get_reorder_python_imports();
+      get_autoflake();
     }
   end
 
@@ -234,7 +235,7 @@ local function get_python_tools()
     ['https://github.com/asottile/reorder_python_imports'] = get_reorder_python_imports;
     ['https://github.com/pre-commit/mirrors-autopep8'] = get_autopep8;
     ['https://github.com/pre-commit/mirrors-isort'] = get_isort;
-    ['https://github.com/lyz-code/autoimport'] = get_autoimport;
+    ['https://github.com/myint/autoflake'] = get_autoflake;
   }
   local local_repos_mapping = {['black'] = 'https://github.com/psf/black'}
   local pre_commit_config = read_precommit_config(pre_commit_config_file_path)
