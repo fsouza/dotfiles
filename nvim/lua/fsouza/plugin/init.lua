@@ -3,6 +3,9 @@ local vfn = vim.fn
 local helpers = require('fsouza.lib.nvim_helpers')
 
 local function setup_fuzzy_mappings()
+  local rg_opts =
+    [[--column -n --hidden --no-heading --color=always -S --glob '!.git' --glob '!.hg']]
+
   helpers.create_mappings({
     n = {
       {
@@ -43,8 +46,7 @@ local function setup_fuzzy_mappings()
           if search ~= '' then
             require('fsouza.fzf-lua').grep({
               search = search;
-              raw_cmd = [[rg --column -n --hidden --no-heading --color=always -S --glob '!.git' --glob '!.hg' -- ]] ..
-                vfn.shellescape(search);
+              raw_cmd = string.format([[rg %s -- %s]], rg_opts, vfn.shellescape(search));
             })
           end
         end);
@@ -53,7 +55,7 @@ local function setup_fuzzy_mappings()
       {
         lhs = '<leader>gw';
         rhs = helpers.fn_map(function()
-          require('fsouza.fzf-lua').grep_cword()
+          require('fsouza.fzf-lua').grep_cword({rg_opts = rg_opts})
         end);
         opts = {silent = true};
       };
@@ -62,7 +64,7 @@ local function setup_fuzzy_mappings()
       {
         lhs = '<leader>gw';
         rhs = helpers.fn_map(function()
-          require('fsouza.fzf-lua').grep_visual()
+          require('fsouza.fzf-lua').grep_visual({rg_opts = rg_opts})
         end);
         opts = {silent = true};
       };
