@@ -241,12 +241,18 @@ end
 function M.with_defaults(opts)
   local capabilities = vim.lsp.protocol.make_client_capabilities()
 
-  return vim.tbl_extend('keep', opts, {
+  capabilities.workspace.executeCommand = {dynamicRegistration = false}
+
+  return vim.tbl_extend('keep', {
     handlers = require('fsouza.lsp.handlers');
     on_attach = on_attach;
-    capabilities = capabilities;
+    capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities, {
+      snippetSupport = false;
+      preselectSupport = false;
+      commitCharactersSupport = false;
+    });
     root_dir = vim.loop.cwd;
-  });
+  }, opts);
 end
 
 M.root_pattern_with_fallback = function(...)
