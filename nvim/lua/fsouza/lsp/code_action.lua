@@ -34,7 +34,9 @@ local function handle_actions(actions)
 end
 
 local function code_action_for_buf()
-  vim.lsp.buf.range_code_action(nil, {1; 1}, {api.nvim_buf_line_count(0); 2147483647})
+  local bufnr = api.nvim_get_current_buf()
+  vim.lsp.buf.range_code_action({diagnostics = vim.lsp.diagnostic.get(bufnr)}, {1; 1},
+                                {api.nvim_buf_line_count(0); 2147483647})
 end
 
 local function code_action_for_line(cb)
@@ -45,6 +47,10 @@ local function code_action_for_line(cb)
 end
 
 function M.code_action()
+  vim.lsp.handlers['textDocument/codeAction'] = function(_, _, actions)
+    handle_actions(actions)
+  end
+
   code_action_for_line(function(_, _, actions)
     if not actions or vim.tbl_isempty(actions) then
       return code_action_for_buf(function(_, _, buf_actions)
