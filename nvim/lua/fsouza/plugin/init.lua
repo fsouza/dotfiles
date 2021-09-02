@@ -122,10 +122,10 @@ local function setup_spell()
 end
 
 local function setup_editorconfig()
-  require('fsouza.plugin.editor_config').enable()
+  require('fsouza.plugin.editorconfig').enable()
   vim.schedule(function()
-    vcmd([[command! EnableEditorConfig lua require('fsouza.plugin.editor_config').enable()]])
-    vcmd([[command! DisableEditorConfig lua require('fsouza.plugin.editor_config').disable()]])
+    vcmd([[command! EnableEditorConfig lua require('fsouza.plugin.editorconfig').enable()]])
+    vcmd([[command! DisableEditorConfig lua require('fsouza.plugin.editorconfig').disable()]])
   end)
 end
 
