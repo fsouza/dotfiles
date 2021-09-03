@@ -27,11 +27,9 @@ local function edit_file(entry)
     end
   end
 
-  file = vim.fn.fnameescape(file)
+  vcmd('edit ' .. vim.fn.fnameescape(file))
   if line and col then
-    vcmd(string.format([[edit +call\ cursor(%d,\ %d) %s]], tonumber(line), tonumber(col), file))
-  else
-    vcmd('edit ' .. file)
+    vim.api.nvim_win_set_cursor(0, {tonumber(line); tonumber(col) - 1})
   end
 end
 
