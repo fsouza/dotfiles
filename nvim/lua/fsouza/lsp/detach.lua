@@ -62,7 +62,7 @@ function M.restart()
 
   require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics()
   for _, bufnr in ipairs(api.nvim_list_bufs()) do
-    detach(bufnr)
+    pcall(detach, bufnr)
   end
 end
 
