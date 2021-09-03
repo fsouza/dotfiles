@@ -87,7 +87,7 @@ local function set_opts(bufnr, opts)
   end
 
   vim.schedule(function()
-    if nvim_buf_get_option(bufnr, 'modifiable') then
+    if api.nvim_buf_is_valid(bufnr) and nvim_buf_get_option(bufnr, 'modifiable') then
       for k, v in pairs(vim_opts) do
         nvim_buf_set_option(bufnr, k, v)
       end
