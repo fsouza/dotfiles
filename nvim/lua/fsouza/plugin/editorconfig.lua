@@ -51,7 +51,10 @@ local function handle_whitespaces(bufnr, v)
       command = helpers.fn_cmd(trim_whitespace);
     })
   end
-  helpers.augroup('editorconfig_trim_trailing_whitespace_' .. bufnr, commands)
+
+  if api.nvim_buf_is_valid(bufnr) then
+    helpers.augroup('editorconfig_trim_trailing_whitespace_' .. bufnr, commands)
+  end
 end
 
 local function set_opts(bufnr, opts)
