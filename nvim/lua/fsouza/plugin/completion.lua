@@ -4,7 +4,6 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
-local default_source_names = {'nvim_lsp'; 'buffer'}
 local function resolve_sources(source_names)
   local default_opts = {
     buffer = {
@@ -16,7 +15,7 @@ local function resolve_sources(source_names)
 
   return vim.tbl_map(function(source_name)
     return {name = source_name; opts = default_opts[source_name]}
-  end, source_names or default_source_names)
+  end, source_names)
 end
 
 local function load_sources(cmp, sources)
