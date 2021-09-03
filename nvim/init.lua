@@ -79,7 +79,6 @@ local function global_options()
   vim.o.incsearch = true
   vim.o.wildmenu = true
   vim.o.wildmode = 'list:longest'
-  vim.o.smarttab = true
   vim.o.backup = false
   vim.o.inccommand = 'nosplit'
   vim.o.jumpoptions = 'stack'
