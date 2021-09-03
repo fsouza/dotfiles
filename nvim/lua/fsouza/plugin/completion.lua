@@ -8,7 +8,9 @@ local function resolve_sources(source_names)
   local default_opts = {
     buffer = {
       get_bufnrs = function()
-        return {api.nvim_get_current_buf()}
+        return vim.tbl_map(function(win)
+          return api.nvim_win_get_buf(win)
+        end, api.nvim_list_wins())
       end;
     };
   }
