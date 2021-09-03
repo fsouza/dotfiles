@@ -12,7 +12,6 @@ local function resolve_sources(source_names)
         return api.nvim_list_bufs()
       end;
     };
-    tmux = {all_panes = true};
   }
 
   return vim.tbl_map(function(source_name)
@@ -24,9 +23,6 @@ local function load_sources(cmp, sources)
   local source_loaders = {
     buffer = function()
       cmp.register_source('buffer', require('cmp_buffer').new())
-    end;
-    tmux = function()
-      cmp.register_source('tmux', require('compe_tmux'))
     end;
     nvim_lsp = function()
       require('cmp_nvim_lsp').setup()
