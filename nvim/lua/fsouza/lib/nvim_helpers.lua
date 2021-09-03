@@ -40,9 +40,7 @@ function M.create_mappings(mappings, bufnr)
   local fn = api.nvim_set_keymap
   if bufnr then
     fn = function(...)
-      if api.nvim_buf_is_valid(bufnr) then
-        api.nvim_buf_set_keymap(bufnr, ...)
-      end
+      api.nvim_buf_set_keymap(bufnr, ...)
     end
   end
 
@@ -57,9 +55,7 @@ function M.remove_mappings(mappings, bufnr)
   local fn = api.nvim_del_keymap
   if bufnr then
     fn = function(...)
-      if api.nvim_buf_is_valid(bufnr) then
-        api.nvim_buf_del_keymap(bufnr, ...)
-      end
+      api.nvim_buf_del_keymap(bufnr, ...)
     end
   end
 
