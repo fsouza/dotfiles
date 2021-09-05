@@ -112,11 +112,7 @@ local function setup_spell()
     {
       events = {'FileType'};
       targets = {'gitcommit'; 'markdown'; 'text'};
-      command = helpers.fn_cmd(function()
-        local bufnr = vim.api.nvim_get_current_buf()
-        vim.o.spell = true
-        require('fsouza.plugin.completion').on_attach(bufnr, {'buffer'})
-      end);
+      command = [[setlocal spell]];
     };
   })
 end

@@ -111,8 +111,8 @@ local function attached(bufnr, client)
     end
 
     if client.resolved_capabilities.completion then
-      require('fsouza.plugin.completion').on_attach(bufnr, {'nvim_lsp'; 'buffer'})
-      register_detach(require('fsouza.plugin.completion').on_detach)
+      require('fsouza.lsp.completion').on_attach(bufnr, {'nvim_lsp'; 'buffer'})
+      register_detach(require('fsouza.lsp.completion').on_detach)
     end
 
     if client.resolved_capabilities.rename ~= nil and client.resolved_capabilities.rename ~= false then

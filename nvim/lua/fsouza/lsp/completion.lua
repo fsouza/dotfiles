@@ -4,48 +4,17 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
-local function resolve_sources(source_names)
-  local default_opts = {
-    buffer = {
-      get_bufnrs = function()
-        return vim.tbl_map(function(win)
-          return api.nvim_win_get_buf(win)
-        end, api.nvim_list_wins())
-      end;
-    };
-  }
-
-  return vim.tbl_map(function(source_name)
-    return {name = source_name; opts = default_opts[source_name]}
-  end, source_names)
+local function load_lsp_source()
+  require('cmp_nvim_lsp').setup()
 end
 
-local function load_sources(cmp, sources)
-  local source_loaders = {
-    buffer = function()
-      cmp.register_source('buffer', require('cmp_buffer').new())
-    end;
-    nvim_lsp = function()
-      require('cmp_nvim_lsp').setup()
-    end;
-  }
-
-  for _, source in ipairs(sources) do
-    local load = source_loaders[source.name]
-
-    if load then
-      load()
-    end
-  end
-end
-
-local function setup(bufnr, sources)
+local function setup(bufnr, autocomplete)
   vim.cmd('packadd nvim-cmp')
+  load_lsp_source()
 
   local cmp = require('cmp')
-  load_sources(cmp, sources)
-
   require('cmp.config').set_buffer({
+    completion = {autocomplete = autocomplete or false};
     mapping = {
       ['<c-y>'] = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace; select = true});
     };
@@ -54,7 +23,7 @@ local function setup(bufnr, sources)
         require('luasnip').lsp_expand(args.body)
       end;
     };
-    sources = sources;
+    sources = {{name = 'nvim_lsp'}};
     documentation = {border = 'none'};
     preselect = cmp.PreselectMode.None;
     formatting = {
@@ -82,8 +51,26 @@ local cr_cmd = helpers.ifn_map(function()
   return api.nvim_replace_termcodes(r, true, false, true)
 end)
 
-function M.on_attach(bufnr, source_names)
-  setup(bufnr, resolve_sources(source_names))
+function M.on_attach(bufnr)
+  setup(bufnr)
+
+  local setup_cmd = helpers.fn_cmd(function()
+    setup(bufnr)
+  end)
+
+  local complete_cmd = helpers.ifn_map(function()
+    setup(bufnr, {require('cmp').TriggerEvent.TextChanged})
+    helpers.augroup('fsouza__completion_switch_off', {
+      {
+        events = {'InsertLeave'};
+        targets = {'<buffer>'};
+        modifiers = {'++once'};
+        command = setup_cmd;
+      };
+    })
+    require('cmp').complete()
+    return ''
+  end)
 
   require('fsouza.color').set_popup_cb(function()
     for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -98,14 +85,7 @@ function M.on_attach(bufnr, source_names)
     helpers.create_mappings({
       i = {
         {lhs = '<cr>'; rhs = cr_cmd; opts = {noremap = true}};
-        {
-          lhs = '<c-x><c-o>';
-          rhs = helpers.ifn_map(function()
-            require('cmp').complete()
-            return ''
-          end);
-          opts = {noremap = true};
-        };
+        {lhs = '<c-x><c-o>'; rhs = complete_cmd; opts = {noremap = true}};
       };
     }, bufnr)
   end)
