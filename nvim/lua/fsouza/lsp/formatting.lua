@@ -3,7 +3,7 @@ local M = {}
 local api = vim.api
 local lsp = vim.lsp
 local vcmd = vim.cmd
-local loop = vim.loop
+local vfn = vim.fn
 local helpers = require('fsouza.lib.nvim_helpers')
 
 local langservers_skip_set = {jsonls = true; tsserver = true}
@@ -12,7 +12,7 @@ local langservers_org_imports = {gopls = true}
 
 local function should_skip_buffer(bufnr)
   local file_path = vim.api.nvim_buf_get_name(bufnr)
-  local prefix = loop.cwd()
+  local prefix = vfn.getcwd()
   if not vim.endswith(prefix, '/') then
     prefix = prefix .. '/'
   end

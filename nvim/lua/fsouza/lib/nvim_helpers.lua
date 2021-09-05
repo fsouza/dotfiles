@@ -109,4 +109,8 @@ function M.rewrite_wrap(fn)
   vfn.winrestview(view)
 end
 
+function M.filereadable(p)
+  return vfn.filereadable(p) == 1
+end
+
 return M

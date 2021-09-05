@@ -110,7 +110,7 @@ local function set_config(bufnr)
 
   -- assume it's a relative path
   if not vim.startswith(filename, '/') then
-    filename = string.format('%s/%s', vim.loop.cwd(), filename)
+    filename = string.format('%s/%s', vfn.getcwd(), filename)
   end
 
   require('fsouza.lib.cmd').run('editorconfig', {args = {filename}}, nil, function(result)

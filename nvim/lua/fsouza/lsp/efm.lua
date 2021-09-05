@@ -6,6 +6,7 @@ local loop = vim.loop
 local default_root_markers = {'.git'}
 local config_dir = vfn.stdpath('config')
 local cache_dir = vfn.stdpath('cache')
+local helpers = require('fsouza.lib.nvim_helpers')
 
 local function quote_arg(arg)
   return string.format('"%s"', arg)
@@ -171,7 +172,7 @@ local function get_eslintd_config()
     '.eslintrc.json';
   }
   for _, config_file in ipairs(eslint_config_files) do
-    if loop.fs_stat(config_file) then
+    if helpers.filereadable(config_file) then
       return {
         {
           formatCommand = string.format('%s --stdin --stdin-filename ${INPUT} --fix-to-stdout',
@@ -215,7 +216,7 @@ end
 
 local function get_python_tools()
   local pre_commit_config_file_path = '.pre-commit-config.yaml'
-  if not loop.fs_stat(pre_commit_config_file_path) then
+  if not helpers.filereadable(pre_commit_config_file_path) then
     return {
       get_flake8();
       get_black();
@@ -263,10 +264,10 @@ end
 
 local function get_lua_tools()
   local tools = {}
-  if loop.fs_stat('.luacheckrc') then
+  if helpers.filereadable('.luacheckrc') then
     table.insert(tools, get_luacheck())
   end
-  if loop.fs_stat('.lua-format') then
+  if helpers.filereadable('.lua-format') then
     table.insert(tools, get_luaformat())
   end
   return tools

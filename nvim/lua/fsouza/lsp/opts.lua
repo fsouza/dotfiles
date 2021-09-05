@@ -251,14 +251,16 @@ function M.with_defaults(opts)
       preselectSupport = false;
       commitCharactersSupport = false;
     });
-    root_dir = vim.loop.cwd;
+    root_dir = function()
+      return vim.fn.getcwd()
+    end;
   }, opts);
 end
 
 M.root_pattern_with_fallback = function(...)
   local find_root = require('lspconfig').util.root_pattern(...)
   return function(startpath)
-    return find_root(startpath) or vim.loop.cwd()
+    return find_root(startpath) or vim.fn.getcwd()
   end
 end
 

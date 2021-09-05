@@ -1,4 +1,6 @@
-local loop = vim.loop
+local vfn = vim.fn
+
+local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
@@ -11,7 +13,7 @@ local function set_from_env_var()
 end
 
 local function set_from_poetry()
-  if loop.fs_stat('poetry.lock') then
+  if helpers.filereadable('poetry.lock') then
     local f = io.popen('poetry env info -p 2>/dev/null', 'r')
     if f then
       local virtual_env = f:read()
@@ -23,7 +25,7 @@ local function set_from_poetry()
 end
 
 local function set_from_pipenv()
-  if loop.fs_stat('Pipfile.lock') then
+  if helpers.filereadable('Pipfile.lock') then
     local f = io.popen('pipenv --venv')
     if f then
       local virtual_env = f:read()
@@ -37,8 +39,8 @@ end
 local function set_from_venv_folder()
   local folders = {'venv'; '.venv'}
   for _, folder in pairs(folders) do
-    local venv_candidate = string.format('%s/%s', loop.cwd(), folder)
-    if loop.fs_stat(venv_candidate .. '/bin/python') then
+    local venv_candidate = string.format('%s/%s', vfn.getcwd(), folder)
+    if helpers.filereadable(venv_candidate .. '/bin/python') then
       return venv_candidate
     end
   end
