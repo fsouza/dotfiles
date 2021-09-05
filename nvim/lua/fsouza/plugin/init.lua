@@ -162,6 +162,11 @@ local function setup_terminal_mappings_and_commands()
   })
 end
 
+local function should_skip_ts_and_lsp()
+  local skip_fts = {'gitcommit'}
+  return vim.tbl_contains(skip_fts, vim.bo.filetype)
+end
+
 do
   local schedule = vim.schedule
   schedule(function()
@@ -184,13 +189,15 @@ do
     require('colorizer').setup({'css'; 'javascript'; 'html'; 'lua'; 'htmldjango'; 'yaml'})
   end)
   schedule(setup_terminal_mappings_and_commands)
-  schedule(function()
-    require('fsouza.lsp')
-  end)
-  schedule(function()
-    require('fsouza.plugin.ts')
-  end)
-  schedule(setup_lsp_commands)
+  if not should_skip_ts_and_lsp then
+    schedule(function()
+      require('fsouza.lsp')
+    end)
+    schedule(function()
+      require('fsouza.plugin.ts')
+    end)
+    schedule(setup_lsp_commands)
+  end
   schedule(trigger_ft)
   schedule(function()
     vcmd([[doautocmd User PluginReady]])
