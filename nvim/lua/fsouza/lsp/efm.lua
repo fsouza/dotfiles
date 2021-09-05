@@ -274,8 +274,30 @@ local function get_lua_tools()
   return tools
 end
 
+local prettierd_fts = {
+  'css';
+  'graphql';
+  'html';
+  'javascript';
+  'json';
+  'typescript';
+  'typescriptreact';
+  'yaml';
+}
+
+local function get_filetypes()
+  return vim.tbl_flatten({
+    'bzl';
+    'dune';
+    'lua';
+    'python';
+    'sh';
+    prettierd_fts;
+  })
+end
+
 local function get_settings()
-  local settings = {lintDebounce = 250000000; rootMarkers = default_root_markers; languages = {}}
+  local settings = M.basic_settings()
   local function add_if_not_empty(language, tool)
     if tool.formatCommand or tool.lintCommand then
       local tools = settings.languages[language] or {}
@@ -305,21 +327,15 @@ local function get_settings()
   end
 
   local prettierd = get_prettierd()
-  local prettierd_fts = {
-    'css';
-    'graphql';
-    'html';
-    'javascript';
-    'json';
-    'typescript';
-    'typescriptreact';
-    'yaml';
-  }
   for _, ft in ipairs(prettierd_fts) do
     add_if_not_empty(ft, prettierd)
   end
 
   return settings
+end
+
+function M.basic_settings()
+  return {lintDebounce = 250000000; rootMarkers = default_root_markers; languages = {}}, get_filetypes()
 end
 
 function M.gen_config()

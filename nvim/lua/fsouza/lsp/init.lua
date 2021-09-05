@@ -128,12 +128,17 @@ do
       };
     }))
 
-    local settings, filetypes = require('fsouza.lsp.efm').gen_config()
+    local settings, filetypes = require('fsouza.lsp.efm').basic_settings()
     lsp.efm.setup(opts.with_defaults({
       cmd = {get_cache_cmd('efm-langserver')};
       init_options = {documentFormatting = true};
       settings = settings;
       filetypes = filetypes;
+      on_init = function(client)
+        client.config.settings = require('fsouza.lsp.efm').gen_config()
+        client.notify('workspace/didChangeConfiguration', {settings = client.config.settings})
+        return true
+      end;
     }))
   end)
 
