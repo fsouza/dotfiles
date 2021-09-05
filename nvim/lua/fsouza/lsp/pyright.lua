@@ -91,7 +91,9 @@ end
 local function detect_python_interpreter(cb)
   detect_virtualenv(function(virtualenv)
     if virtualenv then
-      vim.env.VIRTUAL_ENV = virtualenv
+      vim.schedule(function()
+        vim.env.VIRTUAL_ENV = virtualenv
+      end)
       cb(string.format('%s/bin/python', virtualenv))
     end
   end)
