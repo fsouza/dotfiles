@@ -86,9 +86,26 @@ do
 
     lsp.yamlls.setup(opts.with_defaults({cmd = {vim_node_ls; 'yaml-language-server'; '--stdio'}}))
 
-    lsp.pyright.setup(opts.with_defaults(require('fsouza.lsp.custom.pyright').get_opts({
+    lsp.pyright.setup(opts.with_defaults({
       cmd = {vim_node_ls; 'pyright-langserver'; '--stdio'};
-    })))
+      settings = {
+        pyright = {};
+        python = {
+          pythonPath = '/usr/bin/python3';
+          analysis = {
+            autoImportCompletions = true;
+            autoSearchPaths = true;
+            diagnosticMode = 'workspace';
+            typeCheckingMode = vim.g.pyright_type_checking_mode or 'basic';
+            useLibraryCodeForTypes = true;
+          };
+        };
+      };
+      on_init = function(client)
+        require('fsouza.lsp.pyright').detect_pythonPath(client)
+        return true
+      end;
+    }))
   end)
 
   if_executable('go', function()
