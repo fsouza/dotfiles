@@ -264,6 +264,13 @@ async def install_efm(langservers_cache_dir: Path) -> None:
     await _go_install(langservers_cache_dir, "github.com/mattn/efm-langserver@master")
 
 
+async def install_buildifier(langservers_cache_dir: Path) -> None:
+    await _go_install(
+        langservers_cache_dir,
+        "github.com/bazelbuild/buildtools/buildifier@master",
+    )
+
+
 async def setup_langservers(cache_dir: Path) -> None:
     langservers_cache_dir = cache_dir / "langservers"
     await asyncio.gather(
@@ -272,6 +279,7 @@ async def setup_langservers(cache_dir: Path) -> None:
         install_gopls(langservers_cache_dir),
         install_shfmt(langservers_cache_dir),
         install_efm(langservers_cache_dir),
+        install_buildifier(langservers_cache_dir),
     )
 
 
