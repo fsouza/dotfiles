@@ -1,9 +1,11 @@
 mkfile_path := $(realpath $(lastword $(MAKEFILE_LIST)))
 mkfile_dir := $(dir $(mkfile_path))
 
-LUACHECK := $(if $(shell command -v luacheck 2>/dev/null), luacheck, $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)/hr/bin/luacheck)
+NVIM_CACHE_DIR := $(if $(shell command -v luacheck 2>/dev/null), luacheck, $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1))
 
-LUAFORMAT := $(if $(shell command -v lua-format 2>/dev/null), lua-format, $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)/hr/bin/lua-format)
+LUACHECK := $(if $(shell command -v luacheck 2>/dev/null), luacheck, $(NVIM_CACHE_DIR)/hr/bin/luacheck)
+
+LUAFORMAT := $(if $(shell command -v lua-format 2>/dev/null), lua-format, $(NVIM_CACHE_DIR)/hr/bin/lua-format)
 
 MACOSX_DEPLOYMENT_TARGET ?= 10.15
 
@@ -13,8 +15,8 @@ all: luacheck lua-format
 .PHONY: bootstrap
 bootstrap:
 	git -C $(mkfile_dir) submodule update --init --recursive
-	python3 $(mkfile_dir)/scripts/bootstrap.py --cache-dir $${HOME}/.cache/nvim
-	make -f $(mkfile_path) update-paq kill-daemons
+	python3 $(mkfile_dir)/scripts/bootstrap.py
+	make -f $(mkfile_path) update-paq kill-daemons clear-logs
 
 .PHONY: update-paq
 update-paq:
@@ -24,6 +26,10 @@ update-paq:
 kill-daemons:
 	pkill prettierd || true
 	pkill eslint_d || true
+
+.PHONY: clear-logs
+clear-logs:
+	:> $(NVIM_CACHE_DIR)/lsp.log
 
 .PHONY: luacheck
 luacheck:
