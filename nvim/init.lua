@@ -4,12 +4,10 @@ local vfn = vim.fn
 local cache_dir = vfn.stdpath('cache')
 local data_dir = vfn.stdpath('data')
 
-local helpers = require('fsouza.lib.nvim_helpers')
-
 _G.prequire = vim.F.nil_wrap(require)
 
 local function initial_mappings()
-  helpers.create_mappings({
+  require('fsouza.lib.nvim_helpers').create_mappings({
     n = {{lhs = 'Q'; rhs = ''}; {lhs = '<Space>'; rhs = ''}; {lhs = '<c-t>'; rhs = ''}};
   })
   vim.g.mapleader = ' '
@@ -119,14 +117,18 @@ local function global_mappings()
   }
 
   local maps = {c = rl_bindings; o = rl_bindings; i = rl_insert_mode_bindings}
-  helpers.create_mappings(maps)
+
+  require('fsouza.lib.nvim_helpers').create_mappings(maps)
 end
 
 do
-  local schedule = vim.schedule
-  initial_mappings()
   hererocks()
   add_paqs_opt_to_path()
+
+  require('impatient')
+
+  local schedule = vim.schedule
+  initial_mappings()
 
   schedule(function()
     global_options()
