@@ -47,13 +47,13 @@ local function code_action_for_line(cb)
 end
 
 function M.code_action()
-  vim.lsp.handlers['textDocument/codeAction'] = function(_, _, actions)
+  vim.lsp.handlers['textDocument/codeAction'] = function(_, actions)
     handle_actions(actions)
   end
 
-  code_action_for_line(function(_, _, actions)
+  code_action_for_line(function(_, actions)
     if not actions or vim.tbl_isempty(actions) then
-      return code_action_for_buf(function(_, _, buf_actions)
+      return code_action_for_buf(function(_, buf_actions)
         handle_actions(buf_actions)
       end)
     end
@@ -71,7 +71,7 @@ function M.visual_code_action()
   local start_pos = vfn.getpos([['<]])
   local end_pos = vfn.getpos([['>]])
 
-  vim.lsp.handlers['textDocument/codeAction'] = function(_, _, actions)
+  vim.lsp.handlers['textDocument/codeAction'] = function(_, actions)
     handle_actions(actions)
   end
 

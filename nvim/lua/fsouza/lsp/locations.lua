@@ -101,7 +101,7 @@ local function ts_range(loc)
   return loc
 end
 
-local function peek_location_callback(_, _, result)
+local function peek_location_callback(_, result)
   if not result or vim.tbl_isempty(result) then
     return
   end

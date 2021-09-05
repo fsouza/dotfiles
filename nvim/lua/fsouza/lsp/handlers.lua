@@ -5,11 +5,12 @@ local lsp = vim.lsp
 
 local non_focusable_handlers = {}
 
-local function popup_callback(err, method, ...)
+local function popup_callback(err, result, context, ...)
+  local method = context.method
   if non_focusable_handlers[method] == nil then
     non_focusable_handlers[method] = vim.lsp.with(vim.lsp.handlers[method], {focusable = false})
   end
-  non_focusable_handlers[method](err, method, ...)
+  non_focusable_handlers[method](err, result, context, ...)
   for _, winid in ipairs(api.nvim_list_wins()) do
     if pcall(api.nvim_win_get_var, winid, method) then
       require('fsouza.color').set_popup_winid(winid)
@@ -17,7 +18,7 @@ local function popup_callback(err, method, ...)
   end
 end
 
-local function fzf_location_callback(_, _, result)
+local function fzf_location_callback(_, result)
   if result == nil or vim.tbl_isempty(result) then
     return nil
   end
@@ -39,7 +40,7 @@ M['textDocument/definition'] = fzf_location_callback
 M['textDocument/typeDefinition'] = fzf_location_callback
 M['textDocument/implementation'] = fzf_location_callback
 
-M['textDocument/references'] = function(err, method, result)
+M['textDocument/references'] = function(err, result, ...)
   if vim.tbl_islist(result) then
     local lineno = api.nvim_win_get_cursor(0)[1] - 1
     local new_result = {}
@@ -50,10 +51,10 @@ M['textDocument/references'] = function(err, method, result)
     end
     result = new_result
   end
-  fzf_location_callback(err, method, result)
+  fzf_location_callback(err, result, ...)
 end
 
-M['textDocument/documentHighlight'] = function(_, _, result, _)
+M['textDocument/documentHighlight'] = function(_, result)
   if not result then
     return
   end
@@ -66,8 +67,8 @@ M['textDocument/hover'] = popup_callback
 
 M['textDocument/signatureHelp'] = popup_callback
 
-M['textDocument/publishDiagnostics'] = function(err, method, result, client_id)
-  require('fsouza.lsp.buf_diagnostic').publish_diagnostics(err, method, result, client_id)
+M['textDocument/publishDiagnostics'] = function(...)
+  require('fsouza.lsp.buf_diagnostic').publish_diagnostics(...)
 end
 
 return M

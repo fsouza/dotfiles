@@ -43,7 +43,7 @@ local function resolve_code_lenses(client, lenses, cb)
   local done = 0
 
   for _, lens in ipairs(lenses) do
-    client.lsp_client.request('codeLens/resolve', lens, function(_, _, result)
+    client.lsp_client.request('codeLens/resolve', lens, function(_, result)
       done = done + 1
       if result then
         table.insert(resolved_lenses, result)
@@ -76,21 +76,21 @@ local function render_virtual_text(bufnr)
   end
 end
 
-local function codelenses_handler(_, _, codelenses, _, bufnr)
+local function codelenses_handler(_, codelenses, context)
   if not codelenses then
     return
   end
 
   local preresolved, to_resolve = group_by_line(codelenses)
-  local client = clients[bufnr]
+  local client = clients[context.bufnr]
   if #to_resolve > 0 then
     resolve_code_lenses(client, to_resolve, function(lenses)
-      code_lenses[bufnr] = group_by_line(lenses, preresolved)
-      render_virtual_text(bufnr)
+      code_lenses[context.bufnr] = group_by_line(lenses, preresolved)
+      render_virtual_text(context.bufnr)
     end)
   else
-    code_lenses[bufnr] = preresolved
-    render_virtual_text(bufnr)
+    code_lenses[context.bufnr] = preresolved
+    render_virtual_text(context.bufnr)
   end
 end
 

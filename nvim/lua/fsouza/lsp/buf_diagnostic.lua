@@ -28,10 +28,10 @@ local function make_handler()
     signs = true;
     update_in_insert = true;
   })
-  return function(err, method, result, client_id, bufnr)
+  return function(err, result, context, ...)
     vim.schedule(exec_hooks)
-    lsp_diagnostic.clear(bufnr, client_id)
-    return handler(err, method, result, client_id)
+    lsp_diagnostic.clear(context.bufnr, context.client_id)
+    return handler(err, result, context, ...)
   end
 end
 
@@ -43,7 +43,7 @@ function M.unregister_hook(id)
   hooks[id] = nil
 end
 
-function M.publish_diagnostics(err, method, result, client_id)
+function M.publish_diagnostics(err, result, context, ...)
   if not result then
     return
   end
@@ -52,7 +52,9 @@ function M.publish_diagnostics(err, method, result, client_id)
   if not bufnr then
     return
   end
-  local debouncer_key = string.format('%d/%s', client_id, uri)
+  context.bufnr = bufnr
+
+  local debouncer_key = string.format('%d/%s', context.client_id, uri)
   local _handler = make_handler()
   local handler = debouncers[debouncer_key]
 
@@ -68,7 +70,7 @@ function M.publish_diagnostics(err, method, result, client_id)
     })
   end
 
-  handler.call(err, method, result, client_id, bufnr)
+  handler.call(err, result, context, ...)
 end
 
 return M
