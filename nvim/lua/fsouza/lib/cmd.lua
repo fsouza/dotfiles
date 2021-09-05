@@ -50,10 +50,6 @@ end
 --   signal: number;
 --   errors: string table;
 -- }
---
--- The function returns a function that can be called to wait for the command
--- to finish. The function takes a timeout and returns the same values as
--- vim.wait.
 function M.run(cmd, opts, input_data, on_finished, debug_fn)
   local cmd_handle
   local stdout = loop.new_pipe(false)

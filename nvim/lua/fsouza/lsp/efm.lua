@@ -97,17 +97,13 @@ local function get_autopep8(args)
 end
 
 local function get_buildifier()
-  local nvim_config_path = config_dir
-  local bin = nvim_config_path .. '/langservers/bin/buildifierw'
-  if vfn.executable(string.format('%s/langservers/bin/buildifier', cache_dir)) == 1 then
-    return {
-      formatCommand = string.format('%s ${INPUT}', bin);
-      formatStdin = true;
-      rootMarkers = default_root_markers;
-      env = {'NVIM_CACHE_DIR=' .. cache_dir};
-    }
-  end
-  return {}
+  local bin = config_dir .. '/langservers/bin/buildifierw'
+  return {
+    formatCommand = string.format('%s ${INPUT}', bin);
+    formatStdin = true;
+    rootMarkers = default_root_markers;
+    env = {'NVIM_CACHE_DIR=' .. cache_dir};
+  }
 end
 
 local function get_dune()
