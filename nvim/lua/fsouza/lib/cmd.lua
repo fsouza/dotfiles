@@ -117,19 +117,6 @@ function M.run(cmd, opts, input_data, on_finished, debug_fn)
     loop.write(stdin, input_data)
   end
   loop.shutdown(stdin)
-
-  return function(timeout_ms)
-    local status, code = vim.wait(timeout_ms, function()
-      return r.finished
-    end, 20)
-
-    if not status then
-      r.abort = true
-      safe_close(cmd_handle, close)
-    end
-
-    return status, code
-  end
 end
 
 return M
