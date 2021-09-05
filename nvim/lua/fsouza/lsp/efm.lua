@@ -1,7 +1,6 @@
 local M = {}
 
 local vfn = vim.fn
-local loop = vim.loop
 
 local default_root_markers = {'.git'}
 local config_dir = vfn.stdpath('config')
@@ -286,14 +285,7 @@ local prettierd_fts = {
 }
 
 local function get_filetypes()
-  return vim.tbl_flatten({
-    'bzl';
-    'dune';
-    'lua';
-    'python';
-    'sh';
-    prettierd_fts;
-  })
+  return vim.tbl_flatten({'bzl'; 'dune'; 'lua'; 'python'; 'sh'; prettierd_fts})
 end
 
 local function get_settings()
@@ -335,7 +327,8 @@ local function get_settings()
 end
 
 function M.basic_settings()
-  return {lintDebounce = 250000000; rootMarkers = default_root_markers; languages = {}}, get_filetypes()
+  return {lintDebounce = 250000000; rootMarkers = default_root_markers; languages = {}},
+         get_filetypes()
 end
 
 function M.gen_config()
