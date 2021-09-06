@@ -119,40 +119,40 @@ local function get_autopep8(args, cb)
   end)
 end
 
-local function get_buildifier()
+local function get_buildifier(cb)
   local bin = config_dir .. '/langservers/bin/buildifierw'
-  return {
+  cb({
     formatCommand = string.format('%s ${INPUT}', bin);
     formatStdin = true;
     rootMarkers = default_root_markers;
     env = {'NVIM_CACHE_DIR=' .. cache_dir};
-  }
+  })
 end
 
-local function get_dune()
-  return {
+local function get_dune(cb)
+  cb({
     formatCommand = 'dune format-dune-file';
     formatStdin = true;
     rootMarkers = default_root_markers;
-  }
+  })
 end
 
-local function get_shellcheck()
-  return {
+local function get_shellcheck(cb)
+  cb({
     lintCommand = 'shellcheck -f gcc -x -';
     lintStdin = true;
     lintSource = 'shellcheck';
     lintFormats = {'%f:%l:%c: %trror: %m'; '%f:%l:%c: %tarning: %m'; '%f:%l:%c: %tote: %m'};
     rootMarkers = default_root_markers;
-  }
+  })
 end
 
-local function get_shfmt()
-  return {
+local function get_shfmt(cb)
+  cb({
     formatCommand = string.format('%s/langservers/bin/shfmt -', cache_dir);
     formatStdin = true;
     rootMarkers = default_root_markers;
-  }
+  })
 end
 
 local function get_luacheck(cb)
@@ -160,8 +160,9 @@ local function get_luacheck(cb)
   loop.fs_stat('.luacheckrc', function(err, stat)
     if err == nil and stat.type == 'file' then
       tool = {
-        lintCommand = string.format('%s/hr/bin/luacheck --formatter plain --filename ${INPUT} -',
-                                    cache_dir);
+        lintCommand = string.format(
+          '%s/hr/bin/luacheck --formatter plain --no-default-config --filename ${INPUT} -',
+          cache_dir);
         lintStdin = true;
         lintSource = 'luacheck';
         rootMarkers = default_root_markers;
@@ -386,15 +387,8 @@ local function get_settings(cb)
     end
   end
 
-  -- sync stuff that don't block the event loop.
-  add_if_not_empty('sh', get_shellcheck())
-  add_if_not_empty('sh', get_shfmt())
-  add_if_not_empty('dune', get_dune())
-  add_if_not_empty('bzl', get_buildifier())
-
-  -- async stuff that would block the event loop if it were sync. The way
-  -- pending is managed is kinda annoying, we could probably create a wrapper
-  -- function or something like that.
+  -- some tools are loaded asynchronously, others are not, but we assume any
+  -- can be by supporting the callback style in all of them.
   local pending = 0
 
   local function pending_wrapper(fn, original_cb)
@@ -405,14 +399,23 @@ local function get_settings(cb)
     end)
   end
 
-  pending_wrapper(get_luacheck, function(luacheck)
-    add_if_not_empty('lua', luacheck)
-  end)
+  local simple_tool_factories = {
+    {language = 'sh'; fn = get_shellcheck};
+    {language = 'sh'; fn = get_shfmt};
+    {language = 'dune'; fn = get_dune};
+    {language = 'bzl'; fn = get_buildifier};
+    {language = 'lua'; fn = get_luaformat};
+    {language = 'lua'; fn = get_luacheck};
+  }
 
-  pending_wrapper(get_luaformat, function(luaformat)
-    add_if_not_empty('lua', luaformat)
-  end)
+  for _, f in ipairs(simple_tool_factories) do
+    local language = f.language
+    pending_wrapper(f.fn, function(tool)
+      add_if_not_empty(language, tool)
+    end)
+  end
 
+  -- prettierd and eslint_d may apply to multiple file types.
   pending_wrapper(get_eslintd_config, function(eslint_tools)
     local eslint_fts = {'javascript'; 'typescript'}
     for _, eslint in ipairs(eslint_tools) do
@@ -428,6 +431,7 @@ local function get_settings(cb)
     end
   end)
 
+  -- Python is a whole different kind of fun.
   pending_wrapper(get_python_tools, function(python_tools)
     settings.languages.python = python_tools
   end)
