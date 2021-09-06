@@ -301,8 +301,6 @@ local function get_python_tools(cb)
   local pre_commit_config_file_path = '.pre-commit-config.yaml'
 
   try_read_precommit_config(pre_commit_config_file_path, function(pre_commit_config)
-    print(vim.inspect(pre_commit_config))
-
     local pc_repo_tools = {
       ['https://gitlab.com/pycqa/flake8'] = get_flake8;
       ['https://github.com/pycqa/flake8'] = get_flake8;
@@ -451,7 +449,6 @@ end
 
 function M.gen_config(client)
   get_settings(function(settings)
-    print(vim.inspect(settings))
     client.config.settings = settings
     client.notify('workspace/didChangeConfiguration', {settings = client.config.settings})
   end)
