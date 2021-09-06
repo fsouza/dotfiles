@@ -18,28 +18,24 @@ local function set_from_cmd(exec, args, cb)
 end
 
 local function set_from_poetry(cb)
-  loop.fs_stat('poetry.lock', function(err, stat)
+  loop.fs_stat('poetry.lock', function(err)
     if err then
       cb(nil)
       return
     end
 
-    if stat.type == 'file' then
-      set_from_cmd('poetry', {'env'; 'info'; '-p'}, cb)
-    end
+    set_from_cmd('poetry', {'env'; 'info'; '-p'}, cb)
   end)
 end
 
 local function set_from_pipenv(cb)
-  loop.fs_stat('Pipfile.lock', function(err, stat)
+  loop.fs_stat('Pipfile.lock', function(err)
     if err then
       cb(nil)
       return
     end
 
-    if stat.type == 'file' then
-      set_from_cmd('pipenv', {'--venv'}, cb)
-    end
+    set_from_cmd('pipenv', {'--venv'}, cb)
   end)
 end
 
