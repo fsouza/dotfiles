@@ -124,7 +124,6 @@ local function get_autopep8(args, cb)
 end
 
 local function get_buildifier(cb)
-  local path = require('pl.path')
   local bin = path.join(config_dir, 'langservers', 'bin', 'buildifierw')
   cb({
     formatCommand = string.format('%s ${INPUT}', bin);
