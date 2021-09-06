@@ -44,23 +44,19 @@ function M.restart()
 
   vim.lsp.stop_client(all_clients)
 
-  local interval_ms = 50
-  local edit = nil
-  edit = function()
+  local timer = vim.loop.new_timer()
+  timer:start(50, 50, vim.schedule_wrap(function()
     local has_new_clients, total_clients = check_new_clients()
     if has_new_clients then
+      timer:stop()
       return
     end
 
-    if total_clients > 0 then
-      vim.defer_fn(edit, interval_ms)
-      return
+    if total_clients == 0 then
+      timer:stop()
+      vim.cmd([[silent! edit]])
     end
-
-    vim.cmd([[silent! edit]])
-  end
-
-  vim.defer_fn(edit, interval_ms)
+  end))
 
   require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics()
   local safe_detach = vim.F.nil_wrap(detach)
