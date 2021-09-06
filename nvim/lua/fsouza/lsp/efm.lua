@@ -65,7 +65,8 @@ end
 local function get_autoflake8(_, cb)
   get_python_bin('autoflake8', function(autoflake8_path)
     cb({
-      formatCommand = string.format('%s --expand-star-imports -', autoflake8_path);
+      formatCommand = string.format('%s --expand-star-imports --exit-zero-even-if-changed -',
+                                    autoflake8_path);
       formatStdin = true;
       rootMarkers = default_root_markers;
     })
