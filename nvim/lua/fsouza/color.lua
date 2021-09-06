@@ -35,11 +35,11 @@ function M.set_default_theme(theme_ns)
 end
 
 local function gc()
-  for winid in pairs(state.themes) do
+  require('fsouza.tablex').foreach(state.themes, function(winid)
     if not api.nvim_win_is_valid(winid) then
       state.themes[winid] = nil
     end
-  end
+  end)
 end
 
 local function find_theme(curr_winid)

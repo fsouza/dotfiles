@@ -1,4 +1,4 @@
-local M = {}
+local path = require('pl.path')
 
 local loop = vim.loop
 local vfn = vim.fn
@@ -7,12 +7,16 @@ local default_root_markers = {'.git'}
 local config_dir = vfn.stdpath('config')
 local cache_dir = vfn.stdpath('cache')
 
+local M = {}
+
 local function quote_arg(arg)
   return string.format('"%s"', arg)
 end
 
 local function process_args(args)
-  return table.concat(vim.tbl_map(quote_arg, args or {}), ' ')
+  return require('fsouza.tablex').reduce(function(acc, arg)
+    return acc .. quote_arg(arg)
+  end, args or {}, '')
 end
 
 local function if_bin(bin_to_check, fallback_bin, cb)
@@ -33,9 +37,9 @@ end
 
 local function get_python_bin(bin_name, cb)
   local virtualenv = os.getenv('VIRTUAL_ENV')
-  local default_bin = string.format('%s/venv/bin/%s', cache_dir, bin_name)
+  local default_bin = path.join(cache_dir, 'venv', 'bin', bin_name)
   if virtualenv then
-    local venv_bin_name = string.format('%s/bin/%s', vim.env.VIRTUAL_ENV, bin_name)
+    local venv_bin_name = path.join(virtualenv, 'bin', bin_name)
     if_bin(venv_bin_name, default_bin, cb)
   else
     cb(default_bin)
@@ -120,7 +124,8 @@ local function get_autopep8(args, cb)
 end
 
 local function get_buildifier(cb)
-  local bin = config_dir .. '/langservers/bin/buildifierw'
+  local path = require('pl.path')
+  local bin = path.join(config_dir, 'langservers', 'bin', 'buildifierw')
   cb({
     formatCommand = string.format('%s ${INPUT}', bin);
     formatStdin = true;
@@ -149,7 +154,7 @@ end
 
 local function get_shfmt(cb)
   cb({
-    formatCommand = string.format('%s/langservers/bin/shfmt -', cache_dir);
+    formatCommand = string.format('%s -', path.join(cache_dir, 'langservers', 'bin', 'shfmt'));
     formatStdin = true;
     rootMarkers = default_root_markers;
   })
@@ -178,7 +183,7 @@ local function get_luaformat(cb)
   loop.fs_stat('.lua-format', function(err, stat)
     if err == nil and stat.type == 'file' then
       tool = {
-        formatCommand = string.format('%s/hr/bin/lua-format', cache_dir);
+        formatCommand = path.join(cache_dir, 'hr', 'bin', 'lua-format');
         formatStdin = true;
         rootMarkers = {'.lua-format'; '.git'};
       }
@@ -315,18 +320,20 @@ local function get_python_tools(cb)
       ['https://github.com/fsouza/autoflake8'] = get_autoflake8;
     }
 
-    local pre_commit_fns = {}
-    for _, repo in ipairs(pre_commit_config.repos) do
+    local pre_commit_fns = require('fsouza.tablex').filter_map(function(repo)
       local repo_url = repo.repo
       local args = {}
       if repo.hooks[1] and vim.tbl_islist(repo.hooks[1].args) then
         args = repo.hooks[1].args
       end
+
       local fn = pc_repo_tools[repo_url]
       if fn then
-        table.insert(pre_commit_fns, {fn = fn; args = args})
+        return {fn = fn; args = args}
       end
-    end
+
+      return nil
+    end, pre_commit_config.repos)
 
     if #pre_commit_fns > 0 then
       fns = pre_commit_fns
@@ -345,10 +352,10 @@ local function get_python_tools(cb)
       end
     end
 
-    for _, fn in ipairs(fns) do
+    require('fsouza.tablex').foreach(fns, function(fn)
       pending = pending + 1
       fn.fn(fn.args, process_result)
-    end
+    end)
 
     local timer = vim.loop.new_timer()
     timer:start(0, 25, function()
@@ -408,27 +415,28 @@ local function get_settings(cb)
     {language = 'lua'; fn = get_luacheck};
   }
 
-  for _, f in ipairs(simple_tool_factories) do
-    local language = f.language
+  local tablex = require('fsouza.tablex')
+
+  tablex.foreach(simple_tool_factories, function(f)
     pending_wrapper(f.fn, function(tool)
-      add_if_not_empty(language, tool)
+      add_if_not_empty(f.language, tool)
     end)
-  end
+  end)
 
   -- prettierd and eslint_d may apply to multiple file types.
   pending_wrapper(get_eslintd_config, function(eslint_tools)
     local eslint_fts = {'javascript'; 'typescript'}
-    for _, eslint in ipairs(eslint_tools) do
-      for _, ft in ipairs(eslint_fts) do
+    tablex.foreach(eslint_tools, function(eslint)
+      tablex.foreach(eslint_fts, function(ft)
         add_if_not_empty(ft, eslint)
-      end
-    end
+      end)
+    end)
   end)
 
   pending_wrapper(get_prettierd, function(prettierd)
-    for _, ft in ipairs(prettierd_fts) do
+    tablex.foreach(prettierd_fts, function(ft)
       add_if_not_empty(ft, prettierd)
-    end
+    end)
   end)
 
   -- Python is a whole different kind of fun.

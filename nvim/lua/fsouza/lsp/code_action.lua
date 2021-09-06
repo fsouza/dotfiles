@@ -2,7 +2,7 @@ local api = vim.api
 local vfn = vim.fn
 local buf = vim.lsp.buf
 
-local util = require('vim.lsp.util')
+local util = vim.lsp.util
 
 local M = {}
 
@@ -11,10 +11,9 @@ local function handle_actions(actions)
     return
   end
 
-  local lines = {}
-  for _, action in ipairs(actions) do
-    table.insert(lines, action.title)
-  end
+  local lines = require('fsouza.tablex').map(function(action)
+    return action.title
+  end, actions)
 
   local function handle_selection(index)
     local action_chosen = actions[index]

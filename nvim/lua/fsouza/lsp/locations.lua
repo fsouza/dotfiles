@@ -36,12 +36,10 @@ local function should_use_ts(node)
     -- go
     'var_spec';
   }
-  for _, t in pairs(node_types) do
-    if node_type == t then
-      return true
-    end
-  end
-  return false
+
+  return require('fsouza.tablex').exists(node_types, function(t)
+    return node_type == t
+  end)
 end
 
 local function normalize_loc(loc)

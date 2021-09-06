@@ -1,14 +1,16 @@
+local path = require('pl.path')
+
 local vfn = vim.fn
 
 local config_dir = vfn.stdpath('config')
 local cache_dir = vfn.stdpath('cache')
 
 local function get_local_cmd(cmd)
-  return string.format('%s/langservers/bin/%s', config_dir, cmd)
+  return path.join(config_dir, 'langservers', 'bin', cmd)
 end
 
 local function get_cache_cmd(cmd)
-  return string.format('%s/langservers/bin/%s', cache_dir, cmd)
+  return path.join(cache_dir, 'langservers', 'bin', cmd)
 end
 
 local function set_log_level()
@@ -21,10 +23,10 @@ end
 
 local function define_signs()
   local levels = {'Error'; 'Warning'; 'Information'; 'Hint'}
-  for _, level in ipairs(levels) do
+  require('fsouza.tablex').foreach(levels, function(level)
     local sign_name = 'LspDiagnosticsSign' .. level
     vfn.sign_define(sign_name, {text = ''; texthl = sign_name; numhl = sign_name})
-  end
+  end)
 end
 
 -- override some stuff in vim.lsp
@@ -144,13 +146,15 @@ do
   if_executable('dune', function()
     lsp.ocamllsp.setup(opts.with_defaults({
       cmd = {
-        string.format('%s/langservers/ocaml-lsp/_build/install/default/bin/ocamllsp', cache_dir);
+        path.join(cache_dir, 'langservers', 'ocaml-lsp', '_build', 'install', 'default', 'bin',
+                  'ocamllsp');
       };
       root_dir = opts.root_pattern_with_fallback('.merlin', 'package.json');
     }))
   end)
 
-  local clangd = os.getenv('HOMEBREW_PREFIX') .. '/opt/llvm/bin/clangd'
+  local clangd = require('pl.path').join(os.getenv('HOMEBREW_PREFIX'), 'opt', 'llvm', 'bin',
+                                         'clangd')
   if_executable(clangd, function()
     lsp.clangd.setup(opts.with_defaults({
       cmd = {clangd; '--background-index'; '--pch-storage=memory'};

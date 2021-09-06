@@ -18,8 +18,7 @@ local function hererocks()
   local hererocks_path = cache_dir .. '/hr'
   local share_path = hererocks_path .. '/share/lua/' .. lua_version
   local lib_path = hererocks_path .. '/lib/lua/' .. lua_version
-  package.path = share_path .. '/?.lua' .. ';' .. share_path ..
-                   '/?/init.lua;' .. package.path
+  package.path = share_path .. '/?.lua' .. ';' .. share_path .. '/?/init.lua;' .. package.path
   package.cpath = package.cpath .. ';' .. lib_path .. '/?.so'
 end
 
@@ -29,7 +28,7 @@ local function add_paqs_opt_to_path()
   local packed = require('fsouza.packed')
   local opt_dir = path.join(packed.paq_dir, 'opt')
 
-  require('pl.tablex').foreach(packed.paqs, function(paq)
+  require('fsouza.tablex').foreach(packed.paqs, function(paq)
     if paq.opt and paq.as then
       local paq_dir = path.join(opt_dir, paq.as)
       package.path = package.path .. ';' .. path.join(paq_dir, 'lua', '?.lua') .. ';' ..

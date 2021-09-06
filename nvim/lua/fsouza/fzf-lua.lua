@@ -7,13 +7,13 @@ local function should_qf(selected)
     return false
   end
 
-  for _, sel in ipairs(selected) do
+  return require('fsouza.tablex').exists(selected, function(sel)
     if string.match(sel, '^.+:%d+:%d+:') then
       return true
+    else
+      return false
     end
-  end
-
-  return false
+  end)
 end
 
 local function edit_file(entry)

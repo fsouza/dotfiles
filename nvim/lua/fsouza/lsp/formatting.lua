@@ -68,13 +68,9 @@ local function organize_imports_and_write(client, bufnr)
       return
     end
 
-    local code_action = nil
-    for _, action in ipairs(actions) do
-      if action.kind == 'source.organizeImports' then
-        code_action = action
-        break
-      end
-    end
+    local code_action = require('fsouza.tablex').find_value_if(actions, function(action)
+      return action.kind == 'source.organizeImports'
+    end)
 
     if code_action and code_action.edit then
       api.nvim_buf_call(bufnr, function()

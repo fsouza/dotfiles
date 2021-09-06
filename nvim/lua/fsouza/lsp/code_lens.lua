@@ -16,7 +16,7 @@ local code_lenses = {}
 local function group_by_line(codelenses, by_line)
   local to_resolve = {}
   by_line = by_line or {}
-  for _, codelens in ipairs(codelenses) do
+  require('fsouza.tablex').foreach(codelenses, function(codelens)
     if not codelens.command then
       table.insert(to_resolve, codelens)
     else
@@ -25,7 +25,7 @@ local function group_by_line(codelenses, by_line)
       table.insert(curr, codelens)
       by_line[line_id] = curr
     end
-  end
+  end)
   return by_line, to_resolve
 end
 
@@ -42,14 +42,14 @@ local function resolve_code_lenses(client, lenses, cb)
   local resolved_lenses = {}
   local done = 0
 
-  for _, lens in ipairs(lenses) do
+  require('fsouza.tablex').foreach(lenses, function(lens)
     client.lsp_client.request('codeLens/resolve', lens, function(_, result)
       done = done + 1
       if result then
         table.insert(resolved_lenses, result)
       end
     end)
-  end
+  end)
 
   local timer = vim.loop.new_timer()
   timer:start(500, 500, vim.schedule_wrap(function()
@@ -64,16 +64,15 @@ local function render_virtual_text(bufnr)
   api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
 
   local prefix = ' '
-  for line, items in pairs(code_lenses[bufnr]) do
-    local titles = {}
-    for _, item in ipairs(items) do
-      table.insert(titles, item.command.title)
-    end
+  require('fsouza.tablex').foreach(code_lenses[bufnr], function(items, line)
+    local titles = require('fsouza.tablex').map(function(item)
+      return item.command.title
+    end, items)
     local chunks = {
       {string.format('%s%s', prefix, table.concat(titles, ' | ')); 'LspCodeLensVirtualText'};
     }
     api.nvim_buf_set_virtual_text(bufnr, ns, line, chunks, {})
-  end
+  end)
 end
 
 local function codelenses_handler(_, codelenses, context)
@@ -150,12 +149,14 @@ local function execute_codelenses(bufnr, items)
   end
 
   if #items > 1 then
-    local popup_lines = {}
-    for _, item in ipairs(items) do
+    local popup_lines = require('fsouza.tablex').filter_map(function(item)
       if item.command then
-        table.insert(popup_lines, item.command.title)
+        return item.command.title
       end
-    end
+
+      return nil
+    end, items)
+
     require('fsouza.lib.popup_picker').open(popup_lines, function(index)
       execute_item(items[index])
     end)

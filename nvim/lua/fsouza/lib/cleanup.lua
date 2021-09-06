@@ -10,12 +10,12 @@ end
 
 local function cleanup()
   local finished = 0
-  for _, cb in pairs(cbs) do
+  require('fsouza.tablex').foreach(cbs, function(cb)
     vim.schedule(function()
       cb()
       finished = finished + 1
     end)
-  end
+  end)
 
   vim.wait(500, function()
     return finished == #cbs

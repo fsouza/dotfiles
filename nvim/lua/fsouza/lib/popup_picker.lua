@@ -37,21 +37,23 @@ local function min(x, y)
 end
 
 local function close_others(win_var_identifier)
-  for _, winid in ipairs(api.nvim_list_wins()) do
+  require('fsouza.tablex').foreach(api.nvim_list_wins(), function(winid)
     if pcall(api.nvim_win_get_var, winid, win_var_identifier) then
       api.nvim_win_close(winid, true)
     end
-  end
+  end)
   cbs = {}
 end
 
 function M.open(lines, cb)
-  local longest = 0
-  for _, line in ipairs(lines) do
-    if #line > longest then
-      longest = #line
-    end
-  end
+  local longest = require('fsouza.tablex').reduce(
+                    function(longest, line)
+      if #line > longest then
+        return #line
+      else
+        return longest
+      end
+    end, lines, 0)
   longest = longest * 2
   local min_width = 50
   local max_width = 3 * min_width

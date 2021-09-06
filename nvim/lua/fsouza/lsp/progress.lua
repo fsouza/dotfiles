@@ -32,9 +32,9 @@ local function on_progress_update()
     return string.format('%s%s%s', prefix, msg.message, suffix)
   end
 
-  for _, message in ipairs(messages) do
+  require('fsouza.tablex').foreach(messages, function(message)
     debounced_print.call(format_message(message))
-  end
+  end)
 end
 
 function M.on_attach()

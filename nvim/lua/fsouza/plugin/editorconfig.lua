@@ -10,12 +10,12 @@ local M = {}
 local function parse_output(data)
   local lines = vim.split(data, '\n')
   local opts = {}
-  for _, line in ipairs(lines) do
+  require('fsouza.tablex').foreach(lines, function(line)
     local parts = vim.split(line, '=')
     if #parts == 2 then
       opts[parts[1]] = parts[2]
     end
-  end
+  end)
   return opts
 end
 
@@ -59,7 +59,7 @@ end
 
 local function set_opts(bufnr, opts)
   local vim_opts = {tabstop = 8}
-  for k, v in pairs(opts) do
+  require('fsouza.tablex').foreach(opts, function(v, k)
     if k == 'charset' then
       vim_opts.fileencoding, vim_opts.bomb = get_vim_fenc(v)
     end
@@ -87,13 +87,13 @@ local function set_opts(bufnr, opts)
         handle_whitespaces(bufnr, v)
       end)
     end
-  end
+  end)
 
   vim.schedule(function()
     if api.nvim_buf_is_valid(bufnr) and nvim_buf_get_option(bufnr, 'modifiable') then
-      for k, v in pairs(vim_opts) do
-        nvim_buf_set_option(bufnr, k, v)
-      end
+      require('fsouza.tablex').foreach(vim_opts, function(value, option_name)
+        nvim_buf_set_option(bufnr, option_name, value)
+      end)
     end
   end)
 end
@@ -110,7 +110,7 @@ local function set_config(bufnr)
 
   -- assume it's a relative path
   if not vim.startswith(filename, '/') then
-    filename = string.format('%s/%s', vfn.getcwd(), filename)
+    filename = require('pl.path').join(vfn.getcwd(), filename)
   end
 
   require('fsouza.lib.cmd').run('editorconfig', {args = {filename}}, nil, function(result)
@@ -135,10 +135,7 @@ local function set_enabled(v)
       command = set_config_cmd;
     });
     vim.schedule(function()
-      local bufs = api.nvim_list_bufs()
-      for _, buf in ipairs(bufs) do
-        set_config(buf)
-      end
+      require('fsouza.tablex').foreach(api.nvim_list_bufs(), set_config)
     end)
   end
   helpers.augroup('editorconfig', commands)

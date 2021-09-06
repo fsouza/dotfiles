@@ -75,36 +75,35 @@ local function noners(ns)
     'CmpDocumentationBorder';
     'FloatBorder';
   }
-  for _, group in pairs(groups) do
+  require('fsouza.tablex').foreach(groups, function(group)
     nvim_set_hl(ns, group, {})
-  end
+  end)
 end
 
 local function reversers(ns)
   local groups = {'MoreMsg'; 'StatusLine'; 'StatusLineNC'; 'Visual'};
-  for _, group in pairs(groups) do
+  require('fsouza.tablex').foreach(groups, function(group)
     nvim_set_hl(ns, group, {reverse = true})
-  end
+  end)
 end
 
 local function setup_lsp_reference(ns)
-  for _, ref_type in pairs({'Text'; 'Read'; 'Write'}) do
+  require('fsouza.tablex').foreach({'Text'; 'Read'; 'Write'}, function(ref_type)
     nvim_set_hl(ns, 'LspReference' .. ref_type, {bg = colors.light_gray})
-  end
+  end)
 end
 
 local function setup_lsp_diagnostics(ns)
   local diagnostics_floating = {link = 'Normal'}
   local diagnostics_sign = {fg = colors.red; bg = colors.lighter_gray; bold = true}
 
-  for _, level in pairs({'Error'; 'Warning'; 'Information'; 'Hint'}) do
+  require('fsouza.tablex').foreach({'Error'; 'Warning'; 'Information'; 'Hint'}, function(level)
     local sign_group = 'LspDiagnosticsSign' .. level
     local floating_group = 'LspDiagnosticsFloating' .. level
 
     nvim_set_hl(ns, floating_group, diagnostics_floating)
     nvim_set_hl(ns, sign_group, diagnostics_sign)
-  end
-  nvim_set_hl(ns, 'User1', {bold = true; fg = colors.red})
+  end)
 end
 
 local function setup_lsp_codelens(ns)

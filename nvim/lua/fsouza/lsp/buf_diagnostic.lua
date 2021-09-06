@@ -7,17 +7,15 @@ local debouncers = {}
 local hooks = {}
 
 function M.buf_clear_all_diagnostics()
-  for _, bufnr in ipairs(api.nvim_list_bufs()) do
-    vim.lsp.diagnostic.clear(bufnr)
-  end
+  require('fsouza.tablex').foreach(api.nvim_list_bufs(), vim.lsp.diagnostic.clear)
 end
 
 -- This is a workaround because the default lsp client doesn't let us hook into
 -- textDocument/didChange like coc.nvim does.
 local function exec_hooks()
-  for _, fn in pairs(hooks) do
+  require('fsouza.tablex').foreach(hooks, function(fn)
     fn()
-  end
+  end)
 end
 
 local function make_handler()

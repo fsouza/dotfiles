@@ -13,23 +13,25 @@ function M.register(bufnr, cb)
 end
 
 local function detach(bufnr)
-  for _, cb in ipairs(callbacks[bufnr] or {}) do
+  require('fsouza.tablex').foreach(callbacks[bufnr] or {}, function(cb)
     cb(bufnr)
-  end
+  end)
 
   callbacks[bufnr] = nil
 end
 
 function M.restart()
+  local tablex = require('fsouza.tablex')
+
   local function extract_client_id(client)
     return client.id
   end
 
   local all_clients = vim.lsp.get_active_clients()
-  local original_client_ids = vim.tbl_map(extract_client_id, all_clients)
+  local original_client_ids = tablex.map(extract_client_id, all_clients)
 
   local function check_new_clients()
-    local current_client_ids = vim.tbl_map(extract_client_id, vim.lsp.get_active_clients())
+    local current_client_ids = tablex.map(extract_client_id, vim.lsp.get_active_clients())
 
     for _, client_id in ipairs(current_client_ids) do
       if not vim.tbl_contains(original_client_ids, client_id) then
@@ -61,9 +63,11 @@ function M.restart()
   vim.defer_fn(edit, interval_ms)
 
   require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics()
-  for _, bufnr in ipairs(api.nvim_list_bufs()) do
-    pcall(detach, bufnr)
-  end
+  local safe_detach = vim.F.nil_wrap(detach)
+
+  tablex.foreach(api.nvim_list_bufs(), function(bufnr)
+    safe_detach(bufnr)
+  end)
 end
 
 return M

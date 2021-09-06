@@ -11,11 +11,11 @@ local function popup_callback(err, result, context, ...)
     non_focusable_handlers[method] = vim.lsp.with(vim.lsp.handlers[method], {focusable = false})
   end
   non_focusable_handlers[method](err, result, context, ...)
-  for _, winid in ipairs(api.nvim_list_wins()) do
+  require('fsouza.tablex').foreach(api.nvim_list_wins(), function(winid)
     if pcall(api.nvim_win_get_var, winid, method) then
       require('fsouza.color').set_popup_winid(winid)
     end
-  end
+  end)
 end
 
 local function fzf_location_callback(_, result)
@@ -43,13 +43,9 @@ M['textDocument/implementation'] = fzf_location_callback
 M['textDocument/references'] = function(err, result, ...)
   if vim.tbl_islist(result) then
     local lineno = api.nvim_win_get_cursor(0)[1] - 1
-    local new_result = {}
-    for _, v in ipairs(result) do
-      if v.range.start.line ~= lineno then
-        table.insert(new_result, v)
-      end
-    end
-    result = new_result
+    result = require('fsouza.tablex').filter(result, function(v)
+      return v.range.start.line ~= lineno
+    end)
   end
   fzf_location_callback(err, result, ...)
 end

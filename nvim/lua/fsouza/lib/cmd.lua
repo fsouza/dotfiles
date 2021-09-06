@@ -9,11 +9,11 @@ local function make_debug(prefix, debug_fn)
   end
 
   return function(data)
-    for _, line in ipairs(vim.split(data, '\n')) do
+    require('pl.tables').foreach(vim.split(data, '\n'), function(line)
       if line ~= '' then
         debug_fn(string.format('%s: %s', prefix, line))
       end
-    end
+    end)
   end
 end
 

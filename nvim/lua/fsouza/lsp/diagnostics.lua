@@ -6,17 +6,15 @@ local vcmd = vim.cmd
 
 local function items_from_diagnostics(bufnr, diagnostics)
   local fname = api.nvim_buf_get_name(bufnr)
-  local items = {}
-  for _, diagnostic in ipairs(diagnostics) do
+  return require('fsouza.tablex').map(function(diagnostic)
     local pos = diagnostic.range.start
-    table.insert(items, {
+    return {
       filename = fname;
       lnum = pos.line + 1;
       col = pos.character + 1;
       text = diagnostic.message;
-    })
-  end
-  return items
+    }
+  end, diagnostics)
 end
 
 local function render_diagnostics(items)
@@ -43,13 +41,10 @@ end
 
 function M.list_workspace_diagnostics()
   local all_diagnostics = vim.lsp.diagnostic.get_all()
-  local all_items = {}
-  for bufnr, diagnostics in pairs(all_diagnostics) do
-    local buffer_items = items_from_diagnostics(bufnr, diagnostics)
-    for _, item in ipairs(buffer_items) do
-      table.insert(all_items, item)
-    end
-  end
+  local all_items = require('fsouza.tablex').flat_map(
+                      function(diagnostics, bufnr)
+      return items_from_diagnostics(bufnr, diagnostics)
+    end, all_diagnostics)
   render_diagnostics(all_items)
 end
 

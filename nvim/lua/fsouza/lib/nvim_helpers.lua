@@ -39,41 +39,41 @@ end
 function M.create_mappings(mappings, bufnr)
   local fn = api.nvim_set_keymap
   if bufnr then
-    fn = function(...)
-      api.nvim_buf_set_keymap(bufnr, ...)
-    end
+    fn = require('pl.func').bind1(api.nvim_buf_set_keymap, bufnr)
   end
 
-  for mode, rules in pairs(mappings) do
-    for _, m in ipairs(rules) do
+  local tablex = require('fsouza.tablex')
+  tablex.foreach(mappings, function(rules, mode)
+    tablex.foreach(rules, function(m)
       fn(mode, m.lhs, m.rhs, m.opts or {})
-    end
-  end
+    end)
+  end)
 end
 
 function M.remove_mappings(mappings, bufnr)
   local fn = api.nvim_del_keymap
   if bufnr then
-    fn = function(...)
-      api.nvim_buf_del_keymap(bufnr, ...)
-    end
+    fn = require('pl.func').bind1(api.nvim_buf_del_keymap, bufnr)
   end
 
-  for mode, rules in pairs(mappings) do
-    for _, m in ipairs(rules) do
+  local tablex = require('fsouza.tablex')
+  tablex.foreach(mappings, function(rules, mode)
+    tablex.foreach(rules, function(m)
       fn(mode, m.lhs)
-    end
-  end
+    end)
+  end)
 end
 
 function M.augroup(name, commands)
+  local tablex = require('fsouza.tablex')
+
   vcmd('augroup ' .. name)
   vcmd('autocmd!')
-  for _, c in ipairs(commands) do
+  tablex.foreach(commands, function(c)
     vcmd(string.format('autocmd %s %s %s %s', table.concat(c.events, ','),
                        table.concat(c.targets or {}, ','), table.concat(c.modifiers or {}, ' '),
                        c.command))
-  end
+  end)
   vcmd('augroup END')
 end
 
@@ -107,10 +107,6 @@ function M.rewrite_wrap(fn)
   view.lnum = lineno
   view.col = orig_colno + col_offset
   vfn.winrestview(view)
-end
-
-function M.filereadable(p)
-  return vfn.filereadable(p) == 1
 end
 
 return M

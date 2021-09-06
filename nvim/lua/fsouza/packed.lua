@@ -1,9 +1,11 @@
-local vcmd = vim.cmd
-local vfn = vim.fn
+local path = require('pl.path')
 local helpers = require('fsouza.lib.nvim_helpers')
 
+local vcmd = vim.cmd
+local vfn = vim.fn
+
 local M = {
-  paq_dir = vfn.stdpath('data') .. '/site/pack/paqs/';
+  paq_dir = path.join(vfn.stdpath('data'), 'site', 'pack', 'paqs');
   paqs = {
     {'savq/paq-nvim'; opt = true; as = 'paq-nvim'};
 
@@ -39,7 +41,7 @@ local M = {
 }
 
 local function download_paq(fn)
-  local paq_repo_dir = M.paq_dir .. 'opt/paq-nvim'
+  local paq_repo_dir = path.join(M.paq_dir, 'opt', 'paq-nvim')
 
   require('fsouza.lib.cmd').run('git', {
     args = {

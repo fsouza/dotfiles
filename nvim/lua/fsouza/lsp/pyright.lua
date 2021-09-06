@@ -1,5 +1,7 @@
-local loop = vim.loop
 local cmd = require('fsouza.lib.cmd')
+local path = require('pl.path')
+
+local loop = vim.loop
 
 local M = {}
 
@@ -45,8 +47,8 @@ local function set_from_venv_folder(cb)
   local function test_folder(idx)
     local folder = folders[idx]
     if folder then
-      local venv_candidate = string.format('%s/%s', loop.cwd(), folder)
-      loop.fs_stat(string.format('%s/bin/python', venv_candidate), function(err, stat)
+      local venv_candidate = path.join(loop.cwd(), folder)
+      loop.fs_stat(path.join(venv_candidate, 'bin', 'python'), function(err, stat)
         if err then
           return test_folder(idx + 1)
         end
@@ -90,7 +92,7 @@ local function detect_python_interpreter(cb)
       vim.schedule(function()
         vim.env.VIRTUAL_ENV = virtualenv
       end)
-      cb(string.format('%s/bin/python', virtualenv))
+      cb(path.join(virtualenv, 'bin', 'python'))
     end
   end)
 end

@@ -26,21 +26,18 @@ local function lang_to_ft(lang)
 end
 
 local function set_folding()
+  local tablex = require('fsouza.tablex')
+
   local helpers = require('fsouza.lib.nvim_helpers')
-  local file_types = {}
-  for i, lang in ipairs(wanted_parsers) do
-    file_types[i] = lang_to_ft(lang)
-  end
+  local file_types = tablex.flat_map(lang_to_ft, wanted_parsers)
 
   local foldexpr = 'nvim_treesitter#foldexpr()'
-
-  file_types = vim.tbl_flatten(file_types)
-  for _, ft in pairs(file_types) do
+  tablex.foreach(file_types, function(ft)
     if ft == vim.bo.filetype then
       vim.wo.foldmethod = 'expr'
       vim.wo.foldexpr = foldexpr
     end
-  end
+  end)
 
   helpers.augroup('folding_config', {
     {

@@ -23,9 +23,9 @@ local function notify(bufnr)
     textDocument = {uri = uri; version = api.nvim_buf_get_changedtick(bufnr)};
     contentChanges = {{text = read_buffer(bufnr)}};
   }
-  for _, client in ipairs(clients_by_buf[bufnr]) do
+  require('fsouza.tablex').foreach(clients_by_buf[bufnr], function(client)
     client.notify('textDocument/didChange', params)
-  end
+  end)
 end
 
 local function buf_attach_if_needed(bufnr)
