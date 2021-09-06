@@ -135,8 +135,7 @@ do
       settings = settings;
       filetypes = filetypes;
       on_init = function(client)
-        client.config.settings = require('fsouza.lsp.efm').gen_config()
-        client.notify('workspace/didChangeConfiguration', {settings = client.config.settings})
+        require('fsouza.lsp.efm').gen_config(client)
         return true
       end;
     }))
