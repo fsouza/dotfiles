@@ -19,6 +19,10 @@ local function process_args(args)
   end, args or {}, '')
 end
 
+local function find_venv_bin(bin_name)
+  return path.join(cache_dir, 'venv', 'bin', bin_name)
+end
+
 local function if_bin(bin_to_check, fallback_bin, cb)
   loop.fs_stat(bin_to_check, function(err, stat)
     if err == nil and stat.type == 'file' then
@@ -37,7 +41,7 @@ end
 
 local function get_python_bin(bin_name, cb)
   local virtualenv = os.getenv('VIRTUAL_ENV')
-  local default_bin = path.join(cache_dir, 'venv', 'bin', bin_name)
+  local default_bin = find_venv_bin(bin_name)
   if virtualenv then
     local venv_bin_name = path.join(virtualenv, 'bin', bin_name)
     if_bin(venv_bin_name, default_bin, cb)
@@ -124,9 +128,9 @@ local function get_autopep8(args, cb)
 end
 
 local function get_buildifier(cb)
-  local bin = path.join(config_dir, 'langservers', 'bin', 'buildifierw')
+  local buildifierw = path.join(config_dir, 'langservers', 'bin', 'buildifierw.py')
   cb({
-    formatCommand = string.format('%s ${INPUT}', bin);
+    formatCommand = string.format('%s %s ${INPUT}', find_venv_bin('python3'), buildifierw);
     formatStdin = true;
     rootMarkers = default_root_markers;
     env = {'NVIM_CACHE_DIR=' .. cache_dir};
