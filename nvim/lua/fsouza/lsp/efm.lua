@@ -389,6 +389,8 @@ end
 
 local function get_settings(cb)
   local settings = M.basic_settings()
+  settings.languages = {}
+
   local function add_if_not_empty(language, tool)
     if tool.formatCommand or tool.lintCommand then
       local tools = settings.languages[language] or {}
@@ -459,8 +461,11 @@ local function get_settings(cb)
 end
 
 function M.basic_settings()
-  return {lintDebounce = 250000000; rootMarkers = default_root_markers; languages = {}},
-         get_filetypes()
+  return {
+    lintDebounce = 250000000;
+    rootMarkers = default_root_markers;
+    languages = vim.empty_dict();
+  }, get_filetypes()
 end
 
 function M.gen_config(client)
