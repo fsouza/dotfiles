@@ -37,6 +37,7 @@ local M = {
     {'ibhagwan/fzf-lua'; as = 'fzf-lua'; opt = true};
     {'liuchengxu/vista.vim'; opt = true};
     {'neovim/nvim-lspconfig'; as = 'nvim-lspconfig'; opt = true};
+    {'lewis6991/impatient.nvim'; as = 'impatient.nvim'; opt = true};
   };
 }
 
