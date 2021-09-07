@@ -3,4 +3,4 @@
 set -e
 
 cd "$(dirname "${0}")/.."
-fnm exec --using=v16 npx --no-install "$@"
+exec fnm exec --using=v16 npx --no-install "$@"
