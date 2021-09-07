@@ -10,7 +10,7 @@ aspy.refactor-imports==2.1.1
     # via reorder-python-imports
 attrs==20.3.0
     # via flake8-bugbear
-autoflake8==0.2.0
+autoflake8==0.2.1
     # via -r requirements.in
 autopep8==1.5.7
     # via -r requirements.in
