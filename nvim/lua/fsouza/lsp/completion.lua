@@ -1,8 +1,11 @@
 local api = vim.api
+local vcmd = vim.cmd
 local vfn = vim.fn
 local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
+
+local autoconfirm_characters = {python = {'.'; '('}}
 
 local function load_lsp_source()
   require('cmp_nvim_lsp').setup()
@@ -51,8 +54,52 @@ local cr_cmd = helpers.ifn_map(function()
   return api.nvim_replace_termcodes(r, true, false, true)
 end)
 
+local confirm_and_esc_cmd = helpers.ifn_map(function()
+  local comp_info = vfn.complete_info()
+  if comp_info.pum_visible == 1 and comp_info.selected > -1 then
+    local cmp = require('cmp')
+    local core = require('cmp.core')
+    local entry = core.menu:get_selected_entry()
+    if entry then
+      core.confirm(entry, {behavior = cmp.ConfirmBehavior.Replace}, function()
+        cmp.close()
+        vcmd([[stopinsert]])
+      end)
+      return ''
+    end
+  end
+  return api.nvim_replace_termcodes([[<esc>]], true, false, true)
+end)
+
+local function autoconfirm_on_char(ch)
+  return helpers.ifn_map(function()
+    local comp_info = vfn.complete_info()
+    if comp_info.pum_visible == 1 and comp_info.selected > -1 then
+      local cmp = require('cmp')
+      local core = require('cmp.core')
+      local entry = core.menu:get_selected_entry()
+      if entry then
+        core.confirm(entry, {behavior = cmp.ConfirmBehavior.Replace}, function()
+          api.nvim_input(ch)
+        end)
+        return ''
+      end
+    end
+    return ch
+  end)
+end
+
 function M.on_attach(bufnr)
   setup(bufnr)
+
+  require('fsouza.color').set_popup_cb(function()
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local whl = vim.api.nvim_win_get_option(win, 'winhighlight')
+      if string.match(whl, 'CmpDocumentation') then
+        return win
+      end
+    end
+  end)
 
   local setup_cmd = helpers.fn_cmd(function()
     setup(bufnr)
@@ -72,22 +119,21 @@ function M.on_attach(bufnr)
     return ''
   end)
 
-  require('fsouza.color').set_popup_cb(function()
-    for _, win in ipairs(vim.api.nvim_list_wins()) do
-      local whl = vim.api.nvim_win_get_option(win, 'winhighlight')
-      if string.match(whl, 'CmpDocumentation') then
-        return win
-      end
-    end
+  local buf_mappings = {
+    i = {
+      {lhs = '<cr>'; rhs = cr_cmd; opts = {noremap = true}};
+      {lhs = '<c-x><c-o>'; rhs = complete_cmd; opts = {noremap = true}};
+      {lhs = [[<esc>]]; rhs = confirm_and_esc_cmd; opts = {noremap = true}};
+    };
+  }
+
+  local ft = api.nvim_buf_get_option(bufnr, 'filetype')
+  require('fsouza.tablex').foreach(autoconfirm_characters[ft] or {}, function(ch)
+    table.insert(buf_mappings.i, {lhs = ch; rhs = autoconfirm_on_char(ch); opts = {noremap = true}})
   end)
 
   vim.schedule(function()
-    helpers.create_mappings({
-      i = {
-        {lhs = '<cr>'; rhs = cr_cmd; opts = {noremap = true}};
-        {lhs = '<c-x><c-o>'; rhs = complete_cmd; opts = {noremap = true}};
-      };
-    }, bufnr)
+    helpers.create_mappings(buf_mappings, bufnr)
   end)
 end
 
