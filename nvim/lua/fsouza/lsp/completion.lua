@@ -8,13 +8,12 @@ local function load_lsp_source()
   require('cmp_nvim_lsp').setup()
 end
 
-local function setup(bufnr, autocomplete)
+local function setup(bufnr)
   vim.cmd('packadd nvim-cmp')
   load_lsp_source()
 
   local cmp = require('cmp')
   require('cmp.config').set_buffer({
-    completion = {autocomplete = autocomplete or false};
     mapping = {
       ['<c-y>'] = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace; select = true});
     };
@@ -54,20 +53,7 @@ end)
 function M.on_attach(bufnr)
   setup(bufnr)
 
-  local setup_cmd = helpers.fn_cmd(function()
-    setup(bufnr)
-  end)
-
   local complete_cmd = helpers.ifn_map(function()
-    setup(bufnr, {require('cmp').TriggerEvent.TextChanged})
-    helpers.augroup('fsouza__completion_switch_off', {
-      {
-        events = {'InsertLeave'};
-        targets = {'<buffer>'};
-        modifiers = {'++once'};
-        command = setup_cmd;
-      };
-    })
     require('cmp').complete()
     return ''
   end)
