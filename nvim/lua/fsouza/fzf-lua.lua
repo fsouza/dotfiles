@@ -1,5 +1,3 @@
-local vcmd = vim.cmd
-
 local _fzf_lua = nil
 
 local function should_qf(selected)
@@ -16,32 +14,13 @@ local function should_qf(selected)
   end)
 end
 
-local function edit_file(entry)
-  local file, line, col = entry:match('^([^:]+):(%d+):(%d+):')
-  if not file then
-    file, line = entry:match('^([^:]+):(%d+):')
-    if file then
-      col = 1
-    else
-      file = entry
-    end
-  end
-
-  vcmd('edit ' .. vim.fn.fnameescape(file))
-  if line and col then
-    vim.api.nvim_win_set_cursor(0, {tonumber(line); tonumber(col) - 1})
-  end
-end
-
 local function edit_or_qf(selected)
   local actions = require('fzf-lua.actions')
   if should_qf(selected) then
     actions.file_sel_to_qf(selected)
     vim.cmd('cc')
   else
-    for i = 2, #selected do
-      edit_file(selected[i])
-    end
+    actions.file_edit(selected, {})
   end
 end
 
