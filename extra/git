@@ -13,23 +13,8 @@ function git_config {
 	git config user.email "${email}"
 }
 
-function gh_clone {
-	local dest=${3:-${2}}
-
-	if [ -z "${dest}" ]; then
-		echo >&2 "can't clone without destination"
-		return 2
-	fi
-	git clone --recurse-submodules "git@github.com:${1}/${2}.git" "${dest}" &&
-		cd "${dest}" || return
-}
-
 function git_delete_gone_branches {
 	git branch -v | rg '([a-fA-F0-9])+\s\[gone\]' | awk '{print $1}' | xargs git branch -D
-}
-
-function c {
-	gh_clone fsouza "$1" "$2"
 }
 
 if [[ -v HOMEBREW_PREFIX ]]; then

@@ -15,7 +15,6 @@ pushd "${basedir}"
 git submodule update --init --recursive
 popd
 
-# Should I start using stow?
 home_files=(.zshrc .editorconfig)
 for file in "${home_files[@]}"; do
 	ln -sf "${basedir}"/"${file}" "${HOME}"/"${file}"
@@ -45,7 +44,6 @@ if [ -f "${basedir}"/bin/"${os}"-setup ]; then
 	"${basedir}"/bin/"${os}"-setup
 fi
 
-# bootstrap nvim
 if command -v nvim &>/dev/null; then
 	env NVIM_DEBUG=1 make -f "${HOME}"/.config/nvim/Makefile bootstrap
 fi
