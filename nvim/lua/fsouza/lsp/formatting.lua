@@ -68,8 +68,12 @@ local function organize_imports_and_write(client, bufnr)
       return
     end
 
-    local code_action = require('fsouza.tablex').find_value_if(actions, function(action)
-      return action.kind == 'source.organizeImports'
+    local _, code_action = require('fsouza.tablex').find_if(actions, function(action)
+      if action.kind == 'source.organizeImports' then
+        return action
+      else
+        return false
+      end
     end)
 
     if code_action and code_action.edit then

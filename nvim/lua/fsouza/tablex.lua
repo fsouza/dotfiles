@@ -29,14 +29,6 @@ function tablex.exists(t, pred)
   return pl_tablex.find_if(t, pred) ~= nil
 end
 
-function tablex.find_value_if(t, pred)
-  local idx = pl_tablex.find_if(t, pred) ~= nil
-  if idx == nil then
-    return nil
-  end
-  return t[idx]
-end
-
 return setmetatable(tablex, {
   __index = function(table, key)
     local value = pl_tablex[key]
