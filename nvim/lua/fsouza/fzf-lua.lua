@@ -44,8 +44,6 @@ local function fzf_lua()
       fzf_args = vim.env.FZF_DEFAULT_OPTS;
       fzf_layout = 'default';
       fzf_binds = {
-        'ctrl-f:page-down';
-        'ctrl-b:page-up';
         'ctrl-a:toggle-all';
         'ctrl-l:clear-query';
         'ctrl-d:preview-half-page-down';

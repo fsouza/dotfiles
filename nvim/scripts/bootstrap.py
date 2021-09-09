@@ -107,12 +107,15 @@ async def download_hererocks_py(cache_dir: Path) -> Path:
     filename = cache_dir / "hererocks.py"
 
     if not await exists(filename):
+        here_rocks_url = (
+            "https://raw.githubusercontent.com/luarocks/hererocks/master/hererocks.py"
+        )
         await run_cmd(
             "curl",
             [
                 "-sLo",
                 filename,
-                "https://raw.githubusercontent.com/luarocks/hererocks/master/hererocks.py",
+                here_rocks_url,
             ],
         )
 
