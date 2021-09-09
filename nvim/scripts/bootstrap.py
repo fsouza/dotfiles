@@ -191,7 +191,7 @@ async def install_servers_from_npm() -> None:
         print("skipping servers from npm")
         return
 
-    await run_cmd("fnm", ["install"])
+    await run_cmd("fnm", ["install"], cwd=base_dir / "langservers")
     await run_cmd(
         "fnm",
         [
