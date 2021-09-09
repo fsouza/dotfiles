@@ -84,7 +84,7 @@ return {
     };
   };
   scrollback_lines = 50000;
-  unix_domains = {{name = 'unix'}};
+  unix_domains = {{name = 'unix'; connect_automatically = true}};
   window_close_confirmation = 'NeverPrompt';
   window_padding = {top = 2; right = 2; bottom = 2; left = 2};
 }
