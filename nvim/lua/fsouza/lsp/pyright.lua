@@ -2,6 +2,7 @@ local cmd = require('fsouza.lib.cmd')
 local path = require('pl.path')
 
 local loop = vim.loop
+local vfn = vim.fn
 
 local M = {}
 
@@ -67,8 +68,18 @@ local function set_from_venv_folder(cb)
   test_folder(1)
 end
 
+local function set_from_nvim_venv(cb)
+  cb(path.join(vfn.stdpath('cache'), 'venv', 'bin', 'python'))
+end
+
 local function detect_virtualenv(cb)
-  local detectors = {set_from_venv_folder; set_from_env_var; set_from_poetry; set_from_pipenv}
+  local detectors = {
+    set_from_venv_folder;
+    set_from_env_var;
+    set_from_poetry;
+    set_from_pipenv;
+    set_from_nvim_venv;
+  }
 
   local function detect(idx)
     local detector = detectors[idx]
