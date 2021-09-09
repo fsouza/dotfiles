@@ -3,4 +3,4 @@ mkfile_dir := $(dir $(mkfile_path))
 
 .PHONY: shellcheck
 shellcheck:
-	cd $(mkfile_dir) && shellcheck bin/* nvim/langservers/bin/*
+	cd $(mkfile_dir) && shellcheck bin/*

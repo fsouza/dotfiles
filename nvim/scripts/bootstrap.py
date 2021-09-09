@@ -188,12 +188,11 @@ async def install_servers_from_npm() -> None:
         print("skipping servers from npm")
         return
 
-    await run_cmd("fnm", ["install", "v16"])
+    await run_cmd("fnm", ["install"])
     await run_cmd(
         "fnm",
         [
             "exec",
-            "--using=v16",
             "npx",
             "--yes",
             "yarn",

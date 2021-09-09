@@ -67,29 +67,34 @@ do
   local opts = require('fsouza.lsp.opts')
 
   if_executable('fnm', function()
-    local vim_node_ls = get_local_cmd('node-lsp')
-    lsp.bashls.setup(opts.with_defaults({cmd = {vim_node_ls; 'bash-language-server'; 'start'}}))
+    local nvim_python = path.join(cache_dir, 'venv', 'bin', 'python3')
+    local nvim_node_ls = get_local_cmd('node-lsp.py')
+    lsp.bashls.setup(opts.with_defaults({
+      cmd = {nvim_python; nvim_node_ls; 'bash-language-server'; 'start'};
+    }))
 
     lsp.cssls.setup(opts.with_defaults({
-      cmd = {vim_node_ls; 'vscode-css-language-server'; '--stdio'};
+      cmd = {nvim_python; nvim_node_ls; 'vscode-css-language-server'; '--stdio'};
     }))
 
     lsp.html.setup(opts.with_defaults({
-      cmd = {vim_node_ls; 'vscode-html-language-server'; '--stdio'};
+      cmd = {nvim_python; nvim_node_ls; 'vscode-html-language-server'; '--stdio'};
     }))
 
     lsp.jsonls.setup(opts.with_defaults({
-      cmd = {vim_node_ls; 'vscode-json-language-server'; '--stdio'};
+      cmd = {nvim_python; nvim_node_ls; 'vscode-json-language-server'; '--stdio'};
     }))
 
     lsp.tsserver.setup(opts.with_defaults({
-      cmd = {vim_node_ls; 'typescript-language-server'; '--stdio'};
+      cmd = {nvim_python; nvim_node_ls; 'typescript-language-server'; '--stdio'};
     }))
 
-    lsp.yamlls.setup(opts.with_defaults({cmd = {vim_node_ls; 'yaml-language-server'; '--stdio'}}))
+    lsp.yamlls.setup(opts.with_defaults({
+      cmd = {nvim_python; nvim_node_ls; 'yaml-language-server'; '--stdio'};
+    }))
 
     lsp.pyright.setup(opts.with_defaults({
-      cmd = {vim_node_ls; 'pyright-langserver'; '--stdio'};
+      cmd = {nvim_python; nvim_node_ls; 'pyright-langserver'; '--stdio'};
       settings = {
         pyright = {};
         python = {
