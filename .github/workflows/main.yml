@@ -111,3 +111,25 @@ jobs:
 
       - name: run lua-format-check
         run: make -f $HOME/.config/nvim/Makefile lua-format-check
+
+  pre-commit:
+    name: pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+
+      - uses: actions/setup-python@v2.2.2
+        with:
+          python-version: 3.x
+
+      - name: install pre-commit
+        run: pip install pre-commit
+
+      - name: pre-commit cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: ~/.cache/pre-commit
+          key: "${{ hashFiles('.pre-commit-config.yaml') }}"
+
+      - run: pre-commit run --all-files --show-diff-on-failure
+
