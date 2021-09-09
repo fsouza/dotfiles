@@ -6,21 +6,33 @@ local inactive_tab_colors = {fg_color = '#262626'; bg_color = tab_color_bg}
 
 local function get_keys()
   local keys = {
+    {key = 'c'; mods = 'SUPER'; action = wezterm.action({CopyTo = 'Clipboard'})};
+    {key = 'v'; mods = 'SUPER'; action = wezterm.action({PasteFrom = 'Clipboard'})};
     {
       key = '|';
       mods = 'LEADER';
-      action = wezterm.action {SplitHorizontal = {domain = 'CurrentPaneDomain'}};
+      action = wezterm.action({SplitHorizontal = {domain = 'CurrentPaneDomain'}});
     };
     {
       key = '-';
       mods = 'LEADER';
-      action = wezterm.action {SplitVertical = {domain = 'CurrentPaneDomain'}};
+      action = wezterm.action({SplitVertical = {domain = 'CurrentPaneDomain'}});
     };
-    {key = 'c'; mods = 'LEADER'; action = wezterm.action {SpawnTab = 'CurrentPaneDomain'}};
-    {key = 'x'; mods = 'LEADER'; action = wezterm.action {CloseCurrentTab = {confirm = false}}};
+    {key = 'c'; mods = 'LEADER'; action = wezterm.action({SpawnTab = 'CurrentPaneDomain'})};
+    {key = 'x'; mods = 'LEADER'; action = wezterm.action({CloseCurrentTab = {confirm = false}})};
     {key = 'w'; mods = 'LEADER'; action = 'ShowTabNavigator'};
+    {key = 'r'; mods = 'LEADER'; action = 'ReloadConfiguration'};
     {key = 'q'; mods = 'SUPER'; action = 'QuitApplication'};
+    {key = 'Enter'; mods = 'LEADER'; action = 'ActivateCopyMode'};
   }
+
+  for n = 1, 9 do
+    table.insert(keys, {
+      key = tostring(n);
+      mods = 'LEADER';
+      action = wezterm.action({ActivateTab = n - 1});
+    })
+  end
 
   return keys
 end
