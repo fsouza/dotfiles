@@ -2,9 +2,10 @@ local cmd = require('fsouza.lib.cmd')
 local path = require('pl.path')
 
 local loop = vim.loop
-local vfn = vim.fn
 
 local M = {}
+
+local cache_dir = vim.fn.stdpath('cache')
 
 local function set_from_env_var(cb)
   cb(os.getenv('VIRTUAL_ENV'))
@@ -69,7 +70,7 @@ local function set_from_venv_folder(cb)
 end
 
 local function set_from_nvim_venv(cb)
-  cb(path.join(vfn.stdpath('cache'), 'venv', 'bin', 'python'))
+  cb(path.join(cache_dir, 'venv', 'bin', 'python'))
 end
 
 local function detect_virtualenv(cb)
