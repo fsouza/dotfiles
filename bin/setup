@@ -2,18 +2,11 @@
 
 set -euo pipefail
 
-# This script setups this repository, intializing the submodules, setting up
-# symlinks, copying any required files and bootstrapping the nvim config.
-
 os=$(uname -s)
 basedir=$(
 	cd "$(dirname "${0}")"/..
 	pwd -P
 )
-
-pushd "${basedir}"
-git submodule update --init --recursive
-popd
 
 home_files=(.zshrc .editorconfig)
 for file in "${home_files[@]}"; do

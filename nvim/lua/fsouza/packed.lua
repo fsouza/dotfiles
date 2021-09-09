@@ -45,13 +45,7 @@ local function download_paq(fn)
   local paq_repo_dir = path.join(M.paq_dir, 'opt', 'paq-nvim')
 
   require('fsouza.lib.cmd').run('git', {
-    args = {
-      'clone';
-      '--depth=1';
-      '--recurse-submodules';
-      'https://github.com/savq/paq-nvim.git';
-      paq_repo_dir;
-    };
+    args = {'clone'; '--depth=1'; 'https://github.com/savq/paq-nvim.git'; paq_repo_dir};
   }, nil, function(result)
     if result.exit_status ~= 0 then
       error(string.format('failed to clone paq-nvim: %d - %s', result.exit_status, result.stderr))
