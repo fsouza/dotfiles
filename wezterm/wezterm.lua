@@ -9,7 +9,17 @@ local function get_keys()
     {key = 'c'; mods = 'SUPER'; action = wezterm.action({CopyTo = 'Clipboard'})};
     {key = 'v'; mods = 'SUPER'; action = wezterm.action({PasteFrom = 'Clipboard'})};
     {
-      key = '|';
+      key = [[|]];
+      mods = 'LEADER';
+      action = wezterm.action({SplitHorizontal = {domain = 'CurrentPaneDomain'}});
+    };
+    {
+      key = [[\]];
+      mods = 'LEADER|SHIFT';
+      action = wezterm.action({SplitHorizontal = {domain = 'CurrentPaneDomain'}});
+    };
+    {
+      key = [[\]];
       mods = 'LEADER';
       action = wezterm.action({SplitHorizontal = {domain = 'CurrentPaneDomain'}});
     };
@@ -18,12 +28,30 @@ local function get_keys()
       mods = 'LEADER';
       action = wezterm.action({SplitVertical = {domain = 'CurrentPaneDomain'}});
     };
+    {
+      key = '_';
+      mods = 'LEADER';
+      action = wezterm.action({SplitVertical = {domain = 'CurrentPaneDomain'}});
+    };
+    {
+      key = '-';
+      mods = 'LEADER|SHIFT';
+      action = wezterm.action({SplitVertical = {domain = 'CurrentPaneDomain'}});
+    };
+    {key = ' '; mods = 'LEADER|CTRL'; action = 'ActivateLastTab'};
     {key = 'c'; mods = 'LEADER'; action = wezterm.action({SpawnTab = 'CurrentPaneDomain'})};
     {key = 'x'; mods = 'LEADER'; action = wezterm.action({CloseCurrentTab = {confirm = false}})};
     {key = 'w'; mods = 'LEADER'; action = 'ShowTabNavigator'};
     {key = 'r'; mods = 'LEADER'; action = 'ReloadConfiguration'};
     {key = 'q'; mods = 'SUPER'; action = 'QuitApplication'};
     {key = 'Enter'; mods = 'LEADER'; action = 'ActivateCopyMode'};
+    {key = 'h'; mods = 'LEADER'; action = wezterm.action({ActivatePaneDirection = 'Left'})};
+    {key = 'l'; mods = 'LEADER'; action = wezterm.action({ActivatePaneDirection = 'Right'})};
+    {key = 'k'; mods = 'LEADER'; action = wezterm.action({ActivatePaneDirection = 'Up'})};
+    {key = 'j'; mods = 'LEADER'; action = wezterm.action({ActivatePaneDirection = 'Down'})};
+
+    -- missing this: basically ActivateLastPane
+    -- {key = ';'; mods = 'LEADER'; action = wezterm.action({ActivatePaneDirection = 'Down'})};
   }
 
   for n = 1, 9 do
@@ -68,6 +96,7 @@ return {
   font = wezterm.font('Source Code Pro');
   font_size = 12;
   force_reverse_video_cursor = true;
+  inactive_pane_hsb = {saturation = 1.0; brightness = 1.0};
   keys = get_keys();
   leader = {key = ' '; mods = 'CTRL'; timeout_milliseconds = 1000};
   mouse_bindings = {
@@ -84,7 +113,7 @@ return {
     };
   };
   scrollback_lines = 50000;
-  unix_domains = {{name = 'unix'; connect_automatically = true}};
+  unix_domains = {{name = 'unix'; connect_automatically = true; skip_permissions_check = false}};
   window_close_confirmation = 'NeverPrompt';
   window_padding = {top = 2; right = 2; bottom = 2; left = 2};
 }
