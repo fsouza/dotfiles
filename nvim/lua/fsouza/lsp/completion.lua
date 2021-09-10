@@ -4,15 +4,14 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
-local function load_lsp_source()
+local load_cmp = helpers.once(function()
+  vim.cmd('packadd nvim-cmp')
   require('cmp_nvim_lsp').setup()
-end
+  return require('cmp')
+end)
 
 local function setup(bufnr)
-  vim.cmd('packadd nvim-cmp')
-  load_lsp_source()
-
-  local cmp = require('cmp')
+  local cmp = load_cmp()
   require('cmp.config').set_buffer({
     mapping = {
       ['<c-y>'] = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace; select = true});
@@ -54,7 +53,7 @@ function M.on_attach(bufnr)
   setup(bufnr)
 
   local complete_cmd = helpers.ifn_map(function()
-    require('cmp').complete()
+    load_cmp().complete()
     return ''
   end)
 

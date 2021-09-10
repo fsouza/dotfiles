@@ -4,6 +4,10 @@ local M = {}
 
 local api = vim.api
 
+local load_vista_vim = helpers.once(function()
+  vim.cmd([[packadd vista.vim]])
+end)
+
 local cmds = {
   show_line_diagnostics = helpers.fn_map(function()
     vim.lsp.diagnostic.show_line_diagnostics({focusable = false})
@@ -150,7 +154,7 @@ local function attached(bufnr, client)
       table.insert(mappings.n, {
         lhs = '<leader>v';
         rhs = helpers.fn_map(function()
-          vim.cmd('packadd vista.vim')
+          load_vista_vim()
           vim.cmd('Vista nvim_lsp')
         end);
         opts = {silent = true};
