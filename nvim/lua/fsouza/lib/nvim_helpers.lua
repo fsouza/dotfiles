@@ -109,4 +109,17 @@ function M.rewrite_wrap(fn)
   vfn.winrestview(view)
 end
 
+function M.once(fn)
+  local result
+  local called = false
+  return function(...)
+    if called then
+      return result
+    end
+    called = true
+    result = fn(...)
+    return result
+  end
+end
+
 return M

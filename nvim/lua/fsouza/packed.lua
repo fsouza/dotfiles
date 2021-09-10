@@ -33,7 +33,7 @@ local M = {
     };
     {'nvim-treesitter/nvim-treesitter-textobjects'};
     {'nvim-treesitter/playground'};
-    {'SmiteshP/nvim-gps'};
+    {'SmiteshP/nvim-gps'; opt = true};
 
     -- completion stuff
     {'hrsh7th/nvim-cmp'; as = 'nvim-cmp'; opt = true};

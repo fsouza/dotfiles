@@ -34,7 +34,16 @@ local function get_file_types()
   return tablex.flat_map(lang_to_ft, wanted_parsers)
 end
 
+local setup_gps = helpers.once(function()
+  vim.cmd([[packadd nvim-gps]])
+  require('nvim-gps').setup({
+    icons = {['class-name'] = '￠ '; ['function-name'] = 'ƒ '; ['method-name'] = 'ƒ '};
+    separator = ' ＞ ';
+  })
+end)
+
 local gps_cmd = helpers.fn_map(function()
+  setup_gps()
   vim.notify(require('nvim-gps').get_location())
 end)
 
@@ -111,10 +120,6 @@ do
   set_folding()
   mappings()
 
-  require('nvim-gps').setup({
-    icons = {['class-name'] = '￠ '; ['function-name'] = 'ƒ '; ['method-name'] = 'ƒ '};
-    separator = ' ＞ ';
-  })
 end
 
 return M
