@@ -18,7 +18,7 @@ local function should_skip_buffer(bufnr)
   end
   local skip = not vim.startswith(file_path, prefix)
   if skip then
-    print(string.format([[[DEBUG] skipping %s because it's not in %s]], file_path, prefix))
+    vim.notify(string.format([[[DEBUG] skipping %s because it's not in %s]], file_path, prefix))
   end
   return skip
 end

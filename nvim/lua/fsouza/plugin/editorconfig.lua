@@ -115,7 +115,8 @@ local function set_config(bufnr)
 
   require('fsouza.lib.cmd').run('editorconfig', {args = {filename}}, nil, function(result)
     if result.exit_status ~= 0 then
-      print(string.format('failed to run editorconfig: %d - %s', result.exit_status, result.stderr))
+      vim.notify(string.format('failed to run editorconfig: %d - %s', result.exit_status,
+                               result.stderr))
       return
     end
 
