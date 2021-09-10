@@ -15,7 +15,7 @@ function refresh_go_tools {
 }
 
 function _bootstrap_go {
-	local BOOTSTRAP_GO="go1.17"
+	local BOOTSTRAP_GO="go1.17.1"
 	local dest_dir=${GO_HOME}/bootstrap
 	local go_binary=${dest_dir}/go/bin/go
 	if ! [ -x "${go_binary}" ]; then
