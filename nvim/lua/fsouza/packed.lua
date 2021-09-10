@@ -39,7 +39,7 @@ local M = {
 
     -- opt stuff
     {'ibhagwan/fzf-lua'; as = 'fzf-lua'; opt = true};
-    {'liuchengxu/vista.vim'; opt = true};
+    {'fsouza/vista.vim'; opt = true; branch = 'neovim-master-compatibility'};
     {'neovim/nvim-lspconfig'; as = 'nvim-lspconfig'; opt = true};
     {'norcalli/nvim-colorizer.lua'; as = 'nvim-colorizer.lua'; opt = true};
     {'lewis6991/impatient.nvim'; as = 'impatient.nvim'; opt = true};
