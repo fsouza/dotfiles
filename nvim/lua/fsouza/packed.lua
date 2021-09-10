@@ -15,14 +15,6 @@ local M = {
     {'justinmk/vim-sneak'};
     {'mattn/emmet-vim'};
     {'michaeljsmith/vim-indent-object'};
-    {
-      'nvim-treesitter/nvim-treesitter';
-      run = function()
-        vcmd('TSUpdate')
-      end;
-    };
-    {'nvim-treesitter/nvim-treesitter-textobjects'};
-    {'nvim-treesitter/playground'};
     {'rhysd/git-messenger.vim'};
     {'sheerun/vim-polyglot'};
     {'tpope/vim-commentary'};
@@ -31,6 +23,17 @@ local M = {
     {'tpope/vim-rhubarb'};
     {'tpope/vim-surround'};
     {'vijaymarupudi/nvim-fzf'};
+
+    -- treesitter
+    {
+      'nvim-treesitter/nvim-treesitter';
+      run = function()
+        vcmd('TSUpdate')
+      end;
+    };
+    {'nvim-treesitter/nvim-treesitter-textobjects'};
+    {'nvim-treesitter/playground'};
+    {'SmiteshP/nvim-gps'};
 
     -- completion stuff
     {'hrsh7th/nvim-cmp'; as = 'nvim-cmp'; opt = true};

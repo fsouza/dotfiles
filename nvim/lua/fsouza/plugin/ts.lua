@@ -89,4 +89,9 @@ do
     ensure_installed = wanted_parsers;
   })
   set_folding()
+
+  require('nvim-gps').setup({
+    icons = {['class-name'] = '￠ '; ['function-name'] = 'ƒ '; ['method-name'] = 'ƒ '};
+    separator = ' ＞ ';
+  })
 end
