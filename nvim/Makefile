@@ -14,7 +14,7 @@ all: luacheck lua-format
 
 .PHONY: bootstrap
 bootstrap:
-	python3 $(mkfile_dir)/scripts/bootstrap.py
+	python3.9 $(mkfile_dir)/scripts/bootstrap.py
 	make -f $(mkfile_path) update-paq kill-daemons clear-logs
 
 .PHONY: update-paq
