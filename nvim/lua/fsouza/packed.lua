@@ -15,8 +15,12 @@ local M = {
     {'justinmk/vim-sneak'};
     {'mattn/emmet-vim'};
     {'michaeljsmith/vim-indent-object'};
-    {'norcalli/nvim-colorizer.lua'};
-    {'nvim-treesitter/nvim-treesitter'};
+    {
+      'nvim-treesitter/nvim-treesitter';
+      run = function()
+        vcmd('TSUpdate')
+      end;
+    };
     {'nvim-treesitter/nvim-treesitter-textobjects'};
     {'nvim-treesitter/playground'};
     {'rhysd/git-messenger.vim'};
@@ -37,6 +41,7 @@ local M = {
     {'ibhagwan/fzf-lua'; as = 'fzf-lua'; opt = true};
     {'liuchengxu/vista.vim'; opt = true};
     {'neovim/nvim-lspconfig'; as = 'nvim-lspconfig'; opt = true};
+    {'norcalli/nvim-colorizer.lua'; as = 'nvim-colorizer.lua'; opt = true};
     {'lewis6991/impatient.nvim'; as = 'impatient.nvim'; opt = true};
   };
 }
