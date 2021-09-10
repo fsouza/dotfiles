@@ -1,3 +1,8 @@
+local helpers = require('fsouza.lib.nvim_helpers')
+local tablex = require('fsouza.tablex')
+
+local M = {}
+
 local wanted_parsers = {
   'bash';
   'c';
@@ -25,25 +30,40 @@ local function lang_to_ft(lang)
   return vim.tbl_flatten({{obj.filetype or lang}; obj.used_by or {}})
 end
 
+local function get_file_types()
+  return tablex.flat_map(lang_to_ft, wanted_parsers)
+end
+
+local gps_cmd = helpers.fn_map(function()
+  vim.notify(require('nvim-gps').get_location())
+end)
+
+function M.create_mappings(bufnr)
+  bufnr = bufnr or vim.fn.expand('<abuf>') or vim.api.nvim_get_current_buf()
+
+  helpers.create_mappings({n = {{lhs = '<leader>w'; rhs = gps_cmd; opts = {noremap = true}}}},
+                          bufnr)
+end
+
 local function set_folding()
-  local tablex = require('fsouza.tablex')
-
-  local helpers = require('fsouza.lib.nvim_helpers')
-  local file_types = tablex.flat_map(lang_to_ft, wanted_parsers)
-
+  local file_types = get_file_types()
   local foldexpr = 'nvim_treesitter#foldexpr()'
-  tablex.foreach(file_types, function(ft)
-    if ft == vim.bo.filetype then
-      vim.wo.foldmethod = 'expr'
-      vim.wo.foldexpr = foldexpr
-    end
-  end)
-
-  helpers.augroup('folding_config', {
+  helpers.augroup('fsouza__folding_config', {
     {
       events = {'FileType'};
       targets = file_types;
       command = [[setlocal foldmethod=expr foldexpr=]] .. foldexpr;
+    };
+  })
+end
+
+local function mappings()
+  local file_types = get_file_types()
+  helpers.augroup('fsouza__ts_mappings', {
+    {
+      events = {'FileType'};
+      targets = file_types;
+      command = [[lua require('fsouza.plugin.ts').create_mappings()]];
     };
   })
 end
@@ -89,9 +109,12 @@ do
     ensure_installed = wanted_parsers;
   })
   set_folding()
+  mappings()
 
   require('nvim-gps').setup({
     icons = {['class-name'] = '￠ '; ['function-name'] = 'ƒ '; ['method-name'] = 'ƒ '};
     separator = ' ＞ ';
   })
 end
+
+return M
