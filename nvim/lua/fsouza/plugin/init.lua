@@ -72,6 +72,25 @@ local function setup_fuzzy_mappings()
   })
 end
 
+local function setup_git_messenger()
+  local load_git_messenger = helpers.once(function()
+    vcmd([[packadd git-messenger.vim]])
+  end)
+
+  helpers.create_mappings({
+    n = {
+      {
+        lhs = '<leader>gm';
+        rhs = helpers.fn_map(function()
+          load_git_messenger()
+          vcmd('GitMessenger')
+        end);
+        opts = {noremap = true; silent = true};
+      };
+    };
+  })
+end
+
 local function setup_autofmt_commands()
   vcmd([[command! ToggleAutofmt lua require('fsouza.lib.autofmt').toggle()]])
   vcmd([[command! ToggleGlobalAutofmt lua require('fsouza.lib.autofmt').toggle_g()]])
@@ -172,6 +191,7 @@ do
   end)
   schedule(setup_editorconfig)
   schedule(setup_fuzzy_mappings)
+  schedule(setup_git_messenger)
   schedule(setup_hlyank)
   schedule(function()
     require('fsouza.plugin.mkdir').setup()

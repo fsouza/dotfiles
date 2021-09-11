@@ -1,4 +1,4 @@
-local _fzf_lua = nil
+local helpers = require('fsouza.lib.nvim_helpers')
 
 local function should_qf(selected)
   if #selected <= 2 then
@@ -35,44 +35,43 @@ local function file_actions()
   }
 end
 
-local function fzf_lua()
-  if _fzf_lua == nil then
-    local actions = file_actions()
+local fzf_lua = helpers.once(function()
+  vim.cmd([[packadd nvim-fzf]])
+  local actions = file_actions()
 
-    _fzf_lua = require('fzf-lua')
-    _fzf_lua.setup({
-      fzf_args = vim.env.FZF_DEFAULT_OPTS;
-      fzf_layout = 'default';
-      fzf_binds = {
-        'ctrl-a:toggle-all';
-        'ctrl-l:clear-query';
-        'ctrl-d:preview-half-page-down';
-        'ctrl-u:preview-half-page-up';
-        'ctrl-h:toggle-preview';
-      };
-      buffers = {file_icons = false; git_icons = false};
-      files = {file_icons = false; git_icons = false; actions = actions};
-      git = {files = {file_icons = false; git_icons = false; actions = actions}};
-      grep = {file_icons = false; git_icons = false; actions = actions};
-      oldfiles = {file_icons = false; git_icons = false; actions = actions};
-      lsp = {file_icons = false; git_icons = false; actions = actions};
-      winopts = {win_height = 0.75; win_width = 0.90};
-      previewers = {
-        builtin = {
-          keymap = {
-            toggle_hide = '<c-h>';
-            toggle_full = '<c-o>';
-            page_up = '<c-u>';
-            page_down = '<c-d>';
-            page_reset = '<c-r>';
-          };
+  local _fzf_lua = require('fzf-lua')
+  _fzf_lua.setup({
+    fzf_args = vim.env.FZF_DEFAULT_OPTS;
+    fzf_layout = 'default';
+    fzf_binds = {
+      'ctrl-a:toggle-all';
+      'ctrl-l:clear-query';
+      'ctrl-d:preview-half-page-down';
+      'ctrl-u:preview-half-page-up';
+      'ctrl-h:toggle-preview';
+    };
+    buffers = {file_icons = false; git_icons = false};
+    files = {file_icons = false; git_icons = false; actions = actions};
+    git = {files = {file_icons = false; git_icons = false; actions = actions}};
+    grep = {file_icons = false; git_icons = false; actions = actions};
+    oldfiles = {file_icons = false; git_icons = false; actions = actions};
+    lsp = {file_icons = false; git_icons = false; actions = actions};
+    winopts = {win_height = 0.75; win_width = 0.90};
+    previewers = {
+      builtin = {
+        keymap = {
+          toggle_hide = '<c-h>';
+          toggle_full = '<c-o>';
+          page_up = '<c-u>';
+          page_down = '<c-d>';
+          page_reset = '<c-r>';
         };
       };
-    })
-  end
+    };
+  })
 
   return _fzf_lua
-end
+end)
 
 return setmetatable({}, {
   __index = function(table, key)

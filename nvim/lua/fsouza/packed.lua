@@ -15,14 +15,12 @@ local M = {
     {'justinmk/vim-sneak'};
     {'mattn/emmet-vim'};
     {'michaeljsmith/vim-indent-object'};
-    {'rhysd/git-messenger.vim'};
     {'sheerun/vim-polyglot'};
     {'tpope/vim-commentary'};
     {'tpope/vim-fugitive'};
     {'tpope/vim-repeat'};
     {'tpope/vim-rhubarb'};
     {'tpope/vim-surround'};
-    {'vijaymarupudi/nvim-fzf'};
 
     -- treesitter
     {
@@ -41,11 +39,13 @@ local M = {
     {'l3mon4d3/luasnip'; as = 'luasnip'; opt = true};
 
     -- opt stuff
-    {'ibhagwan/fzf-lua'; as = 'fzf-lua'; opt = true};
     {'fsouza/vista.vim'; opt = true; branch = 'neovim-master-compatibility'};
+    {'ibhagwan/fzf-lua'; as = 'fzf-lua'; opt = true};
+    {'lewis6991/impatient.nvim'; as = 'impatient.nvim'; opt = true};
     {'neovim/nvim-lspconfig'; as = 'nvim-lspconfig'; opt = true};
     {'norcalli/nvim-colorizer.lua'; as = 'nvim-colorizer.lua'; opt = true};
-    {'lewis6991/impatient.nvim'; as = 'impatient.nvim'; opt = true};
+    {'rhysd/git-messenger.vim'; opt = true};
+    {'vijaymarupudi/nvim-fzf'; opt = true};
   };
 }
 
