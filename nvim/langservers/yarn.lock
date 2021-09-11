@@ -38,10 +38,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@fsouza/prettierd@^0.16.0":
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.16.0.tgz#23df6f62ef84f17990e5c214c969fa0b32578447"
-  integrity sha512-ISBECcmds1SZ0CQGNFaih954Ul7Ig2XfwAGSeWx7/0xS7l3Nm7S6FOV7JPZgfzIebHgk5gjkONFFxzdotbGHbA==
+"@fsouza/prettierd@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.17.0.tgz#e930420dd2fe3abeb2b5a15ebf8ad9d0b6e8ab11"
+  integrity sha512-C+N3+m10btFYIyzfdLXgHaqa/EF88VYrpbJ7xFrjzYfMYr16qJHRIBKVXZzdeej/3cKs6rK6BKRhJC5NksoIOw==
   dependencies:
     core_d "^3.2.0"
     nanolru "^1.0.0"
