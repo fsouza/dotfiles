@@ -69,18 +69,8 @@ local function set_from_venv_folder(cb)
   test_folder(1)
 end
 
-local function set_from_nvim_venv(cb)
-  cb(path.join(cache_dir, 'venv', 'bin', 'python'))
-end
-
 local function detect_virtualenv(cb)
-  local detectors = {
-    set_from_venv_folder;
-    set_from_env_var;
-    set_from_poetry;
-    set_from_pipenv;
-    set_from_nvim_venv;
-  }
+  local detectors = {set_from_venv_folder; set_from_env_var; set_from_poetry; set_from_pipenv}
 
   local function detect(idx)
     local detector = detectors[idx]
@@ -110,11 +100,13 @@ local function detect_python_interpreter(cb)
 end
 
 function M.detect_pythonPath(client)
+  client.config.settings.python.pythonPath = path.join(cache_dir, 'venv', 'bin', 'python')
+
   detect_python_interpreter(function(python_path)
     if python_path then
       client.config.settings.python.pythonPath = python_path
-      client.notify('workspace/didChangeConfiguration', {settings = client.config.settings})
     end
+    client.notify('workspace/didChangeConfiguration', {settings = client.config.settings})
   end)
 end
 
