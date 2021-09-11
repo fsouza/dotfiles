@@ -6,7 +6,7 @@ return {
   black = '#262626';
   red = '#990000';
   brown = '#5f0000';
-  white = '#f0f0f0';
+  white = '#ececec';
   pink = '#ffd7ff';
   orange = '#ffd787';
 }
