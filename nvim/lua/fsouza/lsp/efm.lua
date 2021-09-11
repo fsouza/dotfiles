@@ -373,6 +373,7 @@ local function get_python_tools(cb)
 end
 
 local prettierd_fts = {
+  'changelog';
   'css';
   'graphql';
   'html';

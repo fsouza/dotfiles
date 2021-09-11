@@ -130,7 +130,7 @@ local function setup_spell()
   helpers.augroup('auto_spell', {
     {
       events = {'FileType'};
-      targets = {'gitcommit'; 'markdown'; 'text'};
+      targets = {'changelog'; 'gitcommit'; 'markdown'; 'text'};
       command = [[setlocal spell]];
     };
   })
