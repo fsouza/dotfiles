@@ -2,9 +2,10 @@ do
   local helpers = require('fsouza.lib.nvim_helpers')
 
   local mappings = {
-    {ft = 'gomod'; patterns = {'go.mod'}};
     {ft = 'bzl'; patterns = {'Tiltfile'; '*.tilt'}};
     {ft = 'fsharp'; patterns = {'*.fs'; '*.fsx'; '*.fsi'}};
+    {ft = 'fsharp_project'; patterns = {'*.fsproj'}};
+    {ft = 'gomod'; patterns = {'go.mod'}};
   }
 
   helpers.augroup('fsouza__ftdetect', vim.tbl_map(function(m)

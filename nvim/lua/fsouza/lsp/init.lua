@@ -158,6 +158,10 @@ do
     }))
   end)
 
+  if_executable('dotnet', function()
+    lsp.fsautocomplete.setup(opts.with_defaults({}))
+  end)
+
   local clangd = require('pl.path').join(os.getenv('HOMEBREW_PREFIX'), 'opt', 'llvm', 'bin',
                                          'clangd')
   if_executable(clangd, function()

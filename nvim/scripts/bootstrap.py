@@ -273,6 +273,14 @@ async def install_buildifier(langservers_cache_dir: Path) -> None:
     )
 
 
+async def install_fsautocomplete() -> None:
+    if not await has_command("dotnet"):
+        print("skipping fsautocomplete")
+        return
+
+    await run_cmd("dotnet", ["tool", "install", "--global", "fsautocomplete"])
+
+
 async def setup_langservers(cache_dir: Path) -> None:
     langservers_cache_dir = cache_dir / "langservers"
     await asyncio.gather(
@@ -282,6 +290,7 @@ async def setup_langservers(cache_dir: Path) -> None:
         install_shfmt(langservers_cache_dir),
         install_efm(langservers_cache_dir),
         install_buildifier(langservers_cache_dir),
+        install_fsautocomplete(),
     )
 
 

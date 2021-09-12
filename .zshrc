@@ -15,6 +15,7 @@ source "${basedir}"/extra/brew
 prepend_to_path \
 	"${HOME}"/.cargo/bin \
 	"${HOME}"/.local/bin \
+	"${HOME}/.dotnet/tools" \
 	"${basedir}"/bin
 
 if command -v fnm &>/dev/null; then

@@ -7,7 +7,7 @@ indent_style = tab
 insert_final_line = true
 trim_trailing_whitespace = true
 
-[*.{bazel,bzl,d,elm,fs,proto,ps1,py,rs,rst,tl,ts,zig}]
+[*.{bazel,bzl,d,elm,fs,fsi,fsproj,fsx,proto,ps1,py,rs,rst,tl,ts,zig}]
 indent_style = space
 indent_size = 4
 
