@@ -47,6 +47,7 @@ autoload -Uz compinit && compinit -d "${HOME}/.cache/zsh/zcompdump" -u
 export HISTFILE="$HOME/.cache/zsh/history"
 export HISTSIZE=1234567890
 export SAVEHIST=$HISTSIZE
+export NO_COLOR=1
 
 setopt noautomenu
 setopt nomenucomplete
