@@ -56,6 +56,10 @@ jobs:
         with:
           go-version: "1.x"
 
+      - uses: actions/setup-dotnet@v1.8.1
+        with:
+          dotnet-version: "5.x"
+
       - name: langservers cache
         id: nvim-langservers-cache
         uses: actions/cache@v2.1.6
