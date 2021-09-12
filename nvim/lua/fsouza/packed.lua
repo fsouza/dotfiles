@@ -52,6 +52,7 @@ local M = {
     -- requires setting some global variables that I don't want to have to set
     -- :)
     {'HerringtonDarkholme/yats.vim'};
+    {'keith/swift.vim'};
     {'ocaml/vim-ocaml'};
     {'tbastos/vim-lua'};
     {'Vimjas/vim-python-pep8-indent'};

@@ -162,11 +162,7 @@ do
     lsp.fsautocomplete.setup(opts.with_defaults({}))
   end)
 
-  local clangd = require('pl.path').join(os.getenv('HOMEBREW_PREFIX'), 'opt', 'llvm', 'bin',
-                                         'clangd')
-  if_executable(clangd, function()
-    lsp.clangd.setup(opts.with_defaults({
-      cmd = {clangd; '--background-index'; '--pch-storage=memory'};
-    }))
+  if_executable('sourcekit-lsp', function()
+    lsp.sourcekit.setup(opts.with_defaults({}))
   end)
 end
