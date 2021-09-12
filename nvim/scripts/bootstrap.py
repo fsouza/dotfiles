@@ -278,7 +278,7 @@ async def install_fsautocomplete() -> None:
         print("skipping fsautocomplete")
         return
 
-    await run_cmd("dotnet", ["tool", "install", "--global", "fsautocomplete"])
+    await run_cmd("dotnet", ["tool", "update", "--global", "fsautocomplete"])
 
 
 async def setup_langservers(cache_dir: Path) -> None:
