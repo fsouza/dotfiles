@@ -10,6 +10,16 @@ local langservers_skip_set = {jsonls = true; tsserver = true}
 
 local langservers_org_imports = {gopls = true}
 
+local updates = {}
+
+local function set_last_update(bufnr)
+  updates[bufnr] = os.clock()
+end
+
+local function get_last_update(bufnr)
+  return updates[bufnr]
+end
+
 local function should_skip_buffer(bufnr)
   local file_path = vim.api.nvim_buf_get_name(bufnr)
   local prefix = vfn.getcwd()
@@ -106,7 +116,13 @@ local function autofmt_and_write(client, bufnr)
             lsp.util.apply_text_edits(result, bufnr)
           end)
 
-          vcmd('update')
+          local last_update = get_last_update(bufnr)
+          if last_update and os.clock() - last_update < 0.01 then
+            vcmd('noau update')
+          else
+            vcmd('update')
+            set_last_update(bufnr)
+          end
         end)
 
         if should_organize_imports(client.name) then
