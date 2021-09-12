@@ -15,7 +15,6 @@ local M = {
     {'justinmk/vim-sneak'};
     {'mattn/emmet-vim'};
     {'michaeljsmith/vim-indent-object'};
-    {'sheerun/vim-polyglot'};
     {'tpope/vim-commentary'};
     {'tpope/vim-fugitive'};
     {'tpope/vim-repeat'};
@@ -46,6 +45,17 @@ local M = {
     {'norcalli/nvim-colorizer.lua'; as = 'nvim-colorizer.lua'; opt = true};
     {'rhysd/git-messenger.vim'; opt = true};
     {'vijaymarupudi/nvim-fzf'; opt = true};
+
+    -- filetypes stuff
+    --
+    -- Note: I used to use vim-polyglot, but it loads too much garbage and
+    -- requires setting some global variables that I don't want to have to set
+    -- :)
+    {'HerringtonDarkholme/yats.vim'};
+    {'ocaml/vim-ocaml'};
+    {'tbastos/vim-lua'};
+    {'Vimjas/vim-python-pep8-indent'};
+    {'ziglang/zig.vim'};
   };
 }
 

@@ -42,7 +42,6 @@ local function global_vars()
   vim.g.netrw_home = data_dir
   vim.g.netrw_banner = 0
   vim.g.netrw_liststyle = 3
-  vim.g.polyglot_disabled = {'markdown'; 'sensible'; 'autoindent'; 'modula2'}
   vim.g.user_emmet_mode = 'i'
   vim.g.user_emmet_leader_key = [[<C-x>]]
   vim.g.wordmotion_extra = {
