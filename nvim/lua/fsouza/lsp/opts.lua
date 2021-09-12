@@ -4,8 +4,44 @@ local M = {}
 
 local api = vim.api
 
-local load_vista_vim = helpers.once(function()
-  vim.cmd([[packadd vista.vim]])
+local setup_symbols_outline = helpers.once(function()
+  require('symbols-outline').setup({
+    highlight_hovered_item = false;
+    auto_preview = false;
+    keymaps = {
+      hover_symbol = '<leader>i';
+      toggle_preview = {'K'};
+      close = {'<leader>v'; 'q'; '<esc>'};
+    };
+    symbols = {
+      File = {icon = '>'; hl = 'TSURI'};
+      Module = {icon = 'Ｍ'; hl = 'TSNamespace'};
+      Namespace = {icon = '>'; hl = 'TSNamespace'};
+      Package = {icon = '>'; hl = 'TSNamespace'};
+      Class = {icon = '𝓒'; hl = 'TSType'};
+      Method = {icon = 'ƒ'; hl = 'TSMethod'};
+      Property = {icon = 'ƒ'; hl = 'TSMethod'};
+      Field = {icon = '>'; hl = 'TSField'};
+      Constructor = {icon = 'ƒ'; hl = 'TSConstructor'};
+      Enum = {icon = 'ℰ'; hl = 'TSType'};
+      Interface = {icon = 'ﰮ'; hl = 'TSType'};
+      Function = {icon = 'ƒ'; hl = 'TSFunction'};
+      Variable = {icon = '>'; hl = 'TSConstant'};
+      Constant = {icon = '>'; hl = 'TSConstant'};
+      String = {icon = '𝓐'; hl = 'TSString'};
+      Number = {icon = '#'; hl = 'TSNumber'};
+      Boolean = {icon = '⊨'; hl = 'TSBoolean'};
+      Array = {icon = 'Ａ'; hl = 'TSConstant'};
+      Object = {icon = '⦿'; hl = 'TSType'};
+      Key = {icon = '🔐'; hl = 'TSType'};
+      Null = {icon = 'NULL'; hl = 'TSType'};
+      EnumMember = {icon = '>'; hl = 'TSField'};
+      Struct = {icon = '𝓢'; hl = 'TSType'};
+      Event = {icon = '>'; hl = 'TSType'};
+      Operator = {icon = '+'; hl = 'TSOperator'};
+      TypeParameter = {icon = '𝙏'; hl = 'TSParameter'};
+    };
+  })
 end)
 
 local cmds = {
@@ -87,6 +123,10 @@ local cmds = {
       require('fsouza.fzf-lua').lsp_workspace_symbols({query = query})
     end
   end);
+  symbols_outline = helpers.fn_map(function()
+    setup_symbols_outline()
+    require('symbols-outline').toggle_outline()
+  end);
 }
 
 local function attached(bufnr, client)
@@ -151,14 +191,8 @@ local function attached(bufnr, client)
     if client.resolved_capabilities.document_symbol then
       table.insert(mappings.n,
                    {lhs = '<leader>t'; rhs = cmds.list_document_symbols; opts = {silent = true}})
-      table.insert(mappings.n, {
-        lhs = '<leader>v';
-        rhs = helpers.fn_map(function()
-          load_vista_vim()
-          vim.cmd('Vista nvim_lsp')
-        end);
-        opts = {silent = true};
-      })
+      table.insert(mappings.n,
+                   {lhs = '<leader>v'; rhs = cmds.symbols_outline; opts = {silent = true}})
     end
 
     if client.resolved_capabilities.find_references then
