@@ -240,7 +240,7 @@ function M.with_defaults(opts)
 
   capabilities.workspace.executeCommand = {dynamicRegistration = false}
 
-  return vim.tbl_extend('keep', {
+  return vim.tbl_extend('force', {
     handlers = require('fsouza.lsp.handlers');
     on_attach = on_attach;
     capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities, {

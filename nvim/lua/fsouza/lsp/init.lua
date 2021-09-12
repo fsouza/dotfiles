@@ -159,7 +159,9 @@ do
   end)
 
   if_executable('dotnet', function()
-    lsp.fsautocomplete.setup(opts.with_defaults({}))
+    lsp.fsautocomplete.setup(opts.with_defaults({
+      root_dir = opts.root_pattern_with_fallback('*.fsproj', '*.sln');
+    }))
   end)
 
   if_executable('sourcekit-lsp', function()
