@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
-
-export NO_COLOR=1
-prefix=${HOMEBREW_PREFIX:-/usr/local}
-exec "${prefix}"/bin/fd "$@"
