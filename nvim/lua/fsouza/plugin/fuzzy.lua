@@ -16,7 +16,7 @@ end
 function M.grep_visual()
   local search = require('fsouza.lib.nvim_helpers').visual_selection()
   if string.find(search, '\n') then
-    error('only single line selections are supported')
+    return
   end
 
   if search ~= '' then

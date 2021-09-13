@@ -121,7 +121,7 @@ local function custom_groups(ns)
 end
 
 local function telescope(ns)
-  nvim_set_hl(ns, 'TelescopeSelection', {bold = true; bg = colors.light_gray})
+  nvim_set_hl(ns, 'TelescopeSelection', {bg = colors.light_gray})
   nvim_set_hl(ns, 'TelescopeSelectionCaret', {bold = true; bg = colors.light_gray})
   nvim_set_hl(ns, 'TelescopeMultiSelection', {bold = true; bg = colors.orange})
   nvim_set_hl(ns, 'TelescopeMatching', {bold = true})

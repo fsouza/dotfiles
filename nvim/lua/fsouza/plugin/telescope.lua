@@ -54,7 +54,7 @@ do
       mappings = {
         i = {
           ['<esc>'] = actions.close;
-          ['<c-a>'] = actions.toggle_all;
+          ['<a-a>'] = actions.toggle_all;
           ['<tab>'] = actions.toggle_selection + actions.move_selection_next;
           ['<s-tab>'] = actions.toggle_selection + actions.move_selection_previous;
           ['<cr>'] = edit_or_qf;
