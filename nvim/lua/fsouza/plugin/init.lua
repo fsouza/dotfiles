@@ -15,7 +15,7 @@ local function setup_fuzzy_mappings()
       {
         lhs = '<leader>zz';
         rhs = helpers.fn_map(function()
-          require('telescope.builtin').find_files()
+          require('fsouza.plugin.fuzzy').find_files()
         end);
         opts = {silent = true};
       };
@@ -31,7 +31,7 @@ local function setup_fuzzy_mappings()
         rhs = helpers.fn_map(function()
           local dir_path = vfn.expand('%:p:h')
           if vim.startswith(dir_path, '/') then
-            require('telescope.builtin').find_files({search_dirs = {dir_path}})
+            require('fsouza.fuzzy').find_files(dir_path)
           end
         end);
         opts = {silent = true};
