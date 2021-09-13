@@ -62,6 +62,22 @@ do
           ['<c-u>'] = actions.preview_scrolling_up;
         };
       };
+      vimgrep_arguments = {
+        {
+          'rg';
+          '--color=never';
+          '--no-heading';
+          '--with-filename';
+          '--line-number';
+          '--column';
+          '--smart-case';
+          '--hidden';
+          '--glob';
+          '!.git';
+          '--glob';
+          '!.hg';
+        };
+      };
     };
     extensions = {
       fzf = {
