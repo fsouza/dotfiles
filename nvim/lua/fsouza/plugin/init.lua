@@ -31,7 +31,7 @@ local function setup_fuzzy_mappings()
         rhs = helpers.fn_map(function()
           local dir_path = vfn.expand('%:p:h')
           if vim.startswith(dir_path, '/') then
-            require('fsouza.fuzzy').find_files(dir_path)
+            require('fsouza.plugin.fuzzy').find_files(dir_path)
           end
         end);
         opts = {silent = true};
@@ -39,10 +39,7 @@ local function setup_fuzzy_mappings()
       {
         lhs = '<leader>gg';
         rhs = helpers.fn_map(function()
-          local search = vfn.input([[rg：]])
-          if search ~= '' then
-            require('telescope.builtin').grep_string({search = search; use_regex = true})
-          end
+          require('fsouza.plugin.fuzzy').grep()
         end);
         opts = {silent = true};
       };
@@ -58,14 +55,7 @@ local function setup_fuzzy_mappings()
       {
         lhs = '<leader>gw';
         rhs = helpers.fn_map(function()
-          local search = require('fsouza.lib.nvim_helpers').visual_selection()
-          if string.find(search, '\n') then
-            error('only single line selections are supported')
-          end
-
-          if search ~= '' then
-            require('telescope.builtin').grep_string({search = search})
-          end
+          require('fsouza.plugin.fuzzy').grep_visual()
         end);
         opts = {silent = true};
       };
