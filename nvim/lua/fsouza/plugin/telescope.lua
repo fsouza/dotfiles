@@ -50,6 +50,7 @@ do
 
   telescope.setup {
     defaults = {
+      layout_config = {height = 0.75; width = 0.9};
       mappings = {
         i = {
           ['<esc>'] = actions.close;
