@@ -4,7 +4,8 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
-local debounced_print = require('fsouza.lib.debounce').debounce(2000, print)
+local debounced_notify = require('fsouza.lib.debounce').debounce(2000,
+                                                                 vim.schedule_wrap(vim.notify))
 
 local function on_progress_update()
   local mode = api.nvim_get_mode()
@@ -33,7 +34,7 @@ local function on_progress_update()
   end
 
   require('fsouza.tablex').foreach(messages, function(message)
-    debounced_print.call(format_message(message))
+    debounced_notify.call(format_message(message))
   end)
 end
 
