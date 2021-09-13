@@ -3,9 +3,6 @@ local vfn = vim.fn
 local helpers = require('fsouza.lib.nvim_helpers')
 
 local function setup_fuzzy_mappings()
-  local rg_opts =
-    [[--column -n --hidden --no-heading --color=always -S --glob '!.git' --glob '!.hg']]
-
   helpers.create_mappings({
     n = {
       {
