@@ -61,8 +61,14 @@ local function setup_fuzzy_mappings()
       {
         lhs = '<leader>gw';
         rhs = helpers.fn_map(function()
-          -- TODO: telescope doesn't support this yet. Send a PR?
-          require('fsouza.fzf-lua').grep_visual({rg_opts = rg_opts})
+          local search = require('fsouza.lib.nvim_helpers').visual_selection()
+          if string.find(search, '\n') then
+            error('only single line selections are supported')
+          end
+
+          if search ~= '' then
+            require('telescope.builtin').grep_string({search = search})
+          end
         end);
         opts = {silent = true};
       };

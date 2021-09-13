@@ -122,4 +122,46 @@ function M.once(fn)
   end
 end
 
+function M.visual_selection()
+  local visualmode = vfn.visualmode()
+  if visualmode == '' then
+    return ''
+  end
+
+  local start_pos = vfn.getpos('v')
+  local end_pos = vfn.getpos('.')
+  api.nvim_input('<esc>')
+
+  local start_line = start_pos[2]
+  local start_col = start_pos[3]
+
+  local end_line = end_pos[2]
+  local end_col = end_pos[3]
+
+  if visualmode == 'V' then
+    start_col = 0
+    end_col = 2147483647
+  end
+
+  if end_line < start_line then
+    start_line, end_line = end_line, start_line
+    start_col, end_col = end_col, start_col
+  elseif end_line == start_line and end_col < start_col then
+    start_col, end_col = end_col, start_col
+  end
+
+  -- Note: this should use nvim_buf_get_text when available?
+  local bufnr = api.nvim_get_current_buf()
+  local lines = api.nvim_buf_get_lines(bufnr, start_line - 1, end_line, true)
+
+  if #lines == 1 then
+    lines[1] = string.sub(lines[1], start_col, end_col)
+  else
+    lines[1] = string.sub(lines[1], start_col)
+    lines[#lines] = string.sub(lines[#lines], 1, end_col)
+  end
+
+  return table.concat(lines, '\n')
+end
+
 return M
