@@ -37,19 +37,17 @@ local M = {
     {'hrsh7th/cmp-nvim-lsp'; as = 'cmp-nvim-lsp'; opt = true};
     {'l3mon4d3/luasnip'; as = 'luasnip'; opt = true};
 
-    -- opt stuff
+    -- misc opt stuff
     {
       'ram02z/symbols-outline.nvim';
       opt = true;
       as = 'symbols-outline.nvim';
       branch = 'new_handler';
     };
-    {'ibhagwan/fzf-lua'; as = 'fzf-lua'; opt = true};
     {'lewis6991/impatient.nvim'; as = 'impatient.nvim'; opt = true};
     {'neovim/nvim-lspconfig'; as = 'nvim-lspconfig'; opt = true};
     {'norcalli/nvim-colorizer.lua'; as = 'nvim-colorizer.lua'; opt = true};
     {'rhysd/git-messenger.vim'; opt = true};
-    {'vijaymarupudi/nvim-fzf'; opt = true};
 
     -- filetypes stuff
     --
