@@ -1,2 +1,7 @@
 --type-add
 proto:*.proto
+--hidden
+--glob
+!.git
+--glob
+!.hg
