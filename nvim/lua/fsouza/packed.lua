@@ -38,16 +38,18 @@ local M = {
     {'l3mon4d3/luasnip'; as = 'luasnip'; opt = true};
 
     -- misc opt stuff
+    {'ibhagwan/fzf-lua'; as = 'fzf-lua'; opt = true};
+    {'lewis6991/impatient.nvim'; as = 'impatient.nvim'; opt = true};
+    {'neovim/nvim-lspconfig'; as = 'nvim-lspconfig'; opt = true};
+    {'norcalli/nvim-colorizer.lua'; as = 'nvim-colorizer.lua'; opt = true};
     {
       'ram02z/symbols-outline.nvim';
       opt = true;
       as = 'symbols-outline.nvim';
       branch = 'new_handler';
     };
-    {'lewis6991/impatient.nvim'; as = 'impatient.nvim'; opt = true};
-    {'neovim/nvim-lspconfig'; as = 'nvim-lspconfig'; opt = true};
-    {'norcalli/nvim-colorizer.lua'; as = 'nvim-colorizer.lua'; opt = true};
     {'rhysd/git-messenger.vim'; opt = true};
+    {'vijaymarupudi/nvim-fzf'; opt = true};
 
     -- filetypes stuff
     --
@@ -60,16 +62,6 @@ local M = {
     {'tbastos/vim-lua'};
     {'Vimjas/vim-python-pep8-indent'};
     {'ziglang/zig.vim'};
-
-    -- telescope
-    {'nvim-lua/plenary.nvim'; opt = true; as = 'plenary.nvim'};
-    {'nvim-telescope/telescope.nvim'; opt = true; as = 'telescope.nvim'};
-    {
-      'nvim-telescope/telescope-fzf-native.nvim';
-      opt = true;
-      run = 'make';
-      as = 'telescope-fzf-native.nvim';
-    };
   };
 }
 

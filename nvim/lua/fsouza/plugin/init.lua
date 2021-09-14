@@ -8,7 +8,7 @@ local function setup_fuzzy_mappings()
       {
         lhs = '<leader>zb';
         rhs = helpers.fn_map(function()
-          require('telescope.builtin').buffers()
+          require('fsouza.plugin.fuzzy').buffers()
         end);
         opts = {silent = true};
       };
@@ -22,7 +22,7 @@ local function setup_fuzzy_mappings()
       {
         lhs = '<leader>;';
         rhs = helpers.fn_map(function()
-          require('telescope.builtin').commands()
+          require('fsouza.plugin.fuzzy').commands()
         end);
         opts = {silent = true};
       };
@@ -46,7 +46,7 @@ local function setup_fuzzy_mappings()
       {
         lhs = '<leader>gw';
         rhs = helpers.fn_map(function()
-          require('telescope.builtin').grep_string()
+          require('fsouza.plugin.fuzzy').grep(vfn.expand('<cword>'))
         end);
         opts = {silent = true};
       };
@@ -201,9 +201,6 @@ do
     require('fsouza.plugin.ts')
   end)
   schedule(setup_lsp_commands)
-  schedule(function()
-    require('fsouza.plugin.telescope')
-  end)
   schedule(setup_fuzzy_mappings)
   schedule(trigger_ft)
   schedule(function()
