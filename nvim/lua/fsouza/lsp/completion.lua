@@ -22,7 +22,7 @@ local function setup(bufnr)
       end;
     };
     sources = {{name = 'nvim_lsp'}};
-    documentation = {border = 'none'};
+    documentation = {border = 'none'; winhighlight = 'Normal:CmpDocumentation'};
     preselect = cmp.PreselectMode.None;
     formatting = {
       format = function(entry, vim_item)
