@@ -53,13 +53,23 @@ do
       layout_config = {height = 0.75; width = 0.9};
       mappings = {
         i = {
-          ['<esc>'] = actions.close;
           ['<a-a>'] = actions.toggle_all;
           ['<tab>'] = actions.toggle_selection + actions.move_selection_next;
           ['<s-tab>'] = actions.toggle_selection + actions.move_selection_previous;
           ['<cr>'] = edit_or_qf;
           ['<c-d>'] = actions.preview_scrolling_down;
           ['<c-u>'] = actions.preview_scrolling_up;
+          ['<c-g>'] = actions.close;
+        };
+        n = {
+          ['<esc>'] = actions.close;
+          ['<c-a>'] = actions.toggle_all;
+          ['<tab>'] = actions.toggle_selection + actions.move_selection_next;
+          ['<s-tab>'] = actions.toggle_selection + actions.move_selection_previous;
+          ['<cr>'] = edit_or_qf;
+          ['<c-d>'] = actions.preview_scrolling_down;
+          ['<c-u>'] = actions.preview_scrolling_up;
+          ['<c-g>'] = actions.close;
         };
       };
       vimgrep_arguments = {
