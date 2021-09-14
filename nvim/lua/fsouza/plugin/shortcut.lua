@@ -9,7 +9,7 @@ local function fzf_dir(directory, cd)
     api.nvim_set_current_dir(directory)
     require('fsouza.plugin.fuzzy').find_files()
   else
-    require('fsouza.plugin.fuzzy').find_files({search_dirs = {directory}})
+    require('fsouza.plugin.fuzzy').find_files(directory)
   end
 end
 
