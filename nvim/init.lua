@@ -115,8 +115,6 @@ local function global_mappings()
     {lhs = '<c-f>'; rhs = '<right>'; opts = {noremap = true}};
     {lhs = '<c-b>'; rhs = '<left>'; opts = {noremap = true}};
     {lhs = '<c-d>'; rhs = '<del>'; opts = {noremap = true}};
-    {lhs = '<c-a>'; rhs = '<home>'; opts = {noremap = true}};
-    {lhs = '<c-e>'; rhs = '<end>'; opts = {noremap = true}};
   }
 
   local maps = {c = rl_bindings; o = rl_bindings; i = rl_insert_mode_bindings}
