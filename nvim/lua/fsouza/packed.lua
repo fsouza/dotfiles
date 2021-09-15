@@ -42,12 +42,7 @@ local M = {
     {'lewis6991/impatient.nvim'; as = 'impatient.nvim'; opt = true};
     {'neovim/nvim-lspconfig'; as = 'nvim-lspconfig'; opt = true};
     {'norcalli/nvim-colorizer.lua'; as = 'nvim-colorizer.lua'; opt = true};
-    {
-      'ram02z/symbols-outline.nvim';
-      opt = true;
-      as = 'symbols-outline.nvim';
-      branch = 'new_handler';
-    };
+    {'simrat39/symbols-outline.nvim'; opt = true; as = 'symbols-outline.nvim'};
     {'rhysd/git-messenger.vim'; opt = true};
     {'vijaymarupudi/nvim-fzf'; opt = true};
 
