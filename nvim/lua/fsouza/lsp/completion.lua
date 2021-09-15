@@ -13,6 +13,7 @@ end)
 local function setup(bufnr)
   local cmp = load_cmp()
   require('cmp.config').set_buffer({
+    completion = {autocomplete = false};
     mapping = {
       ['<c-y>'] = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace; select = true});
     };

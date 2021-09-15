@@ -9,9 +9,8 @@ local setup_symbols_outline = helpers.once(function()
     highlight_hovered_item = false;
     auto_preview = false;
     keymaps = {
-      hover_symbol = '<leader>i';
-      toggle_preview = {'K'};
-      close = {'<leader>v'; 'q'; '<esc>'};
+      toggle_preview = {'<leader>i'};
+      close = {'<leader>v'};
     };
     symbols = {
       File = {icon = '>'; hl = 'TSURI'};
