@@ -8,10 +8,7 @@ local setup_symbols_outline = helpers.once(function()
   require('symbols-outline').setup({
     highlight_hovered_item = false;
     auto_preview = false;
-    keymaps = {
-      toggle_preview = {'<leader>i'};
-      close = {'<leader>v'};
-    };
+    keymaps = {toggle_preview = {'<leader>i'}; close = {'<leader>v'}};
     symbols = {
       File = {icon = '>'; hl = 'TSURI'};
       Module = {icon = 'Ｍ'; hl = 'TSNamespace'};
