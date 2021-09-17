@@ -4,7 +4,7 @@ local helpers = require('fsouza.lib.nvim_helpers')
 
 local M = {}
 
-local debounced_notify = require('fsouza.lib.debounce').debounce(2000,
+local debounced_notify = require('fsouza.lib.debounce').debounce(4000,
                                                                  vim.schedule_wrap(vim.notify))
 
 local function on_progress_update()
