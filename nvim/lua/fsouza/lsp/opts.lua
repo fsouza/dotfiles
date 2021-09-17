@@ -1,7 +1,5 @@
 local helpers = require('fsouza.lib.nvim_helpers')
 
-local vfn = vim.fn
-
 local M = {}
 
 local api = vim.api
