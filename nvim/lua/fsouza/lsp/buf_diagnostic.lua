@@ -1,4 +1,7 @@
+local helpers = require('fsouza.lib.nvim_helpers')
+
 local api = vim.api
+local vfn = vim.fn
 
 local M = {}
 
@@ -7,7 +10,7 @@ local debouncers = {}
 local hooks = {}
 
 function M.buf_clear_all_diagnostics()
-  require('fsouza.tablex').foreach(api.nvim_list_bufs(), vim.lsp.diagnostic.clear)
+  vim.diagnostic.hide()
 end
 
 -- This is a workaround because the default lsp client doesn't let us hook into
@@ -18,18 +21,34 @@ local function exec_hooks()
   end)
 end
 
+local redefine_signs = helpers.once(function(cb)
+  local levels = {'Error'; 'Warning'; 'Info'; 'Hint'}
+  require('fsouza.tablex').foreach(levels, function(level)
+    local sign_name = 'DiagnosticSign' .. level
+    vfn.sign_define(sign_name, {text = ''; texthl = sign_name; numhl = sign_name})
+    cb()
+  end)
+end)
+
 local function make_handler()
-  local lsp_diagnostic = vim.lsp.diagnostic
   local handler = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
     underline = true;
     virtual_text = false;
     signs = true;
     update_in_insert = true;
   })
-  return function(err, result, context, ...)
+  return function(err, result, context, config)
     vim.schedule(exec_hooks)
-    lsp_diagnostic.clear(context.bufnr, context.client_id)
-    return handler(err, result, context, ...)
+    vim.diagnostic.reset(context.client_id, context.bufnr)
+    handler(err, result, context, config)
+    if result and vim.tbl_islist(result.diagnostics) and #result.diagnostics > 0 then
+      vim.schedule(function()
+        redefine_signs(function()
+          vim.diagnostic.reset(context.client_id, context.bufnr)
+          handler(err, result, context, config)
+        end)
+      end)
+    end
   end
 end
 

@@ -67,7 +67,7 @@ local function organize_imports_and_write(client, bufnr)
   local changed_tick = api.nvim_buf_get_changedtick(bufnr)
   local params = vim.lsp.util.make_given_range_params({1; 1},
                                                       {api.nvim_buf_line_count(bufnr); 2147483647})
-  params.context = {diagnostics = vim.lsp.diagnostic.get(bufnr, client.id)}
+  params.context = {diagnostics = vim.diagnostic.get(bufnr, {namespace = client.id})}
 
   client.request('textDocument/codeAction', params, function(_, actions)
     if changed_tick ~= api.nvim_buf_get_changedtick(bufnr) then

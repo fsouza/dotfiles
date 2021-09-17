@@ -30,7 +30,7 @@ end
 
 function M.list_file_diagnostics()
   local bufnr = api.nvim_get_current_buf()
-  local diagnostics = vim.lsp.diagnostic.get(bufnr)
+  local diagnostics = vim.diagnostic.get(bufnr)
   if not diagnostics then
     return
   end
@@ -40,7 +40,7 @@ function M.list_file_diagnostics()
 end
 
 function M.list_workspace_diagnostics()
-  local all_diagnostics = vim.lsp.diagnostic.get_all()
+  local all_diagnostics = vim.diagnostic.get(nil)
   local all_items = require('fsouza.tablex').flat_map(
                       function(diagnostics, bufnr)
       return items_from_diagnostics(bufnr, diagnostics)

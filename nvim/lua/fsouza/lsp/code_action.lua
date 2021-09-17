@@ -34,12 +34,13 @@ end
 
 local function code_action_for_buf()
   local bufnr = api.nvim_get_current_buf()
-  vim.lsp.buf.range_code_action({diagnostics = vim.lsp.diagnostic.get(bufnr)}, {1; 1},
+  vim.lsp.buf.range_code_action({diagnostics = vim.diagnostic.get(bufnr)}, {1; 1},
                                 {api.nvim_buf_line_count(0); 2147483647})
 end
 
 local function code_action_for_line(cb)
-  local context = {diagnostics = vim.lsp.diagnostic.get_line_diagnostics()}
+  local lnum, _ = api.nvim_win_get_cursor(0)
+  local context = {diagnostics = vim.diagnostic.get(0, {lnum = lnum - 1})}
   local params = util.make_range_params()
   params.context = context
   vim.lsp.buf_request(0, 'textDocument/codeAction', params, cb)

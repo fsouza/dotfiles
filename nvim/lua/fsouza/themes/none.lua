@@ -98,8 +98,8 @@ local function setup_lsp_diagnostics(ns)
   local diagnostics_sign = {fg = colors.red; bg = colors.lighter_gray; bold = true}
 
   require('fsouza.tablex').foreach({'Error'; 'Warning'; 'Information'; 'Hint'}, function(level)
-    local sign_group = 'LspDiagnosticsSign' .. level
-    local floating_group = 'LspDiagnosticsFloating' .. level
+    local sign_group = 'DiagnosticSign' .. level
+    local floating_group = 'DiagnosticFloating' .. level
 
     nvim_set_hl(ns, floating_group, diagnostics_floating)
     nvim_set_hl(ns, sign_group, diagnostics_sign)

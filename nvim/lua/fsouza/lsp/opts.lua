@@ -1,5 +1,7 @@
 local helpers = require('fsouza.lib.nvim_helpers')
 
+local vfn = vim.fn
+
 local M = {}
 
 local api = vim.api
@@ -42,7 +44,7 @@ end)
 
 local cmds = {
   show_line_diagnostics = helpers.fn_map(function()
-    vim.lsp.diagnostic.show_line_diagnostics({focusable = false})
+    vim.diagnostic.show_line_diagnostics({focusable = false})
   end);
   list_file_diagnostics = helpers.fn_map(function()
     require('fsouza.lsp.diagnostics').list_file_diagnostics()
@@ -57,10 +59,10 @@ local cmds = {
     require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics()
   end);
   goto_next_diagnostic = helpers.fn_map(function()
-    vim.lsp.diagnostic.goto_next({popup_opts = {focusable = false}})
+    vim.diagnostic.goto_next({popup_opts = {focusable = false}})
   end);
   goto_prev_diagnostic = helpers.fn_map(function()
-    vim.lsp.diagnostic.goto_prev({popup_opts = {focusable = false}})
+    vim.diagnostic.goto_prev({popup_opts = {focusable = false}})
   end);
   rename = helpers.fn_map(function()
     vim.lsp.buf.rename()
