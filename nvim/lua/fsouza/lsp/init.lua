@@ -1,4 +1,3 @@
-local helpers = require('fsouza.lib.nvim_helpers')
 local path = require('pl.path')
 
 local vfn = vim.fn
