@@ -37,18 +37,22 @@ local function make_handler()
     signs = true;
     update_in_insert = true;
   })
-  return function(err, result, context, config)
-    vim.schedule(exec_hooks)
+
+  local function handle_diagnostics(err, result, context, config)
     vim.diagnostic.reset(context.client_id, context.bufnr)
     handler(err, result, context, config)
     if result and vim.tbl_islist(result.diagnostics) and #result.diagnostics > 0 then
       vim.schedule(function()
         redefine_signs(function()
-          vim.diagnostic.reset(context.client_id, context.bufnr)
-          handler(err, result, context, config)
+          handle_diagnostics(err, result, context, config)
         end)
       end)
     end
+  end
+
+  return function(err, result, context, config)
+    vim.schedule(exec_hooks)
+    handle_diagnostics(err, result, context, config)
   end
 end
 
