@@ -26,8 +26,8 @@ local redefine_signs = helpers.once(function(cb)
   require('fsouza.tablex').foreach(levels, function(level)
     local sign_name = 'DiagnosticSign' .. level
     vfn.sign_define(sign_name, {text = ''; texthl = sign_name; numhl = sign_name})
-    cb()
   end)
+  cb()
 end)
 
 local function make_handler()
