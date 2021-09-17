@@ -1,3 +1,4 @@
+local helpers = require('fsouza.lib.nvim_helpers')
 local path = require('pl.path')
 
 local vfn = vim.fn
@@ -44,8 +45,17 @@ local function patch_lsp()
   end
 end
 
+local function define_signs()
+  local levels = {'Error'; 'Warn'; 'Info'; 'Hint'}
+  require('fsouza.tablex').foreach(levels, function(level)
+    local sign_name = 'DiagnosticSign' .. level
+    vfn.sign_define(sign_name, {text = ''; texthl = sign_name; numhl = sign_name})
+  end)
+end
+
 do
   patch_lsp()
+  define_signs()
 
   local function if_executable(name, cb)
     if vfn.executable(name) == 1 then

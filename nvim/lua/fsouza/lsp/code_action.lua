@@ -39,7 +39,7 @@ local function code_action_for_buf()
 end
 
 local function code_action_for_line(cb)
-  local lnum, _ = api.nvim_win_get_cursor(0)
+  local lnum, _ = unpack(api.nvim_win_get_cursor(0))
   local context = {diagnostics = vim.diagnostic.get(0, {lnum = lnum - 1})}
   local params = util.make_range_params()
   params.context = context

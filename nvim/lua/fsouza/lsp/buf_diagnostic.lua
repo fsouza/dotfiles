@@ -21,15 +21,6 @@ local function exec_hooks()
   end)
 end
 
-local redefine_signs = helpers.once(function(cb)
-  local levels = {'Error'; 'Warning'; 'Info'; 'Hint'}
-  require('fsouza.tablex').foreach(levels, function(level)
-    local sign_name = 'DiagnosticSign' .. level
-    vfn.sign_define(sign_name, {text = ''; texthl = sign_name; numhl = sign_name})
-  end)
-  cb()
-end)
-
 local function make_handler()
   local handler = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
     underline = true;
@@ -38,21 +29,10 @@ local function make_handler()
     update_in_insert = true;
   })
 
-  local function handle_diagnostics(err, result, context, config)
-    vim.diagnostic.reset(context.client_id, context.bufnr)
-    handler(err, result, context, config)
-    if result and vim.tbl_islist(result.diagnostics) and #result.diagnostics > 0 then
-      vim.schedule(function()
-        redefine_signs(function()
-          handle_diagnostics(err, result, context, config)
-        end)
-      end)
-    end
-  end
-
-  return function(err, result, context, config)
+  return function(err, result, context, ...)
     vim.schedule(exec_hooks)
-    handle_diagnostics(err, result, context, config)
+    vim.diagnostic.reset(context.client_id, context.bufnr)
+    handler(err, result, context, ...)
   end
 end
 

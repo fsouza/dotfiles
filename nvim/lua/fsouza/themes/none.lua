@@ -97,7 +97,7 @@ local function setup_lsp_diagnostics(ns)
   local diagnostics_floating = {link = 'Normal'}
   local diagnostics_sign = {fg = colors.red; bg = colors.lighter_gray; bold = true}
 
-  require('fsouza.tablex').foreach({'Error'; 'Warning'; 'Information'; 'Hint'}, function(level)
+  require('fsouza.tablex').foreach({'Error'; 'Warn'; 'Info'; 'Hint'}, function(level)
     local sign_group = 'DiagnosticSign' .. level
     local floating_group = 'DiagnosticFloating' .. level
 
