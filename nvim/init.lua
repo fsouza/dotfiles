@@ -51,6 +51,7 @@ local function global_vars()
     [=[\([A-F]\+[0-9]\+\([A-F]\|[0-9]\)*\)\+]=];
     [=[\([0-9]\+[A-F]\+\([0-9]\|[A-F]\)*\)\+]=];
   }
+  vim.g.zig_fmt_autosave = 0
 end
 
 local function ui_options()
