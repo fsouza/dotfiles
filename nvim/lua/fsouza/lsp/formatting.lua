@@ -112,9 +112,7 @@ local function autofmt_and_write(client, bufnr)
 
       if result then
         api.nvim_buf_call(bufnr, function()
-          helpers.rewrite_wrap(function()
-            lsp.util.apply_text_edits(result, bufnr)
-          end)
+          lsp.util.apply_text_edits(result, bufnr)
 
           local last_update = get_last_update(bufnr)
           if last_update and os.clock() - last_update < 0.01 then
