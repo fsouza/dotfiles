@@ -19,14 +19,14 @@ jobs:
     name: bootstrap-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
-      - name: install neovim nightly
+      - name: install neovim
         run: |
           if [ "${{ runner.os }}" = "Linux" ]; then
             suffix=linux64
           else
             suffix=macos
           fi
-          curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-${suffix}.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
+          curl -L https://github.com/neovim/neovim/releases/download/v0.5.0/nvim-${suffix}.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
 
       - name: install build deps on mac
         if: runner.os == 'macOS'
