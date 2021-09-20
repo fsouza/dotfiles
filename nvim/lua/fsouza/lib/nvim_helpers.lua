@@ -2,7 +2,6 @@ local M = {fns = {}}
 
 local api = vim.api
 local vcmd = vim.cmd
-local vfn = vim.fn
 
 local function register_cb(fn)
   local id = tostring(fn)
