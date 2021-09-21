@@ -10,8 +10,7 @@ function _normalize_name_version {
 }
 
 function refresh_go_tools {
-	go install golang.org/x/tools/cmd/goimports@latest &&
-		go install honnef.co/go/tools/cmd/staticcheck@latest
+	go install honnef.co/go/tools/cmd/staticcheck@latest
 }
 
 function _bootstrap_go {
