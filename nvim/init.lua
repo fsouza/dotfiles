@@ -127,10 +127,6 @@ do
   hererocks()
   add_paqs_opt_to_path()
 
-  if not vim.env.BOOTSTRAP_PAQ then
-    require('impatient').enable_profile()
-  end
-
   local schedule = vim.schedule
   initial_mappings()
 

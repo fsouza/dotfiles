@@ -39,7 +39,6 @@ local M = {
 
     -- misc opt stuff
     {'ibhagwan/fzf-lua'; as = 'fzf-lua'; opt = true};
-    {'lewis6991/impatient.nvim'; as = 'impatient.nvim'; opt = true};
     {'neovim/nvim-lspconfig'; as = 'nvim-lspconfig'; opt = true};
     {'norcalli/nvim-colorizer.lua'; as = 'nvim-colorizer.lua'; opt = true};
     {'simrat39/symbols-outline.nvim'; opt = true; as = 'symbols-outline.nvim'};
