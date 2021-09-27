@@ -26,7 +26,8 @@ function rebootstrap_neovim {
 		make distclean &&
 		git clean -dfx &&
 		rm -rf "${NEOVIM_INSTALL_PREFIX}" &&
-		_update_neovim
+		_update_neovim &&
+		popd
 }
 
 function update_neovim {
