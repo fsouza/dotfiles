@@ -1,4 +1,4 @@
-basedir=$(dirname "$(realpath "${(%):-%N}")")
+basedir=$(dirname "$(readlink "${(%):-%N}")")
 source "${basedir}"/extra/init-functions
 
 mkdir -p ~/.cache/{go,node,zsh}
