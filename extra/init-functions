@@ -10,3 +10,12 @@ function prepend_to_path {
 	done
 	export PATH
 }
+
+function realpath {
+	resolved=$(readlink "${1}")
+	if [ -n "${resolved}" ]; then
+		echo "${resolved}"
+	else
+		echo "${1}"
+	fi
+}
