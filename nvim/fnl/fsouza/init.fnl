@@ -1,10 +1,10 @@
 (global prerequire (vim.F.nil_wrap require))
 
 (fn initial-mappings []
-  ((require "fsouza.lib.nvim_helpers").create_mappings [{:n [
-                                                             {:lhs "Q" :rhs ""}
-                                                             {:lhs "<Space>" :rhs ""}
-                                                             {:lhs "<c-t>" :rhs ""}]}])
+  (let [helpers (require "fsouza.lib.nvim_helpers")]
+    (helpers.create_mappings {:n [{:lhs "Q" :rhs ""}
+                                  {:lhs "<Space>" :rhs ""}
+                                  {:lhs "<c-t>" :rhs ""}]}))
   (tset vim.g :mapleader " "))
 
 (fn hererocks []
@@ -110,6 +110,7 @@
 (let [schedule vim.schedule]
   (hererocks)
   (add-paqs-opt-to-path)
+  (initial-mappings)
   (schedule (fn []
               (set-global-options)
               (set-global-mappings)))
