@@ -166,7 +166,7 @@ async def ensure_hererocks(cache_dir: Path) -> Path:
 
     await run_cmd(
         hr_dir / "bin" / "luarocks",
-        ["make", "--server=https://luarocks.org/dev"],
+        ["make"],
         cwd=base_dir,
     )
 
