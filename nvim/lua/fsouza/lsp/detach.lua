@@ -54,7 +54,7 @@ function M.restart()
 
     if total_clients == 0 then
       timer:stop()
-      vim.cmd([[silent! edit]])
+      vim.cmd('silent! edit')
     end
   end))
 

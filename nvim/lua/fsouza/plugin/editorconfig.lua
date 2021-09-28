@@ -37,7 +37,7 @@ end
 local function trim_whitespace()
   local view = vfn.winsaveview()
   pcall(function()
-    vcmd([[silent! keeppatterns %s/\v\s+$//]])
+    vcmd('silent! keeppatterns %s/\\v\\s+$//')
   end)
   vfn.winrestview(view)
 end

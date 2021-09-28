@@ -35,7 +35,7 @@ local function get_file_types()
 end
 
 local setup_gps = helpers.once(function()
-  vim.cmd([[packadd nvim-gps]])
+  vim.cmd('packadd nvim-gps')
   require('nvim-gps').setup({
     icons = {['class-name'] = '￠ '; ['function-name'] = 'ƒ '; ['method-name'] = 'ƒ '};
     separator = ' ＞ ';
@@ -61,7 +61,7 @@ local function set_folding()
     {
       events = {'FileType'};
       targets = file_types;
-      command = [[setlocal foldmethod=expr foldexpr=]] .. foldexpr;
+      command = 'setlocal foldmethod=expr foldexpr=' .. foldexpr;
     };
   })
 end
@@ -72,7 +72,7 @@ local function mappings()
     {
       events = {'FileType'};
       targets = file_types;
-      command = [[lua require('fsouza.plugin.ts').create_mappings()]];
+      command = 'lua require(\'fsouza.plugin.ts\').create_mappings()';
     };
   })
 end

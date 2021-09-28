@@ -114,7 +114,7 @@ local cmds = {
     require('fsouza.lsp.locations').preview_type_definition()
   end);
   query_workspace_symbols = helpers.fn_map(function()
-    local query = vim.fn.input([[query：]])
+    local query = vim.fn.input('query：')
     if query ~= '' then
       require('fsouza.plugin.fuzzy').lsp_workspace_symbols({query = query})
     end

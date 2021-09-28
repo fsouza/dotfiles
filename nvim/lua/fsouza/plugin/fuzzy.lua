@@ -40,7 +40,7 @@ local function file_actions()
 end
 
 local fzf_lua = helpers.once(function()
-  vim.cmd([[packadd nvim-fzf]])
+  vim.cmd('packadd nvim-fzf')
   local actions = file_actions()
 
   local _fzf_lua = require('fzf-lua')
@@ -83,14 +83,14 @@ end
 
 do
   local rg_opts =
-    [[--column -n --hidden --no-heading --color=always -S --glob '!.git' --glob '!.hg']]
+    '--column -n --hidden --no-heading --color=always -S --glob \'!.git\' --glob \'!.hg\''
 
   function M.grep(search)
-    search = search or vfn.input([[rg：]])
+    search = search or vfn.input('rg：')
     if search ~= '' then
       fzf_lua().grep({
         search = search;
-        raw_cmd = string.format([[rg %s -- %s]], rg_opts, vfn.shellescape(search));
+        raw_cmd = string.format('rg %s -- %s', rg_opts, vfn.shellescape(search));
       })
     end
   end

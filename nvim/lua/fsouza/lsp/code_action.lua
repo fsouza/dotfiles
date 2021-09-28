@@ -68,8 +68,8 @@ function M.visual_code_action()
   end
   api.nvim_input('<esc>')
 
-  local start_pos = vfn.getpos([['<]])
-  local end_pos = vfn.getpos([['>]])
+  local start_pos = vfn.getpos('\'<')
+  local end_pos = vfn.getpos('\'>')
 
   vim.lsp.handlers['textDocument/codeAction'] = function(_, actions)
     handle_actions(actions)

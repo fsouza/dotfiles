@@ -66,7 +66,7 @@ function M.run(term_id, ...)
   -- this isn't great, but we can live with it.
   local command = table.concat({...}, ' ')
   if command == '' then
-    command = vfn.input([[>> ]])
+    command = vfn.input('>> ')
   end
   if command == '' then
     return
@@ -84,10 +84,8 @@ function M.cr()
     return
   end
 
-  vcmd([[
-silent! only
-wincmd F
-]])
+  vcmd('silent! only')
+  vcmd('wincmd F')
 end
 
 return M

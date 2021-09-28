@@ -99,7 +99,7 @@ function M.repack()
 end
 
 function M.setup_command()
-  vim.cmd([[command! Repack lua require('fsouza.packed').repack()]])
+  vim.cmd('command! Repack lua require(\'fsouza.packed\').repack()')
   helpers.augroup('fsouza__auto_repack', {
     {
       events = {'BufWritePost'};

@@ -65,7 +65,7 @@ end
 
 local function setup_git_messenger()
   local load_git_messenger = helpers.once(function()
-    vcmd([[packadd git-messenger.vim]])
+    vcmd('packadd git-messenger.vim')
   end)
 
   helpers.create_mappings({
@@ -83,12 +83,12 @@ local function setup_git_messenger()
 end
 
 local function setup_autofmt_commands()
-  vcmd([[command! ToggleAutofmt lua require('fsouza.lib.autofmt').toggle()]])
-  vcmd([[command! ToggleGlobalAutofmt lua require('fsouza.lib.autofmt').toggle_g()]])
+  vcmd('command! ToggleAutofmt lua require(\'fsouza.lib.autofmt\').toggle()')
+  vcmd('command! ToggleGlobalAutofmt lua require(\'fsouza.lib.autofmt\').toggle_g()')
 end
 
 local function setup_lsp_commands()
-  vcmd([[command! LspRestart lua require('fsouza.lsp.detach').restart()]])
+  vcmd('command! LspRestart lua require(\'fsouza.lsp.detach\').restart()')
 end
 
 local function setup_hlyank()
@@ -122,7 +122,7 @@ local function setup_spell()
     {
       events = {'FileType'};
       targets = {'changelog'; 'gitcommit'; 'markdown'; 'text'};
-      command = [[setlocal spell]];
+      command = 'setlocal spell';
     };
   })
 end
@@ -130,8 +130,8 @@ end
 local function setup_editorconfig()
   require('fsouza.plugin.editorconfig').enable()
   vim.schedule(function()
-    vcmd([[command! EnableEditorConfig lua require('fsouza.plugin.editorconfig').enable()]])
-    vcmd([[command! DisableEditorConfig lua require('fsouza.plugin.editorconfig').disable()]])
+    vcmd('command! EnableEditorConfig lua require(\'fsouza.plugin.editorconfig\').enable()')
+    vcmd('command! DisableEditorConfig lua require(\'fsouza.plugin.editorconfig\').disable()')
   end)
 end
 
@@ -204,6 +204,6 @@ do
   schedule(setup_fuzzy_mappings)
   schedule(trigger_ft)
   schedule(function()
-    vcmd([[doautocmd User PluginReady]])
+    vcmd('doautocmd User PluginReady')
   end)
 end

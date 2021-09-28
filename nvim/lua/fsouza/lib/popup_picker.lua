@@ -11,7 +11,7 @@ function M.handle_selection(winid)
   local index = api.nvim_win_get_cursor(0)[1]
   local cb = cbs[winid]
   vim.schedule(function()
-    vcmd([[wincmd p]])
+    vcmd('wincmd p')
     M.close(winid)
     cb(index)
   end)

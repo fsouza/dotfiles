@@ -31,7 +31,7 @@ function M.register(command, path)
     end)
   end
   vcmd(string.format(
-         [[command! -bang %s lua require('fsouza.plugin.shortcut').registry['%s'](vim.fn.expand('<bang>'))]],
+         'command! -bang %s lua require(\'fsouza.plugin.shortcut\').registry[\'%s\'](vim.fn.expand(\'<bang>\'))',
          command, command))
 end
 

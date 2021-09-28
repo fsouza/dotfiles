@@ -44,12 +44,12 @@ local function global_vars()
   vim.g.netrw_liststyle = 3
   vim.g.surround_no_insert_mappings = true
   vim.g.user_emmet_mode = 'i'
-  vim.g.user_emmet_leader_key = [[<C-x>]]
+  vim.g.user_emmet_leader_key = '<C-x>'
   vim.g.wordmotion_extra = {
-    [=[\([a-f]\+[0-9]\+\([a-f]\|[0-9]\)*\)\+]=];
-    [=[\([0-9]\+[a-f]\+\([0-9]\|[a-f]\)*\)\+]=];
-    [=[\([A-F]\+[0-9]\+\([A-F]\|[0-9]\)*\)\+]=];
-    [=[\([0-9]\+[A-F]\+\([0-9]\|[A-F]\)*\)\+]=];
+    '\\([a-f]\\+[0-9]\\+\\([a-f]\\|[0-9]\\)*\\)\\+';
+    '\\([0-9]\\+[a-f]\\+\\([0-9]\\|[a-f]\\)*\\)\\+';
+    '\\([A-F]\\+[0-9]\\+\\([A-F]\\|[0-9]\\)*\\)\\+';
+    '\\([0-9]\\+[A-F]\\+\\([0-9]\\|[A-F]\\)*\\)\\+';
   }
   vim.g.zig_fmt_autosave = 0
 end
@@ -61,7 +61,7 @@ local function ui_options()
   vim.o.showcmd = false
   vim.o.laststatus = 0
   vim.o.ruler = true
-  vim.o.rulerformat = [[%-14.(%l,%c   %o%)]]
+  vim.o.rulerformat = '%-14.(%l,%c   %o%)'
   vim.o.guicursor = 'a:block'
   vim.o.mouse = ''
   vim.o.shiftround = true
@@ -93,7 +93,7 @@ end
 
 local function folding()
   vim.o.foldlevelstart = 99
-  vcmd([[set foldmethod=indent]])
+  vcmd('set foldmethod=indent')
 end
 
 local function global_mappings()

@@ -134,7 +134,7 @@ local function execute_codelenses(bufnr, items)
   local function run(clens)
     client.lsp_client.request('workspace/executeCommand', clens.command, function(err)
       if not err then
-        vcmd([[checktime]])
+        vcmd('checktime')
       end
     end)
   end

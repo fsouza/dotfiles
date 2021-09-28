@@ -34,8 +34,8 @@ local function if_bin(bin_to_check, fallback_bin, cb)
 end
 
 local function get_node_bin(bin_name, cb)
-  local local_bin = string.format([[node_modules/.bin/%s]], bin_name)
-  local default_bin = string.format([[%s/langservers/node_modules/.bin/%s]], config_dir, bin_name)
+  local local_bin = path.join('node_modules', '.bin', bin_name)
+  local default_bin = path.join(config_dir, 'langservers', 'node_modules', '.bin', bin_name)
   if_bin(local_bin, default_bin, cb)
 end
 

@@ -37,12 +37,12 @@ end
 
 local function cr_key_for_comp_info(comp_info)
   if comp_info.mode == '' then
-    return [[<cr>]]
+    return '<cr>'
   end
   if comp_info.pum_visible == 1 and comp_info.selected == -1 then
-    return [[<c-e><cr>]]
+    return '<c-e><cr>'
   end
-  return [[<cr>]]
+  return '<cr>'
 end
 
 local cr_cmd = helpers.ifn_map(function()
