@@ -1,4 +1,4 @@
-(global prerequire (vim.F.nil_wrap require))
+(global prequire (vim.F.nil_wrap require))
 
 (fn initial-mappings []
   (let [helpers (require "fsouza.lib.nvim_helpers")]
@@ -19,7 +19,7 @@
 (fn add-paqs-opt-to-path []
   (let [path (require "pl.path")
         packed (require "fsouza.packed")
-        opt-dir (path.join packed.paq_dir "opt")]
+        opt-dir (path.join packed.paq-dir "opt")]
     (each [_ paq (ipairs packed.paqs)]
       (when (and paq.opt paq.as)
         (let [paq-dir (path.join opt-dir paq.as)]
@@ -107,17 +107,18 @@
         helpers (require "fsouza.lib.nvim_helpers")]
     (helpers.create_mappings mappings)))
 
-(let [schedule vim.schedule]
-  (hererocks)
-  (add-paqs-opt-to-path)
-  (initial-mappings)
-  (schedule (fn []
-              (set-global-options)
-              (set-global-mappings)))
-  (set-ui-options)
-  (set-folding)
-  (set-neovim-global-vars)
-  (if vim.env.BOOTSTRAP_PAQ
-    (let [packed-mod (require "fsouza.packed")]
-      (packed-mod.setup))
-    (schedule (partial require "fsouza.plugin"))))
+(do
+  (let [schedule vim.schedule]
+    (hererocks)
+    (add-paqs-opt-to-path)
+    (initial-mappings)
+    (schedule (fn []
+                (set-global-options)
+                (set-global-mappings)))
+    (set-ui-options)
+    (set-folding)
+    (set-neovim-global-vars)
+    (if vim.env.BOOTSTRAP_PAQ
+      (let [packed-mod (require "fsouza.packed")]
+        (packed-mod.setup))
+      (schedule (partial require "fsouza.plugin")))))
