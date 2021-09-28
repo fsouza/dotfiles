@@ -32,14 +32,14 @@ local function patch_lsp()
   local original_show_line_diagnostics = vim.diagnostic.show_line_diagnostics
   vim.diagnostic.show_line_diagnostics = function(...)
     local bufnr, winid = original_show_line_diagnostics(...)
-    require('fsouza.color').set_popup_winid(winid)
+    require('fsouza.color')['set-popup-winid'](winid)
     return bufnr, winid
   end
 
   local original_show_position_diagnostics = vim.diagnostic.show_line_diagnostics
   vim.diagnostic.show_position_diagnostics = function(...)
     local bufnr, winid = original_show_position_diagnostics(...)
-    require('fsouza.color').set_popup_winid(winid)
+    require('fsouza.color')['set-popup-winid'](winid)
     return bufnr, winid
   end
 end

@@ -58,7 +58,7 @@ function M.on_attach(bufnr)
     return ''
   end)
 
-  require('fsouza.color').set_popup_cb(function()
+  require('fsouza.color')['set-popup-cb'](function()
     for _, win in ipairs(vim.api.nvim_list_wins()) do
       local whl = vim.api.nvim_win_get_option(win, 'winhighlight')
       if string.match(whl, 'CmpDocumentation') then

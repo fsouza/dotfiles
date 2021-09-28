@@ -79,7 +79,7 @@ function M.open(lines, cb)
   vim.wo.number = true
   vim.wo.wrap = false
   vim.w[win_var_identifier] = true
-  require('fsouza.color').set_popup_winid(winid)
+  require('fsouza.color')['set-popup-winid'](winid)
 
   helpers.create_mappings({
     n = {

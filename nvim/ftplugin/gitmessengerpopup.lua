@@ -5,7 +5,7 @@ do
   require('fsouza.tablex').foreach(api.nvim_list_wins(), function(winid)
     local winbuf = api.nvim_win_get_buf(winid)
     if winbuf == bufnr then
-      require('fsouza.color').set_popup_winid(winid)
+      require('fsouza.color')['set-popup-winid'](winid)
     end
   end)
 end

@@ -105,7 +105,7 @@ local function peek_location_callback(_, result)
   end
   local loc = ts_range(result[1])
   local _, win_id = lsp_util.preview_location(loc)
-  require('fsouza.color').set_popup_winid(win_id)
+  require('fsouza.color')['set-popup-winid'](win_id)
 end
 
 local function make_lsp_loc_action(method)

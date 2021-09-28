@@ -13,7 +13,7 @@ local function popup_callback(err, result, context, ...)
   non_focusable_handlers[method](err, result, context, ...)
   require('fsouza.tablex').foreach(api.nvim_list_wins(), function(winid)
     if pcall(api.nvim_win_get_var, winid, method) then
-      require('fsouza.color').set_popup_winid(winid)
+      require('fsouza.color')['set-popup-winid'](winid)
     end
   end)
 end
