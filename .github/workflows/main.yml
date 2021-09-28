@@ -108,12 +108,6 @@ jobs:
           eval $(opam env --set-switch)
           ./bin/setup
 
-      - name: run luacheck
-        run: make -f $HOME/.config/nvim/Makefile luacheck
-
-      - name: run lua-format-check
-        run: make -f $HOME/.config/nvim/Makefile lua-format-check
-
   pre-commit:
     name: pre-commit
     runs-on: ubuntu-latest
