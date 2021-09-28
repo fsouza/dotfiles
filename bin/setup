@@ -38,7 +38,7 @@ if [ -f "${basedir}"/bin/"${os}"-setup ]; then
 fi
 
 if command -v nvim &>/dev/null; then
-	env NVIM_DEBUG=1 make -f "${HOME}"/.config/nvim/Makefile bootstrap
+	env NVIM_DEBUG=1 make -C "${HOME}"/.config/nvim
 fi
 
 touch "${HOME}"/.zsh_sessions_disable

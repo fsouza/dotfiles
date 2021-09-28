@@ -1,21 +1,13 @@
-mkfile_path := $(realpath $(lastword $(MAKEFILE_LIST)))
-mkfile_dir := $(dir $(mkfile_path))
-
 NVIM_CACHE_DIR := $(if $(shell command -v luacheck 2>/dev/null), luacheck, $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1))
 
-LUACHECK := $(if $(shell command -v luacheck 2>/dev/null), luacheck, $(NVIM_CACHE_DIR)/hr/bin/luacheck)
-
-LUAFORMAT := $(if $(shell command -v lua-format 2>/dev/null), lua-format, $(NVIM_CACHE_DIR)/hr/bin/lua-format)
-
-MACOSX_DEPLOYMENT_TARGET ?= 10.15
+FENNEL := $(if $(shell command -v fennel 2>/dev/null), fennel, $(NVIM_CACHE_DIR)/hr/bin/fennel)
 
 .PHONY: all
-all: luacheck lua-format
+all: bootstrap compile update-paq kill-daemons clear-logs
 
 .PHONY: bootstrap
 bootstrap:
-	python3.9 $(mkfile_dir)/scripts/bootstrap.py
-	make -f $(mkfile_path) update-paq kill-daemons clear-logs
+	python3.9 scripts/bootstrap.py
 
 .PHONY: update-paq
 update-paq:
@@ -30,14 +22,11 @@ kill-daemons:
 clear-logs:
 	:> $(NVIM_CACHE_DIR)/lsp.log
 
-.PHONY: luacheck
-luacheck:
-	cd $(mkfile_dir) && $(LUACHECK) --no-color lua
+FNL_FILES := $(shell find fnl -name '*.fnl')
+LUA_FILES := $(patsubst fnl/%.fnl,lua/%.lua,$(FNL_FILES))
 
-.PHONY: lua-format
-lua-format:
-	cd $(mkfile_dir) && git ls-files -- '*.lua' '*.rockspec' | grep -v ^pack | xargs $(LUAFORMAT) -i
+.PHONY: compile
+compile: $(LUA_FILES)
 
-.PHONY: lua-format-check
-lua-format-check:
-	cd $(mkfile_dir) && git ls-files -- '*.lua' '*.rockspec' | grep -v ^pack | xargs $(LUAFORMAT) --check
+lua/%.lua: fnl/%.fnl
+	$(FENNEL) -c $< > $@
