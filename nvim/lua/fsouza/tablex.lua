@@ -1,6 +1,6 @@
 local tablex = {}
 
-local pl_tablex = require('pl.tablex')
+local pl_tablex = require("pl.tablex")
 
 function tablex.flat_map(fn, t)
   local result = {}

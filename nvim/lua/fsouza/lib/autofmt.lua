@@ -6,7 +6,7 @@ local M = {}
 --
 -- For enabled, we first look at vim.b, then vim.g (and it defaults to true).
 function M.is_enabled(bufnr)
-  local _, buf_autoformat = pcall(api.nvim_buf_get_var, bufnr, 'autoformat')
+  local _, buf_autoformat = pcall(api.nvim_buf_get_var, bufnr, "autoformat")
   if buf_autoformat ~= nil then
     return buf_autoformat
   end

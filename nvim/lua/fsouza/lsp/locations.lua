@@ -1,8 +1,8 @@
 local M = {}
 
 local lsp = vim.lsp
-local lsp_util = require('vim.lsp.util')
-local parsers = require('nvim-treesitter.parsers')
+local lsp_util = require("vim.lsp.util")
+local parsers = require("nvim-treesitter.parsers")
 
 local function should_use_ts(node)
   if node == nil then
@@ -14,30 +14,30 @@ local function should_use_ts(node)
   -- TODO: this should use ts queries
   local node_types = {
     -- generic
-    'local_function';
-    'function_declaration';
-    'method_declaration';
-    'type_spec';
-    'assignment';
+    "local_function";
+    "function_declaration";
+    "method_declaration";
+    "type_spec";
+    "assignment";
 
     -- typescript
-    'class';
-    'function';
-    'type_alias_declaration';
-    'interface_declaration';
-    'method_definition';
-    'variable_declarator';
-    'public_field_definition';
+    "class";
+    "function";
+    "type_alias_declaration";
+    "interface_declaration";
+    "method_definition";
+    "variable_declarator";
+    "public_field_definition";
 
     -- python
-    'class_definition';
-    'function_definition';
+    "class_definition";
+    "function_definition";
 
     -- go
-    'var_spec';
+    "var_spec";
   }
 
-  return require('fsouza.tablex').exists(node_types, function(t)
+  return require("fsouza.tablex").exists(node_types, function(t)
     return node_type == t
   end)
 end
@@ -65,7 +65,7 @@ local function ts_range(loc)
   end
 
   local lang = parsers.ft_to_lang(vim.bo.filetype)
-  if not lang or lang == '' then
+  if not lang or lang == "" then
     return loc
   end
   if not parsers.has_parser(lang) then
@@ -73,11 +73,11 @@ local function ts_range(loc)
   end
 
   local bufnr = vim.uri_to_bufnr(loc.uri)
-  vim.api.nvim_buf_set_option(bufnr, 'buflisted', true)
-  vim.api.nvim_buf_set_option(bufnr, 'filetype', vim.bo.filetype)
+  vim.api.nvim_buf_set_option(bufnr, "buflisted", true)
+  vim.api.nvim_buf_set_option(bufnr, "filetype", vim.bo.filetype)
 
   local start_pos = loc.range.start
-  local end_pos = loc.range['end']
+  local end_pos = loc.range["end"]
 
   local parser = vim.treesitter.get_parser(bufnr, lang)
   local _, t = next(parser:trees())
@@ -93,8 +93,8 @@ local function ts_range(loc)
     local sl, sc, el, ec = parent_node:range()
     loc.range.start.line = sl
     loc.range.start.character = sc
-    loc.range['end'].line = el
-    loc.range['end'].character = ec
+    loc.range["end"].line = el
+    loc.range["end"].character = ec
   end
   return loc
 end
@@ -105,7 +105,7 @@ local function peek_location_callback(_, result)
   end
   local loc = ts_range(result[1])
   local _, win_id = lsp_util.preview_location(loc)
-  require('fsouza.color')['set-popup-winid'](win_id)
+  require("fsouza.color")["set-popup-winid"](win_id)
 end
 
 local function make_lsp_loc_action(method)
@@ -115,12 +115,12 @@ local function make_lsp_loc_action(method)
   end
 end
 
-M.preview_definition = make_lsp_loc_action('textDocument/definition')
+M.preview_definition = make_lsp_loc_action("textDocument/definition")
 
-M.preview_declaration = make_lsp_loc_action('textDocument/declaration')
+M.preview_declaration = make_lsp_loc_action("textDocument/declaration")
 
-M.preview_implementation = make_lsp_loc_action('textDocument/implementation')
+M.preview_implementation = make_lsp_loc_action("textDocument/implementation")
 
-M.preview_type_definition = make_lsp_loc_action('textDocument/typeDefinition')
+M.preview_type_definition = make_lsp_loc_action("textDocument/typeDefinition")
 
 return M

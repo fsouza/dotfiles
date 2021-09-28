@@ -11,17 +11,17 @@ local function handle_actions(actions)
     return
   end
 
-  local lines = require('fsouza.tablex').map(function(action)
+  local lines = require("fsouza.tablex").map(function(action)
     return action.title
   end, actions)
 
   local function handle_selection(index)
     local action_chosen = actions[index]
-    if action_chosen.edit or type(action_chosen.command) == 'table' then
+    if action_chosen.edit or type(action_chosen.command) == "table" then
       if action_chosen.edit then
         util.apply_workspace_edit(action_chosen.edit)
       end
-      if type(action_chosen.command) == 'table' then
+      if type(action_chosen.command) == "table" then
         buf.execute_command(action_chosen.command)
       end
     else
@@ -29,7 +29,7 @@ local function handle_actions(actions)
     end
   end
 
-  require('fsouza.lib.popup_picker').open(lines, handle_selection)
+  require("fsouza.lib.popup_picker").open(lines, handle_selection)
 end
 
 local function code_action_for_buf()
@@ -43,11 +43,11 @@ local function code_action_for_line(cb)
   local context = {diagnostics = vim.diagnostic.get(0, {lnum = lnum - 1})}
   local params = util.make_range_params()
   params.context = context
-  vim.lsp.buf_request(0, 'textDocument/codeAction', params, cb)
+  vim.lsp.buf_request(0, "textDocument/codeAction", params, cb)
 end
 
 function M.code_action()
-  vim.lsp.handlers['textDocument/codeAction'] = function(_, actions)
+  vim.lsp.handlers["textDocument/codeAction"] = function(_, actions)
     handle_actions(actions)
   end
 
@@ -63,15 +63,15 @@ function M.code_action()
 end
 
 function M.visual_code_action()
-  if vfn.visualmode() == '' then
+  if vfn.visualmode() == "" then
     return
   end
-  api.nvim_input('<esc>')
+  api.nvim_input("<esc>")
 
-  local start_pos = vfn.getpos('\'<')
-  local end_pos = vfn.getpos('\'>')
+  local start_pos = vfn.getpos("'<")
+  local end_pos = vfn.getpos("'>")
 
-  vim.lsp.handlers['textDocument/codeAction'] = function(_, actions)
+  vim.lsp.handlers["textDocument/codeAction"] = function(_, actions)
     handle_actions(actions)
   end
 

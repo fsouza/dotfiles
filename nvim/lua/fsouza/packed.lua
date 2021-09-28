@@ -1,81 +1,81 @@
-local path = require('pl.path')
-local helpers = require('fsouza.lib.nvim_helpers')
+local path = require("pl.path")
+local helpers = require("fsouza.lib.nvim_helpers")
 
 local vcmd = vim.cmd
 local vfn = vim.fn
 
 local M = {
-  paq_dir = path.join(vfn.stdpath('data'), 'site', 'pack', 'paqs');
+  paq_dir = path.join(vfn.stdpath("data"), "site", "pack", "paqs");
   paqs = {
-    {'savq/paq-nvim'; opt = true; as = 'paq-nvim'};
+    {"savq/paq-nvim"; opt = true; as = "paq-nvim"};
 
-    {'chaoren/vim-wordmotion'};
-    {'godlygeek/tabular'};
-    {'justinmk/vim-dirvish'};
-    {'justinmk/vim-sneak'};
-    {'mattn/emmet-vim'};
-    {'michaeljsmith/vim-indent-object'};
-    {'tpope/vim-commentary'};
-    {'tpope/vim-fugitive'};
-    {'tpope/vim-repeat'};
-    {'tpope/vim-rhubarb'};
-    {'tpope/vim-surround'};
+    {"chaoren/vim-wordmotion"};
+    {"godlygeek/tabular"};
+    {"justinmk/vim-dirvish"};
+    {"justinmk/vim-sneak"};
+    {"mattn/emmet-vim"};
+    {"michaeljsmith/vim-indent-object"};
+    {"tpope/vim-commentary"};
+    {"tpope/vim-fugitive"};
+    {"tpope/vim-repeat"};
+    {"tpope/vim-rhubarb"};
+    {"tpope/vim-surround"};
 
     -- treesitter
     {
-      'nvim-treesitter/nvim-treesitter';
+      "nvim-treesitter/nvim-treesitter";
       run = function()
-        vcmd('TSUpdate')
+        vcmd("TSUpdate")
       end;
     };
-    {'nvim-treesitter/nvim-treesitter-textobjects'};
-    {'nvim-treesitter/playground'};
-    {'SmiteshP/nvim-gps'; opt = true};
+    {"nvim-treesitter/nvim-treesitter-textobjects"};
+    {"nvim-treesitter/playground"};
+    {"SmiteshP/nvim-gps"; opt = true};
 
     -- completion stuff
-    {'hrsh7th/nvim-cmp'; as = 'nvim-cmp'; opt = true};
-    {'hrsh7th/cmp-nvim-lsp'; as = 'cmp-nvim-lsp'; opt = true};
-    {'l3mon4d3/luasnip'; as = 'luasnip'; opt = true};
+    {"hrsh7th/nvim-cmp"; as = "nvim-cmp"; opt = true};
+    {"hrsh7th/cmp-nvim-lsp"; as = "cmp-nvim-lsp"; opt = true};
+    {"l3mon4d3/luasnip"; as = "luasnip"; opt = true};
 
     -- misc opt stuff
-    {'ibhagwan/fzf-lua'; as = 'fzf-lua'; opt = true};
-    {'neovim/nvim-lspconfig'; as = 'nvim-lspconfig'; opt = true};
-    {'norcalli/nvim-colorizer.lua'; as = 'nvim-colorizer.lua'; opt = true};
-    {'simrat39/symbols-outline.nvim'; opt = true; as = 'symbols-outline.nvim'};
-    {'rhysd/git-messenger.vim'; opt = true};
-    {'vijaymarupudi/nvim-fzf'; opt = true};
+    {"ibhagwan/fzf-lua"; as = "fzf-lua"; opt = true};
+    {"neovim/nvim-lspconfig"; as = "nvim-lspconfig"; opt = true};
+    {"norcalli/nvim-colorizer.lua"; as = "nvim-colorizer.lua"; opt = true};
+    {"simrat39/symbols-outline.nvim"; opt = true; as = "symbols-outline.nvim"};
+    {"rhysd/git-messenger.vim"; opt = true};
+    {"vijaymarupudi/nvim-fzf"; opt = true};
 
     -- filetypes stuff
     --
     -- Note: I used to use vim-polyglot, but it loads too much garbage and
     -- requires setting some global variables that I don't want to have to set
     -- :)
-    {'bakpakin/fennel.vim'};
-    {'HerringtonDarkholme/yats.vim'};
-    {'keith/swift.vim'};
-    {'ocaml/vim-ocaml'};
-    {'tbastos/vim-lua'};
-    {'Vimjas/vim-python-pep8-indent'};
-    {'ziglang/zig.vim'};
+    {"bakpakin/fennel.vim"};
+    {"HerringtonDarkholme/yats.vim"};
+    {"keith/swift.vim"};
+    {"ocaml/vim-ocaml"};
+    {"tbastos/vim-lua"};
+    {"Vimjas/vim-python-pep8-indent"};
+    {"ziglang/zig.vim"};
   };
 }
 
 local function download_paq(fn)
-  local paq_repo_dir = path.join(M.paq_dir, 'opt', 'paq-nvim')
+  local paq_repo_dir = path.join(M.paq_dir, "opt", "paq-nvim")
 
-  require('fsouza.lib.cmd').run('git', {
-    args = {'clone'; '--depth=1'; 'https://github.com/savq/paq-nvim.git'; paq_repo_dir};
+  require("fsouza.lib.cmd").run("git", {
+    args = {"clone"; "--depth=1"; "https://github.com/savq/paq-nvim.git"; paq_repo_dir};
   }, nil, function(result)
     if result.exit_status ~= 0 then
-      error(string.format('failed to clone paq-nvim: %d - %s', result.exit_status, result.stderr))
+      error(string.format("failed to clone paq-nvim: %d - %s", result.exit_status, result.stderr))
     end
-    vcmd('packadd! paq-nvim')
-    fn(require('paq'))
+    vcmd("packadd! paq-nvim")
+    fn(require("paq"))
   end)
 end
 
 local function with_paq(fn)
-  local paq = prequire('paq')
+  local paq = prequire("paq")
   if paq then
     fn(paq)
     return
@@ -93,19 +93,19 @@ function M.setup()
 end
 
 function M.repack()
-  package.loaded['fsouza.packed'] = nil
-  require('fsouza.packed').setup()
+  package.loaded["fsouza.packed"] = nil
+  require("fsouza.packed").setup()
   M.setup_command()
 end
 
 function M.setup_command()
-  vim.cmd('command! Repack lua require(\'fsouza.packed\').repack()')
-  helpers.augroup('fsouza__auto_repack', {
+  vim.cmd("command! Repack lua require('fsouza.packed').repack()")
+  helpers.augroup("fsouza__auto_repack", {
     {
-      events = {'BufWritePost'};
-      targets = {vfn.expand('~/.dotfiles/nvim/lua/fsouza/packed.lua')};
-      modifiers = {'++once'};
-      command = 'Repack';
+      events = {"BufWritePost"};
+      targets = {vfn.expand("~/.dotfiles/nvim/lua/fsouza/packed.lua")};
+      modifiers = {"++once"};
+      command = "Repack";
     };
   })
 end

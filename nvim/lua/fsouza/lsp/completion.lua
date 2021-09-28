@@ -1,34 +1,34 @@
 local api = vim.api
 local vfn = vim.fn
-local helpers = require('fsouza.lib.nvim_helpers')
+local helpers = require("fsouza.lib.nvim_helpers")
 
 local M = {}
 
 local load_cmp = helpers.once(function()
-  vim.cmd('packadd nvim-cmp')
-  require('cmp_nvim_lsp').setup()
-  return require('cmp')
+  vim.cmd("packadd nvim-cmp")
+  require("cmp_nvim_lsp").setup()
+  return require("cmp")
 end)
 
 local function setup(bufnr)
   local cmp = load_cmp()
-  require('cmp.config').set_buffer({
+  require("cmp.config").set_buffer({
     completion = {autocomplete = false};
     mapping = {
-      ['<c-y>'] = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace; select = true});
+      ["<c-y>"] = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace; select = true});
     };
     snippet = {
       expand = function(args)
-        require('luasnip').lsp_expand(args.body)
+        require("luasnip").lsp_expand(args.body)
       end;
     };
-    sources = {{name = 'nvim_lsp'}};
-    documentation = {border = 'none'; winhighlight = 'Normal:CmpDocumentation'};
+    sources = {{name = "nvim_lsp"}};
+    documentation = {border = "none"; winhighlight = "Normal:CmpDocumentation"};
     preselect = cmp.PreselectMode.None;
     formatting = {
       format = function(entry, vim_item)
-        local menu = ({nvim_lsp = 'LSP'})[entry.source.name] or entry.source.name
-        vim_item.menu = '「' .. menu .. '」'
+        local menu = ({nvim_lsp = "LSP"})[entry.source.name] or entry.source.name
+        vim_item.menu = "「" .. menu .. "」"
         return vim_item
       end;
     };
@@ -36,13 +36,13 @@ local function setup(bufnr)
 end
 
 local function cr_key_for_comp_info(comp_info)
-  if comp_info.mode == '' then
-    return '<cr>'
+  if comp_info.mode == "" then
+    return "<cr>"
   end
   if comp_info.pum_visible == 1 and comp_info.selected == -1 then
-    return '<c-e><cr>'
+    return "<c-e><cr>"
   end
-  return '<cr>'
+  return "<cr>"
 end
 
 local cr_cmd = helpers.ifn_map(function()
@@ -55,13 +55,13 @@ function M.on_attach(bufnr)
 
   local complete_cmd = helpers.ifn_map(function()
     load_cmp().complete()
-    return ''
+    return ""
   end)
 
-  require('fsouza.color')['set-popup-cb'](function()
+  require("fsouza.color")["set-popup-cb"](function()
     for _, win in ipairs(vim.api.nvim_list_wins()) do
-      local whl = vim.api.nvim_win_get_option(win, 'winhighlight')
-      if string.match(whl, 'CmpDocumentation') then
+      local whl = vim.api.nvim_win_get_option(win, "winhighlight")
+      if string.match(whl, "CmpDocumentation") then
         return win
       end
     end
@@ -70,8 +70,8 @@ function M.on_attach(bufnr)
   vim.schedule(function()
     helpers.create_mappings({
       i = {
-        {lhs = '<cr>'; rhs = cr_cmd; opts = {noremap = true}};
-        {lhs = '<c-x><c-o>'; rhs = complete_cmd; opts = {noremap = true}};
+        {lhs = "<cr>"; rhs = cr_cmd; opts = {noremap = true}};
+        {lhs = "<c-x><c-o>"; rhs = complete_cmd; opts = {noremap = true}};
       };
     }, bufnr)
   end)
@@ -79,11 +79,11 @@ end
 
 function M.on_detach(bufnr)
   if api.nvim_buf_is_valid(bufnr) then
-    helpers.remove_mappings({i = {{lhs = '<cr>'}}}, bufnr)
+    helpers.remove_mappings({i = {{lhs = "<cr>"}}}, bufnr)
   end
 
   -- probably a bad idea?
-  require('cmp.config').buffers[bufnr] = nil
+  require("cmp.config").buffers[bufnr] = nil
 end
 
 return M

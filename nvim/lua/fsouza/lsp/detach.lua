@@ -13,7 +13,7 @@ function M.register(bufnr, cb)
 end
 
 local function detach(bufnr)
-  require('fsouza.tablex').foreach(callbacks[bufnr] or {}, function(cb)
+  require("fsouza.tablex").foreach(callbacks[bufnr] or {}, function(cb)
     cb(bufnr)
   end)
 
@@ -21,7 +21,7 @@ local function detach(bufnr)
 end
 
 function M.restart()
-  local tablex = require('fsouza.tablex')
+  local tablex = require("fsouza.tablex")
 
   local function extract_client_id(client)
     return client.id
@@ -54,11 +54,11 @@ function M.restart()
 
     if total_clients == 0 then
       timer:stop()
-      vim.cmd('silent! edit')
+      vim.cmd("silent! edit")
     end
   end))
 
-  require('fsouza.lsp.buf_diagnostic').buf_clear_all_diagnostics()
+  require("fsouza.lsp.buf_diagnostic").buf_clear_all_diagnostics()
   local safe_detach = vim.F.nil_wrap(detach)
 
   tablex.foreach(api.nvim_list_bufs(), function(bufnr)

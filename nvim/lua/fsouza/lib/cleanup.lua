@@ -1,4 +1,4 @@
-local helpers = require('fsouza.lib.nvim_helpers')
+local helpers = require("fsouza.lib.nvim_helpers")
 
 local cbs = {}
 
@@ -10,7 +10,7 @@ end
 
 local function cleanup()
   local finished = 0
-  require('fsouza.tablex').foreach(cbs, function(cb)
+  require("fsouza.tablex").foreach(cbs, function(cb)
     vim.schedule(function()
       cb()
       finished = finished + 1
@@ -23,8 +23,8 @@ local function cleanup()
 end
 
 function M.setup()
-  helpers.augroup('fsouza__lua_lib_cleanup',
-                  {{events = {'VimLeavePre'}; targets = {'*'}; command = helpers.fn_cmd(cleanup)}})
+  helpers.augroup("fsouza__lua_lib_cleanup",
+                  {{events = {"VimLeavePre"}; targets = {"*"}; command = helpers.fn_cmd(cleanup)}})
 end
 
 return M

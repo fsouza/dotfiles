@@ -9,9 +9,9 @@ local function make_debug(prefix, debug_fn)
   end
 
   return function(data)
-    require('pl.tables').foreach(vim.split(data, '\n'), function(line)
-      if line ~= '' then
-        debug_fn(string.format('%s: %s', prefix, line))
+    require("pl.tables").foreach(vim.split(data, "\n"), function(line)
+      if line ~= "" then
+        debug_fn(string.format("%s: %s", prefix, line))
       end
     end)
   end
@@ -19,7 +19,7 @@ end
 
 local function input_collector(prefix, debug_fn)
   local debug = make_debug(prefix, debug_fn)
-  local result = {data = ''}
+  local result = {data = ""}
   function result.callback(err, chunk)
     if err then
       result.err = err
@@ -65,8 +65,8 @@ function M.run(cmd, opts, input_data, on_finished, debug_fn)
     safe_close(cmd_handle)
   end
 
-  local stdout_handler = input_collector('STDOUT', debug_fn)
-  local stderr_handler = input_collector('STDERR', debug_fn)
+  local stdout_handler = input_collector("STDOUT", debug_fn)
+  local stderr_handler = input_collector("STDERR", debug_fn)
 
   local r = {abort = false; finished = false}
   local function onexit(code, signal)
@@ -96,7 +96,7 @@ function M.run(cmd, opts, input_data, on_finished, debug_fn)
   end
 
   local pid_or_err
-  opts = vim.tbl_extend('error', opts, {stdio = {stdin; stdout; stderr}})
+  opts = vim.tbl_extend("error", opts, {stdio = {stdin; stdout; stderr}})
   cmd_handle, pid_or_err = loop.spawn(cmd, opts, onexit)
 
   if not cmd_handle then

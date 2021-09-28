@@ -1,7 +1,7 @@
 local api = vim.api
 local vcmd = vim.cmd
 
-local helpers = require('fsouza.lib.nvim_helpers')
+local helpers = require("fsouza.lib.nvim_helpers")
 
 local M = {}
 
@@ -11,7 +11,7 @@ function M.handle_selection(winid)
   local index = api.nvim_win_get_cursor(0)[1]
   local cb = cbs[winid]
   vim.schedule(function()
-    vcmd('wincmd p')
+    vcmd("wincmd p")
     M.close(winid)
     cb(index)
   end)
@@ -37,7 +37,7 @@ local function min(x, y)
 end
 
 local function close_others(win_var_identifier)
-  require('fsouza.tablex').foreach(api.nvim_list_wins(), function(winid)
+  require("fsouza.tablex").foreach(api.nvim_list_wins(), function(winid)
     if pcall(api.nvim_win_get_var, winid, win_var_identifier) then
       api.nvim_win_close(winid, true)
     end
@@ -46,7 +46,7 @@ local function close_others(win_var_identifier)
 end
 
 function M.open(lines, cb)
-  local longest = require('fsouza.tablex').reduce(
+  local longest = require("fsouza.tablex").reduce(
                     function(longest, line)
       if #line > longest then
         return #line
@@ -60,43 +60,43 @@ function M.open(lines, cb)
   local bufnr = api.nvim_create_buf(false, true)
   api.nvim_buf_set_lines(bufnr, 0, -1, true, lines)
   local win_opts = {
-    relative = 'cursor';
+    relative = "cursor";
     width = min(max(longest, min_width), max_width);
     height = #lines;
     col = 0;
     row = 1;
-    style = 'minimal';
+    style = "minimal";
   }
 
-  local win_var_identifier = 'fsouza__popup_picker'
+  local win_var_identifier = "fsouza__popup_picker"
   close_others(win_var_identifier)
   local winid = api.nvim_open_win(bufnr, true, win_opts)
   cbs[winid] = cb
   vim.bo.readonly = true
   vim.bo.modifiable = false
   vim.wo.cursorline = true
-  vim.wo.cursorlineopt = 'both'
+  vim.wo.cursorlineopt = "both"
   vim.wo.number = true
   vim.wo.wrap = false
   vim.w[win_var_identifier] = true
-  require('fsouza.color')['set-popup-winid'](winid)
+  require("fsouza.color")["set-popup-winid"](winid)
 
   helpers.create_mappings({
     n = {
       {
-        lhs = '<esc>';
+        lhs = "<esc>";
         rhs = helpers.fn_map(function()
-          require('fsouza.lib.popup_picker').close(winid)
+          require("fsouza.lib.popup_picker").close(winid)
         end);
       };
       {
-        lhs = '<cr>';
+        lhs = "<cr>";
         rhs = helpers.fn_map(function()
-          require('fsouza.lib.popup_picker').handle_selection(winid)
+          require("fsouza.lib.popup_picker").handle_selection(winid)
         end);
       };
-      {lhs = '<c-n>'; rhs = '<down>'; opts = {noremap = true}};
-      {lhs = '<c-p>'; rhs = '<up>'; opts = {noremap = true}};
+      {lhs = "<c-n>"; rhs = "<down>"; opts = {noremap = true}};
+      {lhs = "<c-p>"; rhs = "<up>"; opts = {noremap = true}};
     };
   }, bufnr)
 end

@@ -1,6 +1,6 @@
 local api = vim.api
 local vcmd = vim.cmd
-local helpers = require('fsouza.lib.nvim_helpers')
+local helpers = require("fsouza.lib.nvim_helpers")
 
 local M = {}
 
@@ -8,7 +8,7 @@ local debouncers = {}
 
 local clients = {}
 
-local ns = api.nvim_create_namespace('fsouza__code_lens')
+local ns = api.nvim_create_namespace("fsouza__code_lens")
 
 -- stores result by bufnr & line (range.start.line)
 local code_lenses = {}
@@ -16,7 +16,7 @@ local code_lenses = {}
 local function group_by_line(codelenses, by_line)
   local to_resolve = {}
   by_line = by_line or {}
-  require('fsouza.tablex').foreach(codelenses, function(codelens)
+  require("fsouza.tablex").foreach(codelenses, function(codelens)
     if not codelens.command then
       table.insert(to_resolve, codelens)
     else
@@ -42,8 +42,8 @@ local function resolve_code_lenses(client, lenses, cb)
   local resolved_lenses = {}
   local done = 0
 
-  require('fsouza.tablex').foreach(lenses, function(lens)
-    client.lsp_client.request('codeLens/resolve', lens, function(_, result)
+  require("fsouza.tablex").foreach(lenses, function(lens)
+    client.lsp_client.request("codeLens/resolve", lens, function(_, result)
       done = done + 1
       if result then
         table.insert(resolved_lenses, result)
@@ -63,13 +63,13 @@ end
 local function render_virtual_text(bufnr)
   api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
 
-  local prefix = ' '
-  require('fsouza.tablex').foreach(code_lenses[bufnr], function(items, line)
-    local titles = require('fsouza.tablex').map(function(item)
+  local prefix = " "
+  require("fsouza.tablex").foreach(code_lenses[bufnr], function(items, line)
+    local titles = require("fsouza.tablex").map(function(item)
       return item.command.title
     end, items)
     local chunks = {
-      {string.format('%s%s', prefix, table.concat(titles, ' | ')); 'LspCodeLensVirtualText'};
+      {string.format("%s%s", prefix, table.concat(titles, " | ")); "LspCodeLensVirtualText"};
     }
     api.nvim_buf_set_virtual_text(bufnr, ns, line, chunks, {})
   end)
@@ -101,7 +101,7 @@ local function codelenses(bufnr)
     bufnr = api.nvim_get_current_buf()
   end
   local params = {textDocument = {uri = vim.uri_from_bufnr(bufnr)}}
-  clients[bufnr].lsp_client.request('textDocument/codeLens', params, codelenses_handler, bufnr)
+  clients[bufnr].lsp_client.request("textDocument/codeLens", params, codelenses_handler, bufnr)
 end
 
 local function codelens(bufnr)
@@ -109,7 +109,7 @@ local function codelens(bufnr)
   local debounced = debouncers[debouncer_key]
   if debounced == nil then
     local interval = vim.b.lsp_codelens_debouncing_ms or 50
-    debounced = require('fsouza.lib.debounce').debounce(interval, vim.schedule_wrap(codelenses))
+    debounced = require("fsouza.lib.debounce").debounce(interval, vim.schedule_wrap(codelenses))
     debouncers[debouncer_key] = debounced
     api.nvim_buf_attach(bufnr, false, {
       on_detach = function()
@@ -132,9 +132,9 @@ local function execute_codelenses(bufnr, items)
   end
 
   local function run(clens)
-    client.lsp_client.request('workspace/executeCommand', clens.command, function(err)
+    client.lsp_client.request("workspace/executeCommand", clens.command, function(err)
       if not err then
-        vcmd('checktime')
+        vcmd("checktime")
       end
     end)
   end
@@ -143,13 +143,13 @@ local function execute_codelenses(bufnr, items)
     if not client.supports_command then
       return
     end
-    if selected.command.command ~= '' then
+    if selected.command.command ~= "" then
       run(selected)
     end
   end
 
   if #items > 1 then
-    local popup_lines = require('fsouza.tablex').filter_map(function(item)
+    local popup_lines = require("fsouza.tablex").filter_map(function(item)
       if item.command then
         return item.command.title
       end
@@ -157,7 +157,7 @@ local function execute_codelenses(bufnr, items)
       return nil
     end, items)
 
-    require('fsouza.lib.popup_picker').open(popup_lines, function(index)
+    require("fsouza.lib.popup_picker").open(popup_lines, function(index)
       execute_item(items[index])
     end)
   else
@@ -182,7 +182,7 @@ local function execute()
 end
 
 local function augroup_name(bufnr)
-  return 'lsp_codelens_' .. bufnr
+  return "lsp_codelens_" .. bufnr
 end
 
 function M.on_attach(opts)
@@ -201,8 +201,8 @@ function M.on_attach(opts)
   local augroup_id = augroup_name(bufnr)
   helpers.augroup(augroup_id, {
     {
-      events = {'InsertLeave'; 'BufWritePost'};
-      targets = {string.format('<buffer=%d>', bufnr)};
+      events = {"InsertLeave"; "BufWritePost"};
+      targets = {string.format("<buffer=%d>", bufnr)};
       command = helpers.fn_cmd(function()
         codelens(bufnr)
       end);
@@ -210,7 +210,7 @@ function M.on_attach(opts)
   })
 
   vim.schedule(function()
-    require('fsouza.lsp.buf_diagnostic').register_hook(augroup_id, function()
+    require("fsouza.lsp.buf_diagnostic").register_hook(augroup_id, function()
       codelens(bufnr)
     end)
     api.nvim_buf_attach(bufnr, false, {
@@ -241,7 +241,7 @@ function M.on_detach(bufnr)
   clients[bufnr] = nil
   local augroup_id = augroup_name(bufnr)
   helpers.reset_augroup(augroup_id)
-  require('fsouza.lsp.buf_diagnostic').unregister_hook(augroup_id)
+  require("fsouza.lsp.buf_diagnostic").unregister_hook(augroup_id)
   remove_results(bufnr)
   clients[bufnr] = nil
 

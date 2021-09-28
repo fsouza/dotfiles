@@ -4,14 +4,14 @@ local vfn = vim.fn
 
 local M = {}
 
-local filetype = 'fsouza_terminal'
+local filetype = "fsouza_terminal"
 
 -- maps number to a terminal, where a terminal is a table with the following
 -- shape: { bufnr: ..., job_id: ... }
 local terminals = {}
 
 local function set_options(bufnr)
-  api.nvim_buf_set_option(bufnr, 'filetype', filetype)
+  api.nvim_buf_set_option(bufnr, "filetype", filetype)
 end
 
 local function jump_to(bufnr)
@@ -22,7 +22,7 @@ local function create_terminal(term_id)
   local bufnr = api.nvim_create_buf(true, false)
   set_options(bufnr)
   jump_to(bufnr)
-  local job_id = vfn.termopen(string.format('%s;#fsouza_term;%s', vim.o.shell, term_id), {
+  local job_id = vfn.termopen(string.format("%s;#fsouza_term;%s", vim.o.shell, term_id), {
     detach = false;
     on_exit = function()
       terminals[term_id] = nil
@@ -56,36 +56,36 @@ end
 
 local function run(term_id, command)
   local term = ensure_term(term_id)
-  if not vim.endswith(command, '\n') then
-    command = command .. '\n'
+  if not vim.endswith(command, "\n") then
+    command = command .. "\n"
   end
   vfn.chansend(term.job_id, command)
 end
 
 function M.run(term_id, ...)
   -- this isn't great, but we can live with it.
-  local command = table.concat({...}, ' ')
-  if command == '' then
-    command = vfn.input('>> ')
+  local command = table.concat({...}, " ")
+  if command == "" then
+    command = vfn.input(">> ")
   end
-  if command == '' then
+  if command == "" then
     return
   end
   run(term_id, command)
 end
 
 function M.run_in_main_term(...)
-  M.run('j', ...)
+  M.run("j", ...)
 end
 
 function M.cr()
-  local cfile = vfn.expand('<cfile>')
+  local cfile = vfn.expand("<cfile>")
   if vfn.filereadable(cfile) == 0 then
     return
   end
 
-  vcmd('silent! only')
-  vcmd('wincmd F')
+  vcmd("silent! only")
+  vcmd("wincmd F")
 end
 
 return M

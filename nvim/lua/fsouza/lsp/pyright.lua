@@ -1,14 +1,14 @@
-local cmd = require('fsouza.lib.cmd')
-local path = require('pl.path')
+local cmd = require("fsouza.lib.cmd")
+local path = require("pl.path")
 
 local loop = vim.loop
 
 local M = {}
 
-local cache_dir = vim.fn.stdpath('cache')
+local cache_dir = vim.fn.stdpath("cache")
 
 local function set_from_env_var(cb)
-  cb(os.getenv('VIRTUAL_ENV'))
+  cb(os.getenv("VIRTUAL_ENV"))
 end
 
 local function set_from_cmd(exec, args, cb)
@@ -22,40 +22,40 @@ local function set_from_cmd(exec, args, cb)
 end
 
 local function set_from_poetry(cb)
-  loop.fs_stat('poetry.lock', function(err)
+  loop.fs_stat("poetry.lock", function(err)
     if err then
       cb(nil)
       return
     end
 
-    set_from_cmd('poetry', {'env'; 'info'; '-p'}, cb)
+    set_from_cmd("poetry", {"env"; "info"; "-p"}, cb)
   end)
 end
 
 local function set_from_pipenv(cb)
-  loop.fs_stat('Pipfile.lock', function(err)
+  loop.fs_stat("Pipfile.lock", function(err)
     if err then
       cb(nil)
       return
     end
 
-    set_from_cmd('pipenv', {'--venv'}, cb)
+    set_from_cmd("pipenv", {"--venv"}, cb)
   end)
 end
 
 local function set_from_venv_folder(cb)
-  local folders = {'venv'; '.venv'}
+  local folders = {"venv"; ".venv"}
 
   local function test_folder(idx)
     local folder = folders[idx]
     if folder then
       local venv_candidate = path.join(loop.cwd(), folder)
-      loop.fs_stat(path.join(venv_candidate, 'bin', 'python'), function(err, stat)
+      loop.fs_stat(path.join(venv_candidate, "bin", "python"), function(err, stat)
         if err then
           return test_folder(idx + 1)
         end
 
-        if stat.type == 'file' then
+        if stat.type == "file" then
           cb(venv_candidate)
         else
           return test_folder(idx + 1)
@@ -94,19 +94,19 @@ local function detect_python_interpreter(cb)
       vim.schedule(function()
         vim.env.VIRTUAL_ENV = virtualenv
       end)
-      cb(path.join(virtualenv, 'bin', 'python'))
+      cb(path.join(virtualenv, "bin", "python"))
     end
   end)
 end
 
 function M.detect_pythonPath(client)
-  client.config.settings.python.pythonPath = path.join(cache_dir, 'venv', 'bin', 'python')
+  client.config.settings.python.pythonPath = path.join(cache_dir, "venv", "bin", "python")
 
   detect_python_interpreter(function(python_path)
     if python_path then
       client.config.settings.python.pythonPath = python_path
     end
-    client.notify('workspace/didChangeConfiguration', {settings = client.config.settings})
+    client.notify("workspace/didChangeConfiguration", {settings = client.config.settings})
   end)
 end
 

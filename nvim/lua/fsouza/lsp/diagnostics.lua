@@ -7,11 +7,11 @@ local vcmd = vim.cmd
 local function render_diagnostics(items)
   lsp.util.set_qflist(items)
   if vim.tbl_isempty(items) then
-    vcmd('cclose')
+    vcmd("cclose")
   else
-    vcmd('copen')
-    vcmd('wincmd p')
-    vcmd('cc')
+    vcmd("copen")
+    vcmd("wincmd p")
+    vcmd("cc")
   end
 end
 

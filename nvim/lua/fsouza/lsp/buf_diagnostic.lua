@@ -13,7 +13,7 @@ end
 -- This is a workaround because the default lsp client doesn't let us hook into
 -- textDocument/didChange like coc.nvim does.
 local function exec_hooks()
-  require('fsouza.tablex').foreach(hooks, function(fn)
+  require("fsouza.tablex").foreach(hooks, function(fn)
     fn()
   end)
 end
@@ -52,13 +52,13 @@ function M.publish_diagnostics(err, result, context, ...)
   end
   context.bufnr = bufnr
 
-  local debouncer_key = string.format('%d/%s', context.client_id, uri)
+  local debouncer_key = string.format("%d/%s", context.client_id, uri)
   local _handler = make_handler()
   local handler = debouncers[debouncer_key]
 
   if handler == nil then
     local interval = vim.b.lsp_diagnostic_debouncing_ms or 250
-    handler = require('fsouza.lib.debounce').debounce(interval, vim.schedule_wrap(_handler))
+    handler = require("fsouza.lib.debounce").debounce(interval, vim.schedule_wrap(_handler))
     debouncers[debouncer_key] = handler
     api.nvim_buf_attach(bufnr, false, {
       on_detach = function(_)

@@ -1,14 +1,14 @@
 local api = vim.api
-local helpers = require('fsouza.lib.nvim_helpers')
+local helpers = require("fsouza.lib.nvim_helpers")
 
 local M = {}
 
 local clients_by_buf = {}
 
 local function read_buffer(bufnr)
-  local lines = table.concat(api.nvim_buf_get_lines(bufnr, 0, -1, true), '\n')
-  if api.nvim_buf_get_option(bufnr, 'eol') then
-    lines = lines .. '\n'
+  local lines = table.concat(api.nvim_buf_get_lines(bufnr, 0, -1, true), "\n")
+  if api.nvim_buf_get_option(bufnr, "eol") then
+    lines = lines .. "\n"
   end
   return lines
 end
@@ -23,8 +23,8 @@ local function notify(bufnr)
     textDocument = {uri = uri; version = api.nvim_buf_get_changedtick(bufnr)};
     contentChanges = {{text = read_buffer(bufnr)}};
   }
-  require('fsouza.tablex').foreach(clients_by_buf[bufnr], function(client)
-    client.notify('textDocument/didChange', params)
+  require("fsouza.tablex").foreach(clients_by_buf[bufnr], function(client)
+    client.notify("textDocument/didChange", params)
   end)
 end
 
@@ -41,7 +41,7 @@ local function buf_attach_if_needed(bufnr)
 end
 
 local function augroup_name(bufnr)
-  return 'lsp_shell_post_' .. bufnr
+  return "lsp_shell_post_" .. bufnr
 end
 
 function M.on_attach(opts)
@@ -52,8 +52,8 @@ function M.on_attach(opts)
 
   helpers.augroup(augroup_name(bufnr), {
     {
-      events = {'FileChangedShellPost'};
-      targets = {string.format('<buffer=%d>', bufnr)};
+      events = {"FileChangedShellPost"};
+      targets = {string.format("<buffer=%d>", bufnr)};
       command = helpers.fn_cmd(function()
         notify(bufnr)
       end);

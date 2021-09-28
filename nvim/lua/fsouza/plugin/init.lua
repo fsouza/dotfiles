@@ -1,61 +1,61 @@
 local vcmd = vim.cmd
 local vfn = vim.fn
-local helpers = require('fsouza.lib.nvim_helpers')
+local helpers = require("fsouza.lib.nvim_helpers")
 
 local function setup_fuzzy_mappings()
   helpers.create_mappings({
     n = {
       {
-        lhs = '<leader>zb';
+        lhs = "<leader>zb";
         rhs = helpers.fn_map(function()
-          require('fsouza.plugin.fuzzy').buffers()
+          require("fsouza.plugin.fuzzy").buffers()
         end);
         opts = {silent = true};
       };
       {
-        lhs = '<leader>zz';
+        lhs = "<leader>zz";
         rhs = helpers.fn_map(function()
-          require('fsouza.plugin.fuzzy').find_files()
+          require("fsouza.plugin.fuzzy").find_files()
         end);
         opts = {silent = true};
       };
       {
-        lhs = '<leader>;';
+        lhs = "<leader>;";
         rhs = helpers.fn_map(function()
-          require('fsouza.plugin.fuzzy').commands()
+          require("fsouza.plugin.fuzzy").commands()
         end);
         opts = {silent = true};
       };
       {
-        lhs = '<leader>zj';
+        lhs = "<leader>zj";
         rhs = helpers.fn_map(function()
-          local dir_path = vfn.expand('%:p:h')
-          if vim.startswith(dir_path, '/') then
-            require('fsouza.plugin.fuzzy').find_files(dir_path)
+          local dir_path = vfn.expand("%:p:h")
+          if vim.startswith(dir_path, "/") then
+            require("fsouza.plugin.fuzzy").find_files(dir_path)
           end
         end);
         opts = {silent = true};
       };
       {
-        lhs = '<leader>gg';
+        lhs = "<leader>gg";
         rhs = helpers.fn_map(function()
-          require('fsouza.plugin.fuzzy').grep()
+          require("fsouza.plugin.fuzzy").grep()
         end);
         opts = {silent = true};
       };
       {
-        lhs = '<leader>gw';
+        lhs = "<leader>gw";
         rhs = helpers.fn_map(function()
-          require('fsouza.plugin.fuzzy').grep(vfn.expand('<cword>'))
+          require("fsouza.plugin.fuzzy").grep(vfn.expand("<cword>"))
         end);
         opts = {silent = true};
       };
     };
     v = {
       {
-        lhs = '<leader>gw';
+        lhs = "<leader>gw";
         rhs = helpers.fn_map(function()
-          require('fsouza.plugin.fuzzy').grep_visual()
+          require("fsouza.plugin.fuzzy").grep_visual()
         end);
         opts = {silent = true};
       };
@@ -65,16 +65,16 @@ end
 
 local function setup_git_messenger()
   local load_git_messenger = helpers.once(function()
-    vcmd('packadd git-messenger.vim')
+    vcmd("packadd git-messenger.vim")
   end)
 
   helpers.create_mappings({
     n = {
       {
-        lhs = '<leader>gm';
+        lhs = "<leader>gm";
         rhs = helpers.fn_map(function()
           load_git_messenger()
-          vcmd('GitMessenger')
+          vcmd("GitMessenger")
         end);
         opts = {noremap = true; silent = true};
       };
@@ -83,21 +83,21 @@ local function setup_git_messenger()
 end
 
 local function setup_autofmt_commands()
-  vcmd('command! ToggleAutofmt lua require(\'fsouza.lib.autofmt\').toggle()')
-  vcmd('command! ToggleGlobalAutofmt lua require(\'fsouza.lib.autofmt\').toggle_g()')
+  vcmd("command! ToggleAutofmt lua require('fsouza.lib.autofmt').toggle()")
+  vcmd("command! ToggleGlobalAutofmt lua require('fsouza.lib.autofmt').toggle_g()")
 end
 
 local function setup_lsp_commands()
-  vcmd('command! LspRestart lua require(\'fsouza.lsp.detach\').restart()')
+  vcmd("command! LspRestart lua require('fsouza.lsp.detach').restart()")
 end
 
 local function setup_hlyank()
-  helpers.augroup('yank_highlight', {
+  helpers.augroup("yank_highlight", {
     {
-      events = {'TextYankPost'};
-      targets = {'*'};
+      events = {"TextYankPost"};
+      targets = {"*"};
       command = helpers.fn_cmd(function()
-        require('vim.highlight').on_yank({higroup = 'HlYank'; timeout = 200; on_macro = false})
+        require("vim.highlight").on_yank({higroup = "HlYank"; timeout = 200; on_macro = false})
       end);
     };
   })
@@ -107,9 +107,9 @@ local function setup_word_replace()
   helpers.create_mappings({
     n = {
       {
-        lhs = '<leader>e';
+        lhs = "<leader>e";
         rhs = helpers.fn_map(function()
-          require('fsouza.plugin.word_sub').run()
+          require("fsouza.plugin.word_sub").run()
         end);
         opts = {silent = true};
       };
@@ -118,53 +118,53 @@ local function setup_word_replace()
 end
 
 local function setup_spell()
-  helpers.augroup('auto_spell', {
+  helpers.augroup("auto_spell", {
     {
-      events = {'FileType'};
-      targets = {'changelog'; 'gitcommit'; 'markdown'; 'text'};
-      command = 'setlocal spell';
+      events = {"FileType"};
+      targets = {"changelog"; "gitcommit"; "markdown"; "text"};
+      command = "setlocal spell";
     };
   })
 end
 
 local function setup_editorconfig()
-  require('fsouza.plugin.editorconfig').enable()
+  require("fsouza.plugin.editorconfig").enable()
   vim.schedule(function()
-    vcmd('command! EnableEditorConfig lua require(\'fsouza.plugin.editorconfig\').enable()')
-    vcmd('command! DisableEditorConfig lua require(\'fsouza.plugin.editorconfig\').disable()')
+    vcmd("command! EnableEditorConfig lua require('fsouza.plugin.editorconfig').enable()")
+    vcmd("command! DisableEditorConfig lua require('fsouza.plugin.editorconfig').disable()")
   end)
 end
 
 local function trigger_ft()
-  vcmd('doautoall FileType')
+  vcmd("doautoall FileType")
 end
 
 local function setup_shortcuts()
-  require('fsouza.plugin.shortcut').register('Dotfiles', vfn.expand('~/.dotfiles'))
-  require('fsouza.plugin.shortcut').register('Paqs', require('fsouza.packed').paq_dir)
+  require("fsouza.plugin.shortcut").register("Dotfiles", vfn.expand("~/.dotfiles"))
+  require("fsouza.plugin.shortcut").register("Paqs", require("fsouza.packed").paq_dir)
 end
 
 local function setup_terminal_mappings_and_commands()
   helpers.create_mappings({
     n = {
       {
-        lhs = '<c-t>j';
+        lhs = "<c-t>j";
         rhs = helpers.fn_map(function()
-          require('fsouza.plugin.terminal').open('j')
+          require("fsouza.plugin.terminal").open("j")
         end);
         opts = {silent = true};
       };
       {
-        lhs = '<c-t>k';
+        lhs = "<c-t>k";
         rhs = helpers.fn_map(function()
-          require('fsouza.plugin.terminal').open('k')
+          require("fsouza.plugin.terminal").open("k")
         end);
         opts = {silent = true};
       };
       {
-        lhs = '<c-t>l';
+        lhs = "<c-t>l";
         rhs = helpers.fn_map(function()
-          require('fsouza.plugin.terminal').open('l')
+          require("fsouza.plugin.terminal").open("l")
         end);
         opts = {silent = true};
       };
@@ -175,35 +175,35 @@ end
 do
   local schedule = vim.schedule
   schedule(function()
-    require('fsouza.packed').setup_command()
+    require("fsouza.packed").setup_command()
   end)
   schedule(function()
-    require('fsouza.lib.cleanup').setup()
+    require("fsouza.lib.cleanup").setup()
   end)
   schedule(setup_editorconfig)
   schedule(setup_git_messenger)
   schedule(setup_hlyank)
   schedule(function()
-    require('fsouza.plugin.mkdir').setup()
+    require("fsouza.plugin.mkdir").setup()
   end)
   schedule(setup_autofmt_commands)
   schedule(setup_word_replace)
   schedule(setup_spell)
   schedule(setup_shortcuts)
   schedule(function()
-    require('colorizer').setup({'css'; 'javascript'; 'html'; 'lua'; 'htmldjango'; 'yaml'})
+    require("colorizer").setup({"css"; "javascript"; "html"; "lua"; "htmldjango"; "yaml"})
   end)
   schedule(setup_terminal_mappings_and_commands)
   schedule(function()
-    require('fsouza.lsp')
+    require("fsouza.lsp")
   end)
   schedule(function()
-    require('fsouza.plugin.ts')
+    require("fsouza.plugin.ts")
   end)
   schedule(setup_lsp_commands)
   schedule(setup_fuzzy_mappings)
   schedule(trigger_ft)
   schedule(function()
-    vcmd('doautocmd User PluginReady')
+    vcmd("doautocmd User PluginReady")
   end)
 end
