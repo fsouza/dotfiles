@@ -149,7 +149,7 @@ local function execute_codelenses(bufnr, items)
   end
 
   if #items > 1 then
-    local popup_lines = require("fsouza.tablex").filter_map(function(item)
+    local popup_lines = require("fsouza.tablex")["filter-map"](function(item)
       if item.command then
         return item.command.title
       end
@@ -203,7 +203,7 @@ function M.on_attach(opts)
     {
       events = {"InsertLeave"; "BufWritePost"};
       targets = {string.format("<buffer=%d>", bufnr)};
-      command = helpers.fn_cmd(function()
+      command = helpers["fn-cmd"](function()
         codelens(bufnr)
       end);
     };
@@ -221,8 +221,8 @@ function M.on_attach(opts)
   end)
 
   if opts.mapping then
-    helpers.create_mappings({
-      n = {{lhs = opts.mapping; rhs = helpers.fn_map(execute); {silent = true}}};
+    helpers["create-mappings"]({
+      n = {{lhs = opts.mapping; rhs = helpers["fn-map"](execute); {silent = true}}};
     }, bufnr)
   end
 end
@@ -234,7 +234,7 @@ function M.on_detach(bufnr)
     api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
 
     if client_opts and client_opts.mapping then
-      helpers.remove_mappings({n = {{lhs = client_opts.mapping}}}, bufnr)
+      helpers["remove-mappings"]({n = {{lhs = client_opts.mapping}}}, bufnr)
     end
   end
 

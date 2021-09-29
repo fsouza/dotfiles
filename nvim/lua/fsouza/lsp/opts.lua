@@ -41,85 +41,85 @@ local setup_symbols_outline = helpers.once(function()
 end)
 
 local cmds = {
-  show_line_diagnostics = helpers.fn_map(function()
+  show_line_diagnostics = helpers["fn-map"](function()
     vim.diagnostic.show_line_diagnostics({focusable = false})
   end);
-  list_file_diagnostics = helpers.fn_map(function()
+  list_file_diagnostics = helpers["fn-map"](function()
     require("fsouza.lsp.diagnostics").list_file_diagnostics()
   end);
-  list_workspace_diagnostics = helpers.fn_map(function()
+  list_workspace_diagnostics = helpers["fn-map"](function()
     require("fsouza.lsp.diagnostics").list_workspace_diagnostics()
   end);
-  fuzzy_workspace_diagnostics = helpers.fn_map(function()
+  fuzzy_workspace_diagnostics = helpers["fn-map"](function()
     require("fsouza.plugin.fuzzy").lsp_workspace_diagnostics()
   end);
-  clear_buffer_diagnostics = helpers.fn_map(function()
+  clear_buffer_diagnostics = helpers["fn-map"](function()
     require("fsouza.lsp.buf_diagnostic").buf_clear_all_diagnostics()
   end);
-  goto_next_diagnostic = helpers.fn_map(function()
+  goto_next_diagnostic = helpers["fn-map"](function()
     vim.diagnostic.goto_next({popup_opts = {focusable = false}})
   end);
-  goto_prev_diagnostic = helpers.fn_map(function()
+  goto_prev_diagnostic = helpers["fn-map"](function()
     vim.diagnostic.goto_prev({popup_opts = {focusable = false}})
   end);
-  rename = helpers.fn_map(function()
+  rename = helpers["fn-map"](function()
     vim.lsp.buf.rename()
   end);
-  code_action = helpers.fn_map(function()
+  code_action = helpers["fn-map"](function()
     require("fsouza.lsp.code_action").code_action()
   end);
-  visual_code_action = helpers.vfn_map(function()
+  visual_code_action = helpers["vfn-map"](function()
     require("fsouza.lsp.code_action").visual_code_action()
   end);
-  goto_declaration = helpers.fn_map(function()
+  goto_declaration = helpers["fn-map"](function()
     vim.lsp.buf.declaration()
   end);
-  preview_declaration = helpers.fn_map(function()
+  preview_declaration = helpers["fn-map"](function()
     require("fsouza.lsp.locations").preview_declaration()
   end);
-  highlight_references = helpers.fn_map(function()
+  highlight_references = helpers["fn-map"](function()
     vim.lsp.buf.document_highlight()
   end);
-  clear_references = helpers.fn_map(function()
+  clear_references = helpers["fn-map"](function()
     vim.lsp.buf.clear_references()
   end);
-  list_document_symbols = helpers.fn_map(function()
+  list_document_symbols = helpers["fn-map"](function()
     require("fsouza.plugin.fuzzy").lsp_document_symbols()
   end);
-  find_references = helpers.fn_map(function()
+  find_references = helpers["fn-map"](function()
     vim.lsp.buf.references()
   end);
-  goto_definition = helpers.fn_map(function()
+  goto_definition = helpers["fn-map"](function()
     vim.lsp.buf.definition()
   end);
-  preview_definition = helpers.fn_map(function()
+  preview_definition = helpers["fn-map"](function()
     require("fsouza.lsp.locations").preview_definition()
   end);
-  display_information = helpers.fn_map(function()
+  display_information = helpers["fn-map"](function()
     vim.lsp.buf.hover()
   end);
-  goto_implementation = helpers.fn_map(function()
+  goto_implementation = helpers["fn-map"](function()
     vim.lsp.buf.implementation()
   end);
-  preview_implementation = helpers.fn_map(function()
+  preview_implementation = helpers["fn-map"](function()
     require("fsouza.lsp.locations").preview_implementation()
   end);
-  display_signature_help = helpers.fn_map(function()
+  display_signature_help = helpers["fn-map"](function()
     vim.lsp.buf.signature_help()
   end);
-  goto_type_definition = helpers.fn_map(function()
+  goto_type_definition = helpers["fn-map"](function()
     vim.lsp.buf.type_definition()
   end);
-  preview_type_definition = helpers.fn_map(function()
+  preview_type_definition = helpers["fn-map"](function()
     require("fsouza.lsp.locations").preview_type_definition()
   end);
-  query_workspace_symbols = helpers.fn_map(function()
+  query_workspace_symbols = helpers["fn-map"](function()
     local query = vim.fn.input("query：")
     if query ~= "" then
       require("fsouza.plugin.fuzzy").lsp_workspace_symbols({query = query})
     end
   end);
-  symbols_outline = helpers.fn_map(function()
+  symbols_outline = helpers["fn-map"](function()
     setup_symbols_outline()
     require("symbols-outline").toggle_outline()
   end);
@@ -249,9 +249,9 @@ local function attached(bufnr, client)
     require("fsouza.lsp.progress").on_attach()
 
     vim.schedule(function()
-      helpers.create_mappings(mappings, bufnr)
+      helpers["create-mappings"](mappings, bufnr)
       register_detach(function()
-        helpers.remove_mappings(mappings, bufnr)
+        helpers["remove-mappings"](mappings, bufnr)
       end)
     end)
   end)

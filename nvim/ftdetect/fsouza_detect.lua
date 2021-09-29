@@ -12,7 +12,7 @@ do
     return {
       events = {"BufNewFile"; "BufRead"};
       targets = m.patterns;
-      command = helpers.fn_cmd(function()
+      command = helpers["fn-cmd"](function()
         vim.o.filetype = m.ft
       end);
     }

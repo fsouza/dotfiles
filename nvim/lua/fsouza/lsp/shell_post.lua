@@ -54,7 +54,7 @@ function M.on_attach(opts)
     {
       events = {"FileChangedShellPost"};
       targets = {string.format("<buffer=%d>", bufnr)};
-      command = helpers.fn_cmd(function()
+      command = helpers["fn-cmd"](function()
         notify(bufnr)
       end);
     };

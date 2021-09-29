@@ -2,7 +2,7 @@
 
 (fn initial-mappings []
   (let [helpers (require "fsouza.lib.nvim_helpers")]
-    (helpers.create_mappings {:n [{:lhs "Q" :rhs ""}
+    (helpers.create-mappings {:n [{:lhs "Q" :rhs ""}
                                   {:lhs "<Space>" :rhs ""}
                                   {:lhs "<c-t>" :rhs ""}]}))
   (tset vim.g :mapleader " "))
@@ -105,7 +105,7 @@
                                  {:lhs "<c-d>" :rhs "<del>" :opts {:noremap true}}]
         mappings {:c rl-bindings :o rl-bindings :i rl-insert-mode-bindings}
         helpers (require "fsouza.lib.nvim_helpers")]
-    (helpers.create_mappings mappings)))
+    (helpers.create-mappings mappings)))
 
 (do
   (let [schedule vim.schedule]

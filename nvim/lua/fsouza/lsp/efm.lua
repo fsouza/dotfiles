@@ -323,7 +323,7 @@ local function get_python_tools(cb)
       ["https://github.com/fsouza/autoflake8"] = get_autoflake8;
     }
 
-    local pre_commit_fns = require("fsouza.tablex").filter_map(function(repo)
+    local pre_commit_fns = require("fsouza.tablex")["filter-map"](function(repo)
       local repo_url = repo.repo
       local args = {}
       if repo.hooks[1] and vim.tbl_islist(repo.hooks[1].args) then

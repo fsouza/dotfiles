@@ -40,7 +40,7 @@ end
 
 function M.on_attach()
   helpers.augroup("fsouza__lsp_progress", {
-    {events = {"User LspProgressUpdate"}; command = helpers.fn_cmd(on_progress_update)};
+    {events = {"User LspProgressUpdate"}; command = helpers["fn-cmd"](on_progress_update)};
   })
 end
 

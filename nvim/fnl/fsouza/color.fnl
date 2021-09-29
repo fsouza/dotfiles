@@ -11,7 +11,7 @@
       (tset (. state :themes) winid nil))))
 
 (fn start-gc-timer [state interval-ms]
-  (let [timer (if (. state :timer) (. state :timer) (vim.loop.new_timer))]
+  (let [timer (helpers.if-nil (. state :timer) vim.loop.new_timer)]
     (tset state :timer timer)
     (timer:start interval-ms interval-ms (vim.schedule_wrap (partial gc state)))))
 
@@ -34,7 +34,7 @@
       :events ["ColorScheme"]
       :targets ["*"]
       :modifiers ["++once"]
-      :command (helpers.fn_cmd mod.disable)}]))
+      :command (helpers.fn-cmd mod.disable)}]))
 
 (fn disable-autocmd [autogroup-name]
   (helpers.augroup autogroup-name []))
@@ -46,7 +46,7 @@
   (when (not state.ns)
     (fn decoration-cb [_ winid]
       (when (. state :enabled)
-        (let [theme (if (. state.themes winid) (. state.themes winid) (find-theme state winid))]
+        (let [theme (helpers.if-nil (. state.themes winid) (partial find-theme state winid))]
           (vim.api.nvim__set_hl_ns theme))))
     (tset state :ns (vim.api.nvim_create_namespace "fsouza__color"))
     (vim.api.nvim_set_decoration_provider state.ns { :on_win decoration-cb :on_line decoration-cb })))

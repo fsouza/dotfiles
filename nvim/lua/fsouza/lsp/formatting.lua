@@ -96,7 +96,7 @@ local function organize_imports_and_write(client, bufnr)
 end
 
 local function autofmt_and_write(client, bufnr)
-  local enable = require("fsouza.lib.autofmt").is_enabled(bufnr)
+  local enable = require("fsouza.lib.autofmt")["is-enabled"](bufnr)
   if not enable then
     return
   end
@@ -112,7 +112,7 @@ local function autofmt_and_write(client, bufnr)
 
       if result then
         api.nvim_buf_call(bufnr, function()
-          helpers.rewrite_wrap(function()
+          helpers["rewrite-wrap"](function()
             lsp.util.apply_text_edits(result, bufnr)
           end)
 
@@ -150,17 +150,17 @@ function M.on_attach(client, bufnr)
     {
       events = {"BufWritePost"};
       targets = {string.format("<buffer=%d>", bufnr)};
-      command = helpers.fn_cmd(function()
+      command = helpers["fn-cmd"](function()
         autofmt_and_write(client, bufnr)
       end);
     };
   })
 
-  helpers.create_mappings({
+  helpers["create-mappings"]({
     n = {
       {
         lhs = "<leader>f";
-        rhs = helpers.fn_map(function()
+        rhs = helpers["fn-map"](function()
           fmt(client, bufnr)
         end);
         opts = {silent = true};
@@ -171,7 +171,7 @@ end
 
 function M.on_detach(bufnr)
   if api.nvim_buf_is_valid(bufnr) then
-    helpers.remove_mappings({n = {{lhs = "<leader>f"}}}, bufnr)
+    helpers["remove-mappings"]({n = {{lhs = "<leader>f"}}}, bufnr)
   end
   helpers.reset_augroup(augroup_name(bufnr))
 end

@@ -45,7 +45,7 @@ local function cr_key_for_comp_info(comp_info)
   return "<cr>"
 end
 
-local cr_cmd = helpers.ifn_map(function()
+local cr_cmd = helpers["ifn-map"](function()
   local r = cr_key_for_comp_info(vfn.complete_info())
   return api.nvim_replace_termcodes(r, true, false, true)
 end)
@@ -53,7 +53,7 @@ end)
 function M.on_attach(bufnr)
   setup(bufnr)
 
-  local complete_cmd = helpers.ifn_map(function()
+  local complete_cmd = helpers["ifn-map"](function()
     load_cmp().complete()
     return ""
   end)
@@ -68,7 +68,7 @@ function M.on_attach(bufnr)
   end)
 
   vim.schedule(function()
-    helpers.create_mappings({
+    helpers["create-mappings"]({
       i = {
         {lhs = "<cr>"; rhs = cr_cmd; opts = {noremap = true}};
         {lhs = "<c-x><c-o>"; rhs = complete_cmd; opts = {noremap = true}};
@@ -79,7 +79,7 @@ end
 
 function M.on_detach(bufnr)
   if api.nvim_buf_is_valid(bufnr) then
-    helpers.remove_mappings({i = {{lhs = "<cr>"}}}, bufnr)
+    helpers["remove-mappings"]({i = {{lhs = "<cr>"}}}, bufnr)
   end
 
   -- probably a bad idea?
