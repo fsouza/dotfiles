@@ -3,14 +3,14 @@ NVIM_CACHE_DIR := $(if $(shell command -v luacheck 2>/dev/null), luacheck, $(she
 FENNEL := $(if $(shell command -v fennel 2>/dev/null), fennel, $(NVIM_CACHE_DIR)/hr/bin/fennel)
 
 .PHONY: all
-all: bootstrap compile update-paq kill-daemons clear-logs
+all: bootstrap update-paq kill-daemons clear-logs
 
 .PHONY: bootstrap
 bootstrap:
 	python3.9 scripts/bootstrap.py
 
 .PHONY: update-paq
-update-paq:
+update-paq: compile
 	env BOOTSTRAP_PAQ=1 nvim --headless -E +'lua vim.loop.new_timer():start(10000, 0, vim.schedule_wrap(function() vim.cmd("qa") end))' || true
 
 .PHONY: kill-daemons

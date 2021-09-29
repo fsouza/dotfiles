@@ -11,7 +11,7 @@
                    (string.format "%s;#fsouza_term;%s" vim.o.shell term-id)
                    {:detach false
                     :on_exit (partial tset terminals term-id nil)})]
-          (tset terminals term-id {:bufnr bufnr :job-id job-id})))
+      (tset terminals term-id {:bufnr bufnr :job-id job-id})))
   (. terminals term-id))
 
 (fn get-term [term-id]

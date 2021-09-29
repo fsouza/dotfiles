@@ -25,7 +25,7 @@
 
 (fn open [mod lines cb]
   (let [longest (* 2 (accumulate [longest 0 _ line (ipairs lines)]
-                            (max longest line-length)))
+                       (max longest line-length)))
         min-width 50
         max-width (* 3 min-width)
         bufnr (vim.api.nvim_create_buf false true)

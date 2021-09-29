@@ -60,7 +60,7 @@
                   ; Note: I used to use vim-polyglot, but it loads too much garbage and
                   ; requires setting some global variables that I don't want to have to set
                   ; :)
-                  ["bakpakin/fennel.vim"]
+                  ["fsouza/fennel.vim"]
                   ["HerringtonDarkholme/yats.vim"]
                   ["keith/swift.vim"]
                   ["ocaml/vim-ocaml"]
@@ -76,4 +76,4 @@
                      (tset package.loaded "fsouza.packed" nil)
                      (let [packed (require "fsouza.packed")]
                        (packed.setup)))}]
-  mod)
+mod)

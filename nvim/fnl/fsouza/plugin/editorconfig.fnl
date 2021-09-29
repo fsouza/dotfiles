@@ -2,9 +2,9 @@
 
 (fn parse-output [data]
   (collect [_ line (ipairs (vim.split data "\n"))]
-                           (let [parts (vim.split line "=")]
-                             (when (= (length parts) 2)
-                               (values (. parts 1) (. parts 2))))))
+    (let [parts (vim.split line "=")]
+      (when (= (length parts) 2)
+        (values (. parts 1) (. parts 2))))))
 
 (fn get-vim-fenc [v]
   (match v
