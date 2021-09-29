@@ -26,7 +26,7 @@ local function fzf_location_callback(_, result)
   if vim.tbl_islist(result) then
     if #result > 1 then
       local items = lsp.util.locations_to_items(result)
-      require("fsouza.plugin.fuzzy").send_items(items, "Locations")
+      require("fsouza.plugin.fuzzy")["send-items"](items, "Locations")
     else
       lsp.util.jump_to_location(result[1])
     end
