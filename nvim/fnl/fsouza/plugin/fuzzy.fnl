@@ -15,7 +15,7 @@
 (fn edit-or-qf [selected]
   (let [actions (require "fzf-lua.actions")]
     (if (should-qf selected)
-      (do 
+      (do
         (actions.file_sel_to_qf selected)
         (vim.cmd "cc"))
       (do
@@ -83,7 +83,7 @@
         config (require "fzf-lua.config")
         core (require "fzf-lua.core")
         opts (config.normalize_opts {:prompt prompt :cwd (vim.fn.getcwd)} config.globals.lsp)]
-    (tset opts :fzf_fn 
+    (tset opts :fzf_fn
           (icollect [_ item (ipairs items)]
                     (let [item (core.make_entry_lcol opts item)]
                       (core.make_entry_file opts item))))

@@ -89,7 +89,7 @@
                             "failed to run editorconfig: %d - %s"
                             result.exit_status
                             result.stderr)))))))))
-      
+
 (local set-config-cmd (helpers.fn-cmd set-config))
 
 (fn set-enabled [v]
