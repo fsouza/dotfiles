@@ -29,5 +29,5 @@ LUA_FILES := $(patsubst fnl/%.fnl,lua/%.lua,$(FNL_FILES))
 compile: $(LUA_FILES)
 
 lua/%.lua: fnl/%.fnl
-	mkdir -p $(dir $@)
+	@ mkdir -p $(dir $@)
 	$(FENNEL) -c $< > $@

@@ -114,7 +114,7 @@
     (schedule setup-word-replace)
     (schedule setup-spell)
     (schedule setup-shortcuts)
-    (schedule (partial mod-invoke "colorizer" "setup" ["css" "javascript" "html" "lua" "htmldjango" "yaml"]))
+    (schedule (partial mod-invoke "colorizer" "setup" ["css" "fennel" "javascript" "html" "lua" "htmldjango" "yaml"]))
     (schedule setup-terminal-mappings)
     (schedule (partial require "fsouza.lsp"))
     (schedule (partial require "fsouza.plugin.ts"))
