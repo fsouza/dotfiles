@@ -1,4 +1,4 @@
-NVIM_CACHE_DIR := $(if $(shell command -v luacheck 2>/dev/null), luacheck, $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1))
+NVIM_CACHE_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)
 
 FENNEL := $(if $(shell command -v fennel 2>/dev/null), fennel, $(NVIM_CACHE_DIR)/hr/bin/fennel)
 
