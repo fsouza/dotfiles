@@ -34,7 +34,11 @@
   (let [sts (vim.api.nvim_buf_get_option bufnr "softtabstop")
         sw (vim.api.nvim_buf_get_option bufnr "shiftwidth")
         ts (vim.api.nvim_buf_get_option bufnr "tabstop")
-        tab-size (or (and (> sts 0) sts) (and (< sts 0) sw) ts)
+        tab-size (if (> sts 0)
+                   sts
+                   (if (< sts 0)
+                     sw
+                     ts))
         opts {:tabSize tab-size
               :insertSpaces (vim.api.nvim_buf_get_option bufnr "expandtab")}]
     {:textDocument {:uri (vim.uri_from_bufnr bufnr)
