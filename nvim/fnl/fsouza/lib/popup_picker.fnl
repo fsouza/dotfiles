@@ -67,7 +67,7 @@
                                      :opts {:noremap true}}
                                     {:lhs "<c-p>"
                                      :rhs "<up>"
-                                     :opts {:noremap true}}]}))))
+                                     :opts {:noremap true}}]} bufnr))))
 
 
 (let [cbs {}

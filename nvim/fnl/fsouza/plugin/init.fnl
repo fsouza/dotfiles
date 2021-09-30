@@ -117,7 +117,7 @@
     (schedule (partial mod-invoke "colorizer" "setup" ["css" "fennel" "javascript" "html" "lua" "htmldjango" "yaml"]))
     (schedule setup-terminal-mappings)
     (schedule (partial require "fsouza.lsp"))
-    (schedule (partial require "fsouza.plugin.ts"))
+    ; (schedule (partial require "fsouza.plugin.ts"))
     (schedule setup-lsp-commands)
     (schedule setup-fuzzy-mappings)
     (schedule (partial vim.cmd "doautoall FileType"))

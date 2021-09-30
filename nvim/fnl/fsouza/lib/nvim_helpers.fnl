@@ -77,6 +77,7 @@
            :create-mappings create-mappings
            :remove-mappings remove-mappings
            :augroup augroup
+           :reset-augroup (fn [name] (augroup name []))
            :once once
            :rewrite-wrap rewrite-wrap
            :if-nil (fn [v factory]

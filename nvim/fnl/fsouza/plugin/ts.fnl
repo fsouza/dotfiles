@@ -38,7 +38,7 @@
 
     (helpers.create-mappings {:n [{:lhs "<leader>w"
                                    :rhs gps-cmd
-                                   :opts {:noremap true}}]})))
+                                   :opts {:noremap true}}]} bufnr)))
 
 (fn set-folding []
   (helpers.augroup
