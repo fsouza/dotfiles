@@ -1,70 +1,46 @@
-local M = {}
+(local non-focusable-handlers {})
 
-local api = vim.api
-local lsp = vim.lsp
+(fn popup-callback [err result context ...]
+  (let [method context.method
+        handler (vim.F.if_nil (. non-focusable-handlers method) (vim.lsp.with (. vim.lsp.handlers method) {:focusable false}))
+        color (require "fsouza.color")]
+    (tset non-focusable-handlers method handler)
+    (handler err result context ...)
+    (each [_ winid (ipairs (vim.api.nvim_list_wins))]
+      (color.set-popup-winid winid))))
 
-local non_focusable_handlers = {}
+(fn fzf-location-callback [_ result]
+  (when (and result (not (vim.tbl_isempty result)))
+    (if (vim.tbl_islist result)
+      (if (> (length result) 1)
+        (let [fuzzy (require "fsouza.plugin.fuzzy")
+              items (vim.lsp.util.locations_to_items result)]
+          (fuzzy.send-items items "Locations"))
+        (vim.lsp.util.jump-to-location (. result 1)))
+      (vim.lsp.util.jump-to-location result))))
 
-local function popup_callback(err, result, context, ...)
-  local method = context.method
-  if non_focusable_handlers[method] == nil then
-    non_focusable_handlers[method] = vim.lsp.with(vim.lsp.handlers[method], {focusable = false})
-  end
-  non_focusable_handlers[method](err, result, context, ...)
-  require("fsouza.tablex").foreach(api.nvim_list_wins(), function(winid)
-    if pcall(api.nvim_win_get_var, winid, method) then
-      require("fsouza.color")["set-popup-winid"](winid)
-    end
-  end)
-end
+{:textDocument/declaration fzf-location-callback
+:textDocument/definition fzf-location-callback
+:textDocument/typeDefinition fzf-location-callback
+:textDocument/implementation fzf-location-callback
+:textDocument/references (fn [err result ...]
+                           (var result result)
+                           (when (vim.tbl_islist result)
+                             (let [tablex (require "fsouza.tablex")
+                                   (lineno _) (unpack (vim.api.nvim_win_get_cursor 0))
+                                   lineno (- lineno 1)]
+                               (set result (tablex.filter result (fn [v]
+                                                                   (not= v.range.start.line lineno))))))
+                           (fzf-location-callback err result ...))
+:textDocument/documentHighlight (fn [_ result]
+                                  (when (not result)
+                                    (lua "return"))
 
-local function fzf_location_callback(_, result)
-  if result == nil or vim.tbl_isempty(result) then
-    return nil
-  end
-
-  if vim.tbl_islist(result) then
-    if #result > 1 then
-      local items = lsp.util.locations_to_items(result)
-      require("fsouza.plugin.fuzzy")["send-items"](items, "Locations")
-    else
-      lsp.util.jump_to_location(result[1])
-    end
-  else
-    lsp.util.jump_to_location(result)
-  end
-end
-
-M["textDocument/declaration"] = fzf_location_callback
-M["textDocument/definition"] = fzf_location_callback
-M["textDocument/typeDefinition"] = fzf_location_callback
-M["textDocument/implementation"] = fzf_location_callback
-
-M["textDocument/references"] = function(err, result, ...)
-  if vim.tbl_islist(result) then
-    local lineno = api.nvim_win_get_cursor(0)[1] - 1
-    result = require("fsouza.tablex").filter(result, function(v)
-      return v.range.start.line ~= lineno
-    end)
-  end
-  fzf_location_callback(err, result, ...)
-end
-
-M["textDocument/documentHighlight"] = function(_, result)
-  if not result then
-    return
-  end
-  local bufnr = api.nvim_get_current_buf()
-  lsp.util.buf_clear_references(bufnr)
-  lsp.util.buf_highlight_references(bufnr, result)
-end
-
-M["textDocument/hover"] = popup_callback
-
-M["textDocument/signatureHelp"] = popup_callback
-
-M["textDocument/publishDiagnostics"] = function(...)
-  require("fsouza.lsp.buf_diagnostic").publish_diagnostics(...)
-end
-
-return M
+                                  (let [bufnr (vim.api.nvim_get_current_buf)]
+                                    (vim.lsp.buf.util.buf_clear_references bufnr)
+                                    (vim.lsp.buf_highlight_references bufnr result)))
+:textDocument/hover popup-callback
+:textDocument/signatureHelp popup-callback
+:textDocument/publishDiagnostics (fn [...]
+                                   (let [buf-diagnostics (require "fsouza.lib.buf_diagnostic")]
+                                     (buf-diagnostics.publish-diagnostics ...)))}
