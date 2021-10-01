@@ -105,8 +105,9 @@
         (error (string.format "failed to compile fnl: %s" (vim.inspect result)))))
 
     (fn make []
-      (let [cmd (require "fsouza.lib.cmd")]
-        (cmd.run "make" {:args ["-C" config-dir "install-site"]} nil handle-result)))
+      (when (not vim.g.fennel_ks)
+        (let [cmd (require "fsouza.lib.cmd")]
+          (cmd.run "make" {:args ["-C" config-dir "install-site"]} nil handle-result))))
 
     (helpers.augroup "fsouza__autocompile-fennel" [{:events ["BufWritePost"]
                                                     :targets ["~/.dotfiles/nvim/*.fnl"]
