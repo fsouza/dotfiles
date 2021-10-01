@@ -31,7 +31,7 @@
 ;; {
 ;;   stdout: string;
 ;;   stderr: string;
-;;   exit_status: number;
+;;   exit-status: number;
 ;;   signal: number;
 ;;   errors: string table;
 ;; }

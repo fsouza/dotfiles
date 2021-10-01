@@ -85,10 +85,7 @@
           (fn [result]
             (if (= result.exit-status 0)
               (set-opts bufnr (parse-output result.stdout))
-              (vim.notify (string.format
-                            "failed to run editorconfig: %d - %s"
-                            result.exit_status
-                            result.stderr)))))))))
+              (vim.notify (string.format "failed to run editorconfig: %s" (vim.inspect result))))))))))
 
 (local set-config-cmd (helpers.fn-cmd set-config))
 
