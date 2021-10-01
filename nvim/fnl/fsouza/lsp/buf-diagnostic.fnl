@@ -37,7 +37,7 @@
 
 (fn publish-diagnostics [err result context ...]
   (when result
-    (let [helpers (require "fsouza.lib.nvim_helpers")
+    (let [helpers (require "fsouza.lib.nvim-helpers")
           uri result.uri
           bufnr (vim.uri_to_bufnr uri)]
       (when bufnr

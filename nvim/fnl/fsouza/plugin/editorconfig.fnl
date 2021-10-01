@@ -1,4 +1,4 @@
-(local helpers (require "fsouza.lib.nvim_helpers"))
+(local helpers (require "fsouza.lib.nvim-helpers"))
 
 (fn parse-output [data]
   (collect [_ line (ipairs (vim.split data "\n"))]

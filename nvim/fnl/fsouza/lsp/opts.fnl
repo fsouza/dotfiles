@@ -1,4 +1,4 @@
-(local helpers (require "fsouza.lib.nvim_helpers"))
+(local helpers (require "fsouza.lib.nvim-helpers"))
 
 (local setup-symbols-outline
   (helpers.once (fn []
@@ -61,13 +61,13 @@
                                                                       :hl "TSParameter"}}})
                     symbols-outline))))
 
-(local buf-diag-mod (require "fsouza.lsp.buf_diagnostic"))
+(local buf-diag-mod (require "fsouza.lsp.buf-diagnostic"))
 
 (local diag-mod (require "fsouza.lsp.diagnostics"))
 
 (local fuzzy-mod (require "fsouza.plugin.fuzzy"))
 
-(local code-action (require "fsouza.lsp.code_action"))
+(local code-action (require "fsouza.lsp.code-action"))
 
 (local locations-mod (require "fsouza.lsp.locations"))
 
@@ -124,7 +124,7 @@
                       :x []}]
 
         (when client.resolved_capabilities.text_document_did_change
-          (let [shell-post (require "fsouza.lsp.shell_post")]
+          (let [shell-post (require "fsouza.lsp.shell-post")]
             (shell-post.on-attach {:bufnr bufnr
                                    :client client})
             (register-detach shell-post.on-detach)))
@@ -139,7 +139,7 @@
                                     :rhs cmds.rename
                                     :opts {:silent true}}))
 
-        (when client.resolved_capabilities.code_action
+        (when client.resolved_capabilities.code-action
           (table.insert mappings.n {:lhs "<leader>cc"
                                     :rhs cmds.code-action
                                     :opts {:silent true}})
@@ -205,12 +205,12 @@
                                    :rhs cmds.query-workspace-symbols
                                    :opts {:silent true}}))
 
-        (when client.resolved_capabilities.code_lens
-          (let [codelens (require "fsouza.lsp.code_lens")]
+        (when client.resolved_capabilities.code-lens
+          (let [codelens (require "fsouza.lsp.code-lens")]
             (codelens.on-attach {:bufnr bufnr
                                  :client client
                                  :mapping "<leader><cr>"
-                                 :can-resolve client.resolved_capabilities.code_lens_resolve
+                                 :can-resolve client.resolved_capabilities.code-lens_resolve
                                  :supports-command client.resolved_capabilities.execute_command})
             (register-detach codelens.on-detach)))
 

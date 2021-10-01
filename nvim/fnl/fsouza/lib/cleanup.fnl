@@ -16,7 +16,7 @@
            :register (fn [f]
                        (table.insert mod.cbs f))
            :setup (fn []
-                    (let [helpers (require "fsouza.lib.nvim_helpers")]
+                    (let [helpers (require "fsouza.lib.nvim-helpers")]
                       (helpers.augroup
                         "fsouza__lua_lib_cleanup"
                         [{:events ["VimLeavePre"]

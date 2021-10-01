@@ -29,7 +29,7 @@
         min-width 50
         max-width (* 3 min-width)
         bufnr (vim.api.nvim_create_buf false true)
-        win-var-identifier "fsouza__popup_picker"
+        win-var-identifier "fsouza__popup-picker"
         win-opts {:relative "cursor"
                   :width (min (max longest min-width) max-width)
                   :height (length lines)
@@ -44,7 +44,7 @@
     (let [winid (vim.api.nvim_open_win bufnr true win-opts)
           {:cbs cbs} mod
           color (require "fsouza.color")
-          helpers (require "fsouza.lib.nvim_helpers")]
+          helpers (require "fsouza.lib.nvim-helpers")]
       (tset cbs winid cb)
       (tset vim.bo :readonly true)
       (tset vim.bo :modifiable false)
@@ -57,11 +57,11 @@
 
       (helpers.create-mappings {:n [{:lhs "<esc>"
                                      :rhs (helpers.fn-map (fn []
-                                                            (let [popup-picker (require "fsouza.lib.popup_picker")]
+                                                            (let [popup-picker (require "fsouza.lib.popup-picker")]
                                                               (popup-picker.close winid))))}
                                     {:lhs "<cr>"
                                      :rhs (helpers.fn-map (fn []
-                                                            (let [popup-picker (require "fsouza.lib.popup_picker")]
+                                                            (let [popup-picker (require "fsouza.lib.popup-picker")]
                                                               (popup-picker.handle-selection winid))))}
                                     {:lhs "<c-n>"
                                      :rhs "<down>"

@@ -3,7 +3,7 @@
 (local terminals {})
 
 (fn create-terminal [term-id]
-  (let [filetype "fsouza_terminal"
+  (let [filetype "fsouza-terminal"
         bufnr (vim.api.nvim_create_buf true false)]
     (vim.api.nvim_buf_set_option bufnr "filetype" filetype)
     (vim.api.nvim_set_current_buf bufnr)

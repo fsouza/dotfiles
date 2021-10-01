@@ -1,5 +1,5 @@
 (let [bufnr (vim.api.nvim_get_current_buf)
-      helpers (require "fsouza.lib.nvim_helpers")]
+      helpers (require "fsouza.lib.nvim-helpers")]
   (helpers.create-mappings {:t [{:lhs "<esc><esc>"
                                  :rhs "<c-\\><c-n>"
                                  :opts {:noremap true}}]

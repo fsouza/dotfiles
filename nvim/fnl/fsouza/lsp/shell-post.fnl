@@ -1,4 +1,4 @@
-(local helpers (require "fsouza.lib.nvim_helpers"))
+(local helpers (require "fsouza.lib.nvim-helpers"))
 
 (local clients-by-buf {})
 
@@ -24,7 +24,7 @@
 
 
 (fn augroup-name [bufnr]
-  (.. "fsouza__lsp_shell_post_" bufnr))
+  (.. "fsouza__lsp_shell-post_" bufnr))
 
 (fn on-attach [opts]
   (let [{:bufnr bufnr

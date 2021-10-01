@@ -1,4 +1,4 @@
-(local helpers (require "fsouza.lib.nvim_helpers"))
+(local helpers (require "fsouza.lib.nvim-helpers"))
 
 (fn run [bufname]
   (let [dir (vim.fn.fnamemodify bufname ":h")]

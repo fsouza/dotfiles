@@ -1,4 +1,4 @@
-(local helpers (require "fsouza.lib.nvim_helpers"))
+(local helpers (require "fsouza.lib.nvim-helpers"))
 
 (local langservers-skip-set {:jsonls true
                              :tsserver true})
@@ -73,7 +73,7 @@
                                                             false)))]
             (when (and code-action code-action.edit)
               (vim.api.nvim_buf_call bufnr (fn []
-                                             (vim.lsp.util.apply_workspace_edit code_action.edit)
+                                             (vim.lsp.util.apply_workspace_edit code-action.edit)
                                              (vim.cmd "update"))))))))))
 
 (fn autofmt-and-write [client bufnr]

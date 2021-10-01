@@ -1,4 +1,4 @@
-(let [helpers (require "fsouza.lib.nvim_helpers")
+(let [helpers (require "fsouza.lib.nvim-helpers")
       mappings [{:ft "bzl" :patterns ["Tiltfile" "*.tilt"]}
                 {:ft "fsharp" :patterns ["*.fs" "*.fsx" "*.fsi"]}
                 {:ft "fsharp_project" :patterns ["*.fsproj"]}

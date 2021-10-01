@@ -2,7 +2,7 @@
   (when (and actions (not (vim.tbl_isempty actions)))
     (let [lines (icollect [_ action (ipairs actions)]
                   action.title)
-          popup-picker (require "fsouza.lib.popup_picker")]
+          popup-picker (require "fsouza.lib.popup-picker")]
 
       (popup-picker.open
         lines
@@ -19,7 +19,7 @@
 (fn code-action-for-buf []
   (let [bufnr (vim.api.nvim_get_current_buf)
         line-count (vim.api.nvim_buf_line_count bufnr)]
-    (vim.lsp.buf.range_code_action {:diagnostics (vim.diagnostic.get bufnr)} [1 1] [line-count 2147483647])))
+    (vim.lsp.buf.range_code-action {:diagnostics (vim.diagnostic.get bufnr)} [1 1] [line-count 2147483647])))
 
 (fn code-action-for-line [cb]
   (let [(lnum _) (unpack (vim.api.nvim_win_get_cursor 0))
@@ -45,7 +45,7 @@
     (vim.api.nvim_input "<esc>")
     (let [start-pos (vim.fn.getpos "'<")
           end-pos (vim.fn.getpos "'>")]
-      (vim.lsp.buf.range_code_action nil [(. start-pos 2) (. start-pos 3)] [(. end-pos 2) (. end-pos 3)]))))
+      (vim.lsp.buf.range_code-action nil [(. start-pos 2) (. start-pos 3)] [(. end-pos 2) (. end-pos 3)]))))
 
 {:code-action code-action
  :visual-code-action visual-code-action}

@@ -1,4 +1,4 @@
-(local helpers (require "fsouza.lib.nvim_helpers"))
+(local helpers (require "fsouza.lib.nvim-helpers"))
 (local themes (require "fsouza.themes"))
 
 (fn set-popup-winid [state winid]

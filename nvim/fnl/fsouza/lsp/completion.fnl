@@ -1,4 +1,4 @@
-(local helpers (require "fsouza.lib.nvim_helpers"))
+(local helpers (require "fsouza.lib.nvim-helpers"))
 
 (local load-cmp (helpers.once (fn []
                                 (vim.cmd "packadd nvim-cmp")

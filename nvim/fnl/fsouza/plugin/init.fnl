@@ -1,4 +1,4 @@
-(local helpers (require "fsouza.lib.nvim_helpers"))
+(local helpers (require "fsouza.lib.nvim-helpers"))
 
 (fn fuzzy [member ...]
   (let [mod (require "fsouza.plugin.fuzzy")
@@ -61,7 +61,7 @@
   (helpers.create-mappings {:n [{:lhs "<leader>e"
                                  :rhs (helpers.fn-map
                                         (fn []
-                                          (let [word-sub (require "fsouza.plugin.word_sub")]
+                                          (let [word-sub (require "fsouza.plugin.word-sub")]
                                             (word-sub.run))))}]}))
 
 

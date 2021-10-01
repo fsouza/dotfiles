@@ -1,7 +1,7 @@
 (global prequire (vim.F.nil_wrap require))
 
 (fn initial-mappings []
-  (let [helpers (require "fsouza.lib.nvim_helpers")]
+  (let [helpers (require "fsouza.lib.nvim-helpers")]
     (helpers.create-mappings {:n [{:lhs "Q" :rhs ""}
                                   {:lhs "<Space>" :rhs ""}
                                   {:lhs "<c-t>" :rhs ""}]}))
@@ -104,7 +104,7 @@
                                  {:lhs "<c-b>" :rhs "<left>" :opts {:noremap true}}
                                  {:lhs "<c-d>" :rhs "<del>" :opts {:noremap true}}]
         mappings {:c rl-bindings :o rl-bindings :i rl-insert-mode-bindings}
-        helpers (require "fsouza.lib.nvim_helpers")]
+        helpers (require "fsouza.lib.nvim-helpers")]
     (helpers.create-mappings mappings)))
 
 (do

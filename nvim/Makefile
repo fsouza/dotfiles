@@ -25,13 +25,13 @@ clear-logs:
 FNL_FILES := $(shell find . -name '*.fnl' | sed -e 's;./;;')
 LUA_FILES := $(patsubst %.fnl,%.lua,$(patsubst fnl/%.fnl,lua/%.lua,$(FNL_FILES)))
 
-.PHONY: debug
-debug:
-	@echo $(LUA_FILES)
-
 .PHONY: compile
 compile: $(LUA_FILES)
 
 %.lua: %.fnl
+	@ mkdir -p $(dir $@)
+	$(FENNEL) -c $< > $@
+
+lua/%.lua: fnl/%.fnl
 	@ mkdir -p $(dir $@)
 	$(FENNEL) -c $< > $@

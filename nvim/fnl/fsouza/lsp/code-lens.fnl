@@ -1,10 +1,10 @@
-(local helpers (require "fsouza.lib.nvim_helpers"))
+(local helpers (require "fsouza.lib.nvim-helpers"))
 
 (local debouncers {})
 
 (local clients {})
 
-(local ns (vim.api.nvim_create_namespace "fsouza__code_lens"))
+(local ns (vim.api.nvim_create_namespace "fsouza__code-lens"))
 
 ;; stores result by bufnr & line (range.start.line)
 (local code-lenses {})
@@ -102,7 +102,7 @@
                              (run selected)))]
         (if (> (length items) 1)
           (let [tablex (require "fsouza.tablex")
-                popup-picker (require "fsouza.lib.popup_picker")
+                popup-picker (require "fsouza.lib.popup-picker")
                 popup-lines (tablex.filter-map (fn [item]
                                                  (when item.command
                                                    item.command.title)))]
@@ -132,7 +132,7 @@
 
     (tset clients bufnr nil)
     (let [augroup-id (augroup-name bufnr)
-          buf-diagnostic (require "fsouza.lsp.buf_diagnostic")]
+          buf-diagnostic (require "fsouza.lsp.buf-diagnostic")]
       (helpers.reset-augroup augroup-id)
       (buf-diagnostic.unregister-hook augroup-id)
       (remove-results bufnr))))
@@ -152,7 +152,7 @@
                                   :command (helpers.fn-cmd (partial codelens bufnr))}])
 
     (vim.schedule (fn []
-                    (let [buf-diagnostic (require "fsouza.lsp.buf_diagnostic")]
+                    (let [buf-diagnostic (require "fsouza.lsp.buf-diagnostic")]
                       (buf-diagnostic.register-hook augroup-id (partial codelens bufnr)))
                     (vim.api.nvim_buf_attach bufnr false {:on_detach (partial on-detach bufnr)})))
 

@@ -66,14 +66,14 @@
            :vcmd-map (partial string.format "<cmd>'<,'>%s<cr>")
            :fn-cmd (fn [f]
                      (let [id (register-cb mod f)]
-                       (string.format "lua require('fsouza.lib.nvim_helpers').fns['%s']()" id)))
+                       (string.format "lua require('fsouza.lib.nvim-helpers').fns['%s']()" id)))
            :fn-map (fn [f]
                      (mod.cmd-map (mod.fn-cmd f)))
            :vfn-map (fn [f]
                       (mod.vcmd-map (mod.fn-cmd f)))
            :ifn-map (fn [f]
                       (let [id (register-cb mod f)]
-                        (string.format "<c-r>=luaeval(\"require('fsouza.lib.nvim_helpers').fns['%s']()\")<CR>" id)))
+                        (string.format "<c-r>=luaeval(\"require('fsouza.lib.nvim-helpers').fns['%s']()\")<CR>" id)))
            :create-mappings create-mappings
            :remove-mappings remove-mappings
            :augroup augroup
