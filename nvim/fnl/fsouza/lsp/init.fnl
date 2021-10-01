@@ -36,7 +36,7 @@
 
 (macro if-executable [name expr]
   `(when (= (vim.fn.executable ,name) 1)
-    ,expr))
+     ,expr))
 
 (do
   (patch-lsp)
@@ -55,7 +55,7 @@
           `(let [mod# (. lsp ,name)
                  cmd# [nvim-python nvim-node-ls ,...]]
 
-            (mod#.setup (opts.with-defaults {:cmd cmd#}))))
+             (mod#.setup (opts.with-defaults {:cmd cmd#}))))
 
 
         (node-lsp :bashls "bash-language-server" "start")
@@ -69,40 +69,42 @@
                                                       nvim-node-ls
                                                       "pyright-langserver"
                                                       "--stdio"]
-                                                :settings {:pythonPath "/usr/bin/python3"
-                                                           :analysis {:autoImportCompletions true
-                                                                      :autoSearchPaths true
-                                                                      :diagnosticMode "workspace"
-                                                                      :typeCheckingMode (vim.F.if_nil vim.g.pyright_type_checking_mode "basic")
-                                                                      :useLibraryCodeForTypes true}
-                                                           :on_init (fn [client]
-                                                                      (let [pyright (require "fsouza.lsp.pyright")]
-                                                                        (pyright.detect-pythonPath client)
-                                                                        true))}}))))
+                                                :settings {:pyright {}
+                                                           :python {:pythonPath "/usr/bin/python3"
+                                                                    :analysis {:autoImportCompletions true
+                                                                               :autoSearchPaths true
+                                                                               :diagnosticMode "workspace"
+                                                                               :typeCheckingMode (vim.F.if_nil vim.g.pyright_type_checking_mode "basic")
+                                                                               :useLibraryCodeForTypes true}}}
+                                                :on_init (fn [client]
+                                                           (let [pyright (require "fsouza.lsp.pyright")]
+                                                             (pyright.detect-pythonPath client))
+                                                           true)}))))
 
     (if-executable "go"
-      (lsp.gopls.setup (opts.with-defaults {:cmd [(get-cache-cmd "gopls")]
-                                            :root_dir (opts.root-pattern-with-fallback "go.mod")
-                                            :init_options {:deepCompletion false
-                                                           :staticcheck true
-                                                           :analyses {:fillreturns true
-                                                                      :nonewvars true
-                                                                      :undeclaredname true
-                                                                      :unusedparams true
-                                                                      :ST1000 false}
-                                                           :linksInHover false
-                                                           :codelenses {:vendor false}
-                                                           :gofumpt true}}))
+      (do
+        (lsp.gopls.setup (opts.with-defaults {:cmd [(get-cache-cmd "gopls")]
+                                              :root_dir (opts.root-pattern-with-fallback "go.mod")
+                                              :init_options {:deepCompletion false
+                                                            :staticcheck true
+                                                            :analyses {:fillreturns true
+                                                                        :nonewvars true
+                                                                        :undeclaredname true
+                                                                        :unusedparams true
+                                                                        :ST1000 false}
+                                                            :linksInHover false
+                                                            :codelenses {:vendor false}
+                                                            :gofumpt true}}))
 
-      (let [efm (require "fsouza.lsp.efm")
-            (settings filetypes) (efm.basic-settings)]
-        (lsp.efm.setup (opts.with-defaults {:cmd [(get-cache-cmd "efm-langserver")]
-                                            :init_options {:documentFormatting true}
-                                            :settings settings
-                                            :filetypes filetypes
-                                            :on_init (fn [client]
-                                                       (efm.gen-config client)
-                                                       true)}))))
+        (let [efm (require "fsouza.lsp.efm")
+              (settings filetypes) (efm.basic-settings)]
+          (lsp.efm.setup (opts.with-defaults {:cmd [(get-cache-cmd "efm-langserver")]
+                                              :init_options {:documentFormatting true}
+                                              :settings settings
+                                              :filetypes filetypes
+                                              :on_init (fn [client]
+                                                        (efm.gen-config client)
+                                                        true)})))))
 
     (if-executable "dune"
       (lsp.ocamllsp.setup (opts.with-defaults {:cmd (path.join cache-dir "langservers" "ocaml-lsp" "_build"

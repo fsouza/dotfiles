@@ -237,14 +237,14 @@
                     :capabilities (cmp-nvim-lsp.update_capabilities capabilities {:snippetSupport false
                                                                                   :preselectSupport false
                                                                                   :commitCharactersSupport false})
-                    :root_dir (partial vim.fn.getcwd)}]
+                    :root_dir (fn [] (vim.fn.getcwd))}]
       (vim.tbl_extend "force" defaults opts))))
 
 (fn root-pattern-with-fallback [...]
   (let [lspconfig (require "lspconfig")
         find-root (lspconfig.util.root_pattern ...)]
     (fn [startpath]
-      (helpers.if-nil (find-root startpath) (partial vim.fn.getcwd)))))
+      (helpers.if-nil (find-root startpath) (fn [] (vim.fn.getcwd))))))
 
 {:with-defaults with-defaults
  :root-pattern-with-fallback root-pattern-with-fallback}
