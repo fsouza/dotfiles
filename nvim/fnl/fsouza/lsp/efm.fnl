@@ -65,7 +65,7 @@
            :lintStdin true
            :lintSource "flake8"
            :lintFormats ["%f:%l:%c: %m"]
-           :rootMarkers [".flake8" ".git" ""]}))))
+           :rootMarkers [".flake8" ".git" ""]} get-autoflake8))))
 
 (fn get-add-trailing-comma [args cb]
   (get-python-bin
