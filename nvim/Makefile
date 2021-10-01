@@ -22,12 +22,16 @@ kill-daemons:
 clear-logs:
 	:> $(NVIM_CACHE_DIR)/lsp.log
 
-FNL_FILES := $(shell find fnl -name '*.fnl')
-LUA_FILES := $(patsubst fnl/%.fnl,lua/%.lua,$(FNL_FILES))
+FNL_FILES := $(shell find . -name '*.fnl' | sed -e 's;./;;')
+LUA_FILES := $(patsubst %.fnl,%.lua,$(patsubst fnl/%.fnl,lua/%.lua,$(FNL_FILES)))
+
+.PHONY: debug
+debug:
+	@echo $(LUA_FILES)
 
 .PHONY: compile
 compile: $(LUA_FILES)
 
-lua/%.lua: fnl/%.fnl
+%.lua: %.fnl
 	@ mkdir -p $(dir $@)
 	$(FENNEL) -c $< > $@
