@@ -5,14 +5,14 @@
 (local config-dir (vim.fn.stdpath "config"))
 (local cache-dir (vim.fn.stdpath "cache"))
 
-(local quote-arg (partial (string.format "\"%s\"")))
+(local quote-arg (partial string.format "\"%s\""))
 
 (fn process-args [args]
   (let [args (vim.F.if_nil args [])]
     (accumulate [acc "" _ arg (ipairs args)]
       (.. acc (quote-arg arg)))))
 
-(local find-venv-bin (partial path.join cache-dir "venv" "bin" bin-name))
+(local find-venv-bin (partial path.join cache-dir "venv" "bin"))
 
 (macro if-bin [bin-to-check fallback-bin cb]
   `(vim.loop.fs_stat ,bin-to-check (fn [err# stat#]
@@ -64,8 +64,8 @@
       (cb {:lintCommand (string.format "%s --stdin-display-name ${INPUT} --format \"%%(path)s:%%(row)d:%%(col)d: %%(code)s %%(text)s\" %s -" flake8-path (process-args args))
            :lintStdin true
            :lintSource "flake8"
-           :lintFormats = ["%f:%l:%c: %m"]
-           :rootMarkers = [".flake8" ".git" ""]}))))
+           :lintFormats ["%f:%l:%c: %m"]
+           :rootMarkers [".flake8" ".git" ""]}))))
 
 (fn get-add-trailing-comma [args cb]
   (get-python-bin
@@ -224,7 +224,7 @@
                 timer (vim.loop.new_timer)]
             (var pending 0)
 
-            (fn proces-result [tool next-fn]
+            (fn process-result [tool next-fn]
               (table.insert tools tool)
               (if next-fn
                 (next-fn nil process-result)
@@ -232,7 +232,7 @@
 
             (each [_ f (ipairs fns)]
               (set pending (+ pending 1))
-              (f.fn f.args process-results))
+              (f.fn f.args process-result))
 
             (timer:start 0 25 (fn []
                                 (when (= pending 0)
@@ -258,7 +258,7 @@
     (fn add-if-not-empty [language tool]
       (when (or tool.formatCommand tool.lintCommand)
         (let [tools (vim.F.if_nil (?. settings :languages language) [])]
-          (table.insert tools.tool)
+          (table.insert tools tool)
           (tset settings.languages language tools))))
 
     (var pending 0)
@@ -279,7 +279,9 @@
                                   :fn get-buildifier}]
           timer (vim.loop.new_timer)]
       (each [_ f (ipairs simple-tool-factories)]
-        (pending-wrapper f.fn (partial add-if-not-empty f.language)))
+        (let [{:fn f :language language} f]
+          (pending-wrapper f (fn [tool]
+                               (add-if-not-empty language tool)))))
 
       (pending-wrapper get-eslintd-config (fn [eslint-tools]
                                             (let [eslint-fts ["javascript" "typescript"]]
@@ -302,7 +304,7 @@
 
 (fn gen-config [client]
   (get-settings (fn [settings]
-                  (tset client.confg :settings settings)
+                  (tset client.config :settings settings)
                   (client.notify "workspace/didChangeConfiguration" {:settings client.config.settings}))))
 
 {:basic-settings basic-settings

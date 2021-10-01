@@ -76,7 +76,6 @@
 
 (fn peek-location-callback [_ result]
   (when (and result (not (vim.tbl_isempty result)))
-    (print (vim.inspect result))
     (let [loc (ts-range (. result 1))
           color (require "fsouza.color")
           (_ winid) (vim.lsp.util.preview_location loc)]
