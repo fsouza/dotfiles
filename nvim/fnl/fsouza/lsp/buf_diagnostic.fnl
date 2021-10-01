@@ -2,6 +2,11 @@
 
 (local hooks {})
 
+(fn buf-clear-all-diagnostics []
+  (let [all-clients (vim.lsp.get_active_clients)]
+    (each [_ client (ipairs all-clients)]
+      (vim.diagnostic.hide (vim.lsp.diagnostic.get_namespace client.id)))))
+
 ;; This is a workaround because the default lsp client doesn't let us hook into
 ;; textDocument/didChange like coc.nvim does.
 (fn exec-hooks []
@@ -27,7 +32,8 @@
     (tset debouncers debouncer-key handler)
     (vim.api.nvim_buf_attach bufnr false {:on_detach (fn []
                                                        (handler.stop)
-                                                       (tset debouncers debouncer-key nil))})))
+                                                       (tset debouncers debouncer-key nil))})
+    handler))
 
 (fn publish-diagnostics [err result context ...]
   (when result
@@ -42,7 +48,7 @@
                         (partial make-debounced-handler bufnr debouncer-key))]
           (handler.call err result context ...))))))
 
-{:buf-clear-all-diagnostics vim.diagnostic.hide
+{:buf-clear-all-diagnostics buf-clear-all-diagnostics
  :register-hook (fn [id f]
                   (tset hooks id f))
  :unregister-hook (fn [id]

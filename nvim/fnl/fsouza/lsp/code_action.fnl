@@ -1,6 +1,6 @@
 (fn handle-actions [actions]
   (when (and actions (not (vim.tbl_isempty actions)))
-    (let [lines (collect [_ action (ipairs actions)]
+    (let [lines (icollect [_ action (ipairs actions)]
                   action.title)
           popup-picker (require "fsouza.lib.popup_picker")]
 
@@ -46,3 +46,6 @@
     (let [start-pos (vim.fn.getpos "'<")
           end-pos (vim.fn.getpos "'>")]
       (vim.lsp.buf.range_code_action nil [(. start-pos 2) (. start-pos 3)] [(. end-pos 2) (. end-pos 3)]))))
+
+{:code-action code-action
+ :visual-code-action visual-code-action}

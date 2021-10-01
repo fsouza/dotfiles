@@ -10,7 +10,7 @@
   (let [cmp (load-cmp)
         cmp-config (require "cmp.config")]
     (cmp-config.set_buffer {:completion {:autocomplete false}
-                            :mapping {:<c-y> (cpm.mapping.confirm {:behavior cmp.ConfirmBehavior.Replace
+                            :mapping {:<c-y> (cmp.mapping.confirm {:behavior cmp.ConfirmBehavior.Replace
                                                                    :select true})}
                             :snippet {:expand (fn [args]
                                                 (let [luasnip (require "luasnip")]
@@ -54,15 +54,15 @@
         (let [winids (vim.api.nvim_list_wins)]
           (each [_ winid (ipairs winids)]
             (when (string.match (vim.api.nvim_win_get_option winid "winhighlight") "CmpDocumentation")
-              (lua (.. "return " winid)))))))
+              (lua "return winid"))))))
 
     (let [mappings {:i [{:lhs "<cr>"
                          :rhs cr-cmd
                          :opts {:noremap true}}
-                        {:lhs "<c-x><c-o."
+                        {:lhs "<c-x><c-o>"
                          :rhs complete-cmd
                          :opts {:noremap true}}]}]
-      (vim.schedule (partial (helpers.create-mappings mappings bufnr))))))
+      (vim.schedule (partial helpers.create-mappings mappings bufnr)))))
 
 (fn on-detach [bufnr]
   (when (vim.api.nvim_buf_is_valid bufnr)

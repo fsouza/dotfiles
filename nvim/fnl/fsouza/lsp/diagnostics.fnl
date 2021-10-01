@@ -2,7 +2,7 @@
   `(do
      (vim.lsp.util.set_qflist ,items)
      (if (vim.tbl_isempty ,items)
-       (vim.cmd "close")
+       (vim.cmd "cclose")
        (do
          (vim.cmd "copen")
          (vim.cmd "wincmd p")

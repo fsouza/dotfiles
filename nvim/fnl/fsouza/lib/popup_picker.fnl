@@ -17,7 +17,7 @@
 (fn handle-selection [mod winid]
   (let [index (. (vim.api.nvim_win_get_cursor 0) 1)
         {:cbs cbs} mod
-        cb (. cbs index)]
+        cb (. cbs winid)]
     (vim.schedule (fn []
                     (vim.cmd "wincmd p")
                     (mod.close winid)
@@ -25,7 +25,7 @@
 
 (fn open [mod lines cb]
   (let [longest (* 2 (accumulate [longest 0 _ line (ipairs lines)]
-                       (max longest line-length)))
+                       (max longest (length line))))
         min-width 50
         max-width (* 3 min-width)
         bufnr (vim.api.nvim_create_buf false true)
@@ -38,7 +38,8 @@
                   :style "minimal"}]
 
     (vim.api.nvim_buf_set_lines bufnr 0 -1 true lines)
-    (close-others win-var-identifier (partial tset mod.cbs []))
+    (close-others win-var-identifier (fn []
+                                       (tset mod :cbs [])))
 
     (let [winid (vim.api.nvim_open_win bufnr true win-opts)
           {:cbs cbs} mod
@@ -71,9 +72,11 @@
 
 
 (let [cbs {}
-      mod {:handle-selection (partial handle-selection mod)
+      mod {:handle-selection (fn [winid]
+                               (handle-selection mod winid))
            :close (fn [winid]
                     (tset cbs winid nil)
                     (vim.api.nvim_win_close winid false))
-           :open (partial open mod)}]
+           :open (fn [lines cb]
+                   (open mod lines cb))}]
   mod)

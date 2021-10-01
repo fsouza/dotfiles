@@ -22,7 +22,7 @@
                             (let [current-client-ids (get-lsp-client-ids)]
                               (each [_ client-id (ipairs current-client-ids)]
                                 (when (not (vim.tbl_contains original-client-ids client-id))
-                                  (lua (.. "return true, " (length current-client-ids)))))
+                                  (lua "return true, #current_client_ids")))
 
                               (values false (length current-client-ids))))
         timer (vim.loop.new_timer)]

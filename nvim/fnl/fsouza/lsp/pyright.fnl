@@ -1,113 +1,70 @@
-local cmd = require("fsouza.lib.cmd")
-local path = require("pl.path")
+(local path (require "pl.path"))
 
-local loop = vim.loop
+(fn set-from-env-var [cb]
+  (cb (os.getenv "VIRTUAL_ENV")))
 
-local M = {}
+(fn set-from-cmd [exec args cb]
+  (let [cmd (require "fsouza.lib.cmd")]
+    (cmd.run exec {:args args} nil (fn [result]
+                                     (if (= result.exit-status 0)
+                                       (cb (vim.trim result.stdout))
+                                       (cb nil))))))
 
-local cache_dir = vim.fn.stdpath("cache")
+(fn set-from-poetry [cb]
+  (vim.loop.fs_stat "poetry.lock" (fn [err]
+                                    (if err
+                                      (cb nil)
+                                      (set-from-cmd "poetry" ["env" "info" "-p"] cb)))))
 
-local function set_from_env_var(cb)
-  cb(os.getenv("VIRTUAL_ENV"))
-end
+(fn set-from-pipenv [cb]
+  (vim.loop.fs_stat "Pipfile.lock" (fn [err]
+                                     (if err
+                                       (cb nil)
+                                       (set-from-cmd "pipenv" ["--venv"] cb)))))
 
-local function set_from_cmd(exec, args, cb)
-  cmd.run(exec, {args = args}, nil, function(result)
-    if result.exit_status == 0 then
-      cb(vim.trim(result.stdout))
-    else
-      cb(nil)
-    end
-  end)
-end
+(fn set-from-venv-folder [cb]
+  (let [folders ["venv" ".venv"]]
+    (fn test-folder [idx]
+      (let [folder (. folders idx)]
+        (if folder
+          (let [venv-candidate (path.join (vim.loop.cwd) folder)]
+            (vim.loop.fs_stat (path.join venv-candidate "bin" "python") (fn [err stat]
+                                                                          (if (and (not err) (= stat.type "file"))
+                                                                            (cb venv-candidate)
+                                                                            (test-folder (+ idx 1))))))
+          (cb nil))))
 
-local function set_from_poetry(cb)
-  loop.fs_stat("poetry.lock", function(err)
-    if err then
-      cb(nil)
-      return
-    end
+    (test-folder 1)))
 
-    set_from_cmd("poetry", {"env"; "info"; "-p"}, cb)
-  end)
-end
+(fn detect-virtualenv [cb]
+  (let [detectors [set-from-venv-folder
+                   set-from-env-var
+                   set-from-poetry
+                   set-from-pipenv]]
+    (fn detect [idx]
+      (let [detector (. detectors idx)]
+        (when detector
+          (detector #(if $1
+                        (cb $1)
+                        (detect (+ idx 1)))))))
 
-local function set_from_pipenv(cb)
-  loop.fs_stat("Pipfile.lock", function(err)
-    if err then
-      cb(nil)
-      return
-    end
+    (detect 1)))
 
-    set_from_cmd("pipenv", {"--venv"}, cb)
-  end)
-end
+(fn detect-python-interpreter [cb]
+  (detect-virtualenv (fn [virtualenv]
+                       (when virtualenv
+                         (vim.schedule (fn []
+                                         (tset vim.env :VIRTUAL_ENV virtualenv)))
+                         (cb (path.join virtualenv "bin" "python"))))))
 
-local function set_from_venv_folder(cb)
-  local folders = {"venv"; ".venv"}
 
-  local function test_folder(idx)
-    local folder = folders[idx]
-    if folder then
-      local venv_candidate = path.join(loop.cwd(), folder)
-      loop.fs_stat(path.join(venv_candidate, "bin", "python"), function(err, stat)
-        if err then
-          return test_folder(idx + 1)
-        end
+(fn detect-pythonPath [client]
+  (let [cache-dir (vim.fn.stdpath "cache")]
+    (tset client.config.settings.python :pythonPath (path.join cache-dir "venv" "bin" "python"))
 
-        if stat.type == "file" then
-          cb(venv_candidate)
-        else
-          return test_folder(idx + 1)
-        end
-      end)
-    else
-      cb(nil)
-    end
-  end
+    (detect-python-interpreter (fn [python-path]
+                                 (when python-path
+                                   (tset client.config.settings.python :pythonPath python-path))
+                                 (client.notify "workspace/didChangeConfiguration" {:settings client.config.settings})))))
 
-  test_folder(1)
-end
-
-local function detect_virtualenv(cb)
-  local detectors = {set_from_venv_folder; set_from_env_var; set_from_poetry; set_from_pipenv}
-
-  local function detect(idx)
-    local detector = detectors[idx]
-    if detector then
-      detector(function(virtualenv)
-        if virtualenv then
-          cb(virtualenv)
-        else
-          detect(idx + 1)
-        end
-      end)
-    end
-  end
-
-  detect(1)
-end
-
-local function detect_python_interpreter(cb)
-  detect_virtualenv(function(virtualenv)
-    if virtualenv then
-      vim.schedule(function()
-        vim.env.VIRTUAL_ENV = virtualenv
-      end)
-      cb(path.join(virtualenv, "bin", "python"))
-    end
-  end)
-end
-
-function M.detect_pythonPath(client)
-  client.config.settings.python.pythonPath = path.join(cache_dir, "venv", "bin", "python")
-
-  detect_python_interpreter(function(python_path)
-    if python_path then
-      client.config.settings.python.pythonPath = python_path
-    end
-    client.notify("workspace/didChangeConfiguration", {settings = client.config.settings})
-  end)
-end
-
-return M
+{:detect-pythonPath detect-pythonPath}

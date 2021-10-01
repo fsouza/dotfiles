@@ -87,11 +87,11 @@
                (fmt client bufnr (fn [_ result]
                                    (when (and
                                            (= changed-tick (vim.api.nvim_buf_get_changedtick bufnr))
-                                           (result))
+                                           result)
                                      (vim.api.nvim_buf_call
                                        bufnr
                                        (fn []
-                                         (helpers.rewrite-wrap bufnr (partial vim.lsp.util.apply_text_edits result bufnr))
+                                         (helpers.rewrite-wrap (partial vim.lsp.util.apply_text_edits result bufnr))
 
                                          (let [last-update (get-last-update bufnr)]
                                            (if (and last-update (< (- (os.clock) last-update) 0.01))

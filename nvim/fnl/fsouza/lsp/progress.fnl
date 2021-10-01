@@ -1,47 +1,32 @@
-local api = vim.api
-local lsp_util = vim.lsp.util
-local helpers = require("fsouza.lib.nvim_helpers")
+(local debounce (require "fsouza.lib.debounce"))
+(local helpers (require "fsouza.lib.nvim_helpers"))
 
-local M = {}
+(local debounced-notify (debounce.debounce 4000 (vim.schedule_wrap vim.notify)))
 
-local debounced_notify = require("fsouza.lib.debounce").debounce(4000,
-                                                                 vim.schedule_wrap(vim.notify))
+(fn on-progress-update []
+  (let [{:mode mode} (vim.api.nvim_get_mode)]
+    (when (= mode "n")
+      (fn format-message [msg]
+        (var prefix "")
+        (var suffix "")
 
-local function on_progress_update()
-  local mode = api.nvim_get_mode()
-  if mode.mode ~= "n" then
-    return
-  end
+        (when (not= msg.title "")
+          (set prefix (string.format "%s: " msg.title)))
 
-  local messages = lsp_util.get_progress_messages()
+        (when (not= msg.name "")
+          (set prefix (string.format "[%s] %s" msg.name prefix)))
 
-  local function format_message(msg)
-    local prefix = ""
-    if msg.title ~= "" then
-      prefix = string.format("%s: ", msg.title)
-    end
+        (when msg.percentage
+          (set suffix (string.format " (%s)" msg.percentage)))
 
-    if msg.name ~= "" then
-      prefix = string.format("[%s] %s", msg.name, prefix)
-    end
+        (string.format "%s%s%s" prefix msg.message suffix))
 
-    local suffix = ""
-    if msg.percentage then
-      suffix = string.format(" (%s)", msg.percentage)
-    end
+      (let [messages (vim.lsp.util.get_progress_messages)]
+        (each [_ message (ipairs messages)]
+          (debounced-notify.call (format-message message)))))))
 
-    return string.format("%s%s%s", prefix, msg.message, suffix)
-  end
+(fn on-attach []
+  (helpers.augroup "fsouza__lsp_progress" [{:events ["User LspProgressUpdate"]
+                                            :command (helpers.fn-cmd on-progress-update)}]))
 
-  require("fsouza.tablex").foreach(messages, function(message)
-    debounced_notify.call(format_message(message))
-  end)
-end
-
-function M.on_attach()
-  helpers.augroup("fsouza__lsp_progress", {
-    {events = {"User LspProgressUpdate"}; command = helpers["fn-cmd"](on_progress_update)};
-  })
-end
-
-return M
+{:on-attach (helpers.once on-attach)}

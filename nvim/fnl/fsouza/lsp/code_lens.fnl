@@ -49,14 +49,14 @@
   (let [prefix " "
         buf-lenses (. code-lenses bufnr)]
     (each [line items (pairs buf-lenses)]
-      (let [titles (collect [_ item (ipairs items)]
+      (let [titles (icollect [_ item (ipairs items)]
                      item.command.title)
-            chunks [(string.format "%s%s" prefix (table.concat titles " | ")) "LspCodeLensVirtualText"]]
+            chunks [[(string.format "%s%s" prefix (table.concat titles " | ")) "LspCodeLensVirtualText"]]]
         (vim.api.nvim_buf_set_virtual_text bufnr ns line chunks {})))))
 
 (fn codelenses-handler [_ codelenses context]
   (when codelenses
-    (let [(preresolved to-resolved) (group-by-line codelenses)
+    (let [(preresolved to-resolve) (group-by-line codelenses)
           client (. clients context.bufnr)
           handle-lenses (fn [lenses]
                           (tset code-lenses context.bufnr lenses)
@@ -75,18 +75,19 @@
           client (. clients bufnr)]
       (client.lsp-client.request "textDocument/codeLens" params codelenses-handler bufnr))))
 
-(fn make-debounced-codelenses [bufnr]
-  (let [interval-ms (vim.F.if_nil vim.bl.lsp_codelens_debouncing_ms or 50)
+(fn make-debounced-codelenses [bufnr debouncer-key]
+  (let [interval-ms (vim.F.if_nil vim.b.lsp_codelens_debouncing_ms 50)
         debounce (require "fsouza.lib.debounce")
-        debounced (debounce interval-ms (vim.schedule_wrap codelenses))]
-    (tset debouncers debounce-key debounced)
+        debounced (debounce.debounce interval-ms (vim.schedule_wrap codelenses))]
+    (tset debouncers debouncer-key debounced)
     (vim.api.nvim_buf_attach bufnr false {:on_detach (fn []
                                                        (debounced.stop)
-                                                       (tset debouncers debouncer-key nil))})))
+                                                       (tset debouncers debouncer-key nil))})
+    debounced))
 
 (fn codelens [bufnr]
   (let [debouncer-key bufnr
-        debounced (helpers.if-nil (. debouncers debouncer-key) (partial make-debounced-codelenses bufnr))]
+        debounced (helpers.if-nil (. debouncers debouncer-key) (partial make-debounced-codelenses bufnr debouncer-key))]
     (debounced.call bufnr)))
 
 (fn execute-codelenses [bufnr items]
@@ -156,11 +157,11 @@
                     (vim.api.nvim_buf_attach bufnr false {:on_detach (partial on-detach bufnr)})))
 
     (when opts.mapping
-        (helpers.create-mappings
-                    {:n [{:lhs opts.mapping
-                          :rhs (helpers.fn-map execute)
-                          :opts {:silent true}}]}
-                    bufnr))))
+      (helpers.create-mappings
+        {:n [{:lhs opts.mapping
+              :rhs (helpers.fn-map execute)
+              :opts {:silent true}}]}
+        bufnr))))
 
 {:on-attach on-attach
  :on-detach on-detach}

@@ -1,126 +1,93 @@
-local M = {}
+(fn should-use-ts [node]
+  (when (= node nil)
+    (lua "return false"))
 
-local lsp = vim.lsp
-local lsp_util = require("vim.lsp.util")
-local parsers = require("nvim-treesitter.parsers")
+  (let [node-type (node:type)
+        node-types [; generic
+                    "local_function"
+                    "function_declaration"
+                    "method_declaration"
+                    "type_spec"
+                    "assignment"
 
-local function should_use_ts(node)
-  if node == nil then
-    return false
-  end
+                    ; typescript
+                    "class"
+                    "function"
+                    "type_alias_declaration"
+                    "interface_declaration"
+                    "method_definition"
+                    "variable_declarator"
+                    "public_field_definition"
 
-  local node_type = node:type()
+                    ; python
+                    "class_definition"
+                    "function_definition"
 
-  -- TODO: this should use ts queries
-  local node_types = {
-    -- generic
-    "local_function";
-    "function_declaration";
-    "method_declaration";
-    "type_spec";
-    "assignment";
+                    ; go
+                    "var_spec"]
+        tablex (require "fsouza.tablex")]
 
-    -- typescript
-    "class";
-    "function";
-    "type_alias_declaration";
-    "interface_declaration";
-    "method_definition";
-    "variable_declarator";
-    "public_field_definition";
+    (tablex.exists node-types (partial = node-type))))
 
-    -- python
-    "class_definition";
-    "function_definition";
 
-    -- go
-    "var_spec";
-  }
+(fn normalize-loc [loc]
+  (when (not loc.uri)
+    (when loc.targetUri
+      (tset loc :uri loc.targetUri))
+    (when loc.targetRange
+      (tset loc :range loc.targetRange)))
+  loc)
 
-  return require("fsouza.tablex").exists(node_types, function(t)
-    return node_type == t
-  end)
-end
+(fn ts-range [loc]
+  (let [loc (normalize-loc loc)]
+    (when (not loc.uri)
+      (lua "return loc"))
 
-local function normalize_loc(loc)
-  if loc.uri then
-    return loc
-  end
+    (let [parsers (require "nvim-treesitter.parsers")
+          lang (parsers.ft_to_lang vim.bo.filetype)]
+      (when (or (not lang) (= lang "") (not (parsers.has_parser lang)))
+        (lua "return loc"))
 
-  if loc.targetUri then
-    loc.uri = loc.targetUri
+      (let [bufnr (vim.uri_to_bufnr loc.uri)
+            start-pos loc.range.start
+            end-pos loc.range.end]
+        (vim.api.nvim_buf_set_option bufnr "buflisted" true)
+        (vim.api.nvim_buf_set_option bufnr "filetype" vim.bo.filetype)
 
-    if loc.targetRange then
-      loc.range = loc.targetRange
-    end
-  end
+        (let [parser (vim.treesitter.get_parser bufnr lang)
+              (_ t) (next (parser:trees))]
+          (when (not t)
+            (lua "return loc"))
 
-  return loc
-end
+          (let [root (t:root)
+                node (root:named_descendant_for_range start-pos.line
+                                                      start-pos.character
+                                                      end-pos.line
+                                                      end-pos.character)
+                parent-node (node:parent)]
+            (when (should-use-ts parent-node)
+              (let [(sl sc el ec) (parent-node:range)]
+                (tset loc.range.start :line sl)
+                (tset loc.range.start :character sc)
+                (tset loc.range.end :line el)
+                (tset loc.range.end :character ec)))
 
-local function ts_range(loc)
-  loc = normalize_loc(loc)
-  if not loc.uri then
-    return loc
-  end
+            loc))))))
 
-  local lang = parsers.ft_to_lang(vim.bo.filetype)
-  if not lang or lang == "" then
-    return loc
-  end
-  if not parsers.has_parser(lang) then
-    return loc
-  end
+(fn peek-location-callback [_ result]
+  (when (and result (not (vim.tbl_isempty result)))
+    (print (vim.inspect result))
+    (let [loc (ts-range (. result 1))
+          color (require "fsouza.color")
+          (_ winid) (vim.lsp.util.preview_location loc)]
+      (color.set-popup-winid winid))))
 
-  local bufnr = vim.uri_to_bufnr(loc.uri)
-  vim.api.nvim_buf_set_option(bufnr, "buflisted", true)
-  vim.api.nvim_buf_set_option(bufnr, "filetype", vim.bo.filetype)
+(macro make-lsp-loc-action [method]
+  `(fn []
+     (let [params# (vim.lsp.util.make_position_params)]
+       (vim.lsp.buf_request 0 ,method params# peek-location-callback))))
 
-  local start_pos = loc.range.start
-  local end_pos = loc.range["end"]
-
-  local parser = vim.treesitter.get_parser(bufnr, lang)
-  local _, t = next(parser:trees())
-  if not t then
-    return loc
-  end
-  local root = t:root()
-  local node = root:named_descendant_for_range(start_pos.line, start_pos.character, end_pos.line,
-                                               end_pos.character)
-
-  local parent_node = node:parent()
-  if should_use_ts(parent_node) then
-    local sl, sc, el, ec = parent_node:range()
-    loc.range.start.line = sl
-    loc.range.start.character = sc
-    loc.range["end"].line = el
-    loc.range["end"].character = ec
-  end
-  return loc
-end
-
-local function peek_location_callback(_, result)
-  if not result or vim.tbl_isempty(result) then
-    return
-  end
-  local loc = ts_range(result[1])
-  local _, win_id = lsp_util.preview_location(loc)
-  require("fsouza.color")["set-popup-winid"](win_id)
-end
-
-local function make_lsp_loc_action(method)
-  return function()
-    local params = lsp_util.make_position_params()
-    lsp.buf_request(0, method, params, peek_location_callback)
-  end
-end
-
-M.preview_definition = make_lsp_loc_action("textDocument/definition")
-
-M.preview_declaration = make_lsp_loc_action("textDocument/declaration")
-
-M.preview_implementation = make_lsp_loc_action("textDocument/implementation")
-
-M.preview_type_definition = make_lsp_loc_action("textDocument/typeDefinition")
-
-return M
+{:preview-definition (make-lsp-loc-action "textDocument/definition")
+ :preview-declaration (make-lsp-loc-action "textDocument/declaration")
+ :preview-implementation (make-lsp-loc-action "textDocument/implementation")
+ :preview-type-definition (make-lsp-loc-action "textDocument/typeDefinition")}
