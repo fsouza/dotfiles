@@ -97,6 +97,22 @@
                                  :rhs (helpers.fn-map (partial term-open "l"))
                                  :opts {:silent true}}]}))
 
+(fn setup-autocompile []
+  (let [config-dir (vim.fn.stdpath "config")]
+    (fn handle-result [result]
+      (if (= result.exit-status 0)
+        (vim.notify "Successfully compiled")
+        (error (string.format "failed to compile fnl: %s" (vim.inspect result)))))
+
+    (fn make []
+      (let [cmd (require "fsouza.lib.cmd")]
+        (cmd.run "make" {:args ["-C" config-dir "install-site"]} nil handle-result)))
+
+    (helpers.augroup "fsouza__autocompile-fennel" [{:events ["BufWritePost"]
+                                                    :targets ["~/.dotfiles/nvim/*.fnl"]
+                                                    :command (helpers.fn-cmd make)}])))
+
+
 ;; helper function to import a module and invoke a function.
 (fn mod-invoke [mod fn-name ...]
   (let [mod (require mod)
@@ -120,5 +136,6 @@
     (schedule (partial require "fsouza.plugin.ts"))
     (schedule setup-lsp-commands)
     (schedule setup-fuzzy-mappings)
+    (schedule setup-autocompile)
     (schedule (partial vim.cmd "doautoall FileType"))
     (schedule (partial vim.cmd "doautocmd User PluginReady"))))
