@@ -2,7 +2,7 @@ NVIM_CACHE_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("
 
 NVIM_DATA_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("data")' +q 2>&1)
 
-FENNEL := $(if $(shell command -v fennel 2>/dev/null), fennel, $(NVIM_CACHE_DIR)/hr/bin/fennel)
+FENNEL := $(if $(shell command -v fennel 2>/dev/null),fennel,$(NVIM_CACHE_DIR)/hr/bin/fennel)
 
 .PHONY: all
 all: bootstrap update-paq kill-daemons clear-logs
@@ -39,9 +39,7 @@ clean-site:
 build: $(LUA_FILES)
 
 build/%.lua: %.fnl
-	@ mkdir -p $(dir $@)
-	$(FENNEL) -c $< > $@
+	env FENNEL=$(FENNEL) python3.9 scripts/compile.py $< $@
 
 build/lua/%.lua: fnl/%.fnl
-	@ mkdir -p $(dir $@)
-	$(FENNEL) -c $< > $@
+	env FENNEL=$(FENNEL) python3.9 scripts/compile.py $< $@
