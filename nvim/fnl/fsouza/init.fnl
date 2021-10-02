@@ -11,8 +11,8 @@
   (let [lua-version (string.gsub _G._VERSION "Lua " "")
         cache-dir (vim.fn.stdpath "cache")
         hererocks-path (.. cache-dir "/hr")
-        share-path (.. (.. hererocks-path "/share/lua/") lua-version)
-        lib-path (.. (.. hererocks-path "/lib/lua/") lua-version)]
+        share-path (.. hererocks-path "/share/lua/" lua-version)
+        lib-path (.. hererocks-path "/lib/lua/" lua-version)]
     (tset package :path (table.concat [(.. share-path "/?.lua") (.. share-path "/?/init.lua") package.path] ";"))
     (tset package :cpath (table.concat [(.. lib-path "/?.so") package.cpath] ";"))))
 
