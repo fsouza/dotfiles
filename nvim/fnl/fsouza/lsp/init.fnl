@@ -107,8 +107,8 @@
                                                         true)})))))
 
     (if-executable "dune"
-      (lsp.ocamllsp.setup (opts.with-defaults {:cmd (path.join cache-dir "langservers" "ocaml-lsp" "_build"
-                                                               "install" "default" "bin" "ocamllsp")
+      (lsp.ocamllsp.setup (opts.with-defaults {:cmd [(path.join cache-dir "langservers" "ocaml-lsp" "_build"
+                                                                "install" "default" "bin" "ocamllsp")]
                                                :root_dir (opts.root-pattern-with-fallback ".merlin" "package.json")})))
 
     (if-executable "dotnet"
