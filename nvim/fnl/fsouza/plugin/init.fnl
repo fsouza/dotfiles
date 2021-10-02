@@ -106,8 +106,12 @@
 
     (fn make []
       (when (not vim.g.fennel_ks)
-        (let [cmd (require "fsouza.lib.cmd")]
-          (cmd.run "make" {:args ["-C" config-dir "install-site"]} nil handle-result))))
+        (let [cmd (require "fsouza.lib.cmd")
+              file-name (vim.fn.expand "<afile>")
+              make-target (if (vim.endswith file-name "/packed.fnl")
+                            "update-paq"
+                            "install-site")]
+          (cmd.run "make" {:args ["-C" config-dir make-target]} nil handle-result))))
 
     (helpers.augroup "fsouza__autocompile-fennel" [{:events ["BufWritePost"]
                                                     :targets ["~/.dotfiles/nvim/*.fnl"]
