@@ -1,3 +1,5 @@
+(import-macros {: vim-schedule} :fsouza-macros)
+
 (local helpers (require "fsouza.lib.nvim-helpers"))
 
 (fn parse-output [data]
@@ -61,13 +63,12 @@
         "insert_final_line" (handle-insert-final-line vim-opts v)
         "insert_final_newline" (handle-insert-final-line vim-opts v)
         "indent_size" (handle-indent-size vim-opts v)
-        "trim_trailing_whitespace" (vim.schedule (partial handle-whitespaces bufnr v))))
+        "trim_trailing_whitespace" (vim-schedule (handle-whitespaces bufnr v))))
 
-    (vim.schedule
-      (fn []
-        (when (and (vim.api.nvim_buf_is_valid bufnr) (vim.api.nvim_buf_get_option bufnr "modifiable"))
-          (each [option-name value (pairs vim-opts)]
-            (vim.api.nvim_buf_set_option bufnr option-name value)))))))
+    (vim-schedule
+      (when (and (vim.api.nvim_buf_is_valid bufnr) (vim.api.nvim_buf_get_option bufnr "modifiable"))
+        (each [option-name value (pairs vim-opts)]
+          (vim.api.nvim_buf_set_option bufnr option-name value))))))
 
 (fn set-config [bufnr]
   (let [bufnr (helpers.if-nil bufnr vim.api.nvim_get_current_buf)
@@ -95,9 +96,9 @@
       (table.insert commands {:events ["BufNewFile" "BufReadPost" "BufFilePost"]
                               :targets ["*"]
                               :command set-config-cmd})
-      (vim.schedule (fn []
-                      (each [_ bufnr (ipairs (vim.api.nvim_list_bufs))]
-                        (set-config bufnr)))))
+      (vim-schedule
+        (each [_ bufnr (ipairs (vim.api.nvim_list_bufs))]
+          (set-config bufnr))))
     (helpers.augroup "editorconfig" commands)))
 
 {:enable (partial set-enabled true)

@@ -1,3 +1,5 @@
+(import-macros {: vim-schedule} :fsouza-macros)
+
 (fn make-debug [prefix debug-fn]
   (if (= debug-fn nil)
     (fn [] nil)
@@ -55,12 +57,12 @@
                   (let [code (if (and r.abort (= code 0))
                                -1
                                code)]
-                    (vim.schedule (fn []
-                                    (let [errors []]
-                                      (when stdout-handler.err
-                                        (table.insert errors stdout-handler.err))
-                                      (when stderr-handler.err
-                                        (table.insert errors stderr-handler.err))
+                    (vim-schedule
+                      (let [errors []]
+                        (when stdout-handler.err
+                          (table.insert errors stdout-handler.err))
+                        (when stderr-handler.err
+                          (table.insert errors stderr-handler.err))
 
                                       (on-finished {:exit-status code
                                                     :aborted r.abort
@@ -69,7 +71,7 @@
                                                     :stderr stderr-handler.data
                                                     :errors errors})
                                       (tset r :finished true)
-                                      (close))))))
+                                      (close)))))
         opts (vim.tbl_extend "error" opts {:stdio [stdin stdout stderr]})
         (spawn-handle pid-or-err) (loop.spawn cmd opts on-exit)]
 
@@ -81,6 +83,6 @@
         (when input-data
           (loop.write stdin input-data))
         (loop.shutdown stdin))
-      (vim.schedule (partial on-finished {:exit-status -1 :stderr pid-or-err})))))
+      (vim-schedule (on-finished {:exit-status -1 :stderr pid-or-err})))))
 
 {:run run}

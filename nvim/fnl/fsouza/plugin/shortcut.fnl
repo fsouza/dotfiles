@@ -1,3 +1,5 @@
+(import-macros {: vim-schedule} :fsouza-macros)
+
 (fn fzf-dir [directory cd]
   (let [fuzzy (require "fsouza.plugin.fuzzy")]
     (if cd
@@ -12,10 +14,10 @@
                                  (vim.loop.fs_stat path (fn [err stat]
                                                           (when (not err)
                                                             (let [is-dir (= stat.type "directory")]
-                                                              (vim.schedule (fn []
-                                                                              (if is-dir
-                                                                                (fzf-dir path cd)
-                                                                                (vim.cmd (.. "edit " path))))))))))))
+                                                              (vim-schedule
+                                                                (if is-dir
+                                                                  (fzf-dir path cd)
+                                                                  (vim.cmd (.. "edit " path)))))))))))
 
   (vim.cmd
     (string.format

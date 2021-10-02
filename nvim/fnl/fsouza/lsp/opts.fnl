@@ -103,16 +103,14 @@
                                                 (let [symbols-outline (setup-symbols-outline)]
                                                   (symbols-outline.toggle_outline))))})
 
-(macro schedule [expr]
-  `(vim.schedule (fn []
-                   ,expr)))
+(import-macros {: vim-schedule} :fsouza-macros)
 
 (fn attached [bufnr client]
   (let [detach (require "fsouza.lsp.detach")]
     (macro register-detach [cb]
       `(detach.register bufnr ,cb))
 
-    (schedule
+    (vim-schedule
       (let [mappings {:n [{:lhs "<leader>l" :rhs cmds.show-line-diagnostics :opts {:silent true}}
                           {:lhs "<leader>df" :rhs cmds.list-file-diagnostics :opts {:silent true}}
                           {:lhs "<leader>dw" :rhs cmds.list-workspace-diagnostics :opts {:silent true}}
@@ -217,7 +215,7 @@
         (let [progress (require "fsouza.lsp.progress")]
           (progress.on-attach))
 
-        (schedule
+        (vim-schedule
           (do
             (helpers.create-mappings mappings bufnr)
             (register-detach (partial helpers.remove-mappings mappings bufnr))))))))

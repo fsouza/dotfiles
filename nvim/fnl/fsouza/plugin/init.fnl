@@ -1,5 +1,7 @@
 (local helpers (require "fsouza.lib.nvim-helpers"))
 
+(import-macros {: vim-schedule} :fsouza-macros)
+
 (fn fuzzy [member ...]
   (let [mod (require "fsouza.plugin.fuzzy")
         f (. mod member)]
@@ -73,8 +75,8 @@
 (fn setup-editorconfig []
   (let [editorconfig (require "fsouza.plugin.editorconfig")]
     (editorconfig.enable))
-  (vim.schedule
-    (fn []
+  (vim-schedule
+    (do
       (vim.cmd "command! EnableEditorConfig lua require('fsouza.plugin.editorconfig').enable()")
       (vim.cmd "command! DisableEditorConfig lua require('fsouza.plugin.editorconfig').disable()"))))
 

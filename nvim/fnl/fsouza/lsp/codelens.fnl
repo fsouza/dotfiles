@@ -1,3 +1,5 @@
+(import-macros {: vim-schedule} :fsouza-macros)
+
 (local helpers (require "fsouza.lib.nvim-helpers"))
 
 (local debouncers {})
@@ -145,16 +147,16 @@
                          :supports-resolve opts.can-resolve
                          :supports-command opts.supports-command
                          :mapping opts.mapping})
-    (vim.schedule (partial codelens bufnr))
+    (vim-schedule (codelens bufnr))
 
     (helpers.augroup augroup-id [{:events ["InsertLeave" "BufWritePost"]
                                   :targets [(string.format "<buffer=%d>" bufnr)]
                                   :command (helpers.fn-cmd (partial codelens bufnr))}])
 
-    (vim.schedule (fn []
-                    (let [buf-diagnostic (require "fsouza.lsp.buf-diagnostic")]
-                      (buf-diagnostic.register-hook augroup-id (partial codelens bufnr)))
-                    (vim.api.nvim_buf_attach bufnr false {:on_detach (partial on-detach bufnr)})))
+    (vim-schedule
+      (let [buf-diagnostic (require "fsouza.lsp.buf-diagnostic")]
+        (buf-diagnostic.register-hook augroup-id (partial codelens bufnr))
+        (vim.api.nvim_buf_attach bufnr false {:on_detach (partial on-detach bufnr)})))
 
     (when opts.mapping
       (helpers.create-mappings

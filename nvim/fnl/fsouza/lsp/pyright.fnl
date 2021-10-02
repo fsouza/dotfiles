@@ -1,3 +1,5 @@
+(import-macros {: vim-schedule} :fsouza-macros)
+
 (local path (require "pl.path"))
 
 (fn set-from-env-var [cb]
@@ -53,8 +55,7 @@
 (fn detect-python-interpreter [cb]
   (detect-virtualenv (fn [virtualenv]
                        (when virtualenv
-                         (vim.schedule (fn []
-                                         (tset vim.env :VIRTUAL_ENV virtualenv)))
+                         (vim-schedule (tset vim.env :VIRTUAL_ENV virtualenv))
                          (cb (path.join virtualenv "bin" "python"))))))
 
 

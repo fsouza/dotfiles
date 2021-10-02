@@ -1,3 +1,5 @@
+(import-macros {: vim-schedule} :fsouza-macros)
+
 (fn min [x y]
   (if (< x y)
     x
@@ -18,10 +20,10 @@
   (let [index (. (vim.api.nvim_win_get_cursor 0) 1)
         {:cbs cbs} mod
         cb (. cbs winid)]
-    (vim.schedule (fn []
-                    (vim.cmd "wincmd p")
-                    (mod.close winid)
-                    (cb index)))))
+    (vim-schedule
+      (vim.cmd "wincmd p")
+      (mod.close winid)
+      (cb index))))
 
 (fn open [mod lines cb]
   (let [longest (* 2 (accumulate [longest 0 _ line (ipairs lines)]

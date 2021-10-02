@@ -1,3 +1,5 @@
+(import-macros {: vim-schedule} :fsouza-macros)
+
 (local path (require "pl.path"))
 
 (local default-root-markers [".git"])
@@ -236,7 +238,7 @@
 
             (timer:start 0 25 (fn []
                                 (when (= pending 0)
-                                  (vim.schedule (partial cb tools))
+                                  (vim-schedule (cb tools))
                                   (timer:close))))))))))
 
 (local prettierd-fts ["changelog" "css" "graphql" "html" "javascript" "json"
@@ -299,7 +301,7 @@
 
       (timer:start 0 25 (fn []
                           (when (= pending 0)
-                            (vim.schedule (partial cb settings))
+                            (vim-schedule (cb settings))
                             (timer:close)))))))
 
 (fn gen-config [client]

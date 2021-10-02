@@ -1,10 +1,13 @@
+(import-macros {: vim-schedule} :fsouza-macros)
+
 (fn cleanup [mod]
   (var finished 0)
   (let [{:cbs cbs} mod]
     (each [_ cb (ipairs cbs)]
-      (vim.schedule (fn []
-                      (cb)
-                      (set finished (+ finished 1)))))
+      (vim-schedule
+        (do
+          (cb)
+          (set finished (+ finished 1)))))
 
     (vim.wait
       500
