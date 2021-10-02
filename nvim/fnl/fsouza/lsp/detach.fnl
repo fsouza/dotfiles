@@ -1,12 +1,14 @@
+(import-macros {: if-nil} :fsouza-macros)
+
 (local callbacks {})
 
 (fn register [bufnr cb]
-  (let [buf-cbs (vim.F.if_nil (. callbacks bufnr) [])]
+  (let [buf-cbs (if-nil (. callbacks bufnr) [])]
     (table.insert buf-cbs cb)
     (tset callbacks bufnr buf-cbs)))
 
 (fn detach [bufnr]
-  (let [buf-cbs (vim.F.if_nil (. callbacks bufnr) [])]
+  (let [buf-cbs (if-nil (. callbacks bufnr) [])]
     (each [_ cb (ipairs buf-cbs)]
       (cb bufnr)))
   (tset callbacks bufnr nil))

@@ -1,3 +1,5 @@
+(import-macros {: if-nil} :fsouza-macros)
+
 (local helpers (require "fsouza.lib.nvim-helpers"))
 
 (local tablex (require "fsouza.tablex"))
@@ -9,7 +11,7 @@
 (fn lang-to-ft [lang]
   (let [parsers (require "nvim-treesitter.parsers")
         obj (. parsers.list lang)]
-    (vim.tbl_flatten [(vim.F.if_nil obj.filetype lang)] (vim.F.if_nil obj.used_by []))))
+    (vim.tbl_flatten [(if-nil obj.filetype lang)] (if-nil obj.used_by []))))
 
 (fn get-file-types []
   (tablex.flat-map lang-to-ft wanted-parsers))
@@ -29,12 +31,11 @@
                                    (vim.notify location)))))
 
 (fn create-mappings [bufnr]
-  (let [bufnr (helpers.if-nil
+  (let [bufnr (if-nil
                 bufnr
-                (fn []
-                  (helpers.if-nil
-                    (vim.fn.expand "<abuf>")
-                    vim.api.nvim_get_current_buf)))]
+                (if-nil
+                  (vim.fn.expand "<abuf>")
+                  vim.api.nvim_get_current_buf))]
 
     (helpers.create-mappings {:n [{:lhs "<leader>w"
                                    :rhs gps-cmd

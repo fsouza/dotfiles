@@ -1,3 +1,5 @@
+(import-macros {: if-nil} :fsouza-macros)
+
 (fn register-cb [mod cb]
   (let [id (tostring cb)]
     (tset mod.fns id cb)
@@ -9,7 +11,7 @@
                         vim.api.nvim_set_keymap)]
     (each [mode rules (pairs mappings)]
       (each [_ m (ipairs rules)]
-        (set-keymap-fn mode m.lhs m.rhs (vim.F.if_nil m.opts {}))))))
+        (set-keymap-fn mode m.lhs m.rhs (if-nil m.opts {}))))))
 
 (fn remove-mappings [mappings bufnr]
   (let [del-keymap-fn (if bufnr
@@ -26,8 +28,8 @@
     (vim.cmd (string.format
                "autocmd %s %s %s %s"
                (table.concat c.events ",")
-               (table.concat (vim.F.if_nil c.targets []) ",")
-               (table.concat (vim.F.if_nil c.modifiers []) " ")
+               (table.concat (if-nil c.targets []) ",")
+               (table.concat (if-nil c.modifiers []) " ")
                c.command)))
   (vim.cmd "augroup END"))
 
@@ -56,7 +58,7 @@
     (let [line-offset (- (vim.api.nvim_buf_line_count bufnr) orig-nlines)
           lineno (+ orig-lineno line-offset)
           new-line (. (vim.api.nvim_buf_get_lines bufnr (- lineno 1) lineno true) 1)
-          col-offset (- (string.len (vim.F.if_nil new-line "")) (string.len orig-line))]
+          col-offset (- (string.len (if-nil new-line "")) (string.len orig-line))]
       (tset view :lnum lineno)
       (tset view :col (+ orig-colno col-offset))
       (vim.fn.winrestview view))))
@@ -79,9 +81,5 @@
            :augroup augroup
            :reset-augroup (fn [name] (augroup name []))
            :once once
-           :rewrite-wrap rewrite-wrap
-           :if-nil (fn [v factory]
-                     (if v
-                       v
-                       (factory)))}]
+           :rewrite-wrap rewrite-wrap}]
   mod)

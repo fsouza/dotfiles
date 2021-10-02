@@ -2,4 +2,10 @@
   `(vim.schedule (fn []
                    ,expr)))
 
-{:vim-schedule vim-schedule}
+(fn if-nil [v expr]
+  `(if (not= ,v nil)
+     ,v
+     ,expr))
+
+{:vim-schedule vim-schedule
+ :if-nil if-nil}

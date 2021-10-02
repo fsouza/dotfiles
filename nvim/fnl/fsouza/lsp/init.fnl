@@ -1,3 +1,5 @@
+(import-macros {: if-nil} :fsouza-macros)
+
 (local path (require "pl.path"))
 
 (local cache-dir (vim.fn.stdpath "cache"))
@@ -74,7 +76,7 @@
                                                                     :analysis {:autoImportCompletions true
                                                                                :autoSearchPaths true
                                                                                :diagnosticMode "workspace"
-                                                                               :typeCheckingMode (vim.F.if_nil vim.g.pyright_type_checking_mode "basic")
+                                                                               :typeCheckingMode (if-nil vim.g.pyright_type_checking_mode "basic")
                                                                                :useLibraryCodeForTypes true}}}
                                                 :on_init (fn [client]
                                                            (let [pyright (require "fsouza.lsp.pyright")]

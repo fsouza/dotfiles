@@ -1,3 +1,5 @@
+(import-macros {: if-nil} :fsouza-macros)
+
 (local helpers (require "fsouza.lib.nvim-helpers"))
 
 (local clients-by-buf {})
@@ -29,7 +31,7 @@
 (fn on-attach [opts]
   (let [{:bufnr bufnr
          :client client} opts
-        buf-clients (vim.F.if_nil (. clients-by-buf bufnr) [])]
+        buf-clients (if-nil (. clients-by-buf bufnr) [])]
     (buf-attach-if-needed bufnr)
     (table.insert buf-clients client)
     (tset clients-by-buf bufnr buf-clients)

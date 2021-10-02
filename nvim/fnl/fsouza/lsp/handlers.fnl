@@ -1,8 +1,10 @@
+(import-macros {: if-nil} :fsouza-macros)
+
 (local non-focusable-handlers {})
 
 (fn popup-callback [err result context ...]
   (let [method context.method
-        handler (vim.F.if_nil (. non-focusable-handlers method) (vim.lsp.with (. vim.lsp.handlers method) {:focusable false}))
+        handler (if-nil (. non-focusable-handlers method) (vim.lsp.with (. vim.lsp.handlers method) {:focusable false}))
         color (require "fsouza.color")]
     (tset non-focusable-handlers method handler)
     (handler err result context ...)

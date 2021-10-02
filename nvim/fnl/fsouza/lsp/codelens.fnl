@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule} :fsouza-macros)
+(import-macros {: vim-schedule : if-nil} :fsouza-macros)
 
 (local helpers (require "fsouza.lib.nvim-helpers"))
 
@@ -13,11 +13,11 @@
 
 (fn group-by-line [codelenses by-line]
   (let [to-resolve []
-        by-line (vim.F.if_nil by-line {})]
+        by-line (if-nil by-line {})]
     (each [_ codelens (ipairs codelenses)]
       (if codelens.command
         (let [line-id codelens.range.start.line
-              curr (vim.F.if_nil (. by-line line-id) [])]
+              curr (if-nil (. by-line line-id) [])]
           (table.insert curr codelens)
           (tset by-line line-id curr))
         (table.insert to-resolve codelens)))
@@ -78,7 +78,7 @@
       (client.lsp-client.request "textDocument/codeLens" params codelenses-handler bufnr))))
 
 (fn make-debounced-codelenses [bufnr debouncer-key]
-  (let [interval-ms (vim.F.if_nil vim.b.lsp_codelens_debouncing_ms 50)
+  (let [interval-ms (if-nil vim.b.lsp_codelens_debouncing_ms 50)
         debounce (require "fsouza.lib.debounce")
         debounced (debounce.debounce interval-ms (vim.schedule_wrap codelenses))]
     (tset debouncers debouncer-key debounced)
@@ -89,7 +89,7 @@
 
 (fn codelens [bufnr]
   (let [debouncer-key bufnr
-        debounced (helpers.if-nil (. debouncers debouncer-key) (partial make-debounced-codelenses bufnr debouncer-key))]
+        debounced (if-nil (. debouncers debouncer-key) (make-debounced-codelenses bufnr debouncer-key))]
     (debounced.call bufnr)))
 
 (fn execute-codelenses [bufnr items]
@@ -117,7 +117,7 @@
         bufnr (vim.api.nvim_get_current_buf)
         cursor (vim.api.nvim_win_get_cursor winid)
         line-id (- (. cursor 1) 1)
-        buffer-results (vim.F.if_nil (. code-lenses bufnr) {})
+        buffer-results (if-nil (. code-lenses bufnr) {})
         line-codelenses (. buffer-results line-id)]
     (when line-codelenses
       (execute-codelenses bufnr line-codelenses))))

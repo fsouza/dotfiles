@@ -1,3 +1,5 @@
+(import-macros {: if-nil} :fsouza-macros)
+
 (local helpers (require "fsouza.lib.nvim-helpers"))
 (local themes (require "fsouza.themes"))
 
@@ -11,7 +13,7 @@
       (tset (. state :themes) winid nil))))
 
 (fn start-gc-timer [state interval-ms]
-  (let [timer (helpers.if-nil (. state :timer) vim.loop.new_timer)]
+  (let [timer (if-nil (. state :timer) (vim.loop.new_timer))]
     (tset state :timer timer)
     (timer:start interval-ms interval-ms (vim.schedule_wrap (partial gc state)))))
 
@@ -46,7 +48,7 @@
   (when (not state.ns)
     (fn decoration-cb [_ winid]
       (when (. state :enabled)
-        (let [theme (helpers.if-nil (. state.themes winid) (partial find-theme state winid))]
+        (let [theme (if-nil (. state.themes winid) (find-theme state winid))]
           (vim.api.nvim__set_hl_ns theme))))
     (tset state :ns (vim.api.nvim_create_namespace "fsouza__color"))
     (vim.api.nvim_set_decoration_provider state.ns { :on_win decoration-cb :on_line decoration-cb })))

@@ -1,3 +1,5 @@
+(import-macros {: vim-schedule : if-nil} :fsouza-macros)
+
 (local helpers (require "fsouza.lib.nvim-helpers"))
 
 (local setup-symbols-outline
@@ -102,8 +104,6 @@
              :symbols-outline (helpers.fn-map (fn []
                                                 (let [symbols-outline (setup-symbols-outline)]
                                                   (symbols-outline.toggle_outline))))})
-
-(import-macros {: vim-schedule} :fsouza-macros)
 
 (fn attached [bufnr client]
   (let [detach (require "fsouza.lsp.detach")]
@@ -221,7 +221,7 @@
             (register-detach (partial helpers.remove-mappings mappings bufnr))))))))
 
 (fn on-attach [client bufnr]
-  (let [bufnr (helpers.if-nil bufnr vim.api.nvim_get_current_buf)
+  (let [bufnr (if-nil bufnr vim.api.nvim_get_current_buf)
         bufnr (if (= bufnr 0) (vim.api.nvim_get_current_buf) bufnr)]
     (attached bufnr client)))
 
@@ -242,7 +242,7 @@
   (let [lspconfig (require "lspconfig")
         find-root (lspconfig.util.root_pattern ...)]
     (fn [startpath]
-      (helpers.if-nil (find-root startpath) (fn [] (vim.fn.getcwd))))))
+      (if-nil (find-root startpath) (vim.fn.getcwd)))))
 
 {:with-defaults with-defaults
  :root-pattern-with-fallback root-pattern-with-fallback}

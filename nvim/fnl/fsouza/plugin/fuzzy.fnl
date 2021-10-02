@@ -1,3 +1,5 @@
+(import-macros {: if-nil} :fsouza-macros)
+
 (local helpers (require "fsouza.lib.nvim-helpers"))
 
 (fn should-qf [selected]
@@ -71,7 +73,7 @@
         fzf-lua-))))
 
 (fn grep [rg-opts search]
-  (let [search (helpers.if-nil search (partial vim.fn.input "rg："))
+  (let [search (if-nil search (vim.fn.input "rg："))
         fzf-lua (fzf-lua)]
     (when (not= search "")
       (fzf-lua.grep {:search search

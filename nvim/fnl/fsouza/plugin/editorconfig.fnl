@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule} :fsouza-macros)
+(import-macros {: vim-schedule : if-nil} :fsouza-macros)
 
 (local helpers (require "fsouza.lib.nvim-helpers"))
 
@@ -71,7 +71,7 @@
           (vim.api.nvim_buf_set_option bufnr option-name value))))))
 
 (fn set-config [bufnr]
-  (let [bufnr (helpers.if-nil bufnr vim.api.nvim_get_current_buf)
+  (let [bufnr (if-nil bufnr (vim.api.nvim_get_current_buf))
         filename (vim.api.nvim_buf_get_name bufnr)]
     (when (and (?. vim :bo bufnr :modifiable) (not (?. vim :bo bufnr :readonly)) (not= filename ""))
       (let [filename (if (vim.startswith filename "/")

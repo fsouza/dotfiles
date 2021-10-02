@@ -1,3 +1,5 @@
+(import-macros {: if-nil} :fsouza-macros)
+
 (local colors (require "fsouza.themes.colors"))
 
 (fn basics [ns]
@@ -65,7 +67,7 @@
   (vim.api.nvim_set_hl ns "HlYank" {:bg colors.orange}))
 
 (fn [name]
-  (let [ns (vim.api.nvim_create_namespace (vim.F.if_nil name "fsouza__none"))]
+  (let [ns (vim.api.nvim_create_namespace (if-nil name "fsouza__none"))]
     (basics ns)
     (noners ns)
     (reversers ns)

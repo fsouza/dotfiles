@@ -1,3 +1,5 @@
+(import-macros {: if-nil} :fsouza-macros)
+
 (local helpers (require "fsouza.lib.nvim-helpers"))
 
 (fn run [bufname]
@@ -5,7 +7,7 @@
     (vim.fn.mkdir dir "p")))
 
 (fn register-for-buffer [bufnr]
-  (let [bufnr (helpers.if-nil bufnr (partial vim.fn.expand "<abuf>"))
+  (let [bufnr (if-nil bufnr (vim.fn.expand "<abuf>"))
         bufname (vim.api.nvim_buf_get_name bufnr)]
     (when (not= "" bufname)
       (helpers.augroup (.. "fsouza__mkdir_" bufnr) [{:events ["BufWritePre"]

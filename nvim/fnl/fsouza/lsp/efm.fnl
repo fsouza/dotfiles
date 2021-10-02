@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule} :fsouza-macros)
+(import-macros {: vim-schedule : if-nil} :fsouza-macros)
 
 (local path (require "pl.path"))
 
@@ -10,7 +10,7 @@
 (local quote-arg (partial string.format "\"%s\""))
 
 (fn process-args [args]
-  (let [args (vim.F.if_nil args [])]
+  (let [args (if-nil args [])]
     (accumulate [acc "" _ arg (ipairs args)]
       (.. acc (quote-arg arg)))))
 
@@ -213,7 +213,7 @@
               tablex (require "fsouza.tablex")
               find-repo (fn [repo]
                           (let [repo-url repo.repo
-                                args (vim.F.if_nil (?. repo :hooks 1 :args) [])
+                                args (if-nil (?. repo :hooks 1 :args) [])
                                 f (. pc-repo-tools repo-url)]
                             (if f
                               {:fn f
@@ -221,7 +221,7 @@
                               nil)))
               pre-commit-fns (tablex.filter-map find-repo pre-commit-config.repos)]
 
-          (let [fns (vim.F.if_nil pre-commit-fns fns)
+          (let [fns (if-nil pre-commit-fns fns)
                 tools []
                 timer (vim.loop.new_timer)]
             (var pending 0)
@@ -259,7 +259,7 @@
 
     (fn add-if-not-empty [language tool]
       (when (or tool.formatCommand tool.lintCommand)
-        (let [tools (vim.F.if_nil (?. settings :languages language) [])]
+        (let [tools (if-nil (?. settings :languages language) [])]
           (table.insert tools tool)
           (tset settings.languages language tools))))
 
