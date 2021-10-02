@@ -205,12 +205,12 @@
                                    :rhs cmds.query-workspace-symbols
                                    :opts {:silent true}}))
 
-        (when client.resolved_capabilities.code-lens
-          (let [codelens (require "fsouza.lsp.code-lens")]
+        (when client.resolved_capabilities.code_lens
+          (let [codelens (require "fsouza.lsp.codelens")]
             (codelens.on-attach {:bufnr bufnr
                                  :client client
                                  :mapping "<leader><cr>"
-                                 :can-resolve client.resolved_capabilities.code-lens_resolve
+                                 :can-resolve client.resolved_capabilities.code_lens_resolve
                                  :supports-command client.resolved_capabilities.execute_command})
             (register-detach codelens.on-detach)))
 

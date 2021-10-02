@@ -4,7 +4,7 @@
 
 (local clients {})
 
-(local ns (vim.api.nvim_create_namespace "fsouza__code-lens"))
+(local ns (vim.api.nvim_create_namespace "fsouza__codelens"))
 
 ;; stores result by bufnr & line (range.start.line)
 (local code-lenses {})
