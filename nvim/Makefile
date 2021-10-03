@@ -24,7 +24,7 @@ clear-logs:
 	:> $(NVIM_CACHE_DIR)/lsp.log
 
 FNL_FILES := $(shell find . -name '*.fnl' | grep -v 'macros/.*\.fnl' | sed -e 's;./;;')
-LUA_FILES := $(patsubst %,build/%,$(patsubst %.fnl,%.lua,$(patsubst fnl/%.fnl,lua/%.lua,$(FNL_FILES))))
+LUA_FILES := $(patsubst %.fnl,build/%.lua,$(FNL_FILES))
 
 .PHONY: install-site
 install-site: build
@@ -38,9 +38,6 @@ clean-site:
 build: $(LUA_FILES)
 
 build/%.lua: %.fnl
-	env FENNEL=$(FENNEL) python3.9 scripts/compile.py $< $@
-
-build/lua/%.lua: fnl/%.fnl
 	env FENNEL=$(FENNEL) python3.9 scripts/compile.py $< $@
 
 .PHONY: gen-init-lua
