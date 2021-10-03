@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule} :fsouza)
+(import-macros {: vim-schedule} :helpers)
 
 (fn cleanup [mod]
   (var finished 0)

@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule} :fsouza)
+(import-macros {: vim-schedule} :helpers)
 
 (fn min [x y]
   (if (< x y)

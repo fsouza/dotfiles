@@ -1,4 +1,4 @@
-(import-macros {: if-nil} :fsouza)
+(import-macros {: if-nil} :helpers)
 
 (fn [name]
   (let [colors (require :fsouza.themes.colors)

@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule} :fsouza)
+(import-macros {: vim-schedule} :helpers)
 
 (fn make-debug [prefix debug-fn]
   (if (= debug-fn nil)
