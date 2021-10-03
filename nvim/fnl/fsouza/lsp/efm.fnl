@@ -156,11 +156,7 @@
 
 (fn try-read-precommit-config [file-path cb]
   (let [empty-result {:repos []}
-        lyaml (prequire "lyaml")]
-
-    (when (not lyaml)
-      (cb empty-result)
-      (lua "return"))
+        lyaml (require "lyaml")]
 
     (vim.loop.fs_open
       file-path
@@ -168,7 +164,7 @@
       (tonumber "644" 8)
       (fn [err fd]
         (if err
-          (cb empty-result)
+          (cb nil)
           (let [block-size 1024]
             (var offset 0)
             (var content "")
@@ -215,7 +211,9 @@
                               {:fn f
                                :args args}
                               nil)))
-              pre-commit-fns (tablex.filter-map find-repo pre-commit-config.repos)]
+              pre-commit-fns (if pre-commit-config
+                               (tablex.filter-map find-repo pre-commit-config.repos)
+                               nil)]
 
           (let [fns (if-nil pre-commit-fns fns)
                 tools []
@@ -241,7 +239,7 @@
                       "typescript" "typescriptreact" "yaml"])
 
 (fn get-filetypes []
-  (vim.tbl_flatten ["bzl" "dune" "lua" "python" "sh" prettierd_fts]))
+  (vim.tbl_flatten ["bzl" "dune" "python" "sh" prettierd_fts]))
 
 (fn basic-settings []
   (values {:lintDebounce 250000000
