@@ -216,9 +216,8 @@
           (progress.on-attach))
 
         (vim-schedule
-          (do
-            (helpers.create-mappings mappings bufnr)
-            (register-detach (partial helpers.remove-mappings mappings bufnr))))))))
+          (helpers.create-mappings mappings bufnr)
+          (register-detach (partial helpers.remove-mappings mappings bufnr)))))))
 
 (fn on-attach [client bufnr]
   (let [bufnr (if-nil bufnr (vim.api.nvim_get_current_buf))

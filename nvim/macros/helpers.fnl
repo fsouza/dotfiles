@@ -1,6 +1,6 @@
-(fn vim-schedule [expr]
+(fn vim-schedule [...]
   `(vim.schedule (fn []
-                   ,expr)))
+                   ,...)))
 
 (fn if-nil [v expr]
   `(if (not= ,v nil)

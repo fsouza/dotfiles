@@ -20,8 +20,7 @@
       (do
         (actions.file_sel_to_qf selected)
         (vim.cmd "cc"))
-      (do
-        (actions.file_edit selected [])))))
+      (actions.file_edit selected []))))
 
 (fn file-actions []
   (let [actions (require :fzf-lua.actions)]

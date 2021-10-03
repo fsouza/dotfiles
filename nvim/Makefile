@@ -31,8 +31,12 @@ install-site: build
 	@ mkdir -p $(NVIM_DATA_DIR)/site
 	cp -prv build/* $(NVIM_DATA_DIR)/site
 
+.PHONY:
+clean:
+	rm -rf build
+
 .PHONY: clean-site
-clean-site:
+clean-site: clean
 	rm -rf $(NVIM_DATA_DIR)/site
 
 build: $(LUA_FILES)

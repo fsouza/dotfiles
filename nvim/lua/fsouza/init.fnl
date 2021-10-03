@@ -111,13 +111,13 @@
         helpers (require :fsouza.lib.nvim-helpers)]
     (helpers.create-mappings mappings)))
 
-(let [schedule vim.schedule]
+(do
   (hererocks)
   (add-paqs-opt-to-path)
   (initial-mappings)
-  (schedule (fn []
-              (set-global-options)
-              (set-global-mappings)))
+  (vim-schedule
+    (set-global-options)
+    (set-global-mappings))
   (set-ui-options)
   (set-folding)
   (set-neovim-global-vars)
