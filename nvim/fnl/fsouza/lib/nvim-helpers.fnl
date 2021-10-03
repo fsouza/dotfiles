@@ -1,4 +1,4 @@
-(import-macros {: if-nil} :helpers)
+(import-macros {: if-nil : cmd-map : vcmd-map} :helpers)
 
 (fn register-cb [mod cb]
   (let [id (tostring cb)]
@@ -64,15 +64,13 @@
       (vim.fn.winrestview view))))
 
 (let [mod {:fns []
-           :cmd-map (partial string.format "<cmd>%s<cr>")
-           :vcmd-map (partial string.format "<cmd>'<,'>%s<cr>")
            :fn-cmd (fn [f]
                      (let [id (register-cb mod f)]
                        (string.format "lua require('fsouza.lib.nvim-helpers').fns['%s']()" id)))
            :fn-map (fn [f]
-                     (mod.cmd-map (mod.fn-cmd f)))
+                     (cmd-map (mod.fn-cmd f)))
            :vfn-map (fn [f]
-                      (mod.vcmd-map (mod.fn-cmd f)))
+                      (vcmd-map (mod.fn-cmd f)))
            :ifn-map (fn [f]
                       (let [id (register-cb mod f)]
                         (string.format "<c-r>=luaeval(\"require('fsouza.lib.nvim-helpers').fns['%s']()\")<CR>" id)))
