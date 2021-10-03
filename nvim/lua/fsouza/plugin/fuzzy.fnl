@@ -40,11 +40,6 @@
             fzf-lua- (require :fzf-lua)]
         (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
                          :fzf_layout "default"
-                         :fzf_binds ["alt-a:toggle-all"
-                                     "ctrl-l:clear-query"
-                                     "ctrl-d:preview-half-page-down"
-                                     "ctrl-u:preview-half-page-up"
-                                     "ctrl-h:toggle-preview"]
                          :buffers {:file_icons false
                                    :git_icons false}
                          :files {:file_icons false
@@ -64,11 +59,17 @@
                                :actions actions}
                          :winopts {:win_height 0.75
                                    :win_width 0.90}
-                         :previewers {:builtin {:keymap {:toggle_hide "<c-h>"
-                                                         :toggle_full "<c-o>"
-                                                         :page_up "<c-u>"
-                                                         :page_down "<c-d>"
-                                                         :page_reset "<c-r>"}}}})
+                         :keymap {:builtin {:toggle_hide "<c-h>"
+                                            :toggle_full "<c-o>"
+                                            :page_up "<c-u>"
+                                            :page_down "<c-d>"
+                                            :page_reset "<c-r>"}}
+
+                         :fzf {:alt-a :toggle-all
+                               :ctrl-l :clear-query
+                               :ctrl-d :preview-half-page-down
+                               :ctrl-u :preview-half-page-up
+                               :ctrl-h :toggle-preview}})
 
         fzf-lua-))))
 
