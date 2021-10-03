@@ -31,17 +31,15 @@ jobs:
       - name: install build deps on mac
         if: runner.os == 'macOS'
         run: |
-          brew install bash shellcheck libyaml
+          brew install bash libyaml
 
       - name: install build deps on ubuntu
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y shellcheck libyaml-dev
+          sudo apt-get install -y libyaml-dev
 
       - uses: actions/checkout@v2.3.4
-
-      - run: shellcheck bin/*
 
       - uses: avsm/setup-ocaml@v2
         with:
