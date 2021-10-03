@@ -1,4 +1,4 @@
-(import-macros {: if-nil} :fsouza-macros)
+(import-macros {: if-nil} :fsouza)
 
 (local helpers (require "fsouza.lib.nvim-helpers"))
 

@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule} :fsouza-macros)
+(import-macros {: vim-schedule} :fsouza)
 
 (fn fzf-dir [directory cd]
   (let [fuzzy (require "fsouza.plugin.fuzzy")]

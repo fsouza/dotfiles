@@ -1,4 +1,4 @@
-(import-macros {: if-nil} :fsouza-macros)
+(import-macros {: if-nil} :fsouza)
 
 (fn is-enabled [bufnr]
   (let [helpers (require "fsouza.lib.nvim-helpers")

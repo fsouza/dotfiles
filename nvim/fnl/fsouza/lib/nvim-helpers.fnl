@@ -1,4 +1,4 @@
-(import-macros {: if-nil} :fsouza-macros)
+(import-macros {: if-nil} :fsouza)
 
 (fn register-cb [mod cb]
   (let [id (tostring cb)]

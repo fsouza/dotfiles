@@ -11,7 +11,7 @@ def main(args: Sequence[str]) -> int:
     fennel = os.environ["FENNEL"]
     [fnl_file, out_file] = args
 
-    cmd = subprocess.run([fennel, "-c", fnl_file], capture_output=True)
+    cmd = subprocess.run([fennel, "--load", "macros/init.fnl", "-c", fnl_file], capture_output=True)
     if cmd.returncode != 0:
         sys.stderr.buffer.write(cmd.stderr)
         return cmd.returncode

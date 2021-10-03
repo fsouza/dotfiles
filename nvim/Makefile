@@ -24,7 +24,7 @@ kill-daemons:
 clear-logs:
 	:> $(NVIM_CACHE_DIR)/lsp.log
 
-FNL_FILES := $(shell find . -name '*.fnl' | grep -v 'fsouza-macros/.*\.fnl' | sed -e 's;./;;')
+FNL_FILES := $(shell find . -name '*.fnl' | grep -v 'macros/.*\.fnl' | sed -e 's;./;;')
 LUA_FILES := $(patsubst %,build/%,$(patsubst %.fnl,%.lua,$(patsubst fnl/%.fnl,lua/%.lua,$(FNL_FILES))))
 
 .PHONY: install-site

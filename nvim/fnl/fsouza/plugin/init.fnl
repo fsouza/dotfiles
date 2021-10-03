@@ -1,6 +1,6 @@
 (local helpers (require "fsouza.lib.nvim-helpers"))
 
-(import-macros {: vim-schedule} :fsouza-macros)
+(import-macros {: vim-schedule} :fsouza)
 
 (fn fuzzy [member ...]
   (let [mod (require "fsouza.plugin.fuzzy")

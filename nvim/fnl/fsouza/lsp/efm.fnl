@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : if-nil} :fsouza-macros)
+(import-macros {: vim-schedule : if-nil} :fsouza)
 
 (local path (require "pl.path"))
 
