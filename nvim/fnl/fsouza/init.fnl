@@ -1,5 +1,7 @@
 (global prequire (vim.F.nil_wrap require))
 
+(global config-dir (vim.fn.expand "~/.dotfiles/nvim"))
+
 (fn initial-mappings []
   (let [helpers (require :fsouza.lib.nvim-helpers)]
     (helpers.create-mappings {:n [{:lhs "Q" :rhs ""}

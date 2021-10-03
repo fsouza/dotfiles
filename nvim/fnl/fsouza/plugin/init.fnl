@@ -100,11 +100,10 @@
                                  :opts {:silent true}}]}))
 
 (fn setup-autocompile []
-  (let [config-dir (vim.fn.stdpath "config")]
-    (fn handle-result [result]
-      (if (= result.exit-status 0)
-        (vim.notify "Successfully compiled")
-        (error (string.format "failed to compile fnl: %s" (vim.inspect result)))))
+  (fn handle-result [result]
+    (if (= result.exit-status 0)
+      (vim.notify "Successfully compiled")
+      (error (string.format "failed to compile fnl: %s" (vim.inspect result))))
 
     (fn make []
       (when (not vim.g.fennel_ks)

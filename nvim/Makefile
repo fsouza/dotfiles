@@ -1,11 +1,10 @@
 NVIM_CACHE_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)
-
+NVIM_CONFIG_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("config")' +q 2>&1)
 NVIM_DATA_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("data")' +q 2>&1)
-
 FENNEL := $(if $(shell command -v fennel 2>/dev/null),fennel,$(NVIM_CACHE_DIR)/hr/bin/fennel)
 
 .PHONY: all
-all: bootstrap update-paq kill-daemons clear-logs
+all: bootstrap gen-init-lua update-paq kill-daemons clear-logs
 
 .PHONY: bootstrap
 bootstrap:
@@ -43,3 +42,8 @@ build/%.lua: %.fnl
 
 build/lua/%.lua: fnl/%.fnl
 	env FENNEL=$(FENNEL) python3.9 scripts/compile.py $< $@
+
+.PHONY: gen-init-lua
+gen-init-lua:
+	@ mkdir -p $(NVIM_CONFIG_DIR)
+	echo 'require("fsouza")' > $(NVIM_CONFIG_DIR)/init.lua

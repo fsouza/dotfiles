@@ -1,12 +1,8 @@
 (import-macros {: vim-schedule : if-nil} :helpers)
 
 (local path (require :pl.path))
-
 (local default-root-markers [".git"])
-
-(local config-dir (vim.fn.stdpath "config"))
 (local cache-dir (vim.fn.stdpath "cache"))
-
 (local quote-arg (partial string.format "\"%s\""))
 
 (fn process-args [args]

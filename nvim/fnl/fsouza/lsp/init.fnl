@@ -5,8 +5,7 @@
 (local cache-dir (vim.fn.stdpath "cache"))
 
 (fn get-local-cmd [cmd]
-  (let [config-dir (vim.fn.stdpath "config")]
-    (path.join config-dir "langservers" "bin" cmd)))
+  (path.join config-dir "langservers" "bin" cmd))
 
 (fn get-cache-cmd [cmd]
   (path.join cache-dir "langservers" "bin" cmd))
