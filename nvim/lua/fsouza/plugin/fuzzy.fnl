@@ -59,11 +59,10 @@
                                :actions actions}
                          :winopts {:win_height 0.75
                                    :win_width 0.90}
-                         :keymap {:builtin {:toggle_hide "<c-h>"
-                                            :toggle_full "<c-o>"
-                                            :page_up "<c-u>"
-                                            :page_down "<c-d>"
-                                            :page_reset "<c-r>"}}
+                         :keymap {:builtin {:<c-h> :toggle-preview
+                                            :<c-u> :preview-page-up
+                                            :<c-d> :preview-page-down
+                                            :<c-r> :preview-page-reset}}
 
                          :fzf {:alt-a :toggle-all
                                :ctrl-l :clear-query
