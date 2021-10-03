@@ -1,6 +1,6 @@
-(local helpers (require :fsouza.lib.nvim-helpers))
-
 (import-macros {: vim-schedule} :helpers)
+
+(local helpers (require :fsouza.lib.nvim-helpers))
 
 (fn fuzzy [member ...]
   (let [mod (require :fsouza.plugin.fuzzy)
@@ -93,8 +93,7 @@
                                  :rhs (helpers.fn-map (partial term-open "j"))
                                  :opts {:silent true}}
                                 {:lhs "<c-t>k"
-                                 :rhs (helpers.fn-map (partial term-open "k"))
-                                 :opts {:silent true}}
+                                 :rhs (helpers.fn-map (partial term-open "k"))}
                                 {:lhs "<c-t>l"
                                  :rhs (helpers.fn-map (partial term-open "l"))
                                  :opts {:silent true}}]}))
@@ -103,20 +102,20 @@
   (fn handle-result [result]
     (if (= result.exit-status 0)
       (vim.notify "Successfully compiled")
-      (error (string.format "failed to compile fnl: %s" (vim.inspect result))))
+      (error (string.format "failed to compile fnl: %s" (vim.inspect result)))))
 
-    (fn make []
-      (when (not vim.g.fennel_ks)
-        (let [cmd (require :fsouza.lib.cmd)
-              file-name (vim.fn.expand "<afile>")
-              make-target (if (vim.endswith file-name "/packed.fnl")
-                            "update-paq"
-                            "install-site")]
-          (cmd.run "make" {:args ["-C" config-dir make-target]} nil handle-result))))
+  (fn make []
+    (when (not vim.g.fennel_ks)
+      (let [cmd (require :fsouza.lib.cmd)
+            file-name (vim.fn.expand "<afile>")
+            make-target (if (vim.endswith file-name "/packed.fnl")
+                          "update-paq"
+                          "install-site")]
+        (cmd.run "make" {:args ["-C" config-dir make-target]} nil handle-result))))
 
-    (helpers.augroup "fsouza__autocompile-fennel" [{:events ["BufWritePost"]
-                                                    :targets ["~/.dotfiles/nvim/*.fnl"]
-                                                    :command (helpers.fn-cmd make)}])))
+  (helpers.augroup "fsouza__autocompile-fennel" [{:events ["BufWritePost"]
+                                                  :targets ["~/.dotfiles/nvim/*.fnl"]
+                                                  :command (helpers.fn-cmd make)}]))
 
 
 ;; helper function to import a module and invoke a function.
