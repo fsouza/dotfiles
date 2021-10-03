@@ -1,10 +1,10 @@
 (import-macros {: vim-schedule : if-nil} :fsouza)
 
-(local helpers (require "fsouza.lib.nvim-helpers"))
+(local helpers (require :fsouza.lib.nvim-helpers))
 
 (local setup-symbols-outline
   (helpers.once (fn []
-                  (let [symbols-outline (require "symbols-outline")]
+                  (let [symbols-outline (require :symbols-outline)]
                     (symbols-outline.setup {:highlight_hovered_item false
                                             :auto_preview false
                                             :keymaps {:toggle_preview ["<leader>i"]
@@ -63,15 +63,15 @@
                                                                       :hl "TSParameter"}}})
                     symbols-outline))))
 
-(local buf-diag-mod (require "fsouza.lsp.buf-diagnostic"))
+(local buf-diag-mod (require :fsouza.lsp.buf-diagnostic))
 
-(local diag-mod (require "fsouza.lsp.diagnostics"))
+(local diag-mod (require :fsouza.lsp.diagnostics))
 
-(local fuzzy-mod (require "fsouza.plugin.fuzzy"))
+(local fuzzy-mod (require :fsouza.plugin.fuzzy))
 
-(local code-action (require "fsouza.lsp.code-action"))
+(local code-action (require :fsouza.lsp.code-action))
 
-(local locations-mod (require "fsouza.lsp.locations"))
+(local locations-mod (require :fsouza.lsp.locations))
 
 (local cmds {:show-line-diagnostics (helpers.fn-map (partial vim.diagnostic.show_line_diagnostics {:focusable false}))
              :list-file-diagnostics (helpers.fn-map diag-mod.list-file-diagnostics)
@@ -106,7 +106,7 @@
                                                   (symbols-outline.toggle_outline))))})
 
 (fn attached [bufnr client]
-  (let [detach (require "fsouza.lsp.detach")]
+  (let [detach (require :fsouza.lsp.detach)]
     (macro register-detach [cb]
       `(detach.register bufnr ,cb))
 
@@ -122,13 +122,13 @@
                       :x []}]
 
         (when client.resolved_capabilities.text_document_did_change
-          (let [shell-post (require "fsouza.lsp.shell-post")]
+          (let [shell-post (require :fsouza.lsp.shell-post)]
             (shell-post.on-attach {:bufnr bufnr
                                    :client client})
             (register-detach shell-post.on-detach)))
 
         (when client.resolved_capabilities.completion
-          (let [completion (require "fsouza.lsp.completion")]
+          (let [completion (require :fsouza.lsp.completion)]
             (completion.on-attach bufnr)
             (register-detach completion.on-detach)))
 
@@ -162,7 +162,7 @@
           (table.insert mappings.n {:lhs "<leader>pt" :rhs cmds.preview-type-definition :opts {:silent true}}))
 
         (when client.resolved_capabilities.document_formatting
-          (let [formatting (require "fsouza.lsp.formatting")]
+          (let [formatting (require :fsouza.lsp.formatting)]
             (formatting.on-attach client bufnr)
             (register-detach formatting.on-detach)))
 
@@ -204,7 +204,7 @@
                                    :opts {:silent true}}))
 
         (when client.resolved_capabilities.code_lens
-          (let [codelens (require "fsouza.lsp.codelens")]
+          (let [codelens (require :fsouza.lsp.codelens)]
             (codelens.on-attach {:bufnr bufnr
                                  :client client
                                  :mapping "<leader><cr>"
@@ -212,7 +212,7 @@
                                  :supports-command client.resolved_capabilities.execute_command})
             (register-detach codelens.on-detach)))
 
-        (let [progress (require "fsouza.lsp.progress")]
+        (let [progress (require :fsouza.lsp.progress)]
           (progress.on-attach))
 
         (vim-schedule
@@ -227,10 +227,10 @@
 
 (fn with-defaults [opts]
   (let [capabilities (vim.lsp.protocol.make_client_capabilities)
-        cmp-nvim-lsp (require "cmp_nvim_lsp")]
+        cmp-nvim-lsp (require :cmp_nvim_lsp)]
     (tset capabilities.workspace :executeCommand {:dynamicRegistration false})
 
-    (let [defaults {:handlers (require "fsouza.lsp.handlers")
+    (let [defaults {:handlers (require :fsouza.lsp.handlers)
                     :on_attach on-attach
                     :capabilities (cmp-nvim-lsp.update_capabilities capabilities {:snippetSupport false
                                                                                   :preselectSupport false
@@ -239,7 +239,7 @@
       (vim.tbl_extend "force" defaults opts))))
 
 (fn root-pattern-with-fallback [...]
-  (let [lspconfig (require "lspconfig")
+  (let [lspconfig (require :lspconfig)
         find-root (lspconfig.util.root_pattern ...)]
     (fn [startpath]
       (if-nil (find-root startpath) (vim.fn.getcwd)))))

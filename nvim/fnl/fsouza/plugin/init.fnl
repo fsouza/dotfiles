@@ -1,9 +1,9 @@
-(local helpers (require "fsouza.lib.nvim-helpers"))
+(local helpers (require :fsouza.lib.nvim-helpers))
 
 (import-macros {: vim-schedule} :fsouza)
 
 (fn fuzzy [member ...]
-  (let [mod (require "fsouza.plugin.fuzzy")
+  (let [mod (require :fsouza.plugin.fuzzy)
         f (. mod member)]
     (f ...)))
 
@@ -54,7 +54,7 @@
                                       :targets ["*"]
                                       :command (helpers.fn-cmd
                                                  (fn []
-                                                   (let [vhl (require "vim.highlight")]
+                                                   (let [vhl (require :vim.highlight)]
                                                      (vhl.on_yank {:higroup "HlYank"
                                                                    :timeout 200
                                                                    :on_macro false}))))}]))
@@ -63,7 +63,7 @@
   (helpers.create-mappings {:n [{:lhs "<leader>e"
                                  :rhs (helpers.fn-map
                                         (fn []
-                                          (let [word-sub (require "fsouza.plugin.word-sub")]
+                                          (let [word-sub (require :fsouza.plugin.word-sub)]
                                             (word-sub.run))))}]}))
 
 
@@ -73,7 +73,7 @@
                                           :command "setlocal spell"}]))
 
 (fn setup-editorconfig []
-  (let [editorconfig (require "fsouza.plugin.editorconfig")]
+  (let [editorconfig (require :fsouza.plugin.editorconfig)]
     (editorconfig.enable))
   (vim-schedule
     (do
@@ -81,11 +81,11 @@
       (vim.cmd "command! DisableEditorConfig lua require('fsouza.plugin.editorconfig').disable()"))))
 
 (fn setup-shortcuts []
-  (let [shortcut (require "fsouza.plugin.shortcut")]
+  (let [shortcut (require :fsouza.plugin.shortcut)]
     (shortcut.register "Dotfiles" (vim.fn.expand "~/.dotfiles"))))
 
 (fn term-open [term]
-  (let [mod (require "fsouza.plugin.terminal")]
+  (let [mod (require :fsouza.plugin.terminal)]
     (mod.open term)))
 
 (fn setup-terminal-mappings []
@@ -108,7 +108,7 @@
 
     (fn make []
       (when (not vim.g.fennel_ks)
-        (let [cmd (require "fsouza.lib.cmd")
+        (let [cmd (require :fsouza.lib.cmd)
               file-name (vim.fn.expand "<afile>")
               make-target (if (vim.endswith file-name "/packed.fnl")
                             "update-paq"

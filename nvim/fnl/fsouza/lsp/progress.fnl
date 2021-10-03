@@ -1,5 +1,5 @@
-(local debounce (require "fsouza.lib.debounce"))
-(local helpers (require "fsouza.lib.nvim-helpers"))
+(local debounce (require :fsouza.lib.debounce))
+(local helpers (require :fsouza.lib.nvim-helpers))
 
 (local debounced-notify (debounce.debounce 4000 (vim.schedule_wrap vim.notify)))
 

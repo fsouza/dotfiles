@@ -1,7 +1,7 @@
 (global prequire (vim.F.nil_wrap require))
 
 (fn initial-mappings []
-  (let [helpers (require "fsouza.lib.nvim-helpers")]
+  (let [helpers (require :fsouza.lib.nvim-helpers)]
     (helpers.create-mappings {:n [{:lhs "Q" :rhs ""}
                                   {:lhs "<Space>" :rhs ""}
                                   {:lhs "<c-t>" :rhs ""}]}))
@@ -17,8 +17,8 @@
     (tset package :cpath (table.concat [(.. lib-path "/?.so") package.cpath] ";"))))
 
 (fn add-paqs-opt-to-path []
-  (let [path (require "pl.path")
-        packed (require "fsouza.packed")
+  (let [path (require :pl.path)
+        packed (require :fsouza.packed)
         opt-dir (path.join packed.paq-dir "opt")]
     (each [_ paq (ipairs packed.paqs)]
       (when (and paq.opt paq.as)
@@ -58,7 +58,7 @@
                  :number  true
                  :relativenumber  true
                  :lazyredraw  true}
-        color-mod (require "fsouza.color")]
+        color-mod (require :fsouza.color)]
     (each [name value (pairs options)]
       (tset vim.o name value))
     (color-mod.enable)))
@@ -104,7 +104,7 @@
                                  {:lhs "<c-b>" :rhs "<left>" :opts {:noremap true}}
                                  {:lhs "<c-d>" :rhs "<del>" :opts {:noremap true}}]
         mappings {:c rl-bindings :o rl-bindings :i rl-insert-mode-bindings}
-        helpers (require "fsouza.lib.nvim-helpers")]
+        helpers (require :fsouza.lib.nvim-helpers)]
     (helpers.create-mappings mappings)))
 
 (do
@@ -119,6 +119,6 @@
     (set-folding)
     (set-neovim-global-vars)
     (if vim.env.BOOTSTRAP_PAQ
-      (let [packed-mod (require "fsouza.packed")]
+      (let [packed-mod (require :fsouza.packed)]
         (packed-mod.setup))
       (schedule (partial require "fsouza.plugin")))))

@@ -1,6 +1,6 @@
 (import-macros {: if-nil} :fsouza)
 
-(local path (require "pl.path"))
+(local path (require :pl.path))
 
 (local cache-dir (vim.fn.stdpath "cache"))
 
@@ -15,7 +15,7 @@
   (let [level (if vim.env.NVIM_DEBUG
                 "TRACE"
                 "ERROR")
-        lsp-log (require "vim.lsp.log")]
+        lsp-log (require :vim.lsp.log)]
     (lsp-log.set_level level)))
 
 (fn patch-lsp []
@@ -25,7 +25,7 @@
       (let [original-fn (. vim.diagnostic fn-to-patch)]
         (tset vim.diagnostic fn-to-patch (fn [...]
                                            (let [(bufnr winid) (original-fn ...)
-                                                 color (require "fsouza.color")]
+                                                 color (require :fsouza.color)]
                                              (color.set-popup-winid winid)
                                              (values bufnr winid))))))))
 
@@ -45,11 +45,11 @@
   (define-signs)
 
   (set-log-level)
-  (let [lsp (require "lspconfig")
-        opts (require "fsouza.lsp.opts")]
+  (let [lsp (require :lspconfig)
+        opts (require :fsouza.lsp.opts)]
 
     (if-executable "fnm"
-      (let [tablex (require "fsouza.tablex")
+      (let [tablex (require :fsouza.tablex)
             nvim-python (path.join cache-dir "venv" "bin" "python3")
             nvim-node-ls (get-local-cmd "node-lsp.py")]
 
@@ -79,7 +79,7 @@
                                                                                :typeCheckingMode (if-nil vim.g.pyright_type_checking_mode "basic")
                                                                                :useLibraryCodeForTypes true}}}
                                                 :on_init (fn [client]
-                                                           (let [pyright (require "fsouza.lsp.pyright")]
+                                                           (let [pyright (require :fsouza.lsp.pyright)]
                                                              (pyright.detect-pythonPath client))
                                                            true)}))))
 
@@ -98,7 +98,7 @@
                                                             :codelenses {:vendor false}
                                                             :gofumpt true}}))
 
-        (let [efm (require "fsouza.lsp.efm")
+        (let [efm (require :fsouza.lsp.efm)
               (settings filetypes) (efm.basic-settings)]
           (lsp.efm.setup (opts.with-defaults {:cmd [(get-cache-cmd "efm-langserver")]
                                               :init_options {:documentFormatting true}

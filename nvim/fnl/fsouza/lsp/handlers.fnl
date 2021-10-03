@@ -5,7 +5,7 @@
 (fn popup-callback [err result context ...]
   (let [method context.method
         handler (if-nil (. non-focusable-handlers method) (vim.lsp.with (. vim.lsp.handlers method) {:focusable false}))
-        color (require "fsouza.color")]
+        color (require :fsouza.color)]
     (tset non-focusable-handlers method handler)
     (handler err result context ...)
     (each [_ winid (ipairs (vim.api.nvim_list_wins))]
@@ -16,7 +16,7 @@
   (when (and result (not (vim.tbl_isempty result)))
     (if (vim.tbl_islist result)
       (if (> (length result) 1)
-        (let [fuzzy (require "fsouza.plugin.fuzzy")
+        (let [fuzzy (require :fsouza.plugin.fuzzy)
               items (vim.lsp.util.locations_to_items result)]
           (fuzzy.send-items items "Locations"))
         (vim.lsp.util.jump_to_location (. result 1)))
@@ -29,7 +29,7 @@
 :textDocument/references (fn [err result ...]
                            (var result result)
                            (when (vim.tbl_islist result)
-                             (let [tablex (require "fsouza.tablex")
+                             (let [tablex (require :fsouza.tablex)
                                    (lineno _) (unpack (vim.api.nvim_win_get_cursor 0))
                                    lineno (- lineno 1)]
                                (set result (tablex.filter result (fn [v]
@@ -45,5 +45,5 @@
 :textDocument/hover popup-callback
 :textDocument/signatureHelp popup-callback
 :textDocument/publishDiagnostics (fn [...]
-                                   (let [buf-diagnostics (require "fsouza.lsp.buf-diagnostic")]
+                                   (let [buf-diagnostics (require :fsouza.lsp.buf-diagnostic)]
                                      (buf-diagnostics.publish-diagnostics ...)))}

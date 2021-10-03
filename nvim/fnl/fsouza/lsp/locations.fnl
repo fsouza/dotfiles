@@ -25,7 +25,7 @@
 
                     ; go
                     "var_spec"]
-        tablex (require "fsouza.tablex")]
+        tablex (require :fsouza.tablex)]
 
     (tablex.exists node-types (partial = node-type))))
 
@@ -43,7 +43,7 @@
     (when (not loc.uri)
       (lua "return loc"))
 
-    (let [parsers (require "nvim-treesitter.parsers")
+    (let [parsers (require :nvim-treesitter.parsers)
           lang (parsers.ft_to_lang vim.bo.filetype)]
       (when (or (not lang) (= lang "") (not (parsers.has_parser lang)))
         (lua "return loc"))
@@ -77,7 +77,7 @@
 (fn peek-location-callback [_ result]
   (when (and result (not (vim.tbl_isempty result)))
     (let [loc (ts-range (. result 1))
-          color (require "fsouza.color")
+          color (require :fsouza.color)
           (_ winid) (vim.lsp.util.preview_location loc)]
       (color.set-popup-winid winid))))
 

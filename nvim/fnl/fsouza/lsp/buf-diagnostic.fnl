@@ -28,7 +28,7 @@
       (handler err result context ...))))
 
 (fn make-debounced-handler [bufnr debouncer-key]
-  (let [debounce (require "fsouza.lib.debounce")
+  (let [debounce (require :fsouza.lib.debounce)
         interval-ms (if-nil vim.b.lsp_diagnostic_debouncing_ms 250)
         handler (debounce.debounce interval-ms (vim.schedule_wrap (make-handler)))]
     (tset debouncers debouncer-key handler)
@@ -39,7 +39,7 @@
 
 (fn publish-diagnostics [err result context ...]
   (when result
-    (let [helpers (require "fsouza.lib.nvim-helpers")
+    (let [helpers (require :fsouza.lib.nvim-helpers)
           uri result.uri
           bufnr (vim.uri_to_bufnr uri)]
       (when bufnr

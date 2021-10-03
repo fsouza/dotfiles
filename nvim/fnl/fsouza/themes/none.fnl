@@ -1,6 +1,6 @@
 (import-macros {: if-nil} :fsouza)
 
-(local colors (require "fsouza.themes.colors"))
+(local colors (require :fsouza.themes.colors))
 
 (fn basics [ns]
   (vim.api.nvim_set_hl ns "CursorColumn" {:bg colors.lighter-gray})

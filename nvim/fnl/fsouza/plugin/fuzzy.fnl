@@ -1,10 +1,10 @@
 (import-macros {: if-nil} :fsouza)
 
-(local helpers (require "fsouza.lib.nvim-helpers"))
+(local helpers (require :fsouza.lib.nvim-helpers))
 
 (fn should-qf [selected]
   (let [n-selected (length selected)
-        tablex (require "fsouza.tablex")]
+        tablex (require :fsouza.tablex)]
     (if (<= (length selected) 2)
       false
       (tablex.exists
@@ -15,7 +15,7 @@
             false))))))
 
 (fn edit-or-qf [selected]
-  (let [actions (require "fzf-lua.actions")]
+  (let [actions (require :fzf-lua.actions)]
     (if (should-qf selected)
       (do
         (actions.file_sel_to_qf selected)
@@ -24,7 +24,7 @@
         (actions.file_edit selected [])))))
 
 (fn file-actions []
-  (let [actions (require "fzf-lua.actions")]
+  (let [actions (require :fzf-lua.actions)]
     {:default edit-or-qf
      :ctrl-s actions.file_spit
      :ctrl-v actions.file_vsplit
@@ -37,7 +37,7 @@
       (vim.cmd "packadd nvim-fzf")
 
       (let [actions (file-actions)
-            fzf-lua- (require "fzf-lua")]
+            fzf-lua- (require :fzf-lua)]
         (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
                          :fzf_layout "default"
                          :fzf_binds ["alt-a:toggle-all"
@@ -82,8 +82,8 @@
 (fn send-items [items prompt]
   (let [prompt (.. prompt "：")
         fzf-lua (fzf-lua)
-        config (require "fzf-lua.config")
-        core (require "fzf-lua.core")
+        config (require :fzf-lua.config)
+        core (require :fzf-lua.core)
         opts (config.normalize_opts {:prompt prompt :cwd (vim.fn.getcwd)} config.globals.lsp)]
     (tset opts :fzf_fn
           (icollect [_ item (ipairs items)]

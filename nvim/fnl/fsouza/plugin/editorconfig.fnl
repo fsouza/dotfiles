@@ -1,6 +1,6 @@
 (import-macros {: vim-schedule : if-nil} :fsouza)
 
-(local helpers (require "fsouza.lib.nvim-helpers"))
+(local helpers (require :fsouza.lib.nvim-helpers))
 
 (fn parse-output [data]
   (collect [_ line (ipairs (vim.split data "\n"))]
@@ -76,9 +76,9 @@
     (when (and (?. vim :bo bufnr :modifiable) (not (?. vim :bo bufnr :readonly)) (not= filename ""))
       (let [filename (if (vim.startswith filename "/")
                        filename
-                       (let [pl-path (require "pl.path")]
+                       (let [pl-path (require :pl.path)]
                          (pl-path.join (vim.fn.getcwd) filename)))
-            cmd (require "fsouza.lib.cmd")]
+            cmd (require :fsouza.lib.cmd)]
         (cmd.run
           "editorconfig"
           {:args [filename]}

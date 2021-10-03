@@ -1,19 +1,19 @@
-(local helpers (require "fsouza.lib.nvim-helpers"))
+(local helpers (require :fsouza.lib.nvim-helpers))
 
 (local load-cmp (helpers.once (fn []
                                 (vim.cmd "packadd nvim-cmp")
-                                (let [cmp-nvim-lsp (require "cmp_nvim_lsp")]
+                                (let [cmp-nvim-lsp (require :cmp_nvim_lsp)]
                                   (cmp-nvim-lsp.setup)
-                                  (require "cmp")))))
+                                  (require :cmp)))))
 
 (fn setup [bufnr]
   (let [cmp (load-cmp)
-        cmp-config (require "cmp.config")]
+        cmp-config (require :cmp.config)]
     (cmp-config.set_buffer {:completion {:autocomplete false}
                             :mapping {:<c-y> (cmp.mapping.confirm {:behavior cmp.ConfirmBehavior.Replace
                                                                    :select true})}
                             :snippet {:expand (fn [args]
-                                                (let [luasnip (require "luasnip")]
+                                                (let [luasnip (require :luasnip)]
                                                   (luasnip.lsp_expand args.body)))}
                             :sources [{:name "nvim_lsp"}]
                             :documentation {:border "none"
@@ -47,7 +47,7 @@
                                         (let [cmp (load-cmp)]
                                           (cmp.complete)
                                           "")))
-        color (require "fsouza.color")]
+        color (require :fsouza.color)]
 
     (color.set-popup-cb
       (fn []
@@ -69,7 +69,7 @@
     (helpers.remove-mappings {:i [{:lhs "<cr>"}
                                   {:lhs "<c-x><c-o>"}]} bufnr))
 
-  (let [cmp-config (require "cmp.config")]
+  (let [cmp-config (require :cmp.config)]
     (tset cmp-config.buffers bufnr nil)))
 
 {:on-attach on-attach

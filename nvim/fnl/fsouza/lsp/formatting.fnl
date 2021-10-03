@@ -1,4 +1,4 @@
-(local helpers (require "fsouza.lib.nvim-helpers"))
+(local helpers (require :fsouza.lib.nvim-helpers))
 
 (local langservers-skip-set {:jsonls true
                              :tsserver true})
@@ -66,7 +66,7 @@
           (lua "return"))
 
         (when (and actions (not (vim.tbl_isempty actions)))
-          (let [tablex (require "fsouza.tablex")
+          (let [tablex (require :fsouza.tablex)
                 (_ code-action) (tablex.find_if actions (fn [action]
                                                           (if (= action.kind "source.organizeImports")
                                                             action
@@ -77,7 +77,7 @@
                                              (vim.cmd "update"))))))))))
 
 (fn autofmt-and-write [client bufnr]
-  (let [autofmt (require "fsouza.lib.autofmt")
+  (let [autofmt (require :fsouza.lib.autofmt)
         enable (autofmt.is-enabled bufnr)]
     (when (or (not enable) (buf-is-empty bufnr))
       (lua "return"))

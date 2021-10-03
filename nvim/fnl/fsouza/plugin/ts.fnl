@@ -1,15 +1,15 @@
 (import-macros {: if-nil} :fsouza)
 
-(local helpers (require "fsouza.lib.nvim-helpers"))
+(local helpers (require :fsouza.lib.nvim-helpers))
 
-(local tablex (require "fsouza.tablex"))
+(local tablex (require :fsouza.tablex))
 
 (local wanted-parsers ["bash" "c" "cpp" "css" "go" "html" "javascript" "json"
                        "lua" "ocaml" "ocaml_interface" "ocamllex" "python" "query"
                        "regex" "toml" "tsx" "typescript"])
 
 (fn lang-to-ft [lang]
-  (let [parsers (require "nvim-treesitter.parsers")
+  (let [parsers (require :nvim-treesitter.parsers)
         obj (. parsers.list lang)]
     (vim.tbl_flatten [(if-nil obj.filetype lang)] (if-nil obj.used_by []))))
 
@@ -19,14 +19,14 @@
 (local setup-gps (helpers.once
                    (fn []
                      (vim.cmd "packadd nvim-gps")
-                     (let [nvim-gps (require "nvim-gps")]
+                     (let [nvim-gps (require :nvim-gps)]
                        (nvim-gps.setup {:icons {:class-name "￠ "
                                                 :function-name "ƒ "
                                                 :method-name "ƒ "} })))))
 
 (local gps-cmd (helpers.fn-map (fn []
                                  (setup-gps)
-                                 (let [nvim-gps (require "nvim-gps")
+                                 (let [nvim-gps (require :nvim-gps)
                                        location (nvim-gps.get_location)]
                                    (vim.notify location)))))
 
@@ -56,7 +56,7 @@
       :command (helpers.fn-cmd create-mappings)}]))
 
 (do
-  (let [configs (require "nvim-treesitter.configs")]
+  (let [configs (require :nvim-treesitter.configs)]
     (configs.setup {:highlight {:enable false}
                     :playground {:enable true
                                  :updatetime 10}

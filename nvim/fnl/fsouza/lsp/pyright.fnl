@@ -1,12 +1,12 @@
 (import-macros {: vim-schedule} :fsouza)
 
-(local path (require "pl.path"))
+(local path (require :pl.path))
 
 (fn set-from-env-var [cb]
   (cb (os.getenv "VIRTUAL_ENV")))
 
 (fn set-from-cmd [exec args cb]
-  (let [cmd (require "fsouza.lib.cmd")]
+  (let [cmd (require :fsouza.lib.cmd)]
     (cmd.run exec {:args args} nil (fn [result]
                                      (if (= result.exit-status 0)
                                        (cb (vim.trim result.stdout))

@@ -1,7 +1,7 @@
 (import-macros {: if-nil} :fsouza)
 
-(local helpers (require "fsouza.lib.nvim-helpers"))
-(local themes (require "fsouza.themes"))
+(local helpers (require :fsouza.lib.nvim-helpers))
+(local themes (require :fsouza.themes))
 
 (fn set-popup-winid [state winid]
   (when (. state :enabled)

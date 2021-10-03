@@ -1,6 +1,6 @@
 (import-macros {: vim-schedule : if-nil} :fsouza)
 
-(local path (require "pl.path"))
+(local path (require :pl.path))
 
 (local default-root-markers [".git"])
 
@@ -210,7 +210,7 @@
                              "https://github.com/pre-commit/mirrors-autopep8" get_autopep8
                              "https://github.com/pre-commit/mirrors-isort" get_isort
                              "https://github.com/fsouza/autoflake8" get_autoflake8}
-              tablex (require "fsouza.tablex")
+              tablex (require :fsouza.tablex)
               find-repo (fn [repo]
                           (let [repo-url repo.repo
                                 args (if-nil (?. repo :hooks 1 :args) [])

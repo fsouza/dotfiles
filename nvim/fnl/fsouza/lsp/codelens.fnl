@@ -1,6 +1,6 @@
 (import-macros {: vim-schedule : if-nil} :fsouza)
 
-(local helpers (require "fsouza.lib.nvim-helpers"))
+(local helpers (require :fsouza.lib.nvim-helpers))
 
 (local debouncers {})
 
@@ -79,7 +79,7 @@
 
 (fn make-debounced-codelenses [bufnr debouncer-key]
   (let [interval-ms (if-nil vim.b.lsp_codelens_debouncing_ms 50)
-        debounce (require "fsouza.lib.debounce")
+        debounce (require :fsouza.lib.debounce)
         debounced (debounce.debounce interval-ms (vim.schedule_wrap codelenses))]
     (tset debouncers debouncer-key debounced)
     (vim.api.nvim_buf_attach bufnr false {:on_detach (fn []
@@ -103,8 +103,8 @@
                            (when (and client.supports-command (not= selected.command.command ""))
                              (run selected)))]
         (if (> (length items) 1)
-          (let [tablex (require "fsouza.tablex")
-                popup-picker (require "fsouza.lib.popup-picker")
+          (let [tablex (require :fsouza.tablex)
+                popup-picker (require :fsouza.lib.popup-picker)
                 popup-lines (tablex.filter-map (fn [item]
                                                  (when item.command
                                                    item.command.title)))]
@@ -134,7 +134,7 @@
 
     (tset clients bufnr nil)
     (let [augroup-id (augroup-name bufnr)
-          buf-diagnostic (require "fsouza.lsp.buf-diagnostic")]
+          buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
       (helpers.reset-augroup augroup-id)
       (buf-diagnostic.unregister-hook augroup-id)
       (remove-results bufnr))))
@@ -154,7 +154,7 @@
                                   :command (helpers.fn-cmd (partial codelens bufnr))}])
 
     (vim-schedule
-      (let [buf-diagnostic (require "fsouza.lsp.buf-diagnostic")]
+      (let [buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
         (buf-diagnostic.register-hook augroup-id (partial codelens bufnr))
         (vim.api.nvim_buf_attach bufnr false {:on_detach (partial on-detach bufnr)})))
 

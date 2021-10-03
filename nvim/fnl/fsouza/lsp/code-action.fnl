@@ -2,7 +2,7 @@
   (when (and actions (not (vim.tbl_isempty actions)))
     (let [lines (icollect [_ action (ipairs actions)]
                   action.title)
-          popup-picker (require "fsouza.lib.popup-picker")]
+          popup-picker (require :fsouza.lib.popup-picker)]
 
       (popup-picker.open
         lines

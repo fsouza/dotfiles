@@ -1,7 +1,7 @@
 (import-macros {: if-nil} :fsouza)
 
 (fn is-enabled [bufnr]
-  (let [helpers (require "fsouza.lib.nvim-helpers")
+  (let [helpers (require :fsouza.lib.nvim-helpers)
         (_ buf-autoformat) (pcall vim.api.nvim_buf_get_var bufnr "autoformat")]
     (if-nil buf-autoformat (if-nil vim.g.autoformat true))))
 

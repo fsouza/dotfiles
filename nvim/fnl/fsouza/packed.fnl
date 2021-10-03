@@ -1,8 +1,8 @@
-(local path (require "pl.path"))
+(local path (require :pl.path))
 
 (fn download-paq [mod cb]
   (let [paq-repo-dir (path.join mod.paq-dir "opt" "paq-nvim")
-        cmd (require "fsouza.lib.cmd")]
+        cmd (require :fsouza.lib.cmd)]
 
     (cmd.run
       "git"
@@ -12,7 +12,7 @@
         (if (= result.exit-status 0)
           (do
             (vim.cmd "packadd! paq-nvim")
-            (cb (require "paq")))
+            (cb (require :paq)))
           (error (string.format "failed to clone paq-nvim: %s" (vim.inspect result))))))))
 
 (fn with-paq [mod cb]
@@ -74,6 +74,6 @@
                                     (paq:sync))))
            :repack (fn []
                      (tset package.loaded "fsouza.packed" nil)
-                     (let [packed (require "fsouza.packed")]
+                     (let [packed (require :fsouza.packed)]
                        (packed.setup)))}]
 mod)
