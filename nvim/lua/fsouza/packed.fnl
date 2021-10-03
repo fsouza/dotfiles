@@ -16,7 +16,7 @@
           (error (string.format "failed to clone paq-nvim: %s" (vim.inspect result))))))))
 
 (fn with-paq [mod cb]
-  (let [paq (prequire "paq")]
+  (let [paq (prequire :paq)]
     (if paq
       (cb paq)
       (download-paq mod cb))))

@@ -156,7 +156,7 @@
 
 (fn try-read-precommit-config [file-path cb]
   (let [empty-result {:repos []}
-        lyaml (require "lyaml")]
+        lyaml (require :lyaml)]
 
     (vim.loop.fs_open
       file-path

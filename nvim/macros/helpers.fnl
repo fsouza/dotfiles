@@ -11,7 +11,7 @@
   `(string.format "<cmd>%s<cr>" ,cmd))
 
 (fn vcmd-map [cmd]
-  `(string.format "<cmd>'<,'><cr>" ,cmd))
+  `(string.format "<cmd>'<,'>%s<cr>" ,cmd))
 
 {:vim-schedule vim-schedule
  :if-nil if-nil

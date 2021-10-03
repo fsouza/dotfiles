@@ -84,11 +84,11 @@
   (let [shortcut (require :fsouza.plugin.shortcut)]
     (shortcut.register "Dotfiles" (vim.fn.expand "~/.dotfiles"))))
 
-(fn term-open [term]
-  (let [mod (require :fsouza.plugin.terminal)]
-    (mod.open term)))
-
 (fn setup-terminal-mappings []
+  (fn term-open [term]
+    (let [mod (require :fsouza.plugin.terminal)]
+      (mod.open term)))
+
   (helpers.create-mappings {:n [{:lhs "<c-t>j"
                                  :rhs (helpers.fn-map (partial term-open "j"))
                                  :opts {:silent true}}
@@ -117,30 +117,27 @@
                                                   :targets ["~/.dotfiles/nvim/*.fnl"]
                                                   :command (helpers.fn-cmd make)}]))
 
+(macro mod-invoke [mod fn-name ...]
+  `(let [mod# (require ,mod)
+         f# (. mod# ,fn-name)]
+     (f# ,...)))
 
-;; helper function to import a module and invoke a function.
-(fn mod-invoke [mod fn-name ...]
-  (let [mod (require mod)
-        f (. mod fn-name)]
-    (f ...)))
-
-(do
-  (let [schedule vim.schedule]
-    (schedule (partial mod-invoke "fsouza.lib.cleanup" "setup"))
-    (schedule setup-editorconfig)
-    (schedule setup-git-messenger)
-    (schedule setup-hlyank)
-    (schedule (partial mod-invoke "fsouza.plugin.mkdir" "setup"))
-    (schedule setup-autofmt-commands)
-    (schedule setup-word-replace)
-    (schedule setup-spell)
-    (schedule setup-shortcuts)
-    (schedule (partial mod-invoke "colorizer" "setup" ["css" "fennel" "javascript" "html" "lua" "htmldjango" "yaml"]))
-    (schedule setup-terminal-mappings)
-    (schedule (partial require "fsouza.lsp"))
-    (schedule (partial require "fsouza.plugin.ts"))
-    (schedule setup-lsp-commands)
-    (schedule setup-fuzzy-mappings)
-    (schedule setup-autocompile)
-    (schedule (partial vim.cmd "doautoall FileType"))
-    (schedule (partial vim.cmd "doautocmd User PluginReady"))))
+(let [schedule vim.schedule]
+  (vim-schedule (mod-invoke :fsouza.lib.cleanup :setup))
+  (schedule setup-editorconfig)
+  (schedule setup-git-messenger)
+  (schedule setup-hlyank)
+  (vim-schedule (mod-invoke :fsouza.plugin.mkdir :setup))
+  (schedule setup-autofmt-commands)
+  (schedule setup-word-replace)
+  (schedule setup-spell)
+  (schedule setup-shortcuts)
+  (vim-schedule (mod-invoke :colorizer :setup [:css :fennel :javascript :html :lua :htmldjango :yaml]))
+  (schedule setup-terminal-mappings)
+  (vim-schedule (require :fsouza.lsp))
+  (vim-schedule (require :fsouza.plugin.ts))
+  (schedule setup-lsp-commands)
+  (schedule setup-fuzzy-mappings)
+  (schedule setup-autocompile)
+  (vim-schedule (vim.cmd "doautoall FileType"))
+  (vim-schedule (vim.cmd "doautocmd User PluginReady")))

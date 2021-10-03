@@ -1,3 +1,5 @@
+(import-macros {: vim-schedule} :helpers)
+
 (global prequire (vim.F.nil_wrap require))
 
 (global config-dir (vim.fn.expand "~/.dotfiles/nvim"))
@@ -109,18 +111,17 @@
         helpers (require :fsouza.lib.nvim-helpers)]
     (helpers.create-mappings mappings)))
 
-(do
-  (let [schedule vim.schedule]
-    (hererocks)
-    (add-paqs-opt-to-path)
-    (initial-mappings)
-    (schedule (fn []
-                (set-global-options)
-                (set-global-mappings)))
-    (set-ui-options)
-    (set-folding)
-    (set-neovim-global-vars)
-    (if vim.env.BOOTSTRAP_PAQ
-      (let [packed-mod (require :fsouza.packed)]
-        (packed-mod.setup))
-      (schedule (partial require "fsouza.plugin")))))
+(let [schedule vim.schedule]
+  (hererocks)
+  (add-paqs-opt-to-path)
+  (initial-mappings)
+  (schedule (fn []
+              (set-global-options)
+              (set-global-mappings)))
+  (set-ui-options)
+  (set-folding)
+  (set-neovim-global-vars)
+  (if vim.env.BOOTSTRAP_PAQ
+    (let [packed-mod (require :fsouza.packed)]
+      (packed-mod.setup))
+    (vim-schedule (require :fsouza.plugin))))
