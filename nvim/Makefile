@@ -31,6 +31,9 @@ install-site: build
 	@ mkdir -p $(NVIM_DATA_DIR)/site
 	cp -prv build/* $(NVIM_DATA_DIR)/site
 
+.PHONY: rebuild
+rebuild: clean build
+
 .PHONY:
 clean:
 	rm -rf build
