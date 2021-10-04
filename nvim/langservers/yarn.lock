@@ -1660,10 +1660,10 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pyright@^1.1.172:
-  version "1.1.172"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.172.tgz#ef6297a92066125c7e215c87f52cfc6506c3e2e3"
-  integrity sha512-FRZrCgpJ1u5bhZ7PbDI7i+OjgYv7Fu2tgqpKFTzHz8BYCG7OjhLNOAh0wsLYe8IEfNo2JZtm7p+emTw9/cI09A==
+pyright@^1.1.174:
+  version "1.1.174"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.174.tgz#8345c1e133d4868fca19a57f8a9d497168019394"
+  integrity sha512-aqwWmU6Mx14vVe9rDbkLcx6RjnVZ1uXwamnxv4uWv1+DA8gpktjH2eyiBknhuaNm6h4nJO6VbI6HyFf1VtADeg==
 
 qs@~6.5.2:
   version "6.5.2"
@@ -2234,7 +2234,7 @@ vscode-languageserver@^8.0.0-next.2:
   dependencies:
     vscode-languageserver-protocol "3.17.0-next.8"
 
-vscode-nls@^4.1.1, vscode-nls@^4.1.2:
+vscode-nls@^4.1.1:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/vscode-nls/-/vscode-nls-4.1.2.tgz#ca8bf8bb82a0987b32801f9fddfdd2fb9fd3c167"
   integrity sha512-7bOHxPsfyuCqmP+hZXscLhiHwe7CSuFE4hyhbs22xPIhQ4jv99FcR4eBzfYYVLP356HNFpdvz63FFb/xw6T4Iw==
