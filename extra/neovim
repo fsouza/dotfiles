@@ -42,4 +42,6 @@ if [ -x "$NEOVIM_INSTALL_PREFIX/bin/nvim" ]; then
 	}
 
 	export EDITOR=nvim GIT_EDITOR=nvim MANPAGER="nvim +'Man!'"
+else
+	unset EDITOR GIT_EDITOR MANPAGER
 fi
