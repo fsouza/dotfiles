@@ -2,10 +2,20 @@
   `(vim.schedule (fn []
                    ,...)))
 
-(fn if-nil [v expr]
-  `(if (not= ,v nil)
-     ,v
-     ,expr))
+(fn if-nil [...]
+  (let [args [...]]
+    (fn check [idx]
+      (let [arg (. args idx)]
+        (if (< idx (length args))
+          (list (sym :if)
+                (list (sym :not=) arg (sym :nil))
+                arg
+                (check (+ idx 1)))
+          (if (= idx (length args))
+            arg
+            nil))))
+
+    (check 1)))
 
 (fn cmd-map [cmd]
   `(string.format "<cmd>%s<cr>" ,cmd))
