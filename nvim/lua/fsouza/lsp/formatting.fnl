@@ -127,5 +127,5 @@
     (helpers.remove-mappings {:n [{:lhs "<leader>f"}]} bufnr))
   (helpers.reset-augroup (augroup-name bufnr)))
 
-{:on-attach on-attach
- :on-detach on-detach}
+{: on-attach
+ : on-detach}

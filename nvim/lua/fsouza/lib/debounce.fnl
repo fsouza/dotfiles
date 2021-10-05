@@ -11,4 +11,4 @@
              (make-call)
              (timer:close))}))
 
-{:debounce debounce}
+{: debounce}

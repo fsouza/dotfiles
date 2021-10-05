@@ -4,7 +4,7 @@
 (local debounced-notify (debounce.debounce 4000 (vim.schedule_wrap vim.notify)))
 
 (fn on-progress-update []
-  (let [{:mode mode} (vim.api.nvim_get_mode)]
+  (let [{: mode} (vim.api.nvim_get_mode)]
     (when (= mode "n")
       (fn format-message [msg]
         (var prefix "")

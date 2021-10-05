@@ -275,7 +275,7 @@
                                   :fn get-buildifier}]
           timer (vim.loop.new_timer)]
       (each [_ f (ipairs simple-tool-factories)]
-        (let [{:fn f :language language} f]
+        (let [{:fn f : language} f]
           (pending-wrapper f (fn [tool]
                                (add-if-not-empty language tool)))))
 
@@ -303,5 +303,5 @@
                   (tset client.config :settings settings)
                   (client.notify "workspace/didChangeConfiguration" {:settings client.config.settings}))))
 
-{:basic-settings basic-settings
- :gen-config gen-config}
+{: basic-settings
+ : gen-config}

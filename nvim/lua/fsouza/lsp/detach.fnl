@@ -15,8 +15,8 @@
 
 (macro get-lsp-client-ids []
   `(let [all-clients# (vim.lsp.get_active_clients)]
-    (icollect [_# client# (ipairs all-clients#)]
-      client.id)))
+     (icollect [_# client# (ipairs all-clients#)]
+       client.id)))
 
 (fn restart []
   (let [original-client-ids (get-lsp-client-ids)
@@ -40,5 +40,5 @@
                                  (vim.cmd "silent! edit")))))))))
 
 
-{:register register
- :restart restart}
+{: register
+ : restart}

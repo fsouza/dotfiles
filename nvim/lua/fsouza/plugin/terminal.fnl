@@ -39,5 +39,5 @@
       (vim.cmd "silent! only")
       (vim.cmd "wincmd F"))))
 
-{:open open
- :cr cr}
+{: open
+ : cr}

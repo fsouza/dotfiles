@@ -47,5 +47,5 @@
           end-pos (vim.fn.getpos "'>")]
       (vim.lsp.buf.range_code-action nil [(. start-pos 2) (. start-pos 3)] [(. end-pos 2) (. end-pos 3)]))))
 
-{:code-action code-action
- :visual-code-action visual-code-action}
+{: code-action
+ : visual-code-action}

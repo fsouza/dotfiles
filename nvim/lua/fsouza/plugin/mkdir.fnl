@@ -21,4 +21,4 @@
                                      :command (helpers.fn-cmd register-for-buffer)}])
   (register-for-buffer (vim.api.nvim_get_current_buf)))
 
-{:setup setup}
+{: setup}

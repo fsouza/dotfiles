@@ -50,9 +50,9 @@
                         (make-debounced-handler bufnr debouncer-key))]
           (handler.call err result context ...))))))
 
-{:buf-clear-all-diagnostics buf-clear-all-diagnostics
+{: buf-clear-all-diagnostics
  :register-hook (fn [id f]
                   (tset hooks id f))
  :unregister-hook (fn [id]
                     (tset hooks id nil))
- :publish-diagnostics publish-diagnostics}
+ : publish-diagnostics}

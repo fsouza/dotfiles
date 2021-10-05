@@ -25,7 +25,7 @@
                                                                 entry.source.name)]
                                                      (tset vim-item :menu (string.format "「%s」" menu))
                                                      vim-item))}}
-                            bufnr)))
+                           bufnr)))
 
 (fn cr-key-for-comp-info [comp-info]
   (if (= comp-info.mode "")
@@ -72,5 +72,5 @@
   (let [cmp-config (require :cmp.config)]
     (tset cmp-config.buffers bufnr nil)))
 
-{:on-attach on-attach
- :on-detach on-detach}
+{: on-attach
+ : on-detach}

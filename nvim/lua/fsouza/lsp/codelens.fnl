@@ -165,5 +165,5 @@
               :opts {:silent true}}]}
         bufnr))))
 
-{:on-attach on-attach
- :on-detach on-detach}
+{: on-attach
+ : on-detach}

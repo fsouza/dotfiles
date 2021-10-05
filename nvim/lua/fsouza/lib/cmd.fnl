@@ -64,14 +64,14 @@
                         (when stderr-handler.err
                           (table.insert errors stderr-handler.err))
 
-                                      (on-finished {:exit-status code
-                                                    :aborted r.abort
-                                                    :signal signal
-                                                    :stdout stdout-handler.data
-                                                    :stderr stderr-handler.data
-                                                    :errors errors})
-                                      (tset r :finished true)
-                                      (close)))))
+                        (on-finished {:exit-status code
+                                      :aborted r.abort
+                                      :signal signal
+                                      :stdout stdout-handler.data
+                                      :stderr stderr-handler.data
+                                      :errors errors})
+                        (tset r :finished true)
+                        (close)))))
         opts (vim.tbl_extend "error" opts {:stdio [stdin stdout stderr]})
         (spawn-handle pid-or-err) (loop.spawn cmd opts on-exit)]
 
@@ -85,4 +85,4 @@
         (loop.shutdown stdin))
       (vim-schedule (on-finished {:exit-status -1 :stderr pid-or-err})))))
 
-{:run run}
+{: run}

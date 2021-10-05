@@ -119,7 +119,8 @@
                           {:lhs "<c-n>" :rhs cmds.goto-next-diagnostic :opts {:silent true}}
                           {:lhs "<c-p>" :rhs cmds.goto-prev-diagnostic :opts {:silent true}}]
                       :i []
-                      :x []}]
+                      :x []}
+            progress (require :fsouza.lsp.progress)]
 
         (when client.resolved_capabilities.text_document_did_change
           (let [shell-post (require :fsouza.lsp.shell-post)]
@@ -168,40 +169,40 @@
 
         (when client.resolved_capabilities.document_highlight
           (table.insert mappings.n {:lhs "<leader>s"
-                                   :rhs cmds.highlight-references
-                                   :opts {:silent true}})
+                                    :rhs cmds.highlight-references
+                                    :opts {:silent true}})
           (table.insert mappings.n {:lhs "<leader>S"
-                                   :rhs cmds.clear-references
-                                   :opts {:silent true}}))
+                                    :rhs cmds.clear-references
+                                    :opts {:silent true}}))
 
         (when client.resolved_capabilities.document_symbol
           (table.insert mappings.n {:lhs "<leader>t"
-                                   :rhs cmds.list-document-symbols
-                                   :opts {:silent true}})
+                                    :rhs cmds.list-document-symbols
+                                    :opts {:silent true}})
           (table.insert mappings.n {:lhs "<leader>v"
-                                   :rhs cmds.symbols-outline
-                                   :opts {:silent true}}))
+                                    :rhs cmds.symbols-outline
+                                    :opts {:silent true}}))
 
         (when client.resolved_capabilities.find_references
           (table.insert mappings.n {:lhs "<leader>q"
-                                   :rhs cmds.find-references
-                                   :opts {:silent true}}))
+                                    :rhs cmds.find-references
+                                    :opts {:silent true}}))
 
         (when client.resolved_capabilities.hover
           (table.insert mappings.n {:lhs "<leader>i"
-                                   :rhs cmds.display-information
-                                   :opts {:silent true}}))
+                                    :rhs cmds.display-information
+                                    :opts {:silent true}}))
 
 
         (when client.resolved_capabilities.signature_help
           (table.insert mappings.i {:lhs "<c-k>"
-                                   :rhs cmds.display-signature-help
-                                   :opts {:silent true}}))
+                                    :rhs cmds.display-signature-help
+                                    :opts {:silent true}}))
 
         (when client.resolved_capabilities.workspace_symbol
           (table.insert mappings.n {:lhs "<leader>T"
-                                   :rhs cmds.query-workspace-symbols
-                                   :opts {:silent true}}))
+                                    :rhs cmds.query-workspace-symbols
+                                    :opts {:silent true}}))
 
         (when client.resolved_capabilities.code_lens
           (let [codelens (require :fsouza.lsp.codelens)]
@@ -212,8 +213,7 @@
                                  :supports-command client.resolved_capabilities.execute_command})
             (register-detach codelens.on-detach)))
 
-        (let [progress (require :fsouza.lsp.progress)]
-          (progress.on-attach))
+        (progress.on-attach)
 
         (vim-schedule
           (helpers.create-mappings mappings bufnr)
@@ -243,5 +243,5 @@
     (fn [startpath]
       (if-nil (find-root startpath) (vim.fn.getcwd)))))
 
-{:with-defaults with-defaults
- :root-pattern-with-fallback root-pattern-with-fallback}
+{: with-defaults
+ : root-pattern-with-fallback}

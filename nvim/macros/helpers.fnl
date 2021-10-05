@@ -23,7 +23,7 @@
 (fn vcmd-map [cmd]
   `(string.format "<cmd>'<,'>%s<cr>" ,cmd))
 
-{:vim-schedule vim-schedule
- :if-nil if-nil
- :cmd-map cmd-map
- :vcmd-map vcmd-map}
+{: vim-schedule
+ : if-nil
+ : cmd-map
+ : vcmd-map}

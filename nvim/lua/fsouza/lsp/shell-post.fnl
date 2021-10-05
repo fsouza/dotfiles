@@ -29,8 +29,8 @@
   (.. "fsouza__lsp_shell-post_" bufnr))
 
 (fn on-attach [opts]
-  (let [{:bufnr bufnr
-         :client client} opts
+  (let [{: bufnr
+         : client} opts
         buf-clients (if-nil (. clients-by-buf bufnr) [])]
     (buf-attach-if-needed bufnr)
     (table.insert buf-clients client)
@@ -45,5 +45,5 @@
   (tset clients-by-buf bufnr nil)
   (helpers.reset-augroup (augroup-name bufnr)))
 
-{:on-attach on-attach
- :on-detach on-detach}
+{: on-attach
+ : on-detach}

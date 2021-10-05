@@ -87,15 +87,15 @@
         (lsp.gopls.setup (opts.with-defaults {:cmd [(get-cache-cmd "gopls")]
                                               :root_dir (opts.root-pattern-with-fallback "go.mod")
                                               :init_options {:deepCompletion false
-                                                            :staticcheck true
-                                                            :analyses {:fillreturns true
+                                                             :staticcheck true
+                                                             :analyses {:fillreturns true
                                                                         :nonewvars true
                                                                         :undeclaredname true
                                                                         :unusedparams true
                                                                         :ST1000 false}
-                                                            :linksInHover false
-                                                            :codelenses {:vendor false}
-                                                            :gofumpt true}}))
+                                                             :linksInHover false
+                                                             :codelenses {:vendor false}
+                                                             :gofumpt true}}))
 
         (let [efm (require :fsouza.lsp.efm)
               (settings filetypes) (efm.basic-settings)]
@@ -104,8 +104,8 @@
                                               :settings settings
                                               :filetypes filetypes
                                               :on_init (fn [client]
-                                                        (efm.gen-config client)
-                                                        true)})))))
+                                                         (efm.gen-config client)
+                                                         true)})))))
 
     (if-executable "dune"
       (lsp.ocamllsp.setup (opts.with-defaults {:cmd [(path.join cache-dir "langservers" "ocaml-lsp" "_build"

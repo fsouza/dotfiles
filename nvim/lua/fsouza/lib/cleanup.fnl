@@ -2,7 +2,7 @@
 
 (fn cleanup [mod]
   (var finished 0)
-  (let [{:cbs cbs} mod]
+  (let [{: cbs} mod]
     (each [_ cb (ipairs cbs)]
       (vim-schedule
         (do

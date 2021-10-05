@@ -23,27 +23,27 @@
       (vim.lsp.util.jump_to_location result))))
 
 {:textDocument/declaration fzf-location-callback
-:textDocument/definition fzf-location-callback
-:textDocument/typeDefinition fzf-location-callback
-:textDocument/implementation fzf-location-callback
-:textDocument/references (fn [err result ...]
-                           (var result result)
-                           (when (vim.tbl_islist result)
-                             (let [tablex (require :fsouza.tablex)
-                                   (lineno _) (unpack (vim.api.nvim_win_get_cursor 0))
-                                   lineno (- lineno 1)]
-                               (set result (tablex.filter result (fn [v]
-                                                                   (not= v.range.start.line lineno))))))
-                           (fzf-location-callback err result ...))
-:textDocument/documentHighlight (fn [_ result]
-                                  (when (not result)
-                                    (lua "return"))
+ :textDocument/definition fzf-location-callback
+ :textDocument/typeDefinition fzf-location-callback
+ :textDocument/implementation fzf-location-callback
+ :textDocument/references (fn [err result ...]
+                            (var result result)
+                            (when (vim.tbl_islist result)
+                              (let [tablex (require :fsouza.tablex)
+                                    (lineno _) (unpack (vim.api.nvim_win_get_cursor 0))
+                                    lineno (- lineno 1)]
+                                (set result (tablex.filter result (fn [v]
+                                                                    (not= v.range.start.line lineno))))))
+                            (fzf-location-callback err result ...))
+ :textDocument/documentHighlight (fn [_ result]
+                                   (when (not result)
+                                     (lua "return"))
 
-                                  (let [bufnr (vim.api.nvim_get_current_buf)]
-                                    (vim.lsp.util.buf_clear_references bufnr)
-                                    (vim.lsp.util.buf_highlight_references bufnr result)))
-:textDocument/hover popup-callback
-:textDocument/signatureHelp popup-callback
-:textDocument/publishDiagnostics (fn [...]
-                                   (let [buf-diagnostics (require :fsouza.lsp.buf-diagnostic)]
-                                     (buf-diagnostics.publish-diagnostics ...)))}
+                                   (let [bufnr (vim.api.nvim_get_current_buf)]
+                                     (vim.lsp.util.buf_clear_references bufnr)
+                                     (vim.lsp.util.buf_highlight_references bufnr result)))
+ :textDocument/hover popup-callback
+ :textDocument/signatureHelp popup-callback
+ :textDocument/publishDiagnostics (fn [...]
+                                    (let [buf-diagnostics (require :fsouza.lsp.buf-diagnostic)]
+                                      (buf-diagnostics.publish-diagnostics ...)))}

@@ -47,8 +47,8 @@
       (let [detector (. detectors idx)]
         (when detector
           (detector #(if $1
-                        (cb $1)
-                        (detect (+ idx 1)))))))
+                       (cb $1)
+                       (detect (+ idx 1)))))))
 
     (detect 1)))
 
@@ -68,4 +68,4 @@
                                    (tset client.config.settings.python :pythonPath python-path))
                                  (client.notify "workspace/didChangeConfiguration" {:settings client.config.settings})))))
 
-{:detect-pythonPath detect-pythonPath}
+{: detect-pythonPath}

@@ -19,5 +19,5 @@
         items (vim.diagnostic.toqflist diagnostics)]
     (render-diagnostics items)))
 
-{:list-file-diagnostics list-file-diagnostics
- :list-workspace-diagnostics list-workspace-diagnostics}
+{: list-file-diagnostics
+ : list-workspace-diagnostics}
