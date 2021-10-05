@@ -2,13 +2,14 @@ NVIM_CACHE_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("
 NVIM_CONFIG_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("config")' +q 2>&1)
 NVIM_DATA_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("data")' +q 2>&1)
 FENNEL := $(if $(shell command -v fennel 2>/dev/null),fennel,$(NVIM_CACHE_DIR)/hr/bin/fennel)
+PYTHON ?= python3.10
 
 .PHONY: all
 all: bootstrap gen-init-lua update-paq kill-daemons clear-logs
 
 .PHONY: bootstrap
 bootstrap:
-	python3.9 scripts/bootstrap.py
+	$(PYTHON) scripts/bootstrap.py
 
 .PHONY: update-paq
 update-paq: install-site
@@ -45,7 +46,7 @@ clean-site: clean
 build: $(LUA_FILES)
 
 build/%.lua: %.fnl
-	env FENNEL=$(FENNEL) python3.9 scripts/compile.py $< $@
+	env FENNEL=$(FENNEL) $(PYTHON) scripts/compile.py $< $@
 
 .PHONY: gen-init-lua
 gen-init-lua:

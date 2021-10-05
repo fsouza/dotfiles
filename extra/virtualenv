@@ -65,7 +65,7 @@ function d() {
 }
 
 function _find_python() {
-	local python=${PYTHON:-python3.9}
+	local python=${PYTHON:-python3.10}
 	if ! command -v "${python}" &>/dev/null && [[ -v HOMEBREW_PREFIX ]]; then
 		local path=$(fd -L "${python}"$ --type f "${HOMEBREW_PREFIX}"/opt/python*/bin | head -1)
 		if [ -n "$path" ]; then
