@@ -85,7 +85,7 @@
   (get-python-bin
     "autopep8"
     (fn [autopep8-path]
-      (cb {:formatCommand (string.format "%s %s -" autopep8 (process-args args))
+      (cb {:formatCommand (string.format "%s %s -" autopep8-path (process-args args))
            :formatStdin true
            :rootMarkers default-root-markers}))))
 
