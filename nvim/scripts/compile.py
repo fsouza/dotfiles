@@ -1,10 +1,8 @@
-from __future__ import annotations
-
 import os
 import pathlib
 import subprocess
 import sys
-from typing import Sequence
+from collections.abc import Sequence
 
 
 def main(args: Sequence[str]) -> int:

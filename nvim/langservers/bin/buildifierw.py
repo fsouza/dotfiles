@@ -1,9 +1,7 @@
-from __future__ import annotations
-
 import os
 import sys
+from collections.abc import Sequence
 from typing import NoReturn
-from typing import Sequence
 
 
 def main(args: Sequence[str]) -> NoReturn:

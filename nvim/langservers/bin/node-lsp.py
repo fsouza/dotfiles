@@ -1,8 +1,8 @@
 import os
 import pathlib
 import sys
+from collections.abc import Sequence
 from typing import NoReturn
-from typing import Sequence
 
 
 def main(args: Sequence[str]) -> NoReturn:
