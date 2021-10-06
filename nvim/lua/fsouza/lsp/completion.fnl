@@ -30,7 +30,7 @@
 (fn cr-key-for-comp-info [comp-info]
   (if (= comp-info.mode "")
     "<cr>"
-    (if (and (= comp-info.pum_visible 1) (= comp_info.selected -1))
+    (if (and (= comp-info.pum_visible 1) (= comp-info.selected -1))
       "<c-e><cr>"
       "<cr>")))
 

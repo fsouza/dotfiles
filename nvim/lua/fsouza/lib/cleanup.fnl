@@ -15,14 +15,13 @@
         (= (length cbs) finished))
       25)))
 
-(let [mod {:cbs []
-           :register (fn [f]
-                       (table.insert mod.cbs f))
-           :setup (fn []
-                    (let [helpers (require :fsouza.lib.nvim-helpers)]
-                      (helpers.augroup
-                        "fsouza__lua_lib_cleanup"
-                        [{:events ["VimLeavePre"]
-                          :targets ["*"]
-                          :command (helpers.fn-cmd (partial cleanup mod))}])))}]
+(let [mod {:cbs []}]
+  (tset mod :register (partial table.insert mod.cbs))
+  (tset mod :setup (fn []
+                     (let [helpers (require :fsouza.lib.nvim-helpers)]
+                       (helpers.augroup
+                         "fsouza__lua_lib_cleanup"
+                         [{:events ["VimLeavePre"]
+                           :targets ["*"]
+                           :command (helpers.fn-cmd (partial cleanup mod))}]))))
   mod)

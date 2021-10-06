@@ -25,7 +25,6 @@
       command
       command)))
 
-(let [mod {:registry []
-           :register (fn [command path]
-                       (register mod command path))}]
+(let [mod {:registry []}]
+  (tset mod :register (partial register mod))
   mod)

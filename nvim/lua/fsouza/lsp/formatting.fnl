@@ -21,7 +21,7 @@
                  (.. cwd "/"))
         skip (not (vim.startswith file-path prefix))]
     (when skip
-      (vim.notify (string.format "[DEBUG] skipping %s because it's not in %s" file_path prefix)))
+      (vim.notify (string.format "[DEBUG] skipping %s because it's not in %s" file-path prefix)))
     skip))
 
 (fn should-skip-server [server-name]

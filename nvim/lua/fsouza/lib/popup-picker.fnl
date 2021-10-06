@@ -74,11 +74,9 @@
 
 
 (let [cbs {}
-      mod {:handle-selection (fn [winid]
-                               (handle-selection mod winid))
-           :close (fn [winid]
+      mod {:close (fn [winid]
                     (tset cbs winid nil)
-                    (vim.api.nvim_win_close winid false))
-           :open (fn [lines cb]
-                   (open mod lines cb))}]
+                    (vim.api.nvim_win_close winid false))}]
+  (tset mod :handle-selection (partial handle-selection mod))
+  (tset mod :open (partial open mod))
   mod)

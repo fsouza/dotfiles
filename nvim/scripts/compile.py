@@ -10,7 +10,15 @@ def main(args: Sequence[str]) -> int:
     [fnl_file, out_file] = args
 
     cmd = subprocess.run(
-        [fennel, "--load", "macros/init.fnl", "-c", fnl_file],
+        [
+            fennel,
+            "--load",
+            "macros/init.fnl",
+            "--globals",
+            "vim,prequire,config-dir",
+            "-c",
+            fnl_file,
+        ],
         capture_output=True,
     )
     if cmd.returncode != 0:

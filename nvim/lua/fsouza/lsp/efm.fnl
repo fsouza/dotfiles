@@ -193,15 +193,15 @@
     (try-read-precommit-config
       pre-commit-config-file-path
       (fn [pre-commit-config]
-        (let [pc-repo-tools {"https://gitlab.com/pycqa/flake8" get_flake8
-                             "https://github.com/pycqa/flake8" get_flake8
-                             "https://github.com/psf/black" get_black
-                             "https://github.com/ambv/black" get_black
-                             "https://github.com/asottile/add-trailing-comma" get_add_trailing_comma
-                             "https://github.com/asottile/reorder_python_imports" get_reorder_python_imports
-                             "https://github.com/pre-commit/mirrors-autopep8" get_autopep8
-                             "https://github.com/pre-commit/mirrors-isort" get_isort
-                             "https://github.com/fsouza/autoflake8" get_autoflake8}
+        (let [pc-repo-tools {"https://gitlab.com/pycqa/flake8" get-flake8
+                             "https://github.com/pycqa/flake8" get-flake8
+                             "https://github.com/psf/black" get-black
+                             "https://github.com/ambv/black" get-black
+                             "https://github.com/asottile/add-trailing-comma" get-add-trailing-comma
+                             "https://github.com/asottile/reorder_python_imports" get-reorder-python-imports
+                             "https://github.com/pre-commit/mirrors-autopep8" get-autopep8
+                             "https://github.com/pre-commit/mirrors-isort" get-isort
+                             "https://github.com/fsouza/autoflake8" get-autoflake8}
               tablex (require :fsouza.tablex)
               find-repo (fn [repo]
                           (let [repo-url repo.repo
@@ -239,7 +239,7 @@
                       "typescript" "typescriptreact" "yaml"])
 
 (fn get-filetypes []
-  (vim.tbl_flatten ["bzl" "dune" "python" "sh" prettierd_fts]))
+  (vim.tbl_flatten ["bzl" "dune" "python" "sh" prettierd-fts]))
 
 (fn basic-settings []
   (values {:lintDebounce 250000000

@@ -57,17 +57,15 @@
       autogroup-name "fsouza__colors_auto_disable"
       gc-interval-ms 5000
       mod {:set-popup-cb (partial tset state :popup-cb)
-           :set-popup-winid (partial set-popup-winid state)
-           :enable (fn []
+           :set-popup-winid (partial set-popup-winid state)}]
+  (tset mod :enable (fn []
                      (enable state)
                      (start-gc-timer state gc-interval-ms)
-                     (setup-autocmd mod autogroup-name))
-
-           :disable (fn []
+                     (setup-autocmd mod autogroup-name)))
+  (tset mod :disable (fn []
                       (tset state :enabled false)
                       (tset state :themes {})
                       (stop-gc-timer state)
                       (vim.api.nvim__set_hl_ns 0)
-                      (disable-autocmd autogroup-name))
-           }]
+                      (disable-autocmd autogroup-name)))
   mod)

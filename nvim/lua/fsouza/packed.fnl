@@ -6,7 +6,7 @@
 
     (cmd.run
       "git"
-      {:args ["clone" "--depth=1" "https://github.com/savq/paq-nvim.git" paq_repo_dir]}
+      {:args ["clone" "--depth=1" "https://github.com/savq/paq-nvim.git" paq-repo-dir]}
       nil
       (fn [result]
         (if (= result.exit-status 0)
@@ -67,13 +67,13 @@
                   ["tbastos/vim-lua"]
                   ["Vimjas/vim-python-pep8-indent"]
                   ["ziglang/zig.vim"]]
-           :setup (fn []
-                    (with-paq mod (fn [paq]
-                                    (paq:setup {:paq_dir paq-dir})
-                                    (paq mod.paqs)
-                                    (paq:sync))))
            :repack (fn []
                      (tset package.loaded "fsouza.packed" nil)
                      (let [packed (require :fsouza.packed)]
                        (packed.setup)))}]
+  (tset mod :setup (partial with-paq mod (fn [paq]
+                                           (paq:setup {:paq_dir paq-dir})
+                                           (paq mod.paqs)
+                                           (paq:sync))))
+
 mod)

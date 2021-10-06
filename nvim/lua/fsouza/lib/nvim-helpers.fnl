@@ -64,20 +64,20 @@
       (vim.fn.winrestview view))))
 
 (let [mod {:fns []
-           :fn-cmd (fn [f]
-                     (let [id (register-cb mod f)]
-                       (string.format "lua require('fsouza.lib.nvim-helpers').fns['%s']()" id)))
-           :fn-map (fn [f]
-                     (cmd-map (mod.fn-cmd f)))
-           :vfn-map (fn [f]
-                      (vcmd-map (mod.fn-cmd f)))
-           :ifn-map (fn [f]
-                      (let [id (register-cb mod f)]
-                        (string.format "<c-r>=luaeval(\"require('fsouza.lib.nvim-helpers').fns['%s']()\")<CR>" id)))
            :create-mappings create-mappings
            :remove-mappings remove-mappings
            :augroup augroup
            :reset-augroup (fn [name] (augroup name []))
            :once once
            :rewrite-wrap rewrite-wrap}]
+  (tset mod :fn-cmd (fn [f]
+                      (let [id (register-cb mod f)]
+                        (string.format "lua require('fsouza.lib.nvim-helpers').fns['%s']()" id))))
+  (tset mod :fn-map (fn [f]
+                      (cmd-map (mod.fn-cmd f))))
+  (tset mod :vfn-map (fn [f]
+                       (vcmd-map (mod.fn-cmd f))))
+  (tset mod :ifn-map (fn [f]
+                       (let [id (register-cb mod f)]
+                         (string.format "<c-r>=luaeval(\"require('fsouza.lib.nvim-helpers').fns['%s']()\")<CR>" id))))
   mod)

@@ -16,7 +16,7 @@
           params {:textDocument {:uri uri
                                  :version (vim.api.nvim_buf_get_changedtick bufnr)}
                   :contentChanges [{:text (read-buffer bufnr)}]}]
-      (each [_ bufnr (ipairs (. clients-by-buf bufnr))]
+      (each [_ client (ipairs (. clients-by-buf bufnr))]
         (client.notify "textDocument/didChange" params)))))
 
 (fn buf-attach-if-needed [bufnr]

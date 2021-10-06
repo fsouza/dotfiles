@@ -11,13 +11,13 @@
 
 (fn input-collector [prefix debug-fn]
   (let [debug (make-debug prefix debug-fn)
-        result {:data ""
-                :callback (fn [err chunk]
-                            (when err
-                              (tset result :err err))
-                            (when chunk
-                              (tset result :data (.. result.data chunk))
-                              (debug chunk)))}]
+        result {:data ""}]
+    (tset result :callback (fn [err chunk]
+                             (when err
+                               (tset result :err err))
+                             (when chunk
+                               (tset result :data (.. result.data chunk))
+                               (debug chunk))))
     result))
 
 (fn safe-close [h cb]
