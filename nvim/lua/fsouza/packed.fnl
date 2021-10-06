@@ -66,7 +66,12 @@
                   ["ocaml/vim-ocaml"]
                   ["tbastos/vim-lua"]
                   ["Vimjas/vim-python-pep8-indent"]
-                  ["ziglang/zig.vim"]]
+                  ["ziglang/zig.vim"]
+
+                  ; colorschemes
+                  ["ishan9299/modus-theme-vim"]
+                  ["ldelossa/vimdark"]
+                  ["Th3Whit3Wolf/one-nvim"]]
            :repack (fn []
                      (tset package.loaded "fsouza.packed" nil)
                      (let [packed (require :fsouza.packed)]
