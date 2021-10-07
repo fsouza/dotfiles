@@ -6,11 +6,11 @@
 #
 add-trailing-comma==2.1.0
     # via -r requirements.in
-aspy.refactor-imports==2.1.1
+aspy.refactor-imports==2.2.0
     # via reorder-python-imports
-attrs==20.3.0
+attrs==21.2.0
     # via flake8-bugbear
-autoflake8==0.2.1
+autoflake8==0.2.2
     # via -r requirements.in
 autopep8==1.5.7
     # via -r requirements.in
@@ -18,7 +18,7 @@ black==21.9b0
     # via -r requirements.in
 cached-property==1.5.2
     # via aspy.refactor-imports
-click==7.1.2
+click==8.0.1
     # via black
 flake8==3.9.2
     # via
@@ -43,17 +43,17 @@ mypy-extensions==0.4.3
     # via black
 pathspec==0.9.0
     # via black
-platformdirs==2.2.0
+platformdirs==2.4.0
     # via black
 pycodestyle==2.7.0
     # via
     #   autopep8
     #   flake8
-pyflakes==2.3.0
+pyflakes==2.3.1
     # via
     #   autoflake8
     #   flake8
-regex==2020.11.13
+regex==2021.9.30
     # via black
 reorder-python-imports==2.6.0
     # via -r requirements.in
@@ -61,7 +61,7 @@ tokenize-rt==4.1.0
     # via add-trailing-comma
 toml==0.10.2
     # via autopep8
-tomli==1.0.4
+tomli==1.2.1
     # via black
 typing-extensions==3.10.0.2
     # via black
