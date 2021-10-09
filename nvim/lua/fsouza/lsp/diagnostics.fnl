@@ -1,7 +1,7 @@
-(macro render-diagnostics [items]
-  `(do
-     (vim.lsp.util.set_qflist ,items)
-     (if (vim.tbl_isempty ,items)
+(macro render-diagnostics [diagnostics]
+  `(let [items# (vim.diagnostics.toqflist ,diagnostics)]
+     (vim.lsp.util.set_qflist items#)
+     (if (vim.tbl_isempty items#)
        (vim.cmd "cclose")
        (do
          (vim.cmd "copen")
@@ -9,15 +9,11 @@
          (vim.cmd "cc")))))
 
 (fn list-file-diagnostics []
-  (let [bufnr (vim.api.nvim_get_current_buf)
-        buf-diagnostics (vim.diagnostic.get bufnr)
-        items (vim.diagnostic.toqflist buf-diagnostics)]
-    (render-diagnostics items)))
+  (let [bufnr (vim.api.nvim_get_current_buf)]
+    (render-diagnostics (vim.diagnostic.get bufnr))))
 
 (fn list-workspace-diagnostics []
-  (let [diagnostics (vim.diagnostic.get)
-        items (vim.diagnostic.toqflist diagnostics)]
-    (render-diagnostics items)))
+  (render-diagnostics (vim.diagnostic.get)))
 
 {: list-file-diagnostics
  : list-workspace-diagnostics}
