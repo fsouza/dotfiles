@@ -61,7 +61,8 @@
                  :shortmess  "filnxtToOFIc"
                  :number  true
                  :relativenumber  true
-                 :lazyredraw  true}
+                 :lazyredraw  true
+                 :isfname "@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@"}
         color-mod (require :fsouza.color)]
     (each [name value (pairs options)]
       (tset vim.o name value))
