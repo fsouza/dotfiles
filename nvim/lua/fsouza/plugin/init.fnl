@@ -99,19 +99,29 @@
                                  :opts {:silent true}}]}))
 
 (fn setup-autocompile []
-  (fn handle-result [result]
+  (fn handle-result [next result]
     (if (= result.exit-status 0)
-      (vim.notify "Successfully compiled")
+      (do
+        (vim.notify "Successfully compiled")
+        (when next
+          (next)))
       (error (string.format "failed to compile fnl: %s" (vim.inspect result)))))
+
+  (fn repaq []
+    (tset package.loaded "fsouza.packed" nil)
+    (let [packed (require "fsouza.packed")]
+      (packed.setup)))
 
   (fn make []
     (when (not vim.g.fennel_ks)
       (let [cmd (require :fsouza.lib.cmd)
             file-name (vim.fn.expand "<afile>")
-            make-target (if (vim.endswith file-name "/packed.fnl")
-                          "update-paq"
-                          "install-site")]
-        (cmd.run "make" {:args ["-C" config-dir make-target]} nil handle-result))))
+            make-target "install-site"
+            next (if (vim.endswith file-name "/packed.fnl")
+                   repaq
+                   nil)]
+
+        (cmd.run "make" {:args ["-C" config-dir make-target]} nil (partial handle-result next)))))
 
   (helpers.augroup "fsouza__autocompile-fennel" [{:events ["BufWritePost"]
                                                   :targets ["~/.dotfiles/nvim/*.fnl"]
