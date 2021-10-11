@@ -21,14 +21,6 @@
   (when (. state :timer)
     (state.timer:close)))
 
-(fn find-theme [state curr-winid]
-  (if (. state :popup-cb)
-    (let [winid (state.popup-cb)]
-      (if (= winid curr-winid)
-        (. themes :popup)
-        (. state :default-theme)))
-    (. state :default-theme)))
-
 (fn setup-autocmd [mod autogroup-name]
   (helpers.augroup
     autogroup-name
@@ -48,16 +40,19 @@
   (when (not state.ns)
     (fn decoration-cb [_ winid]
       (when (. state :enabled)
-        (let [theme (if-nil (. state.themes winid) (find-theme state winid))]
+        (let [theme (if-nil (. state.themes winid) state.default-theme)]
           (vim.api.nvim__set_hl_ns theme))))
     (tset state :ns (vim.api.nvim_create_namespace "fsouza__color"))
     (vim.api.nvim_set_decoration_provider state.ns { :on_win decoration-cb :on_line decoration-cb })))
 
-(let [state {:enabled false :default-theme nil :themes {} :popup-cb nil :ns nil :timer nil }
+(let [state {:enabled false
+             :default-theme nil
+             :themes {}
+             :ns nil
+             :timer nil}
       autogroup-name "fsouza__colors_auto_disable"
       gc-interval-ms 5000
-      mod {:set-popup-cb (partial tset state :popup-cb)
-           :set-popup-winid (partial set-popup-winid state)}]
+      mod {:set-popup-winid (partial set-popup-winid state)}]
   (tset mod :enable (fn []
                      (enable state)
                      (start-gc-timer state gc-interval-ms)
