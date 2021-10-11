@@ -21,10 +21,10 @@
   (when (. state :timer)
     (state.timer:close)))
 
-(fn find-theme [state curr_winid]
+(fn find-theme [state curr-winid]
   (if (. state :popup-cb)
     (let [winid (state.popup-cb)]
-      (if (= winid curr_winid)
+      (if (= winid curr-winid)
         (. themes :popup)
         (. state :default-theme)))
     (. state :default-theme)))

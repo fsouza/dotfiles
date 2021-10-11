@@ -24,7 +24,8 @@
                                                                 "LSP"
                                                                 entry.source.name)]
                                                      (tset vim-item :menu (string.format "「%s」" menu))
-                                                     vim-item))}}
+                                                     vim-item))}
+                            :experimental {:native_menu true}}
                            bufnr)))
 
 (fn cr-key-for-comp-info [comp-info]
