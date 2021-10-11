@@ -18,9 +18,9 @@ black==21.9b0
     # via -r requirements.in
 cached-property==1.5.2
     # via aspy.refactor-imports
-click==8.0.1
+click==8.0.3
     # via black
-flake8==3.9.2
+flake8==4.0.1
     # via
     #   -r requirements.in
     #   flake8-bugbear
@@ -31,9 +31,9 @@ flake8-bugbear==21.9.2
     # via -r requirements.in
 flake8-builtins==1.5.3
     # via -r requirements.in
-flake8-comprehensions==3.6.1
+flake8-comprehensions==3.7.0
     # via -r requirements.in
-flake8-tidy-imports==4.4.1
+flake8-tidy-imports==4.5.0
     # via -r requirements.in
 isort==5.9.3
     # via -r requirements.in
@@ -45,15 +45,15 @@ pathspec==0.9.0
     # via black
 platformdirs==2.4.0
     # via black
-pycodestyle==2.7.0
+pycodestyle==2.8.0
     # via
     #   autopep8
     #   flake8
-pyflakes==2.3.1
+pyflakes==2.4.0
     # via
     #   autoflake8
     #   flake8
-regex==2021.9.30
+regex==2021.10.8
     # via black
 reorder-python-imports==2.6.0
     # via -r requirements.in
