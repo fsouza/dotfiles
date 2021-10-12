@@ -63,6 +63,7 @@
                   ["HerringtonDarkholme/yats.vim"]
                   ["keith/swift.vim"]
                   ["ocaml/vim-ocaml"]
+                  ["pangloss/vim-javascript"]
                   ["tbastos/vim-lua"]
                   ["Vimjas/vim-python-pep8-indent"]
                   ["ziglang/zig.vim"]
