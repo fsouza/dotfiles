@@ -107,7 +107,7 @@
                 popup-picker (require :fsouza.lib.popup-picker)
                 popup-lines (tablex.filter-map (fn [item]
                                                  (when item.command
-                                                   item.command.title)))]
+                                                   item.command.title)) items)]
             (popup-picker.open popup-lines (fn [index]
                                              (execute-item (. items index)))))
           (execute-item (. items 1)))))))
