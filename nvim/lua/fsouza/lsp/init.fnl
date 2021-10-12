@@ -18,6 +18,8 @@
     (lsp-log.set_level level)))
 
 (fn patch-lsp []
+  (tset vim.lsp._request_name_to_capability :completionItem/resolve "completion")
+
   (let [fns-to-patch [:show_line_diagnostics
                       :show_position_diagnostics]]
     (each [_ fn-to-patch (ipairs fns-to-patch)]
