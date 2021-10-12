@@ -2,7 +2,8 @@
 
 (fn is-enabled [bufnr]
   (let [helpers (require :fsouza.lib.nvim-helpers)
-        (_ buf-autoformat) (pcall vim.api.nvim_buf_get_var bufnr "autoformat")]
+        (defined buf-autoformat) (pcall vim.api.nvim_buf_get_var bufnr "autoformat")
+        buf-autoformat (if defined buf-autoformat nil)]
     (if-nil buf-autoformat vim.g.autoformat true)))
 
 (fn toggle [ns]
