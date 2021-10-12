@@ -43,7 +43,8 @@
                   {1 "SmiteshP/nvim-gps" :opt true}
 
                   ; completion stuff
-                  {1 "mfussenegger/nvim-lsp-compl" :as "nvim-lsp-compl" :opt true}
+                  {1 "hrsh7th/nvim-cmp" :as "nvim-cmp" :opt true}
+                  {1 "hrsh7th/cmp-nvim-lsp" :as "cmp-nvim-lsp" :opt true}
                   {1 "l3mon4d3/luasnip" :as "luasnip" :opt true}
 
                   ; misc opt stuff

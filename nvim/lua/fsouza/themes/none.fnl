@@ -31,7 +31,7 @@
                 "PmenuSbar" "PmenuSel" "PmenuThumb" "Question" "Search" "PreCondit" "PreProc"
                 "Repeat" "Special" "SpecialChar" "SpecialComment" "Statement" "StorageClass"
                 "String" "Structure" "Tag" "Todo" "Type" "Typedef" "Underlined" "htmlBold"
-                "Title" "ModeMsg" "FloatBorder"]]
+                "Title" "ModeMsg" "CmpDocumentationBorder" "FloatBorder"]]
     (each [_ group (ipairs groups)]
       (vim.api.nvim_set_hl ns group {}))))
 
