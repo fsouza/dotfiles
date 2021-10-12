@@ -19,7 +19,8 @@
 
 (fn stop-gc-timer [state]
   (when (. state :timer)
-    (state.timer:close)))
+    (state.timer:close)
+    (tset state :timer nil)))
 
 (fn setup-autocmd [mod autogroup-name]
   (helpers.augroup
