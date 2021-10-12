@@ -34,6 +34,21 @@ function update_neovim {
 	_update_neovim || rebootstrap_neovim
 }
 
+function enter_demo_mode {
+	dir=~/.local/share/nvim/site/after/plugin
+	mkdir -p "${dir}"
+	cat >"${dir}/demo.vim" <<EOF
+colorscheme modus-operandi
+highlight Normal guibg=NONE
+EOF
+	gsed -i 's/size: .\+$/size: 24.0/' ~/.dotfiles/alacritty.yml
+}
+
+function leave_demo_mode {
+	rm -f ~/.local/share/nvim/site/after/plugin/demo.vim
+	git -C ~/.dotfiles restore alacritty.yml
+}
+
 if [ -x "$NEOVIM_INSTALL_PREFIX/bin/nvim" ]; then
 	prepend_to_path "$NEOVIM_INSTALL_PREFIX/bin"
 
