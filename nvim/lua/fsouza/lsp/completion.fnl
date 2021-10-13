@@ -57,6 +57,7 @@
         (popup-winid _) (popup.open {:lines contents
                                      :enter false
                                      :type-name "completion-doc"
+                                     :markdown true
                                      :row row
                                      :col (+ col width scrollbar)
                                      :relative "editor"})]
