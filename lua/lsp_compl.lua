@@ -4,31 +4,6 @@ local timer = nil
 local M = {}
 local SNIPPET = 2
 
-
-local function mk_handler(fn)
-  return function(...)
-    local config_or_client_id = select(4, ...)
-    local is_new = type(config_or_client_id) ~= 'number'
-    if is_new then
-      fn(...)
-    else
-      local err = select(1, ...)
-      local method = select(2, ...)
-      local result = select(3, ...)
-      local client_id = select(4, ...)
-      local bufnr = select(5, ...)
-      local config = select(6, ...)
-      fn(err, result, { method = method, client_id = client_id, bufnr = bufnr }, config)
-    end
-  end
-end
-
-
-local function request(bufnr, method, params, handler)
-  return lsp.buf_request(bufnr, method, params, mk_handler(handler))
-end
-
-
 local client_settings = {}
 local completion_ctx
 completion_ctx = {
@@ -52,7 +27,6 @@ completion_ctx = {
     completion_ctx.cancel_pending()
   end
 }
-
 
 local function get_documentation(item)
   local docs = item.documentation
@@ -78,20 +52,6 @@ function M.text_document_completion_list_to_complete_items(result, prefix, fuzzy
     if kind == 'Snippet' then
       word = item.label
     elseif item.insertTextFormat == SNIPPET then
-      --[[
-      -- eclipse.jdt.ls has
-      --      insertText = "wait",
-      --      label = "wait() : void"
-      --      textEdit = { ... }
-      --
-      -- haskell-ide-engine has
-      --      insertText = "testSuites ${1:Env}"
-      --      label = "testSuites"
-      --
-      -- lua-language-server has
-      --      insertText = "query_definition",
-      --      label = "query_definition(pattern)",
-      --]]
       if item.textEdit then
         word = item.insertText or item.textEdit.newText
       elseif item.insertText then
@@ -125,9 +85,6 @@ function M.text_document_completion_list_to_complete_items(result, prefix, fuzzy
   end)
   return matches
 end
-
-
-
 
 local function reset_timer()
   if timer then
@@ -190,7 +147,7 @@ local function adjust_start_col(lnum, line, items, encoding)
 end
 
 
-function M.trigger_completion()
+function M.trigger_completion(client, bufnr)
   reset_timer()
   completion_ctx.cancel_pending()
   local lnum, cursor_pos = unpack(api.nvim_win_get_cursor(0))
@@ -198,7 +155,7 @@ function M.trigger_completion()
   local line_to_cursor = line:sub(1, cursor_pos)
   local col = vim.fn.match(line_to_cursor, '\\k*$') + 1
   local params = lsp.util.make_position_params()
-  local _, cancel_req = request(0, 'textDocument/completion', params, function(err, result, ctx)
+  local _, req_id = client.request('textDocument/completion', params, function(err, result, ctx)
     local client_id = ctx.client_id
     completion_ctx.pending_requests = {}
     assert(not err, vim.inspect(err))
@@ -224,8 +181,12 @@ function M.trigger_completion()
       opts.server_side_fuzzy_completion
     )
     vim.fn.complete(startbyte, matches)
-  end)
-  table.insert(completion_ctx.pending_requests, cancel_req)
+  end, bufnr)
+  if req_id then
+    table.insert(completion_ctx.pending_requests, function ()
+      client.cancel_request(req_id)
+    end)
+  end
 end
 
 
@@ -267,14 +228,11 @@ end
 
 
 M.expand_snippet = function(snippet)
-  local ok, luasnip = pcall(require, 'luasnip')
-  local fn = ok and luasnip.lsp_expand or vim.fn['vsnip#anonymous']
-  fn(snippet)
+  require('luasnip').lsp_expand(snippet)
 end
 
 
 local function apply_snippet(item, suffix)
-  -- TODO: move cursor back to end of new text?
   if item.textEdit then
     M.expand_snippet(item.textEdit.newText .. suffix)
   elseif item.insertText then
@@ -283,7 +241,7 @@ local function apply_snippet(item, suffix)
 end
 
 
-function M._CompleteDone(resolveEdits)
+function M._CompleteDone(client_id, bufnr)
   if completion_ctx.suppress_completeDone then
     completion_ctx.suppress_completeDone = false
     return
@@ -296,7 +254,6 @@ function M._CompleteDone(resolveEdits)
   local lnum, col = unpack(api.nvim_win_get_cursor(0))
   lnum = lnum - 1
   local item = completed_item.user_data
-  local bufnr = api.nvim_get_current_buf()
   local expand_snippet = item.insertTextFormat == SNIPPET and completion_ctx.expand_snippet
   local suffix = nil
   if expand_snippet then
@@ -307,33 +264,29 @@ function M._CompleteDone(resolveEdits)
     api.nvim_buf_set_text(bufnr, lnum, start_char, lnum, #line, {''})
   end
   completion_ctx.reset()
+  local client = vim.lsp.get_client_by_id(client_id)
+  local resolve_edits = (client.server_capabilities.completionProvider or {}).resolveProvider
   if item.additionalTextEdits then
     if expand_snippet then
       apply_snippet(item, suffix)
     end
     apply_text_edits(bufnr, lnum, item.additionalTextEdits)
-  elseif resolveEdits and type(item) == "table" then
-    local _, cancel_req = request(bufnr, 'completionItem/resolve', item, function(err, result)
+  elseif resolve_edits and type(item) == "table" then
+    local _, req_id = client.request('completionItem/resolve', item, function(err, result)
       completion_ctx.pending_requests = {}
       assert(not err, vim.inspect(err))
       if expand_snippet then
         apply_snippet(item, suffix)
       end
       apply_text_edits(bufnr, lnum, result.additionalTextEdits)
-    end)
-    table.insert(completion_ctx.pending_requests, cancel_req)
+    end, bufnr)
+    if req_id then
+      table.insert(completion_ctx.pending_requests, function()
+        client.cancel_request(req_id)
+      end)
+    end
   elseif expand_snippet then
     apply_snippet(item, suffix)
-  end
-end
-
-
-function M.accept_pum()
-  if tonumber(vim.fn.pumvisible()) == 0 then
-    return false
-  else
-    completion_ctx.expand_snippet = true
-    return true
   end
 end
 
@@ -358,9 +311,10 @@ function M.attach(client, bufnr, opts)
   end
   vim.cmd(string.format("autocmd InsertLeave <buffer=%d> lua require'lsp_compl'._InsertLeave()", bufnr))
   vim.cmd(string.format(
-    "autocmd CompleteDone <buffer=%d> lua require'lsp_compl'._CompleteDone(%s)",
+    "autocmd CompleteDone <buffer=%d> lua require'lsp_compl'._CompleteDone(%d, %d)",
     bufnr,
-    (client.server_capabilities.completionProvider or {}).resolveProvider
+    client.id,
+    bufnr
   ))
   vim.cmd('augroup end')
 end
