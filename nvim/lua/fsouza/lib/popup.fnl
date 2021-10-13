@@ -18,7 +18,6 @@
 (fn open [opts]
   (let [{: lines
          : type-name
-         : enter
          : markdown} opts
         longest (* 2 (accumulate [longest 0 _ line (ipairs lines)]
                        (max longest (length line))))
@@ -43,7 +42,7 @@
 
     (close-others win-var-identifier)
 
-    (let [winid (vim.api.nvim_open_win bufnr enter win-opts)
+    (let [winid (vim.api.nvim_open_win bufnr false win-opts)
           color (require :fsouza.color)
           helpers (require :fsouza.lib.nvim-helpers)]
 

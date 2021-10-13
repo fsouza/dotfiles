@@ -9,7 +9,6 @@
   (let [popup (require :fsouza.lib.popup)
         (winid bufnr) (popup.open {:lines lines
                                    :type-name "picker"
-                                   :enter true
                                    :row 1})
         helpers (require :fsouza.lib.nvim-helpers)]
 
@@ -18,6 +17,12 @@
     (vim.api.nvim_win_set_option winid :cursorline true)
     (vim.api.nvim_win_set_option winid :cursorlineopt "both")
     (vim.api.nvim_win_set_option winid :number true)
+    (vim.api.nvim_set_current_win winid)
+
+    (helpers.augroup "fsouza-popup-picker-leave" [{:events ["WinLeave"]
+                                                   :targets [(string.format "<buffer=%d>" bufnr)]
+                                                   :modifiers ["++once"]
+                                                   :command (helpers.fn-cmd (partial vim.api.nvim_win_close winid false))}])
 
     (helpers.create-mappings {:n [{:lhs "<esc>"
                                     :rhs (helpers.fn-map (partial vim.api.nvim_win_close winid false))}
