@@ -2,6 +2,11 @@
 
 (local helpers (require :fsouza.lib.nvim-helpers))
 
+; used to store information about ongoing completion, gets reset everytime we
+; exit "completion mode".
+(local state {:inflight-requests {}
+              :resolved-items {}})
+
 (var winid nil)
 
 (fn cr-key-for-comp-info [comp-info]
@@ -41,12 +46,14 @@
   (let [popup (require :fsouza.lib.popup)
         {: row
          : col
-         : width} (vim.fn.pum_getpos)
+         : width
+         : scrollbar} (vim.fn.pum_getpos)
+        scrollbar (if scrollbar 1 0)
         (popup-winid _) (popup.open {:lines contents
                                      :enter false
                                      :type-name "completion-doc"
                                      :row row
-                                     :col (+ col width)
+                                     :col (+ col width scrollbar)
                                      :relative "editor"})]
     (set winid popup-winid)))
 
@@ -58,22 +65,79 @@
     (vim.api.nvim_win_close winid false)
     (set winid nil)))
 
-(fn on-CompleteChanged []
-  (vim.schedule close)
+(fn render-docs [item]
+  (let [docs (popup-contents item)]
+    (when (> (length docs) 0)
+      (vim-schedule (show-popup docs)))))
+
+(fn resolve-item [client bufnr item cb]
+  (var request-id nil)
+
+  (let [item-key (if-nil item.sortText item.label)]
+    (fn on-resolve [err item]
+      (when (not err)
+        (tset state.resolved-items item-key item)
+        (cb item))
+
+      (if request-id
+        (tset state.inflight-requests request-id nil)))
+
+    (let [resolved-item (. state.resolved-items item-key)]
+      (if resolved-item
+        (cb resolved-item)
+        (let [(_ req-id) (client.request "completionItem/resolve" item on-resolve bufnr)]
+          (when req-id
+            (set request-id req-id)
+            (tset state.inflight-requests req-id true)))))))
+
+(fn reset-state [client]
+  (close)
+  (each [req-id _ (pairs state.inflight-requests)]
+    (vim-schedule (client.cancel_request req-id)))
+  (tset state :inflight-requests {})
+  (tset state :resolved-items {}))
+
+(fn do-completeChanged [client bufnr item]
+  (close)
+  (when item
+    (let [completion-provider (?. client :server_capabilities :completionProvider)
+          completion-provider (if-nil completion-provider {})
+          resolve-provider (. completion-provider :resolveProvider)]
+      (if resolve-provider
+        (resolve-item client bufnr item render-docs)
+        (render-docs item)))))
+
+(fn on-CompleteChanged [client bufnr]
   (let [item (?. vim :v :event :completed_item :user_data)]
-    (when item
-      (let [docs (popup-contents item)]
-        (when (> (length docs) 0)
-          (vim-schedule (show-popup docs)))))))
+    (vim-schedule (do-completeChanged client bufnr item))))
+
+(fn leave-completion [client bufnr]
+  (reset-state client)
+  (helpers.reset-augroup (augroup-name bufnr)))
 
 (fn on-attach [client bufnr]
   (tset client.server_capabilities.completionProvider :triggerCharacters [])
   (tset client.resolved_capabilities :signature_help_trigger_characters [])
 
-  (let [lsp-compl (require "lsp_compl")
-        complete-cmd (helpers.ifn-map (fn []
-                                          (lsp-compl.trigger_completion)
-                                          ""))
+  (let [lsp-compl (require :lsp_compl)]
+    (fn complete []
+      (let [lsp-compl (require :lsp_compl)]
+        (helpers.augroup (augroup-name bufnr) [{:events ["CompleteChanged"]
+                                                :targets [(string.format "<buffer=%d>" bufnr)]
+                                                :command (helpers.fn-cmd (partial on-CompleteChanged client bufnr))}
+                                               {:events ["CompleteDone"]
+                                                :targets [(string.format "<buffer=%d>" bufnr)]
+                                                :modifiers ["++once"]
+                                                :command (helpers.fn-cmd (partial reset-state client))}
+                                               {:events ["InsertLeave"]
+                                                :targets [(string.format "<buffer=%d>" bufnr)]
+                                                :modifiers ["++once"]
+                                                :command (helpers.fn-cmd (partial leave-completion client bufnr))}])
+
+        (lsp-compl.trigger_completion)
+        ""))
+
+    (let [complete-cmd (helpers.ifn-map complete)
           mappings {:i [{:lhs "<cr>"
                          :rhs cr-cmd
                          :opts {:noremap true}}
@@ -81,15 +145,8 @@
                          :rhs complete-cmd
                          :opts {:noremap true}}]}]
 
-    (helpers.augroup (augroup-name bufnr) [{:events ["CompleteChanged"]
-                                            :targets [(string.format "<buffer=%d>" bufnr)]
-                                            :command (helpers.fn-cmd on-CompleteChanged)}
-                                           {:events ["CompleteDone"]
-                                            :targets [(string.format "<buffer=%d>" bufnr)]
-                                            :command (helpers.fn-cmd close)}])
-
-    (lsp-compl.attach client bufnr)
-    (vim-schedule (helpers.create-mappings mappings bufnr))))
+      (lsp-compl.attach client bufnr)
+      (vim-schedule (helpers.create-mappings mappings bufnr)))))
 
 (fn on-detach [bufnr]
   (helpers.reset-augroup (augroup-name bufnr))
