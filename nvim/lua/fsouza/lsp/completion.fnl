@@ -1,3 +1,8 @@
+;; TODO(fsouza): eventually I should bring a version of my fork of
+;; nvim-lsp-compl here, or part of it. Right now, we're invoking
+;; completionItem/resolve on both CompleteChanged and CompleteDone, because
+;; those happen in separate places.
+
 (import-macros {: vim-schedule : if-nil} :helpers)
 
 (local helpers (require :fsouza.lib.nvim-helpers))
@@ -111,9 +116,12 @@
   (let [item (?. vim :v :event :completed_item :user_data)]
     (vim-schedule (do-completeChanged client bufnr item))))
 
-(fn leave-completion [client bufnr]
+(fn do-InsertLeave [client bufnr]
   (reset-state client)
   (helpers.reset-augroup (augroup-name bufnr)))
+
+(fn on-InsertLeave [client bufnr]
+  (vim-schedule (do-InsertLeave client bufnr)))
 
 (fn on-attach [client bufnr]
   (tset client.server_capabilities.completionProvider :triggerCharacters [])
@@ -132,9 +140,9 @@
                                                {:events ["InsertLeave"]
                                                 :targets [(string.format "<buffer=%d>" bufnr)]
                                                 :modifiers ["++once"]
-                                                :command (helpers.fn-cmd (partial leave-completion client bufnr))}])
+                                                :command (helpers.fn-cmd (partial on-InsertLeave client bufnr))}])
 
-        (lsp-compl.trigger_completion)
+        (lsp-compl.trigger_completion client bufnr)
         ""))
 
     (let [complete-cmd (helpers.ifn-map complete)
@@ -145,15 +153,18 @@
                          :rhs complete-cmd
                          :opts {:noremap true}}]}]
 
-      (lsp-compl.attach client bufnr)
+      (lsp-compl.attach client bufnr {:trigger_on_delete true})
       (vim-schedule (helpers.create-mappings mappings bufnr)))))
 
-(fn on-detach [bufnr]
+(fn on-detach [client bufnr]
   (helpers.reset-augroup (augroup-name bufnr))
 
   (when (vim.api.nvim_buf_is_valid bufnr)
     (helpers.remove-mappings {:i [{:lhs "<cr>"}
-                                  {:lhs "<c-x><c-o>"}]} bufnr)))
+                                  {:lhs "<c-x><c-o>"}]} bufnr))
+
+  (let [lsp-compl (require :lsp_compl)]
+    (lsp-compl.detach client.id bufnr)))
 
 {: on-attach
  : on-detach}

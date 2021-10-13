@@ -131,7 +131,7 @@
         (when client.resolved_capabilities.completion
           (let [completion (require :fsouza.lsp.completion)]
             (completion.on-attach client bufnr)
-            (register-detach completion.on-detach)))
+            (register-detach (partial completion.on-detach client))))
 
         (when client.resolved_capabilities.rename
           (table.insert mappings.n {:lhs "<leader>r"
