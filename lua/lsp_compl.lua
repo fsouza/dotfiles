@@ -74,7 +74,6 @@ function M.text_document_completion_list_to_complete_items(result, prefix, fuzzy
   end
   local matches = {}
   for _, item in pairs(items) do
-    local info = get_documentation(item)
     local kind = lsp.protocol.CompletionItemKind[item.kind] or ''
     local word
     if kind == 'Snippet' then
@@ -114,7 +113,6 @@ function M.text_document_completion_list_to_complete_items(result, prefix, fuzzy
         abbr = item.label,
         kind = kind,
         menu = item.detail or '',
-        info = info,
         icase = 1,
         dup = 1,
         empty = 1,
@@ -229,37 +227,6 @@ function M.trigger_completion()
     vim.fn.complete(startbyte, matches)
   end)
   table.insert(completion_ctx.pending_requests, cancel_req)
-end
-
-
-function M._InsertCharPre(server_side_fuzzy_completion)
-  if timer then
-    return
-  end
-  local char = api.nvim_get_vvar('char')
-  local pumvisible = tonumber(vim.fn.pumvisible()) == 1
-  if pumvisible then
-    if completion_ctx.isIncomplete or server_side_fuzzy_completion then
-      -- Calling vim.fn.complete will trigger `CompleteDone` for the active completion window;
-      -- → suppress it to avoid resetting the completion_ctx
-      completion_ctx.suppress_completeDone = true
-      timer = vim.loop.new_timer()
-      timer:start(150, 0, vim.schedule_wrap(M.trigger_completion))
-    end
-    return
-  end
-  local triggers = triggers_by_buf[api.nvim_get_current_buf()] or {}
-  for _, entry in pairs(triggers) do
-    local chars, fn = unpack(entry)
-    if vim.tbl_contains(chars, char) then
-      timer = vim.loop.new_timer()
-      timer:start(50, 0, function()
-        reset_timer()
-        vim.schedule(fn)
-      end)
-      return
-    end
-  end
 end
 
 
@@ -416,11 +383,6 @@ function M.attach(client, bufnr, opts)
   client_settings[client.id] = opts
   vim.cmd(string.format('augroup lsp_compl_%d_%d', client.id, bufnr))
   vim.cmd('au!')
-  vim.cmd(string.format(
-    "autocmd InsertCharPre <buffer=%d> lua require'lsp_compl'._InsertCharPre(%s)",
-    bufnr,
-    opts.server_side_fuzzy_completion or false
-  ))
   if opts.trigger_on_delete then
     vim.cmd(string.format("autocmd TextChangedP <buffer=%d> lua require'lsp_compl'._TextChangedP()", bufnr))
     vim.cmd(string.format("autocmd TextChangedI <buffer=%d> lua require'lsp_compl'._TextChangedI()", bufnr))
