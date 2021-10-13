@@ -1,6 +1,5 @@
 local api = vim.api
 local lsp = vim.lsp
-local timer = nil
 local M = {}
 local SNIPPET = 2
 
@@ -86,15 +85,6 @@ function M.text_document_completion_list_to_complete_items(result, prefix, fuzzy
   return matches
 end
 
-local function reset_timer()
-  if timer then
-    timer:stop()
-    timer:close()
-    timer = nil
-  end
-end
-
-
 local function adjust_start_col(lnum, line, items, encoding)
   -- vim.fn.complete takes a startbyte and selecting a completion entry will
   -- replace anything between the startbyte and the current cursor position
@@ -148,7 +138,6 @@ end
 
 
 function M.trigger_completion(client, bufnr)
-  reset_timer()
   completion_ctx.cancel_pending()
   local lnum, cursor_pos = unpack(api.nvim_win_get_cursor(0))
   local line = api.nvim_get_current_line()
@@ -190,28 +179,7 @@ function M.trigger_completion(client, bufnr)
 end
 
 
-function M._TextChangedP()
-  completion_ctx.cursor = api.nvim_win_get_cursor(0)
-end
-
-
-function M._TextChangedI()
-  local cursor = completion_ctx.cursor
-  if not cursor or timer then
-    return
-  end
-  local current_cursor = api.nvim_win_get_cursor(0)
-  if current_cursor[1] == cursor[1] and current_cursor[2] <= cursor[2] then
-    timer = vim.loop.new_timer()
-    timer:start(150, 0, vim.schedule_wrap(M.trigger_completion))
-  elseif current_cursor[1] ~= cursor[1] then
-    completion_ctx.cursor = nil
-  end
-end
-
-
 function M._InsertLeave()
-  reset_timer()
   completion_ctx.cursor = nil
   completion_ctx.reset()
 end
@@ -305,10 +273,6 @@ function M.attach(client, bufnr, opts)
   client_settings[client.id] = opts
   vim.cmd(string.format('augroup lsp_compl_%d_%d', client.id, bufnr))
   vim.cmd('au!')
-  if opts.trigger_on_delete then
-    vim.cmd(string.format("autocmd TextChangedP <buffer=%d> lua require'lsp_compl'._TextChangedP()", bufnr))
-    vim.cmd(string.format("autocmd TextChangedI <buffer=%d> lua require'lsp_compl'._TextChangedI()", bufnr))
-  end
   vim.cmd(string.format("autocmd InsertLeave <buffer=%d> lua require'lsp_compl'._InsertLeave()", bufnr))
   vim.cmd(string.format(
     "autocmd CompleteDone <buffer=%d> lua require'lsp_compl'._CompleteDone(%d, %d)",
