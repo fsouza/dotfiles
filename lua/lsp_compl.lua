@@ -1,7 +1,6 @@
 local api = vim.api
 local lsp = vim.lsp
 local timer = nil
-local triggers_by_buf = {}
 local M = {}
 local SNIPPET = 2
 
@@ -348,36 +347,6 @@ function M.detach(client_id, bufnr)
 end
 
 
-local function signature_help()
-  reset_timer()
-  local params = lsp.util.make_position_params()
-  request(0, 'textDocument/signatureHelp', params, function(...)
-    local config_or_client_id = select(4, ...)
-    local is_new = type(config_or_client_id) ~= 'number'
-    local config_idx = is_new and 4 or 6
-    local config = select(config_idx, ...) or {}
-    config.focusable = false
-    if is_new then
-      vim.lsp.handlers['textDocument/signatureHelp'](
-        select(1, ...),
-        select(2, ...),
-        select(3, ...),
-        config
-      )
-    else
-      vim.lsp.handlers['textDocument/signatureHelp'](
-        select(1, ...),
-        select(2, ...),
-        select(3, ...),
-        select(4, ...),
-        select(5, ...),
-        config
-      )
-    end
-  end)
-end
-
-
 function M.attach(client, bufnr, opts)
   opts = opts or {}
   client_settings[client.id] = opts
@@ -394,26 +363,6 @@ function M.attach(client, bufnr, opts)
     (client.server_capabilities.completionProvider or {}).resolveProvider
   ))
   vim.cmd('augroup end')
-
-  local triggers = triggers_by_buf[bufnr]
-  if not triggers then
-    triggers = {}
-    triggers_by_buf[bufnr] = triggers
-    api.nvim_buf_attach(bufnr, false, {
-      on_detach = function(_, b)
-        triggers_by_buf[b] = nil
-      end
-    })
-  end
-  local signature_triggers = client.resolved_capabilities.signature_help_trigger_characters
-  if signature_triggers and #signature_triggers > 0 then
-    table.insert(triggers, { signature_triggers, signature_help })
-  end
-  local completionProvider = client.server_capabilities.completionProvider or {}
-  local completion_triggers = completionProvider.triggerCharacters
-  if completion_triggers and #completion_triggers > 0 then
-    table.insert(triggers, { completion_triggers, M.trigger_completion })
-  end
 end
 
 return M
