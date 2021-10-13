@@ -153,7 +153,7 @@
                          :rhs complete-cmd
                          :opts {:noremap true}}]}]
 
-      (lsp-compl.attach client bufnr {:trigger_on_delete true})
+      (lsp-compl.attach client bufnr)
       (vim-schedule (helpers.create-mappings mappings bufnr)))))
 
 (fn on-detach [client bufnr]
