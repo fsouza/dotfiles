@@ -108,9 +108,8 @@
       (error (string.format "failed to compile fnl: %s" (vim.inspect result)))))
 
   (fn repaq []
-    (tset package.loaded "fsouza.packed" nil)
-    (let [packed (require "fsouza.packed")]
-      (packed.setup)))
+    (let [packed (require :fsouza.packed)]
+      (packed.repack)))
 
   (fn make []
     (when (not vim.g.fennel_ks)
