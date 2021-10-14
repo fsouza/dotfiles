@@ -8,7 +8,7 @@
 (fn process-args [args]
   (let [args (if-nil args [])]
     (accumulate [acc "" _ arg (ipairs args)]
-      (.. acc (quote-arg arg)))))
+      (.. acc " " (quote-arg arg)))))
 
 (local find-venv-bin (partial path.join cache-dir "venv" "bin"))
 
