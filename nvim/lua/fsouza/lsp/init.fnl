@@ -116,4 +116,7 @@
       (lsp.fsautocomplete.setup (opts.with-defaults {:root_dir (opts.root-pattern-with-fallback "*.fsproj" "*.sln")})))
 
     (if-executable "sourcekit-lsp"
+      (lsp.sourcekit.setup (opts.with-defaults {})))
+
+    (if-executable "clojure-lsp"
       (lsp.sourcekit.setup (opts.with-defaults {})))))
