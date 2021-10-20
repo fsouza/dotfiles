@@ -59,6 +59,7 @@
                   ; Note: I used to use vim-polyglot, but it loads too much garbage and
                   ; requires setting some global variables that I don't want to have to set
                   ; :)
+                  ["clojure-vim/clojure.vim"]
                   ["fsouza/fennel.vim"]
                   ["HerringtonDarkholme/yats.vim"]
                   ["keith/swift.vim"]
