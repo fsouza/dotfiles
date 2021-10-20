@@ -86,7 +86,7 @@
                  :joinspaces  false
                  :synmaxcol  300
                  :showmatch true
-                 :matchtime 1}]
+                 :matchtime 2}]
     (each [name value (pairs options)]
       (tset vim.o name value))))
 
