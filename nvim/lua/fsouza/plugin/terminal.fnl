@@ -33,6 +33,11 @@
   (let [term (ensure-term term-id)]
     (vim.api.nvim_set_current_buf term.bufnr)))
 
+(fn run [term-id cmd]
+  (let [term (get-term term-id)]
+    (when term
+      (vim.fn.chansend term.job-id [cmd ""]))))
+
 (fn cr []
   (let [cfile (vim.fn.expand "<cfile>")]
     (when (= (vim.fn.filereadable cfile) 1)
@@ -40,4 +45,5 @@
       (vim.cmd "wincmd F"))))
 
 {: open
- : cr}
+ : cr
+ : run}
