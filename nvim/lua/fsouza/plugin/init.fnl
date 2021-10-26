@@ -89,7 +89,7 @@
     (let [mod (require :fsouza.plugin.terminal)]
       (mod.open term)))
 
-  (macro term-mapping [term-id modifier]
+  (macro term-mapping [term-id]
     `{:lhs ,(.. "<c-t>" term-id)
       :rhs (helpers.fn-map (partial term-open ,term-id))
       :opts {:silent true}})
