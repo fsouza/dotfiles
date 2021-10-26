@@ -6,12 +6,12 @@
   (let [filetype "fsouza-terminal"
         bufnr (vim.api.nvim_create_buf true false)]
     (vim.api.nvim_buf_set_option bufnr "filetype" filetype)
-    (vim.api.nvim_set_current_buf bufnr)
-    (let [job-id (vim.fn.termopen
-                   (string.format "%s;#fsouza_term;%s" vim.o.shell term-id)
-                   {:detach false
-                    :on_exit (partial tset terminals term-id nil)})]
-      (tset terminals term-id {:bufnr bufnr :job-id job-id})))
+    (vim.api.nvim_buf_call bufnr (fn []
+                                   (let [job-id (vim.fn.termopen
+                                                  (string.format "%s;#fsouza_term;%s" vim.o.shell term-id)
+                                                  {:detach false
+                                                   :on_exit (partial tset terminals term-id nil)})]
+                                     (tset terminals term-id {:bufnr bufnr :job-id job-id})))))
   (. terminals term-id))
 
 (fn get-term [term-id]
@@ -22,7 +22,6 @@
         (tset terminals term-id nil)
         nil))))
 
-
 (fn ensure-term [term-id]
   (let [term (get-term term-id)]
     (if term
@@ -30,13 +29,12 @@
       (create-terminal term-id))))
 
 (fn open [term-id]
-  (let [term (ensure-term term-id)]
-    (vim.api.nvim_set_current_buf term.bufnr)))
+  (let [{: bufnr} (ensure-term term-id)]
+    (vim.api.nvim_set_current_buf bufnr)))
 
 (fn run [term-id cmd]
-  (let [term (get-term term-id)]
-    (when term
-      (vim.fn.chansend term.job-id [cmd ""]))))
+  (let [{: job-id} (ensure-term term-id)]
+    (vim.fn.chansend job-id [cmd ""])))
 
 (fn cr []
   (let [cfile (vim.fn.expand "<cfile>")]
