@@ -89,14 +89,14 @@
     (let [mod (require :fsouza.plugin.terminal)]
       (mod.open term)))
 
-  (helpers.create-mappings {:n [{:lhs "<c-t>j"
-                                 :rhs (helpers.fn-map (partial term-open "j"))
-                                 :opts {:silent true}}
-                                {:lhs "<c-t>k"
-                                 :rhs (helpers.fn-map (partial term-open "k"))}
-                                {:lhs "<c-t>l"
-                                 :rhs (helpers.fn-map (partial term-open "l"))
-                                 :opts {:silent true}}]}))
+  (macro term-mapping [term-id modifier]
+    `{:lhs ,(.. "<c-t>" term-id)
+      :rhs (helpers.fn-map (partial term-open ,term-id))
+      :opts {:silent true}})
+
+  (helpers.create-mappings {:n [(term-mapping "j")
+                                (term-mapping "k")
+                                (term-mapping "l")]}))
 
 (fn setup-autocompile []
   (fn handle-result [next result]
