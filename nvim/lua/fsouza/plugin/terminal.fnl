@@ -1,3 +1,5 @@
+(import-macros {: if-nil} :helpers)
+
 ;; maps number to a terminal, where a terminal is a table with the following
 ;; shape: { bufnr: ..., job-id: ... }
 (local terminals {})
@@ -42,6 +44,16 @@
       (vim.cmd "silent! only")
       (vim.cmd "wincmd F"))))
 
+(fn split [term-id opts]
+  (let [{: percent} opts
+        percent (if-nil percent 40)
+        percent (/ percent 100)
+        {: bufnr} (ensure-term term-id)
+        winheight (vim.api.nvim_win_get_height 0)
+        split (* winheight percent)]
+    (vim.cmd (string.format "botright %dsplit|buffer %d" split bufnr))))
+
 {: open
  : cr
- : run}
+ : run
+ : split}
