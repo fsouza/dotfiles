@@ -15,7 +15,7 @@ function refresh_go_tools {
 
 function _goarch {
 	local hw_name=$(uname -m)
-	if [[ ${hw_name} == "x86_64" ]]; do
+	if [[ ${hw_name} == "x86_64" ]]; then
 		echo amd64
 	else
 		echo "${hw_name}"
