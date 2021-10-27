@@ -52,11 +52,9 @@
                             (code-action-for-buf handler)))))
 
 (fn visual-code-action []
-  (when (not= (vim.fn.visualmode) "")
-    (vim.api.nvim_input "<esc>")
-    (let [start-pos (vim.fn.getpos "'<")
-          end-pos (vim.fn.getpos "'>")]
-      (range-code-action nil [(. start-pos 2) (. start-pos 3)] [(. end-pos 2) (. end-pos 3)] handler))))
+  (let [helpers (require :fsouza.lib.nvim-helpers)
+        [srow scol erow ecol] (helpers.get-visual-selection-range)]
+    (range-code-action nil [srow scol] [erow ecol] handler)))
 
 {: code-action
  : visual-code-action}
