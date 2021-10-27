@@ -39,7 +39,7 @@ cond_source "${basedir}/extra/$(uname -s)-functions"
 
 source "${basedir}"/extra/tmux
 
-fpath=(/usr/local/share/zsh-completions ~/.cache/zsh/zfunc $fpath)
+fpath=(${HOMEBREW_PREFIX}/share/zsh-completions ~/.cache/zsh/zfunc $fpath)
 export ZLE_SPACE_SUFFIX_CHARS=$'|&'
 
 autoload -Uz compinit && compinit -d "${HOME}/.cache/zsh/zcompdump" -u
