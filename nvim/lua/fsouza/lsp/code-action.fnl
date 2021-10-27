@@ -1,3 +1,5 @@
+(import-macros {: if-nil} :helpers)
+
 (fn handle-actions [actions]
   (when (and actions (not (vim.tbl_isempty actions)))
     (let [lines (icollect [_ action (ipairs actions)]
@@ -16,36 +18,45 @@
                   (vim.lsp.buf.execute_command action-chosen.command)))
               (vim.lsp.buf.execute_command action-chosen))))))))
 
-(fn code-action-for-buf []
+(fn handler [_ actions]
+  (handle-actions actions))
+
+(macro line-diagnostics []
+  `(let [[lnum# _#] (vim.api.nvim_win_get_cursor 0)]
+     (vim.diagnostic.get 0 {:lnum (- lnum# 1)})))
+
+(fn range-code-action [context start-pos end-pos cb]
+  (let [context (if-nil context {:diagnostics (line-diagnostics)})
+        params (vim.lsp.util.make_given_range_params start-pos end-pos)]
+    (tset params :context context)
+    (vim.lsp.buf_request 0 "textDocument/codeAction" params cb)))
+
+(fn code-action-for-buf [cb]
   (let [bufnr (vim.api.nvim_get_current_buf)
-        line-count (vim.api.nvim_buf_line_count bufnr)]
-    (vim.lsp.buf.range_code-action {:diagnostics (vim.diagnostic.get bufnr)} [1 1] [line-count 2147483647])))
+        line-count (vim.api.nvim_buf_line_count bufnr)
+        context {:diagnostics (vim.diagnostic.get bufnr)}
+        start-pos [1 1]
+        end-pos [line-count 2147483647]]
+    (range-code-action context start-pos end-pos cb)))
 
 (fn code-action-for-line [cb]
-  (let [(lnum _) (unpack (vim.api.nvim_win_get_cursor 0))
-        context {:diagnostics (vim.diagnostic.get 0 {:lnum (- lnum 1)})}
+  (let [context {:diagnostics (line-diagnostics)}
         params (vim.lsp.util.make_range_params)]
     (tset params :context context)
     (vim.lsp.buf_request 0 "textDocument/codeAction" params cb)))
 
 (fn code-action []
-  (tset vim.lsp.handlers "textDocument/codeAction" (fn [_ actions]
-                                                     (handle-actions actions)))
-
   (code-action-for-line (fn [_ actions]
                           (if (and actions (not (vim.tbl_isempty actions)))
                             (handle-actions actions)
-                            (code-action-for-buf)))))
+                            (code-action-for-buf handler)))))
 
 (fn visual-code-action []
-  (tset vim.lsp.handlers "textDocument/codeAction" (fn [_ actions]
-                                                     (handle-actions actions)))
-
   (when (not= (vim.fn.visualmode) "")
     (vim.api.nvim_input "<esc>")
     (let [start-pos (vim.fn.getpos "'<")
           end-pos (vim.fn.getpos "'>")]
-      (vim.lsp.buf.range_code-action nil [(. start-pos 2) (. start-pos 3)] [(. end-pos 2) (. end-pos 3)]))))
+      (range-code-action nil [(. start-pos 2) (. start-pos 3)] [(. end-pos 2) (. end-pos 3)] handler))))
 
 {: code-action
  : visual-code-action}

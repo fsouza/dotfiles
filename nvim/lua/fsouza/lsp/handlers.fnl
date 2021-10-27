@@ -30,7 +30,7 @@
                             (var result result)
                             (when (vim.tbl_islist result)
                               (let [tablex (require :fsouza.tablex)
-                                    (lineno _) (unpack (vim.api.nvim_win_get_cursor 0))
+                                    [lineno _] (vim.api.nvim_win_get_cursor 0)
                                     lineno (- lineno 1)]
                                 (set result (tablex.filter result (fn [v]
                                                                     (not= v.range.start.line lineno))))))

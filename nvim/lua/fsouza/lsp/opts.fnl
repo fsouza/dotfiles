@@ -82,7 +82,7 @@
              :goto-prev-diagnostic (helpers.fn-map (partial vim.diagnostic.goto_prev {:popup_opts {:focusable false}}))
              :rename (helpers.fn-map vim.lsp.buf.rename)
              :code-action (helpers.fn-map code-action.code-action)
-             :visual-code-action (helpers.fn-map code-action.visual-code-action)
+             :visual-code-action (helpers.vfn-map code-action.visual-code-action)
              :highlight-references (helpers.fn-map vim.lsp.buf.document_highlight)
              :clear-references (helpers.fn-map vim.lsp.buf.clear_references)
              :list-document-symbols (helpers.fn-map fuzzy-mod.lsp_document_symbols)
@@ -138,7 +138,7 @@
                                     :rhs cmds.rename
                                     :opts {:silent true}}))
 
-        (when client.resolved_capabilities.code-action
+        (when client.resolved_capabilities.code_action
           (table.insert mappings.n {:lhs "<leader>cc"
                                     :rhs cmds.code-action
                                     :opts {:silent true}})
