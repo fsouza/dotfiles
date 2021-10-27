@@ -3,7 +3,6 @@ source "${basedir}"/extra/init-functions
 
 mkdir -p ~/.cache/{go,node,zsh}
 
-export MANPATH=/usr/share/man:/usr/local/share/man
 export EDITOR=vim PAGER=less MANPAGER=less
 export RIPGREP_CONFIG_PATH=${HOME}/.config/rgrc
 export LESSHISTFILE=${HOME}/.cache/lesshst
