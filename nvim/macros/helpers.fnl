@@ -20,10 +20,12 @@
 (fn cmd-map [cmd]
   `(string.format "<cmd>%s<cr>" ,cmd))
 
-(fn vcmd-map [cmd]
-  `(string.format "<cmd>'<,'>%s<cr>" ,cmd))
+(fn send-esc []
+  `(-> "<esc>"
+       (vim.api.nvim_replace_termcodes true false true)
+       (vim.api.nvim_feedkeys "map" true)))
 
 {: vim-schedule
  : if-nil
  : cmd-map
- : vcmd-map}
+ : send-esc}

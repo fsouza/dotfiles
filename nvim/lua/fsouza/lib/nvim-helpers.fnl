@@ -1,4 +1,4 @@
-(import-macros {: if-nil : cmd-map : vcmd-map} :helpers)
+(import-macros {: if-nil : cmd-map : send-esc} :helpers)
 
 (fn register-cb [mod cb]
   (let [id (tostring cb)]
@@ -64,8 +64,23 @@
       (vim.fn.winrestview view))))
 
 (fn get-visual-selection-range []
-  (let [[_ srow scol _] (vim.fn.getpos "'<")
-        [_ erow ecol _] (vim.fn.getpos "'>")]
+  (fn from-markers []
+    (let [[_ srow scol _] (vim.fn.getpos "'<")
+          [_ erow ecol _] (vim.fn.getpos "'>")]
+      [srow scol erow ecol]))
+
+  (fn from-current [mode]
+    (let [[_ srow scol _] (vim.fn.getpos ".")
+          [_ erow ecol _] (vim.fn.getpos "v")]
+      (send-esc)
+      (if (= mode "V")
+        [srow 0 erow 2147483647]
+        [srow scol erow ecol])))
+
+  (let [mode (vim.fn.mode)
+        [srow scol erow ecol] (if (or (= mode "v") (= mode "V"))
+                                (from-current mode)
+                                (from-markers))]
     (if (< srow erow)
       [srow scol erow ecol]
       (if (> srow erow)
@@ -90,14 +105,13 @@
            : augroup
            : once
            : rewrite-wrap
-           : get-visual-selection-contents}]
+           : get-visual-selection-contents
+           : get-visual-selection-range}]
   (tset mod :fn-cmd (fn [f]
                       (let [id (register-cb mod f)]
                         (string.format "lua require('fsouza.lib.nvim-helpers').fns['%s']()" id))))
   (tset mod :fn-map (fn [f]
                       (cmd-map (mod.fn-cmd f))))
-  (tset mod :vfn-map (fn [f]
-                       (vcmd-map (mod.fn-cmd f))))
   (tset mod :ifn-map (fn [f]
                        (let [id (register-cb mod f)]
                          (string.format "<c-r>=luaeval(\"require('fsouza.lib.nvim-helpers').fns['%s']()\")<CR>" id))))
