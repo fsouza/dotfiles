@@ -1,5 +1,5 @@
 function find_brew {
-	local paths=(/usr/local/bin/brew)
+	local paths=(/opt/homebrew/bin/brew /usr/local/bin/brew)
 	for path in ${paths}; do
 		if [ -x "${path}" ]; then
 			echo ${path}
