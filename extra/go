@@ -13,15 +13,22 @@ function refresh_go_tools {
 	go install honnef.co/go/tools/cmd/staticcheck@latest
 }
 
+function _goarch {
+	local hw_name=$(uname -m)
+	if [[ ${hw_name} == "x86_64" ]]; do
+		echo amd64
+	else
+		echo "${hw_name}"
+	fi
+}
+
 function _bootstrap_go {
 	local BOOTSTRAP_GO="go1.17.2"
 	local dest_dir=${GO_HOME}/bootstrap
 	local go_binary=${dest_dir}/go/bin/go
 	if ! [ -x "${go_binary}" ]; then
 		mkdir -p "${dest_dir}"
-
-		# some day I'll have to support arm64, that day isn't today.
-		curl -sL "https://golang.org/dl/${BOOTSTRAP_GO}.$(uname -s | tr '[:upper:]' '[:lower:]')-amd64.tar.gz" | tar -C "${dest_dir}" -xzf -
+		curl -sL "https://golang.org/dl/${BOOTSTRAP_GO}.$(uname -s | tr '[:upper:]' '[:lower:]')-$(_goarch).tar.gz" | tar -C "${dest_dir}" -xzf -
 	fi
 	dirname "${go_binary}"
 }
