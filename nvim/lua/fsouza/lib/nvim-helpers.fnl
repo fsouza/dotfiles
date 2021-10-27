@@ -63,13 +63,34 @@
       (tset view :col (+ orig-colno col-offset))
       (vim.fn.winrestview view))))
 
+(fn get-visual-selection-range []
+  (let [[_ srow scol _] (vim.fn.getpos "'<")
+        [_ erow ecol _] (vim.fn.getpos "'>")]
+    (if (< srow erow)
+      [srow scol erow ecol]
+      (if (> srow erow)
+        [erow ecol srow scol]
+        (if (<= scol ecol)
+          [srow scol erow ecol]
+          [erow ecol srow scol])))))
+
+(fn get-visual-selection-contents []
+  (let [[srow scol erow ecol] (get-visual-selection-range)
+        lines (vim.api.nvim_buf_get_lines 0 (- srow 1) erow true)
+        nlines (length lines)
+        eline (+ 1 (- erow srow))]
+    (tset lines eline (string.sub (. lines eline) 1 ecol))
+    (tset lines 1 (string.sub (. lines 1) scol))
+    lines))
+
 (let [mod {:fns []
-           :create-mappings create-mappings
-           :remove-mappings remove-mappings
-           :augroup augroup
            :reset-augroup (fn [name] (augroup name []))
-           :once once
-           :rewrite-wrap rewrite-wrap}]
+           : create-mappings
+           : remove-mappings
+           : augroup
+           : once
+           : rewrite-wrap
+           : get-visual-selection-contents}]
   (tset mod :fn-cmd (fn [f]
                       (let [id (register-cb mod f)]
                         (string.format "lua require('fsouza.lib.nvim-helpers').fns['%s']()" id))))
