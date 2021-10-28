@@ -11,9 +11,7 @@
                 (list (sym :not=) arg (sym :nil))
                 arg
                 (check (+ idx 1)))
-          (if (= idx (length args))
-            arg
-            nil))))
+          arg)))
 
     (check 1)))
 
