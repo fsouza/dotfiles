@@ -1,9 +1,14 @@
 ZIG_INSTALL_PREFIX=$HOME/opt/zig
 
 function update_zig {
+	local arch=$(uname -m)
+	if [[ $arch == "arm64" ]]; then
+		arch=aarch64
+	fi
+
 	mkdir -p "${ZIG_INSTALL_PREFIX}"
 	curl -s https://ziglang.org/download/index.json \
-		| jq -r '.master["x86_64-macos"]'.tarball \
+		| jq -r '.master["'${arch}'-macos"]'.tarball \
 		| xargs curl -sL \
 		| tar --lzma -C "${ZIG_INSTALL_PREFIX}" --strip 1 -xf -
 }
