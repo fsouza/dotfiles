@@ -18,6 +18,7 @@ function get_arch {
 		proc_translated=$(sysctl -n sysctl.proc_translated 2>/dev/null || true)
 		if [[ $proc_translated == "1" ]]; then
 			echo "arm64"
+			return 0
 		fi
 	fi
 	echo "${arch}"
