@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+function gen_alacritty_config {
+	envsubst <"${basedir}"/alacritty.yml >~/.config/alacritty.yml
+}
+
 os=$(uname -s)
 basedir=$(
 	cd "$(dirname "${0}")"/..
@@ -14,7 +18,7 @@ for file in "${home_files[@]}"; do
 done
 
 mkdir -p "${HOME}"/.config
-xdg_files=(tmux.conf alacritty.yml rgrc)
+xdg_files=(tmux.conf rgrc)
 for file in "${xdg_files[@]}"; do
 	ln -sf "${basedir}"/"${file}" "${HOME}"/.config/"${file}"
 done
@@ -37,8 +41,9 @@ if [ -f "${basedir}"/bin/"${os}"-setup ]; then
 	"${basedir}"/bin/"${os}"-setup
 fi
 
-if command -v nvim &>/dev/null; then
-	env NVIM_DEBUG=1 make -C "${basedir}"/nvim
-fi
+# if command -v nvim &>/dev/null; then
+# 	env NVIM_DEBUG=1 make -C "${basedir}"/nvim
+# fi
 
 touch "${HOME}"/.zsh_sessions_disable
+gen_alacritty_config
