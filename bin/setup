@@ -41,9 +41,9 @@ if [ -f "${basedir}"/bin/"${os}"-setup ]; then
 	"${basedir}"/bin/"${os}"-setup
 fi
 
-# if command -v nvim &>/dev/null; then
-# 	env NVIM_DEBUG=1 make -C "${basedir}"/nvim
-# fi
+if command -v nvim &>/dev/null; then
+	env NVIM_DEBUG=1 make -C "${basedir}"/nvim
+fi
 
 touch "${HOME}"/.zsh_sessions_disable
 gen_alacritty_config
