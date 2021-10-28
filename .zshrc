@@ -8,7 +8,7 @@ export RIPGREP_CONFIG_PATH=${HOME}/.config/rgrc
 export LESSHISTFILE=${HOME}/.cache/lesshst
 export NODE_REPL_HISTORY=${HOME}/.cache/node/history
 
-export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 source "${basedir}"/extra/brew
 
 prepend_to_path \
@@ -16,6 +16,8 @@ prepend_to_path \
 	"${HOME}"/.local/bin \
 	"${HOME}/.dotnet/tools" \
 	"${basedir}"/bin
+
+export MANPATH="${HOME}/.local/share/man${MANPATH+:$MANPATH}:"
 
 if command -v fnm &>/dev/null; then
 	eval "$(fnm env)"
