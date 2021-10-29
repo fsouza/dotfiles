@@ -1,0 +1,17 @@
+ALACRITTY_SRC_DIR=$HOME/Projects/os/3/alacritty
+
+function _ensure_alacritty_src {
+	if ! [ -d "${ALACRITTY_SRC_DIR}" ]; then
+		git clone https://github.com/alacritty/alacritty.git "${ALACRITTY_SRC_DIR}"
+	fi
+}
+
+function update_alacritty {
+	_ensure_alacritty_src
+	rustup update
+	pushd "${ALACRITTY_SRC_DIR}" &&
+		git pull &&
+		make app &&
+		cp -rv target/release/osx/Alacritty.app /Applications &&
+		popd || return
+}

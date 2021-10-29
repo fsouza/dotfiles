@@ -33,6 +33,7 @@ source "${basedir}"/extra/go
 source "${basedir}"/extra/mail
 source "${basedir}"/extra/ocaml
 source "${basedir}"/extra/neovim
+source "${basedir}"/extra/alacritty
 source "${basedir}"/extra/rclone
 source "${basedir}"/extra/zig
 
