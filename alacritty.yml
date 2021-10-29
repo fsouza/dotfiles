@@ -56,7 +56,7 @@ cursor:
   unfocused_hollow: true
 
 shell:
-  program: ${HOME}/.dotfiles/bin/shell.sh
+  program: /bin/zsh
   args:
     - --login
 
