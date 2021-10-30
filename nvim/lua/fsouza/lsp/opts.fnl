@@ -73,7 +73,7 @@
 
 (local locations-mod (require :fsouza.lsp.locations))
 
-(local cmds {:show-line-diagnostics (helpers.fn-map (partial vim.diagnostic.show_line_diagnostics {:focusable false}))
+(local cmds {:show-line-diagnostics (helpers.fn-map (partial vim.lsp.diagnostic.show_line_diagnostics {:focusable false}))
              :list-file-diagnostics (helpers.fn-map diag-mod.list-file-diagnostics)
              :list-workspace-diagnostics (helpers.fn-map diag-mod.list-workspace-diagnostics)
              :fuzzy-workspace-diagnostics (helpers.fn-map fuzzy-mod.lsp_workspace_diagnostics)
