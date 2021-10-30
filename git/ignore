@@ -16,3 +16,6 @@ __pycache__
 *.egg-info
 .luacheckcache
 .dmypy.json
+.clj-kondo
+.lsp
+.cpcache
