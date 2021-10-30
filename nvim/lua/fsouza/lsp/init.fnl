@@ -119,4 +119,4 @@
       (lsp.sourcekit.setup (opts.with-defaults {})))
 
     (if-executable "clojure-lsp"
-      (lsp.sourcekit.setup (opts.with-defaults {})))))
+      (lsp.clojure_lsp.setup (opts.with-defaults {})))))
