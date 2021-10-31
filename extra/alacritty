@@ -8,10 +8,9 @@ function _ensure_alacritty_src {
 
 function update_alacritty {
 	_ensure_alacritty_src
-	rustup update
 	pushd "${ALACRITTY_SRC_DIR}" &&
 		git pull &&
 		make app &&
-		cp -rv target/release/osx/Alacritty.app /Applications &&
+		cp -av target/release/osx/Alacritty.app /Applications &&
 		popd || return
 }
