@@ -41,8 +41,8 @@
                      ts))
         opts {:tabSize tab-size
               :insertSpaces (vim.api.nvim_buf_get_option bufnr "expandtab")}]
-    {:textDocument {:uri (vim.uri_from_bufnr bufnr)
-                    :options opts}}))
+    {:textDocument {:uri (vim.uri_from_bufnr bufnr)}
+     :options opts}))
 
 (fn fmt [client bufnr cb]
   (let [(_ req-id) (client.request "textDocument/formatting" (formatting-params bufnr) cb bufnr)]
