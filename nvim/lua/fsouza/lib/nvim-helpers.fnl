@@ -1,4 +1,4 @@
-(import-macros {: if-nil : cmd-map : send-esc} :helpers)
+(import-macros {: if-nil : send-esc} :helpers)
 
 (fn register-cb [mod cb]
   (let [id (tostring cb)]
@@ -111,7 +111,7 @@
                       (let [id (register-cb mod f)]
                         (string.format "lua require('fsouza.lib.nvim-helpers').fns['%s']()" id))))
   (tset mod :fn-map (fn [f]
-                      (cmd-map (mod.fn-cmd f))))
+                      (string.format "<cmd>%s<cr>" (mod.fn-cmd f))))
   (tset mod :ifn-map (fn [f]
                        (let [id (register-cb mod f)]
                          (string.format "<c-r>=luaeval(\"require('fsouza.lib.nvim-helpers').fns['%s']()\")<CR>" id))))

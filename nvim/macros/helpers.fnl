@@ -16,7 +16,7 @@
     (check 1)))
 
 (fn cmd-map [cmd]
-  `(string.format "<cmd>%s<cr>" ,cmd))
+  (.. "<cmd>" cmd "<cr>"))
 
 (fn send-esc []
   `(-> "<esc>"
