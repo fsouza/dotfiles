@@ -28,16 +28,9 @@ jobs:
           fi
           curl -L https://github.com/neovim/neovim/releases/download/v0.5.0/nvim-${suffix}.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
 
-      - name: install build deps on mac
-        if: runner.os == 'macOS'
+      - name: install build deps
         run: |
           brew install bash libyaml
-
-      - name: install build deps on ubuntu
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libyaml-dev
 
       - uses: actions/checkout@v2.4.0
 
