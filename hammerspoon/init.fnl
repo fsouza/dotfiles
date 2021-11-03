@@ -10,8 +10,6 @@
 
     (fn enable-hks []
       (each [_ hk (ipairs hks)]
-        (print "enabling")
-        (print hk)
         (hk:enable)))
 
     (fn disable-hks []
