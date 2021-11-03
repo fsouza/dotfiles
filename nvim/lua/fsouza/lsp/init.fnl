@@ -4,35 +4,35 @@
 
 (local cache-dir (vim.fn.stdpath "cache"))
 
-(fn get-local-cmd [cmd]
-  (path.join config-dir "langservers" "bin" cmd))
+(macro get-local-cmd [cmd]
+  `(path.join config-dir "langservers" "bin" ,cmd))
 
-(fn get-cache-cmd [cmd]
-  (path.join cache-dir "langservers" "bin" cmd))
+(macro get-cache-cmd [cmd]
+  `(path.join cache-dir "langservers" "bin" ,cmd))
 
-(fn set-log-level []
-  (let [level (if vim.env.NVIM_DEBUG
-                "TRACE"
-                "ERROR")
-        lsp-log (require :vim.lsp.log)]
-    (lsp-log.set_level level)))
+(macro set-log-level []
+  `(let [level# (if vim.env.NVIM_DEBUG
+                  "TRACE"
+                  "ERROR")
+         lsp-log# (require :vim.lsp.log)]
+     (lsp-log#.set_level level#)))
 
-(fn patch-lsp []
-  (let [fns-to-patch [:open_float]]
-    (each [_ fn-to-patch (ipairs fns-to-patch)]
-      (let [original-fn (. vim.diagnostic fn-to-patch)]
-        (tset vim.diagnostic fn-to-patch (fn [...]
-                                           (let [(bufnr winid) (original-fn ...)
-                                                 color (require :fsouza.color)]
-                                             (color.set-popup-winid winid)
-                                             (values bufnr winid))))))))
+(macro patch-lsp []
+  `(let [fns-to-patch# [:open_float]]
+     (each [_# fn-to-patch# (ipairs fns-to-patch#)]
+       (let [original-fn# (. vim.diagnostic fn-to-patch#)]
+         (tset vim.diagnostic fn-to-patch# (fn [...]
+                                             (let [(bufnr# winid#) (original-fn# ...)
+                                                   color# (require :fsouza.color)]
+                                               (color#.set-popup-winid winid#)
+                                               (values bufnr# winid#))))))))
 
-(fn define-signs []
-  (each [_ level (ipairs ["Error" "Warn" "Info" "Hint"])]
-    (let [sign-name (.. "DiagnosticSign" level)]
-      (vim.fn.sign_define sign-name {:text ""
-                                     :texthl sign-name
-                                     :numhl sign-name}))))
+(macro define-signs []
+  `(each [_# level# (ipairs ["Error" "Warn" "Info" "Hint"])]
+     (let [sign-name# (.. "DiagnosticSign" level#)]
+       (vim.fn.sign_define sign-name# {:text ""
+                                       :texthl sign-name#
+                                       :numhl sign-name#}))))
 
 (macro if-executable [name expr]
   `(when (= (vim.fn.executable ,name) 1)
