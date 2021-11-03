@@ -9,24 +9,12 @@ on:
       - main
 jobs:
   bootstrap:
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-20.04
-          - macos-11
-
     name: bootstrap-${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-11
     steps:
       - name: install neovim
         run: |
-          if [ "${{ runner.os }}" = "Linux" ]; then
-            suffix=linux64
-          else
-            suffix=macos
-          fi
-          curl -L https://github.com/neovim/neovim/releases/download/v0.5.0/nvim-${suffix}.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
+          curl -L https://github.com/neovim/neovim/releases/download/v0.5.0/nvim-macos.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
 
       - name: install build deps
         run: |
@@ -64,7 +52,6 @@ jobs:
           echo "::set-output name=version::$(nvim --version | grep LuaJIT)"
 
       - name: set MACOSX_DEPLOYMENT_TARGET
-        if: runner.os == 'macOS'
         id: macosx-deployment-target
         run: |
           echo "MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)" >>${GITHUB_ENV}
