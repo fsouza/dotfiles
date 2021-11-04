@@ -1961,10 +1961,10 @@ type-fest@^0.8.1:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
-typescript-language-server@^0.6.4:
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-0.6.4.tgz#0ccf1488ca5bee418e45313c941d12d72be16b3d"
-  integrity sha512-tcN3Kyq/tHF79rNdueFNOyY3fTFTj9t0oneoLzkAhV35QBghxwX1eDi6oOnzIglZjSbJWosdnedHHfyjqQ62ig==
+typescript-language-server@^0.6.5:
+  version "0.6.5"
+  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-0.6.5.tgz#cb2b0a896bd19a8ffc7b414cc104f8456a5d709a"
+  integrity sha512-gcNm+rxgehKU6Vy+UWwWOHjPAtyqsxAquslzlS1JdmvsRb//nzFXbwIsGRZ8DDaZ5mijfH7PR2BCTysg2nBAIQ==
   dependencies:
     command-exists "^1.2.6"
     commander "^7.2.0"
