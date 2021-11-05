@@ -32,4 +32,4 @@
 (hs.hotkey.bind prefix "V" (fn []
                              (hs.eventtap.keyStrokes (hs.pasteboard.getContents))))
 
-(set-readline-shortcuts ["Firefox" "Slack"])
+(set-readline-shortcuts ["Finder" "Firefox" "Safari" "Slack"])
