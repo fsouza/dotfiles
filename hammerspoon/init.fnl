@@ -3,8 +3,8 @@
 (fn set-readline-shortcuts [apps]
   (let [hks [(hs.hotkey.new [:ctrl] :n (partial hs.eventtap.keyStroke [] :down))
              (hs.hotkey.new [:ctrl] :p (partial hs.eventtap.keyStroke [] :up))
-             (hs.hotkey.new [:ctrl] :f (partial hs.eventtap.keyStroke [] :left))
-             (hs.hotkey.new [:ctrl] :b (partial hs.eventtap.keyStroke [] :right))]
+             (hs.hotkey.new [:ctrl] :f (partial hs.eventtap.keyStroke [] :right))
+             (hs.hotkey.new [:ctrl] :b (partial hs.eventtap.keyStroke [] :left))]
         filters (icollect [_ app (ipairs apps)]
                   (hs.window.filter.new (fn [win]
                                           (let [application (win:application)]
