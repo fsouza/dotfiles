@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+os=$(uname -s)
+basedir=$(cd "$(dirname "${0}")"/.. && pwd -P)
+
 function gen_hammerspoon_config {
 	local nvim_cache_dir temp_file fennel
 
@@ -9,13 +12,10 @@ function gen_hammerspoon_config {
 	fennel=${nvim_cache_dir}/hr/bin/fennel
 	temp_file=$(mktemp)
 
-	"${fennel}" --globals hs -c hammerspoon/init.fnl >"${temp_file}" &&
+	"${fennel}" --globals hs -c "${basedir}"/hammerspoon/init.fnl >"${temp_file}" &&
 		mkdir -p ~/.hammerspoon &&
 		mv "${temp_file}" ~/.hammerspoon/init.lua
 }
-
-os=$(uname -s)
-basedir=$(cd "$(dirname "${0}")"/.. && pwd -P)
 
 home_files=(.zshrc .editorconfig)
 for file in "${home_files[@]}"; do
