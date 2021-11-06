@@ -22,9 +22,6 @@
       (filter:subscribe hs.window.filter.windowFocused enable-hks)
       (filter:subscribe hs.window.filter.windowUnfocused disable-hks))))
 
-; (hs.hotkey.bind ["ctrl"] "n" (partial hs.eventtap.keyStroke [] :down))
-; (hs.hotkey.bind ["ctrl"] "p" (partial hs.eventtap.keyStroke [] :up))
-
 ;; prefix+r to reload config
 (hs.hotkey.bind prefix "R" (partial hs.reload))
 
