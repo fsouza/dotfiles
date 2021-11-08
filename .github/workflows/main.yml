@@ -9,7 +9,7 @@ on:
       - main
 jobs:
   bootstrap:
-    name: bootstrap-${{ matrix.os }}
+    name: bootstrap
     runs-on: macos-11
     steps:
       - name: install neovim
