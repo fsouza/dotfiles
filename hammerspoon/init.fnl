@@ -1,19 +1,19 @@
 (local prefix ["cmd" "ctrl"])
 
-(fn make-hotkey [mod key target]
-  (hs.hotkey.new
-    [mod]
-    key
-    (fn []
-      (let [key-event (hs.eventtap.event.newKeyEvent [] target true)]
-        (key-event:post)))
-    (fn []
-      (let [key-event (hs.eventtap.event.newKeyEvent [] target false)]
-        (key-event:post)))
-    (fn []
-      (let [key-event (hs.eventtap.event.newKeyEvent [] target true)
-            key-event (key-event:setProperty hs.eventtap.event.properties.keyboardEventAutorepeat 1)]
-        (key-event:post)))))
+(macro make-hotkey [mod key target]
+  `(hs.hotkey.new
+     [,mod]
+     ,key
+     (fn []
+       (let [key-event# (hs.eventtap.event.newKeyEvent [] ,target true)]
+         (key-event#:post)))
+     (fn []
+       (let [key-event# (hs.eventtap.event.newKeyEvent [] ,target false)]
+         (key-event#:post)))
+     (fn []
+       (let [key-event# (hs.eventtap.event.newKeyEvent [] ,target true)
+             key-event# (key-event#:setProperty hs.eventtap.event.properties.keyboardEventAutorepeat 1)]
+         (key-event#:post)))))
 
 (fn set-readline-shortcuts [apps]
   (let [hks [(make-hotkey :ctrl :n :down)
