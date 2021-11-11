@@ -1961,15 +1961,16 @@ type-fest@^0.8.1:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
-typescript-language-server@^0.6.5:
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-0.6.5.tgz#cb2b0a896bd19a8ffc7b414cc104f8456a5d709a"
-  integrity sha512-gcNm+rxgehKU6Vy+UWwWOHjPAtyqsxAquslzlS1JdmvsRb//nzFXbwIsGRZ8DDaZ5mijfH7PR2BCTysg2nBAIQ==
+typescript-language-server@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-0.7.1.tgz#bf0b1a97551e4e385b3f97668ce09b5751d27122"
+  integrity sha512-pxPFvsDQolUTJTBdr8e9Qo+SBCYU8RIUO0l8eODMjBDvG9rTl6NTME+OEzMiR8LQ8siZ2jdQUq4K+6a/+20JCQ==
   dependencies:
     command-exists "^1.2.6"
     commander "^7.2.0"
     fs-extra "^10.0.0"
     p-debounce "^2.1.0"
+    semver "^7.3.5"
     tempy "^1.0.1"
     vscode-languageserver "^7.0.0"
     vscode-languageserver-protocol "^3.16.0"
