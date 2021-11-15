@@ -647,10 +647,10 @@ eslint@^7.3.0:
     text-table "^0.2.0"
     v8-compile-cache "^2.0.3"
 
-eslint_d@^11.0.0:
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-11.0.0.tgz#a05e7b5409b2113b2b2d7c5a857ee21821ee9f84"
-  integrity sha512-eR6yaJepLQ8hMGIfW2Bj41e4ZnxbsbMZvYjDxWl98YnUlqn46qoUi20N3VB0xq9mv1IKsOO+Rqfnjov5Y93zLg==
+eslint_d@^11.1.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-11.1.0.tgz#2fb9cb31e7d3f553d606a84df10b9e3eb5bb1a99"
+  integrity sha512-uhrQhFPG7L/81j90+QKaDImDJriqCdPY4ZcN9exFs9sdeF28Cdv/vD2XuRhjD5FxVbA/nNpFL37QsTSQwtjdjA==
   dependencies:
     core_d "^3.2.0"
     eslint "^7.3.0"
