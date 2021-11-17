@@ -4,7 +4,7 @@
 (local themes (require :fsouza.themes))
 
 (fn set-popup-winid [state winid]
-  (when (. state :enabled)
+  (when (and (. state :enabled) winid)
     (tset (. state :themes) winid (. themes :popup))))
 
 (fn gc [state]
