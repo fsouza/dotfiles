@@ -23,7 +23,7 @@ function _goarch {
 }
 
 function _bootstrap_go {
-	local BOOTSTRAP_GO="go1.17.2"
+	local BOOTSTRAP_GO="go1.17.3"
 	local dest_dir=${GO_HOME}/bootstrap
 	local go_binary=${dest_dir}/go/bin/go
 	if ! [ -x "${go_binary}" ]; then
