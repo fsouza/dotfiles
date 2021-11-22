@@ -26,6 +26,7 @@
            :paqs [{1 "savq/paq-nvim" :opt true :as "paq-nvim"}
                   ["chaoren/vim-wordmotion"]
                   ["godlygeek/tabular"]
+                  ["guns/vim-sexp"]
                   ["justinmk/vim-dirvish"]
                   ["justinmk/vim-sneak"]
                   ["mattn/emmet-vim"]
@@ -34,6 +35,7 @@
                   ["tpope/vim-fugitive"]
                   ["tpope/vim-repeat"]
                   ["tpope/vim-rhubarb"]
+                  ["tpope/vim-sexp-mappings-for-regular-people"]
                   ["tpope/vim-surround"]
 
                   ; treesitter
