@@ -2,12 +2,11 @@
 
 (fn make-debug [prefix debug-fn]
   (if (= debug-fn nil)
-    (fn [] nil)
-    (fn [data]
-      (let [lines (vim.split data "\n")]
-        (each [_ line (ipairs lines)]
-          (when (not= line "")
-            (debug-fn (string.format "%s: %s" prefix line))))))))
+    #nil
+    #(let [lines (vim.split $1 "\n")]
+       (each [_ line (ipairs lines)]
+         (when (not= line "")
+           (debug-fn (string.format "%s: %s" prefix line)))))))
 
 (fn input-collector [prefix debug-fn]
   (let [debug (make-debug prefix debug-fn)

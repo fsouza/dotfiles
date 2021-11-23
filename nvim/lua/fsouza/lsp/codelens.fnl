@@ -41,10 +41,9 @@
             (when result
               (table.insert resolved-lenses result)))))
 
-      (timer:start 500 500 (vim.schedule_wrap (fn []
-                                                (when (= done (length lenses))
-                                                  (timer:close)
-                                                  (cb resolved-lenses))))))))
+      (timer:start 500 500 (vim.schedule_wrap #(when (= done (length lenses))
+                                                 (timer:close)
+                                                 (cb resolved-lenses)))))))
 
 (fn render-virtual-text [bufnr]
   (vim.api.nvim_buf_clear_namespace bufnr ns 0 -1)
@@ -64,8 +63,7 @@
                           (tset code-lenses context.bufnr lenses)
                           (render-virtual-text context.bufnr))]
       (if (> (length to-resolve) 0)
-        (resolve-code-lenses client to-resolve (fn [lenses]
-                                                 (handle-lenses (group-by-line lenses preresolved))))
+        (resolve-code-lenses client to-resolve #(handle-lenses (group-by-line $1 preresolved)))
         (handle-lenses preresolved)))))
 
 (fn codelenses [bufnr]
@@ -108,8 +106,7 @@
                 popup-lines (tablex.filter-map (fn [item]
                                                  (when item.command
                                                    item.command.title)) items)]
-            (popup-picker.open popup-lines (fn [index]
-                                             (execute-item (. items index)))))
+            (popup-picker.open popup-lines #(execute-item (. items $1))))
           (execute-item (. items 1)))))))
 
 (fn execute []

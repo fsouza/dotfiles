@@ -4,16 +4,12 @@
   `(hs.hotkey.new
      [,mod]
      ,key
-     (fn []
-       (let [key-event# (hs.eventtap.event.newKeyEvent [] ,target true)]
-         (key-event#:post)))
-     (fn []
-       (let [key-event# (hs.eventtap.event.newKeyEvent [] ,target false)]
-         (key-event#:post)))
-     (fn []
-       (let [key-event# (hs.eventtap.event.newKeyEvent [] ,target true)
-             key-event# (key-event#:setProperty hs.eventtap.event.properties.keyboardEventAutorepeat 1)]
-         (key-event#:post)))))
+     #(let [key-event# (hs.eventtap.event.newKeyEvent [] ,target true)]
+        (key-event#:post))
+     #(let [key-event# (hs.eventtap.event.newKeyEvent [] ,target false)]
+        (key-event#:post))
+     #(let [key-event# (hs.eventtap.event.newKeyEvent [] ,target true)]
+        (key-event#:post))))
 
 (fn set-readline-shortcuts [apps]
   (let [hks [(make-hotkey :ctrl :n :down)
@@ -21,9 +17,8 @@
              (make-hotkey :ctrl :f :right)
              (make-hotkey :ctrl :b :left)]
         filters (icollect [_ app (ipairs apps)]
-                  (hs.window.filter.new (fn [win]
-                                          (let [application (win:application)]
-                                            (= (application:name) app)))))]
+                  (hs.window.filter.new #(let [application ($1:application)]
+                                           (= (application:name) app))))]
 
     (fn enable-hks []
       (each [_ hk (ipairs hks)]
@@ -41,7 +36,6 @@
 (hs.hotkey.bind prefix "R" (partial hs.reload))
 
 ;; prefix+v as a workaround for "typing" the clipboard.
-(hs.hotkey.bind prefix "V" (fn []
-                             (hs.eventtap.keyStrokes (hs.pasteboard.getContents))))
+(hs.hotkey.bind prefix "V" #(hs.eventtap.keyStrokes (hs.pasteboard.getContents)))
 
 (set-readline-shortcuts ["Finder" "Firefox" "Safari" "Slack"])

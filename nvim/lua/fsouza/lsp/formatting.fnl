@@ -82,26 +82,25 @@
     (when (or (not enable) (buf-is-empty bufnr))
       (lua "return"))
 
-    (pcall (fn []
-             (let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)]
-               (fmt client bufnr (fn [_ result]
-                                   (when (and
-                                           (= changed-tick (vim.api.nvim_buf_get_changedtick bufnr))
-                                           result)
-                                     (vim.api.nvim_buf_call
-                                       bufnr
-                                       (fn []
-                                         (helpers.rewrite-wrap (partial vim.lsp.util.apply_text_edits result bufnr))
+    (pcall #(let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)]
+              (fmt client bufnr (fn [_ result]
+                                  (when (and
+                                          (= changed-tick (vim.api.nvim_buf_get_changedtick bufnr))
+                                          result)
+                                    (vim.api.nvim_buf_call
+                                      bufnr
+                                      (fn []
+                                        (helpers.rewrite-wrap (partial vim.lsp.util.apply_text_edits result bufnr))
 
-                                         (let [last-update (get-last-update bufnr)]
-                                           (if (and last-update (< (- (os.clock) last-update) 0.01))
-                                             (vim.cmd "noau update")
-                                             (do
-                                               (vim.cmd "update")
-                                               (set-last-update bufnr))))
+                                        (let [last-update (get-last-update bufnr)]
+                                          (if (and last-update (< (- (os.clock) last-update) 0.01))
+                                            (vim.cmd "noau update")
+                                            (do
+                                              (vim.cmd "update")
+                                              (set-last-update bufnr))))
 
-                                         (when (should-organize-imports client.name)
-                                           (organize-imports-and-write client bufnr))))))))))))
+                                        (when (should-organize-imports client.name)
+                                          (organize-imports-and-write client bufnr)))))))))))
 
 
 (fn augroup-name [bufnr]

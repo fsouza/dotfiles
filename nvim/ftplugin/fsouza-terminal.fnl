@@ -4,7 +4,6 @@
                                  :rhs "<c-\\><c-n>"
                                  :opts {:noremap true}}]
                             :n [{:lhs "<cr>"
-                                 :rhs (helpers.fn-map (fn []
-                                                        (let [terminal (require :fsouza.plugin.terminal)]
-                                                          (terminal.cr))))
+                                 :rhs (helpers.fn-map #(let [terminal (require :fsouza.plugin.terminal)]
+                                                         (terminal.cr)))
                                  :opts {:noremap true}}]} bufnr))

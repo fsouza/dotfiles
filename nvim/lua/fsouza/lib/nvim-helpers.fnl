@@ -99,7 +99,7 @@
     lines))
 
 (let [mod {:fns []
-           :reset-augroup (fn [name] (augroup name []))
+           :reset-augroup #(augroup $1 [])
            : create-mappings
            : remove-mappings
            : augroup
@@ -107,12 +107,9 @@
            : rewrite-wrap
            : get-visual-selection-contents
            : get-visual-selection-range}]
-  (tset mod :fn-cmd (fn [f]
-                      (let [id (register-cb mod f)]
-                        (string.format "lua require('fsouza.lib.nvim-helpers').fns['%s']()" id))))
-  (tset mod :fn-map (fn [f]
-                      (string.format "<cmd>%s<cr>" (mod.fn-cmd f))))
-  (tset mod :ifn-map (fn [f]
-                       (let [id (register-cb mod f)]
-                         (string.format "<c-r>=luaeval(\"require('fsouza.lib.nvim-helpers').fns['%s']()\")<CR>" id))))
+  (tset mod :fn-cmd #(let [id (register-cb mod $1)]
+                       (string.format "lua require('fsouza.lib.nvim-helpers').fns['%s']()" id)))
+  (tset mod :fn-map #(string.format "<cmd>%s<cr>" (mod.fn-cmd $1)))
+  (tset mod :ifn-map #(let [id (register-cb mod $1)]
+                        (string.format "<c-r>=luaeval(\"require('fsouza.lib.nvim-helpers').fns['%s']()\")<CR>" id)))
   mod)

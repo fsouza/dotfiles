@@ -20,24 +20,22 @@
 
 (fn restart []
   (let [original-client-ids (get-lsp-client-ids)
-        check-new-clients (fn []
-                            (let [current-client-ids (get-lsp-client-ids)]
-                              (each [_ client-id (ipairs current-client-ids)]
-                                (when (not (vim.tbl_contains original-client-ids client-id))
-                                  (lua "return true, #current_client_ids")))
+        check-new-clients #(let [current-client-ids (get-lsp-client-ids)]
+                             (each [_ client-id (ipairs current-client-ids)]
+                               (when (not (vim.tbl_contains original-client-ids client-id))
+                                 (lua "return true, #current_client_ids")))
 
-                              (values false (length current-client-ids))))
+                              (values false (length current-client-ids)))
         timer (vim.loop.new_timer)]
 
     (vim.lsp.stop_client original-client-ids)
     (timer:start 50 50 (vim.schedule_wrap
-                         (fn []
-                           (let [(has-new-clients total-clients) (check-new-clients)]
-                             (if has-new-clients
-                               (timer:stop)
-                               (when (= total-clients 0)
-                                 (timer:stop)
-                                 (vim.cmd "silent! edit")))))))))
+                         #(let [(has-new-clients total-clients) (check-new-clients)]
+                            (if has-new-clients
+                              (timer:stop)
+                              (when (= total-clients 0)
+                                (timer:stop)
+                                (vim.cmd "silent! edit"))))))))
 
 
 {: register

@@ -21,8 +21,7 @@
 
 (fn buf-attach-if-needed [bufnr]
   (when (not (. clients-by-buf bufnr))
-    (vim.api.nvim_buf_attach bufnr false {:on_detach (fn []
-                                                       (tset clients-by-buf bufnr nil))})))
+    (vim.api.nvim_buf_attach bufnr false {:on_detach #(tset clients-by-buf bufnr nil)})))
 
 
 (fn augroup-name [bufnr]

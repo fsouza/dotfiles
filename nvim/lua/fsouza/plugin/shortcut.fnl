@@ -9,15 +9,14 @@
       (fuzzy.find-files directory))))
 
 (fn register [mod command path]
-  (tset mod.registry command (fn [bang]
-                               (let [cd (= bang "!")]
-                                 (vim.loop.fs_stat path (fn [err stat]
-                                                          (when (not err)
-                                                            (let [is-dir (= stat.type "directory")]
-                                                              (vim-schedule
-                                                                (if is-dir
-                                                                  (fzf-dir path cd)
-                                                                  (vim.cmd (.. "edit " path)))))))))))
+  (tset mod.registry command #(let [cd (= $1 "!")]
+                                (vim.loop.fs_stat path (fn [err stat]
+                                                         (when (not err)
+                                                           (let [is-dir (= stat.type "directory")]
+                                                             (vim-schedule
+                                                               (if is-dir
+                                                                 (fzf-dir path cd)
+                                                                 (vim.cmd (.. "edit " path))))))))))
 
   (vim.cmd
     (string.format

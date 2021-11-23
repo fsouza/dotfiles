@@ -8,5 +8,4 @@
     (icollect [_ m (ipairs mappings)]
       {:events ["BufNewFile" "BufRead"]
        :targets m.patterns
-       :command (helpers.fn-cmd (fn []
-                                  (tset vim.o :filetype m.ft)))})))
+       :command (helpers.fn-cmd #(tset vim.o :filetype m.ft))})))

@@ -34,60 +34,53 @@
 (fn get-black [args cb]
   (get-python-bin
     "black"
-    (fn [black-path]
-      (cb {:formatCommand (string.format "%s --fast --quiet %s -" black-path (process-args args))
-           :formatStdin true
-           :rootMarkers [".git" ""]}))))
+    #(cb {:formatCommand (string.format "%s --fast --quiet %s -" $1 (process-args args))
+          :formatStdin true
+          :rootMarkers [".git" ""]})))
 
 (fn get-isort [args cb]
   (get-python-bin
     "isort"
-    (fn [isort-path]
-      (cb {:formatCommand (string.format "%s %s -" isort-path (process-args args))
-           :formatStdin true
-           :rootMarkers [".isort.cfg" ".git" ""]}))))
+    #(cb {:formatCommand (string.format "%s %s -" $1 (process-args args))
+          :formatStdin true
+          :rootMarkers [".isort.cfg" ".git" ""]})))
 
 (fn get-autoflake8 [_ cb]
   (get-python-bin
     "autoflake8"
-    (fn [autoflake8-path]
-      (cb {:formatCommand (string.format "%s --expand-star-imports --exit-zero-even-if-changed -" autoflake8-path)
-           :formatStdin true
-           :rootMarkers default-root-markers}))))
+    #(cb {:formatCommand (string.format "%s --expand-star-imports --exit-zero-even-if-changed -" $1)
+          :formatStdin true
+          :rootMarkers default-root-markers})))
 
 (fn get-flake8 [args cb]
   (get-python-bin
     "flake8"
-    (fn [flake8-path]
-      (cb {:lintCommand (string.format "%s --stdin-display-name ${INPUT} --format \"%%(path)s:%%(row)d:%%(col)d: %%(code)s %%(text)s\" %s -" flake8-path (process-args args))
-           :lintStdin true
-           :lintSource "flake8"
-           :lintFormats ["%f:%l:%c: %m"]
-           :rootMarkers [".flake8" ".git" ""]} get-autoflake8))))
+    #(cb {:lintCommand (string.format "%s --stdin-display-name ${INPUT} --format \"%%(path)s:%%(row)d:%%(col)d: %%(code)s %%(text)s\" %s -" $1 (process-args args))
+          :lintStdin true
+          :lintSource "flake8"
+          :lintFormats ["%f:%l:%c: %m"]
+          :rootMarkers [".flake8" ".git" ""]} get-autoflake8)))
 
 (fn get-add-trailing-comma [args cb]
   (get-python-bin
     "add-trailing-comma"
-    (fn [atc-path]
-      (cb {:formatCommand (string.format "%s --exit-zero-even-if-changed %s -" atc-path (process-args args))
-           :formatStdin true
-           :rootMarkers default-root-markers}))))
+    #(cb {:formatCommand (string.format "%s --exit-zero-even-if-changed %s -" $1 (process-args args))
+          :formatStdin true
+          :rootMarkers default-root-markers})))
 
 (fn get-reorder-python-imports [args cb]
   (get-python-bin
     "reorder-python-imports"
-    (fn [rpi-path]
-      (cb {:formatCommand (string.format "%s --exit-zero-even-if-changed %s -" rpi-path (process-args args))
-           :formatStdin true
-           :rootMarkers default-root-markers}))))
+    #(cb {:formatCommand (string.format "%s --exit-zero-even-if-changed %s -" $1 (process-args args))
+          :formatStdin true
+          :rootMarkers default-root-markers})))
 
 (fn get-autopep8 [args cb]
   (get-python-bin
     "autopep8"
-    (fn [autopep8-path]
-      (cb {:formatCommand (string.format "%s %s -" autopep8-path (process-args args))
-           :formatStdin true
-           :rootMarkers default-root-markers}))))
+    #(cb {:formatCommand (string.format "%s %s -" $1 (process-args args))
+          :formatStdin true
+          :rootMarkers default-root-markers})))
 
 (fn get-buildifier [cb]
   (let [buildifierw (path.join config-dir "langservers" "bin" "buildifierw.py")
@@ -118,10 +111,9 @@
 (fn get-prettierd [cb]
   (get-node-bin
     "prettierd"
-    (fn [prettierd-path]
-      (cb {:formatCommand (string.format "%s ${INPUT}" prettierd-path)
-           :formatStdin true
-           :env [(.. "XDG_RUNTIME_DIR=" cache-dir)]}))))
+    #(cb {:formatCommand (string.format "%s ${INPUT}" $1)
+          :formatStdin true
+          :env [(.. "XDG_RUNTIME_DIR=" cache-dir)]})))
 
 (fn get-eslintd-config [cb]
   (get-node-bin
@@ -229,10 +221,9 @@
               (set pending (+ pending 1))
               (f.fn f.args process-result))
 
-            (timer:start 0 25 (fn []
-                                (when (= pending 0)
-                                  (vim-schedule (cb tools))
-                                  (timer:close))))))))))
+            (timer:start 0 25 #(when (= pending 0)
+                                 (vim-schedule (cb tools))
+                                 (timer:close)))))))))
 
 (local prettierd-fts ["changelog" "css" "graphql" "html" "javascript" "json"
                       "typescript" "typescriptreact" "yaml"])
@@ -275,27 +266,21 @@
           timer (vim.loop.new_timer)]
       (each [_ f (ipairs simple-tool-factories)]
         (let [{:fn f : language} f]
-          (pending-wrapper f (fn [tool]
-                               (add-if-not-empty language tool)))))
+          (pending-wrapper f #(add-if-not-empty language $1))))
 
-      (pending-wrapper get-eslintd-config (fn [eslint-tools]
-                                            (let [eslint-fts ["javascript" "typescript"]]
-                                              (each [_ eslint (ipairs eslint-tools)]
-                                                (each [_ ft (ipairs eslint-fts)]
-                                                  (add-if-not-empty ft eslint))))))
+      (pending-wrapper get-eslintd-config #(let [eslint-fts ["javascript" "typescript"]]
+                                             (each [_ eslint (ipairs $1)]
+                                               (each [_ ft (ipairs eslint-fts)]
+                                                 (add-if-not-empty ft eslint)))))
 
-      (pending-wrapper get-prettierd (fn [prettierd]
-                                       (each [_ ft (ipairs prettierd-fts)]
-                                         (add-if-not-empty ft prettierd))))
+      (pending-wrapper get-prettierd #(each [_ ft (ipairs prettierd-fts)]
+                                        (add-if-not-empty ft $1)))
 
-      (pending-wrapper get-python-tools (fn [python-tools]
-                                          (tset settings.languages :python python-tools)))
+      (pending-wrapper get-python-tools #(tset settings.languages :python $1))
 
-
-      (timer:start 0 25 (fn []
-                          (when (= pending 0)
-                            (vim-schedule (cb settings))
-                            (timer:close)))))))
+      (timer:start 0 25 #(when (= pending 0)
+                           (vim-schedule (cb settings))
+                           (timer:close))))))
 
 (fn gen-config [client]
   (get-settings (fn [settings]

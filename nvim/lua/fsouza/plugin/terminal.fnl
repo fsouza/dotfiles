@@ -8,12 +8,11 @@
   (let [filetype "fsouza-terminal"
         bufnr (vim.api.nvim_create_buf true false)]
     (vim.api.nvim_buf_set_option bufnr "filetype" filetype)
-    (vim.api.nvim_buf_call bufnr (fn []
-                                   (let [job-id (vim.fn.termopen
-                                                  (string.format "%s;#fsouza_term;%s" vim.o.shell term-id)
-                                                  {:detach false
-                                                   :on_exit (partial tset terminals term-id nil)})]
-                                     (tset terminals term-id {:bufnr bufnr :job-id job-id})))))
+    (vim.api.nvim_buf_call bufnr #(let [job-id (vim.fn.termopen
+                                                 (string.format "%s;#fsouza_term;%s" vim.o.shell term-id)
+                                                 {:detach false
+                                                  :on_exit (partial tset terminals term-id nil)})]
+                                    (tset terminals term-id {:bufnr bufnr :job-id job-id}))))
   (. terminals term-id))
 
 (fn get-term [term-id]

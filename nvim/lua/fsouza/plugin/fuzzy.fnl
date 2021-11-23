@@ -9,10 +9,9 @@
       false
       (tablex.exists
         selected
-        (fn [sel]
-          (if (string.match sel "^.+:%d+:%d+:")
-            true
-            false))))))
+        #(if (string.match $1 "^.+:%d+:%d+:")
+           true
+           false)))))
 
 (fn edit-or-qf [selected]
   (let [actions (require :fzf-lua.actions)]
@@ -95,9 +94,8 @@
     (fzf-lua.grep_visual {:rg_opts rg-opts})))
 
 (let [rg-opts "--column -n --hidden --no-heading --color=always -S --glob '!.git' --glob '!.hg'"
-      mod {:find-files (fn [dir]
-                         (let [fzf-lua (fzf-lua)]
-                           (fzf-lua.files {:cwd dir})))
+      mod {:find-files #(let [fzf-lua (fzf-lua)]
+                          (fzf-lua.files {:cwd $1}))
            :grep (partial grep rg-opts)
            :grep-visual (partial grep-visual rg-opts)
            :send-items send-items}]

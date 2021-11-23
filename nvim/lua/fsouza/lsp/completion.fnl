@@ -23,9 +23,8 @@
 
 (local cr-cmd
   (helpers.ifn-map
-    (fn []
-      (let [r (cr-key-for-comp-info (vim.fn.complete_info))]
-        (vim.api.nvim_replace_termcodes r true false true)))))
+    #(let [r (cr-key-for-comp-info (vim.fn.complete_info))]
+       (vim.api.nvim_replace_termcodes r true false true))))
 
 (fn item-documentation [item]
   (match (type item.documentation)

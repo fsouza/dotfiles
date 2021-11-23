@@ -11,17 +11,15 @@
 
     (vim.wait
       500
-      (fn []
-        (= (length cbs) finished))
+      #(= (length cbs) finished)
       25)))
 
 (let [mod {:cbs []}]
   (tset mod :register (partial table.insert mod.cbs))
-  (tset mod :setup (fn []
-                     (let [helpers (require :fsouza.lib.nvim-helpers)]
+  (tset mod :setup #(let [helpers (require :fsouza.lib.nvim-helpers)]
                        (helpers.augroup
                          "fsouza__lua_lib_cleanup"
                          [{:events ["VimLeavePre"]
                            :targets ["*"]
-                           :command (helpers.fn-cmd (partial cleanup mod))}]))))
+                           :command (helpers.fn-cmd (partial cleanup mod))}])))
   mod)

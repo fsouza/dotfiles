@@ -8,15 +8,14 @@
 
       (popup-picker.open
         lines
-        (fn [index]
-          (let [action-chosen (. actions index)]
-            (if (or action-chosen.edit (= (type action-chosen.command) "table"))
-              (do
-                (when action-chosen.edit
-                  (vim.lsp.util.apply_workspace_edit action-chosen.edit))
-                (when (= (type action-chosen.command) "table")
-                  (vim.lsp.buf.execute_command action-chosen.command)))
-              (vim.lsp.buf.execute_command action-chosen))))))))
+        #(let [action-chosen (. actions $1)]
+           (if (or action-chosen.edit (= (type action-chosen.command) "table"))
+             (do
+               (when action-chosen.edit
+                 (vim.lsp.util.apply_workspace_edit action-chosen.edit))
+               (when (= (type action-chosen.command) "table")
+                 (vim.lsp.buf.execute_command action-chosen.command)))
+             (vim.lsp.buf.execute_command action-chosen)))))))
 
 (fn handler [_ actions]
   (handle-actions actions))

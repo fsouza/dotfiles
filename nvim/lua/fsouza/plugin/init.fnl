@@ -18,17 +18,15 @@
                                  :rhs (helpers.fn-map (partial fuzzy "commands"))
                                  :opts {:silent true}}
                                 {:lhs "<leader>zj"
-                                 :rhs (helpers.fn-map (fn []
-                                                        (let [dir-path (vim.fn.expand "%:p:h")]
-                                                          (when (vim.startswith dir-path "/")
-                                                            (fuzzy "find-files" dir-path)))))
+                                 :rhs (helpers.fn-map #(let [dir-path (vim.fn.expand "%:p:h")]
+                                                         (when (vim.startswith dir-path "/")
+                                                           (fuzzy "find-files" dir-path))))
                                  :opts {:silent true}}
                                 {:lhs "<leader>gg"
                                  :rhs (helpers.fn-map (partial fuzzy "grep"))
                                  :opts {:silent true}}
                                 {:lhs "<leader>gw"
-                                 :rhs (helpers.fn-map (fn []
-                                                        (fuzzy "grep" (vim.fn.expand "<cword>"))))
+                                 :rhs (helpers.fn-map #(fuzzy "grep" (vim.fn.expand "<cword>")))
                                  :opts {:silent true}}]
                             :v [{:lhs "<leader>gw"
                                  :rhs (helpers.fn-map (partial fuzzy "grep-visual"))
@@ -53,18 +51,16 @@
   (helpers.augroup "yank_highlight" [{:events ["TextYankPost"]
                                       :targets ["*"]
                                       :command (helpers.fn-cmd
-                                                 (fn []
-                                                   (let [vhl (require :vim.highlight)]
-                                                     (vhl.on_yank {:higroup "HlYank"
-                                                                   :timeout 200
-                                                                   :on_macro false}))))}]))
+                                                 #(let [vhl (require :vim.highlight)]
+                                                    (vhl.on_yank {:higroup "HlYank"
+                                                                  :timeout 200
+                                                                  :on_macro false})))}]))
 
 (fn setup-word-replace []
   (helpers.create-mappings {:n [{:lhs "<leader>e"
                                  :rhs (helpers.fn-map
-                                        (fn []
-                                          (let [word-sub (require :fsouza.plugin.word-sub)]
-                                            (word-sub.run))))}]}))
+                                        #(let [word-sub (require :fsouza.plugin.word-sub)]
+                                           (word-sub.run)))}]}))
 
 
 (fn setup-spell []

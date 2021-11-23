@@ -8,12 +8,11 @@
       "git"
       {:args ["clone" "--depth=1" "https://github.com/savq/paq-nvim.git" paq-repo-dir]}
       nil
-      (fn [result]
-        (if (= result.exit-status 0)
-          (do
-            (vim.cmd "packadd! paq-nvim")
-            (cb (require :paq)))
-          (error (string.format "failed to clone paq-nvim: %s" (vim.inspect result))))))))
+      #(if (= $1.exit-status 0)
+         (do
+           (vim.cmd "packadd! paq-nvim")
+           (cb (require :paq)))
+         (error (string.format "failed to clone paq-nvim: %s" (vim.inspect $1)))))))
 
 (fn with-paq [mod cb]
   (let [(ok? paq) (pcall require :paq)]

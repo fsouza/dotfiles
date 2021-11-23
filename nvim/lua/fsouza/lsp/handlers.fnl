@@ -32,8 +32,7 @@
                               (let [tablex (require :fsouza.tablex)
                                     [lineno _] (vim.api.nvim_win_get_cursor 0)
                                     lineno (- lineno 1)]
-                                (set result (tablex.filter result (fn [v]
-                                                                    (not= v.range.start.line lineno))))))
+                                (set result (tablex.filter result #(not= $1.range.start.line lineno)))))
                             (fzf-location-callback err result ...))
  :textDocument/documentHighlight (fn [_ result]
                                    (when (not result)

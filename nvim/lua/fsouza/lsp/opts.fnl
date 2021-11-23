@@ -3,65 +3,64 @@
 (local helpers (require :fsouza.lib.nvim-helpers))
 
 (local setup-symbols-outline
-  (helpers.once (fn []
-                  (let [symbols-outline (require :symbols-outline)]
-                    (symbols-outline.setup {:highlight_hovered_item false
-                                            :auto_preview false
-                                            :keymaps {:toggle_preview ["<leader>i"]
-                                                      :close ["<leader>v"]}
-                                            :symbols {:File {:icon ">"
-                                                             :hl "TSURI"}
-                                                      :Module {:icon "Ｍ"
+  (helpers.once #(let [symbols-outline (require :symbols-outline)]
+                   (symbols-outline.setup {:highlight_hovered_item false
+                                           :auto_preview false
+                                           :keymaps {:toggle_preview ["<leader>i"]
+                                                     :close ["<leader>v"]}
+                                           :symbols {:File {:icon ">"
+                                                            :hl "TSURI"}
+                                                     :Module {:icon "Ｍ"
+                                                              :hl "TSNamespace"}
+                                                     :Namespace {:icon ">"
+                                                                 :hl "TSNamespace"}
+                                                     :Package {:icon ">"
                                                                :hl "TSNamespace"}
-                                                      :Namespace {:icon ">"
-                                                                  :hl "TSNamespace"}
-                                                      :Package {:icon ">"
-                                                                :hl "TSNamespace"}
-                                                      :Class {:icon "𝓒"
-                                                              :hl "TSType"}
-                                                      :Method {:icon "ƒ"
-                                                               :hl "TSMethod"}
-                                                      :Property {:icon "ƒ"
-                                                                 :hl "TSMethod"}
-                                                      :Field {:icon ">"
-                                                              :hl "TSField"}
-                                                      :Constructor {:icon "ƒ"
-                                                                    :hl "TSConstructor"}
-                                                      :Enum {:icon "ℰ"
+                                                     :Class {:icon "𝓒"
                                                              :hl "TSType"}
-                                                      :Interface {:icon "ﰮ"
-                                                                  :hl "TSType"}
-                                                      :Function {:icon "ƒ"
-                                                                 :hl "TSFunction"}
-                                                      :Variable {:icon ">"
-                                                                 :hl "TSConstant"}
-                                                      :Constant {:icon ">"
-                                                                 :hl "TSConstant"}
-                                                      :String {:icon "𝓐"
-                                                               :hl "TSString"}
-                                                      :Number {:icon "#"
-                                                               :hl "TSNumber"}
-                                                      :Boolean {:icon "⊨"
-                                                                :hl "TSBoolean"}
-                                                      :Array {:icon "Ａ"
-                                                              :hl "TSConstant"}
-                                                      :Object {:icon "⦿"
-                                                               :hl "TSType"}
-                                                      :Key {:icon "🔐"
+                                                     :Method {:icon "ƒ"
+                                                              :hl "TSMethod"}
+                                                     :Property {:icon "ƒ"
+                                                                :hl "TSMethod"}
+                                                     :Field {:icon ">"
+                                                             :hl "TSField"}
+                                                     :Constructor {:icon "ƒ"
+                                                                   :hl "TSConstructor"}
+                                                     :Enum {:icon "ℰ"
                                                             :hl "TSType"}
-                                                      :Null {:icon "NULL"
-                                                             :hl "TSType"}
-                                                      :EnumMember {:icon ">"
-                                                                   :hl "TSField"}
-                                                      :Struct {:icon "𝓢"
-                                                               :hl "TSType"}
-                                                      :Event {:icon ">"
+                                                     :Interface {:icon "ﰮ"
+                                                                 :hl "TSType"}
+                                                     :Function {:icon "ƒ"
+                                                                :hl "TSFunction"}
+                                                     :Variable {:icon ">"
+                                                                :hl "TSConstant"}
+                                                     :Constant {:icon ">"
+                                                                :hl "TSConstant"}
+                                                     :String {:icon "𝓐"
+                                                              :hl "TSString"}
+                                                     :Number {:icon "#"
+                                                              :hl "TSNumber"}
+                                                     :Boolean {:icon "⊨"
+                                                               :hl "TSBoolean"}
+                                                     :Array {:icon "Ａ"
+                                                             :hl "TSConstant"}
+                                                     :Object {:icon "⦿"
                                                               :hl "TSType"}
-                                                      :Operator {:icon "+"
-                                                                 :hl "TSOperator"}
-                                                      :TypeParameter {:icon "𝙏"
-                                                                      :hl "TSParameter"}}})
-                    symbols-outline))))
+                                                     :Key {:icon "🔐"
+                                                           :hl "TSType"}
+                                                     :Null {:icon "NULL"
+                                                            :hl "TSType"}
+                                                     :EnumMember {:icon ">"
+                                                                  :hl "TSField"}
+                                                     :Struct {:icon "𝓢"
+                                                              :hl "TSType"}
+                                                     :Event {:icon ">"
+                                                             :hl "TSType"}
+                                                     :Operator {:icon "+"
+                                                                :hl "TSOperator"}
+                                                     :TypeParameter {:icon "𝙏"
+                                                                     :hl "TSParameter"}}})
+                   symbols-outline)))
 
 (local buf-diag-mod (require :fsouza.lsp.buf-diagnostic))
 
@@ -97,13 +96,11 @@
              :preview-type-definition (helpers.fn-map locations-mod.preview-type-definition)
              :display-information (helpers.fn-map vim.lsp.buf.hover)
              :display-signature-help (helpers.fn-map vim.lsp.buf.signature_help)
-             :query-workspace-symbols (helpers.fn-map (fn []
-                                                        (let [query (vim.fn.input "query：")]
-                                                          (when (not= query "")
-                                                            (fuzzy-mod.lsp_workspace_symbols {:query query})))))
-             :symbols-outline (helpers.fn-map (fn []
-                                                (let [symbols-outline (setup-symbols-outline)]
-                                                  (symbols-outline.toggle_outline))))})
+             :query-workspace-symbols (helpers.fn-map #(let [query (vim.fn.input "query：")]
+                                                         (when (not= query "")
+                                                           (fuzzy-mod.lsp_workspace_symbols {:query query}))))
+             :symbols-outline (helpers.fn-map #(let [symbols-outline (setup-symbols-outline)]
+                                                 (symbols-outline.toggle_outline)))})
 
 (fn attached [bufnr client]
   (let [detach (require :fsouza.lsp.detach)]
@@ -231,7 +228,7 @@
     (let [defaults {:handlers (require :fsouza.lsp.handlers)
                     :on_attach on-attach
                     :capabilities capabilities
-                    :root_dir (fn [] (vim.fn.getcwd))}]
+                    :root_dir #(vim.fn.getcwd)}]
       (vim.tbl_extend "force" defaults opts))))
 
 (fn root-pattern-with-fallback [...]
