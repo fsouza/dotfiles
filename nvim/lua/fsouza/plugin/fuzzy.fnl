@@ -88,7 +88,7 @@
           (icollect [_ item (ipairs items)]
             (let [item (core.make_entry_lcol opts item)]
               (core.make_entry_file opts item))))
-    (fzf-lua.fzf_files (core.set_fzf_line_args opts))))
+    (core.fzf_files (core.set_fzf_line_args opts))))
 
 (fn grep-visual [rg-opts]
   (let [fzf-lua (fzf-lua)]
