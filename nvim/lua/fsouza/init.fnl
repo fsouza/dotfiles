@@ -42,7 +42,9 @@
                                    "\\([A-F]\\+[0-9]\\+\\([A-F]\\|[0-9]\\)*\\)\\+"
                                    "\\([0-9]\\+[A-F]\\+\\([0-9]\\|[A-F]\\)*\\)\\+"]
                 :zig_fmt_autosave 0
-                :sexp_filetypes "clojure,fennel,scheme,lisp,timl"}]
+                :sexp_filetypes "clojure,fennel,scheme,lisp,timl"
+                :sexp_enable_insert_mode_mappings 0
+                :sexp_no_word_maps 0}]
      (each [name# value# (pairs vars#)]
        (vim.api.nvim_set_var name# value#))))
 
