@@ -4,9 +4,10 @@
 
 (local tablex (require :fsouza.tablex))
 
-(local wanted-parsers ["bash" "c" "cpp" "css" "go" "html" "javascript" "json"
-                       "lua" "ocaml" "ocaml_interface" "ocamllex" "python" "query"
-                       "regex" "toml" "tsx" "typescript"])
+(local wanted-parsers ["bash" "c" "clojure" "cpp" "css" "fennel" "go" "html"
+                       "javascript" "json" "lua" "ocaml" "ocaml_interface"
+                       "ocamllex" "python" "query" "regex" "toml" "tsx"
+                       "typescript"])
 
 (fn lang-to-ft [lang]
   (let [parsers (require :nvim-treesitter.parsers)
