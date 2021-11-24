@@ -58,6 +58,10 @@
 (do
   (let [configs (require :nvim-treesitter.configs)]
     (configs.setup {:highlight {:enable false}
+                    :incremental_selection {:enable true
+                                            :keymaps {:init_selection "gnn"
+                                                      :node_incremental "<tab>"
+                                                      :node_decremental "<s-tab>"}}
                     :playground {:enable true
                                  :updatetime 10}
                     :textobjects {:select {:enable true
