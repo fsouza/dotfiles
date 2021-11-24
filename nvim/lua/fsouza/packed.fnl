@@ -38,10 +38,10 @@
                   ["tpope/vim-surround"]
 
                   ; treesitter
+                  {1 "SmiteshP/nvim-gps" :opt true}
                   {1 "nvim-treesitter/nvim-treesitter" :run (partial vim.cmd "TSUpdate")}
                   ["nvim-treesitter/nvim-treesitter-textobjects"]
                   ["nvim-treesitter/playground"]
-                  {1 "SmiteshP/nvim-gps" :opt true}
 
                   ; completion stuff
                   {1 "fsouza/nvim-lsp-compl" :as "nvim-lsp-compl" :opt true}
@@ -51,8 +51,8 @@
                   {1 "ibhagwan/fzf-lua" :as "fzf-lua" :opt true}
                   {1 "neovim/nvim-lspconfig" :as "nvim-lspconfig" :opt true}
                   {1 "norcalli/nvim-colorizer.lua" :as "nvim-colorizer.lua" :opt true}
-                  {1 "simrat39/symbols-outline.nvim" :opt true :as "symbols-outline.nvim"}
                   {1 "rhysd/git-messenger.vim" :opt true}
+                  {1 "simrat39/symbols-outline.nvim" :opt true :as "symbols-outline.nvim"}
                   {1 "vijaymarupudi/nvim-fzf" :opt true}
 
                   ; filetypes stuff
