@@ -38,10 +38,10 @@
                   ["tpope/vim-surround"]
 
                   ; treesitter
-                  {1 "SmiteshP/nvim-gps" :opt true}
                   {1 "nvim-treesitter/nvim-treesitter" :run (partial vim.cmd "TSUpdate")}
                   ["nvim-treesitter/nvim-treesitter-textobjects"]
                   ["nvim-treesitter/playground"]
+                  {1 "SmiteshP/nvim-gps" :opt true}
 
                   ; completion stuff
                   {1 "fsouza/nvim-lsp-compl" :as "nvim-lsp-compl" :opt true}
