@@ -4,18 +4,15 @@
 
 (local tablex (require :fsouza.tablex))
 
-(local wanted-parsers ["bash" "c" "clojure" "cpp" "css" "fennel" "go" "html"
-                       "javascript" "json" "lua" "ocaml" "ocaml_interface"
-                       "ocamllex" "python" "query" "regex" "toml" "tsx"
-                       "typescript"])
-
 (fn lang-to-ft [lang]
   (let [parsers (require :nvim-treesitter.parsers)
         obj (. parsers.list lang)]
     (vim.tbl_flatten [(if-nil obj.filetype lang)] (if-nil obj.used_by []))))
 
 (fn get-file-types []
-  (tablex.flat-map lang-to-ft wanted-parsers))
+  (let [parsers-mod (require :nvim-treesitter.parsers)
+        wanted-parsers (parsers-mod.maintained_parsers)]
+    (tablex.flat-map lang-to-ft wanted-parsers)))
 
 (local setup-gps (helpers.once
                    (fn []
@@ -79,6 +76,6 @@
                                   :swap {:enable true
                                          :swap_next {:<leader>a "@parameter.inner"}
                                          :swap_previos {:<leader>A "@parameter.inner"}}}
-                    :ensure_installed wanted-parsers}))
+                    :ensure_installed "maintained"}))
   (set-folding)
   (mappings))
