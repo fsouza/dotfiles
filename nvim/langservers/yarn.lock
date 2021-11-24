@@ -1676,7 +1676,7 @@ remark-parse@^10.0.1:
     mdast-util-from-markdown "^1.0.0"
     unified "^10.0.0"
 
-request-light@^0.5.4, request-light@^0.5.5:
+request-light@^0.5.5:
   version "0.5.5"
   resolved "https://registry.yarnpkg.com/request-light/-/request-light-0.5.5.tgz#254ab0b38a1db2192170b599b05181934e14932b"
   integrity sha512-AvjfJuhyT6dYfhtIBF+IpTPQco+Td1QJ6PsIJ5xui110vQ5p9HxHk+m1XJqXazLQT6CxxSx9eNv6R/+fu4bZig==
@@ -2317,13 +2317,13 @@ yallist@^4.0.0:
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
 
-yaml-language-server@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/yaml-language-server/-/yaml-language-server-1.2.0.tgz#858945ba51548c6f3cea1e90de8f70455069881a"
-  integrity sha512-ZsQ2uONwleQbFJFdKWBicHmM21jxkzfLI3gLmr7qKBnnRI3ZG4r3gsGbMPASnKTBLBW3l+e8c7KfzS7H3iAQMQ==
+yaml-language-server@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/yaml-language-server/-/yaml-language-server-1.2.1.tgz#d74b0379130e571ecd7940fe691bdf83843555b7"
+  integrity sha512-YAfvorH/uv7HZ/eHOr4inwr6D9WhNg7Z/kUvdxsxM9nRPyTPd960Z7noL4YWO9elPh1ZOnOwYNoInISXAz3eqg==
   dependencies:
     jsonc-parser "^3.0.0"
-    request-light "^0.5.4"
+    request-light "^0.5.5"
     vscode-json-languageservice "^4.1.7"
     vscode-languageserver "^7.0.0"
     vscode-languageserver-textdocument "^1.0.1"
