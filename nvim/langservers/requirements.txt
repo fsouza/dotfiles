@@ -4,7 +4,7 @@
 #
 #    pip-compile
 #
-add_trailing_comma==2.2.1
+add-trailing-comma==2.2.1
     # via -r requirements.in
 aspy.refactor-imports==2.2.0
     # via reorder-python-imports
@@ -27,7 +27,7 @@ flake8==4.0.1
     #   flake8-builtins
     #   flake8-comprehensions
     #   flake8-tidy-imports
-flake8-bugbear==21.9.2
+flake8-bugbear==21.11.28
     # via -r requirements.in
 flake8-builtins==1.5.3
     # via -r requirements.in
