@@ -24,7 +24,11 @@
                     "function_definition"
 
                     ; go
-                    "var_spec"]
+                    "var_spec"
+
+                    ; ocaml
+                    "let_binding"
+                    "value_definition"]
         tablex (require :fsouza.tablex)]
 
     (tablex.exists node-types (partial = node-type))))
