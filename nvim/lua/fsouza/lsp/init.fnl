@@ -61,9 +61,11 @@
         (node-lsp :bashls "bash-language-server" "start")
         (node-lsp :cssls "vscode-css-language-server" "--stdio")
         (node-lsp :html "vscode-html-language-server" "--stdio")
-        (node-lsp :jsonls "vscode-json-language-server" "--stdio")
         (node-lsp :tsserver "typescript-language-server" "--stdio")
         (node-lsp :yamlls "yaml-language-server" "--stdio")
+
+        (lsp.jsonls.setup (opts.with-defaults {:cmd [nvim-python nvim-node-ls "vscode-json-language-server" "--stdio"]
+                                               :settings {:format {:enable false}}}))
 
         (lsp.pyright.setup (opts.with-defaults {:cmd [nvim-python
                                                       nvim-node-ls

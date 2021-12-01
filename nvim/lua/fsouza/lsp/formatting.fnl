@@ -1,7 +1,6 @@
 (local helpers (require :fsouza.lib.nvim-helpers))
 
-(local langservers-skip-set {:jsonls true
-                             :tsserver true})
+(local langservers-skip-set {:tsserver true})
 
 (local langservers-org-imports-set {:gopls true})
 
