@@ -38,6 +38,19 @@ local function get_documentation(item)
   return ''
 end
 
+local function get_detail(item)
+  local max_width = 10
+
+  if not item.detail then
+    return ''
+  end
+
+  if #item.detail <= max_width + 3 then
+    return item.detail
+  end
+
+  return string.format("%s...", string.sub(item.detail, 1, max_width))
+end
 
 function M.text_document_completion_list_to_complete_items(result, prefix, fuzzy)
   local items = lsp.util.extract_completion_items(result)
@@ -70,7 +83,7 @@ function M.text_document_completion_list_to_complete_items(result, prefix, fuzzy
         word = word,
         abbr = item.label,
         kind = kind,
-        menu = item.detail or '',
+        menu = get_detail(item),
         icase = 1,
         dup = 1,
         empty = 1,
