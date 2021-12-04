@@ -122,6 +122,28 @@
                                                   :targets ["~/.dotfiles/nvim/*.fnl"]
                                                   :command (helpers.fn-cmd make)}]))
 
+(fn setup-comment-nvim []
+  (fn pre-hook [ctx]
+    (let [U (require :Comment.utils)
+          tcs-utils (require :ts_context_commentstring.utils)
+          location (if
+                     (= ctx.ctype U.ctype.block)
+                     (tcs-utils.get_cursor_location)
+                     (or (= ctx.cmotion U.cmotion.v) (= ctx.cmotion U.cmotion.V))
+                     (tcs-utils.get_visual_start_location)
+                     nil)
+          key (if
+                (= ctx.ctype U.ctype.line)
+                "__default"
+                "__multiline")
+          tcs-internal (require :ts_context_commentstring.internal)]
+      (tcs-internal.calculate_commentstring {:key key
+                                             :location location})))
+
+  (let [c (require :Comment)]
+    (c.setup {:pre_hook pre-hook
+              :ignore #"^$"})))
+
 (macro mod-invoke [mod fn-name ...]
   `(let [mod# (require ,mod)
          f# (. mod# ,fn-name)]
@@ -141,6 +163,7 @@
   (schedule setup-terminal-mappings)
   (vim-schedule (require :fsouza.lsp))
   (vim-schedule (require :fsouza.plugin.ts))
+  (schedule setup-comment-nvim)
   (schedule setup-lsp-commands)
   (schedule setup-fuzzy-mappings)
   (schedule setup-autocompile)

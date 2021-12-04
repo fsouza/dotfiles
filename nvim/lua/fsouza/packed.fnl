@@ -30,7 +30,6 @@
                   ["justinmk/vim-sneak"]
                   ["mattn/emmet-vim"]
                   ["michaeljsmith/vim-indent-object"]
-                  ["tpope/vim-commentary"]
                   ["tpope/vim-fugitive"]
                   ["tpope/vim-repeat"]
                   ["tpope/vim-rhubarb"]
@@ -42,6 +41,7 @@
                   ["nvim-treesitter/nvim-treesitter-textobjects"]
                   ["nvim-treesitter/playground"]
                   {1 "SmiteshP/nvim-gps" :opt true}
+                  ["JoosepAlviste/nvim-ts-context-commentstring"]
 
                   ; completion stuff
                   {1 "fsouza/nvim-lsp-compl" :as "nvim-lsp-compl" :opt true}
@@ -54,6 +54,7 @@
                   {1 "rhysd/git-messenger.vim" :opt true}
                   {1 "simrat39/symbols-outline.nvim" :opt true :as "symbols-outline.nvim"}
                   {1 "vijaymarupudi/nvim-fzf" :opt true}
+                  {1 "numToStr/Comment.nvim" :as "Comment.nvim" :opt true}
 
                   ; filetypes stuff
                   ;
