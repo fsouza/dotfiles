@@ -59,7 +59,8 @@
                                      :markdown true
                                      :row row
                                      :col (+ col width scrollbar)
-                                     :relative "editor"})]
+                                     :relative "editor"
+                                     :max-width 100})]
     (set winid popup-winid)))
 
 (fn augroup-name [bufnr]

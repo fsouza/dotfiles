@@ -18,11 +18,13 @@
 (fn open [opts]
   (let [{: lines
          : type-name
-         : markdown} opts
+         : markdown
+         : min-width
+         : max-width } opts
         longest (* 2 (accumulate [longest 0 _ line (ipairs lines)]
                        (max longest (length line))))
-        min-width 50
-        max-width (* 3 min-width)
+        min-width (if-nil min-width 50)
+        max-width (if-nil max-width (* 3 min-width))
         bufnr (vim.api.nvim_create_buf false true)
         win-var-identifier (string.format "fsouza__popup-%s" type-name)
         width (min (max longest min-width) max-width)
