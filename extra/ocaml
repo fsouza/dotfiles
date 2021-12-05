@@ -1,3 +1,8 @@
 if command -v opam &>/dev/null && [ -f "$HOME/.opam/opam-init/init.zsh" ]; then
 	source "$HOME/.opam/opam-init/init.zsh"
 fi
+
+function dune_tmux {
+	pane_name=dune
+	_tmux_toggle_pane dune 15 dune build @all --watch
+}
