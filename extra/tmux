@@ -11,7 +11,7 @@ function _tmux_toggle_pane {
 	if [ -n "${pane_id}" ]; then
 		tmux kill-pane -t "${pane_id}"
 	else
-		local pane_id=$(tmux split-window -P -F '#{pane_index}' -d -l "${length}" -fv -c "${PWD}" dune build @all --watch)
+		local pane_id=$(tmux split-window -P -F '#{pane_index}' -d -l "${length}" -fv -c "${PWD}" ${@})
 		tmux select-pane -t "${pane_id}" -T "${pane_name}"
 	fi
 }
