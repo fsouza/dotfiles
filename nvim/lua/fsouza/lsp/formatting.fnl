@@ -47,11 +47,6 @@
   (let [(_ req-id) (client.request "textDocument/formatting" (formatting-params bufnr) cb bufnr)]
     (values req-id (partial client.cancel_request req-id))))
 
-(fn buf-is-empty [bufnr]
-  (let [lines (vim.api.nvim_buf_get_lines bufnr 0 2 false)
-        n-lines (length lines)]
-    (or (= n-lines 0) (and (= n-lines 1) (= (. lines 1) "")))))
-
 (fn organize-imports-and-write [client bufnr]
   (let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)
         params (vim.lsp.util.make_given_range_params [1 1] [(vim.api.nvim_buf_line_count bufnr) 2147483647])]
@@ -78,7 +73,7 @@
 (fn autofmt-and-write [client bufnr]
   (let [autofmt (require :fsouza.lib.autofmt)
         enable (autofmt.is-enabled bufnr)]
-    (when (or (not enable) (buf-is-empty bufnr))
+    (when (not enable)
       (lua "return"))
 
     (pcall #(let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)]
