@@ -40,7 +40,7 @@ function _install_go {
 		prepend_to_path "$(_bootstrap_go)"
 
 		env GOBIN="${temp_gobin}" GOPATH="${GO_HOME}/selfpath" go install "golang.org/dl/${name}@latest" &&
-			env HOME="${GO_HOME}" "${temp_gobin}/${name}" download &&
+			env HOME="${GO_HOME}" GOROOT_BOOTSTRAP="$(go env GOROOT)" "${temp_gobin}/${name}" download &&
 			rm -rf "${temp_gobin}"
 	)
 }
