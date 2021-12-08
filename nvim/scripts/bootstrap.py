@@ -66,6 +66,7 @@ async def run_cmd(
         stdout=stdout,
         stderr=stderr,
         cwd=cwd,
+        stdin=asyncio.subprocess.PIPE,
         env={
             **os.environ,
             **(env or {}),
