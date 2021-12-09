@@ -55,6 +55,7 @@
                   {1 "simrat39/symbols-outline.nvim" :opt true :as "symbols-outline.nvim"}
                   {1 "vijaymarupudi/nvim-fzf" :opt true}
                   {1 "numToStr/Comment.nvim" :as "Comment.nvim" :opt true}
+                  {1 "b0o/SchemaStore.nvim" :as "SchemaStore.nvim" :opt true}
 
                   ; filetypes stuff
                   ;

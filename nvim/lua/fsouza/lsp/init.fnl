@@ -64,8 +64,10 @@
         (node-lsp :tsserver "typescript-language-server" "--stdio")
         (node-lsp :yamlls "yaml-language-server" "--stdio")
 
-        (lsp.jsonls.setup (opts.with-defaults {:cmd [nvim-python nvim-node-ls "vscode-json-language-server" "--stdio"]
-                                               :settings {:format {:enable false}}}))
+        (let [schemastore (require :schemastore)]
+          (lsp.jsonls.setup (opts.with-defaults {:cmd [nvim-python nvim-node-ls "vscode-json-language-server" "--stdio"]
+                                                 :settings {:format {:enable false}
+                                                            :json {:schemas (schemastore.json.schemas)}}})))
 
         (lsp.pyright.setup (opts.with-defaults {:cmd [nvim-python
                                                       nvim-node-ls
