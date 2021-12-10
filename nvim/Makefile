@@ -13,7 +13,7 @@ bootstrap:
 
 .PHONY: update-paq
 update-paq: install-site
-	env BOOTSTRAP_PAQ=1 nvim --headless -E +'lua vim.loop.new_timer():start(10000, 0, vim.schedule_wrap(function() vim.cmd("qa") end))' || true
+	env BOOTSTRAP_PAQ=1 nvim --headless -E +'autocmd User PaqDoneSync quit' || true
 
 .PHONY: kill-daemons
 kill-daemons:
