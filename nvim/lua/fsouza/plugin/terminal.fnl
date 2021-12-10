@@ -12,7 +12,8 @@
                           :command (helpers.fn-cmd #(vim.api.nvim_set_option :mouse "a"))}
                          {:events ["BufLeave"]
                           :targets [(string.format "<buffer=%d>" bufnr)]
-                          :command (helpers.fn-cmd #(vim.api.nvim_set_option :mouse ""))}])
+                          :command (helpers.fn-cmd #(vim.api.nvim_set_option :mouse ""))}]
+                        [])
         augroup-id (string.format "terminal-mouse-%d" bufnr)]
     (helpers.augroup augroup-id auto-commands)))
 
