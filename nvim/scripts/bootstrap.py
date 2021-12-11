@@ -28,7 +28,6 @@ async def run_cmd(
     cwd: Path | None = None,
     env: dict[str, str] | None = None,
     capture_output: Literal[False] = False,
-    input_data: bytes | None = None,
 ) -> None:
     ...
 
@@ -40,7 +39,6 @@ async def run_cmd(
     cwd: Path | None = None,
     env: dict[str, str] | None = None,
     capture_output: Literal[True] = True,
-    input_data: bytes | None = None,
 ) -> tuple[bytes, bytes]:
     ...
 
@@ -51,7 +49,6 @@ async def run_cmd(
     cwd: Path | None = None,
     env: dict[str, str] | None = None,
     capture_output: bool = False,
-    input_data: bytes | None = None,
 ) -> tuple[bytes, bytes] | None:
     stdout, stderr = sys.stdout, sys.stderr
 
@@ -66,14 +63,13 @@ async def run_cmd(
         stdout=stdout,
         stderr=stderr,
         cwd=cwd,
-        stdin=asyncio.subprocess.PIPE,
         env={
             **os.environ,
             **(env or {}),
         },
     )
 
-    stdout, stderr = await proc.communicate(input=input_data)
+    stdout, stderr = await proc.communicate()
     assert proc.returncode is not None
 
     returncode = proc.returncode
@@ -223,11 +219,22 @@ async def install_ocaml_lsp(langservers_cache_dir: Path) -> None:
     assert repo_dir is not None
 
     await run_cmd("opam", ["install", "--deps-only", "-y", "."], cwd=repo_dir)
+
+    # hack: manually install test deps to avoid downgrading ocamlformat. If new
+    # dependencies are added, this may break.
     await run_cmd(
-        "make",
-        ["-C", repo_dir, "install-test-deps"],
-        input_data=b"y",
+        "opam",
+        [
+            "install",
+            "-y",
+            "menhir",
+            "cinaps",
+            "ppx_expect>=v0.14.0",
+            "ocamlformat",
+            "ocamlformat-rpc",
+        ],
     )
+
     await run_cmd(
         "make",
         ["-C", repo_dir, "all"],
