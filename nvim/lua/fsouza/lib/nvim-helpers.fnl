@@ -15,7 +15,7 @@
 
 (fn remove-mappings [mappings bufnr]
   (let [del-keymap-fn (if bufnr
-                        (partial vim.api.nvim_buf_del_key_map bufnr)
+                        (partial vim.api.nvim_buf_del_keymap bufnr)
                         vim.api.nvim_del_keymap)]
     (each [mode rules (pairs mappings)]
       (each [_ m (ipairs rules)]
