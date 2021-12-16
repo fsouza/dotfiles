@@ -18,6 +18,11 @@
      (icollect [_# client# (ipairs all-clients#)]
        client#.id)))
 
+(fn detach-all-buffers []
+  (let [bufnrs (vim.api.nvim_list_bufs)]
+    (each [_ bufnr (ipairs bufnrs)]
+      (detach bufnr))))
+
 (fn restart []
   (let [original-client-ids (get-lsp-client-ids)
         check-new-clients #(let [current-client-ids (get-lsp-client-ids)]
@@ -29,6 +34,7 @@
         timer (vim.loop.new_timer)]
 
     (vim.lsp.stop_client original-client-ids)
+    (detach-all-buffers)
     (timer:start 50 50 (vim.schedule_wrap
                          #(let [(has-new-clients total-clients) (check-new-clients)]
                             (if has-new-clients
