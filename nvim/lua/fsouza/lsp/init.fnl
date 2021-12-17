@@ -7,8 +7,11 @@
 (macro get-local-cmd [cmd]
   `(path.join config-dir "langservers" "bin" ,cmd))
 
+(macro get-cache-path [...]
+  `(path.join cache-dir "langservers" ,...))
+
 (macro get-cache-cmd [cmd]
-  `(path.join cache-dir "langservers" "bin" ,cmd))
+  `(get-cache-path "bin" ,cmd))
 
 (macro set-log-level []
   `(let [level# (if vim.env.NVIM_DEBUG
@@ -122,4 +125,7 @@
       (lsp.sourcekit.setup (opts.with-defaults {})))
 
     (if-executable "clojure-lsp"
-      (lsp.clojure_lsp.setup (opts.with-defaults {})))))
+      (lsp.clojure_lsp.setup (opts.with-defaults {})))
+
+    (if-executable "zig"
+      (lsp.zls.setup (opts.with-defaults {:cmd [(get-cache-path "zls" "zig-out" "bin" "zls")]})))))
