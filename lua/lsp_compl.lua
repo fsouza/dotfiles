@@ -246,6 +246,9 @@ function M._CompleteDone(client_id, bufnr)
   end
   completion_ctx.reset()
   local client = vim.lsp.get_client_by_id(client_id)
+  if not client then
+    return
+  end
   local resolve_edits = (client.server_capabilities.completionProvider or {}).resolveProvider
   if item.additionalTextEdits then
     if expand_snippet then
