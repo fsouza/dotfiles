@@ -5,7 +5,7 @@ FENNEL := $(if $(shell command -v fennel 2>/dev/null),fennel,$(NVIM_CACHE_DIR)/h
 PYTHON ?= python3.10
 
 .PHONY: all
-all: bootstrap gen-init-lua update-paq kill-daemons clear-logs
+all: bootstrap gen-init-lua update-paq update-treesitter kill-daemons clear-logs
 
 .PHONY: bootstrap
 bootstrap:
@@ -14,6 +14,10 @@ bootstrap:
 .PHONY: update-paq
 update-paq: install-site
 	env BOOTSTRAP_PAQ=1 nvim --headless -E +'autocmd User PaqDoneSync quit' || true
+
+.PHONY: update-treesitter
+update-treesitter:
+	nvim --headless -E +'TSUpdateSync' +'quit'
 
 .PHONY: kill-daemons
 kill-daemons:
