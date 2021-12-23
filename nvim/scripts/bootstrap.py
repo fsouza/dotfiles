@@ -1,5 +1,4 @@
 import asyncio
-import json
 import os
 import shutil
 import sys
@@ -303,36 +302,6 @@ async def install_fsautocomplete() -> None:
     await run_cmd("dotnet", ["tool", "update", "--global", "fsautocomplete"])
 
 
-async def _write_zls_config() -> None:
-    home = Path.home()
-    known_folder = Path(
-        "Library/Application Support"
-        if sys.platform == "darwin"
-        else os.getenv("XDG_CONFIG_HOME", ".config"),
-    )
-    location = known_folder if known_folder.is_absolute() else home / known_folder
-    zls_config = {
-        "enable_semantic_tokens": False,
-        "include_at_in_builtins": True,
-        "operator_completions": True,
-        "warn_style": True,
-    }
-    await write_file(location / "zls.json", contents=json.dumps(zls_config))
-
-
-async def install_zls(langservers_cache_dir: Path) -> None:
-    if not await has_command("zig"):
-        print("skipping zls")
-        return
-
-    repo_dir = await _clone_or_update(
-        "https://github.com/zigtools/zls.git",
-        langservers_cache_dir / "zls",
-    )
-    await run_cmd("zig", ["build", "-Drelease-safe"], cwd=repo_dir)
-    await _write_zls_config()
-
-
 async def setup_langservers(cache_dir: Path) -> None:
     langservers_cache_dir = cache_dir / "langservers"
     await asyncio.gather(
@@ -343,7 +312,6 @@ async def setup_langservers(cache_dir: Path) -> None:
         install_efm(langservers_cache_dir),
         install_buildifier(langservers_cache_dir),
         install_fsautocomplete(),
-        install_zls(langservers_cache_dir),
     )
 
 
