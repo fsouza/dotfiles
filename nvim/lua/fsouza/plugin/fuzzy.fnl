@@ -16,7 +16,8 @@
 (fn edit-single-selection [selected]
   (let [fzf-path (require :fzf-lua.path)
         entry (fzf-path.entry_to_file (. selected 1))]
-    (vim.cmd (string.format "edit %s" (vim.fn.fnameescape entry.path)))))
+    (vim.cmd (string.format "edit %s" (vim.fn.fnameescape entry.path)))
+    (vim.api.nvim_win_set_cursor 0 [entry.line (- entry.col 1)])))
 
 (fn edit-or-qf [selected]
   (let [actions (require :fzf-lua.actions)]
