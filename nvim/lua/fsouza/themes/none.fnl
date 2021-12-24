@@ -22,15 +22,17 @@
   (vim.api.nvim_set_hl ns "WarningMsg" {:fg colors.brown})
   (vim.api.nvim_set_hl ns "Folded" {:bg colors.lighter-gray})
   (vim.api.nvim_set_hl ns "FoldColumn" {:bg colors.lighter-gray})
-  (vim.api.nvim_set_hl ns "Error" {:fg colors.red}))
+  (vim.api.nvim_set_hl ns "Error" {:fg colors.red})
+  (vim.api.nvim_set_hl ns "String" {:fg colors.blue})
+  (vim.api.nvim_set_hl ns "Comment" {:fg colors.dark-gray}))
 
 (fn noners [ns]
-  (let [groups ["Boolean" "Character" "Comment" "Conceal" "Conditional" "Constant"
+  (let [groups ["Boolean" "Character" "Conceal" "Conditional" "Constant"
                 "Debug" "Define" "Delimiter" "Exception" "Float" "Function" "Identifier"
                 "Ignore" "Include" "Keyword" "Label" "Macro" "NonText" "Number" "Operator"
                 "PmenuSbar" "PmenuSel" "PmenuThumb" "Question" "Search" "PreCondit" "PreProc"
                 "Repeat" "Special" "SpecialChar" "SpecialComment" "Statement" "StorageClass"
-                "String" "Structure" "Tag" "Todo" "Type" "Typedef" "Underlined" "htmlBold"
+                "Structure" "Tag" "Todo" "Type" "Typedef" "Underlined" "htmlBold"
                 "Title" "ModeMsg" "FloatBorder"]]
     (each [_ group (ipairs groups)]
       (vim.api.nvim_set_hl ns group {}))))

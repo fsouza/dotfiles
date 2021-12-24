@@ -1,4 +1,5 @@
-{:dark-gray :#5f5f5f
+{:darker-gray :#333333
+ :dark-gray :#5f5f5f
  :gray :#afafaf
  :light-gray :#d0d0d0
  :lighter-gray :#dadada
@@ -7,4 +8,5 @@
  :brown :#5f0000
  :white :#ececec
  :pink :#ffd7ff
- :orange :#ffd787}
+ :orange :#ffd787
+ :blue :#000066}
