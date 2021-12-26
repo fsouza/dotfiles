@@ -1,10 +1,12 @@
-(local helpers (require :fsouza.lib.nvim-helpers))
+(import-macros {: if-nil} :helpers)
 
-(local langservers-skip-set {:tsserver true})
+(local helpers (require :fsouza.lib.nvim-helpers))
 
 (local langservers-org-imports-set {:gopls true})
 
 (local updates {})
+
+(local clients {})
 
 (fn set-last-update [bufnr]
   (tset updates bufnr (os.clock)))
@@ -22,9 +24,6 @@
     (when skip
       (vim.notify (string.format "[DEBUG] skipping %s because it's not in %s" file-path prefix)))
     skip))
-
-(fn should-skip-server [server-name]
-  (. langservers-skip-set server-name))
 
 (fn should-organize-imports [server-name]
   (. langservers-org-imports-set server-name))
@@ -70,31 +69,44 @@
                                              (vim.lsp.util.apply_workspace_edit code-action.edit)
                                              (vim.cmd "update"))))))))))
 
-(fn autofmt-and-write [client bufnr]
+(fn get-client [bufnr]
+  (let [buffer-clients (if-nil (. clients bufnr) [])
+        n-clients (length buffer-clients)]
+    (if
+      (< n-clients 1) nil
+      (= n-clients 1) (. buffer-clients 1)
+      (accumulate [current-client nil _ client (ipairs buffer-clients)]
+        (if
+          (= (?. current-client :name) "efm")
+          current-client
+          client)))))
+
+(fn autofmt-and-write [bufnr]
   (let [autofmt (require :fsouza.lib.autofmt)
         enable (autofmt.is-enabled bufnr)]
     (when (not enable)
       (lua "return"))
 
-    (pcall #(let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)]
-              (fmt client bufnr (fn [_ result]
-                                  (when (and
-                                          (= changed-tick (vim.api.nvim_buf_get_changedtick bufnr))
-                                          result)
-                                    (vim.api.nvim_buf_call
-                                      bufnr
-                                      (fn []
-                                        (helpers.rewrite-wrap (partial vim.lsp.util.apply_text_edits result bufnr))
+    (let [client (get-client bufnr)]
+      (pcall #(let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)]
+                (fmt client bufnr (fn [_ result]
+                                    (when (and
+                                            (= changed-tick (vim.api.nvim_buf_get_changedtick bufnr))
+                                            result)
+                                      (vim.api.nvim_buf_call
+                                        bufnr
+                                        (fn []
+                                          (helpers.rewrite-wrap (partial vim.lsp.util.apply_text_edits result bufnr))
 
-                                        (let [last-update (get-last-update bufnr)]
-                                          (if (and last-update (< (- (os.clock) last-update) 0.01))
-                                            (vim.cmd "noau update")
-                                            (do
-                                              (vim.cmd "update")
-                                              (set-last-update bufnr))))
+                                          (let [last-update (get-last-update bufnr)]
+                                            (if (and last-update (< (- (os.clock) last-update) 0.01))
+                                              (vim.cmd "noau update")
+                                              (do
+                                                (vim.cmd "update")
+                                                (set-last-update bufnr))))
 
-                                        (when (should-organize-imports client.name)
-                                          (organize-imports-and-write client bufnr)))))))))))
+                                          (when (should-organize-imports client.name)
+                                            (organize-imports-and-write client bufnr))))))))))))
 
 
 (fn augroup-name [bufnr]
@@ -104,12 +116,13 @@
   (when (should-skip-buffer bufnr)
     (lua "return"))
 
-  (when (should-skip-server client.name)
-    (lua "return"))
+  (let [buffer-clients (if-nil (. clients bufnr) [])]
+    (table.insert buffer-clients client)
+    (tset clients bufnr buffer-clients))
 
   (helpers.augroup (augroup-name bufnr) [{:events ["BufWritePost"]
                                           :targets [(string.format "<buffer=%d>" bufnr)]
-                                          :command (helpers.fn-cmd (partial autofmt-and-write client bufnr))}])
+                                          :command (helpers.fn-cmd (partial autofmt-and-write bufnr))}])
 
   (helpers.create-mappings {:n [{:lhs "<leader>f"
                                  :rhs (helpers.fn-map (partial fmt client bufnr))
@@ -117,8 +130,10 @@
 
 (fn on-detach [bufnr]
   (when (vim.api.nvim_buf_is_valid bufnr)
-    (helpers.remove-mappings {:n [{:lhs "<leader>f"}]} bufnr))
-  (helpers.reset-augroup (augroup-name bufnr)))
+    (pcall helpers.remove-mappings {:n [{:lhs "<leader>f"}]} bufnr))
+  (helpers.reset-augroup (augroup-name bufnr))
+  (tset clients bufnr nil)
+  (tset updates bufnr nil))
 
 {: on-attach
  : on-detach}
