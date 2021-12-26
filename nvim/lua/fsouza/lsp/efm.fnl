@@ -95,6 +95,11 @@
        :formatStdin true
        :rootMarkers default-root-markers}))
 
+(fn get-ocamlformat [cb]
+  (cb {:formatCommand "ocamlformat --name ${INPUT} -"
+       :formatStdin true
+       :rootMarkers [".ocamlformat"]}))
+
 (fn get-shellcheck [cb]
   (cb {:lintCommand "shellcheck -f gcc -x -"
        :lintStdin true
@@ -229,7 +234,7 @@
                       "typescript" "typescriptreact" "yaml"])
 
 (fn get-filetypes []
-  (vim.tbl_flatten ["bzl" "dune" "python" "sh" prettierd-fts]))
+  (vim.tbl_flatten ["bzl" "dune" "ocaml" "python" "sh" prettierd-fts]))
 
 (fn basic-settings []
   (values {:lintDebounce 250000000
@@ -261,6 +266,8 @@
                                   :fn get-shfmt}
                                  {:language "dune"
                                   :fn get-dune}
+                                 {:language "ocaml"
+                                  :fn get-ocamlformat}
                                  {:language "bzl"
                                   :fn get-buildifier}]
           timer (vim.loop.new_timer)]
