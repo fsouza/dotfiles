@@ -9,4 +9,4 @@
  :white :#ececec
  :pink :#ffd7ff
  :orange :#ffd787
- :blue :#000099}
+ :blue :#000066}
