@@ -65,6 +65,7 @@
                   ["clojure-vim/clojure.vim"]
                   ["fsouza/fennel.vim"]
                   ["HerringtonDarkholme/yats.vim"]
+                  ["jakwings/vim-pony"]
                   ["keith/swift.vim"]
                   ["ocaml/vim-ocaml"]
                   ["pangloss/vim-javascript"]
@@ -85,4 +86,4 @@
                                            (paq mod.paqs)
                                            (paq:sync))))
 
-mod)
+  mod)
