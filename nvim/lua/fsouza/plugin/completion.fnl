@@ -10,11 +10,5 @@
                                             {:name "buffer"
                                              :keyword_length 5
                                              :option {:keyword_length 5}}])
-              :formatting {:format (fn [entry vim-item]
-                                     (let [menu (if (= entry.source.name "nvim_lsp")
-                                                  "LSP"
-                                                  entry.source.name)]
-                                       (tset vim-item :menu (string.format "「%s」" menu))
-                                       vim-item))}
               :preselect cmp.PreselectMode.None
               :experimental {:native_menu true}}))
