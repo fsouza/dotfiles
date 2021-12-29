@@ -16,7 +16,6 @@
       (vim.api.nvim_win_close winid true))))
 
 (fn open [opts]
-  (print (vim.inspect opts))
   (let [{: lines
          : type-name
          : markdown
