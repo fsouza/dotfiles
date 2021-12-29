@@ -46,6 +46,11 @@
 
     (vim.lsp.util.convert_input_to_markdown_lines doc-lines)))
 
+(fn max-width [max-width starting-pos]
+  (let [cols vim.o.columns
+        available-space (- cols starting-pos 2)]
+    (math.min max-width available-space)))
+
 (fn show-popup [contents]
   (let [popup (require :fsouza.lib.popup)
         {: row
@@ -53,14 +58,17 @@
          : width
          : scrollbar} (vim.fn.pum_getpos)
         scrollbar (if scrollbar 1 0)
+        col (+ col width scrollbar)
+        max-width (max-width 100 col)
         (popup-winid _) (popup.open {:lines contents
                                      :enter false
                                      :type-name "completion-doc"
                                      :markdown true
                                      :row row
-                                     :col (+ col width scrollbar)
+                                     :col col
                                      :relative "editor"
-                                     :max-width 100})]
+                                     :max-width max-width
+                                     :wrap true})]
     (set winid popup-winid)))
 
 (fn augroup-name [bufnr]
