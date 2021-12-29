@@ -20,7 +20,8 @@
          : type-name
          : markdown
          : min-width
-         : max-width } opts
+         : max-width
+         : wrap } opts
         longest (* 2 (accumulate [longest 0 _ line (ipairs lines)]
                        (max longest (length line))))
         min-width (if-nil min-width 50)
@@ -49,7 +50,7 @@
 
       (vim.api.nvim_buf_set_option bufnr :readonly true)
       (vim.api.nvim_buf_set_option bufnr :modifiable false)
-      (vim.api.nvim_win_set_option winid :wrap false)
+      (vim.api.nvim_win_set_option winid :wrap (= wrap true) )
 
       (vim.api.nvim_win_set_var winid win-var-identifier true)
       (values winid bufnr))))
