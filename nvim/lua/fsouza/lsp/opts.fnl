@@ -125,6 +125,11 @@
                                    :client client})
             (register-detach shell-post.on-detach)))
 
+        (when client.resolved_capabilities.completion
+          (let [completion (require :fsouza.lsp.completion)]
+            (completion.on-attach client bufnr)
+            (register-detach (partial completion.on-detach client))))
+
         (when client.resolved_capabilities.rename
           (table.insert mappings.n {:lhs "<leader>r"
                                     :rhs cmds.rename
@@ -217,15 +222,12 @@
     (attached bufnr client)))
 
 (fn with-defaults [opts]
-  (let [capabilities (vim.lsp.protocol.make_client_capabilities)
-        cmp-nvim-lsp (require :cmp_nvim_lsp)]
+  (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
     (tset capabilities.workspace :executeCommand {:dynamicRegistration false})
 
     (let [defaults {:handlers (require :fsouza.lsp.handlers)
                     :on_attach on-attach
-                    :capabilities (cmp-nvim-lsp.update_capabilities capabilities {:snippetSupport false
-                                                                                  :preselectSupport false
-                                                                                  :commitCharactersSupport false})
+                    :capabilities capabilities
                     :root_dir #(vim.fn.getcwd)}]
       (vim.tbl_extend "force" defaults opts))))
 

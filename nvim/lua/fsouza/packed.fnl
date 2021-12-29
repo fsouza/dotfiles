@@ -44,9 +44,7 @@
                   ["JoosepAlviste/nvim-ts-context-commentstring"]
 
                   ; completion stuff
-                  ["hrsh7th/nvim-cmp"]
-                  ["hrsh7th/cmp-nvim-lsp"]
-                  ["hrsh7th/cmp-buffer"]
+                  {1 "fsouza/nvim-lsp-compl" :as "nvim-lsp-compl" :opt true}
                   {1 "l3mon4d3/luasnip" :as "luasnip" :opt true}
 
                   ; misc opt stuff
