@@ -46,9 +46,11 @@
 
     (vim.lsp.util.convert_input_to_markdown_lines doc-lines)))
 
-(fn max-width [max-width starting-pos]
+(fn calc-max-width [max-width starting-pos right]
   (let [cols vim.o.columns
-        available-space (- cols starting-pos 2)]
+        available-space (if right
+                          (- cols starting-pos 2)
+                          (- starting-pos 2))]
     (math.min max-width available-space)))
 
 (fn show-popup [contents]
@@ -58,26 +60,30 @@
          : width
          : scrollbar} (vim.fn.pum_getpos)
         scrollbar (if scrollbar 1 0)
-        col (+ col width scrollbar)
-        max-width (max-width 100 col)
+        end-col (+ col width scrollbar)
+        max-width (calc-max-width 100 end-col true)
+        right (> max-width 25)
+        max-width (if right max-width (calc-max-width 100 col false))
+        left-col (if right end-col nil)
+        right-col (if right nil col)
         (popup-winid _) (popup.open {:lines contents
-                                     :enter false
-                                     :type-name "completion-doc"
-                                     :markdown true
-                                     :row row
-                                     :col col
-                                     :relative "editor"
-                                     :max-width max-width
-                                     :wrap true})]
+                                       :enter false
+                                       :type-name "completion-doc"
+                                       :markdown true
+                                       :row row
+                                       :col left-col
+                                       :right-col right-col
+                                       :relative "editor"
+                                       :max-width max-width})]
     (set winid popup-winid)))
 
 (fn augroup-name [bufnr]
   (string.format "fsouza-completion-%d" bufnr))
 
 (fn close []
-  (when winid
-    (vim.api.nvim_win_close winid false)
-    (set winid nil)))
+  (when (and winid (vim.api.nvim_win_is_valid winid))
+    (vim.api.nvim_win_close winid false))
+  (set winid nil))
 
 (fn render-docs [item]
   (let [docs (popup-contents item)]

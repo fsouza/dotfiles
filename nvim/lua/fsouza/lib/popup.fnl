@@ -16,6 +16,7 @@
       (vim.api.nvim_win_close winid true))))
 
 (fn open [opts]
+  (print (vim.inspect opts))
   (let [{: lines
          : type-name
          : markdown
@@ -30,10 +31,13 @@
         win-var-identifier (string.format "fsouza__popup-%s" type-name)
         width (min (max longest min-width) max-width)
         height (length lines)
+        col (if opts.right-col
+              (- opts.right-col width)
+              (if-nil opts.col 0))
         win-opts {:relative (if-nil opts.relative "cursor")
                   :width width
                   :height height
-                  :col (if-nil opts.col 0)
+                  :col col
                   :row (if-nil opts.row 0)
                   :style "minimal"}]
 
