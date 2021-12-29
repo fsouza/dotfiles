@@ -51,7 +51,6 @@
 (macro set-ui-options []
   `(let [options# {:cursorline  true
                    :cursorlineopt  "number"
-                   :termguicolors  true
                    :showcmd  false
                    :laststatus  0
                    :ruler  true
@@ -63,11 +62,10 @@
                    :number  true
                    :relativenumber  true
                    :lazyredraw  true
-                   :isfname "@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@"}
-         color# (require :fsouza.color)]
+                   :isfname "@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@"}]
      (each [name# value# (pairs options#)]
        (tset vim.o name# value#))
-     (color#.enable)))
+     (vim.cmd "color none")))
 
 (macro set-global-options []
   `(let [options# {:completeopt  "menuone,noinsert,noselect"

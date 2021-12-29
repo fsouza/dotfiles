@@ -4,13 +4,9 @@
 
 (fn popup-callback [err result context ...]
   (let [method context.method
-        handler (if-nil (. non-focusable-handlers method) (vim.lsp.with (. vim.lsp.handlers method) {:focusable false}))
-        color (require :fsouza.color)]
+        handler (if-nil (. non-focusable-handlers method) (vim.lsp.with (. vim.lsp.handlers method) {:focusable false}))]
     (tset non-focusable-handlers method handler)
-    (handler err result context ...)
-    (each [_ winid (ipairs (vim.api.nvim_list_wins))]
-      (when (pcall vim.api.nvim_win_get_var winid method)
-        (color.set-popup-winid winid)))))
+    (handler err result context ...)))
 
 (fn fzf-location-callback [_ result]
   (when (and result (not (vim.tbl_isempty result)))

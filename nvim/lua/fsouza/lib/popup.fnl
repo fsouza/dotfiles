@@ -45,7 +45,6 @@
     (close-others win-var-identifier)
 
     (let [winid (vim.api.nvim_open_win bufnr false win-opts)
-          color (require :fsouza.color)
           helpers (require :fsouza.lib.nvim-helpers)]
 
       (vim.api.nvim_buf_set_option bufnr :readonly true)
@@ -53,7 +52,6 @@
       (vim.api.nvim_win_set_option winid :wrap false)
 
       (vim.api.nvim_win_set_var winid win-var-identifier true)
-      (color.set-popup-winid winid)
       (values winid bufnr))))
 
 {: open}

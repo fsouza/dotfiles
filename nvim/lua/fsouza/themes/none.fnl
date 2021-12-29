@@ -1,32 +1,30 @@
-(import-macros {: if-nil} :helpers)
-
 (local colors (require :fsouza.themes.colors))
 
-(fn basics [ns]
-  (vim.api.nvim_set_hl ns "CursorColumn" {:bg colors.lighter-gray})
-  (vim.api.nvim_set_hl ns "CursorLine" {:bg colors.lighter-gray})
-  (vim.api.nvim_set_hl ns "CursorLineNr" {:bold true :bg colors.lighter-gray})
-  (vim.api.nvim_set_hl ns "Directory" {:fg colors.dark-gray})
-  (vim.api.nvim_set_hl ns "LineNr" {:bg colors.lighter-gray})
-  (vim.api.nvim_set_hl ns "MatchParen" {:bg colors.light-gray})
-  (vim.api.nvim_set_hl ns "Normal" {:fg colors.black})
-  (vim.api.nvim_set_hl ns "Floating" {:bg colors.light-gray :fg colors.black})
-  (vim.api.nvim_set_hl ns "Pmenu" {:bg colors.gray})
-  (vim.api.nvim_set_hl ns "SignColumn" {:bg colors.lighter-gray :fg colors.black})
-  (vim.api.nvim_set_hl ns "SpecialKey" {:fg colors.dark-gray})
-  (vim.api.nvim_set_hl ns "SpellBad" {:fg colors.red})
-  (vim.api.nvim_set_hl ns "TabLine" {:bg colors.gray :fg colors.dark-gray})
-  (vim.api.nvim_set_hl ns "TabLineFill" {:bg colors.gray})
-  (vim.api.nvim_set_hl ns "TabLineSel" {:fg colors.dark-gray})
-  (vim.api.nvim_set_hl ns "ErrorMsg" {:bg colors.red :fg colors.white})
-  (vim.api.nvim_set_hl ns "WarningMsg" {:fg colors.brown})
-  (vim.api.nvim_set_hl ns "Folded" {:bg colors.lighter-gray})
-  (vim.api.nvim_set_hl ns "FoldColumn" {:bg colors.lighter-gray})
-  (vim.api.nvim_set_hl ns "Error" {:fg colors.red})
-  (vim.api.nvim_set_hl ns "String" {:fg colors.blue})
-  (vim.api.nvim_set_hl ns "Comment" {:fg colors.dark-gray}))
+(fn basics []
+  [{:group "CursorColumn" :opts {:guibg colors.lighter-gray}}
+   {:group "CursorLine" :opts {:guibg colors.lighter-gray}}
+   {:group "CursorLineNr" :opts {:gui "bold" :guibg colors.lighter-gray :guifg colors.black}}
+   {:group "Directory" :opts {:guifg colors.dark-gray}}
+   {:group "LineNr" :opts {:guibg colors.lighter-gray :guifg colors.black}}
+   {:group "MatchParen" :opts {:guibg colors.light-gray}}
+   {:group "Normal" :opts {:guifg colors.black}}
+   {:group "Floating" :opts {:guibg colors.light-gray :guifg colors.black}}
+   {:group "Pmenu" :opts {:guibg colors.gray}}
+   {:group "SignColumn" :opts {:guibg colors.lighter-gray :guifg colors.black}}
+   {:group "SpecialKey" :opts {:guifg colors.dark-gray}}
+   {:group "SpellBad" :opts {:gui "NONE" :guifg colors.red}}
+   {:group "TabLine" :opts {:guibg colors.gray :guifg colors.dark-gray}}
+   {:group "TabLineFill" :opts {:guibg colors.gray}}
+   {:group "TabLineSel" :opts {:guifg colors.dark-gray}}
+   {:group "ErrorMsg" :opts {:guibg colors.red :guifg colors.white}}
+   {:group "WarningMsg" :opts {:guifg colors.brown}}
+   {:group "Folded" :opts {:guibg colors.lighter-gray}}
+   {:group "FoldColumn" :opts {:guibg colors.lighter-gray}}
+   {:group "Error" :opts {:guifg colors.red}}
+   {:group "String" :opts {:guifg colors.blue}}
+   {:group "Comment" :opts {:guifg colors.dark-gray}}])
 
-(fn noners [ns]
+(fn noners []
   (let [groups ["Boolean" "Character" "Conceal" "Conditional" "Constant"
                 "Debug" "Define" "Delimiter" "Exception" "Float" "Function" "Identifier"
                 "Ignore" "Include" "Keyword" "Label" "Macro" "NonText" "Number" "Operator"
@@ -34,45 +32,59 @@
                 "Repeat" "Special" "SpecialChar" "SpecialComment" "Statement" "StorageClass"
                 "Structure" "Tag" "Todo" "Type" "Typedef" "Underlined" "htmlBold"
                 "Title" "ModeMsg" "FloatBorder"]]
-    (each [_ group (ipairs groups)]
-      (vim.api.nvim_set_hl ns group {}))))
+    (icollect [_ group-name (ipairs groups)]
+      {:group group-name :opts {:gui "NONE" :guifg "NONE" :guibg "NONE"}})))
 
-(fn reversers [ns]
+(fn reversers []
   (let [groups ["MoreMsg" "StatusLine" "StatusLineNC" "Visual"]]
-    (each [_ group (ipairs groups)]
-      (vim.api.nvim_set_hl ns group {:reverse true}))))
+    (icollect [_ group-name (ipairs groups)]
+      {:group group-name :opts {:gui "reverse"}})))
 
-(fn setup-lsp-references [ns]
+(fn lsp-references []
   (let [ref-types ["Text" "Read" "Write"]]
-    (each [_ ref-type (ipairs ref-types)]
-      (vim.api.nvim_set_hl ns (.. "LspReference" ref-type) {:bg colors.light-gray}))))
+    (icollect [_ ref-type (ipairs ref-types)]
+      {:group (.. "LspReference" ref-type)
+       :opts {:guibg colors.light-gray}})))
 
-(fn setup-lsp-diagnostics [ns]
-  (let [diagnostics-floating {:link "Normal"}
-        diagnostics-sign {:fg colors.red :bg colors.lighter-gray :bold true}
-        levels ["Error" "Warn" "Info" "Hint"]]
+(fn lsp-diagnostics []
+  (let [diagnostics-floating {:guifg colors.black}
+        diagnostics-sign {:guifg colors.red :guibg colors.lighter-gray :gui "bold"}
+        levels ["Error" "Warn" "Info" "Hint"]
+        output []]
     (each [_ level (ipairs levels)]
       (let [sign-group (.. "DiagnosticSign" level)
             floating-group (.. "DiagnosticFloating" level)]
-        (vim.api.nvim_set_hl ns sign-group diagnostics-sign)
-        (vim.api.nvim_set_hl ns floating-group diagnostics-floating)))))
+        (table.insert output {:group sign-group :opts diagnostics-sign})
+        (table.insert output {:group floating-group :opts diagnostics-floating})))
+    output))
 
-(fn setup-lsp-codelens [ns]
-  (vim.api.nvim_set_hl ns "LspCodeLensVirtualText" {:fg colors.gray}))
+(fn lsp-codelens []
+  {:group "LspCodeLensVirtualText" :opts {:guifg colors.gray}})
 
-(fn language-highlights [ns]
-  (setup-lsp-diagnostics ns)
-  (setup-lsp-references ns)
-  (setup-lsp-codelens ns))
+(fn custom-groups []
+  [{:group "HlYank" :opts {:guibg colors.orange}}])
 
-(fn custom-groups [ns]
-  (vim.api.nvim_set_hl ns "HlYank" {:bg colors.orange}))
+(fn opts-to-string [opts]
+  (let [opts (icollect [key value (pairs opts)]
+               (string.format "%s=%s" key value))]
+    (table.concat opts " ")))
 
-(fn [name]
-  (let [ns (vim.api.nvim_create_namespace (if-nil name "fsouza__none"))]
-    (basics ns)
-    (noners ns)
-    (reversers ns)
-    (language-highlights ns)
-    (custom-groups ns)
-    ns))
+(fn group-cmd [group]
+  (string.format "highlight %s %s" group.group (opts-to-string group.opts)))
+
+(macro config-groups [groups]
+  `(each [_# group# (ipairs ,groups)]
+     (let [group-cmd# (group-cmd group#)]
+       (vim.cmd group-cmd#))))
+
+(do
+  (vim.cmd "highlight clear")
+  (tset vim.o :termguicolors true)
+  (tset vim.o :background "light")
+  (tset vim.g :colors_name "none")
+  (config-groups (basics))
+  (config-groups (noners))
+  (config-groups (reversers))
+  (config-groups (lsp-diagnostics))
+  (config-groups [(lsp-codelens)])
+  (config-groups (custom-groups)))

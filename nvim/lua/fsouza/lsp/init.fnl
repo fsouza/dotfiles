@@ -20,16 +20,6 @@
          lsp-log# (require :vim.lsp.log)]
      (lsp-log#.set_level level#)))
 
-(macro patch-lsp []
-  `(let [fns-to-patch# [:open_float]]
-     (each [_# fn-to-patch# (ipairs fns-to-patch#)]
-       (let [original-fn# (. vim.diagnostic fn-to-patch#)]
-         (tset vim.diagnostic fn-to-patch# (fn [...]
-                                             (let [(bufnr# winid#) (original-fn# ...)
-                                                   color# (require :fsouza.color)]
-                                               (color#.set-popup-winid winid#)
-                                               (values bufnr# winid#))))))))
-
 (macro define-signs []
   `(each [_# level# (ipairs ["Error" "Warn" "Info" "Hint"])]
      (let [sign-name# (.. "DiagnosticSign" level#)]
@@ -42,7 +32,6 @@
      ,expr))
 
 (do
-  (patch-lsp)
   (define-signs)
 
   (set-log-level)
