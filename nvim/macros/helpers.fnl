@@ -23,7 +23,13 @@
        (vim.api.nvim_replace_termcodes true false true)
        (vim.api.nvim_feedkeys "map" true)))
 
+(fn reload [mod-name]
+  `(do
+     (tset package.loaded ,mod-name nil)
+     (require ,mod-name)))
+
 {: vim-schedule
  : if-nil
  : cmd-map
- : send-esc}
+ : send-esc
+ : reload}
