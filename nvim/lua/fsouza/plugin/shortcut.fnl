@@ -18,11 +18,11 @@
                                                                  (fzf-dir path cd)
                                                                  (vim.cmd (.. "edit " path))))))))))
 
-  (vim.cmd
-    (string.format
-      "command! -bang %s lua require('fsouza.plugin.shortcut').registry['%s'](vim.fn.expand('<bang>'))"
-      command
-      command)))
+  (vim.api.nvim_add_user_command
+    command
+    (string.format "lua require('fsouza.plugin.shortcut').registry['%s'](vim.fn.expand('<bang>'))" command)
+    {:force true
+     :bang true}))
 
 (let [mod {:registry []}]
   (tset mod :register (partial register mod))

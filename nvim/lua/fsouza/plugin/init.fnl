@@ -41,11 +41,11 @@
                                             (vim.cmd "GitMessenger")))}]})))
 
 (fn setup-autofmt-commands []
-  (vim.cmd "command! ToggleAutofmt lua require('fsouza.lib.autofmt').toggle()")
-  (vim.cmd "command! ToggleGlobalAutofmt lua require('fsouza.lib.autofmt').toggle_g()"))
+  (vim.api.nvim_add_user_command "ToggleAutofmt" "lua require('fsouza.lib.autofmt').toggle()" {:force true})
+  (vim.api.nvim_add_user_command "ToggleGlobalAutofmt" "lua require('fsouza.lib.autofmt').toggle_g()" {:force true}))
 
 (fn setup-lsp-commands []
-  (vim.cmd "command! LspRestart lua require('fsouza.lsp.detach').restart()"))
+  (vim.api.nvim_add_user_command "LspRestart" "lua require('fsouza.lsp.detach').restart()" {:force true}))
 
 (fn setup-hlyank []
   (helpers.augroup "yank_highlight" [{:events ["TextYankPost"]
@@ -72,9 +72,8 @@
   (let [editorconfig (require :fsouza.plugin.editorconfig)]
     (editorconfig.enable))
   (vim-schedule
-    (do
-      (vim.cmd "command! EnableEditorConfig lua require('fsouza.plugin.editorconfig').enable()")
-      (vim.cmd "command! DisableEditorConfig lua require('fsouza.plugin.editorconfig').disable()"))))
+    (vim.api.nvim_add_user_command "EnableEditorConfig" "lua require('fsouza.plugin.editorconfig').enable()" {:force true})
+    (vim.api.nvim_add_user_command "DisableEditorConfig" "lua require('fsouza.plugin.editorconfig').disable()" {:force true})))
 
 (fn setup-shortcuts []
   (let [shortcut (require :fsouza.plugin.shortcut)]
