@@ -20,7 +20,7 @@
    {:group "WarningMsg" :opts {:guifg colors.brown}}
    {:group "Folded" :opts {:guibg colors.lighter-gray}}
    {:group "FoldColumn" :opts {:guibg colors.lighter-gray}}
-   {:group "Error" :opts {:guifg colors.red}}
+   {:group "Error" :opts {:guifg colors.red :guibg "NONE"}}
    {:group "String" :opts {:guifg colors.blue}}
    {:group "Comment" :opts {:guifg colors.dark-gray}}])
 
