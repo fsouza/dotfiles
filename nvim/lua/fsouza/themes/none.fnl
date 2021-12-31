@@ -38,7 +38,7 @@
 (fn reversers []
   (let [groups ["MoreMsg" "StatusLine" "StatusLineNC" "Visual"]]
     (icollect [_ group-name (ipairs groups)]
-      {:group group-name :opts {:gui "reverse"}})))
+      {:group group-name :opts {:gui "reverse" :guifg "NONE" :guibg "NONE"}})))
 
 (fn lsp-references []
   (let [ref-types ["Text" "Read" "Write"]]
