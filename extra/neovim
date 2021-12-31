@@ -7,17 +7,21 @@ function _ensure_neovim_src {
 	fi
 }
 
+function _rebuild_neovim {
+	(
+		cd "${NEOVIM_SRC_DIR}" &&
+			make \
+				CMAKE_BUILD_TYPE=RelWithDebInfo \
+				CMAKE_INSTALL_PREFIX="${NEOVIM_INSTALL_PREFIX}" \
+				CMAKE_EXTRA_FLAGS="-DCMAKE_FIND_FRAMEWORK=LAST" \
+				BUNDLED_CMAKE_FLAG="-DUSE_BUNDLED_GPERF=OFF" &&
+			make install || return
+	)
+}
+
 function _update_neovim {
 	_ensure_neovim_src
-	pushd "${NEOVIM_SRC_DIR}" &&
-		git pull &&
-		make \
-			CMAKE_BUILD_TYPE=RelWithDebInfo \
-			CMAKE_INSTALL_PREFIX="${NEOVIM_INSTALL_PREFIX}" \
-			CMAKE_EXTRA_FLAGS="-DCMAKE_FIND_FRAMEWORK=LAST" \
-			BUNDLED_CMAKE_FLAG="-DUSE_BUNDLED_GPERF=OFF" &&
-		make install &&
-		popd || return
+	git -C "${NEOVIM_SRC_DIR}" pull && _rebuild_neovim
 }
 
 function rebootstrap_neovim {
