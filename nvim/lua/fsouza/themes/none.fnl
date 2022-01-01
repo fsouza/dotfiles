@@ -17,7 +17,7 @@
    {:group "TabLineFill" :opts {:guibg colors.gray}}
    {:group "TabLineSel" :opts {:guifg colors.dark-gray}}
    {:group "ErrorMsg" :opts {:guibg colors.red :guifg colors.white}}
-   {:group "WarningMsg" :opts {:guifg colors.brown}}
+   {:group "WarningMsg" :opts {:guifg colors.brown :guibg "NONE"}}
    {:group "Folded" :opts {:guibg colors.lighter-gray}}
    {:group "FoldColumn" :opts {:guibg colors.lighter-gray}}
    {:group "Error" :opts {:guifg colors.red :guibg "NONE"}}
