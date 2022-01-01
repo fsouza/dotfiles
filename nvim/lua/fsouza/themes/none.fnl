@@ -85,6 +85,7 @@
   (config-groups (basics))
   (config-groups (noners))
   (config-groups (reversers))
+  (config-groups (lsp-references))
   (config-groups (lsp-diagnostics))
   (config-groups [(lsp-codelens)])
   (config-groups (custom-groups)))
