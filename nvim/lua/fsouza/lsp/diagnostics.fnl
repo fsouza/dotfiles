@@ -1,6 +1,6 @@
 (macro render-diagnostics [diagnostics]
-  `(let [items# (vim.diagnostics.toqflist ,diagnostics)]
-     (vim.lsp.util.set_qflist items#)
+  `(let [items# (vim.diagnostic.toqflist ,diagnostics)]
+     (vim.diagnostic.setqflist items#)
      (if (vim.tbl_isempty items#)
        (vim.cmd "cclose")
        (do
