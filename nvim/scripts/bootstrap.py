@@ -18,7 +18,7 @@ async def exists(path: Path) -> bool:
 
 
 async def has_command(cmd: str) -> bool:
-    return bool(await asyncio.to_thread(shutil.which, cmd))
+    return bool(await asyncio.to_thread(lambda: shutil.which(cmd)))
 
 
 async def write_file(path: Path, contents: str) -> None:
