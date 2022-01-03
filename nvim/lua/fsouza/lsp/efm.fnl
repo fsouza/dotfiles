@@ -59,6 +59,7 @@
           :lintStdin true
           :lintSource "flake8"
           :lintFormats ["%f:%l:%c: %m"]
+          :lintIgnoreExitCode true
           :rootMarkers [".flake8" ".git" ""]} get-autoflake8)))
 
 (fn get-add-trailing-comma [args cb]
@@ -105,6 +106,7 @@
        :lintStdin true
        :lintSource "shellcheck"
        :lintFormats ["%f:%l:%c: %trror: %m" "%f:%l:%c: %tarning: %m" "%f:%l:%c: %tote: %m"]
+       :lintIgnoreExitCode true
        :rootMarkers default-root-markers}))
 
 (fn get-shfmt [cb]
@@ -141,6 +143,7 @@
                                                      {:lintCommand (string.format "%s --stdin --stdin-filename ${INPUT} --format unix" eslint_d-path)
                                                       :lintStdin true
                                                       :lintSource "eslint"
+                                                      :lintIgnoreExitCode true
                                                       :rootMarkers [".eslintrc.js"
                                                                     ".eslintrc.cjs"
                                                                     ".eslintrc.yaml"
