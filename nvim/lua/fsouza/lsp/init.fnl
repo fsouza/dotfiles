@@ -13,12 +13,13 @@
 (macro get-cache-cmd [cmd]
   `(get-cache-path "bin" ,cmd))
 
-(macro set-log-level []
+(macro config-log []
   `(let [level# (if vim.env.NVIM_DEBUG
-                  "TRACE"
-                  "ERROR")
+                  "trace"
+                  "error")
          lsp-log# (require :vim.lsp.log)]
-     (lsp-log#.set_level level#)))
+     (lsp-log#.set_level level#)
+     (lsp-log#.set_format_func vim.inspect)))
 
 (macro define-signs []
   `(each [_# level# (ipairs ["Error" "Warn" "Info" "Hint"])]
@@ -34,7 +35,7 @@
 (do
   (define-signs)
 
-  (set-log-level)
+  (config-log)
   (let [lsp (require :lspconfig)
         opts (require :fsouza.lsp.opts)]
 
