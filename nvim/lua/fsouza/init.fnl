@@ -45,7 +45,9 @@
                 :zig_fmt_autosave 0
                 :sexp_filetypes "clojure,dune,fennel,scheme,lisp,timl"
                 :sexp_enable_insert_mode_mappings 0
-                :sexp_no_word_maps 0}]
+                :sexp_no_word_maps 0
+                :did_load_filetypes 0
+                :do_filetype_lua 1}]
      (each [name# value# (pairs vars#)]
        (vim.api.nvim_set_var name# value#))))
 
