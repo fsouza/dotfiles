@@ -1,4 +1,4 @@
-(import-macros {: if-nil} :helpers)
+(import-macros {: if-nil : abuf} :helpers)
 
 (local helpers (require :fsouza.lib.nvim-helpers))
 
@@ -32,7 +32,7 @@
   (let [bufnr (if-nil
                 bufnr
                 (if-nil
-                  (vim.fn.expand "<abuf>")
+                  (abuf)
                   vim.api.nvim_get_current_buf))]
 
     (helpers.create-mappings {:n [{:lhs "<leader>w"

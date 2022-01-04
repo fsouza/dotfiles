@@ -28,8 +28,14 @@
      (tset package.loaded ,mod-name nil)
      (require ,mod-name)))
 
+(fn abuf []
+  `(let [abuf# (vim.fn.expand "<abuf>")]
+     (when abuf#
+       (tonumber abuf#))))
+
 {: vim-schedule
  : if-nil
  : cmd-map
  : send-esc
- : reload}
+ : reload
+ : abuf}
