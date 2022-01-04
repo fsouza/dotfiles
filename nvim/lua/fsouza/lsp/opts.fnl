@@ -228,7 +228,8 @@
     (let [defaults {:handlers (require :fsouza.lsp.handlers)
                     :on_attach on-attach
                     :capabilities capabilities
-                    :root_dir #(vim.fn.getcwd)}]
+                    :root_dir #(vim.fn.getcwd)
+                    :tags {:debounce_text_changes 0}}]
       (vim.tbl_extend "force" defaults opts))))
 
 (fn root-pattern-with-fallback [...]
