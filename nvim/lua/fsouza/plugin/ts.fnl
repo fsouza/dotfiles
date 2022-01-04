@@ -63,16 +63,19 @@
                     :playground {:enable true
                                  :updatetime 10}
                     :textobjects {:select {:enable true
+                                           :lookahead true
                                            :keymaps {:af "@function.outer"
                                                      :if "@function.inner"
                                                      :al "@block.outer"
                                                      :il "@block.inner"
                                                      :ac "@class.outer"
-                                                     :ic "@class.inner"}}
+                                                     :ic "@class.inner"
+                                                     "a," "@parameter.outer"
+                                                     "i," "@parameter.inner"}}
                                   :move {:enable true
                                          :set_jumps true
                                          :goto_next_start {:<leader>m "@function.outer"}
-                                         :goto_previous_start {:<leaer>M "@function.outer"}}
+                                         :goto_previous_start {:<leader>M "@function.outer"}}
                                   :swap {:enable true
                                          :swap_next {:<leader>a "@parameter.inner"}
                                          :swap_previos {:<leader>A "@parameter.inner"}}}
