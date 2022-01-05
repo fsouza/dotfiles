@@ -74,9 +74,7 @@
                   ["ziglang/zig.vim"]
 
                   ; colorschemes
-                  ["ishan9299/modus-theme-vim"]
-                  ["ldelossa/vimdark"]
-                  ["Th3Whit3Wolf/one-nvim"]]
+                  ["ishan9299/modus-theme-vim"]]
            :repack (fn []
                      (tset package.loaded "fsouza.packed" nil)
                      (let [packed (require :fsouza.packed)]
