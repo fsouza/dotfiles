@@ -72,8 +72,9 @@
 
 (macro config-groups [groups]
   `(each [_# group# (ipairs ,groups)]
-     (let [group-cmd# (group-cmd group#)]
-       (vim.cmd group-cmd#))))
+     (->> group#
+          (group-cmd)
+          (vim.cmd))))
 
 (fn [colors]
   (vim.cmd "highlight clear")

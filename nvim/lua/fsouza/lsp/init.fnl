@@ -22,11 +22,11 @@
      (lsp-log#.set_format_func vim.inspect)))
 
 (macro define-signs []
-  `(each [_# level# (ipairs ["Error" "Warn" "Info" "Hint"])]
-     (let [sign-name# (.. "DiagnosticSign" level#)]
-       (vim.fn.sign_define sign-name# {:text ""
-                                       :texthl sign-name#
-                                       :numhl sign-name#}))))
+  (icollect [_ level (ipairs ["Error" "Warn" "Info" "Hint"])]
+    (let [sign-name (.. "DiagnosticSign" level)]
+      `(vim.fn.sign_define ,sign-name {:text ""
+                                       :texthl ,sign-name
+                                       :numhl ,sign-name}))))
 
 (macro if-executable [name expr]
   `(when (= (vim.fn.executable ,name) 1)

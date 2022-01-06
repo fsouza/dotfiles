@@ -31,66 +31,67 @@
      (tset vim.g :mapleader " ")))
 
 (macro set-neovim-global-vars []
-  `(let [vars# {:netrw_home (vim.fn.stdpath "data")
-                :netrw_banner 0
-                :netrw_liststyle 3
-                :surround_no_insert_mappings true
-                :user_emmet_mode "i"
-                :user_emmet_leader_key "<C-x>"
-                :wordmotion_extra ["\\([a-f]\\+[0-9]\\+\\([a-f]\\|[0-9]\\)*\\)\\+"
-                                   "\\([0-9]\\+[a-f]\\+\\([0-9]\\|[a-f]\\)*\\)\\+"
-                                   "\\([A-F]\\+[0-9]\\+\\([A-F]\\|[0-9]\\)*\\)\\+"
-                                   "\\([0-9]\\+[A-F]\\+\\([0-9]\\|[A-F]\\)*\\)\\+"]
-                :wordmotion_uppercase_spaces ["(" ")" "[" "]" "{" "}"]
-                :zig_fmt_autosave 0
-                :sexp_filetypes "clojure,dune,fennel,scheme,lisp,timl"
-                :sexp_enable_insert_mode_mappings 0
-                :sexp_no_word_maps 0
-                :did_load_filetypes 0
-                :do_filetype_lua 1}]
-     (each [name# value# (pairs vars#)]
-       (vim.api.nvim_set_var name# value#))))
+  (let [vars {:netrw_home `(vim.fn.stdpath "data")
+              :netrw_banner 0
+              :netrw_liststyle 3
+              :surround_no_insert_mappings true
+              :user_emmet_mode "i"
+              :user_emmet_leader_key "<C-x>"
+              :wordmotion_extra ["\\([a-f]\\+[0-9]\\+\\([a-f]\\|[0-9]\\)*\\)\\+"
+                                 "\\([0-9]\\+[a-f]\\+\\([0-9]\\|[a-f]\\)*\\)\\+"
+                                 "\\([A-F]\\+[0-9]\\+\\([A-F]\\|[0-9]\\)*\\)\\+"
+                                 "\\([0-9]\\+[A-F]\\+\\([0-9]\\|[A-F]\\)*\\)\\+"]
+              :wordmotion_uppercase_spaces ["(" ")" "[" "]" "{" "}"]
+              :zig_fmt_autosave 0
+              :sexp_filetypes "clojure,dune,fennel,scheme,lisp,timl"
+              :sexp_enable_insert_mode_mappings 0
+              :sexp_no_word_maps 0
+              :did_load_filetypes 0
+              :do_filetype_lua 1}]
+    (icollect [name value (pairs vars)]
+      `(vim.api.nvim_set_var ,name ,value))))
 
 (macro set-ui-options []
-  `(let [options# {:cursorline  true
-                   :cursorlineopt  "number"
-                   :showcmd  false
-                   :laststatus  0
-                   :ruler  true
-                   :rulerformat  "%-14.(%l,%c   %o%)"
-                   :guicursor  "a:block"
-                   :mouse  ""
-                   :shiftround  true
-                   :shortmess  "filnxtToOFIc"
-                   :number  true
-                   :relativenumber  true
-                   :lazyredraw  true
-                   :isfname "@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@"}]
-     (each [name# value# (pairs options#)]
-       (tset vim.o name# value#))
-     (vim.cmd "color none")))
+  (let [options {:cursorline  true
+                 :cursorlineopt  "number"
+                 :showcmd  false
+                 :laststatus  0
+                 :ruler  true
+                 :rulerformat  "%-14.(%l,%c   %o%)"
+                 :guicursor  "a:block"
+                 :mouse  ""
+                 :shiftround  true
+                 :shortmess  "filnxtToOFIc"
+                 :number  true
+                 :relativenumber  true
+                 :lazyredraw  true
+                 :isfname "@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@"}]
+    (list (sym :do)
+          (icollect [name value (pairs options)]
+            `(tset vim.o ,name ,value))
+          `(vim.cmd "color none"))))
 
 (macro set-global-options []
-  `(let [options# {:completeopt  "menuone,noinsert,noselect"
-                   :hidden  true
-                   :hlsearch  false
-                   :incsearch  true
-                   :wildmenu  true
-                   :wildmode  "list:longest"
-                   :backup  false
-                   :inccommand  "nosplit"
-                   :jumpoptions  "stack"
-                   :scrolloff  2
-                   :autoindent  true
-                   :smartindent  true
-                   :swapfile  false
-                   :undofile  true
-                   :joinspaces  false
-                   :synmaxcol  300
-                   :showmatch true
-                   :matchtime 1}]
-     (each [name# value# (pairs options#)]
-       (tset vim.o name# value#))))
+  (let [options {:completeopt  "menuone,noinsert,noselect"
+                 :hidden  true
+                 :hlsearch  false
+                 :incsearch  true
+                 :wildmenu  true
+                 :wildmode  "list:longest"
+                 :backup  false
+                 :inccommand  "nosplit"
+                 :jumpoptions  "stack"
+                 :scrolloff  2
+                 :autoindent  true
+                 :smartindent  true
+                 :swapfile  false
+                 :undofile  true
+                 :joinspaces  false
+                 :synmaxcol  300
+                 :showmatch true
+                 :matchtime 1}]
+    (icollect [name value (pairs options)]
+      `(tset vim.o ,name ,value))))
 
 (macro set-folding []
   `(do
@@ -98,25 +99,26 @@
      (vim.cmd "set foldmethod=indent")))
 
 (macro set-global-mappings []
-  `(let [rl-bindings# [{:lhs "<c-a>" :rhs "<home>"}
-                       {:lhs "<c-e>" :rhs "<end>"}
-                       {:lhs "<c-f>" :rhs "<right>"}
-                       {:lhs "<c-b>" :rhs "<left>"}
-                       {:lhs "<c-p>" :rhs "<up>"}
-                       {:lhs "<c-n>" :rhs "<down>"}
-                       {:lhs "<c-d>" :rhs "<del>"}
-                       {:lhs "<m-p>" :rhs "<up>"}
-                       {:lhs "<m-n>" :rhs "<down>"}
-                       {:lhs "<m-b>" :rhs "<s-left>"}
-                       {:lhs "<m-f>" :rhs "<s-right>"}
-                       {:lhs "<m-d>" :rhs "<s-right><c-w>"}]
-         rl-insert-mode-bindings# [{:lhs "<c-f>" :rhs "<right>"}
-                                   {:lhs "<c-b>" :rhs "<left>"}
-                                   {:lhs "<c-d>" :rhs "<del>"}]]
-     (each [_# {:lhs lhs# :rhs rhs#} (ipairs rl-bindings#)]
-       (vim.keymap.set ["c" "o"] lhs# rhs# {:remap false}))
-     (each [_# {:lhs lhs# :rhs rhs#} (ipairs rl-insert-mode-bindings#)]
-       (vim.keymap.set "i" lhs# rhs# {:remap false}))))
+  (let [rl-bindings [{:lhs "<c-a>" :rhs "<home>"}
+                     {:lhs "<c-e>" :rhs "<end>"}
+                     {:lhs "<c-f>" :rhs "<right>"}
+                     {:lhs "<c-b>" :rhs "<left>"}
+                     {:lhs "<c-p>" :rhs "<up>"}
+                     {:lhs "<c-n>" :rhs "<down>"}
+                     {:lhs "<c-d>" :rhs "<del>"}
+                     {:lhs "<m-p>" :rhs "<up>"}
+                     {:lhs "<m-n>" :rhs "<down>"}
+                     {:lhs "<m-b>" :rhs "<s-left>"}
+                     {:lhs "<m-f>" :rhs "<s-right>"}
+                     {:lhs "<m-d>" :rhs "<s-right><c-w>"}]
+        rl-insert-mode-bindings [{:lhs "<c-f>" :rhs "<right>"}
+                                 {:lhs "<c-b>" :rhs "<left>"}
+                                 {:lhs "<c-d>" :rhs "<del>"}]]
+    (list (sym :do)
+          (icollect [_ {: lhs : rhs} (ipairs rl-bindings)]
+            `(vim.keymap.set ["c" "o"] ,lhs ,rhs {:remap false}))
+          (icollect [_ {: lhs : rhs} (ipairs rl-insert-mode-bindings)]
+            `(vim.keymap.set "i" ,lhs ,rhs {:remap false})))))
 
 (do
   (hererocks)
