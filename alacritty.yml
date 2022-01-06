@@ -72,3 +72,4 @@ key_bindings:
   - { key: Space, mods: Control, chars: "\x00" }
   - { key: Space, mods: Shift|Control, action: None }
   - { key: Key6, mods: Control, chars: "\x1e" }
+  - { key: Key7, mods: Control, chars: "\x1e" }
