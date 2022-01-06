@@ -49,7 +49,7 @@
               :did_load_filetypes 0
               :do_filetype_lua 1}]
     (icollect [name value (pairs vars)]
-      `(vim.api.nvim_set_var ,name ,value))))
+      `(tset vim.g ,name ,value))))
 
 (macro set-ui-options []
   (let [options {:cursorline  true
