@@ -24,10 +24,10 @@
                                               (path#.join paq-dir# "lua" "?" "init.lua")] ";")))))))
 
 (macro initial-mappings []
-  `(let [helpers# (require :fsouza.lib.nvim-helpers)]
-     (helpers#.create-mappings {:n [{:lhs "Q" :rhs ""}
-                                    {:lhs "<Space>" :rhs ""}
-                                    {:lhs "<c-t>" :rhs ""}]})
+  `(do
+     (vim.keymap.set "n" "Q" "")
+     (vim.keymap.set "n" "<Space>" "")
+     (vim.keymap.set "n" "<c-t>" "")
      (tset vim.g :mapleader " ")))
 
 (macro set-neovim-global-vars []
@@ -98,24 +98,25 @@
      (vim.cmd "set foldmethod=indent")))
 
 (macro set-global-mappings []
-  `(let [rl-bindings# [{:lhs "<c-a>" :rhs "<home>" :opts {:noremap true}}
-                       {:lhs "<c-e>" :rhs "<end>" :opts {:noremap true}}
-                       {:lhs "<c-f>" :rhs "<right>" :opts {:noremap true}}
-                       {:lhs "<c-b>" :rhs "<left>" :opts {:noremap true}}
-                       {:lhs "<c-p>" :rhs "<up>" :opts {:noremap true}}
-                       {:lhs "<c-n>" :rhs "<down>" :opts {:noremap true}}
-                       {:lhs "<c-d>" :rhs "<del>" :opts {:noremap true}}
-                       {:lhs "<m-p>" :rhs "<up>" :opts {:noremap true}}
-                       {:lhs "<m-n>" :rhs "<down>" :opts {:noremap true}}
-                       {:lhs "<m-b>" :rhs "<s-left>" :opts {:noremap true}}
-                       {:lhs "<m-f>" :rhs "<s-right>" :opts {:noremap true}}
-                       {:lhs "<m-d>" :rhs "<s-right><c-w>" :opts {:noremap true}}]
-         rl-insert-mode-bindings# [{:lhs "<c-f>" :rhs "<right>" :opts {:noremap true}}
-                                   {:lhs "<c-b>" :rhs "<left>" :opts {:noremap true}}
-                                   {:lhs "<c-d>" :rhs "<del>" :opts {:noremap true}}]
-         mappings# {:c rl-bindings# :o rl-bindings# :i rl-insert-mode-bindings#}
-         helpers# (require :fsouza.lib.nvim-helpers)]
-     (helpers#.create-mappings mappings#)))
+  `(let [rl-bindings# [{:lhs "<c-a>" :rhs "<home>"}
+                       {:lhs "<c-e>" :rhs "<end>"}
+                       {:lhs "<c-f>" :rhs "<right>"}
+                       {:lhs "<c-b>" :rhs "<left>"}
+                       {:lhs "<c-p>" :rhs "<up>"}
+                       {:lhs "<c-n>" :rhs "<down>"}
+                       {:lhs "<c-d>" :rhs "<del>"}
+                       {:lhs "<m-p>" :rhs "<up>"}
+                       {:lhs "<m-n>" :rhs "<down>"}
+                       {:lhs "<m-b>" :rhs "<s-left>"}
+                       {:lhs "<m-f>" :rhs "<s-right>"}
+                       {:lhs "<m-d>" :rhs "<s-right><c-w>"}]
+         rl-insert-mode-bindings# [{:lhs "<c-f>" :rhs "<right>"}
+                                   {:lhs "<c-b>" :rhs "<left>"}
+                                   {:lhs "<c-d>" :rhs "<del>"}]]
+     (each [_# {:lhs lhs# :rhs rhs#} (ipairs rl-bindings#)]
+       (vim.keymap.set ["c" "o"] lhs# rhs# {:remap false}))
+     (each [_# {:lhs lhs# :rhs rhs#} (ipairs rl-insert-mode-bindings#)]
+       (vim.keymap.set "i" lhs# rhs# {:remap false}))))
 
 (do
   (hererocks)

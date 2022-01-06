@@ -1,44 +1,23 @@
-(import-macros {: vim-schedule} :helpers)
+(import-macros {: vim-schedule : mod-invoke} :helpers)
 
 (local helpers (require :fsouza.lib.nvim-helpers))
 
-(fn fuzzy [member ...]
-  (let [mod (require :fsouza.plugin.fuzzy)
-        f (. mod member)]
-    (f ...)))
-
 (fn setup-fuzzy-mappings []
-  (helpers.create-mappings {:n [{:lhs "<leader>zb"
-                                 :rhs (helpers.fn-map (partial fuzzy "buffers"))
-                                 :opts {:silent true}}
-                                {:lhs "<leader>zz"
-                                 :rhs (helpers.fn-map (partial fuzzy "find-files"))
-                                 :opts {:silent true}}
-                                {:lhs "<leader>;"
-                                 :rhs (helpers.fn-map (partial fuzzy "commands"))
-                                 :opts {:silent true}}
-                                {:lhs "<leader>zj"
-                                 :rhs (helpers.fn-map #(let [dir-path (vim.fn.expand "%:p:h")]
-                                                         (when (vim.startswith dir-path "/")
-                                                           (fuzzy "find-files" dir-path))))
-                                 :opts {:silent true}}
-                                {:lhs "<leader>gg"
-                                 :rhs (helpers.fn-map (partial fuzzy "grep"))
-                                 :opts {:silent true}}
-                                {:lhs "<leader>gw"
-                                 :rhs (helpers.fn-map #(fuzzy "grep" (vim.fn.expand "<cword>")))
-                                 :opts {:silent true}}]
-                            :v [{:lhs "<leader>gw"
-                                 :rhs (helpers.fn-map (partial fuzzy "grep-visual"))
-                                 :opts {:silent true}}]}))
+  (vim.keymap.set "n" "<leader>zb" #(mod-invoke :fsouza.plugin.fuzzy :buffers) {:silent true})
+  (vim.keymap.set "n" "<leader>zz" #(mod-invoke :fsouza.plugin.fuzzy :find-files) {:silent true})
+  (vim.keymap.set "n" "<leader>;" #(mod-invoke :fsouza.plugin.fuzzy :commands) {:silent true})
+  (vim.keymap.set "n" "<leader>zj" #(let [dir-path (vim.fn.expand "%:p:h")]
+                                      (when (vim.startswith dir-path "/")
+                                        (mod-invoke :fsouza.plugin.fuzzy :find-files dir-path))) {:silent true})
+  (vim.keymap.set "n" "<leader>gg" #(mod-invoke :fsouza.plugin.fuzzy "grep"))
+  (vim.keymap.set "n" "<leader>gw" #(mod-invoke :fsouza.plugin.fuzzy "grep" (vim.fn.expand "<cword>")))
+  (vim.keymap.set "x" "<leader>gw" #(mod-invoke :fsouza.plugin.fuzzy "grep-visual")))
 
 (fn setup-git-messenger []
   (let [load-git-messenger (helpers.once (partial vim.cmd "packadd git-messenger.vim"))]
-    (helpers.create-mappings {:n [{:lhs "<leader>gm"
-                                   :rhs (helpers.fn-map
-                                          (fn []
-                                            (load-git-messenger)
-                                            (vim.cmd "GitMessenger")))}]})))
+    (vim.keymap.set "n" "<leader>gm" #(do
+                                        (load-git-messenger)
+                                        (vim.cmd "GitMessenger")))))
 
 (fn setup-autofmt-commands []
   (vim.api.nvim_add_user_command "ToggleAutofmt" "lua require('fsouza.lib.autofmt').toggle()" {:force true})
@@ -57,11 +36,8 @@
                                                                   :on_macro false})))}]))
 
 (fn setup-word-replace []
-  (helpers.create-mappings {:n [{:lhs "<leader>e"
-                                 :rhs (helpers.fn-map
-                                        #(let [word-sub (require :fsouza.plugin.word-sub)]
-                                           (word-sub.run)))}]}))
-
+  (vim.keymap.set "n" "<leader>e" #(let [word-sub (require :fsouza.plugin.word-sub)]
+                                           (word-sub.run))))
 
 (fn setup-spell []
   (helpers.augroup "fsouza__auto_spell" [{:events ["FileType"]
@@ -80,18 +56,16 @@
     (shortcut.register "Dotfiles" (vim.fn.expand "~/.dotfiles"))))
 
 (fn setup-terminal-mappings []
-  (fn term-open [term]
-    (let [mod (require :fsouza.plugin.terminal)]
-      (mod.open term)))
+  (fn term-open [term-id]
+    (let [{: open} (require :fsouza.plugin.terminal)]
+      (open term-id)))
 
   (macro term-mapping [term-id]
-    `{:lhs ,(.. "<c-t>" term-id)
-      :rhs (helpers.fn-map (partial term-open ,term-id))
-      :opts {:silent true}})
+    `(vim.keymap.set "n" ,(.. "<c-t>" term-id) #(term-open ,term-id)))
 
-  (helpers.create-mappings {:n [(term-mapping "j")
-                                (term-mapping "k")
-                                (term-mapping "l")]}))
+  (term-mapping "j")
+  (term-mapping "k")
+  (term-mapping "l"))
 
 (fn setup-autocompile []
   (fn handle-result [next result]
@@ -142,11 +116,6 @@
   (let [c (require :Comment)]
     (c.setup {:pre_hook pre-hook
               :ignore #"^$"})))
-
-(macro mod-invoke [mod fn-name ...]
-  `(let [mod# (require ,mod)
-         f# (. mod# ,fn-name)]
-     (f# ,...)))
 
 (let [schedule vim.schedule]
   (vim-schedule (mod-invoke :fsouza.lib.cleanup :setup))

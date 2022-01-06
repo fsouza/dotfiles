@@ -124,13 +124,12 @@
                                           :targets [(string.format "<buffer=%d>" bufnr)]
                                           :command (helpers.fn-cmd (partial autofmt-and-write bufnr))}])
 
-  (helpers.create-mappings {:n [{:lhs "<leader>f"
-                                 :rhs (helpers.fn-map (partial fmt client bufnr))
-                                 :opts {:silent true}}]} bufnr))
+  (vim.keymap.set "n" "<leader>f" #(fmt client bufnr) {:silent true
+                                                       :buffer bufnr}))
 
 (fn on-detach [bufnr]
   (when (vim.api.nvim_buf_is_valid bufnr)
-    (pcall helpers.remove-mappings {:n [{:lhs "<leader>f"}]} bufnr))
+    (pcall vim.keymap.del "n" "<leader>f" {:buffer bufnr}))
   (helpers.reset-augroup (augroup-name bufnr))
   (tset clients bufnr nil)
   (tset updates bufnr nil))

@@ -21,11 +21,6 @@
       "<c-e><cr>"
       "<cr>")))
 
-(local cr-cmd
-  (helpers.ifn-map
-    #(let [r (cr-key-for-comp-info (vim.fn.complete_info))]
-       (vim.api.nvim_replace_termcodes r true false true))))
-
 (fn item-documentation [item]
   (match (type item.documentation)
     "table" item.documentation
@@ -67,14 +62,14 @@
         left-col (if right end-col nil)
         right-col (if right nil col)
         (popup-winid _) (popup.open {:lines contents
-                                       :enter false
-                                       :type-name "completion-doc"
-                                       :markdown true
-                                       :row row
-                                       :col left-col
-                                       :right-col right-col
-                                       :relative "editor"
-                                       :max-width max-width})]
+                                     :enter false
+                                     :type-name "completion-doc"
+                                     :markdown true
+                                     :row row
+                                     :col left-col
+                                     :right-col right-col
+                                     :relative "editor"
+                                     :max-width max-width})]
     (set winid popup-winid)))
 
 (fn augroup-name [bufnr]
@@ -160,23 +155,20 @@
         (lsp-compl.trigger_completion client bufnr)
         ""))
 
-    (let [complete-cmd (helpers.ifn-map complete)
-          mappings {:i [{:lhs "<cr>"
-                         :rhs cr-cmd
-                         :opts {:noremap true}}
-                        {:lhs "<c-x><c-o>"
-                         :rhs complete-cmd
-                         :opts {:noremap true}}]}]
-
-      (lsp-compl.attach client bufnr)
-      (vim-schedule (helpers.create-mappings mappings bufnr)))))
+    (lsp-compl.attach client bufnr)
+    (vim-schedule
+      (vim.keymap.set "i" "<c-x><c-o>" complete {:remap false
+                                                 :buffer bufnr})
+      (vim.keymap.set "i" "<cr>" #(cr-key-for-comp-info (vim.fn.complete_info)) {:remap false
+                                                                                 :buffer bufnr
+                                                                                 :expr true}))))
 
 (fn on-detach [client bufnr]
   (helpers.reset-augroup (augroup-name bufnr))
 
   (when (vim.api.nvim_buf_is_valid bufnr)
-    (helpers.remove-mappings {:i [{:lhs "<cr>"}
-                                  {:lhs "<c-x><c-o>"}]} bufnr))
+    (pcall vim.keymap.del "i" "<cr>" {:buffer bufnr})
+    (pcall vim.keymap.del "i" "<c-x><c-o>" {:buffer bufnr}))
 
   (let [lsp-compl (require :lsp_compl)]
     (lsp-compl.detach client.id bufnr)))

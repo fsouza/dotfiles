@@ -5,22 +5,6 @@
     (tset mod.fns id cb)
     id))
 
-(fn create-mappings [mappings bufnr]
-  (let [set-keymap-fn (if bufnr
-                        (partial vim.api.nvim_buf_set_keymap bufnr)
-                        vim.api.nvim_set_keymap)]
-    (each [mode rules (pairs mappings)]
-      (each [_ m (ipairs rules)]
-        (set-keymap-fn mode m.lhs m.rhs (if-nil m.opts {}))))))
-
-(fn remove-mappings [mappings bufnr]
-  (let [del-keymap-fn (if bufnr
-                        (partial vim.api.nvim_buf_del_keymap bufnr)
-                        vim.api.nvim_del_keymap)]
-    (each [mode rules (pairs mappings)]
-      (each [_ m (ipairs rules)]
-        (del-keymap-fn mode m.lhs)))))
-
 (fn augroup [name commands]
   (vim.cmd (.. "augroup " name))
   (vim.cmd "autocmd!")
@@ -100,8 +84,6 @@
 
 (let [mod {:fns []
            :reset-augroup #(augroup $1 [])
-           : create-mappings
-           : remove-mappings
            : augroup
            : once
            : rewrite-wrap
@@ -109,7 +91,4 @@
            : get-visual-selection-range}]
   (tset mod :fn-cmd #(let [id (register-cb mod $1)]
                        (string.format "lua require('fsouza.lib.nvim-helpers').fns['%s']()" id)))
-  (tset mod :fn-map #(string.format "<cmd>%s<cr>" (mod.fn-cmd $1)))
-  (tset mod :ifn-map #(let [id (register-cb mod $1)]
-                        (string.format "<c-r>=luaeval(\"require('fsouza.lib.nvim-helpers').fns['%s']()\")<CR>" id)))
   mod)

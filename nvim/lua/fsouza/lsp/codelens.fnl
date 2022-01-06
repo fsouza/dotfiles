@@ -127,7 +127,7 @@
     (when (vim.api.nvim_buf_is_valid bufnr)
       (vim.api.nvim_buf_clear_namespace bufnr ns 0 -1)
       (when mappings
-        (helpers.remove-mappings {:n [{:lhs mappings}]} bufnr)))
+        (vim.keymap.del "n" mappings {:buffer bufnr})))
 
     (tset clients bufnr nil)
     (let [augroup-id (augroup-name bufnr)
@@ -156,11 +156,8 @@
         (vim.api.nvim_buf_attach bufnr false {:on_detach (partial on-detach bufnr)})))
 
     (when opts.mapping
-      (helpers.create-mappings
-        {:n [{:lhs opts.mapping
-              :rhs (helpers.fn-map execute)
-              :opts {:silent true}}]}
-        bufnr))))
+      (vim.keymap.set "n" opts.mapping execute {:silent true
+                                                :buffer bufnr}))))
 
 {: on-attach
  : on-detach}

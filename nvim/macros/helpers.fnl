@@ -15,9 +15,6 @@
 
     (check 1)))
 
-(fn cmd-map [cmd]
-  (.. "<cmd>" cmd "<cr>"))
-
 (fn send-esc []
   `(-> "<esc>"
        (vim.api.nvim_replace_termcodes true false true)
@@ -33,9 +30,14 @@
      (when abuf#
        (tonumber abuf#))))
 
+(fn mod-invoke [mod fn-name ...]
+  `(let [mod# (require ,mod)
+         f# (. mod# ,fn-name)]
+     (f# ,...)))
+
 {: vim-schedule
  : if-nil
- : cmd-map
  : send-esc
  : reload
- : abuf}
+ : abuf
+ : mod-invoke}

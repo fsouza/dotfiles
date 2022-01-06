@@ -14,30 +14,23 @@
         wanted-parsers (parsers-mod.maintained_parsers)]
     (tablex.flat-map lang-to-ft wanted-parsers)))
 
-(local setup-gps (helpers.once
-                   (fn []
-                     (vim.cmd "packadd nvim-gps")
-                     (let [nvim-gps (require :nvim-gps)]
-                       (nvim-gps.setup {:icons {:class-name "￠ "
-                                                :function-name "ƒ "
-                                                :method-name "ƒ "} })))))
-
-(local gps-cmd (helpers.fn-map (fn []
-                                 (setup-gps)
-                                 (let [nvim-gps (require :nvim-gps)
-                                       location (nvim-gps.get_location)]
-                                   (vim.notify location)))))
+(local load-nvim-gps (helpers.once
+                       (fn []
+                         (vim.cmd "packadd nvim-gps")
+                         (let [nvim-gps (require :nvim-gps)]
+                           (nvim-gps.setup {:icons {:class-name "￠ "
+                                                    :function-name "ƒ "
+                                                    :method-name "ƒ "} })
+                           nvim-gps))))
 
 (fn create-mappings [bufnr]
   (let [bufnr (if-nil
                 bufnr
-                (if-nil
-                  (abuf)
-                  vim.api.nvim_get_current_buf))]
+                (if-nil (abuf) vim.api.nvim_get_current_buf))]
 
-    (helpers.create-mappings {:n [{:lhs "<leader>w"
-                                   :rhs gps-cmd
-                                   :opts {:noremap true}}]} bufnr)))
+    (vim.keymap.set "n" "<leader>w" #(let [{: get_location} (load-nvim-gps)
+                                           location (get_location)]
+                                       (vim.notify location)) {:buffer bufnr})))
 
 (fn set-folding []
   (helpers.augroup

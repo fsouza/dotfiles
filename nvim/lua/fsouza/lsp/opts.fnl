@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : if-nil} :helpers)
+(import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
 
 (local helpers (require :fsouza.lib.nvim-helpers))
 
@@ -62,59 +62,20 @@
                                                                      :hl "TSParameter"}}})
                    symbols-outline)))
 
-(local buf-diag-mod (require :fsouza.lsp.buf-diagnostic))
-
-(local diag-mod (require :fsouza.lsp.diagnostics))
-
-(local fuzzy-mod (require :fsouza.plugin.fuzzy))
-
-(local code-action (require :fsouza.lsp.code-action))
-
-(local locations-mod (require :fsouza.lsp.locations))
-
-(local cmds {:show-line-diagnostics (helpers.fn-map (partial vim.diagnostic.open_float 0 {:scope "line"}))
-             :list-file-diagnostics (helpers.fn-map diag-mod.list-file-diagnostics)
-             :list-workspace-diagnostics (helpers.fn-map diag-mod.list-workspace-diagnostics)
-             :fuzzy-workspace-diagnostics (helpers.fn-map fuzzy-mod.lsp_workspace_diagnostics)
-             :clear-buffer-diagnostics (helpers.fn-map buf-diag-mod.buf-clear-all-diagnostics)
-             :goto-next-diagnostic (helpers.fn-map (partial vim.diagnostic.goto_next {:popup_opts {:focusable false}}))
-             :goto-prev-diagnostic (helpers.fn-map (partial vim.diagnostic.goto_prev {:popup_opts {:focusable false}}))
-             :rename (helpers.fn-map vim.lsp.buf.rename)
-             :code-action (helpers.fn-map code-action.code-action)
-             :visual-code-action (helpers.fn-map code-action.visual-code-action)
-             :highlight-references (helpers.fn-map vim.lsp.buf.document_highlight)
-             :clear-references (helpers.fn-map vim.lsp.buf.clear_references)
-             :list-document-symbols (helpers.fn-map fuzzy-mod.lsp_document_symbols)
-             :find-references (helpers.fn-map vim.lsp.buf.references)
-             :goto-declaration (helpers.fn-map vim.lsp.buf.declaration)
-             :preview-declaration (helpers.fn-map locations-mod.preview-declaration)
-             :goto-definition (helpers.fn-map vim.lsp.buf.definition)
-             :preview-definition (helpers.fn-map locations-mod.preview-definition)
-             :goto-implementation (helpers.fn-map vim.lsp.buf.implementation)
-             :preview-implementation (helpers.fn-map locations-mod.preview-implementation)
-             :goto-type-definition (helpers.fn-map vim.lsp.buf.type_definition)
-             :preview-type-definition (helpers.fn-map locations-mod.preview-type-definition)
-             :display-information (helpers.fn-map vim.lsp.buf.hover)
-             :display-signature-help (helpers.fn-map vim.lsp.buf.signature_help)
-             :query-workspace-symbols (helpers.fn-map #(let [query (vim.fn.input "query：")]
-                                                         (when (not= query "")
-                                                           (fuzzy-mod.lsp_workspace_symbols {:query query}))))
-             :symbols-outline (helpers.fn-map #(let [symbols-outline (setup-symbols-outline)]
-                                                 (symbols-outline.toggle_outline)))})
-
 (fn attached [bufnr client]
   (let [detach (require :fsouza.lsp.detach)]
     (macro register-detach [cb]
       `(detach.register bufnr ,cb))
 
     (vim-schedule
-      (let [mappings {:n [{:lhs "<leader>l" :rhs cmds.show-line-diagnostics :opts {:silent true}}
-                          {:lhs "<leader>df" :rhs cmds.list-file-diagnostics :opts {:silent true}}
-                          {:lhs "<leader>dw" :rhs cmds.list-workspace-diagnostics :opts {:silent true}}
-                          {:lhs "<leader>dd" :rhs cmds.fuzzy-workspace-diagnostics :opts {:silent true}}
-                          {:lhs "<leader>cl" :rhs cmds.clear-buffer-diagnostics :opts {:silent true}}
-                          {:lhs "<c-n>" :rhs cmds.goto-next-diagnostic :opts {:silent true}}
-                          {:lhs "<c-p>" :rhs cmds.goto-prev-diagnostic :opts {:silent true}}]
+      (let [mappings {:n [{:lhs "<leader>l" :rhs #(vim.diagnostic.open_float {:bufnr bufnr
+                                                                              :scope "line"})}
+                          {:lhs "<leader>df" :rhs #(mod-invoke :fsouza.lsp.diagnostics :list-file-diagnostics)}
+                          {:lhs "<leader>dw" :rhs #(mod-invoke :fsouza.lsp.diagnostics :list-workspace-diagnostics)}
+                          {:lhs "<leader>dd" :rhs #(mod-invoke :fsouza.plugin.fuzzy :lsp_workspace_diagnostics)}
+                          {:lhs "<leader>cl" :rhs #(mod-invoke :fsouza.lsp.buf-diagnostic :buf-clear-all-diagnostics )}
+                          {:lhs "<c-n>" :rhs #(vim.diagnostic.goto_next {:focusable false})}
+                          {:lhs "<c-p>" :rhs #(vim.diagnostic.goto_prev {:focusable false})}]
                       :i []
                       :x []}
             progress (require :fsouza.lsp.progress)]
@@ -132,32 +93,29 @@
 
         (when client.resolved_capabilities.rename
           (table.insert mappings.n {:lhs "<leader>r"
-                                    :rhs cmds.rename
-                                    :opts {:silent true}}))
+                                    :rhs #(vim.lsp.buf.rename)}))
 
         (when client.resolved_capabilities.code_action
           (table.insert mappings.n {:lhs "<leader>cc"
-                                    :rhs cmds.code-action
-                                    :opts {:silent true}})
+                                    :rhs #(mod-invoke :fsouza.lsp.code-action :code-action)})
           (table.insert mappings.x {:lhs "<leader>cc"
-                                    :rhs cmds.visual-code-action
-                                    :opts {:silent true}}))
+                                    :rhs #(mod-invoke :fsouza.lsp.code-action :visual-code-action)}))
 
         (when client.resolved_capabilities.declaration
-          (table.insert mappings.n {:lhs "<leader>gy" :rhs cmds.goto-declaration :opts {:silent true}})
-          (table.insert mappings.n {:lhs "<leader>py" :rhs cmds.preview-declaration :opts {:silent true}}))
+          (table.insert mappings.n {:lhs "<leader>gy" :rhs #(vim.lsp.buf.declaration)})
+          (table.insert mappings.n {:lhs "<leader>py" :rhs #(mod-invoke :fsouza.lsp.locations :preview-declaration)}))
 
         (when client.resolved_capabilities.goto_definition
-          (table.insert mappings.n {:lhs "<leader>gd" :rhs cmds.goto-definition :opts {:silent true}})
-          (table.insert mappings.n {:lhs "<leader>pd" :rhs cmds.preview-definition :opts {:silent true}}))
+          (table.insert mappings.n {:lhs "<leader>gd" :rhs #(vim.lsp.buf.definition)})
+          (table.insert mappings.n {:lhs "<leader>pd" :rhs #(mod-invoke :fsouza.lsp.locations :preview-definition)}))
 
         (when client.resolved_capabilities.implementation
-          (table.insert mappings.n {:lhs "<leader>gi" :rhs cmds.goto-implementation :opts {:silent true}})
-          (table.insert mappings.n {:lhs "<leader>pi" :rhs cmds.preview-implementation :opts {:silent true}}))
+          (table.insert mappings.n {:lhs "<leader>gi" :rhs #(vim.lsp.buf.implementation)})
+          (table.insert mappings.n {:lhs "<leader>pi" :rhs #(mod-invoke :fsouza.lsp.locations :preview-implementation)}))
 
         (when client.resolved_capabilities.type_defintion
-          (table.insert mappings.n {:lhs "<leader>gt" :rhs cmds.goto-type-definition :opts {:silent true}})
-          (table.insert mappings.n {:lhs "<leader>pt" :rhs cmds.preview-type-definition :opts {:silent true}}))
+          (table.insert mappings.n {:lhs "<leader>gt" :rhs #(vim.lsp.type_definition)})
+          (table.insert mappings.n {:lhs "<leader>pt" :rhs #(mod-invoke :fsouza.lsp.locations :preview-type-definition)}))
 
         (when client.resolved_capabilities.document_formatting
           (let [formatting (require :fsouza.lsp.formatting)]
@@ -166,40 +124,35 @@
 
         (when client.resolved_capabilities.document_highlight
           (table.insert mappings.n {:lhs "<leader>s"
-                                    :rhs cmds.highlight-references
-                                    :opts {:silent true}})
+                                    :rhs #(vim.lsp.buf.document_highlight)})
           (table.insert mappings.n {:lhs "<leader>S"
-                                    :rhs cmds.clear-references
-                                    :opts {:silent true}}))
+                                    :rhs #(vim.lsp.buf.clear_references)}))
 
         (when client.resolved_capabilities.document_symbol
           (table.insert mappings.n {:lhs "<leader>t"
-                                    :rhs cmds.list-document-symbols
-                                    :opts {:silent true}})
+                                    :rhs #(mod-invoke :fsouza.plugin.fuzzy :lsp_document_symbols)})
           (table.insert mappings.n {:lhs "<leader>v"
-                                    :rhs cmds.symbols-outline
-                                    :opts {:silent true}}))
+                                    :rhs #(let [symbols-outline (setup-symbols-outline)]
+                                            (symbols-outline.toggle_outline))}))
 
         (when client.resolved_capabilities.find_references
           (table.insert mappings.n {:lhs "<leader>q"
-                                    :rhs cmds.find-references
-                                    :opts {:silent true}}))
+                                    :rhs #(vim.lsp.buf.references)}))
 
         (when client.resolved_capabilities.hover
           (table.insert mappings.n {:lhs "<leader>i"
-                                    :rhs cmds.display-information
-                                    :opts {:silent true}}))
-
+                                    :rhs #(vim.lsp.buf.hover)}))
 
         (when client.resolved_capabilities.signature_help
           (table.insert mappings.i {:lhs "<c-k>"
-                                    :rhs cmds.display-signature-help
-                                    :opts {:silent true}}))
+                                    :rhs #(vim.lsp.buf.signature_help)}))
 
         (when client.resolved_capabilities.workspace_symbol
           (table.insert mappings.n {:lhs "<leader>T"
-                                    :rhs cmds.query-workspace-symbols
-                                    :opts {:silent true}}))
+                                    :rhs #(let [{: lsp_workspace_symbols} (require :fsouza.plugin.fuzzy)
+                                                query (vim.fn.input "query：")]
+                                            (when (not= query "")
+                                              (lsp_workspace_symbols {:query query})))}))
 
         (when client.resolved_capabilities.code_lens
           (let [codelens (require :fsouza.lsp.codelens)]
@@ -213,8 +166,13 @@
         (progress.on-attach)
 
         (vim-schedule
-          (helpers.create-mappings mappings bufnr)
-          (register-detach (partial helpers.remove-mappings mappings bufnr)))))))
+          (each [mode keymaps (pairs mappings)]
+            (each [_ {: lhs : rhs} (ipairs keymaps)]
+              (vim.keymap.set mode lhs rhs {:silent true
+                                            :buffer bufnr})))
+          (register-detach #(each [mode keymaps (pairs mappings)]
+                              (each [_ {: lhs} (ipairs keymaps)]
+                                (vim.keymap.del mode lhs {:buffer bufnr})))))))))
 
 (fn on-attach [client bufnr]
   (let [bufnr (if-nil bufnr (vim.api.nvim_get_current_buf))

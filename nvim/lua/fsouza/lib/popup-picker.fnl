@@ -1,22 +1,17 @@
-(macro safe-close [winid]
-  `(if (vim.api.nvim_win_is_valid ,winid)
-     (vim.api.nvim_win_close ,winid false)))
-
-(fn handle-selection [mod winid]
-  (let [index (. (vim.api.nvim_win_get_cursor 0) 1)
-        {: cb} mod]
+(fn handle-selection [cb winid]
+  (let [index (. (vim.api.nvim_win_get_cursor 0) 1)]
     (vim.cmd "wincmd p")
-    (safe-close winid)
+    (when (vim.api.nvim_win_is_valid winid)
+      (vim.api.nvim_win_close winid false))
     (cb index)))
 
-(fn open [mod lines cb]
+(fn open [lines cb]
   (let [popup (require :fsouza.lib.popup)
         (winid bufnr) (popup.open {:lines lines
                                    :type-name "picker"
                                    :row 1})
-        helpers (require :fsouza.lib.nvim-helpers)]
-
-    (tset mod :cb cb)
+        helpers (require :fsouza.lib.nvim-helpers)
+        mapping-opts {:buffer bufnr}]
 
     (vim.api.nvim_win_set_option winid :cursorline true)
     (vim.api.nvim_win_set_option winid :cursorlineopt "both")
@@ -28,16 +23,11 @@
                                                    :modifiers ["++once"]
                                                    :command (helpers.fn-cmd (partial vim.api.nvim_win_close winid false))}])
 
-    (helpers.create-mappings {:n [{:lhs "<esc>"
-                                    :rhs (helpers.fn-map (partial vim.api.nvim_win_close winid false))}
-                                  {:lhs "<cr>"
-                                    :rhs (helpers.fn-map (partial handle-selection mod winid))}
-                                  {:lhs "<c-n>"
-                                    :rhs "<down>"
-                                    :opts {:noremap true}}
-                                  {:lhs "<c-p>"
-                                    :rhs "<up>"
-                                    :opts {:noremap true}}]} bufnr)))
+    (vim.keymap.set "n" "<esc>" #(vim.api.nvim_win_close winid false) mapping-opts)
+    (vim.keymap.set "n" "<cr>" #(handle-selection cb winid) mapping-opts)
+    (vim.keymap.set "n" "<c-n>" "<down>" {:remap false
+                                          :buffer bufnr})
+    (vim.keymap.set "n" "<c-p>" "<up>" {:remap false
+                                          :buffer bufnr})))
 
-(let [mod {:cb nil}]
-  {:open (partial open mod)})
+{:open open}
