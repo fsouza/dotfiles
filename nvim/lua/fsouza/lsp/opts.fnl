@@ -187,7 +187,7 @@
                     :on_attach on-attach
                     :capabilities capabilities
                     :root_dir #(vim.fn.getcwd)
-                    :tags {:debounce_text_changes 0}}]
+                    :flags {:debounce_text_changes 0}}]
       (vim.tbl_extend "force" defaults opts))))
 
 (fn root-pattern-with-fallback [...]
