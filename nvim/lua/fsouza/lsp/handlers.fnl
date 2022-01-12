@@ -23,13 +23,9 @@
  :textDocument/typeDefinition fzf-location-callback
  :textDocument/implementation fzf-location-callback
  :textDocument/references (fn [err result ...]
-                            (var result result)
-                            (when (vim.tbl_islist result)
-                              (let [tablex (require :fsouza.tablex)
-                                    [lineno _] (vim.api.nvim_win_get_cursor 0)
-                                    lineno (- lineno 1)]
-                                (set result (tablex.filter result #(not= $1.range.start.line lineno)))))
-                            (fzf-location-callback err result ...))
+                            (let [{: filter-references} (require :fsouza.lsp.references)
+                                  result (filter-references result)]
+                              (fzf-location-callback err result ...)))
  :textDocument/documentHighlight (fn [_ result]
                                    (when (not result)
                                      (lua "return"))
