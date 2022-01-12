@@ -59,7 +59,7 @@
                  :ruler  true
                  :rulerformat  "%-14.(%l,%c   %o%)"
                  :guicursor  "a:block"
-                 :mouse  ""
+                 :mouse "a"
                  :shiftround  true
                  :shortmess  "filnxtToOFIc"
                  :number  true

@@ -4,20 +4,6 @@
 ;; shape: { bufnr: ..., job-id: ... }
 (local terminals {})
 
-(fn config-mouse-autogroup [bufnr attach]
-  (let [helpers (require :fsouza.lib.nvim-helpers)
-        auto-commands (if attach
-                        [{:events ["BufEnter"]
-                          :targets [(string.format "<buffer=%d>" bufnr)]
-                          :command (helpers.fn-cmd #(vim.api.nvim_set_option :mouse "a"))}
-                         {:events ["BufLeave"]
-                          :targets [(string.format "<buffer=%d>" bufnr)]
-                          :command (helpers.fn-cmd #(vim.api.nvim_set_option :mouse ""))}]
-                        [])
-        augroup-id (string.format "terminal-mouse-%d" bufnr)]
-    (helpers.augroup augroup-id auto-commands)))
-
-
 (fn create-terminal [term-id]
   (let [filetype "fsouza-terminal"
         bufnr (vim.api.nvim_create_buf true false)]
@@ -26,9 +12,7 @@
                                                  (string.format "%s;#fsouza_term;%s" vim.o.shell term-id)
                                                  {:detach false
                                                   :on_exit (partial tset terminals term-id nil)})]
-                                    (tset terminals term-id {:bufnr bufnr :job-id job-id})))
-    (config-mouse-autogroup bufnr true)
-    (vim.api.nvim_buf_attach bufnr false {:on_detach (partial config-mouse-autogroup bufnr false)}))
+                                    (tset terminals term-id {:bufnr bufnr :job-id job-id}))))
   (. terminals term-id))
 
 (fn get-term [term-id]
