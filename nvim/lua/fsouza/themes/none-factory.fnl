@@ -20,7 +20,8 @@
    {:group "FoldColumn" :opts {:guibg colors.lighter-gray}}
    {:group "Error" :opts {:guifg colors.red :guibg "NONE"}}
    {:group "String" :opts {:guifg colors.blue}}
-   {:group "Comment" :opts {:guifg colors.dark-gray}}])
+   {:group "Comment" :opts {:guifg colors.dark-gray}}
+   {:group "Visual" :opts {:guifg "NONE" :guibg colors.lighter-gray :gui "NONE"}}])
 
 (fn noners [colors]
   (let [groups ["Boolean" "Character" "Conceal" "Conditional" "Constant"
@@ -34,7 +35,7 @@
       {:group group-name :opts {:gui "NONE" :guifg "NONE" :guibg "NONE"}})))
 
 (fn reversers [colors]
-  (let [groups ["MoreMsg" "StatusLine" "StatusLineNC" "Visual"]]
+  (let [groups ["MoreMsg" "StatusLine" "StatusLineNC"]]
     (icollect [_ group-name (ipairs groups)]
       {:group group-name :opts {:gui "reverse" :guifg "NONE" :guibg "NONE"}})))
 
