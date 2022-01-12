@@ -48,7 +48,7 @@
 
 (do
   (let [configs (require :nvim-treesitter.configs)]
-    (configs.setup {:highlight {:enable false}
+    (configs.setup {:highlight {:enable true}
                     :incremental_selection {:enable true
                                             :keymaps {:init_selection "gnn"
                                                       :node_incremental "<tab>"
