@@ -66,7 +66,7 @@
                                                             false)))]
             (when (and code-action code-action.edit)
               (vim.api.nvim_buf_call bufnr (fn []
-                                             (vim.lsp.util.apply_workspace_edit code-action.edit)
+                                             (vim.lsp.util.apply_workspace_edit code-action.edit client.offset_encoding)
                                              (vim.cmd "update"))))))))))
 
 (fn get-client [bufnr]
@@ -96,7 +96,7 @@
                                       (vim.api.nvim_buf_call
                                         bufnr
                                         (fn []
-                                          (helpers.rewrite-wrap (partial vim.lsp.util.apply_text_edits result bufnr))
+                                          (helpers.rewrite-wrap (partial vim.lsp.util.apply_text_edits result bufnr client.offset_encoding))
 
                                           (let [last-update (get-last-update bufnr)]
                                             (if (and last-update (< (- (os.clock) last-update) 0.01))

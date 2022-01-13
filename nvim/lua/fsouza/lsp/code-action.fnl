@@ -1,6 +1,6 @@
 (import-macros {: if-nil} :helpers)
 
-(fn handle-actions [actions]
+(fn handle-actions [actions client]
   (when (and actions (not (vim.tbl_isempty actions)))
     (let [lines (icollect [_ action (ipairs actions)]
                   action.title)
@@ -12,13 +12,14 @@
            (if (or action-chosen.edit (= (type action-chosen.command) "table"))
              (do
                (when action-chosen.edit
-                 (vim.lsp.util.apply_workspace_edit action-chosen.edit))
+                 (vim.lsp.util.apply_workspace_edit action-chosen.edit client.offset_encoding))
                (when (= (type action-chosen.command) "table")
                  (vim.lsp.buf.execute_command action-chosen.command)))
              (vim.lsp.buf.execute_command action-chosen)))))))
 
-(fn handler [_ actions]
-  (handle-actions actions))
+(fn handler [_ actions context]
+  (let [client (vim.lsp.get_client_by_id context.client_id)]
+    (handle-actions actions client)))
 
 (macro line-diagnostics []
   `(let [[lnum# _#] (vim.api.nvim_win_get_cursor 0)]
@@ -45,9 +46,9 @@
     (vim.lsp.buf_request 0 "textDocument/codeAction" params cb)))
 
 (fn code-action []
-  (code-action-for-line (fn [_ actions]
+  (code-action-for-line (fn [err actions ...]
                           (if (and actions (not (vim.tbl_isempty actions)))
-                            (handle-actions actions)
+                            (handler err actions ...)
                             (code-action-for-buf handler)))))
 
 (fn visual-code-action []
