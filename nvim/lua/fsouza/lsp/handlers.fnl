@@ -26,13 +26,14 @@
                             (let [{: filter-references} (require :fsouza.lsp.references)
                                   result (filter-references result)]
                               (fzf-location-callback err result ...)))
- :textDocument/documentHighlight (fn [_ result]
+ :textDocument/documentHighlight (fn [_ result context]
                                    (when (not result)
                                      (lua "return"))
 
-                                   (let [bufnr (vim.api.nvim_get_current_buf)]
+                                   (let [bufnr (vim.api.nvim_get_current_buf)
+                                         client (vim.lsp.get_client_by_id context.client_id)]
                                      (vim.lsp.util.buf_clear_references bufnr)
-                                     (vim.lsp.util.buf_highlight_references bufnr result)))
+                                     (vim.lsp.util.buf_highlight_references bufnr result client.offset_encoding)))
  :textDocument/hover popup-callback
  :textDocument/signatureHelp popup-callback
  :textDocument/publishDiagnostics (fn [...]
