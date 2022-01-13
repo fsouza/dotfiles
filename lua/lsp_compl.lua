@@ -198,13 +198,13 @@ function M._InsertLeave()
 end
 
 
-local function apply_text_edits(bufnr, lnum, text_edits)
+local function apply_text_edits(bufnr, lnum, text_edits, client)
   -- Text edit in the same line would mess with the cursor position
   local edits = vim.tbl_filter(
     function(x) return x.range.start.line ~= lnum end,
     text_edits or {}
   )
-  lsp.util.apply_text_edits(edits, bufnr)
+  lsp.util.apply_text_edits(edits, bufnr, client.offset_encoding)
 end
 
 
@@ -254,7 +254,7 @@ function M._CompleteDone(client_id, bufnr)
     if expand_snippet then
       apply_snippet(item, suffix)
     end
-    apply_text_edits(bufnr, lnum, item.additionalTextEdits)
+    apply_text_edits(bufnr, lnum, item.additionalTextEdits, client)
   elseif resolve_edits and type(item) == "table" then
     local _, req_id = client.request('completionItem/resolve', item, function(err, result)
       completion_ctx.pending_requests = {}
@@ -262,7 +262,7 @@ function M._CompleteDone(client_id, bufnr)
       if expand_snippet then
         apply_snippet(item, suffix)
       end
-      apply_text_edits(bufnr, lnum, result.additionalTextEdits)
+      apply_text_edits(bufnr, lnum, result.additionalTextEdits, client)
     end, bufnr)
     if req_id then
       table.insert(completion_ctx.pending_requests, function()
