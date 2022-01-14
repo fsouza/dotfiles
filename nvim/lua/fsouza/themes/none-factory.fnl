@@ -21,7 +21,7 @@
    {:group "Error" :opts {:guifg colors.red :guibg "NONE"}}
    {:group "String" :opts {:guifg colors.blue}}
    {:group "Comment" :opts {:guifg colors.dark-gray}}
-   {:group "Visual" :opts {:guifg "NONE" :guibg colors.lighter-gray :gui "NONE"}}])
+   {:group "Visual" :opts {:guifg "NONE" :guibg colors.gray :gui "NONE"}}])
 
 (fn noners [colors]
   (let [groups ["Boolean" "Character" "Conceal" "Conditional" "Constant"
