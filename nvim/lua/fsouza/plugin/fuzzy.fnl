@@ -5,7 +5,7 @@
 (fn should-qf [selected]
   (let [n-selected (length selected)
         tablex (require :fsouza.tablex)]
-    (if (<= (length selected) 2)
+    (if (<= (length selected) 1)
       false
       (tablex.exists
         selected
