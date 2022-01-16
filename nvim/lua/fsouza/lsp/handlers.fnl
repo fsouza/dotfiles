@@ -8,12 +8,13 @@
     (tset non-focusable-handlers method handler)
     (handler err result context ...)))
 
-(fn fzf-location-callback [_ result]
+(fn fzf-location-callback [_ result ctx]
   (when (and result (not (vim.tbl_isempty result)))
     (if (vim.tbl_islist result)
       (if (> (length result) 1)
         (let [fuzzy (require :fsouza.plugin.fuzzy)
-              items (vim.lsp.util.locations_to_items result)]
+              client (vim.lsp.get_client_by_id ctx.client_id)
+              items (vim.lsp.util.locations_to_items result client.offset_encoding)]
           (fuzzy.send-items items "Locations"))
         (vim.lsp.util.jump_to_location (. result 1)))
       (vim.lsp.util.jump_to_location result))))

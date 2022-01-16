@@ -48,7 +48,7 @@
 
 (fn organize-imports-and-write [client bufnr]
   (let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)
-        params (vim.lsp.util.make_given_range_params [1 1] [(vim.api.nvim_buf_line_count bufnr) 2147483647])]
+        params (vim.lsp.util.make_given_range_params [1 1] [(vim.api.nvim_buf_line_count bufnr) 2147483647] bufnr client.offset_encoding)]
     (tset params :context {:diagnostics (vim.diagnostic.get bufnr {:namespace client.id})})
 
     (client.request
