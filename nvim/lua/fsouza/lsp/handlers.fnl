@@ -10,14 +10,14 @@
 
 (fn fzf-location-callback [_ result ctx]
   (when (and result (not (vim.tbl_isempty result)))
-    (if (vim.tbl_islist result)
-      (if (> (length result) 1)
-        (let [fuzzy (require :fsouza.plugin.fuzzy)
-              client (vim.lsp.get_client_by_id ctx.client_id)
-              items (vim.lsp.util.locations_to_items result client.offset_encoding)]
-          (fuzzy.send-items items "Locations"))
-        (vim.lsp.util.jump_to_location (. result 1)))
-      (vim.lsp.util.jump_to_location result))))
+    (let [client (vim.lsp.get_client_by_id ctx.client_id)]
+      (if (vim.tbl_islist result)
+        (if (> (length result) 1)
+          (let [fuzzy (require :fsouza.plugin.fuzzy)
+                items (vim.lsp.util.locations_to_items result client.offset_encoding)]
+            (fuzzy.send-items items "Locations"))
+          (vim.lsp.util.jump_to_location (. result 1) client.offset_encoding))
+        (vim.lsp.util.jump_to_location result client.offset_encoding)))))
 
 {:textDocument/declaration fzf-location-callback
  :textDocument/definition fzf-location-callback
