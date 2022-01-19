@@ -35,17 +35,14 @@
                   [:tpope/vim-rhubarb]
                   [:tpope/vim-sexp-mappings-for-regular-people]
                   [:tpope/vim-surround]
-                  ; treesitter
                   {1 :nvim-treesitter/nvim-treesitter
                    :run (partial vim.cmd :TSUpdate)}
                   [:nvim-treesitter/nvim-treesitter-textobjects]
                   [:nvim-treesitter/playground]
                   {1 :SmiteshP/nvim-gps :opt true}
                   [:JoosepAlviste/nvim-ts-context-commentstring]
-                  ; completion stuff
                   {1 :fsouza/nvim-lsp-compl :as :nvim-lsp-compl :opt true}
                   {1 :l3mon4d3/luasnip :as :luasnip :opt true}
-                  ; misc opt stuff
                   {1 :ibhagwan/fzf-lua :as :fzf-lua :opt true}
                   {1 :neovim/nvim-lspconfig :as :nvim-lspconfig :opt true}
                   {1 :norcalli/nvim-colorizer.lua
@@ -73,7 +70,6 @@
                   [:tbastos/vim-lua]
                   [:Vimjas/vim-python-pep8-indent]
                   [:ziglang/zig.vim]
-                  ; colorschemes
                   [:ishan9299/modus-theme-vim]]
            :repack (fn []
                      (tset package.loaded :fsouza.packed nil)

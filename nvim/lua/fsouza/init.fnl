@@ -51,7 +51,7 @@
               :zig_fmt_autosave 0
               :sexp_filetypes "clojure,dune,fennel,scheme,lisp,timl"
               :sexp_enable_insert_mode_mappings 0
-              :sexp_no_word_maps 0
+              :sexp_no_word_maps 1
               :did_load_filetypes 0
               :do_filetype_lua 1}]
     (icollect [name value (pairs vars)]
