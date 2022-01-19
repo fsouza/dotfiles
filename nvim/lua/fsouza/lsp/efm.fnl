@@ -91,6 +91,14 @@
          :rootMarkers default-root-markers
          :env [(.. "NVIM_CACHE_DIR=" cache-dir)]})))
 
+(fn get-fnlfmt [cb]
+  (let [fnlfmt (path.join config-dir "langservers" "bin" "fnlfmt.py")
+        py3 (find-venv-bin "python3")]
+    (cb {:formatCommand (string.format "%s %s --fix -" py3 fnlfmt)
+         :formatStdin true
+         :rootMarkers default-root-markers
+         :env [(.. "NVIM_CACHE_DIR=" cache-dir)]})))
+
 (fn get-dune [cb]
   (cb {:formatCommand "dune format-dune-file"
        :formatStdin true
@@ -237,7 +245,7 @@
                       "typescript" "typescriptreact" "yaml"])
 
 (fn get-filetypes []
-  (vim.tbl_flatten ["bzl" "dune" "ocaml" "python" "sh" prettierd-fts]))
+  (vim.tbl_flatten ["bzl" "dune" "fennel" "ocaml" "python" "sh" prettierd-fts]))
 
 (fn basic-settings []
   (values {:lintDebounce 250000000
@@ -272,7 +280,9 @@
                                  {:language "ocaml"
                                   :fn get-ocamlformat}
                                  {:language "bzl"
-                                  :fn get-buildifier}]
+                                  :fn get-buildifier}
+                                 {:language "fennel"
+                                  :fn get-fnlfmt}]
           timer (vim.loop.new_timer)]
       (each [_ f (ipairs simple-tool-factories)]
         (let [{:fn f : language} f]

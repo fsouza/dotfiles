@@ -315,6 +315,20 @@ async def setup_langservers(cache_dir: Path) -> None:
     )
 
 
+async def setup_fnlfmt(cache_dir: Path, hr_dir: Path) -> None:
+    repo_dir = await _clone_or_update(
+        "https://git.sr.ht/~technomancy/fnlfmt",
+        cache_dir / "fnlfmt",
+    )
+
+    await run_cmd(
+        "make",
+        [],
+        cwd=repo_dir,
+        env={"PATH": f"{hr_dir}:{os.environ.get('PATH')}"},
+    )
+
+
 async def _find_cache_dir() -> Path:
     cache_dir = await _neovim_command("echo stdpath('cache')")
     return Path(cache_dir)
@@ -323,11 +337,13 @@ async def _find_cache_dir() -> Path:
 async def main() -> int:
     cache_dir = await _find_cache_dir()
 
-    await asyncio.gather(
+    [_, _, hr_dir] = await asyncio.gather(
         setup_langservers(cache_dir),
         ensure_virtualenv(cache_dir),
         ensure_hererocks(cache_dir),
     )
+
+    await setup_fnlfmt(cache_dir, hr_dir)
 
     return 0
 
