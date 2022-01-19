@@ -315,4 +315,3 @@
                                  {:settings client.config.settings}))))
 
 {: basic-settings : gen-config}
-
