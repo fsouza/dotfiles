@@ -7,14 +7,11 @@
 
 (fn augroup [name commands]
   (vim.cmd (.. "augroup " name))
-  (vim.cmd "autocmd!")
+  (vim.cmd :autocmd!)
   (each [_ c (ipairs commands)]
-    (vim.cmd (string.format
-               "autocmd %s %s %s %s"
-               (table.concat c.events ",")
-               (table.concat (if-nil c.targets []) ",")
-               (table.concat (if-nil c.modifiers []) " ")
-               c.command)))
+    (vim.cmd (string.format "autocmd %s %s %s %s" (table.concat c.events ",")
+                            (table.concat (if-nil c.targets []) ",")
+                            (table.concat (if-nil c.modifiers []) " ") c.command)))
   (vim.cmd "augroup END"))
 
 (fn once [f]
@@ -34,15 +31,18 @@
         cursor (vim.api.nvim_win_get_cursor 0)
         orig-lineno (. cursor 1)
         orig-colno (. cursor 2)
-        orig-line (. (vim.api.nvim_buf_get_lines bufnr (- orig-lineno 1) orig-lineno true) 1)
+        orig-line (. (vim.api.nvim_buf_get_lines bufnr (- orig-lineno 1)
+                                                 orig-lineno true)
+                     1)
         orig-nlines (vim.api.nvim_buf_line_count bufnr)
         view (vim.fn.winsaveview)]
     (f)
-
     (let [line-offset (- (vim.api.nvim_buf_line_count bufnr) orig-nlines)
           lineno (+ orig-lineno line-offset)
-          new-line (. (vim.api.nvim_buf_get_lines bufnr (- lineno 1) lineno true) 1)
-          col-offset (- (string.len (if-nil new-line "")) (string.len orig-line))]
+          new-line (. (vim.api.nvim_buf_get_lines bufnr (- lineno 1) lineno
+                                                  true) 1)
+          col-offset (- (string.len (if-nil new-line ""))
+                        (string.len orig-line))]
       (tset view :lnum lineno)
       (tset view :col (+ orig-colno col-offset))
       (vim.fn.winrestview view))))
@@ -55,23 +55,17 @@
 
   (fn from-current [mode]
     (let [[_ srow scol _] (vim.fn.getpos ".")
-          [_ erow ecol _] (vim.fn.getpos "v")]
+          [_ erow ecol _] (vim.fn.getpos :v)]
       (send-esc)
-      (if (= mode "V")
-        [srow 0 erow 2147483647]
-        [srow scol erow ecol])))
+      (if (= mode :V) [srow 0 erow 2147483647] [srow scol erow ecol])))
 
   (let [mode (vim.fn.mode)
-        [srow scol erow ecol] (if (or (= mode "v") (= mode "V"))
-                                (from-current mode)
-                                (from-markers))]
-    (if (< srow erow)
-      [srow scol erow ecol]
-      (if (> srow erow)
-        [erow ecol srow scol]
-        (if (<= scol ecol)
-          [srow scol erow ecol]
-          [erow ecol srow scol])))))
+        [srow scol erow ecol] (if (or (= mode :v) (= mode :V))
+                                  (from-current mode)
+                                  (from-markers))]
+    (if (< srow erow) [srow scol erow ecol]
+        (if (> srow erow) [erow ecol srow scol]
+            (if (<= scol ecol) [srow scol erow ecol] [erow ecol srow scol])))))
 
 (fn get-visual-selection-contents []
   (let [[srow scol erow ecol] (get-visual-selection-range)
@@ -90,5 +84,6 @@
            : get-visual-selection-contents
            : get-visual-selection-range}]
   (tset mod :fn-cmd #(let [id (register-cb mod $1)]
-                       (string.format "lua require('fsouza.lib.nvim-helpers').fns['%s']()" id)))
+                       (string.format "lua require('fsouza.lib.nvim-helpers').fns['%s']()"
+                                      id)))
   mod)

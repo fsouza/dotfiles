@@ -1,15 +1,16 @@
-(local prefix ["cmd" "ctrl"])
+(local prefix [:cmd :ctrl])
 
 (macro make-hotkey [mod key target]
-  `(hs.hotkey.new
-     [,mod]
-     ,key
-     #(let [key-event# (hs.eventtap.event.newKeyEvent [] ,target true)]
-        (key-event#:post))
-     #(let [key-event# (hs.eventtap.event.newKeyEvent [] ,target false)]
-        (key-event#:post))
-     #(let [key-event# (hs.eventtap.event.newKeyEvent [] ,target true)]
-        (key-event#:post))))
+  `(hs.hotkey.new [,mod] ,key
+                  #(let [key-event# (hs.eventtap.event.newKeyEvent [] ,target
+                                                                   true)]
+                     (key-event#:post))
+                  #(let [key-event# (hs.eventtap.event.newKeyEvent [] ,target
+                                                                   false)]
+                     (key-event#:post))
+                  #(let [key-event# (hs.eventtap.event.newKeyEvent [] ,target
+                                                                   true)]
+                     (key-event#:post))))
 
 (fn set-readline-shortcuts [apps]
   (let [hks [(make-hotkey :ctrl :n :down)
@@ -19,7 +20,6 @@
         filters (icollect [_ app (ipairs apps)]
                   (hs.window.filter.new #(let [application ($1:application)]
                                            (= (application:name) app))))]
-
     (fn enable-hks []
       (each [_ hk (ipairs hks)]
         (hk:enable)))
@@ -33,9 +33,9 @@
       (filter:subscribe hs.window.filter.windowUnfocused disable-hks))))
 
 ;; prefix+r to reload config
-(hs.hotkey.bind prefix "R" (partial hs.reload))
+(hs.hotkey.bind prefix :R (partial hs.reload))
 
 ;; prefix+v as a workaround for "typing" the clipboard.
-(hs.hotkey.bind prefix "V" #(hs.eventtap.keyStrokes (hs.pasteboard.getContents)))
+(hs.hotkey.bind prefix :V #(hs.eventtap.keyStrokes (hs.pasteboard.getContents)))
 
-(set-readline-shortcuts ["Finder" "Firefox" "Google Chrome" "Safari" "Slack"])
+(set-readline-shortcuts [:Finder :Firefox "Google Chrome" :Safari :Slack])

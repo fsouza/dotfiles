@@ -6,7 +6,7 @@
 
 (fn filter-references [refs]
   (if (vim.tbl_islist refs)
-    (do-filter refs)
-    refs))
+      (do-filter refs)
+      refs))
 
 {: filter-references}

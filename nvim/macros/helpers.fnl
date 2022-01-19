@@ -7,18 +7,15 @@
     (fn check [idx]
       (let [arg (. args idx)]
         (if (< idx (length args))
-          (list (sym :if)
-                (list (sym :not=) arg (sym :nil))
-                arg
-                (check (+ idx 1)))
-          arg)))
+            (list (sym :if) (list (sym :not=) arg (sym :nil)) arg
+                  (check (+ idx 1)))
+            arg)))
 
     (check 1)))
 
 (fn send-esc []
-  `(-> "<esc>"
-       (vim.api.nvim_replace_termcodes true false true)
-       (vim.api.nvim_feedkeys "map" true)))
+  `(-> :<esc> (vim.api.nvim_replace_termcodes true false true)
+       (vim.api.nvim_feedkeys :map true)))
 
 (fn reload [mod-name]
   `(do
@@ -26,7 +23,7 @@
      (require ,mod-name)))
 
 (fn abuf []
-  `(let [abuf# (vim.fn.expand "<abuf>")]
+  `(let [abuf# (vim.fn.expand :<abuf>)]
      (when abuf#
        (tonumber abuf#))))
 
@@ -35,9 +32,4 @@
          f# (. mod# ,fn-name)]
      (f# ,...)))
 
-{: vim-schedule
- : if-nil
- : send-esc
- : reload
- : abuf
- : mod-invoke}
+{: vim-schedule : if-nil : send-esc : reload : abuf : mod-invoke}

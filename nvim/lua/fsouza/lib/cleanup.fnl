@@ -4,22 +4,17 @@
   (var finished 0)
   (let [{: cbs} mod]
     (each [_ cb (ipairs cbs)]
-      (vim-schedule
-        (do
-          (cb)
-          (set finished (+ finished 1)))))
-
-    (vim.wait
-      500
-      #(= (length cbs) finished)
-      25)))
+      (vim-schedule (do
+                      (cb)
+                      (set finished (+ finished 1)))))
+    (vim.wait 500 #(= (length cbs) finished) 25)))
 
 (let [mod {:cbs []}]
   (tset mod :register (partial table.insert mod.cbs))
-  (tset mod :setup #(let [helpers (require :fsouza.lib.nvim-helpers)]
-                       (helpers.augroup
-                         "fsouza__lua_lib_cleanup"
-                         [{:events ["VimLeavePre"]
-                           :targets ["*"]
-                           :command (helpers.fn-cmd (partial cleanup mod))}])))
+  (tset mod :setup
+        #(let [helpers (require :fsouza.lib.nvim-helpers)]
+           (helpers.augroup :fsouza__lua_lib_cleanup
+                            [{:events [:VimLeavePre]
+                              :targets ["*"]
+                              :command (helpers.fn-cmd (partial cleanup mod))}])))
   mod)

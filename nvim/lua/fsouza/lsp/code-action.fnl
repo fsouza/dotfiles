@@ -5,17 +5,17 @@
     (let [lines (icollect [_ action (ipairs actions)]
                   action.title)
           popup-picker (require :fsouza.lib.popup-picker)]
-
-      (popup-picker.open
-        lines
-        #(let [action-chosen (. actions $1)]
-           (if (or action-chosen.edit (= (type action-chosen.command) "table"))
-             (do
-               (when action-chosen.edit
-                 (vim.lsp.util.apply_workspace_edit action-chosen.edit client.offset_encoding))
-               (when (= (type action-chosen.command) "table")
-                 (vim.lsp.buf.execute_command action-chosen.command)))
-             (vim.lsp.buf.execute_command action-chosen)))))))
+      (popup-picker.open lines
+                         #(let [action-chosen (. actions $1)]
+                            (if (or action-chosen.edit
+                                    (= (type action-chosen.command) :table))
+                                (do
+                                  (when action-chosen.edit
+                                    (vim.lsp.util.apply_workspace_edit action-chosen.edit
+                                                                       client.offset_encoding))
+                                  (when (= (type action-chosen.command) :table)
+                                    (vim.lsp.buf.execute_command action-chosen.command)))
+                                (vim.lsp.buf.execute_command action-chosen)))))))
 
 (fn handler [_ actions context]
   (let [client (vim.lsp.get_client_by_id context.client_id)]
@@ -29,7 +29,7 @@
   (let [context (if-nil context {:diagnostics (line-diagnostics)})
         params (vim.lsp.util.make_given_range_params start-pos end-pos)]
     (tset params :context context)
-    (vim.lsp.buf_request 0 "textDocument/codeAction" params cb)))
+    (vim.lsp.buf_request 0 :textDocument/codeAction params cb)))
 
 (fn code-action-for-buf [cb]
   (let [bufnr (vim.api.nvim_get_current_buf)
@@ -43,18 +43,17 @@
   (let [context {:diagnostics (line-diagnostics)}
         params (vim.lsp.util.make_range_params)]
     (tset params :context context)
-    (vim.lsp.buf_request 0 "textDocument/codeAction" params cb)))
+    (vim.lsp.buf_request 0 :textDocument/codeAction params cb)))
 
 (fn code-action []
   (code-action-for-line (fn [err actions ...]
                           (if (and actions (not (vim.tbl_isempty actions)))
-                            (handler err actions ...)
-                            (code-action-for-buf handler)))))
+                              (handler err actions ...)
+                              (code-action-for-buf handler)))))
 
 (fn visual-code-action []
   (let [helpers (require :fsouza.lib.nvim-helpers)
         [srow scol erow ecol] (helpers.get-visual-selection-range)]
     (range-code-action nil [srow scol] [erow ecol] handler)))
 
-{: code-action
- : visual-code-action}
+{: code-action : visual-code-action}

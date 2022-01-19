@@ -16,12 +16,11 @@
     (f)))
 
 (fn make-handler []
-  (let [handler (vim.lsp.with
-                  vim.lsp.diagnostic.on_publish_diagnostics
-                  {:underline true
-                   :virtual_text false
-                   :signs true
-                   :update_in_insert false})]
+  (let [handler (vim.lsp.with vim.lsp.diagnostic.on_publish_diagnostics
+                              {:underline true
+                               :virtual_text false
+                               :signs true
+                               :update_in_insert false})]
     (fn [err result context ...]
       (vim.schedule exec-hooks)
       (vim.diagnostic.reset context.client_id context.bufnr)
@@ -30,11 +29,13 @@
 (fn make-debounced-handler [bufnr debouncer-key]
   (let [debounce (require :fsouza.lib.debounce)
         interval-ms (if-nil vim.b.lsp_diagnostic_debouncing_ms 250)
-        handler (debounce.debounce interval-ms (vim.schedule_wrap (make-handler)))]
+        handler (debounce.debounce interval-ms
+                                   (vim.schedule_wrap (make-handler)))]
     (tset debouncers debouncer-key handler)
-    (vim.api.nvim_buf_attach bufnr false {:on_detach (fn []
-                                                       (handler.stop)
-                                                       (tset debouncers debouncer-key nil))})
+    (vim.api.nvim_buf_attach bufnr false
+                             {:on_detach (fn []
+                                           (handler.stop)
+                                           (tset debouncers debouncer-key nil))})
     handler))
 
 (fn publish-diagnostics [err result context ...]
@@ -45,9 +46,8 @@
       (when bufnr
         (tset context :bufnr bufnr)
         (let [debouncer-key (string.format "%d/%s" context.client_id uri)
-              handler (if-nil
-                        (. debouncers debouncer-key)
-                        (make-debounced-handler bufnr debouncer-key))]
+              handler (if-nil (. debouncers debouncer-key)
+                              (make-debounced-handler bufnr debouncer-key))]
           (handler.call err result context ...))))))
 
 {: buf-clear-all-diagnostics

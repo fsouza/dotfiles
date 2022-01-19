@@ -7,7 +7,8 @@
         (set last-call nil)))
 
     (timer:start interval-ms interval-ms make-call)
-    {:call (fn [...] (set last-call [...]))
+    {:call (fn [...]
+             (set last-call [...]))
      :stop (fn []
              (make-call)
              (timer:close))}))

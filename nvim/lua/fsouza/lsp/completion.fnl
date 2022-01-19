@@ -9,23 +9,19 @@
 
 ; used to store information about ongoing completion, gets reset everytime we
 ; exit "completion mode".
-(local state {:inflight-requests {}
-              :resolved-items {}})
+(local state {:inflight-requests {} :resolved-items {}})
 
 (var winid nil)
 
 (fn cr-key-for-comp-info [comp-info]
-  (if (= comp-info.mode "")
-    "<cr>"
-    (if (and (= comp-info.pum_visible 1) (= comp-info.selected -1))
-      "<c-e><cr>"
-      "<cr>")))
+  (if (= comp-info.mode "") :<cr>
+      (if (and (= comp-info.pum_visible 1) (= comp-info.selected -1))
+          :<c-e><cr> :<cr>)))
 
 (fn item-documentation [item]
   (match (type item.documentation)
-    "table" item.documentation
-    _ {:kind "plaintext"
-       :value (vim.trim (if-nil item.documentation ""))}))
+    :table item.documentation
+    _ {:kind :plaintext :value (vim.trim (if-nil item.documentation ""))}))
 
 (fn popup-contents [item]
   (let [doc-lines []
@@ -33,27 +29,21 @@
         detail (vim.trim detail)
         documentation (item-documentation item)]
     (when (not= detail "")
-      (table.insert doc-lines {:kind "plaintext"
-                               :value detail}))
-
+      (table.insert doc-lines {:kind :plaintext :value detail}))
     (when (not= documentation.value "")
       (table.insert doc-lines documentation.value))
-
     (vim.lsp.util.convert_input_to_markdown_lines doc-lines)))
 
 (fn calc-max-width [max-width starting-pos right]
   (let [cols vim.o.columns
         available-space (if right
-                          (- cols starting-pos 2)
-                          (- starting-pos 2))]
+                            (- cols starting-pos 2)
+                            (- starting-pos 2))]
     (math.min max-width available-space)))
 
 (fn show-popup [contents]
   (let [popup (require :fsouza.lib.popup)
-        {: row
-         : col
-         : width
-         : scrollbar} (vim.fn.pum_getpos)
+        {: row : col : width : scrollbar} (vim.fn.pum_getpos)
         scrollbar (if scrollbar 1 0)
         end-col (+ col width scrollbar)
         max-width (calc-max-width 100 end-col true)
@@ -63,13 +53,13 @@
         right-col (if right nil col)
         (popup-winid _) (popup.open {:lines contents
                                      :enter false
-                                     :type-name "completion-doc"
+                                     :type-name :completion-doc
                                      :markdown true
-                                     :row row
+                                     : row
                                      :col left-col
-                                     :right-col right-col
-                                     :relative "editor"
-                                     :max-width max-width})]
+                                     : right-col
+                                     :relative :editor
+                                     : max-width})]
     (set winid popup-winid)))
 
 (fn augroup-name [bufnr]
@@ -87,23 +77,22 @@
 
 (fn resolve-item [client bufnr item cb]
   (var request-id nil)
-
   (let [item-key (if-nil item.sortText item.label)]
     (fn on-resolve [err item]
       (when (not err)
         (tset state.resolved-items item-key item)
         (cb item))
-
       (if request-id
-        (tset state.inflight-requests request-id nil)))
+          (tset state.inflight-requests request-id nil)))
 
     (let [resolved-item (. state.resolved-items item-key)]
       (if resolved-item
-        (cb resolved-item)
-        (let [(_ req-id) (client.request "completionItem/resolve" item on-resolve bufnr)]
-          (when req-id
-            (set request-id req-id)
-            (tset state.inflight-requests req-id true)))))))
+          (cb resolved-item)
+          (let [(_ req-id) (client.request :completionItem/resolve item
+                                           on-resolve bufnr)]
+            (when req-id
+              (set request-id req-id)
+              (tset state.inflight-requests req-id true)))))))
 
 (fn reset-state [client]
   (close)
@@ -115,12 +104,13 @@
 (fn do-completeChanged [client bufnr item]
   (close)
   (when item
-    (let [completion-provider (?. client :server_capabilities :completionProvider)
+    (let [completion-provider (?. client :server_capabilities
+                                  :completionProvider)
           completion-provider (if-nil completion-provider {})
           resolve-provider (. completion-provider :resolveProvider)]
       (if resolve-provider
-        (resolve-item client bufnr item render-docs)
-        (render-docs item)))))
+          (resolve-item client bufnr item render-docs)
+          (render-docs item)))))
 
 (fn on-CompleteChanged [client bufnr]
   (let [item (?. vim :v :event :completed_item :user_data)]
@@ -136,42 +126,39 @@
 (fn on-attach [client bufnr]
   (tset client.server_capabilities.completionProvider :triggerCharacters [])
   (tset client.resolved_capabilities :signature_help_trigger_characters [])
-
   (let [lsp-compl (require :lsp_compl)]
     (fn complete []
       (let [lsp-compl (require :lsp_compl)]
-        (helpers.augroup (augroup-name bufnr) [{:events ["CompleteChanged"]
-                                                :targets [(string.format "<buffer=%d>" bufnr)]
-                                                :command (helpers.fn-cmd (partial on-CompleteChanged client bufnr))}
-                                               {:events ["CompleteDone"]
-                                                :targets [(string.format "<buffer=%d>" bufnr)]
-                                                :modifiers ["++once"]
-                                                :command (helpers.fn-cmd (partial reset-state client))}
-                                               {:events ["InsertLeave"]
-                                                :targets [(string.format "<buffer=%d>" bufnr)]
-                                                :modifiers ["++once"]
-                                                :command (helpers.fn-cmd (partial on-InsertLeave client bufnr))}])
-
+        (helpers.augroup (augroup-name bufnr)
+                         [{:events [:CompleteChanged]
+                           :targets [(string.format "<buffer=%d>" bufnr)]
+                           :command (helpers.fn-cmd (partial on-CompleteChanged
+                                                             client bufnr))}
+                          {:events [:CompleteDone]
+                           :targets [(string.format "<buffer=%d>" bufnr)]
+                           :modifiers [:++once]
+                           :command (helpers.fn-cmd (partial reset-state client))}
+                          {:events [:InsertLeave]
+                           :targets [(string.format "<buffer=%d>" bufnr)]
+                           :modifiers [:++once]
+                           :command (helpers.fn-cmd (partial on-InsertLeave
+                                                             client bufnr))}])
         (lsp-compl.trigger_completion client bufnr)
         ""))
 
     (lsp-compl.attach client bufnr)
-    (vim-schedule
-      (vim.keymap.set "i" "<c-x><c-o>" complete {:remap false
-                                                 :buffer bufnr})
-      (vim.keymap.set "i" "<cr>" #(cr-key-for-comp-info (vim.fn.complete_info)) {:remap false
-                                                                                 :buffer bufnr
-                                                                                 :expr true}))))
+    (vim-schedule (vim.keymap.set :i :<c-x><c-o> complete
+                                  {:remap false :buffer bufnr})
+                  (vim.keymap.set :i :<cr>
+                                  #(cr-key-for-comp-info (vim.fn.complete_info))
+                                  {:remap false :buffer bufnr :expr true}))))
 
 (fn on-detach [client bufnr]
   (helpers.reset-augroup (augroup-name bufnr))
-
   (when (vim.api.nvim_buf_is_valid bufnr)
-    (pcall vim.keymap.del "i" "<cr>" {:buffer bufnr})
-    (pcall vim.keymap.del "i" "<c-x><c-o>" {:buffer bufnr}))
-
+    (pcall vim.keymap.del :i :<cr> {:buffer bufnr})
+    (pcall vim.keymap.del :i :<c-x><c-o> {:buffer bufnr}))
   (let [lsp-compl (require :lsp_compl)]
     (lsp-compl.detach client.id bufnr)))
 
-{: on-attach
- : on-detach}
+{: on-attach : on-detach}

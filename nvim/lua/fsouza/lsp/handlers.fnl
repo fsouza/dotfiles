@@ -4,7 +4,9 @@
 
 (fn popup-callback [err result context ...]
   (let [method context.method
-        handler (if-nil (. non-focusable-handlers method) (vim.lsp.with (. vim.lsp.handlers method) {:focusable false}))]
+        handler (if-nil (. non-focusable-handlers method)
+                        (vim.lsp.with (. vim.lsp.handlers method)
+                                      {:focusable false}))]
     (tset non-focusable-handlers method handler)
     (handler err result context ...)))
 
@@ -12,12 +14,14 @@
   (when (and result (not (vim.tbl_isempty result)))
     (let [client (vim.lsp.get_client_by_id ctx.client_id)]
       (if (vim.tbl_islist result)
-        (if (> (length result) 1)
-          (let [fuzzy (require :fsouza.plugin.fuzzy)
-                items (vim.lsp.util.locations_to_items result client.offset_encoding)]
-            (fuzzy.send-items items "Locations"))
-          (vim.lsp.util.jump_to_location (. result 1) client.offset_encoding))
-        (vim.lsp.util.jump_to_location result client.offset_encoding)))))
+          (if (> (length result) 1)
+              (let [fuzzy (require :fsouza.plugin.fuzzy)
+                    items (vim.lsp.util.locations_to_items result
+                                                           client.offset_encoding)]
+                (fuzzy.send-items items :Locations))
+              (vim.lsp.util.jump_to_location (. result 1)
+                                             client.offset_encoding))
+          (vim.lsp.util.jump_to_location result client.offset_encoding)))))
 
 {:textDocument/declaration fzf-location-callback
  :textDocument/definition fzf-location-callback
@@ -29,12 +33,13 @@
                               (fzf-location-callback err result ...)))
  :textDocument/documentHighlight (fn [_ result context]
                                    (when (not result)
-                                     (lua "return"))
-
+                                     (lua :return))
                                    (let [bufnr (vim.api.nvim_get_current_buf)
                                          client (vim.lsp.get_client_by_id context.client_id)]
                                      (vim.lsp.util.buf_clear_references bufnr)
-                                     (vim.lsp.util.buf_highlight_references bufnr result client.offset_encoding)))
+                                     (vim.lsp.util.buf_highlight_references bufnr
+                                                                            result
+                                                                            client.offset_encoding)))
  :textDocument/hover popup-callback
  :textDocument/signatureHelp popup-callback
  :textDocument/publishDiagnostics (fn [...]

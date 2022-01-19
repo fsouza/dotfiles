@@ -5,13 +5,9 @@
 (fn should-qf [selected]
   (let [n-selected (length selected)
         tablex (require :fsouza.tablex)]
-    (if (<= (length selected) 1)
-      false
-      (tablex.exists
-        selected
-        #(if (string.match $1 "^.+:%d+:%d+:")
-           true
-           false)))))
+    (if (<= (length selected) 1) false
+        (tablex.exists selected #(if (string.match $1 "^.+:%d+:%d+:") true
+                                     false)))))
 
 (fn edit [selected]
   (let [fzf-path (require :fzf-lua.path)]
@@ -23,10 +19,10 @@
 (fn edit-or-qf [selected]
   (let [actions (require :fzf-lua.actions)]
     (if (should-qf selected)
-      (do
-        (actions.file_sel_to_qf selected)
-        (vim.cmd "cc"))
-      (edit selected))))
+        (do
+          (actions.file_sel_to_qf selected)
+          (vim.cmd :cc))
+        (edit selected))))
 
 (fn file-actions []
   (let [actions (require :fzf-lua.actions)]
@@ -36,60 +32,57 @@
      :ctrl-t actions.file_tabedit
      :ctrl-q actions.file_sel_to_qf}))
 
-(local fzf-lua
-  (helpers.once
-    (fn []
-      (vim.cmd "packadd nvim-fzf")
-
-      (let [actions (file-actions)
-            fzf-lua- (require :fzf-lua)]
-        (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
-                         :fzf_layout "default"
-                         :buffers {:file_icons false
-                                   :git_icons false}
-                         :files {:file_icons false
-                                 :git_icons false
-                                 :actions actions}
-                         :git {:file_icons false
-                               :git_icons false
-                               :actions actions}
-                         :grep {:file_icons false
-                                :git_icons false
-                                :actions actions}
-                         :oldfiles {:file_icons false
-                                    :git_icons false
-                                    :actions actions}
-                         :lsp {:file_icons false
-                               :git_icons false
-                               :actions actions}
-                         :winopts {:win_height 0.75
-                                   :win_width 0.90}
-                         :keymap {:builtin {:<c-h> :toggle-preview
-                                            :<c-u> :preview-page-up
-                                            :<c-d> :preview-page-down
-                                            :<c-r> :preview-page-reset}}
-
-                         :fzf {:alt-a :toggle-all
-                               :ctrl-l :clear-query
-                               :ctrl-d :preview-half-page-down
-                               :ctrl-u :preview-half-page-up
-                               :ctrl-h :toggle-preview}})
-
-        fzf-lua-))))
+(local fzf-lua (helpers.once (fn []
+                               (vim.cmd "packadd nvim-fzf")
+                               (let [actions (file-actions)
+                                     fzf-lua- (require :fzf-lua)]
+                                 (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
+                                                  :fzf_layout :default
+                                                  :buffers {:file_icons false
+                                                            :git_icons false}
+                                                  :files {:file_icons false
+                                                          :git_icons false
+                                                          : actions}
+                                                  :git {:file_icons false
+                                                        :git_icons false
+                                                        : actions}
+                                                  :grep {:file_icons false
+                                                         :git_icons false
+                                                         : actions}
+                                                  :oldfiles {:file_icons false
+                                                             :git_icons false
+                                                             : actions}
+                                                  :lsp {:file_icons false
+                                                        :git_icons false
+                                                        : actions}
+                                                  :winopts {:win_height 0.75
+                                                            :win_width 0.9}
+                                                  :keymap {:builtin {:<c-h> :toggle-preview
+                                                                     :<c-u> :preview-page-up
+                                                                     :<c-d> :preview-page-down
+                                                                     :<c-r> :preview-page-reset}}
+                                                  :fzf {:alt-a :toggle-all
+                                                        :ctrl-l :clear-query
+                                                        :ctrl-d :preview-half-page-down
+                                                        :ctrl-u :preview-half-page-up
+                                                        :ctrl-h :toggle-preview}})
+                                 fzf-lua-))))
 
 (fn grep [rg-opts search]
   (let [search (if-nil search (vim.fn.input "rg："))
         fzf-lua (fzf-lua)]
     (when (not= search "")
-      (fzf-lua.grep {:search search
-                     :raw_cmd (string.format "rg %s -- %s" rg-opts (vim.fn.shellescape search))}))))
+      (fzf-lua.grep {: search
+                     :raw_cmd (string.format "rg %s -- %s" rg-opts
+                                             (vim.fn.shellescape search))}))))
 
 (fn send-items [items prompt]
   (let [prompt (.. prompt "：")
         fzf-lua (fzf-lua)
         config (require :fzf-lua.config)
         core (require :fzf-lua.core)
-        opts (config.normalize_opts {:prompt prompt :cwd (vim.fn.getcwd)} config.globals.lsp)]
+        opts (config.normalize_opts {: prompt :cwd (vim.fn.getcwd)}
+                                    config.globals.lsp)]
     (tset opts :fzf_fn
           (icollect [_ item (ipairs items)]
             (let [item (core.make_entry_lcol opts item)]
@@ -105,10 +98,9 @@
                           (fzf-lua.files {:cwd $1}))
            :grep (partial grep rg-opts)
            :grep-visual (partial grep-visual rg-opts)
-           :send-items send-items}]
-  (setmetatable mod
-                {:__index (fn [table key]
-                            (let [fzf-lua (fzf-lua)
-                                  value (. fzf-lua key)]
-                              (rawset table key value)
-                              value))}))
+           : send-items}]
+  (setmetatable mod {:__index (fn [table key]
+                                (let [fzf-lua (fzf-lua)
+                                      value (. fzf-lua key)]
+                                  (rawset table key value)
+                                  value))}))

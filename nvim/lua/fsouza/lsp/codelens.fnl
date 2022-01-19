@@ -6,7 +6,7 @@
 
 (local clients {})
 
-(local ns (vim.api.nvim_create_namespace "fsouza__codelens"))
+(local ns (vim.api.nvim_create_namespace :fsouza__codelens))
 
 ;; stores result by bufnr & line (range.start.line)
 (local code-lenses {})
@@ -16,11 +16,11 @@
         by-line (if-nil by-line {})]
     (each [_ codelens (ipairs codelenses)]
       (if codelens.command
-        (let [line-id codelens.range.start.line
-              curr (if-nil (. by-line line-id) [])]
-          (table.insert curr codelens)
-          (tset by-line line-id curr))
-        (table.insert to-resolve codelens)))
+          (let [line-id codelens.range.start.line
+                curr (if-nil (. by-line line-id) [])]
+            (table.insert curr codelens)
+            (tset by-line line-id curr))
+          (table.insert to-resolve codelens)))
     (values by-line to-resolve)))
 
 (fn remove-results [bufnr]
@@ -28,22 +28,20 @@
 
 (fn resolve-code-lenses [client lenses cb]
   (if (not client.supports-resolve)
-    (cb {})
-    (let [resolved-lenses []
-          timer (vim.loop.new_timer)]
-      (var done 0)
-      (each [_ lens (ipairs lenses)]
-        (client.lsp-client.request
-          "codeLens/resolve"
-          lens
-          (fn [_ result]
-            (set done (+ done 1))
-            (when result
-              (table.insert resolved-lenses result)))))
-
-      (timer:start 500 500 (vim.schedule_wrap #(when (= done (length lenses))
-                                                 (timer:close)
-                                                 (cb resolved-lenses)))))))
+      (cb {})
+      (let [resolved-lenses []
+            timer (vim.loop.new_timer)]
+        (var done 0)
+        (each [_ lens (ipairs lenses)]
+          (client.lsp-client.request :codeLens/resolve lens
+                                     (fn [_ result]
+                                       (set done (+ done 1))
+                                       (when result
+                                         (table.insert resolved-lenses result)))))
+        (timer:start 500 500
+                     (vim.schedule_wrap #(when (= done (length lenses))
+                                           (timer:close)
+                                           (cb resolved-lenses)))))))
 
 (fn render-virtual-text [bufnr]
   (vim.api.nvim_buf_clear_namespace bufnr ns 0 -1)
@@ -52,7 +50,8 @@
     (each [line items (pairs buf-lenses)]
       (let [titles (icollect [_ item (ipairs items)]
                      item.command.title)
-            chunks [[(string.format "%s%s" prefix (table.concat titles " | ")) "LspCodeLensVirtualText"]]]
+            chunks [[(string.format "%s%s" prefix (table.concat titles " | "))
+                     :LspCodeLensVirtualText]]]
         (vim.api.nvim_buf_set_virtual_text bufnr ns line chunks {})))))
 
 (fn codelenses-handler [_ codelenses context]
@@ -63,51 +62,59 @@
                           (tset code-lenses context.bufnr lenses)
                           (render-virtual-text context.bufnr))]
       (if (> (length to-resolve) 0)
-        (resolve-code-lenses client to-resolve #(handle-lenses (group-by-line $1 preresolved)))
-        (handle-lenses preresolved)))))
+          (resolve-code-lenses client to-resolve
+                               #(handle-lenses (group-by-line $1 preresolved)))
+          (handle-lenses preresolved)))))
 
 (fn codelenses [bufnr]
   (when (. clients bufnr)
     (let [bufnr (if (not= bufnr 0)
-                  bufnr
-                  (vim.api.nvim_get_current_buf))
+                    bufnr
+                    (vim.api.nvim_get_current_buf))
           params {:textDocument {:uri (vim.uri_from_bufnr bufnr)}}
           client (. clients bufnr)]
-      (client.lsp-client.request "textDocument/codeLens" params codelenses-handler bufnr))))
+      (client.lsp-client.request :textDocument/codeLens params
+                                 codelenses-handler bufnr))))
 
 (fn make-debounced-codelenses [bufnr debouncer-key]
   (let [interval-ms (if-nil vim.b.lsp_codelens_debouncing_ms 50)
         debounce (require :fsouza.lib.debounce)
         debounced (debounce.debounce interval-ms (vim.schedule_wrap codelenses))]
     (tset debouncers debouncer-key debounced)
-    (vim.api.nvim_buf_attach bufnr false {:on_detach (fn []
-                                                       (debounced.stop)
-                                                       (tset debouncers debouncer-key nil))})
+    (vim.api.nvim_buf_attach bufnr false
+                             {:on_detach (fn []
+                                           (debounced.stop)
+                                           (tset debouncers debouncer-key nil))})
     debounced))
 
 (fn codelens [bufnr]
   (let [debouncer-key bufnr
-        debounced (if-nil (. debouncers debouncer-key) (make-debounced-codelenses bufnr debouncer-key))]
+        debounced (if-nil (. debouncers debouncer-key)
+                          (make-debounced-codelenses bufnr debouncer-key))]
     (debounced.call bufnr)))
 
 (fn execute-codelenses [bufnr items]
   (let [client (. clients bufnr)]
     (when (and (not (vim.tbl_isempty items)) client)
       (let [run (fn [clens]
-                  (client.lsp-client.request "workspace/executeCommand" clens.command (fn [err]
-                                                                                        (when (not err)
-                                                                                          (vim.cmd "checktime")))))
+                  (client.lsp-client.request :workspace/executeCommand
+                                             clens.command
+                                             (fn [err]
+                                               (when (not err)
+                                                 (vim.cmd :checktime)))))
             execute-item (fn [selected]
-                           (when (and client.supports-command (not= selected.command.command ""))
+                           (when (and client.supports-command
+                                      (not= selected.command.command ""))
                              (run selected)))]
         (if (> (length items) 1)
-          (let [tablex (require :fsouza.tablex)
-                popup-picker (require :fsouza.lib.popup-picker)
-                popup-lines (tablex.filter-map (fn [item]
-                                                 (when item.command
-                                                   item.command.title)) items)]
-            (popup-picker.open popup-lines #(execute-item (. items $1))))
-          (execute-item (. items 1)))))))
+            (let [tablex (require :fsouza.tablex)
+                  popup-picker (require :fsouza.lib.popup-picker)
+                  popup-lines (tablex.filter-map (fn [item]
+                                                   (when item.command
+                                                     item.command.title))
+                                                 items)]
+              (popup-picker.open popup-lines #(execute-item (. items $1))))
+            (execute-item (. items 1)))))))
 
 (fn execute []
   (let [winid (vim.api.nvim_get_current_win)
@@ -120,15 +127,14 @@
       (execute-codelenses bufnr line-codelenses))))
 
 (fn augroup-name [bufnr]
-  (.. "fsouza__lsp_codelens_" bufnr))
+  (.. :fsouza__lsp_codelens_ bufnr))
 
 (fn on-detach [bufnr]
   (let [mappings (?. clients bufnr :mappings)]
     (when (vim.api.nvim_buf_is_valid bufnr)
       (vim.api.nvim_buf_clear_namespace bufnr ns 0 -1)
       (when mappings
-        (vim.keymap.del "n" mappings {:buffer bufnr})))
-
+        (vim.keymap.del :n mappings {:buffer bufnr})))
     (tset clients bufnr nil)
     (let [augroup-id (augroup-name bufnr)
           buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
@@ -145,19 +151,17 @@
                          :supports-command opts.supports-command
                          :mapping opts.mapping})
     (vim-schedule (codelens bufnr))
-
-    (helpers.augroup augroup-id [{:events ["InsertLeave" "BufWritePost"]
-                                  :targets [(string.format "<buffer=%d>" bufnr)]
-                                  :command (helpers.fn-cmd (partial codelens bufnr))}])
-
-    (vim-schedule
-      (let [buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
-        (buf-diagnostic.register-hook augroup-id (partial codelens bufnr))
-        (vim.api.nvim_buf_attach bufnr false {:on_detach (partial on-detach bufnr)})))
-
+    (helpers.augroup augroup-id
+                     [{:events [:InsertLeave :BufWritePost]
+                       :targets [(string.format "<buffer=%d>" bufnr)]
+                       :command (helpers.fn-cmd (partial codelens bufnr))}])
+    (vim-schedule (let [buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
+                    (buf-diagnostic.register-hook augroup-id
+                                                  (partial codelens bufnr))
+                    (vim.api.nvim_buf_attach bufnr false
+                                             {:on_detach (partial on-detach
+                                                                  bufnr)})))
     (when opts.mapping
-      (vim.keymap.set "n" opts.mapping execute {:silent true
-                                                :buffer bufnr}))))
+      (vim.keymap.set :n opts.mapping execute {:silent true :buffer bufnr}))))
 
-{: on-attach
- : on-detach}
+{: on-attach : on-detach}

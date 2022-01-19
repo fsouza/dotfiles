@@ -1,38 +1,31 @@
 (fn should-use-ts [node]
   (when (= node nil)
     (lua "return false"))
-
   (let [node-type (node:type)
         node-types [; generic
-                    "local_function"
-                    "function_declaration"
-                    "method_declaration"
-                    "type_spec"
-                    "assignment"
-
+                    :local_function
+                    :function_declaration
+                    :method_declaration
+                    :type_spec
+                    :assignment
                     ; typescript
-                    "class"
-                    "function"
-                    "type_alias_declaration"
-                    "interface_declaration"
-                    "method_definition"
-                    "variable_declarator"
-                    "public_field_definition"
-
+                    :class
+                    :function
+                    :type_alias_declaration
+                    :interface_declaration
+                    :method_definition
+                    :variable_declarator
+                    :public_field_definition
                     ; python
-                    "class_definition"
-                    "function_definition"
-
+                    :class_definition
+                    :function_definition
                     ; go
-                    "var_spec"
-
+                    :var_spec
                     ; ocaml
-                    "let_binding"
-                    "value_definition"]
+                    :let_binding
+                    :value_definition]
         tablex (require :fsouza.tablex)]
-
     (tablex.exists node-types (partial = node-type))))
-
 
 (fn normalize-loc [loc]
   (when (not loc.uri)
@@ -46,23 +39,19 @@
   (let [loc (normalize-loc loc)]
     (when (not loc.uri)
       (lua "return loc"))
-
     (let [parsers (require :nvim-treesitter.parsers)
           lang (parsers.ft_to_lang vim.bo.filetype)]
       (when (or (not lang) (= lang "") (not (parsers.has_parser lang)))
         (lua "return loc"))
-
       (let [bufnr (vim.uri_to_bufnr loc.uri)
             start-pos loc.range.start
             end-pos loc.range.end]
-        (vim.api.nvim_buf_set_option bufnr "buflisted" true)
-        (vim.api.nvim_buf_set_option bufnr "filetype" vim.bo.filetype)
-
+        (vim.api.nvim_buf_set_option bufnr :buflisted true)
+        (vim.api.nvim_buf_set_option bufnr :filetype vim.bo.filetype)
         (let [parser (vim.treesitter.get_parser bufnr lang)
               (_ t) (next (parser:trees))]
           (when (not t)
             (lua "return loc"))
-
           (let [root (t:root)
                 node (root:named_descendant_for_range start-pos.line
                                                       start-pos.character
@@ -75,7 +64,6 @@
                 (tset loc.range.start :character sc)
                 (tset loc.range.end :line el)
                 (tset loc.range.end :character ec)))
-
             loc))))))
 
 (fn peek-location-callback [_ result]
@@ -88,7 +76,7 @@
      (let [params# (vim.lsp.util.make_position_params)]
        (vim.lsp.buf_request 0 ,method params# peek-location-callback))))
 
-{:preview-definition (make-lsp-loc-action "textDocument/definition")
- :preview-declaration (make-lsp-loc-action "textDocument/declaration")
- :preview-implementation (make-lsp-loc-action "textDocument/implementation")
- :preview-type-definition (make-lsp-loc-action "textDocument/typeDefinition")}
+{:preview-definition (make-lsp-loc-action :textDocument/definition)
+ :preview-declaration (make-lsp-loc-action :textDocument/declaration)
+ :preview-implementation (make-lsp-loc-action :textDocument/implementation)
+ :preview-type-definition (make-lsp-loc-action :textDocument/typeDefinition)}

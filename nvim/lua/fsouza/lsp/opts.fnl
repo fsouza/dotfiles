@@ -3,176 +3,201 @@
 (local helpers (require :fsouza.lib.nvim-helpers))
 
 (local setup-symbols-outline
-  (helpers.once #(let [symbols-outline (require :symbols-outline)]
-                   (symbols-outline.setup {:highlight_hovered_item false
-                                           :auto_preview false
-                                           :keymaps {:toggle_preview ["<leader>i"]
-                                                     :close ["<leader>v"]}
-                                           :symbols {:File {:icon ">"
-                                                            :hl "TSURI"}
-                                                     :Module {:icon "Ｍ"
-                                                              :hl "TSNamespace"}
-                                                     :Namespace {:icon ">"
-                                                                 :hl "TSNamespace"}
-                                                     :Package {:icon ">"
-                                                               :hl "TSNamespace"}
-                                                     :Class {:icon "𝓒"
-                                                             :hl "TSType"}
-                                                     :Method {:icon "ƒ"
-                                                              :hl "TSMethod"}
-                                                     :Property {:icon "ƒ"
-                                                                :hl "TSMethod"}
-                                                     :Field {:icon ">"
-                                                             :hl "TSField"}
-                                                     :Constructor {:icon "ƒ"
-                                                                   :hl "TSConstructor"}
-                                                     :Enum {:icon "ℰ"
-                                                            :hl "TSType"}
-                                                     :Interface {:icon "ﰮ"
-                                                                 :hl "TSType"}
-                                                     :Function {:icon "ƒ"
-                                                                :hl "TSFunction"}
-                                                     :Variable {:icon ">"
-                                                                :hl "TSConstant"}
-                                                     :Constant {:icon ">"
-                                                                :hl "TSConstant"}
-                                                     :String {:icon "𝓐"
-                                                              :hl "TSString"}
-                                                     :Number {:icon "#"
-                                                              :hl "TSNumber"}
-                                                     :Boolean {:icon "⊨"
-                                                               :hl "TSBoolean"}
-                                                     :Array {:icon "Ａ"
-                                                             :hl "TSConstant"}
-                                                     :Object {:icon "⦿"
-                                                              :hl "TSType"}
-                                                     :Key {:icon "🔐"
-                                                           :hl "TSType"}
-                                                     :Null {:icon "NULL"
-                                                            :hl "TSType"}
-                                                     :EnumMember {:icon ">"
-                                                                  :hl "TSField"}
-                                                     :Struct {:icon "𝓢"
-                                                              :hl "TSType"}
-                                                     :Event {:icon ">"
-                                                             :hl "TSType"}
-                                                     :Operator {:icon "+"
-                                                                :hl "TSOperator"}
-                                                     :TypeParameter {:icon "𝙏"
-                                                                     :hl "TSParameter"}}})
-                   symbols-outline)))
+       (helpers.once #(let [symbols-outline (require :symbols-outline)]
+                        (symbols-outline.setup {:highlight_hovered_item false
+                                                :auto_preview false
+                                                :keymaps {:toggle_preview [:<leader>i]
+                                                          :close [:<leader>v]}
+                                                :symbols {:File {:icon ">"
+                                                                 :hl :TSURI}
+                                                          :Module {:icon "Ｍ"
+                                                                   :hl :TSNamespace}
+                                                          :Namespace {:icon ">"
+                                                                      :hl :TSNamespace}
+                                                          :Package {:icon ">"
+                                                                    :hl :TSNamespace}
+                                                          :Class {:icon "𝓒"
+                                                                  :hl :TSType}
+                                                          :Method {:icon "ƒ"
+                                                                   :hl :TSMethod}
+                                                          :Property {:icon "ƒ"
+                                                                     :hl :TSMethod}
+                                                          :Field {:icon ">"
+                                                                  :hl :TSField}
+                                                          :Constructor {:icon "ƒ"
+                                                                        :hl :TSConstructor}
+                                                          :Enum {:icon "ℰ"
+                                                                 :hl :TSType}
+                                                          :Interface {:icon "ﰮ"
+                                                                      :hl :TSType}
+                                                          :Function {:icon "ƒ"
+                                                                     :hl :TSFunction}
+                                                          :Variable {:icon ">"
+                                                                     :hl :TSConstant}
+                                                          :Constant {:icon ">"
+                                                                     :hl :TSConstant}
+                                                          :String {:icon "𝓐"
+                                                                   :hl :TSString}
+                                                          :Number {:icon "#"
+                                                                   :hl :TSNumber}
+                                                          :Boolean {:icon "⊨"
+                                                                    :hl :TSBoolean}
+                                                          :Array {:icon "Ａ"
+                                                                  :hl :TSConstant}
+                                                          :Object {:icon "⦿"
+                                                                   :hl :TSType}
+                                                          :Key {:icon "🔐"
+                                                                :hl :TSType}
+                                                          :Null {:icon :NULL
+                                                                 :hl :TSType}
+                                                          :EnumMember {:icon ">"
+                                                                       :hl :TSField}
+                                                          :Struct {:icon "𝓢"
+                                                                   :hl :TSType}
+                                                          :Event {:icon ">"
+                                                                  :hl :TSType}
+                                                          :Operator {:icon "+"
+                                                                     :hl :TSOperator}
+                                                          :TypeParameter {:icon "𝙏"
+                                                                          :hl :TSParameter}}})
+                        symbols-outline)))
 
 (fn attached [bufnr client]
   (let [detach (require :fsouza.lsp.detach)]
     (macro register-detach [cb]
       `(detach.register bufnr ,cb))
-
-    (vim-schedule
-      (let [mappings {:n [{:lhs "<leader>l" :rhs #(vim.diagnostic.open_float {:bufnr bufnr
-                                                                              :scope "line"})}
-                          {:lhs "<leader>df" :rhs #(mod-invoke :fsouza.lsp.diagnostics :list-file-diagnostics)}
-                          {:lhs "<leader>dw" :rhs #(mod-invoke :fsouza.lsp.diagnostics :list-workspace-diagnostics)}
-                          {:lhs "<leader>dd" :rhs #(mod-invoke :fsouza.plugin.fuzzy :lsp_workspace_diagnostics)}
-                          {:lhs "<leader>cl" :rhs #(mod-invoke :fsouza.lsp.buf-diagnostic :buf-clear-all-diagnostics )}
-                          {:lhs "<c-n>" :rhs #(vim.diagnostic.goto_next {:focusable false})}
-                          {:lhs "<c-p>" :rhs #(vim.diagnostic.goto_prev {:focusable false})}]
-                      :i []
-                      :x []}
-            progress (require :fsouza.lsp.progress)]
-
-        (when client.resolved_capabilities.text_document_did_change
-          (let [shell-post (require :fsouza.lsp.shell-post)]
-            (shell-post.on-attach {:bufnr bufnr
-                                   :client client})
-            (register-detach shell-post.on-detach)))
-
-        (when client.resolved_capabilities.completion
-          (let [completion (require :fsouza.lsp.completion)]
-            (completion.on-attach client bufnr)
-            (register-detach (partial completion.on-detach client))))
-
-        (when client.resolved_capabilities.rename
-          (table.insert mappings.n {:lhs "<leader>r"
-                                    :rhs #(vim.lsp.buf.rename)}))
-
-        (when client.resolved_capabilities.code_action
-          (table.insert mappings.n {:lhs "<leader>cc"
-                                    :rhs #(mod-invoke :fsouza.lsp.code-action :code-action)})
-          (table.insert mappings.x {:lhs "<leader>cc"
-                                    :rhs #(mod-invoke :fsouza.lsp.code-action :visual-code-action)}))
-
-        (when client.resolved_capabilities.declaration
-          (table.insert mappings.n {:lhs "<leader>gy" :rhs #(vim.lsp.buf.declaration)})
-          (table.insert mappings.n {:lhs "<leader>py" :rhs #(mod-invoke :fsouza.lsp.locations :preview-declaration)}))
-
-        (when client.resolved_capabilities.goto_definition
-          (table.insert mappings.n {:lhs "<leader>gd" :rhs #(vim.lsp.buf.definition)})
-          (table.insert mappings.n {:lhs "<leader>pd" :rhs #(mod-invoke :fsouza.lsp.locations :preview-definition)}))
-
-        (when client.resolved_capabilities.implementation
-          (table.insert mappings.n {:lhs "<leader>gi" :rhs #(vim.lsp.buf.implementation)})
-          (table.insert mappings.n {:lhs "<leader>pi" :rhs #(mod-invoke :fsouza.lsp.locations :preview-implementation)}))
-
-        (when client.resolved_capabilities.type_defintion
-          (table.insert mappings.n {:lhs "<leader>gt" :rhs #(vim.lsp.type_definition)})
-          (table.insert mappings.n {:lhs "<leader>pt" :rhs #(mod-invoke :fsouza.lsp.locations :preview-type-definition)}))
-
-        (when client.resolved_capabilities.document_formatting
-          (let [formatting (require :fsouza.lsp.formatting)]
-            (formatting.on-attach client bufnr)
-            (register-detach formatting.on-detach)))
-
-        (when client.resolved_capabilities.document_highlight
-          (table.insert mappings.n {:lhs "<leader>s"
-                                    :rhs #(vim.lsp.buf.document_highlight)})
-          (table.insert mappings.n {:lhs "<leader>S"
-                                    :rhs #(vim.lsp.buf.clear_references)}))
-
-        (when client.resolved_capabilities.document_symbol
-          (table.insert mappings.n {:lhs "<leader>t"
-                                    :rhs #(mod-invoke :fsouza.plugin.fuzzy :lsp_document_symbols)})
-          (table.insert mappings.n {:lhs "<leader>v"
-                                    :rhs #(let [symbols-outline (setup-symbols-outline)]
-                                            (symbols-outline.toggle_outline))}))
-
-        (when client.resolved_capabilities.find_references
-          (table.insert mappings.n {:lhs "<leader>q"
-                                    :rhs #(vim.lsp.buf.references)}))
-
-        (when client.resolved_capabilities.hover
-          (table.insert mappings.n {:lhs "<leader>i"
-                                    :rhs #(vim.lsp.buf.hover)}))
-
-        (when client.resolved_capabilities.signature_help
-          (table.insert mappings.i {:lhs "<c-k>"
-                                    :rhs #(vim.lsp.buf.signature_help)}))
-
-        (when client.resolved_capabilities.workspace_symbol
-          (table.insert mappings.n {:lhs "<leader>T"
-                                    :rhs #(let [{: lsp_workspace_symbols} (require :fsouza.plugin.fuzzy)
-                                                query (vim.fn.input "query：")]
-                                            (when (not= query "")
-                                              (lsp_workspace_symbols {:query query})))}))
-
-        (when client.resolved_capabilities.code_lens
-          (let [codelens (require :fsouza.lsp.codelens)]
-            (codelens.on-attach {:bufnr bufnr
-                                 :client client
-                                 :mapping "<leader><cr>"
-                                 :can-resolve client.resolved_capabilities.code_lens_resolve
-                                 :supports-command client.resolved_capabilities.execute_command})
-            (register-detach codelens.on-detach)))
-
-        (progress.on-attach)
-
-        (vim-schedule
-          (each [mode keymaps (pairs mappings)]
-            (each [_ {: lhs : rhs} (ipairs keymaps)]
-              (vim.keymap.set mode lhs rhs {:silent true
-                                            :buffer bufnr})))
-          (register-detach #(each [mode keymaps (pairs mappings)]
-                              (each [_ {: lhs} (ipairs keymaps)]
-                                (vim.keymap.del mode lhs {:buffer bufnr})))))))))
+    (vim-schedule (let [mappings {:n [{:lhs :<leader>l
+                                       :rhs #(vim.diagnostic.open_float {: bufnr
+                                                                         :scope :line})}
+                                      {:lhs :<leader>df
+                                       :rhs #(mod-invoke :fsouza.lsp.diagnostics
+                                                         :list-file-diagnostics)}
+                                      {:lhs :<leader>dw
+                                       :rhs #(mod-invoke :fsouza.lsp.diagnostics
+                                                         :list-workspace-diagnostics)}
+                                      {:lhs :<leader>dd
+                                       :rhs #(mod-invoke :fsouza.plugin.fuzzy
+                                                         :lsp_workspace_diagnostics)}
+                                      {:lhs :<leader>cl
+                                       :rhs #(mod-invoke :fsouza.lsp.buf-diagnostic
+                                                         :buf-clear-all-diagnostics)}
+                                      {:lhs :<c-n>
+                                       :rhs #(vim.diagnostic.goto_next {:focusable false})}
+                                      {:lhs :<c-p>
+                                       :rhs #(vim.diagnostic.goto_prev {:focusable false})}]
+                                  :i []
+                                  :x []}
+                        progress (require :fsouza.lsp.progress)]
+                    (when client.resolved_capabilities.text_document_did_change
+                      (let [shell-post (require :fsouza.lsp.shell-post)]
+                        (shell-post.on-attach {: bufnr : client})
+                        (register-detach shell-post.on-detach)))
+                    (when client.resolved_capabilities.completion
+                      (let [completion (require :fsouza.lsp.completion)]
+                        (completion.on-attach client bufnr)
+                        (register-detach (partial completion.on-detach client))))
+                    (when client.resolved_capabilities.rename
+                      (table.insert mappings.n
+                                    {:lhs :<leader>r
+                                     :rhs #(vim.lsp.buf.rename)}))
+                    (when client.resolved_capabilities.code_action
+                      (table.insert mappings.n
+                                    {:lhs :<leader>cc
+                                     :rhs #(mod-invoke :fsouza.lsp.code-action
+                                                       :code-action)})
+                      (table.insert mappings.x
+                                    {:lhs :<leader>cc
+                                     :rhs #(mod-invoke :fsouza.lsp.code-action
+                                                       :visual-code-action)}))
+                    (when client.resolved_capabilities.declaration
+                      (table.insert mappings.n
+                                    {:lhs :<leader>gy
+                                     :rhs #(vim.lsp.buf.declaration)})
+                      (table.insert mappings.n
+                                    {:lhs :<leader>py
+                                     :rhs #(mod-invoke :fsouza.lsp.locations
+                                                       :preview-declaration)}))
+                    (when client.resolved_capabilities.goto_definition
+                      (table.insert mappings.n
+                                    {:lhs :<leader>gd
+                                     :rhs #(vim.lsp.buf.definition)})
+                      (table.insert mappings.n
+                                    {:lhs :<leader>pd
+                                     :rhs #(mod-invoke :fsouza.lsp.locations
+                                                       :preview-definition)}))
+                    (when client.resolved_capabilities.implementation
+                      (table.insert mappings.n
+                                    {:lhs :<leader>gi
+                                     :rhs #(vim.lsp.buf.implementation)})
+                      (table.insert mappings.n
+                                    {:lhs :<leader>pi
+                                     :rhs #(mod-invoke :fsouza.lsp.locations
+                                                       :preview-implementation)}))
+                    (when client.resolved_capabilities.type_defintion
+                      (table.insert mappings.n
+                                    {:lhs :<leader>gt
+                                     :rhs #(vim.lsp.type_definition)})
+                      (table.insert mappings.n
+                                    {:lhs :<leader>pt
+                                     :rhs #(mod-invoke :fsouza.lsp.locations
+                                                       :preview-type-definition)}))
+                    (when client.resolved_capabilities.document_formatting
+                      (let [formatting (require :fsouza.lsp.formatting)]
+                        (formatting.on-attach client bufnr)
+                        (register-detach formatting.on-detach)))
+                    (when client.resolved_capabilities.document_highlight
+                      (table.insert mappings.n
+                                    {:lhs :<leader>s
+                                     :rhs #(vim.lsp.buf.document_highlight)})
+                      (table.insert mappings.n
+                                    {:lhs :<leader>S
+                                     :rhs #(vim.lsp.buf.clear_references)}))
+                    (when client.resolved_capabilities.document_symbol
+                      (table.insert mappings.n
+                                    {:lhs :<leader>t
+                                     :rhs #(mod-invoke :fsouza.plugin.fuzzy
+                                                       :lsp_document_symbols)})
+                      (table.insert mappings.n
+                                    {:lhs :<leader>v
+                                     :rhs #(let [symbols-outline (setup-symbols-outline)]
+                                             (symbols-outline.toggle_outline))}))
+                    (when client.resolved_capabilities.find_references
+                      (table.insert mappings.n
+                                    {:lhs :<leader>q
+                                     :rhs #(vim.lsp.buf.references)}))
+                    (when client.resolved_capabilities.hover
+                      (table.insert mappings.n
+                                    {:lhs :<leader>i :rhs #(vim.lsp.buf.hover)}))
+                    (when client.resolved_capabilities.signature_help
+                      (table.insert mappings.i
+                                    {:lhs :<c-k>
+                                     :rhs #(vim.lsp.buf.signature_help)}))
+                    (when client.resolved_capabilities.workspace_symbol
+                      (table.insert mappings.n
+                                    {:lhs :<leader>T
+                                     :rhs #(let [{: lsp_workspace_symbols} (require :fsouza.plugin.fuzzy)
+                                                 query (vim.fn.input "query：")]
+                                             (when (not= query "")
+                                               (lsp_workspace_symbols {: query})))}))
+                    (when client.resolved_capabilities.code_lens
+                      (let [codelens (require :fsouza.lsp.codelens)]
+                        (codelens.on-attach {: bufnr
+                                             : client
+                                             :mapping :<leader><cr>
+                                             :can-resolve client.resolved_capabilities.code_lens_resolve
+                                             :supports-command client.resolved_capabilities.execute_command})
+                        (register-detach codelens.on-detach)))
+                    (progress.on-attach)
+                    (vim-schedule (each [mode keymaps (pairs mappings)]
+                                    (each [_ {: lhs : rhs} (ipairs keymaps)]
+                                      (vim.keymap.set mode lhs rhs
+                                                      {:silent true
+                                                       :buffer bufnr})))
+                                  (register-detach #(each [mode keymaps (pairs mappings)]
+                                                      (each [_ {: lhs} (ipairs keymaps)]
+                                                        (vim.keymap.del mode
+                                                                        lhs
+                                                                        {:buffer bufnr})))))))))
 
 (fn on-attach [client bufnr]
   (let [bufnr (if-nil bufnr (vim.api.nvim_get_current_buf))
@@ -182,13 +207,12 @@
 (fn with-defaults [opts]
   (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
     (tset capabilities.workspace :executeCommand {:dynamicRegistration false})
-
     (let [defaults {:handlers (require :fsouza.lsp.handlers)
                     :on_attach on-attach
-                    :capabilities capabilities
+                    : capabilities
                     :root_dir #(vim.fn.getcwd)
                     :flags {:debounce_text_changes 0}}]
-      (vim.tbl_extend "force" defaults opts))))
+      (vim.tbl_extend :force defaults opts))))
 
 (fn root-pattern-with-fallback [...]
   (let [lspconfig (require :lspconfig)
@@ -196,5 +220,4 @@
     (fn [startpath]
       (if-nil (find-root startpath) (vim.fn.getcwd)))))
 
-{: with-defaults
- : root-pattern-with-fallback}
+{: with-defaults : root-pattern-with-fallback}
