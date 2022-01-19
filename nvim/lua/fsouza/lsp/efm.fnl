@@ -97,7 +97,7 @@
 (fn get-fnlfmt [cb]
   (let [fnlfmt (path.join config-dir :langservers :bin :fnlfmt.py)
         py3 (find-venv-bin :python3)]
-    (cb {:formatCommand (string.format "%s %s --fix -" py3 fnlfmt)
+    (cb {:formatCommand (string.format "%s %s -" py3 fnlfmt)
          :formatStdin true
          :rootMarkers default-root-markers
          :env [(.. :NVIM_CACHE_DIR= cache-dir)]})))
@@ -315,3 +315,4 @@
                                  {:settings client.config.settings}))))
 
 {: basic-settings : gen-config}
+
