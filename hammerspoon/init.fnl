@@ -39,4 +39,9 @@
 ;; prefix+v as a workaround for "typing" the clipboard.
 (hs.hotkey.bind prefix :V #(hs.eventtap.keyStrokes (hs.pasteboard.getContents)))
 
-(set-readline-shortcuts [:Finder :Firefox "Google Chrome" :Safari :Slack])
+(set-readline-shortcuts [:Finder
+                         :Firefox
+                         "Google Chrome"
+                         :Safari
+                         :Slack
+                         :Todoist])
