@@ -29,3 +29,5 @@
 	defaultBranch = main
 [advice]
 	detachedHead = false
+[merge]
+	conflictStyle = zdiff3
