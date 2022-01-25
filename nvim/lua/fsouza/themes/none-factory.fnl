@@ -72,7 +72,7 @@
       {:group group-name :opts {:gui :NONE :guifg :NONE :guibg :NONE}})))
 
 (fn reversers [colors]
-  (let [groups [:MoreMsg :StatusLine :StatusLineNC]]
+  (let [groups [:Cursor :MoreMsg :StatusLine :StatusLineNC]]
     (icollect [_ group-name (ipairs groups)]
       {:group group-name :opts {:gui :reverse :guifg :NONE :guibg :NONE}})))
 
