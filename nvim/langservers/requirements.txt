@@ -6,7 +6,7 @@
 #
 add-trailing-comma==2.2.1
     # via -r requirements.in
-aspy.refactor-imports==2.2.0
+aspy.refactor-imports==2.2.1
     # via reorder-python-imports
 attrs==21.2.0
     # via flake8-bugbear
@@ -53,7 +53,7 @@ pyflakes==2.4.0
     # via
     #   autoflake8
     #   flake8
-reorder_python_imports==2.7.0
+reorder_python_imports==2.7.1
     # via -r requirements.in
 tokenize-rt==4.1.0
     # via add-trailing-comma
