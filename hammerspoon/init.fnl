@@ -41,6 +41,7 @@
 
 (set-readline-shortcuts [:Finder
                          :Firefox
+                         "Firefox Beta"
                          "Google Chrome"
                          :Safari
                          :Slack
