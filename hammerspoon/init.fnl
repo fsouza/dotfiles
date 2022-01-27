@@ -17,7 +17,9 @@
              (make-hotkey :ctrl :p [] :up)
              (make-hotkey :ctrl :f [] :right)
              (make-hotkey :ctrl :b [] :left)
-             (make-hotkey :ctrl :w [:alt] hs.keycodes.map.delete)]
+             (make-hotkey :ctrl :w [:alt] hs.keycodes.map.delete)
+             (make-hotkey :alt :f [:alt] :right)
+             (make-hotkey :alt :b [:alt] :left)]
         filters (icollect [_ app (ipairs apps)]
                   (hs.window.filter.new #(let [application ($1:application)]
                                            (= (application:name) app))))]
