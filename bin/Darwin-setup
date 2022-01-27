@@ -148,6 +148,7 @@ defaults write com.apple.controlstrip MiniCustomized -array com.apple.system.bri
 
 defaults write com.apple.touchbar.agent PresentationModeFnModes -dict appWithControlStrip fullControlStrip
 
+touch "${HOME}"/.metadata_never_index
 defaults write com.apple.Spotlight orderedItems -array \
 	'{ enabled = 1; name = APPLICATIONS; }' \
 	'{ enabled = 0; name = "MENU_SPOTLIGHT_SUGGESTIONS"; }' \
