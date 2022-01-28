@@ -18,7 +18,7 @@ jobs:
 
       - name: install build deps
         run: |
-          brew install bash libyaml python@3.10
+          brew install bash libyaml python@3.10 git
           brew link --overwrite python@3.10
 
       - uses: actions/checkout@v2.4.0
