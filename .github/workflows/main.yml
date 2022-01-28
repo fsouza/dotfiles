@@ -70,7 +70,7 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: ~/.cache/nvim/venv
-          key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}-20220128101400"
+          key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}-20220128123800"
 
       - name: install fnm
         run: |

@@ -90,7 +90,7 @@ async def ensure_virtualenv(cache_dir: Path) -> Path:
     venv_dir = cache_dir / "venv"
 
     if not await exists(venv_dir):
-        await run_cmd("python3", ["-m", "venv", venv_dir])
+        await run_cmd("python3", ["-m", "venv", "--copies", venv_dir])
 
     await run_cmd(
         venv_dir / "bin" / "pip",
