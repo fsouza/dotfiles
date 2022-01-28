@@ -41,7 +41,7 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: ~/.cache/nvim/langservers
-          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}"
+          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-20220128101400"
 
       - name: get luajit version
         id: get-luajit-version
@@ -59,7 +59,7 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ runner.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
+          key: "${{ runner.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}-20220128101400"
 
       - name: get python version
         id: get-python-version
