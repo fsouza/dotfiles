@@ -72,9 +72,7 @@ jobs:
           path: ~/.cache/nvim/venv
           key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}"
 
-      - run: ls -la ~/.cache/nvim/venv
-
-      - run: ls -ld ~/.cache/nvim/venv
+      - run: ls -laR ~/.cache/nvim/venv
 
       - name: install fnm
         run: |
