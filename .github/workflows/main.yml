@@ -19,7 +19,7 @@ jobs:
       - name: install build deps
         run: |
           brew update
-          brew install bash libyaml git
+          brew install bash libyaml git lua
 
       - uses: actions/checkout@v2.4.0
 
