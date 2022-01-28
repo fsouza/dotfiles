@@ -93,7 +93,7 @@ async def ensure_virtualenv(cache_dir: Path) -> Path:
         await run_cmd("python3", ["-m", "venv", venv_dir])
 
     await run_cmd(
-        venv_dir / "bin" / "pip",
+        venv_dir / "bin" / "pip3",
         [
             "install",
             "--upgrade",
