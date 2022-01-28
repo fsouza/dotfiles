@@ -133,7 +133,7 @@
                                     {:lhs :<leader>pi
                                      :rhs #(mod-invoke :fsouza.lsp.locations
                                                        :preview-implementation)}))
-                    (when client.resolved_capabilities.type_defintion
+                    (when client.resolved_capabilities.type_definition
                       (table.insert mappings.n
                                     {:lhs :<leader>gt
                                      :rhs #(vim.lsp.type_definition)})
