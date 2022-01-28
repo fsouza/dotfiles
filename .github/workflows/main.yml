@@ -18,12 +18,15 @@ jobs:
 
       - name: install build deps
         run: |
-          brew install bash libyaml opam ocaml python@3.10
+          brew install bash libyaml python@3.10
           brew link --overwrite python@3.10
 
-      - run: opam init
-
       - uses: actions/checkout@v2.4.0
+
+      - uses: avsm/setup-ocaml@v2
+        with:
+          ocaml-compiler: "4.13.1"
+          dune-cache: true
 
       - uses: actions/setup-go@v2.1.5
         with:
@@ -77,6 +80,7 @@ jobs:
 
       - name: run setup
         run: |
+          eval $(opam env --set-switch)
           ./bin/setup
 
   pre-commit:
