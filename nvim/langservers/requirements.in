@@ -8,4 +8,4 @@ flake8-builtins
 flake8-comprehensions
 flake8-tidy-imports
 isort
-reorder_python_imports
+reorder-python-imports

@@ -8,7 +8,7 @@ add-trailing-comma==2.2.1
     # via -r requirements.in
 aspy.refactor-imports==2.2.1
     # via reorder-python-imports
-attrs==21.2.0
+attrs==21.4.0
     # via flake8-bugbear
 autoflake8==0.3.0
     # via -r requirements.in
@@ -43,7 +43,7 @@ mypy-extensions==0.4.3
     # via black
 pathspec==0.9.0
     # via black
-platformdirs==2.4.0
+platformdirs==2.4.1
     # via black
 pycodestyle==2.8.0
     # via
@@ -53,13 +53,13 @@ pyflakes==2.4.0
     # via
     #   autoflake8
     #   flake8
-reorder_python_imports==2.7.1
+reorder-python-imports==2.7.1
     # via -r requirements.in
-tokenize-rt==4.1.0
+tokenize-rt==4.2.1
     # via add-trailing-comma
 toml==0.10.2
     # via autopep8
-tomli==1.2.1
+tomli==1.2.3
     # via black
-typing-extensions==3.10.0.2
+typing-extensions==4.0.1
     # via black
