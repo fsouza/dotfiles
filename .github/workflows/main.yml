@@ -18,14 +18,9 @@ jobs:
 
       - name: install build deps
         run: |
-          brew install bash libyaml
+          brew install bash libyaml opam ocaml
 
       - uses: actions/checkout@v2.4.0
-
-      - uses: avsm/setup-ocaml@v2
-        with:
-          ocaml-compiler: "4.13.1"
-          dune-cache: true
 
       - uses: actions/setup-python@v2.3.1
         with:
