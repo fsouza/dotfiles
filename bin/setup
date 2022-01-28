@@ -46,10 +46,10 @@ if [ -f "${basedir}"/bin/"${os}"-setup ]; then
 	"${basedir}"/bin/"${os}"-setup
 fi
 
+touch "${HOME}"/.zsh_sessions_disable
+
 if command -v nvim &>/dev/null; then
 	env NVIM_DEBUG=1 make -C "${basedir}"/nvim &&
 		# need to do it here because fennel is installed as part of neovim.
 		gen_hammerspoon_config
 fi
-
-touch "${HOME}"/.zsh_sessions_disable
