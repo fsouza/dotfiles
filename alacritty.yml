@@ -69,6 +69,7 @@ key_bindings:
   - { key: K, mods: Alt, chars: "\x1bk" }
   - { key: L, mods: Alt, chars: "\x1bl" }
   - { key: A, mods: Alt, chars: "\x1ba" }
+  - { key: T, mods: Alt, chars: "\x1bt" }
   - { key: Space, mods: Control, chars: "\x00" }
   - { key: Space, mods: Shift|Control, action: None }
   - { key: Key6, mods: Control, chars: "\x1e" }
