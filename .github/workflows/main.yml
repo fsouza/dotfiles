@@ -18,14 +18,9 @@ jobs:
 
       - name: install build deps
         run: |
-          brew install bash libyaml opam ocaml
+          brew install bash libyaml opam ocaml python@3.10
 
       - uses: actions/checkout@v2.4.0
-
-      - uses: actions/setup-python@v2.3.1
-        with:
-          python-version: "3.10"
-          cache: "pip"
 
       - uses: actions/setup-go@v2.1.5
         with:
@@ -70,9 +65,7 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: ~/.cache/nvim/venv
-          key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}"
-
-      - run: ls -laR ~/.cache/nvim/venv
+          key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}-20220128101400"
 
       - name: install fnm
         run: |
@@ -92,6 +85,7 @@ jobs:
       - uses: actions/setup-python@v2.3.1
         with:
           python-version: 3.x
+          cache: pip
 
       - name: install pre-commit
         run: pip install pre-commit
