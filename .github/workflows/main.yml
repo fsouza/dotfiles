@@ -19,6 +19,7 @@ jobs:
       - name: install build deps
         run: |
           brew install bash libyaml opam ocaml python@3.10
+          brew link --overwrite python@3.10
 
       - uses: actions/checkout@v2.4.0
 
