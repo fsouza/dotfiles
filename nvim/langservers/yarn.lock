@@ -1627,10 +1627,10 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pyright@^1.1.215:
-  version "1.1.215"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.215.tgz#ecdf81ee64b3ae12f336fc333bf6e9a99fc29519"
-  integrity sha512-btgvPpp63J7VAlNfTZR+D8uetzhlIGtC9FhlQsMF5xQNLK5lzuWcW+xLz6t97dC3N93G2maB8B55Vxz6eo3a1Q==
+pyright@^1.1.216:
+  version "1.1.216"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.216.tgz#ea29f3a5814c2e13c4fa0d627029854f6f529555"
+  integrity sha512-u+K/CJhqTYnro5hqv0iDEoxQXeJPJKd0XCqYmDaTpYDUrkKrLfrK2uZ+jzpnnarCiXjlqf5DPGDJAT5iSW69jg==
 
 qs@~6.5.2:
   version "6.5.2"
