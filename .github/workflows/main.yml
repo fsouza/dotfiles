@@ -18,6 +18,7 @@ jobs:
 
       - name: install build deps
         run: |
+          brew update
           brew install bash libyaml python@3.10 git
           brew link --overwrite python@3.10
 
