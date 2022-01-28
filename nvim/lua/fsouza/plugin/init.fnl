@@ -82,7 +82,7 @@
       (open term-id)))
 
   (macro term-mapping [term-id]
-    `(vim.keymap.set :n ,(.. :<c-t> term-id) #(term-open ,term-id)))
+    `(vim.keymap.set :n ,(.. :<a-t> term-id) #(term-open ,term-id)))
   (term-mapping :j)
   (term-mapping :k)
   (term-mapping :l))

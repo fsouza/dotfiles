@@ -33,7 +33,6 @@
   `(do
      (vim.keymap.set :n :Q "")
      (vim.keymap.set :n :<Space> "")
-     (vim.keymap.set :n :<c-t> "")
      (tset vim.g :mapleader " ")))
 
 (macro set-neovim-global-vars []
