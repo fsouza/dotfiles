@@ -21,6 +21,8 @@ jobs:
           brew install bash libyaml opam ocaml python@3.10
           brew link --overwrite python@3.10
 
+      - run: opam init
+
       - uses: actions/checkout@v2.4.0
 
       - uses: actions/setup-go@v2.1.5
