@@ -20,7 +20,9 @@
              (make-hotkey :ctrl :w [:alt] hs.keycodes.map.delete)]
         filters (icollect [_ app (ipairs apps)]
                   (hs.window.filter.new #(let [application ($1:application)
-                                               app-name (application:name)]
+                                               app-name (if application
+                                                            (application:name)
+                                                            nil)]
                                            (= app-name app))))]
     (fn enable-hks []
       (each [_ hk (ipairs hks)]
