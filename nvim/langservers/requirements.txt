@@ -14,7 +14,7 @@ autoflake8==0.3.0
     # via -r requirements.in
 autopep8==1.6.0
     # via -r requirements.in
-black==21.12b0
+black==22.1.0
     # via -r requirements.in
 cached-property==1.5.2
     # via aspy.refactor-imports
@@ -60,6 +60,4 @@ tokenize-rt==4.2.1
 toml==0.10.2
     # via autopep8
 tomli==1.2.3
-    # via black
-typing-extensions==4.0.1
     # via black
