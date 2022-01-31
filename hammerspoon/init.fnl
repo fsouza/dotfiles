@@ -19,8 +19,9 @@
              (make-hotkey :ctrl :b [] :left)
              (make-hotkey :ctrl :w [:alt] hs.keycodes.map.delete)]
         filters (icollect [_ app (ipairs apps)]
-                  (hs.window.filter.new #(let [application ($1:application)]
-                                           (= (application:name) app))))]
+                  (hs.window.filter.new #(let [application ($1:application)
+                                               app-name (application:name)]
+                                           (= app-name app))))]
     (fn enable-hks []
       (each [_ hk (ipairs hks)]
         (hk:enable)))
