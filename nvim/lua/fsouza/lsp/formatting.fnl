@@ -8,11 +8,11 @@
 
 (local clients {})
 
-(fn set-last-update [bufnr]
-  (tset updates bufnr (os.clock)))
+(macro set-last-update [bufnr]
+  `(tset updates ,bufnr (os.clock)))
 
-(fn get-last-update [bufnr]
-  (. updates bufnr))
+(macro get-last-update [bufnr]
+  `(. updates ,bufnr))
 
 (fn should-skip-buffer [bufnr]
   (let [file-path (vim.api.nvim_buf_get_name bufnr)
