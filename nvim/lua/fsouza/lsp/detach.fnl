@@ -10,7 +10,7 @@
 (fn detach [bufnr]
   (let [buf-cbs (if-nil (. callbacks bufnr) [])]
     (each [_ cb (ipairs buf-cbs)]
-      (cb bufnr)))
+      (pcall cb bufnr)))
   (tset callbacks bufnr nil))
 
 (macro get-lsp-client-ids []
