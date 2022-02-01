@@ -70,6 +70,7 @@ key_bindings:
   - { key: L, mods: Alt, chars: "\x1bl" }
   - { key: A, mods: Alt, chars: "\x1ba" }
   - { key: T, mods: Alt, chars: "\x1bt" }
+  - { key: T, mods: Command, chars: "\x1bt" }
   - { key: Q, mods: Alt, chars: "\x1bq" }
   - { key: Space, mods: Control, chars: "\x00" }
   - { key: Space, mods: Shift|Control, action: None }
