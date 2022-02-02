@@ -12,9 +12,9 @@ function prepend_to_path {
 }
 
 function realpath {
-	resolved=$(readlink "${1}")
+	local resolved=$(readlink "${1}")
 	if [ -n "${resolved}" ]; then
-		echo "${resolved}"
+		realpath "${resolved}"
 	else
 		echo "${1}"
 	fi
