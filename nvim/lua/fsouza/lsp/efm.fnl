@@ -254,6 +254,7 @@
                       :graphql
                       :html
                       :javascript
+                      :javascriptreact
                       :json
                       :typescript
                       :typescriptreact
@@ -296,7 +297,10 @@
         (let [{:fn f : language} f]
           (pending-wrapper f #(add-if-not-empty language $1))))
       (pending-wrapper get-eslintd-config
-                       #(let [eslint-fts [:javascript :typescript]]
+                       #(let [eslint-fts [:javascript
+                                          :javascriptreact
+                                          :typescript
+                                          :typescriptreact]]
                           (each [_ eslint (ipairs $1)]
                             (each [_ ft (ipairs eslint-fts)]
                               (add-if-not-empty ft eslint)))))
