@@ -160,6 +160,7 @@
                                                           :lintStdin true
                                                           :lintSource :eslint
                                                           :lintIgnoreExitCode true
+                                                          :lintFormats ["%f:%l:%c: %m"]
                                                           :rootMarkers [:.eslintrc.js
                                                                         :.eslintrc.cjs
                                                                         :.eslintrc.yaml
