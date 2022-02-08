@@ -49,4 +49,5 @@
                          "Google Chrome"
                          :Safari
                          :Slack
-                         :Todoist])
+                         :Todoist
+                         :WhatsApp])
