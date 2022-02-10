@@ -6,18 +6,18 @@
 #
 add-trailing-comma==2.2.1
     # via -r requirements.in
-aspy.refactor-imports==2.2.1
+aspy-refactor-imports==2.2.1
     # via reorder-python-imports
 attrs==21.4.0
     # via flake8-bugbear
-autoflake8==0.3.0
+autoflake8==0.3.1
     # via -r requirements.in
 autopep8==1.6.0
     # via -r requirements.in
 black==22.1.0
     # via -r requirements.in
 cached-property==1.5.2
-    # via aspy.refactor-imports
+    # via aspy-refactor-imports
 click==8.0.3
     # via black
 flake8==4.0.1
