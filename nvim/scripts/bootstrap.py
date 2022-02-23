@@ -208,40 +208,19 @@ async def install_servers_from_npm() -> None:
     )
 
 
-async def install_ocaml_lsp(langservers_cache_dir: Path) -> None:
+async def install_ocaml_lsp() -> None:
     if not await has_command("opam"):
         print("skipping ocaml-lsp")
         return
 
-    [_, repo_dir] = await asyncio.gather(
-        run_cmd("opam", ["update", "-y"]),
-        _clone_or_update(
-            "https://github.com/ocaml/ocaml-lsp.git",
-            langservers_cache_dir / "ocaml-lsp",
-        ),
-    )
-    assert repo_dir is not None
-
-    await run_cmd("opam", ["install", "--deps-only", "-y", "."], cwd=repo_dir)
-
-    # hack: manually install test deps to avoid downgrading ocamlformat. If new
-    # dependencies are added, this may break.
     await run_cmd(
         "opam",
         [
             "install",
             "-y",
-            "menhir",
-            "cinaps",
-            "ppx_expect>=v0.14.0",
+            "ocaml-lsp-server",
             "ocamlformat",
-            "ocamlformat-rpc",
         ],
-    )
-
-    await run_cmd(
-        "make",
-        ["-C", repo_dir, "all"],
     )
 
 
@@ -306,7 +285,7 @@ async def setup_langservers(cache_dir: Path) -> None:
     langservers_cache_dir = cache_dir / "langservers"
     await asyncio.gather(
         install_servers_from_npm(),
-        install_ocaml_lsp(langservers_cache_dir),
+        install_ocaml_lsp(),
         install_gopls(langservers_cache_dir),
         install_shfmt(langservers_cache_dir),
         install_efm(langservers_cache_dir),
