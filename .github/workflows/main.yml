@@ -19,7 +19,7 @@ jobs:
       - name: install build deps
         run: |
           brew update
-          brew install bash libyaml git lua
+          brew install bash fnm libyaml git lua
 
       - uses: actions/checkout@v2.4.0
 
@@ -71,11 +71,6 @@ jobs:
         with:
           path: ~/.cache/nvim/venv
           key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}-20220128123800"
-
-      - name: install fnm
-        run: |
-          curl -fsSL https://fnm.vercel.app/install | bash
-          echo "${HOME}/.fnm" >> "${GITHUB_PATH}"
 
       - name: run setup
         run: |
