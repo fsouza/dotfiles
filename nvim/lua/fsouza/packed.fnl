@@ -70,7 +70,7 @@
                   [:tbastos/vim-lua]
                   [:Vimjas/vim-python-pep8-indent]
                   [:ziglang/zig.vim]
-                  [:ishan9299/modus-theme-vim]]
+                  [:shaunsingh/solarized.nvim]]
            :repack (fn []
                      (tset package.loaded :fsouza.packed nil)
                      (let [packed (require :fsouza.packed)]

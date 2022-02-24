@@ -42,15 +42,17 @@ function enter_demo_mode {
 	dir=~/.local/share/nvim/site/after/plugin
 	mkdir -p "${dir}"
 	cat >"${dir}/demo.vim" <<EOF
-colorscheme modus-operandi
-highlight Normal guibg=NONE
+colorscheme solarized
 EOF
+	gsed -i.old 's/^colors:.\+/colors: *solarized-light/' alacritty.yml
 	gsed -i 's/size: .\+$/size: 24.0/' ~/.dotfiles/alacritty.yml
 }
 
 function leave_demo_mode {
 	rm -f ~/.local/share/nvim/site/after/plugin/demo.vim
-	git -C ~/.dotfiles restore alacritty.yml
+	(
+		cd ~/.dotfiles && test -f alacritty.yml.old && mv alacritty.yml.old alacritty.yml
+	)
 }
 
 if [ -x "$NEOVIM_INSTALL_PREFIX/bin/nvim" ]; then
