@@ -44,7 +44,7 @@ function enter_demo_mode {
 	cat >"${dir}/demo.vim" <<EOF
 colorscheme solarized
 EOF
-	gsed -i.old 's/^colors:.\+/colors: *solarized-light/' alacritty.yml
+	gsed -i.old 's/^colors:.\+/colors: *solarized-light/' ~/.dotfiles/alacritty.yml
 	gsed -i 's/size: .\+$/size: 24.0/' ~/.dotfiles/alacritty.yml
 }
 
