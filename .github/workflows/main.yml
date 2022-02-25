@@ -31,7 +31,7 @@ jobs:
         with:
           go-version: "1.x"
 
-      - uses: actions/setup-dotnet@v2
+      - uses: actions/setup-dotnet@v2.0.0
         with:
           dotnet-version: "5.x"
 
