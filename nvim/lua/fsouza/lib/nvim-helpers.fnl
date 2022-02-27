@@ -6,13 +6,13 @@
     id))
 
 (fn augroup [name commands]
-  (vim.cmd (.. "augroup " name))
-  (vim.cmd :autocmd!)
+  (vim.api.nvim_create_augroup {: name :clear true})
   (each [_ c (ipairs commands)]
-    (vim.cmd (string.format "autocmd %s %s %s %s" (table.concat c.events ",")
-                            (table.concat (if-nil c.targets []) ",")
-                            (table.concat (if-nil c.modifiers []) " ") c.command)))
-  (vim.cmd "augroup END"))
+    (let [once (if-nil (?. c :modifiers :once) false)]
+      (vim.api.nvim_create_autocmd {:event c.events
+                                    :pattern c.targets
+                                    :command c.command
+                                    : once}))))
 
 (fn once [f]
   (var result nil)
