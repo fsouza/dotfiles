@@ -1,5 +1,3 @@
-(local prefix [:cmd :ctrl])
-
 (macro make-hotkey [mod key mod-target target]
   `(hs.hotkey.new [,mod] ,key
                   #(let [key-event# (hs.eventtap.event.newKeyEvent ,mod-target
@@ -37,11 +35,10 @@
       (filter:subscribe hs.window.filter.windowFocused enable-hks)
       (filter:subscribe hs.window.filter.windowUnfocused disable-hks))))
 
-;; prefix+r to reload config
-(hs.hotkey.bind prefix :R (partial hs.reload))
-
-;; prefix+v as a workaround for "typing" the clipboard.
-(hs.hotkey.bind prefix :V #(hs.eventtap.keyStrokes (hs.pasteboard.getContents)))
+(let [prefix [:cmd :ctrl]]
+  (hs.hotkey.bind prefix :R (partial hs.reload))
+  (hs.hotkey.bind prefix :V
+                  #(hs.eventtap.keyStrokes (hs.pasteboard.getContents))))
 
 (set-readline-shortcuts [:Finder
                          :Firefox
