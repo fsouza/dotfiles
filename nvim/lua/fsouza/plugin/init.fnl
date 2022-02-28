@@ -113,7 +113,7 @@
 
   (helpers.augroup :fsouza__autocompile-fennel
                    [{:events [:BufWritePost]
-                     :targets ["~/.dotfiles/nvim/*.fnl"]
+                     :targets [(.. (vim.fn.expand "~") :/.dotfiles/nvim/*.fnl)]
                      :command (helpers.fn-cmd make)}]))
 
 (fn setup-comment-nvim []
