@@ -12,6 +12,7 @@
       (vim.api.nvim_create_autocmd {:event c.events
                                     :pattern c.targets
                                     :command c.command
+                                    :callback c.callback
                                     :group name
                                     : once}))))
 
