@@ -296,7 +296,7 @@ async def setup_langservers(cache_dir: Path) -> None:
 
 async def setup_fnlfmt(cache_dir: Path, hr_dir: Path) -> None:
     repo_dir = await _clone_or_update(
-        "https://git.sr.ht/~technomancy/fnlfmt",
+        "https://github.com/fsouza/fnlfmt",
         cache_dir / "fnlfmt",
     )
 
