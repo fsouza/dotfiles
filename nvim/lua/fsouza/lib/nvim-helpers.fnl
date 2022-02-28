@@ -3,13 +3,12 @@
 (fn augroup [name commands]
   (vim.api.nvim_create_augroup {: name :clear true})
   (each [_ c (ipairs commands)]
-    (let [once (if-nil (?. c :modifiers :once) false)]
-      (vim.api.nvim_create_autocmd {:event c.events
-                                    :pattern c.targets
-                                    :command c.command
-                                    :callback c.callback
-                                    :group name
-                                    : once}))))
+    (vim.api.nvim_create_autocmd {:event c.events
+                                  :pattern c.targets
+                                  :command c.command
+                                  :callback c.callback
+                                  :group name
+                                  :once c.once})))
 
 (fn once [f]
   (var result nil)

@@ -135,11 +135,11 @@
                            :callback #(on-CompleteChanged client bufnr)}
                           {:events [:CompleteDone]
                            :targets [(string.format "<buffer=%d>" bufnr)]
-                           :modifiers [:++once]
+                           :once true
                            :callback #(reset-state client)}
                           {:events [:InsertLeave]
                            :targets [(string.format "<buffer=%d>" bufnr)]
-                           :modifiers [:++once]
+                           :once true
                            :callback #(on-InsertLeave client bufnr)}])
         (lsp-compl.trigger_completion client bufnr)
         ""))

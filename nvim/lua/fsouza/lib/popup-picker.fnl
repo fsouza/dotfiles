@@ -17,7 +17,7 @@
     (helpers.augroup :fsouza-popup-picker-leave
                      [{:events [:WinLeave]
                        :targets [(string.format "<buffer=%d>" bufnr)]
-                       :modifiers [:++once]
+                       :once true
                        :callback (partial vim.api.nvim_win_close winid false)}])
     (vim.keymap.set :n :<esc> #(vim.api.nvim_win_close winid false)
                     mapping-opts)

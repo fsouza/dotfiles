@@ -14,7 +14,7 @@
       (helpers.augroup (.. :fsouza__mkdir_ bufnr)
                        [{:events [:BufWritePre]
                          :targets [(string.format "<buffer=%d>" bufnr)]
-                         :modifiers [:++once]
+                         :once true
                          :callback (partial run bufname)}]))))
 
 (fn setup []
