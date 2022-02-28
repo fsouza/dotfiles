@@ -49,7 +49,7 @@
       (table.insert commands
                     {:events [:BufWritePre]
                      :targets [(string.format "<buffer=%d>" bufnr)]
-                     :command (helpers.fn-cmd trim-whitespace)}))
+                     :callback trim-whitespace}))
     (when (vim.api.nvim_buf_is_valid bufnr)
       (helpers.augroup (.. :editorconfig_trim_trailing_whitespace_ bufnr)
                        commands))))
@@ -70,7 +70,7 @@
                     (each [option-name value (pairs vim-opts)]
                       (vim.api.nvim_buf_set_option bufnr option-name value))))))
 
-(fn set-config [bufnr]
+(fn set-config [_ bufnr]
   (let [bufnr (if-nil bufnr (vim.api.nvim_get_current_buf))
         filename (vim.api.nvim_buf_get_name bufnr)]
     (when (and (?. vim :bo bufnr :modifiable)
@@ -87,17 +87,15 @@
                        (vim.notify (string.format "failed to run editorconfig: %s"
                                                   (vim.inspect result))))))))))
 
-(local set-config-cmd (helpers.fn-cmd set-config))
-
 (fn set-enabled [v]
   (let [commands []]
     (when v
       (table.insert commands
                     {:events [:BufNewFile :BufReadPost :BufFilePost]
                      :targets ["*"]
-                     :command set-config-cmd})
+                     :callback set-config})
       (vim-schedule (each [_ bufnr (ipairs (vim.api.nvim_list_bufs))]
-                      (set-config bufnr))))
+                      (set-config nil bufnr))))
     (helpers.augroup :editorconfig commands)))
 
 {:enable (partial set-enabled true) :disable (partial set-enabled false)}

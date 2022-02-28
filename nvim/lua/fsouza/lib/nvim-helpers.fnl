@@ -1,10 +1,5 @@
 (import-macros {: if-nil : send-esc} :helpers)
 
-(fn register-cb [mod cb]
-  (let [id (tostring cb)]
-    (tset mod.fns id cb)
-    id))
-
 (fn augroup [name commands]
   (vim.api.nvim_create_augroup {: name :clear true})
   (each [_ c (ipairs commands)]
@@ -78,14 +73,9 @@
     (tset lines 1 (string.sub (. lines 1) scol))
     lines))
 
-(let [mod {:fns []
-           :reset-augroup #(vim.api.nvim_create_augroup {:name $1 :clear true})
-           : augroup
-           : once
-           : rewrite-wrap
-           : get-visual-selection-contents
-           : get-visual-selection-range}]
-  (tset mod :fn-cmd #(let [id (register-cb mod $1)]
-                       (string.format "lua require('fsouza.lib.nvim-helpers').fns['%s']()"
-                                      id)))
-  mod)
+{:reset-augroup #(vim.api.nvim_create_augroup {:name $1 :clear true})
+ : augroup
+ : once
+ : rewrite-wrap
+ : get-visual-selection-contents
+ : get-visual-selection-range}

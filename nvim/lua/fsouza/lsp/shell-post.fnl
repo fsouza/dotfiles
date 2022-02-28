@@ -36,7 +36,7 @@
     (helpers.augroup (augroup-name bufnr)
                      [{:events [:FileChangedShellPost]
                        :targets [(string.format "<buffer=%d>" bufnr)]
-                       :command (helpers.fn-cmd (partial notify bufnr))}])))
+                       :callback #(notify bufnr)}])))
 
 (fn on-detach [bufnr]
   (tset clients-by-buf bufnr nil)

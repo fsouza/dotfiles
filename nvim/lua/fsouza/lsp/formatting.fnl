@@ -131,7 +131,7 @@
   (helpers.augroup (augroup-name bufnr)
                    [{:events [:BufWritePost]
                      :targets [(string.format "<buffer=%d>" bufnr)]
-                     :command (helpers.fn-cmd (partial autofmt-and-write bufnr))}])
+                     :callback #(autofmt-and-write bufnr)}])
   (vim.keymap.set :n :<leader>f #(fmt client bufnr)
                   {:silent true :buffer bufnr}))
 

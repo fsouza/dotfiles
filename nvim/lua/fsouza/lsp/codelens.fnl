@@ -154,7 +154,7 @@
     (helpers.augroup augroup-id
                      [{:events [:InsertLeave :BufWritePost]
                        :targets [(string.format "<buffer=%d>" bufnr)]
-                       :command (helpers.fn-cmd (partial codelens bufnr))}])
+                       :callback #(codelens bufnr)}])
     (vim-schedule (let [buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
                     (buf-diagnostic.register-hook augroup-id
                                                   (partial codelens bufnr))

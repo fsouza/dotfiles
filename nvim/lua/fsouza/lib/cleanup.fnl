@@ -16,5 +16,5 @@
            (helpers.augroup :fsouza__lua_lib_cleanup
                             [{:events [:VimLeavePre]
                               :targets ["*"]
-                              :command (helpers.fn-cmd (partial cleanup mod))}])))
+                              :callback #(cleanup mod)}])))
   mod)

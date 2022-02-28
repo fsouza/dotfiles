@@ -132,17 +132,15 @@
         (helpers.augroup (augroup-name bufnr)
                          [{:events [:CompleteChanged]
                            :targets [(string.format "<buffer=%d>" bufnr)]
-                           :command (helpers.fn-cmd (partial on-CompleteChanged
-                                                             client bufnr))}
+                           :callback #(on-CompleteChanged client bufnr)}
                           {:events [:CompleteDone]
                            :targets [(string.format "<buffer=%d>" bufnr)]
                            :modifiers [:++once]
-                           :command (helpers.fn-cmd (partial reset-state client))}
+                           :callback #(reset-state client)}
                           {:events [:InsertLeave]
                            :targets [(string.format "<buffer=%d>" bufnr)]
                            :modifiers [:++once]
-                           :command (helpers.fn-cmd (partial on-InsertLeave
-                                                             client bufnr))}])
+                           :callback #(on-InsertLeave client bufnr)}])
         (lsp-compl.trigger_completion client bufnr)
         ""))
 

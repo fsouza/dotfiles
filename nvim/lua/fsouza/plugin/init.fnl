@@ -46,10 +46,10 @@
   (helpers.augroup :yank_highlight
                    [{:events [:TextYankPost]
                      :targets ["*"]
-                     :command (helpers.fn-cmd #(let [vhl (require :vim.highlight)]
-                                                 (vhl.on_yank {:higroup :HlYank
-                                                               :timeout 200
-                                                               :on_macro false})))}]))
+                     :callback #(let [vhl (require :vim.highlight)]
+                                  (vhl.on_yank {:higroup :HlYank
+                                                :timeout 200
+                                                :on_macro false}))}]))
 
 (fn setup-word-replace []
   (vim.keymap.set :n :<leader>e
@@ -114,7 +114,7 @@
   (helpers.augroup :fsouza__autocompile-fennel
                    [{:events [:BufWritePost]
                      :targets [(.. (vim.fn.expand "~") :/.dotfiles/nvim/*.fnl)]
-                     :command (helpers.fn-cmd make)}]))
+                     :callback make}]))
 
 (fn setup-comment-nvim []
   (fn pre-hook [ctx]

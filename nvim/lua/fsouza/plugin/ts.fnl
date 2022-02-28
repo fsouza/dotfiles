@@ -22,7 +22,7 @@
                                                                 :method-name "ƒ "}})
                                        nvim-gps))))
 
-(fn create-mappings [bufnr]
+(fn create-mappings [_ bufnr]
   (let [bufnr (if-nil bufnr (if-nil (abuf) vim.api.nvim_get_current_buf))]
     (vim.keymap.set :n :<leader>w
                     #(let [{: get_location} (load-nvim-gps)
@@ -40,7 +40,7 @@
   (helpers.augroup :fsouza__ts_mappings
                    [{:events [:FileType]
                      :targets (get-file-types)
-                     :command (helpers.fn-cmd create-mappings)}]))
+                     :callback create-mappings}]))
 
 (do
   (let [configs (require :nvim-treesitter.configs)]
