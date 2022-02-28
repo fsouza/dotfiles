@@ -12,6 +12,7 @@
       (vim.api.nvim_create_autocmd {:event c.events
                                     :pattern c.targets
                                     :command c.command
+                                    :group name
                                     : once}))))
 
 (fn once [f]
@@ -77,7 +78,7 @@
     lines))
 
 (let [mod {:fns []
-           :reset-augroup #(augroup $1 [])
+           :reset-augroup #(vim.api.nvim_create_augroup {:name $1 :clear true})
            : augroup
            : once
            : rewrite-wrap
