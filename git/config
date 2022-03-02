@@ -1,7 +1,6 @@
 [user]
 	useConfigOnly = true
 [core]
-	excludesfile = ~/.config/git/ignore
 	filemode = true
 [diff]
 	compactionHeuristic = 1
