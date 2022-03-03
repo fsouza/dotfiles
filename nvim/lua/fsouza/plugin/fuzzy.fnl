@@ -13,8 +13,10 @@
   (let [fzf-path (require :fzf-lua.path)]
     (each [_ sel (ipairs selected)]
       (let [entry (fzf-path.entry_to_file sel)]
-        (vim.cmd (string.format "edit %s" (vim.fn.fnameescape entry.path)))
-        (vim.api.nvim_win_set_cursor 0 [entry.line (- entry.col 1)])))))
+        (vim.cmd (string.format "silent! edit %s"
+                                (vim.fn.fnameescape entry.path)))
+        (vim.api.nvim_win_set_cursor 0 [entry.line (- entry.col 1)])
+        (vim.api.nvim_feedkeys :zz :n false)))))
 
 (fn edit-or-qf [selected]
   (let [actions (require :fzf-lua.actions)]
