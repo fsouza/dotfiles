@@ -72,7 +72,7 @@
     (tset lines 1 (string.sub (. lines 1) scol))
     lines))
 
-{:reset-augroup #(vim.api.nvim_create_augroup {:name $1 :clear true})
+{:reset-augroup #(vim.api.nvim_create_augroup $1 {:clear true})
  : augroup
  : once
  : rewrite-wrap
