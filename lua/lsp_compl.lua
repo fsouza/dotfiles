@@ -192,7 +192,7 @@ function M.trigger_completion(client, bufnr)
 end
 
 
-function M._InsertLeave()
+local function on_InsertLeave()
   completion_ctx.cursor = nil
   completion_ctx.reset()
 end
@@ -222,7 +222,7 @@ local function apply_snippet(item, suffix)
 end
 
 
-function M._CompleteDone(client_id, bufnr)
+local function on_CompleteDone(client_id, bufnr)
   if completion_ctx.suppress_completeDone then
     completion_ctx.suppress_completeDone = false
     return
@@ -274,29 +274,32 @@ function M._CompleteDone(client_id, bufnr)
   end
 end
 
-
-function M.detach(client_id, bufnr)
-  vim.cmd(string.format('augroup lsp_compl_%d_%d', client_id, bufnr))
-  vim.cmd('au!')
-  vim.cmd('augroup end')
-  vim.cmd(string.format('augroup! lsp_compl_%d_%d', client_id, bufnr))
-  client_settings[client_id] = nil
+local function augroup_name(client_id, bufnr)
+  return string.format('lsp_compl_%d_%d', client_id, bufnr)
 end
 
+function M.detach(client_id, bufnr)
+  vim.api.nvim_create_augroup(augroup_name(client_id, bufnr), {clear=true})
+  client_settings[client_id] = nil
+end
 
 function M.attach(client, bufnr, opts)
   opts = opts or {}
   client_settings[client.id] = opts
-  vim.cmd(string.format('augroup lsp_compl_%d_%d', client.id, bufnr))
-  vim.cmd('au!')
-  vim.cmd(string.format("autocmd InsertLeave <buffer=%d> lua require'lsp_compl'._InsertLeave()", bufnr))
-  vim.cmd(string.format(
-    "autocmd CompleteDone <buffer=%d> lua require'lsp_compl'._CompleteDone(%d, %d)",
-    bufnr,
-    client.id,
-    bufnr
-  ))
-  vim.cmd('augroup end')
+  local group_name = augroup_name(client.id, bufnr)
+  vim.api.nvim_create_augroup(group_name, {clear=true})
+  vim.api.nvim_create_autocmd('InsertLeave', {
+    group = group_name,
+    buffer = bufnr,
+    callback = on_InsertLeave,
+  })
+  vim.api.nvim_create_autocmd('CompleteDone', {
+    group = group_name,
+    buffer = bufnr,
+    callback = function()
+      on_CompleteDone(bufnr, client.id)
+    end,
+  })
 end
 
 return M
