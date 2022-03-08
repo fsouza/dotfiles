@@ -70,7 +70,7 @@
                     (each [option-name value (pairs vim-opts)]
                       (vim.api.nvim_buf_set_option bufnr option-name value))))))
 
-(fn set-config [_ bufnr]
+(fn set-config [bufnr]
   (let [bufnr (if-nil bufnr (vim.api.nvim_get_current_buf))
         filename (vim.api.nvim_buf_get_name bufnr)]
     (when (and (?. vim :bo bufnr :modifiable)
@@ -95,7 +95,7 @@
                      :targets ["*"]
                      :callback set-config})
       (vim-schedule (each [_ bufnr (ipairs (vim.api.nvim_list_bufs))]
-                      (set-config nil bufnr))))
+                      (set-config bufnr))))
     (helpers.augroup :editorconfig commands)))
 
 {:enable (partial set-enabled true) :disable (partial set-enabled false)}

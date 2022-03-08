@@ -6,7 +6,7 @@
   (let [dir (vim.fn.fnamemodify bufname ":h")]
     (vim.fn.mkdir dir :p)))
 
-(fn register-for-buffer [_ bufnr]
+(fn register-for-buffer [bufnr]
   (let [event-buffer (abuf)
         bufnr (if-nil bufnr event-buffer 0)
         bufname (vim.api.nvim_buf_get_name bufnr)]
@@ -15,13 +15,13 @@
                        [{:events [:BufWritePre]
                          :targets [(string.format "<buffer=%d>" bufnr)]
                          :once true
-                         :callback (partial run bufname)}]))))
+                         :callback #(run bufname)}]))))
 
 (fn setup []
   (helpers.augroup :fsouza__mkdir
                    [{:events [:BufNew]
                      :targets ["*"]
                      :callback register-for-buffer}])
-  (register-for-buffer nil (vim.api.nvim_get_current_buf)))
+  (register-for-buffer (vim.api.nvim_get_current_buf)))
 
 {: setup}

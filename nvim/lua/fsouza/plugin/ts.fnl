@@ -22,8 +22,8 @@
                                                                 :method-name "ƒ "}})
                                        nvim-gps))))
 
-(fn create-mappings [_ bufnr]
-  (let [bufnr (if-nil bufnr (if-nil (abuf) vim.api.nvim_get_current_buf))]
+(fn create-mappings []
+  (let [bufnr (if-nil (abuf) vim.api.nvim_get_current_buf)]
     (vim.keymap.set :n :<leader>w
                     #(let [{: get_location} (load-nvim-gps)
                            location (get_location)]
