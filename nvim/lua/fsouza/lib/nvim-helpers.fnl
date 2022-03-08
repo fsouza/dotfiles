@@ -1,14 +1,14 @@
 (import-macros {: if-nil : send-esc} :helpers)
 
 (fn augroup [name commands]
-  (vim.api.nvim_create_augroup name {:clear true})
-  (each [_ c (ipairs commands)]
-    (vim.api.nvim_create_autocmd c.events
-                                 {:pattern c.targets
-                                  :command c.command
-                                  :callback c.callback
-                                  :group name
-                                  :once c.once})))
+  (let [group (vim.api.nvim_create_augroup name {:clear true})]
+    (each [_ c (ipairs commands)]
+      (vim.api.nvim_create_autocmd c.events
+                                   {:pattern c.targets
+                                    :command c.command
+                                    :callback c.callback
+                                    : group
+                                    :once c.once}))))
 
 (fn once [f]
   (var result nil)
