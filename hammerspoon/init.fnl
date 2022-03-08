@@ -40,7 +40,8 @@
   (hs.hotkey.bind prefix :V
                   #(hs.eventtap.keyStrokes (hs.pasteboard.getContents))))
 
-(set-readline-shortcuts [:Finder
+(set-readline-shortcuts [:Discord
+                         :Finder
                          :Firefox
                          "Firefox Beta"
                          "Google Chrome"
