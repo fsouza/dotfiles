@@ -90,7 +90,7 @@ async def ensure_virtualenv(cache_dir: Path) -> Path:
     venv_dir = cache_dir / "venv"
 
     if not await exists(venv_dir):
-        await run_cmd("python3", ["-m", "venv", "--copies", venv_dir])
+        await run_cmd(sys.executable, ["-m", "venv", "--copies", venv_dir])
 
     await run_cmd(
         venv_dir / "bin" / "pip",
@@ -162,7 +162,7 @@ async def ensure_hererocks(cache_dir: Path) -> Path:
         hererocks_py = await download_hererocks_py(cache_dir)
         luajit_version = await _find_luajit_version()
         await run_cmd(
-            "python3",
+            sys.executable,
             [hererocks_py, "-j", luajit_version, "-r", "latest", hr_dir],
         )
 
