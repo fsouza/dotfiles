@@ -279,27 +279,27 @@ local function on_CompleteDone(client_id, bufnr)
   end
 end
 
-local function augroup_name(client_id, bufnr)
-  return string.format('lsp_compl_%d_%d', client_id, bufnr)
+local function augroup(client_id, bufnr)
+  local name = string.format('lsp_compl_%d_%d', client_id, bufnr)
+  return vim.api.nvim_create_augroup(name, {clear=true})
 end
 
 function M.detach(client_id, bufnr)
-  vim.api.nvim_create_augroup(augroup_name(client_id, bufnr), {clear=true})
+  augroup(client_id, bufnr)
   client_settings[client_id] = nil
 end
 
 function M.attach(client, bufnr, opts)
   opts = opts or {}
   client_settings[client.id] = opts
-  local group_name = augroup_name(client.id, bufnr)
-  vim.api.nvim_create_augroup(group_name, {clear=true})
+  local group = augroup(client.id, bufnr)
   vim.api.nvim_create_autocmd('InsertLeave', {
-    group = group_name,
+    group = group,
     buffer = bufnr,
     callback = on_InsertLeave,
   })
   vim.api.nvim_create_autocmd('CompleteDone', {
-    group = group_name,
+    group = group,
     buffer = bufnr,
     callback = function()
       on_CompleteDone(bufnr, client.id)
