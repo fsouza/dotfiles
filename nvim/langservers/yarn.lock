@@ -2317,10 +2317,10 @@ yallist@^4.0.0:
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
 
-yaml-language-server@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/yaml-language-server/-/yaml-language-server-1.5.0.tgz#691869895e4a4051efbe9927fbfd07fa28edc2e8"
-  integrity sha512-tQA0M1HisyjoW6Y5beUlZ8x9Yil+pIMT4I1ox94erp9Jbm4ZHEPGxOD53TuA/e8CXxy8tX35vf/QqofnDr1/Gg==
+yaml-language-server@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/yaml-language-server/-/yaml-language-server-1.5.1.tgz#528483c217cd665e391fecfbf4e11242bbf0d04b"
+  integrity sha512-rTrsKFF2G6vY9oInUoMWHuRjdQi/AAeWkt2H4N9TYKMiQPzEWnz91MufNkNwlXCA26JCDFStwqNjaYPUdI6SDw==
   dependencies:
     request-light "^0.5.7"
     vscode-json-languageservice "4.1.8"
