@@ -302,7 +302,7 @@ function M.attach(client, bufnr, opts)
     group = group,
     buffer = bufnr,
     callback = function()
-      on_CompleteDone(bufnr, client.id)
+      on_CompleteDone(client.id, bufnr)
     end,
   })
 end
