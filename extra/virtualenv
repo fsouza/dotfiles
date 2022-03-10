@@ -2,7 +2,7 @@ export VIRTUALENVS=${HOME}/.cache/virtualenvs
 
 VIRTUALENV_PYZ_LOCATION=${VIRTUALENVS}/virtualenv.pyz
 
-function _virtualenv() {
+function virtualenv() {
 	if ! [ -f "${VIRTUALENV_PYZ_LOCATION}" ]; then
 		mkdir -p "${VIRTUALENVS}"
 		curl -Lo "${VIRTUALENV_PYZ_LOCATION}" https://bootstrap.pypa.io/virtualenv.pyz
@@ -86,7 +86,7 @@ function mkv() {
 
 	# create the env only if it doesn't exist yet
 	if ! [ -d "${virtualenvpath}" ]; then
-		_virtualenv -p "$(_find_python)" "${virtualenvpath}" &&
+		virtualenv -p "$(_find_python)" "${virtualenvpath}" &&
 			"${virtualenvpath}/bin/pip" install --upgrade pip
 	fi
 
