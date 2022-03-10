@@ -2,12 +2,21 @@ export VIRTUALENVS=${HOME}/.cache/virtualenvs
 
 VIRTUALENV_PYZ_LOCATION=${VIRTUALENVS}/virtualenv.pyz
 
+function _download_virtualenv() {
+	mkdir -p "${VIRTUALENVS}"
+	curl -Lo "${VIRTUALENV_PYZ_LOCATION}" https://bootstrap.pypa.io/virtualenv.pyz
+}
+
 function virtualenv() {
 	if ! [ -f "${VIRTUALENV_PYZ_LOCATION}" ]; then
-		mkdir -p "${VIRTUALENVS}"
-		curl -Lo "${VIRTUALENV_PYZ_LOCATION}" https://bootstrap.pypa.io/virtualenv.pyz
+		_download_virtualenv
 	fi
 	python3 "${VIRTUALENV_PYZ_LOCATION}" "${@}"
+}
+
+function upgrade_virtualenv() {
+	rm -f "${VIRTUALENV_PYZ_LOCATION}"
+	_download_virtualenv
 }
 
 function _disable_bare_python() {
