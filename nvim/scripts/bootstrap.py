@@ -2,6 +2,7 @@ import asyncio
 import os
 import shutil
 import sys
+import venv
 from pathlib import Path
 from typing import Literal
 from typing import overload
@@ -90,7 +91,7 @@ async def ensure_virtualenv(cache_dir: Path) -> Path:
     venv_dir = cache_dir / "venv"
 
     if not await exists(venv_dir):
-        await run_cmd(sys.executable, ["-m", "venv", "--copies", venv_dir])
+        await asyncio.to_thread(venv.create, venv_dir, with_pip=True, symlinks=False)
 
     await run_cmd(
         venv_dir / "bin" / "pip",
