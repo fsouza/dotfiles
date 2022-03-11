@@ -23,7 +23,8 @@
 
 (fn on-attach []
   (helpers.augroup :fsouza__lsp_progress
-                   [{:events ["User LspProgressUpdate"]
+                   [{:events [:User]
+                     :targets [:LspProgressUpdate]
                      :callback on-progress-update}]))
 
 {:on-attach (helpers.once on-attach)}
