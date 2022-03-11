@@ -79,7 +79,7 @@
   (var request-id nil)
   (let [item-key (if-nil item.sortText item.label)]
     (fn on-resolve [err item]
-      (when (and (not err) item-key)
+      (when (not err)
         (tset state.resolved-items item-key item)
         (cb item))
       (if request-id
