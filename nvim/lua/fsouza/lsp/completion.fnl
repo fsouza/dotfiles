@@ -78,21 +78,22 @@
 (fn resolve-item [client bufnr item cb]
   (var request-id nil)
   (let [item-key (if-nil item.sortText item.label)]
-    (fn on-resolve [err item]
-      (when (not err)
-        (tset state.resolved-items item-key item)
-        (cb item))
-      (if request-id
-          (tset state.inflight-requests request-id nil)))
+    (when item-key
+      (fn on-resolve [err item]
+        (when (not err)
+          (tset state.resolved-items item-key item)
+          (cb item))
+        (if request-id
+            (tset state.inflight-requests request-id nil)))
 
-    (let [resolved-item (. state.resolved-items item-key)]
-      (if resolved-item
-          (cb resolved-item)
-          (let [(_ req-id) (client.request :completionItem/resolve item
-                                           on-resolve bufnr)]
-            (when req-id
-              (set request-id req-id)
-              (tset state.inflight-requests req-id true)))))))
+      (let [resolved-item (. state.resolved-items item-key)]
+        (if resolved-item
+            (cb resolved-item)
+            (let [(_ req-id) (client.request :completionItem/resolve item
+                                             on-resolve bufnr)]
+              (when req-id
+                (set request-id req-id)
+                (tset state.inflight-requests req-id true))))))))
 
 (fn reset-state [client]
   (close)
