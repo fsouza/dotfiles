@@ -59,13 +59,11 @@
 
 (fn detect-pythonPath [client]
   (let [cache-dir (vim.fn.stdpath :cache)]
-    (tset client.config.settings.python :pythonPath
-          (path.join cache-dir :venv :bin :python))
     (detect-python-interpreter (fn [python-path]
                                  (when python-path
                                    (tset client.config.settings.python
-                                         :pythonPath python-path))
-                                 (client.notify :workspace/didChangeConfiguration
-                                                {:settings client.config.settings})))))
+                                         :pythonPath python-path)
+                                   (client.notify :workspace/didChangeConfiguration
+                                                  {:settings client.config.settings}))))))
 
 {: detect-pythonPath}

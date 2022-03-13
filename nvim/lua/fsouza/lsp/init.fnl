@@ -59,7 +59,10 @@
                                                                    :pyright-langserver
                                                                    :--stdio]
                                                              :settings {:pyright {}
-                                                                        :python {:pythonPath :/usr/bin/python3
+                                                                        :python {:pythonPath (path.join cache-dir
+                                                                                                        :venv
+                                                                                                        :bin
+                                                                                                        :python)
                                                                                  :analysis {:autoImportCompletions true
                                                                                             :autoSearchPaths true
                                                                                             :diagnosticMode :workspace
