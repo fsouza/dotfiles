@@ -99,5 +99,10 @@
     (if-executable :dotnet
                    (lsp.fsautocomplete.setup (opts.with-defaults {:root_dir (opts.root-pattern-with-fallback :*.fsproj
                                                                                                              :*.sln)})))
+    (if-executable :zig
+                   (lsp.zls.setup (opts.with-defaults {:cmd [(get-cache-path :zls
+                                                                             :zig-out
+                                                                             :bin
+                                                                             :zls)]})))
     (if-executable :sourcekit-lsp (lsp.sourcekit.setup (opts.with-defaults {})))
     (if-executable :clojure-lsp (lsp.clojure_lsp.setup (opts.with-defaults {})))))

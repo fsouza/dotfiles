@@ -1,8 +1,10 @@
 import asyncio
+import json
 import os
 import shutil
 import sys
 import venv
+from os.path import expanduser
 from pathlib import Path
 from typing import Literal
 from typing import overload
@@ -282,6 +284,34 @@ async def install_fsautocomplete() -> None:
     await run_cmd("dotnet", ["tool", "update", "--global", "fsautocomplete"])
 
 
+async def install_zls(langservers_cache_dir: Path) -> None:
+    if not await has_command("zig"):
+        print("skipping zls")
+        return
+
+    repo_dir = await _clone_or_update(
+        "https://github.com/zigtools/zls.git",
+        langservers_cache_dir / "zls",
+    )
+
+    await asyncio.gather(
+        run_cmd(cmd="zig", args=["build", "-Drelease-safe"], cwd=repo_dir),
+        configure_zls(),
+    )
+
+
+async def configure_zls() -> None:
+    opts = {
+        "enable_snippets": True,
+        "warn_style": True,
+        "enable_semantic_tokens": False,
+        "operator_completions": True,
+        "include_at_in_builtins": True,
+    }
+    config_file_path = Path(expanduser("~/Library/Application Support/zls.json"))
+    await write_file(config_file_path, json.dumps(opts))
+
+
 async def setup_langservers(cache_dir: Path) -> None:
     langservers_cache_dir = cache_dir / "langservers"
     await asyncio.gather(
@@ -292,6 +322,7 @@ async def setup_langservers(cache_dir: Path) -> None:
         install_efm(langservers_cache_dir),
         install_buildifier(langservers_cache_dir),
         install_fsautocomplete(),
+        install_zls(langservers_cache_dir),
     )
 
 
