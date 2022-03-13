@@ -220,8 +220,7 @@
                                                       "https://github.com/fsouza/autoflake8" get-autoflake8}
                                        tablex (require :fsouza.tablex)
                                        find-repo (fn [repo]
-                                                   (let [repo-url repo.repo
-                                                         repo-url (string.lower repo-url)
+                                                   (let [repo-url (string.lower repo.repo)
                                                          args (if-nil (?. repo
                                                                           :hooks
                                                                           1
