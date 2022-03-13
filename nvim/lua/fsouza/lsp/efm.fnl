@@ -215,6 +215,8 @@
                                                       "https://github.com/asottile/reorder_python_imports" get-reorder-python-imports
                                                       "https://github.com/pre-commit/mirrors-autopep8" get-autopep8
                                                       "https://github.com/pre-commit/mirrors-isort" get-isort
+                                                      "https://github.com/pycqa/isort" get-isort
+                                                      "https://github.com/timothycrosley/isort" get-isort
                                                       "https://github.com/fsouza/autoflake8" get-autoflake8}
                                        tablex (require :fsouza.tablex)
                                        find-repo (fn [repo]
