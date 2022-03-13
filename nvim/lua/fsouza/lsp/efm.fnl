@@ -221,6 +221,7 @@
                                        tablex (require :fsouza.tablex)
                                        find-repo (fn [repo]
                                                    (let [repo-url repo.repo
+                                                         repo-url (string.lower repo-url)
                                                          args (if-nil (?. repo
                                                                           :hooks
                                                                           1
