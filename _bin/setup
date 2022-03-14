@@ -42,8 +42,8 @@ for dir in "${xdg_dirs[@]}"; do
 done
 
 export basedir
-if [ -f "${basedir}"/bin/"${os}"-setup ]; then
-	"${basedir}"/bin/"${os}"-setup
+if [ -f "${basedir}"/_bin/"${os}"-setup ]; then
+	"${basedir}"/_bin/"${os}"-setup
 fi
 
 touch "${HOME}"/.zsh_sessions_disable

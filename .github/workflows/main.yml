@@ -78,7 +78,7 @@ jobs:
 
       - name: run setup
         run: |
-          ./bin/setup
+          ./_bin/setup
 
   pre-commit:
     name: pre-commit
