@@ -69,7 +69,7 @@ bindkey '^x^e' edit-command-line
 autoload -U select-word-style
 select-word-style bash
 
-alias bump_dotfiles="git -C ${basedir} pull && ${basedir}/_bin/setup && upgrade_virtualenv"
+alias bump_dotfiles="git -C ${basedir} pull && ${basedir}/bootstrap/setup && upgrade_virtualenv"
 
 source "${basedir}"/extra/fzf
 unset basedir

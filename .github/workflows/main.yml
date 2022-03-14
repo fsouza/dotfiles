@@ -78,7 +78,7 @@ jobs:
 
       - name: run setup
         run: |
-          ./_bin/setup
+          ./bootstrap/setup
 
   pre-commit:
     name: pre-commit
