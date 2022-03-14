@@ -68,6 +68,8 @@
                                          :swap_next {:<leader>a "@parameter.inner"}
                                          :swap_previos {:<leader>A "@parameter.inner"}}}
                     :context_commentstring {:enable true :enable_autocmd false}
+                    :refactor {:navigation {:enable true
+                                            :keymaps {:goto_definition :gd}}}
                     :ensure_installed :maintained}))
   (set-folding)
   (mappings))

@@ -38,6 +38,7 @@
                   {1 :nvim-treesitter/nvim-treesitter
                    :run (partial vim.cmd :TSUpdate)}
                   [:nvim-treesitter/nvim-treesitter-textobjects]
+                  [:nvim-treesitter/nvim-treesitter-refactor]
                   [:nvim-treesitter/playground]
                   {1 :SmiteshP/nvim-gps :opt true}
                   [:JoosepAlviste/nvim-ts-context-commentstring]
