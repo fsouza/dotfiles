@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+git branch -v | rg '([a-fA-F0-9])+\s\[gone\]' | awk '{print $1}' | xargs git branch -D

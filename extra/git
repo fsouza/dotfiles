@@ -1,22 +1,3 @@
-function git_config {
-	local email=${1:-${GITEMAIL}}
-	if [ -z "$email" ]; then
-		echo >&2 "Please provide the email"
-		return 1
-	fi
-	local name=${2:-${GITNAME}}
-	if [ -z "$name" ]; then
-		echo >&2 "Please define the GITNAME environment variable or provide a second parameter to this command"
-		return 1
-	fi
-	git config user.name "$name"
-	git config user.email "${email}"
-}
-
-function git_delete_gone_branches {
-	git branch -v | rg '([a-fA-F0-9])+\s\[gone\]' | awk '{print $1}' | xargs git branch -D
-}
-
 if [[ -v HOMEBREW_PREFIX ]]; then
 	export PERLLIB=${HOMEBREW_PREFIX}/opt/git/share/perl5:${PERLLIB+:$PERLLIB}
 fi
