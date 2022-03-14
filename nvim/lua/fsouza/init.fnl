@@ -67,8 +67,6 @@
                  :mouse ""
                  :shiftround true
                  :shortmess :filnxtToOFIc
-                 :number true
-                 :relativenumber true
                  :lazyredraw true
                  :isfname "@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@"}]
     (list (sym :do) (icollect [name value (pairs options)]
