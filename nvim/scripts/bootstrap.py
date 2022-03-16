@@ -171,7 +171,7 @@ async def ensure_hererocks(cache_dir: Path) -> Path:
 
     await run_cmd(
         hr_dir / "bin" / "luarocks",
-        ["make", f"YAML_DIR={os.getenv('HOMEBREW_PREFIX', '/usr/local')}"],
+        ["make", "--force", f"YAML_DIR={os.getenv('HOMEBREW_PREFIX', '/usr/local')}"],
         cwd=base_dir,
     )
 
