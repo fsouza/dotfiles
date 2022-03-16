@@ -28,6 +28,10 @@ async def write_file(path: Path, contents: str) -> None:
     await asyncio.to_thread(path.write_text, contents)
 
 
+async def write_bytes(path: Path, contents: bytes) -> None:
+    await asyncio.to_thread(path.write_bytes, contents)
+
+
 @overload
 async def run_cmd(
     cmd: str | os.PathLike,
@@ -81,6 +85,10 @@ async def run_cmd(
 
     returncode = proc.returncode
     if returncode != 0:
+        if capture_output:
+            sys.stdout.buffer.write(stdout)
+            sys.stderr.buffer.write(stderr)
+
         raise CommandError(
             f"command '{cmd} {' '.join(str_args)}' exited with status {returncode}",
         )
@@ -312,6 +320,38 @@ async def configure_zls() -> None:
     await write_file(config_file_path, json.dumps(opts))
 
 
+async def install_rust_analyzer(langservers_cache_dir: Path) -> None:
+    if not await has_command("cargo"):
+        print("skipping rust-analyzer")
+        return
+
+    uname = await asyncio.to_thread(os.uname)
+    machine = uname.machine
+    arch = "aarch64" if machine == "arm64" else machine
+    sysname = uname.sysname.lower()
+    os_name = "gnu" if sysname == "linux" else sysname
+    manufacturer = "apple" if os_name == "darwin" else "unknown-linux"
+
+    url = (
+        "https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/"
+        f"rust-analyzer-{arch}-{manufacturer}-{os_name}.gz"
+    )
+
+    # note: this is horrible
+    [_, (stdout, _)] = await asyncio.gather(
+        run_cmd(cmd="rustup", args=["component", "add", "rust-src"]),
+        run_cmd(
+            cmd="bash",
+            args=["-c", f"curl -sL {url} | gunzip -c -"],
+            capture_output=True,
+        ),
+    )
+
+    target_bin = langservers_cache_dir / "bin" / "rust-analyzer"
+    await write_bytes(target_bin, stdout)
+    await asyncio.to_thread(target_bin.chmod, 0o700)
+
+
 async def setup_langservers(cache_dir: Path) -> None:
     langservers_cache_dir = cache_dir / "langservers"
     await asyncio.gather(
@@ -323,6 +363,7 @@ async def setup_langservers(cache_dir: Path) -> None:
         install_buildifier(langservers_cache_dir),
         install_fsautocomplete(),
         install_zls(langservers_cache_dir),
+        install_rust_analyzer(langservers_cache_dir),
     )
 
 

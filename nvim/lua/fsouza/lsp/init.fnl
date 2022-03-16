@@ -107,5 +107,7 @@
                                                                              :zig-out
                                                                              :bin
                                                                              :zls)]})))
+    (if-executable :cargo
+                   (lsp.rust_analyzer.setup (opts.with-defaults {:cmd [(get-cache-cmd :rust-analyzer)]})))
     (if-executable :sourcekit-lsp (lsp.sourcekit.setup (opts.with-defaults {})))
     (if-executable :clojure-lsp (lsp.clojure_lsp.setup (opts.with-defaults {})))))
