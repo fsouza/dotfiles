@@ -348,6 +348,7 @@ async def install_rust_analyzer(langservers_cache_dir: Path) -> None:
     )
 
     target_bin = langservers_cache_dir / "bin" / "rust-analyzer"
+    await asyncio.to_thread(target_bin.parent.mkdir, parents=True, exist_ok=True)
     await write_bytes(target_bin, stdout)
     await asyncio.to_thread(target_bin.chmod, 0o700)
 
