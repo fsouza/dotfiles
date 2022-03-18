@@ -67,8 +67,7 @@
                 :htmlBold
                 :Title
                 :ModeMsg
-                :FloatBorder
-                :WinSeparator]]
+                :FloatBorder]]
     (icollect [_ group-name (ipairs groups)]
       {:group group-name :opts {:gui :NONE :guifg :NONE :guibg :NONE}})))
 
