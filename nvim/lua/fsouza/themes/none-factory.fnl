@@ -25,7 +25,7 @@
    {:group :VertSplit :opts {:guifg colors.black :guibg :NONE :gui :NONE}}
    {:group :WinSeparator :opts {:guibg :NONE :gui :NONE}}
    {:group :StatusLine
-    :opts {:guibg colors.dark-gray :guifg colors.white :gui :NONE}}])
+    :opts {:guibg colors.light-gray :guifg colors.black :gui :NONE}}])
 
 (fn noners [colors]
   (let [groups [:Boolean
