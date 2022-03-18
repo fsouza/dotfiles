@@ -25,6 +25,8 @@
    {:group :VertSplit :opts {:guifg colors.black :guibg :NONE :gui :NONE}}
    {:group :WinSeparator :opts {:guibg :NONE :gui :NONE}}
    {:group :StatusLine
+    :opts {:guibg colors.light-gray :guifg colors.black :gui :NONE}}
+   {:group :StatusLineNC
     :opts {:guibg colors.light-gray :guifg colors.black :gui :NONE}}])
 
 (fn noners [colors]
@@ -75,7 +77,7 @@
       {:group group-name :opts {:gui :NONE :guifg :NONE :guibg :NONE}})))
 
 (fn reversers [colors]
-  (let [groups [:Cursor :MoreMsg :StatusLineNC]]
+  (let [groups [:Cursor :MoreMsg]]
     (icollect [_ group-name (ipairs groups)]
       {:group group-name :opts {:gui :reverse :guifg :NONE :guibg :NONE}})))
 
