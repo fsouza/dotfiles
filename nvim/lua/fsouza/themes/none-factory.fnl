@@ -24,7 +24,7 @@
    {:group :Comment :opts {:guifg colors.dark-gray}}
    {:group :Visual :opts {:guifg :NONE :guibg colors.gray :gui :NONE}}
    {:group :StatusLine
-    :opts {:guifg colors.black :guibg colors.lighter-gray :gui :NONE}}])
+    :opts {:guifg colors.white :guibg colors.dark-gray :gui :NONE}}])
 
 (fn noners [colors]
   (let [groups [:Boolean
