@@ -34,7 +34,7 @@
                              :icon ""}
                             {:provider gps.get_location
                              :enabled gps.is_available
-                             :left_sep [" " {:str "|" :hl {: fg : bg}} " "]}]
+                             :left_sep [" " {:str ">" :hl {: fg : bg}} " "]}]
                            [{:provider :diagnostic_errors
                              :hl {:fg red}
                              :icon " E-"}
