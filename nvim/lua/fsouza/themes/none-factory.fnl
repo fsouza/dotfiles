@@ -22,9 +22,7 @@
    {:group :Error :opts {:guifg colors.red :guibg :NONE}}
    {:group :String :opts {:guifg colors.blue}}
    {:group :Comment :opts {:guifg colors.dark-gray}}
-   {:group :Visual :opts {:guifg :NONE :guibg colors.gray :gui :NONE}}
-   {:group :StatusLine
-    :opts {:guifg colors.white :guibg colors.dark-gray :gui :NONE}}])
+   {:group :Visual :opts {:guifg :NONE :guibg colors.gray :gui :NONE}}])
 
 (fn noners [colors]
   (let [groups [:Boolean
@@ -74,7 +72,7 @@
       {:group group-name :opts {:gui :NONE :guifg :NONE :guibg :NONE}})))
 
 (fn reversers [colors]
-  (let [groups [:Cursor :MoreMsg :StatusLineNC]]
+  (let [groups [:Cursor :MoreMsg :StatusLine :StatusLineNC]]
     (icollect [_ group-name (ipairs groups)]
       {:group group-name :opts {:gui :reverse :guifg :NONE :guibg :NONE}})))
 
