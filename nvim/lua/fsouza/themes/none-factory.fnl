@@ -1,10 +1,9 @@
 (fn basics [colors]
   [{:group :CursorColumn :opts {:guibg colors.lighter-gray}}
    {:group :CursorLine :opts {:guibg colors.lighter-gray}}
-   {:group :CursorLineNr
-    :opts {:gui :bold :guibg colors.lighter-gray :guifg colors.black}}
+   {:group :CursorLineNr :opts {:gui :bold :guibg :NONE :guifg colors.black}}
    {:group :Directory :opts {:guifg colors.dark-gray}}
-   {:group :LineNr :opts {:guibg colors.lighter-gray :guifg colors.black}}
+   {:group :LineNr :opts {:guibg :NONE :guifg colors.black}}
    {:group :MatchParen :opts {:guibg colors.light-gray}}
    {:group :Normal :opts {:guifg colors.black}}
    {:group :Floating :opts {:guibg colors.light-gray :guifg colors.black}}
@@ -22,7 +21,11 @@
    {:group :Error :opts {:guifg colors.red :guibg :NONE}}
    {:group :String :opts {:guifg colors.blue}}
    {:group :Comment :opts {:guifg colors.dark-gray}}
-   {:group :Visual :opts {:guifg :NONE :guibg colors.gray :gui :NONE}}])
+   {:group :Visual :opts {:guifg :NONE :guibg colors.gray :gui :NONE}}
+   {:group :VertSplit :opts {:guifg colors.black :guibg :NONE :gui :NONE}}
+   {:group :WinSeparator :opts {:guibg :NONE :gui :NONE}}
+   {:group :StatusLine
+    :opts {:guibg colors.dark-gray :guifg colors.white :gui :NONE}}])
 
 (fn noners [colors]
   (let [groups [:Boolean
@@ -72,7 +75,7 @@
       {:group group-name :opts {:gui :NONE :guifg :NONE :guibg :NONE}})))
 
 (fn reversers [colors]
-  (let [groups [:Cursor :MoreMsg :StatusLine :StatusLineNC]]
+  (let [groups [:Cursor :MoreMsg :StatusLineNC]]
     (icollect [_ group-name (ipairs groups)]
       {:group group-name :opts {:gui :reverse :guifg :NONE :guibg :NONE}})))
 
