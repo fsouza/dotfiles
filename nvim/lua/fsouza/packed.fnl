@@ -40,7 +40,7 @@
                   [:nvim-treesitter/nvim-treesitter-textobjects]
                   [:nvim-treesitter/nvim-treesitter-refactor]
                   [:nvim-treesitter/playground]
-                  {1 :SmiteshP/nvim-gps :opt true}
+                  [:SmiteshP/nvim-gps]
                   [:JoosepAlviste/nvim-ts-context-commentstring]
                   {1 :fsouza/nvim-lsp-compl :as :nvim-lsp-compl :opt true}
                   {1 :l3mon4d3/luasnip :as :luasnip :opt true}
@@ -56,6 +56,7 @@
                   {1 :vijaymarupudi/nvim-fzf :opt true}
                   {1 :numToStr/Comment.nvim :as :Comment.nvim :opt true}
                   {1 :b0o/SchemaStore.nvim :as :SchemaStore.nvim :opt true}
+                  {1 :feline-nvim/feline.nvim :as :feline.nvim :opt true}
                   ; filetypes stuff
                   ;
                   ; Note: I used to use vim-polyglot, but it loads too much garbage and

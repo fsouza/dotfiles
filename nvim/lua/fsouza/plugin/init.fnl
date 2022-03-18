@@ -154,6 +154,7 @@
   (schedule setup-terminal-mappings)
   (vim-schedule (require :fsouza.lsp))
   (vim-schedule (require :fsouza.plugin.ts))
+  (vim-schedule (require :fsouza.plugin.feline))
   (schedule setup-comment-nvim)
   (schedule setup-lsp-commands)
   (schedule setup-fuzzy-mappings)

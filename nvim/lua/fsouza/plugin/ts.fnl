@@ -1,8 +1,4 @@
-(import-macros {: if-nil : abuf} :helpers)
-
-(local helpers (require :fsouza.lib.nvim-helpers))
-
-(local tablex (require :fsouza.tablex))
+(import-macros {: if-nil : abuf : mod-invoke} :helpers)
 
 (fn lang-to-ft [lang]
   (let [parsers (require :nvim-treesitter.parsers)
@@ -10,37 +6,17 @@
     (vim.tbl_flatten [(if-nil obj.filetype lang)] (if-nil obj.used_by []))))
 
 (fn get-file-types []
-  (let [parsers-mod (require :nvim-treesitter.parsers)
+  (let [tablex (require :fsouza.tablex)
+        parsers-mod (require :nvim-treesitter.parsers)
         wanted-parsers (parsers-mod.maintained_parsers)]
     (tablex.flat-map lang-to-ft wanted-parsers)))
 
-(local load-nvim-gps (helpers.once (fn []
-                                     (vim.cmd "packadd nvim-gps")
-                                     (let [nvim-gps (require :nvim-gps)]
-                                       (nvim-gps.setup {:icons {:class-name "￠ "
-                                                                :function-name "ƒ "
-                                                                :method-name "ƒ "}})
-                                       nvim-gps))))
-
-(fn create-mappings []
-  (let [bufnr (if-nil (abuf) vim.api.nvim_get_current_buf)]
-    (vim.keymap.set :n :<leader>w
-                    #(let [{: get_location} (load-nvim-gps)
-                           location (get_location)]
-                       (vim.notify location))
-                    {:buffer bufnr})))
-
 (fn set-folding []
-  (helpers.augroup :fsouza__folding_config
-                   [{:events [:FileType]
-                     :targets (get-file-types)
-                     :command "setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()"}]))
-
-(fn mappings []
-  (helpers.augroup :fsouza__ts_mappings
-                   [{:events [:FileType]
-                     :targets (get-file-types)
-                     :callback create-mappings}]))
+  (let [helpers (require :fsouza.lib.nvim-helpers)]
+    (helpers.augroup :fsouza__folding_config
+                     [{:events [:FileType]
+                       :targets (get-file-types)
+                       :command "setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()"}])))
 
 (do
   (let [configs (require :nvim-treesitter.configs)]
@@ -72,4 +48,5 @@
                                             :keymaps {:goto_definition :gd}}}
                     :ensure_installed :maintained}))
   (set-folding)
-  (mappings))
+  (mod-invoke :nvim-gps :setup
+              {:icons {:class-name "" :function-name "ƒ " :method-name "ƒ "}}))
