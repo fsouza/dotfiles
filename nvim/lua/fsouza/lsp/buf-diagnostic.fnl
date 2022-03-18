@@ -15,6 +15,26 @@
   (each [_ f (ipairs hooks)]
     (f)))
 
+(fn should-report [diagnostic]
+  ;; 1 = Unecessary
+  ;; 2 = Deprecated
+  ;;
+  ;; See:
+  ;; https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#diagnosticTag
+  (let [tablex (require :fsouza.tablex)
+        tags-to-exclude [1]
+        tags (if-nil diagnostic.tags [])]
+    (not (tablex.exists tags
+                        #(let [diag-tag $1]
+                           (tablex.exists tags-to-exclude #(= $1 diag-tag)))))))
+
+(fn filter-diagnostics [result]
+  (when result
+    (let [tablex (require :fsouza.tablex)
+          diagnostics (if-nil result.diagnostics [])]
+      (tset result :diagnostics (tablex.filter diagnostics should-report))))
+  result)
+
 (fn make-handler []
   (let [handler (vim.lsp.with vim.lsp.diagnostic.on_publish_diagnostics
                               {:underline true
@@ -22,9 +42,10 @@
                                :signs true
                                :update_in_insert false})]
     (fn [err result context ...]
-      (vim.schedule exec-hooks)
-      (vim.diagnostic.reset context.client_id context.bufnr)
-      (handler err result context ...))))
+      (let [result (filter-diagnostics result)]
+        (vim.schedule exec-hooks)
+        (vim.diagnostic.reset context.client_id context.bufnr)
+        (handler err result context ...)))))
 
 (fn make-debounced-handler [bufnr debouncer-key]
   (let [debounce (require :fsouza.lib.debounce)
