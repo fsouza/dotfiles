@@ -3,7 +3,7 @@
    {:group :CursorLine :opts {:guibg colors.lighter-gray}}
    {:group :CursorLineNr :opts {:gui :bold :guibg :NONE :guifg colors.black}}
    {:group :Directory :opts {:guifg colors.dark-gray}}
-   {:group :LineNr :opts {:guibg :NONE :guifg colors.black}}
+   {:group :LineNr :opts {:guibg :NONE :guifg colors.dark-gray}}
    {:group :MatchParen :opts {:guibg colors.light-gray}}
    {:group :Normal :opts {:guifg colors.black}}
    {:group :Floating :opts {:guibg colors.light-gray :guifg colors.black}}
@@ -86,9 +86,7 @@
 
 (fn lsp-diagnostics [colors]
   (let [diagnostics-floating {:guifg colors.black}
-        diagnostics-sign {:guifg colors.red
-                          :guibg colors.lighter-gray
-                          :gui :bold}
+        diagnostics-sign {:guifg colors.red :guibg :NONE :gui :bold}
         levels [:Error :Warn :Info :Hint]
         output []]
     (each [_ level (ipairs levels)]
