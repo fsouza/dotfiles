@@ -106,7 +106,7 @@
   (fn handle-result [next result]
     (if (= result.exit-status 0)
         (do
-          (mod-invoke :fsouza.lib.notif :notify "Successfully compiled")
+          (vim.notify "Successfully compiled")
           (when next
             (next)))
         (error (string.format "failed to compile fnl: %s" (vim.inspect result)))))
