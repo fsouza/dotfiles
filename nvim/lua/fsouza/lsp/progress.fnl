@@ -1,7 +1,4 @@
-(local debounce (require :fsouza.lib.debounce))
 (local helpers (require :fsouza.lib.nvim-helpers))
-
-(local debounced-notify (debounce.debounce 4000 (vim.schedule_wrap vim.notify)))
 
 (fn on-progress-update []
   (let [{: mode} (vim.api.nvim_get_mode)]
@@ -19,7 +16,7 @@
 
       (let [messages (vim.lsp.util.get_progress_messages)]
         (each [_ message (ipairs messages)]
-          (debounced-notify.call (format-message message)))))))
+          (vim.notify (format-message message)))))))
 
 (fn on-attach []
   (helpers.augroup :fsouza__lsp_progress
@@ -27,4 +24,11 @@
                      :targets [:LspProgressUpdate]
                      :callback on-progress-update}]))
 
-{:on-attach (helpers.once on-attach)}
+(fn make-handler []
+  (let [debounce (require :fsouza.lib.debounce)
+        debounced-handler (debounce.debounce 3000
+                                             (vim.schedule_wrap (. vim.lsp.handlers
+                                                                   :$/progress)))]
+    debounced-handler.call))
+
+{:on-attach (helpers.once on-attach) :handler (make-handler)}
