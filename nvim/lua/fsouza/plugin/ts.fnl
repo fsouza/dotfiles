@@ -48,5 +48,4 @@
                                             :keymaps {:goto_definition :gd}}}
                     :ensure_installed :maintained}))
   (set-folding)
-  (mod-invoke :nvim-gps :setup
-              {:icons {:class-name "" :function-name "ƒ " :method-name "ƒ "}}))
+  (mod-invoke :nvim-gps :setup {:disable_icons true}))
