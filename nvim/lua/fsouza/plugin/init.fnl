@@ -86,8 +86,10 @@
                                                {:force true})))
 
 (fn setup-shortcuts []
-  (let [shortcut (require :fsouza.plugin.shortcut)]
-    (shortcut.register :Dotfiles (vim.fn.expand "~/.dotfiles"))))
+  (let [shortcut (require :fsouza.plugin.shortcut)
+        path (require :pl.path)]
+    (shortcut.register :Dotfiles (vim.fn.expand "~/.dotfiles"))
+    (shortcut.register :Site (path.join (vim.fn.stdpath :data) :site))))
 
 (fn setup-terminal-mappings []
   (fn term-open [term-id]
@@ -143,8 +145,7 @@
           tcs-internal (require :ts_context_commentstring.internal)]
       (tcs-internal.calculate_commentstring {: key : location})))
 
-  (let [c (require :Comment)]
-    (c.setup {:pre_hook pre-hook :ignore #"^$"})))
+  (mod-invoke :Comment :setup {:pre_hook pre-hook :ignore #"^$"}))
 
 (let [schedule vim.schedule]
   (vim-schedule (mod-invoke :fsouza.lib.cleanup :setup))
