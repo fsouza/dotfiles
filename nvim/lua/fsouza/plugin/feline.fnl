@@ -19,6 +19,7 @@
     (path.basename (vim.loop.cwd))))
 
 (let [gps (require :nvim-gps)
+      notif (require :fsouza.lib.notif)
       bg "#d0d0d0"
       fg "#262626"
       red "#990000"
@@ -51,7 +52,11 @@
                             {:provider :line_percentage
                              :left_sep "   "
                              :right_sep " "
-                             :icon ""}]]
+                             :icon ""}
+                            {:provider notif.get-notification
+                             :enabled notif.has-notification
+                             :left_sep "   "
+                             :right_sep " "}]]
                   :inactive [[cwd-provider {:provider :file_type :icon ""}]]}
       feline (require :feline)]
   (feline.setup {: theme
