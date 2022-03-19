@@ -47,7 +47,7 @@
     (require :fsouza.lsp)
     (setup-lsp-commands))
 
-  (if (= (vim.loop.cwd) vim.env.HOME)
+  (if (= (vim.loop.cwd) (vim.loop.os_homedir))
       (helpers.augroup :fsouza-lsp-change-dir-setup
                        [{:events [:DirChanged]
                          :targets ["*"]
