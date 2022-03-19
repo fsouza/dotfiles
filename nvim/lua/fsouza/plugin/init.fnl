@@ -42,6 +42,19 @@
                                  "lua require('fsouza.lsp.detach').restart()"
                                  {:force true}))
 
+(fn setup-lsp []
+  (fn do-setup []
+    (require :fsouza.lsp)
+    (setup-lsp-commands))
+
+  (if (= (vim.loop.cwd) vim.env.HOME)
+      (helpers.augroup :fsouza-lsp-change-dir-setup
+                       [{:events [:DirChanged]
+                         :targets ["*"]
+                         :callback do-setup
+                         :once true}])
+      (do-setup)))
+
 (fn setup-hlyank []
   (helpers.augroup :yank_highlight
                    [{:events [:TextYankPost]
@@ -152,11 +165,10 @@
                              :htmldjango
                              :yaml]))
   (schedule setup-terminal-mappings)
-  (vim-schedule (require :fsouza.lsp))
+  (schedule setup-lsp)
   (vim-schedule (require :fsouza.plugin.ts))
   (vim-schedule (require :fsouza.plugin.feline))
   (schedule setup-comment-nvim)
-  (schedule setup-lsp-commands)
   (schedule setup-fuzzy-mappings)
   (schedule setup-autocompile)
   (vim-schedule (vim.cmd "doautoall FileType"))
