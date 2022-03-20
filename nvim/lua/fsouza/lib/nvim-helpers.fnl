@@ -1,12 +1,19 @@
 (import-macros {: if-nil : send-esc} :helpers)
 
+(fn wrap-callback [cb]
+  (if (not= cb nil)
+      #(do
+         (cb)
+         nil)
+      nil))
+
 (fn augroup [name commands]
   (let [group (vim.api.nvim_create_augroup name {:clear true})]
     (each [_ c (ipairs commands)]
       (vim.api.nvim_create_autocmd c.events
                                    {:pattern c.targets
                                     :command c.command
-                                    :callback c.callback
+                                    :callback (wrap-callback c.callback)
                                     : group
                                     :once c.once}))))
 
