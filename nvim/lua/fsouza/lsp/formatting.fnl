@@ -118,7 +118,7 @@
                                                   (when (should-organize-imports client.name)
                                                     (organize-imports-and-write client
                                                                                 bufnr)))))))))))
-  false)
+  nil)
 
 (fn augroup-name [bufnr]
   (.. :lsp_autofmt_ bufnr))

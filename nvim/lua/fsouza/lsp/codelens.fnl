@@ -92,7 +92,7 @@
         debounced (if-nil (. debouncers debouncer-key)
                           (make-debounced-codelenses bufnr debouncer-key))]
     (debounced.call bufnr))
-  false)
+  nil)
 
 (fn execute-codelenses [bufnr items]
   (let [client (. clients bufnr)]

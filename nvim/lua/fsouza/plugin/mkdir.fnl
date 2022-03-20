@@ -5,7 +5,7 @@
 (fn run [bufname]
   (let [dir (vim.fn.fnamemodify bufname ":h")]
     (vim.fn.mkdir dir :p))
-  false)
+  nil)
 
 (fn register-for-buffer [bufnr]
   (let [event-buffer (abuf)
@@ -17,7 +17,7 @@
                          :targets [(string.format "<buffer=%d>" bufnr)]
                          :once true
                          :callback #(run bufname)}])))
-  false)
+  nil)
 
 (fn setup []
   (helpers.augroup :fsouza__mkdir

@@ -18,7 +18,7 @@
                   :contentChanges [{:text (read-buffer bufnr)}]}]
       (each [_ client (ipairs (. clients-by-buf bufnr))]
         (client.notify :textDocument/didChange params))))
-  false)
+  nil)
 
 (fn buf-attach-if-needed [bufnr]
   (when (not (. clients-by-buf bufnr))
