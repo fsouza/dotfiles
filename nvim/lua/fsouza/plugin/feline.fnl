@@ -20,6 +20,12 @@
         home (vim.loop.os_homedir)]
     (if (= cwd home) "~" (path.basename cwd))))
 
+(fn get-file-type []
+  (let [mapping {:fsouza-terminal :terminal}
+        ft (vim.api.nvim_buf_get_option 0 :filetype)
+        ft (if-nil (. mapping ft) ft)]
+    (string.format "[%s]" ft)))
+
 (let [gps (require :nvim-gps)
       notif (require :fsouza.lib.notif)
       bg "#d0d0d0"
@@ -59,10 +65,10 @@
                              :enabled notif.has-notification
                              :left_sep "   "
                              :right_sep " "}]]
-                  :inactive [[cwd-provider {:provider :file_type :icon ""}]]}
+                  :inactive [[{:provider :get-file-type :icon ""}]]}
       feline (require :feline)]
   (feline.setup {: theme
                  : components
                  :default_bg bg
                  :default_fg fg
-                 :custom_providers {: get-cwd : get-mode-text}}))
+                 :custom_providers {: get-cwd : get-mode-text : get-file-type}}))
