@@ -15,8 +15,10 @@
     (if output (string.format "%s | " output) "")))
 
 (fn get-cwd []
-  (let [path (require :pl.path)]
-    (path.basename (vim.loop.cwd))))
+  (let [path (require :pl.path)
+        cwd (vim.loop.cwd)
+        home (vim.loop.os_homedir)]
+    (if (= cwd home) "~" (path.basename cwd))))
 
 (let [gps (require :nvim-gps)
       notif (require :fsouza.lib.notif)
