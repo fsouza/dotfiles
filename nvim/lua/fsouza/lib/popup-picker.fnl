@@ -20,7 +20,7 @@
                        :once true
                        :callback #(do
                                     (vim.api.nvim_win_close winid false)
-                                    nil)}])
+                                    false)}])
     (vim.keymap.set :n :<esc> #(vim.api.nvim_win_close winid false)
                     mapping-opts)
     (vim.keymap.set :n :<cr> #(handle-selection cb winid) mapping-opts)

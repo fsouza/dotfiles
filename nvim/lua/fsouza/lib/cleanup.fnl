@@ -8,7 +8,7 @@
                       (cb)
                       (set finished (+ finished 1)))))
     (vim.wait 500 #(= (length cbs) finished) 25))
-  nil)
+  false)
 
 (let [mod {:cbs []}]
   (tset mod :register (partial table.insert mod.cbs))

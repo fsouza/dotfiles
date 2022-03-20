@@ -46,7 +46,7 @@
   (fn do-setup []
     (require :fsouza.lsp)
     (setup-lsp-commands)
-    nil)
+    false)
 
   (if (= (vim.loop.cwd) (vim.loop.os_homedir))
       (helpers.augroup :fsouza-lsp-change-dir-setup
@@ -64,7 +64,7 @@
                                   (vhl.on_yank {:higroup :HlYank
                                                 :timeout 200
                                                 :on_macro false})
-                                  nil)}]))
+                                  false)}]))
 
 (fn setup-word-replace []
   (vim.keymap.set :n :<leader>e
@@ -127,7 +127,7 @@
                      nil)]
         (cmd.run :make {:args [:-C config-dir make-target]} nil
                  (partial handle-result next))))
-    nil)
+    false)
 
   (helpers.augroup :fsouza__autocompile-fennel
                    [{:events [:BufWritePost]
