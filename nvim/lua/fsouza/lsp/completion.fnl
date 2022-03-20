@@ -100,7 +100,8 @@
   (each [req-id _ (pairs state.inflight-requests)]
     (vim-schedule (client.cancel_request req-id)))
   (tset state :inflight-requests {})
-  (tset state :resolved-items {}))
+  (tset state :resolved-items {})
+  false)
 
 (fn do-completeChanged [client bufnr item]
   (close)
@@ -115,14 +116,16 @@
 
 (fn on-CompleteChanged [client bufnr]
   (let [item (?. vim :v :event :completed_item :user_data)]
-    (vim-schedule (do-completeChanged client bufnr item))))
+    (vim-schedule (do-completeChanged client bufnr item)))
+  false)
 
 (fn do-InsertLeave [client bufnr]
   (reset-state client)
   (helpers.reset-augroup (augroup-name bufnr)))
 
 (fn on-InsertLeave [client bufnr]
-  (vim-schedule (do-InsertLeave client bufnr)))
+  (vim-schedule (do-InsertLeave client bufnr))
+  false)
 
 (fn on-attach [client bufnr]
   (tset client.server_capabilities.completionProvider :triggerCharacters [])

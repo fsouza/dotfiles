@@ -17,7 +17,8 @@
 
       (let [messages (vim.lsp.util.get_progress_messages)]
         (each [_ message (ipairs messages)]
-          (notify (format-message message)))))))
+          (notify (format-message message))))))
+  false)
 
 (fn on-attach []
   (helpers.augroup :fsouza__lsp_progress
