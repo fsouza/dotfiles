@@ -18,9 +18,7 @@
                      [{:events [:WinLeave]
                        :targets [(string.format "<buffer=%d>" bufnr)]
                        :once true
-                       :callback #(do
-                                    (vim.api.nvim_win_close winid false)
-                                    false)}])
+                       :callback #(vim.api.nvim_win_close winid false)}])
     (vim.keymap.set :n :<esc> #(vim.api.nvim_win_close winid false)
                     mapping-opts)
     (vim.keymap.set :n :<cr> #(handle-selection cb winid) mapping-opts)

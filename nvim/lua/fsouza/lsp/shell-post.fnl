@@ -17,8 +17,7 @@
                                  :version (vim.api.nvim_buf_get_changedtick bufnr)}
                   :contentChanges [{:text (read-buffer bufnr)}]}]
       (each [_ client (ipairs (. clients-by-buf bufnr))]
-        (client.notify :textDocument/didChange params))))
-  false)
+        (client.notify :textDocument/didChange params)))))
 
 (fn buf-attach-if-needed [bufnr]
   (when (not (. clients-by-buf bufnr))

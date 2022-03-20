@@ -41,8 +41,7 @@
 (fn trim-whitespace []
   (let [view (vim.fn.winsaveview)]
     (pcall (partial vim.cmd "silent! keeppatterns %s/\\v\\s+$//"))
-    (vim.fn.winrestview view))
-  false)
+    (vim.fn.winrestview view)))
 
 (fn handle-whitespaces [bufnr v]
   (let [commands []]
@@ -86,8 +85,7 @@
                    (if (= result.exit-status 0)
                        (set-opts bufnr (parse-output result.stdout))
                        (vim.notify (string.format "failed to run editorconfig: %s"
-                                                  (vim.inspect result)))))))))
-  false)
+                                                  (vim.inspect result))))))))))
 
 (fn set-enabled [v]
   (let [commands []]
