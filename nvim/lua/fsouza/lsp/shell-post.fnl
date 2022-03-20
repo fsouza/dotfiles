@@ -1,6 +1,4 @@
-(import-macros {: if-nil} :helpers)
-
-(local helpers (require :fsouza.lib.nvim-helpers))
+(import-macros {: if-nil : mod-invoke} :helpers)
 
 (local clients-by-buf {})
 
@@ -33,13 +31,13 @@
     (buf-attach-if-needed bufnr)
     (table.insert buf-clients client)
     (tset clients-by-buf bufnr buf-clients)
-    (helpers.augroup (augroup-name bufnr)
-                     [{:events [:FileChangedShellPost]
-                       :targets [(string.format "<buffer=%d>" bufnr)]
-                       :callback #(notify bufnr)}])))
+    (mod-invoke :fsouza.lib.nvim-helpers :augroup (augroup-name bufnr)
+                [{:events [:FileChangedShellPost]
+                  :targets [(string.format "<buffer=%d>" bufnr)]
+                  :callback #(notify bufnr)}])))
 
 (fn on-detach [bufnr]
   (tset clients-by-buf bufnr nil)
-  (helpers.reset-augroup (augroup-name bufnr)))
+  (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup (augroup-name bufnr)))
 
 {: on-attach : on-detach}

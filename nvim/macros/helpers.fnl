@@ -28,8 +28,7 @@
        (tonumber abuf#))))
 
 (fn mod-invoke [mod fn-name ...]
-  `(let [mod# (require ,mod)
-         f# (. mod# ,fn-name)]
-     (f# ,...)))
+  `(let [mod# (require ,mod)]
+     ((. mod# ,fn-name) ,...)))
 
 {: vim-schedule : if-nil : send-esc : reload : abuf : mod-invoke}

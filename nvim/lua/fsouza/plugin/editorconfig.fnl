@@ -1,7 +1,5 @@
 (import-macros {: vim-schedule : if-nil} :helpers)
 
-(local helpers (require :fsouza.lib.nvim-helpers))
-
 (fn parse-output [data]
   (collect [_ line (ipairs (vim.split data "\n"))]
     (let [parts (vim.split line "=")]
@@ -44,7 +42,8 @@
     (vim.fn.winrestview view)))
 
 (fn handle-whitespaces [bufnr v]
-  (let [commands []]
+  (let [helpers (require :fsouza.lib.nvim-helpers)
+        commands []]
     (when (= v :true)
       (table.insert commands
                     {:events [:BufWritePre]
@@ -88,7 +87,8 @@
                                                   (vim.inspect result))))))))))
 
 (fn set-enabled [v]
-  (let [commands []]
+  (let [helpers (require :fsouza.lib.nvim-helpers)
+        commands []]
     (when v
       (table.insert commands
                     {:events [:BufNewFile :BufReadPost :BufFilePost]

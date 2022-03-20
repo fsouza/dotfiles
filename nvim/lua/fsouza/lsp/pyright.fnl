@@ -1,7 +1,5 @@
 (import-macros {: vim-schedule} :helpers)
 
-(local path (require :pl.path))
-
 (fn set-from-env-var [cb]
   (cb (os.getenv :VIRTUAL_ENV)))
 
@@ -24,7 +22,8 @@
                          (set-from-cmd :pipenv [:--venv] cb))))
 
 (fn set-from-venv-folder [cb]
-  (let [folders [:venv :.venv]]
+  (let [path (require :pl.path)
+        folders [:venv :.venv]]
     (fn test-folder [idx]
       (let [folder (. folders idx)]
         (if folder
@@ -52,10 +51,11 @@
     (detect 1)))
 
 (fn detect-python-interpreter [cb]
-  (detect-virtualenv (fn [virtualenv]
-                       (when virtualenv
-                         (vim-schedule (tset vim.env :VIRTUAL_ENV virtualenv))
-                         (cb (path.join virtualenv :bin :python))))))
+  (let [path (require :pl.path)]
+    (detect-virtualenv (fn [virtualenv]
+                         (when virtualenv
+                           (vim-schedule (tset vim.env :VIRTUAL_ENV virtualenv))
+                           (cb (path.join virtualenv :bin :python)))))))
 
 (fn detect-pythonPath [client]
   (let [cache-dir (vim.fn.stdpath :cache)]

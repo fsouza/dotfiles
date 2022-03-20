@@ -1,9 +1,8 @@
 (import-macros {: reload} :helpers)
 
-(local path (require :pl.path))
-
 (fn download-paq [paq-dir cb]
-  (let [paq-repo-dir (path.join paq-dir :opt :paq-nvim)
+  (let [path (require :pl.path)
+        paq-repo-dir (path.join paq-dir :opt :paq-nvim)
         cmd (require :fsouza.lib.cmd)]
     (cmd.run :git {:args [:clone
                           :--depth=1
@@ -22,7 +21,8 @@
         (cb paq)
         (download-paq paq-dir cb))))
 
-(let [paq-dir (path.join (vim.fn.stdpath :data) :site :pack :paqs)
+(let [path (require :pl.path)
+      paq-dir (path.join (vim.fn.stdpath :data) :site :pack :paqs)
       paqs [{1 :savq/paq-nvim :opt true :as :paq-nvim}
             [:chaoren/vim-wordmotion]
             [:godlygeek/tabular]

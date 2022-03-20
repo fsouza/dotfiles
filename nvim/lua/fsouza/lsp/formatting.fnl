@@ -1,7 +1,5 @@
 (import-macros {: if-nil} :helpers)
 
-(local helpers (require :fsouza.lib.nvim-helpers))
-
 (local langservers-org-imports-set {:gopls true})
 
 (local updates {})
@@ -101,23 +99,23 @@
                                      (vim.api.nvim_buf_get_changedtick bufnr))
                                   result)
                          (vim.api.nvim_buf_call bufnr
-                                                (fn []
-                                                  (helpers.rewrite-wrap (partial vim.lsp.util.apply_text_edits
-                                                                                 result
-                                                                                 bufnr
-                                                                                 client.offset_encoding))
-                                                  (let [last-update (get-last-update bufnr)]
-                                                    (if (and last-update
-                                                             (< (- (os.clock)
-                                                                   last-update)
-                                                                0.01))
-                                                        (vim.cmd "noau update")
-                                                        (do
-                                                          (vim.cmd :update)
-                                                          (set-last-update bufnr))))
-                                                  (when (should-organize-imports client.name)
-                                                    (organize-imports-and-write client
-                                                                                bufnr))))))))))))
+                                                #(let [helpers (require :fsouza.lib.nvim-helpers)]
+                                                   (helpers.rewrite-wrap (partial vim.lsp.util.apply_text_edits
+                                                                                  result
+                                                                                  bufnr
+                                                                                  client.offset_encoding))
+                                                   (let [last-update (get-last-update bufnr)]
+                                                     (if (and last-update
+                                                              (< (- (os.clock)
+                                                                    last-update)
+                                                                 0.01))
+                                                         (vim.cmd "noau update")
+                                                         (do
+                                                           (vim.cmd :update)
+                                                           (set-last-update bufnr))))
+                                                   (when (should-organize-imports client.name)
+                                                     (organize-imports-and-write client
+                                                                                 bufnr))))))))))))
 
 (fn augroup-name [bufnr]
   (.. :lsp_autofmt_ bufnr))
@@ -125,21 +123,23 @@
 (fn on-attach [client bufnr]
   (when (should-skip-buffer bufnr)
     (lua :return))
-  (let [buffer-clients (if-nil (. clients bufnr) [])]
+  (let [helpers (require :fsouza.lib.nvim-helpers)
+        buffer-clients (if-nil (. clients bufnr) [])]
     (table.insert buffer-clients client)
-    (tset clients bufnr buffer-clients))
-  (helpers.augroup (augroup-name bufnr)
-                   [{:events [:BufWritePost]
-                     :targets [(string.format "<buffer=%d>" bufnr)]
-                     :callback #(autofmt-and-write bufnr)}])
-  (vim.keymap.set :n :<leader>f #(fmt client bufnr)
-                  {:silent true :buffer bufnr}))
+    (tset clients bufnr buffer-clients)
+    (helpers.augroup (augroup-name bufnr)
+                     [{:events [:BufWritePost]
+                       :targets [(string.format "<buffer=%d>" bufnr)]
+                       :callback #(autofmt-and-write bufnr)}])
+    (vim.keymap.set :n :<leader>f #(fmt client bufnr)
+                    {:silent true :buffer bufnr})))
 
 (fn on-detach [bufnr]
-  (when (vim.api.nvim_buf_is_valid bufnr)
-    (pcall vim.keymap.del :n :<leader>f {:buffer bufnr}))
-  (helpers.reset-augroup (augroup-name bufnr))
-  (tset clients bufnr nil)
-  (tset updates bufnr nil))
+  (let [helpers (require :fsouza.lib.nvim-helpers)]
+    (when (vim.api.nvim_buf_is_valid bufnr)
+      (pcall vim.keymap.del :n :<leader>f {:buffer bufnr}))
+    (helpers.reset-augroup (augroup-name bufnr))
+    (tset clients bufnr nil)
+    (tset updates bufnr nil)))
 
 {: on-attach : on-detach}

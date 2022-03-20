@@ -1,11 +1,4 @@
-;; TODO(fsouza): eventually I should bring a version of my fork of
-;; nvim-lsp-compl here, or part of it. Right now, we're invoking
-;; completionItem/resolve on both CompleteChanged and CompleteDone, because
-;; those happen in separate places.
-
-(import-macros {: vim-schedule : if-nil} :helpers)
-
-(local helpers (require :fsouza.lib.nvim-helpers))
+(import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
 
 ; used to store information about ongoing completion, gets reset everytime we
 ; exit "completion mode".
@@ -119,7 +112,7 @@
 
 (fn do-InsertLeave [client bufnr]
   (reset-state client)
-  (helpers.reset-augroup (augroup-name bufnr)))
+  (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup (augroup-name bufnr)))
 
 (fn on-InsertLeave [client bufnr]
   (vim-schedule (do-InsertLeave client bufnr)))
@@ -129,7 +122,8 @@
   (tset client.resolved_capabilities :signature_help_trigger_characters [])
   (let [lsp-compl (require :lsp_compl)]
     (fn complete []
-      (let [lsp-compl (require :lsp_compl)]
+      (let [helpers (require :fsouza.lib.nvim-helpers)
+            lsp-compl (require :lsp_compl)]
         (helpers.augroup (augroup-name bufnr)
                          [{:events [:CompleteChanged]
                            :targets [(string.format "<buffer=%d>" bufnr)]
@@ -153,7 +147,7 @@
                                   {:remap false :buffer bufnr :expr true}))))
 
 (fn on-detach [client bufnr]
-  (helpers.reset-augroup (augroup-name bufnr))
+  (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup (augroup-name bufnr))
   (when (vim.api.nvim_buf_is_valid bufnr)
     (pcall vim.keymap.del :i :<cr> {:buffer bufnr})
     (pcall vim.keymap.del :i :<c-x><c-o> {:buffer bufnr}))

@@ -1,7 +1,5 @@
 (import-macros {: vim-schedule : if-nil} :helpers)
 
-(local helpers (require :fsouza.lib.nvim-helpers))
-
 (local debouncers {})
 
 (local clients {})
@@ -130,7 +128,8 @@
   (.. :fsouza__lsp_codelens_ bufnr))
 
 (fn on-detach [bufnr]
-  (let [mappings (?. clients bufnr :mappings)]
+  (let [helpers (require :fsouza.lib.nvim-helpers)
+        mappings (?. clients bufnr :mappings)]
     (when (vim.api.nvim_buf_is_valid bufnr)
       (vim.api.nvim_buf_clear_namespace bufnr ns 0 -1)
       (when mappings
@@ -143,7 +142,8 @@
       (remove-results bufnr))))
 
 (fn on-attach [opts]
-  (let [bufnr opts.bufnr
+  (let [helpers (require :fsouza.lib.nvim-helpers)
+        bufnr opts.bufnr
         client opts.client
         augroup-id (augroup-name bufnr)]
     (tset clients bufnr {:lsp-client client
