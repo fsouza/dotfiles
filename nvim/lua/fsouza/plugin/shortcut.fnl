@@ -8,8 +8,8 @@
           (fuzzy.find-files))
         (fuzzy.find-files directory))))
 
-(fn register [mod command path]
-  (tset mod.registry command
+(fn register [registry command path]
+  (tset registry command
         #(let [cd (= $1 "!")]
            (vim.loop.fs_stat path
                              (fn [err stat]
@@ -23,6 +23,5 @@
                                                 command)
                                  {:force true :bang true}))
 
-(let [mod {:registry []}]
-  (tset mod :register (partial register mod))
-  mod)
+(let [registry []]
+  {: registry :register (partial register registry)})
