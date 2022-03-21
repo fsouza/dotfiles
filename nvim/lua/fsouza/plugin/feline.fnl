@@ -54,17 +54,16 @@
                              :hl {: fg}
                              :icon " H-"}
                             {:provider :diagnostic_info :hl {: fg} :icon " I-"}
+                            {:provider notif.get-notification
+                             :enabled notif.has-notification
+                             :left_sep "    "}
                             {:provider {:name :position :opts {:padding true}}
-                             :left_sep "    "
+                             :left_sep "  "
                              :icon ""}
                             {:provider :line_percentage
                              :left_sep "   "
                              :right_sep " "
-                             :icon ""}
-                            {:provider notif.get-notification
-                             :enabled notif.has-notification
-                             :left_sep "   "
-                             :right_sep " "}]]
+                             :icon ""}]]
                   :inactive [[{:provider :get-file-type :icon ""}]]}
       feline (require :feline)]
   (feline.setup {: theme
