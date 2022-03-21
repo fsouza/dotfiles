@@ -55,7 +55,10 @@
             {1 :vijaymarupudi/nvim-fzf :opt true}
             {1 :numToStr/Comment.nvim :as :Comment.nvim :opt true}
             {1 :b0o/SchemaStore.nvim :as :SchemaStore.nvim :opt true}
-            {1 :feline-nvim/feline.nvim :as :feline.nvim :opt true}
+            {1 :feline-nvim/feline.nvim
+             :as :feline.nvim
+             :opt true
+             :branch :develop}
             ; filetypes stuff
             ;
             ; Note: I used to use vim-polyglot, but it loads too much garbage and
