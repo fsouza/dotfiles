@@ -44,7 +44,10 @@
                             {:provider gps.get_location
                              :enabled gps.is_available
                              :left_sep [" " {:str ">" :hl {: fg : bg}} " "]}]
-                           [{:provider :diagnostic_errors
+                           [{:provider notif.get-notification
+                             :enabled notif.has-notification
+                             :right_sep "  "}
+                            {:provider :diagnostic_errors
                              :hl {:fg red}
                              :icon " E-"}
                             {:provider :diagnostic_warnings
@@ -54,9 +57,6 @@
                              :hl {: fg}
                              :icon " H-"}
                             {:provider :diagnostic_info :hl {: fg} :icon " I-"}
-                            {:provider notif.get-notification
-                             :enabled notif.has-notification
-                             :left_sep "    "}
                             {:provider {:name :position :opts {:padding true}}
                              :left_sep "  "
                              :icon ""}
