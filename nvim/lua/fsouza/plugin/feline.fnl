@@ -56,12 +56,14 @@
                             {:provider :diagnostic_hints
                              :hl {: fg}
                              :icon " H-"}
-                            {:provider :diagnostic_info :hl {: fg} :icon " I-"}
+                            {:provider :diagnostic_info
+                             :hl {: fg}
+                             :icon " I-"
+                             :right_sep "  "}
                             {:provider {:name :position :opts {:padding true}}
-                             :left_sep "  "
+                             :right_sep "  "
                              :icon ""}
                             {:provider :line_percentage
-                             :left_sep "   "
                              :right_sep " "
                              :icon ""}]]
                   :inactive [[{:provider :get-file-type :icon ""}]]}
