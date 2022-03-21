@@ -45,11 +45,11 @@
                              :enabled gps.is_available
                              :left_sep [" " {:str ">" :hl {: fg : bg}} " "]}]
                            [{:provider notif.get-notification
-                             :enabled notif.has-notification
-                             :right_sep "  "}
+                             :enabled notif.has-notification}
                             {:provider :diagnostic_errors
                              :hl {:fg red}
-                             :icon " E-"}
+                             :icon " E-"
+                             :left_sep "  "}
                             {:provider :diagnostic_warnings
                              :hl {:fg orange}
                              :icon " W-"}
@@ -61,6 +61,7 @@
                              :icon " I-"
                              :right_sep "  "}
                             {:provider {:name :position :opts {:padding true}}
+                             :left_sep "  "
                              :right_sep "  "
                              :icon ""}
                             {:provider :line_percentage

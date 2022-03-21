@@ -12,7 +12,7 @@
                         (if (= timer nil)
                             (do
                               (set timer (vim.loop.new_timer))
-                              (timer:start 2000 0
+                              (timer:start 6000 0
                                            #(do
                                               (timer:stop)
                                               (timer:close)

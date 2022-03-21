@@ -27,7 +27,7 @@
 
 (fn make-handler []
   (let [debounce (require :fsouza.lib.debounce)
-        debounced-handler (debounce.debounce 1000
+        debounced-handler (debounce.debounce 4000
                                              (vim.schedule_wrap (. vim.lsp.handlers
                                                                    :$/progress)))]
     debounced-handler.call))
