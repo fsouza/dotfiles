@@ -7,7 +7,7 @@
       (fn format-message [msg]
         (var prefix "")
         (var suffix "")
-        (when (not= msg.title "")
+        (when (and (not= msg.title "") (not= msg.title "empty title"))
           (set prefix (string.format "%s: " msg.title)))
         (when (not= msg.name "")
           (set prefix (string.format "[%s] %s" msg.name prefix)))
