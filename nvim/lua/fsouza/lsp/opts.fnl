@@ -86,8 +86,7 @@
                                       {:lhs :<c-p>
                                        :rhs #(vim.diagnostic.goto_prev {:focusable false})}]
                                   :i []
-                                  :x []}
-                        progress (require :fsouza.lsp.progress)]
+                                  :x []}]
                     (when client.resolved_capabilities.text_document_did_change
                       (let [shell-post (require :fsouza.lsp.shell-post)]
                         (shell-post.on-attach {: bufnr : client})
@@ -187,7 +186,6 @@
                                              :can-resolve client.resolved_capabilities.code_lens_resolve
                                              :supports-command client.resolved_capabilities.execute_command})
                         (register-detach codelens.on-detach)))
-                    (progress.on-attach)
                     (vim-schedule (each [mode keymaps (pairs mappings)]
                                     (each [_ {: lhs : rhs} (ipairs keymaps)]
                                       (vim.keymap.set mode lhs rhs

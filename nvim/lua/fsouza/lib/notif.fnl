@@ -8,11 +8,11 @@
                 (timer:close)
                 (set timer nil)))
    :has-notification #(not= last-notification nil)
-   :get-notification #(let [msg last-notification]
+   :get-notification #(let [{: msg : age} last-notification]
                         (if (= timer nil)
                             (do
                               (set timer (vim.loop.new_timer))
-                              (timer:start 6000 0
+                              (timer:start age 0
                                            #(do
                                               (timer:stop)
                                               (timer:close)

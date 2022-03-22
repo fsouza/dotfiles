@@ -1,38 +1,28 @@
-(local helpers (require :fsouza.lib.nvim-helpers))
+(import-macros {: if-nil} :helpers)
 
-(fn on-progress-update []
+(local debounce-ms 1000)
+
+(fn handler [_ res ctx]
   (let [{: notify} (require :fsouza.lib.notif)
-        {: mode} (vim.api.nvim_get_mode)]
-    (when (= mode :n)
-      (fn format-message [msg]
-        (var prefix "")
-        (var suffix "")
-        (when (and (not= msg.title "") (not= msg.title "empty title"))
-          (set prefix (string.format "%s: " msg.title)))
-        (when (not= msg.name "")
-          (set prefix (string.format "[%s] %s" msg.name prefix)))
-        (when msg.percentage
-          (set suffix (string.format " (%s)" msg.percentage)))
-        (string.format "%s%s%s" prefix msg.message suffix))
-
-      (let [messages (vim.lsp.util.get_progress_messages)]
-        (each [_ message (ipairs messages)]
-          (notify (format-message message)))))))
-
-(fn on-attach []
-  (helpers.augroup :fsouza__lsp_progress
-                   [{:events [:User]
-                     :targets [:LspProgressUpdate]
-                     :callback on-progress-update}]))
+        {:client_id client-id} ctx
+        client (vim.lsp.get_client_by_id client-id)
+        client-name (if-nil client.name (string.format "client-%d" client-id))
+        message (?. res :value :message)
+        percentage (?. res :value :percentage)]
+    (when message
+      (let [p-msg (if (not= percentage nil)
+                      ;; NB: need %%%%% because of feline.
+                      (string.format " (%d%%%%)" percentage)
+                      "")
+            msg (string.format "[%s] %s%s" client-name message p-msg)]
+        (notify {: msg :age (* debounce-ms 3)})))))
 
 (fn make-handler []
   (let [debounce (require :fsouza.lib.debounce)
-        debounced-handler (debounce.debounce 4000
-                                             (vim.schedule_wrap (. vim.lsp.handlers
-                                                                   :$/progress)))]
+        debounced-handler (debounce.debounce debounce-ms
+                                             (vim.schedule_wrap handler))]
     (fn [...]
       (let [{: mode} (vim.api.nvim_get_mode)]
-        (when (not= mode :i)
-          (debounced-handler.call ...))))))
+        (debounced-handler.call ...)))))
 
-{:on-attach (helpers.once on-attach) :handler (make-handler)}
+{:handler (make-handler)}
