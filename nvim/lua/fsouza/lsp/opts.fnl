@@ -87,19 +87,20 @@
                                        :rhs #(vim.diagnostic.goto_prev {:focusable false})}]
                                   :i []
                                   :x []}]
-                    (when client.resolved_capabilities.text_document_did_change
-                      (let [shell-post (require :fsouza.lsp.shell-post)]
-                        (shell-post.on-attach {: bufnr : client})
-                        (register-detach shell-post.on-detach)))
-                    (when client.resolved_capabilities.completion
+                    (let [shell-post (require :fsouza.lsp.shell-post)]
+                      (shell-post.on-attach {: bufnr : client})
+                      (register-detach shell-post.on-detach))
+                    (when (not= client.server_capabilities.completionProvider
+                                nil)
                       (let [completion (require :fsouza.lsp.completion)]
                         (completion.on-attach client bufnr)
                         (register-detach (partial completion.on-detach client))))
-                    (when client.resolved_capabilities.rename
+                    (when (not= client.server_capabilities.renameProvider nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>r
                                      :rhs #(vim.lsp.buf.rename)}))
-                    (when client.resolved_capabilities.code_action
+                    (when (not= client.server_capabilities.codeActionProvider
+                                nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>cc
                                      :rhs #(mod-invoke :fsouza.lsp.code-action
@@ -108,7 +109,8 @@
                                     {:lhs :<leader>cc
                                      :rhs #(mod-invoke :fsouza.lsp.code-action
                                                        :visual-code-action)}))
-                    (when client.resolved_capabilities.declaration
+                    (when (not= client.server_capabilities.declarationProvider
+                                nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>gy
                                      :rhs #(vim.lsp.buf.declaration)})
@@ -116,7 +118,8 @@
                                     {:lhs :<leader>py
                                      :rhs #(mod-invoke :fsouza.lsp.locations
                                                        :preview-declaration)}))
-                    (when client.resolved_capabilities.goto_definition
+                    (when (not= client.server_capabilities.definitionProvider
+                                nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>gd
                                      :rhs #(vim.lsp.buf.definition)})
@@ -124,7 +127,8 @@
                                     {:lhs :<leader>pd
                                      :rhs #(mod-invoke :fsouza.lsp.locations
                                                        :preview-definition)}))
-                    (when client.resolved_capabilities.implementation
+                    (when (not= client.server_capabilities.implementationProvider
+                                nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>gi
                                      :rhs #(vim.lsp.buf.implementation)})
@@ -132,7 +136,8 @@
                                     {:lhs :<leader>pi
                                      :rhs #(mod-invoke :fsouza.lsp.locations
                                                        :preview-implementation)}))
-                    (when client.resolved_capabilities.type_definition
+                    (when (not= client.server_capabilities.typeDefinitionProvider
+                                nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>gt
                                      :rhs #(vim.lsp.type_definition)})
@@ -140,18 +145,21 @@
                                     {:lhs :<leader>pt
                                      :rhs #(mod-invoke :fsouza.lsp.locations
                                                        :preview-type-definition)}))
-                    (when client.resolved_capabilities.document_formatting
+                    (when (not= client.server_capabilities.documentFormattingProvider
+                                nil)
                       (let [formatting (require :fsouza.lsp.formatting)]
                         (formatting.on-attach client bufnr)
                         (register-detach formatting.on-detach)))
-                    (when client.resolved_capabilities.document_highlight
+                    (when (not= client.server_capabilities.documentHighlightProvider
+                                nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>s
                                      :rhs #(vim.lsp.buf.document_highlight)})
                       (table.insert mappings.n
                                     {:lhs :<leader>S
                                      :rhs #(vim.lsp.buf.clear_references)}))
-                    (when client.resolved_capabilities.document_symbol
+                    (when (not= client.server_capabilities.documentSymbolProvider
+                                nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>t
                                      :rhs #(mod-invoke :fsouza.plugin.fuzzy
@@ -160,31 +168,38 @@
                                     {:lhs :<leader>v
                                      :rhs #(let [symbols-outline (setup-symbols-outline)]
                                              (symbols-outline.toggle_outline))}))
-                    (when client.resolved_capabilities.find_references
+                    (when (not= client.server_capabilities.referenceProvider
+                                nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>q
                                      :rhs #(vim.lsp.buf.references)}))
-                    (when client.resolved_capabilities.hover
+                    (when (not= client.server_capabilities.hoverProvider nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>i :rhs #(vim.lsp.buf.hover)}))
-                    (when client.resolved_capabilities.signature_help
+                    (when (not= client.server_capabilities.signatureHelpProvider
+                                nil)
                       (table.insert mappings.i
                                     {:lhs :<c-k>
                                      :rhs #(vim.lsp.buf.signature_help)}))
-                    (when client.resolved_capabilities.workspace_symbol
+                    (when (not= client.server_capabilities.workspaceSymbolProvider
+                                nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>T
                                      :rhs #(let [{: lsp_workspace_symbols} (require :fsouza.plugin.fuzzy)
                                                  query (vim.fn.input "query：")]
                                              (when (not= query "")
                                                (lsp_workspace_symbols {: query})))}))
-                    (when client.resolved_capabilities.code_lens
+                    (when (not= client.server_capabilities.codeLensProvider nil)
                       (let [codelens (require :fsouza.lsp.codelens)]
                         (codelens.on-attach {: bufnr
                                              : client
                                              :mapping :<leader><cr>
-                                             :can-resolve client.resolved_capabilities.code_lens_resolve
-                                             :supports-command client.resolved_capabilities.execute_command})
+                                             :can-resolve (not= (?. client.server_capabilities
+                                                                    :codeLensProvider
+                                                                    :resolveProvider)
+                                                                nil)
+                                             :supports-command (not= client.server_capabilities.executeCommandProvider
+                                                                     nil)})
                         (register-detach codelens.on-detach)))
                     (vim-schedule (each [mode keymaps (pairs mappings)]
                                     (each [_ {: lhs : rhs} (ipairs keymaps)]
