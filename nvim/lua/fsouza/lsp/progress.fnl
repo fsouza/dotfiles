@@ -30,6 +30,9 @@
         debounced-handler (debounce.debounce 4000
                                              (vim.schedule_wrap (. vim.lsp.handlers
                                                                    :$/progress)))]
-    debounced-handler.call))
+    (fn [...]
+      (let [{: mode} (vim.api.nvim_get_mode)]
+        (when (not= mode :i)
+          (debounced-handler.call ...))))))
 
 {:on-attach (helpers.once on-attach) :handler (make-handler)}
