@@ -8,6 +8,7 @@
 
 (fn disable []
   (when colors-name
-    (vim.cmd (string.format "colorscheme %s" colors-name))))
+    (vim.cmd (string.format "colorscheme %s" colors-name))
+    (set colors-name nil)))
 
 {: enable : disable}
