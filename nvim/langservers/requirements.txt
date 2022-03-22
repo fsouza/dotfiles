@@ -53,10 +53,14 @@ pyflakes==2.4.0
     # via
     #   autoflake8
     #   flake8
+pyupgrade==2.31.1
+    # via -r requirements.in
 reorder-python-imports==3.0.1
     # via -r requirements.in
 tokenize-rt==4.2.1
-    # via add-trailing-comma
+    # via
+    #   add-trailing-comma
+    #   pyupgrade
 toml==0.10.2
     # via autopep8
 tomli==2.0.1

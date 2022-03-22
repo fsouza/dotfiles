@@ -86,6 +86,13 @@
                         :formatStdin true
                         :rootMarkers default-root-markers})))
 
+(fn get-pyupgrade [args cb]
+  (get-python-bin :pyupgrade
+                  #(cb {:formatCommand (string.format "%s --exit-zero-even-if-changed %s -"
+                                                      $1 (process-args args))
+                        :formatStdin true
+                        :rootMarkers default-root-markers})))
+
 (fn get-buildifier [cb]
   (let [buildifierw (path.join config-dir :langservers :bin :buildifierw.py)
         py3 (find-venv-bin :python3)]
@@ -213,6 +220,7 @@
                                                       "https://github.com/ambv/black" get-black
                                                       "https://github.com/asottile/add-trailing-comma" get-add-trailing-comma
                                                       "https://github.com/asottile/reorder_python_imports" get-reorder-python-imports
+                                                      "https://github.com/asottile/pyupgrade" get-pyupgrade
                                                       "https://github.com/pre-commit/mirrors-autopep8" get-autopep8
                                                       "https://github.com/pre-commit/mirrors-isort" get-isort
                                                       "https://github.com/pycqa/isort" get-isort
