@@ -30,9 +30,9 @@
       notif (require :fsouza.lib.notif)
       bg "#d0d0d0"
       fg "#262626"
-      red "#990000"
-      orange "#ffd787"
-      theme {: bg : fg :black fg}
+      error "#990000"
+      warning "#a36d00"
+      theme {: bg : fg :black fg : error : warning}
       cwd-provider {:provider {:name :get-cwd :update [:DirChanged]}
                     :right_sep [" " {:str ">" :hl {: fg : bg}} " "]}
       components {:active [[{:provider {:name :get-mode-text
@@ -47,15 +47,15 @@
                            [{:provider notif.get-notification
                              :enabled notif.has-notification}
                             {:provider :diagnostic_errors
-                             :hl {:fg red}
+                             :hl {:fg :error}
                              :icon " E-"
                              :left_sep "  "}
-                            {:provider :diagnostic_warnings
-                             :hl {:fg orange}
-                             :icon " W-"}
                             {:provider :diagnostic_hints
                              :hl {: fg}
                              :icon " H-"}
+                            {:provider :diagnostic_warnings
+                             :hl {:fg :warning}
+                             :icon " W-"}
                             {:provider :diagnostic_info
                              :hl {: fg}
                              :icon " I-"
