@@ -59,4 +59,4 @@ function ensure_rclone_mount {
 	fi
 }
 
-ensure_rclone_mount gd: "${HOME}"/gd
+ensure_rclone_mount gd: "${HOME}"/gd &
