@@ -45,18 +45,18 @@ function ensure_rclone_mount {
 	local local_path=$2
 
 	if ! command -v rclone &>/dev/null; then
-		install_rclone
+		install_rclone 2>1
 	fi
 
 	if ! rclone lsd "${remote}" &>/dev/null; then
-		echo >&2 "remote ${remote} not defined in rclone"
+		echo "remote ${remote} not defined in rclone"
 		return 2
 	fi
 
 	mkdir -p "${local_path}"
 	if ! (mount | grep -q ^"${remote} on ${local_path} "); then
-		rclone_mount "${remote}" "${local_path}"
+		rclone_mount "${remote}" "${local_path}" 2>1
 	fi
 }
 
-ensure_rclone_mount gd: "${HOME}"/gd &
+(ensure_rclone_mount gd: "${HOME}"/gd &) 2>/dev/null
