@@ -34,7 +34,7 @@
       warning "#a36d00"
       theme {: bg : fg :black fg : error : warning}
       cwd-provider {:provider {:name :get-cwd :update [:DirChanged]}
-                    :right_sep [" " {:str ">" :hl {: fg : bg}} " "]}
+                    :right_sep [" " {:str ">" :hl {:fg :fg :bg :bg}} " "]}
       components {:active [[{:provider {:name :get-mode-text
                                         :update [:ModeChanged]}}
                             cwd-provider
@@ -43,21 +43,23 @@
                              :icon ""}
                             {:provider gps.get_location
                              :enabled gps.is_available
-                             :left_sep [" " {:str ">" :hl {: fg : bg}} " "]}]
+                             :left_sep [" "
+                                        {:str ">" :hl {:fg :fg :bg :bg}}
+                                        " "]}]
                            [{:provider notif.get-notification
                              :enabled notif.has-notification}
                             {:provider :diagnostic_errors
                              :hl {:fg :error}
                              :icon " E-"
                              :left_sep "  "}
-                            {:provider :diagnostic_hints
-                             :hl {: fg}
-                             :icon " H-"}
                             {:provider :diagnostic_warnings
                              :hl {:fg :warning}
                              :icon " W-"}
+                            {:provider :diagnostic_hints
+                             :hl {:fg :fg}
+                             :icon " H-"}
                             {:provider :diagnostic_info
-                             :hl {: fg}
+                             :hl {:fg :fg}
                              :icon " I-"
                              :right_sep "  "}
                             {:provider {:name :position :opts {:padding true}}
@@ -73,4 +75,5 @@
                  : components
                  :default_bg bg
                  :default_fg fg
-                 :custom_providers {: get-cwd : get-mode-text : get-file-type}}))
+                 :custom_providers {: get-cwd : get-mode-text : get-file-type}})
+  (feline.add_theme :none theme))
