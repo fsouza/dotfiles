@@ -1,4 +1,4 @@
-(import-macros {: if-nil} :helpers)
+(import-macros {: if-nil : mod-invoke} :helpers)
 
 (local path (require :pl.path))
 
@@ -54,6 +54,10 @@
                                                                     :--stdio]
                                                               :settings {:format {:enable false}
                                                                          :json {:schemas (schemastore.json.schemas)}}})))
+                     (mod-invoke :fsouza.lsp.buf-diagnostic :register-filter
+                                 :pyright
+                                 #(mod-invoke :fsouza.lsp.pyright
+                                              :valid-diagnostic $1))
                      (lsp.pyright.setup (opts.with-defaults {:cmd [nvim-python
                                                                    nvim-node-ls
                                                                    :pyright-langserver

@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule} :helpers)
+(import-macros {: vim-schedule : if-nil} :helpers)
 
 (fn set-from-env-var [cb]
   (cb (os.getenv :VIRTUAL_ENV)))
@@ -66,4 +66,11 @@
                                    (client.notify :workspace/didChangeConfiguration
                                                   {:settings client.config.settings}))))))
 
-{: detect-pythonPath}
+;; See docs for Diagnostic.Tags:
+;; https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#diagnosticTag
+(fn valid-diagnostic [d]
+  (let [tablex (require :fsouza.tablex)
+        tags (if-nil (. d :tags) [])]
+    (tablex.for-all tags #(not= $1 1))))
+
+{: detect-pythonPath : valid-diagnostic}
