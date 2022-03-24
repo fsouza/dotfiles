@@ -16,11 +16,16 @@
 (fn exists [pl-tablex t pred]
   (not= (pl-tablex.find_if t pred) nil))
 
+(fn for-all [pl-tablex t pred]
+  (not (exists pl-tablex t (fn [...]
+                             (not (pred ...))))))
+
 (let [pl-tablex (require :pl.tablex)
       tablex {: flat-map
               : filter-map
               :flatten vim.tbl_flatten
-              :exists (partial exists pl-tablex)}]
+              :exists (partial exists pl-tablex)
+              :for-all (partial for-all pl-tablex)}]
   (setmetatable tablex {:__index (fn [table key]
                                    (let [value (. pl-tablex key)]
                                      (rawset table key value)
