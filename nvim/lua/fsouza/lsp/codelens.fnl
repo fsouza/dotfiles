@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : if-nil} :helpers)
+(import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
 
 (local debouncers {})
 
@@ -128,8 +128,7 @@
   (.. :fsouza__lsp_codelens_ bufnr))
 
 (fn on-detach [bufnr]
-  (let [helpers (require :fsouza.lib.nvim-helpers)
-        mappings (?. clients bufnr :mappings)]
+  (let [mappings (?. clients bufnr :mappings)]
     (when (vim.api.nvim_buf_is_valid bufnr)
       (vim.api.nvim_buf_clear_namespace bufnr ns 0 -1)
       (when mappings
@@ -137,13 +136,12 @@
     (tset clients bufnr nil)
     (let [augroup-id (augroup-name bufnr)
           buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
-      (helpers.reset-augroup augroup-id)
+      (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup augroup-id)
       (buf-diagnostic.unregister-hook augroup-id)
       (remove-results bufnr))))
 
 (fn on-attach [opts]
-  (let [helpers (require :fsouza.lib.nvim-helpers)
-        bufnr opts.bufnr
+  (let [bufnr opts.bufnr
         client opts.client
         augroup-id (augroup-name bufnr)]
     (tset clients bufnr {:lsp-client client
@@ -151,10 +149,10 @@
                          :supports-command opts.supports-command
                          :mapping opts.mapping})
     (vim-schedule (codelens bufnr))
-    (helpers.augroup augroup-id
-                     [{:events [:InsertLeave :BufWritePost]
-                       :targets [(string.format "<buffer=%d>" bufnr)]
-                       :callback #(codelens bufnr)}])
+    (mod-invoke :fsouza.lib.nvim-helpers :augroup augroup-id
+                [{:events [:InsertLeave :BufWritePost]
+                  :targets [(string.format "<buffer=%d>" bufnr)]
+                  :callback #(codelens bufnr)}])
     (vim-schedule (let [buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
                     (buf-diagnostic.register-hook augroup-id
                                                   (partial codelens bufnr))

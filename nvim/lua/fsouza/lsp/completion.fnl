@@ -122,22 +122,20 @@
   (tset client.resolved_capabilities :signature_help_trigger_characters [])
   (let [lsp-compl (require :lsp_compl)]
     (fn complete []
-      (let [helpers (require :fsouza.lib.nvim-helpers)
-            lsp-compl (require :lsp_compl)]
-        (helpers.augroup (augroup-name bufnr)
-                         [{:events [:CompleteChanged]
-                           :targets [(string.format "<buffer=%d>" bufnr)]
-                           :callback #(on-CompleteChanged client bufnr)}
-                          {:events [:CompleteDone]
-                           :targets [(string.format "<buffer=%d>" bufnr)]
-                           :once true
-                           :callback #(reset-state client)}
-                          {:events [:InsertLeave]
-                           :targets [(string.format "<buffer=%d>" bufnr)]
-                           :once true
-                           :callback #(on-InsertLeave client bufnr)}])
-        (lsp-compl.trigger_completion client bufnr)
-        ""))
+      (mod-invoke :fsouza.lib.nvim-helpers :augroup (augroup-name bufnr)
+                  [{:events [:CompleteChanged]
+                    :targets [(string.format "<buffer=%d>" bufnr)]
+                    :callback #(on-CompleteChanged client bufnr)}
+                   {:events [:CompleteDone]
+                    :targets [(string.format "<buffer=%d>" bufnr)]
+                    :once true
+                    :callback #(reset-state client)}
+                   {:events [:InsertLeave]
+                    :targets [(string.format "<buffer=%d>" bufnr)]
+                    :once true
+                    :callback #(on-InsertLeave client bufnr)}])
+      (lsp-compl.trigger_completion client bufnr)
+      "")
 
     (lsp-compl.attach client bufnr)
     (vim-schedule (vim.keymap.set :i :<c-x><c-o> complete

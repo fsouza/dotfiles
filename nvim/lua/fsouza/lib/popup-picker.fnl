@@ -1,3 +1,5 @@
+(import-macros {: mod-invoke} :helpers)
+
 (fn handle-selection [cb winid]
   (let [index (. (vim.api.nvim_win_get_cursor 0) 1)]
     (vim.cmd "wincmd p")
@@ -6,19 +8,18 @@
     (cb index)))
 
 (fn open [lines cb]
-  (let [popup (require :fsouza.lib.popup)
-        (winid bufnr) (popup.open {: lines :type-name :picker :row 1})
-        helpers (require :fsouza.lib.nvim-helpers)
+  (let [(winid bufnr) (mod-invoke :fsouza.lib.popup :open
+                                  {: lines :type-name :picker :row 1})
         mapping-opts {:buffer bufnr}]
     (vim.api.nvim_win_set_option winid :cursorline true)
     (vim.api.nvim_win_set_option winid :cursorlineopt :both)
     (vim.api.nvim_win_set_option winid :number true)
     (vim.api.nvim_set_current_win winid)
-    (helpers.augroup :fsouza-popup-picker-leave
-                     [{:events [:WinLeave]
-                       :targets [(string.format "<buffer=%d>" bufnr)]
-                       :once true
-                       :callback #(vim.api.nvim_win_close winid false)}])
+    (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza-popup-picker-leave
+                [{:events [:WinLeave]
+                  :targets [(string.format "<buffer=%d>" bufnr)]
+                  :once true
+                  :callback #(vim.api.nvim_win_close winid false)}])
     (vim.keymap.set :n :<esc> #(vim.api.nvim_win_close winid false)
                     mapping-opts)
     (vim.keymap.set :n :<cr> #(handle-selection cb winid) mapping-opts)

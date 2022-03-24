@@ -1,19 +1,19 @@
-(import-macros {: reload} :helpers)
+(import-macros {: reload : mod-invoke} :helpers)
 
 (fn download-paq [paq-dir cb]
   (let [path (require :pl.path)
-        paq-repo-dir (path.join paq-dir :opt :paq-nvim)
-        cmd (require :fsouza.lib.cmd)]
-    (cmd.run :git {:args [:clone
-                          :--depth=1
-                          "https://github.com/savq/paq-nvim.git"
-                          paq-repo-dir]} nil
-             #(if (= $1.exit-status 0)
-                  (do
-                    (vim.cmd "packadd! paq-nvim")
-                    (cb (require :paq)))
-                  (error (string.format "failed to clone paq-nvim: %s"
-                                        (vim.inspect $1)))))))
+        paq-repo-dir (path.join paq-dir :opt :paq-nvim)]
+    (mod-invoke :fsouza.lib.cmd :run :git
+                {:args [:clone
+                        :--depth=1
+                        "https://github.com/savq/paq-nvim.git"
+                        paq-repo-dir]} nil
+                #(if (= $1.exit-status 0)
+                     (do
+                       (vim.cmd "packadd! paq-nvim")
+                       (cb (require :paq)))
+                     (error (string.format "failed to clone paq-nvim: %s"
+                                           (vim.inspect $1)))))))
 
 (fn with-paq [paq-dir cb]
   (let [(ok? paq) (pcall require :paq)]

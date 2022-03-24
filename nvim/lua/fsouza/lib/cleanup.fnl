@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule} :helpers)
+(import-macros {: vim-schedule : mod-invoke} :helpers)
 
 (fn cleanup [cbs]
   (var finished 0)
@@ -10,8 +10,8 @@
 
 (let [cbs []]
   {:register (partial table.insert cbs)
-   :setup #(let [helpers (require :fsouza.lib.nvim-helpers)]
-             (helpers.augroup :fsouza__lua_lib_cleanup
-                              [{:events [:VimLeavePre]
-                                :targets ["*"]
-                                :callback #(cleanup cbs)}]))})
+   :setup #(mod-invoke :fsouza.lib.nvim-helpers :augroup
+                       :fsouza__lua_lib_cleanup
+                       [{:events [:VimLeavePre]
+                         :targets ["*"]
+                         :callback #(cleanup cbs)}])})

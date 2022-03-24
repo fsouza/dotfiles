@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : if-nil} :helpers)
+(import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
 
 (fn parse-output [data]
   (collect [_ line (ipairs (vim.split data "\n"))]
@@ -42,16 +42,15 @@
     (vim.fn.winrestview view)))
 
 (fn handle-whitespaces [bufnr v]
-  (let [helpers (require :fsouza.lib.nvim-helpers)
-        commands []]
+  (let [commands []]
     (when (= v :true)
       (table.insert commands
                     {:events [:BufWritePre]
                      :targets [(string.format "<buffer=%d>" bufnr)]
                      :callback trim-whitespace}))
     (when (vim.api.nvim_buf_is_valid bufnr)
-      (helpers.augroup (.. :editorconfig_trim_trailing_whitespace_ bufnr)
-                       commands))))
+      (mod-invoke :fsouza.lib.nvim-helpers :augroup
+                  (.. :editorconfig_trim_trailing_whitespace_ bufnr) commands))))
 
 (fn set-opts [bufnr opts]
   (let [vim-opts {:tabstop 8}]
@@ -87,8 +86,7 @@
                                                   (vim.inspect result))))))))))
 
 (fn set-enabled [v]
-  (let [helpers (require :fsouza.lib.nvim-helpers)
-        commands []]
+  (let [commands []]
     (when v
       (table.insert commands
                     {:events [:BufNewFile :BufReadPost :BufFilePost]
@@ -96,6 +94,6 @@
                      :callback set-config})
       (vim-schedule (each [_ bufnr (ipairs (vim.api.nvim_list_bufs))]
                       (set-config bufnr))))
-    (helpers.augroup :editorconfig commands)))
+    (mod-invoke :fsouza.lib.nvim-helpers :augroup :editorconfig commands)))
 
 {:enable (partial set-enabled true) :disable (partial set-enabled false)}

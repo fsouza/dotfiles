@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule} :helpers)
+(import-macros {: vim-schedule : mod-invoke} :helpers)
 
 (global config-dir (vim.fn.expand "~/.dotfiles/nvim"))
 
@@ -135,6 +135,5 @@
   (set-folding)
   (set-neovim-global-vars)
   (if vim.env.BOOTSTRAP_PAQ
-      (let [packed (require :fsouza.packed)]
-        (packed.setup))
+      (mod-invoke :fsouza.packed :setup)
       (vim-schedule (require :fsouza.plugin))))

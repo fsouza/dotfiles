@@ -12,11 +12,10 @@
     (tablex.flat-map lang-to-ft wanted-parsers)))
 
 (fn set-folding []
-  (let [helpers (require :fsouza.lib.nvim-helpers)]
-    (helpers.augroup :fsouza__folding_config
-                     [{:events [:FileType]
-                       :targets (get-file-types)
-                       :command "setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()"}])))
+  (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__folding_config
+              [{:events [:FileType]
+                :targets (get-file-types)
+                :command "setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()"}]))
 
 (do
   (let [configs (require :nvim-treesitter.configs)]
