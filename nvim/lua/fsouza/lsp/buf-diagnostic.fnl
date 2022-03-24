@@ -4,6 +4,29 @@
 
 (local hooks {})
 
+(local filters {})
+
+(fn get-filters [client-name]
+  (if-nil (. filters client-name) []))
+
+(fn register-filter [client-name f]
+  (let [client-filters (get-filters client-name)]
+    (table.insert client-filters f)
+    (tset filters client-name client-filters)))
+
+(fn filter [result context]
+  (when result
+    (let [tablex (require :fsouza.tablex)
+          {:name client-name} (vim.lsp.get_client_by_id context.client_id)
+          client-filters (get-filters client-name)
+          {: diagnostics} result]
+      (when diagnostics
+        (tset result :diagnostics (icollect [_ d (ipairs diagnostics)]
+                                    (when (tablex.for-all client-filters
+                                                          #($1 d))
+                                      d)))
+        result))))
+
 (fn buf-clear-all-diagnostics []
   (let [all-clients (vim.lsp.get_active_clients)]
     (each [_ client (ipairs all-clients)]
@@ -24,7 +47,8 @@
     (fn [err result context ...]
       (vim.schedule exec-hooks)
       (vim.diagnostic.reset context.client_id context.bufnr)
-      (handler err result context ...))))
+      (let [result (filter result context)]
+        (handler err result context ...)))))
 
 (fn make-debounced-handler [bufnr debouncer-key]
   (let [debounce (require :fsouza.lib.debounce)
@@ -51,8 +75,7 @@
           (handler.call err result context ...))))))
 
 {: buf-clear-all-diagnostics
- :register-hook (fn [id f]
-                  (tset hooks id f))
- :unregister-hook (fn [id]
-                    (tset hooks id nil))
+ : register-filter
+ :register-hook #(tset hooks $1 $2)
+ :unregister-hook #(tset hooks $1 nil)
  : publish-diagnostics}
