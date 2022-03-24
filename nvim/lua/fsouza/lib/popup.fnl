@@ -39,8 +39,7 @@
                                        {: width : height :separator true})
         (vim.api.nvim_buf_set_lines bufnr 0 -1 true lines))
     (close-others win-var-identifier)
-    (let [winid (vim.api.nvim_open_win bufnr false win-opts)
-          helpers (require :fsouza.lib.nvim-helpers)]
+    (let [winid (vim.api.nvim_open_win bufnr false win-opts)]
       (vim.api.nvim_buf_set_option bufnr :readonly true)
       (vim.api.nvim_buf_set_option bufnr :modifiable false)
       (vim.api.nvim_win_set_option winid :wrap (= wrap true))
