@@ -168,7 +168,7 @@
                                     {:lhs :<leader>v
                                      :rhs #(let [symbols-outline (setup-symbols-outline)]
                                              (symbols-outline.toggle_outline))}))
-                    (when (not= client.server_capabilities.referenceProvider
+                    (when (not= client.server_capabilities.referencesProvider
                                 nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>q
