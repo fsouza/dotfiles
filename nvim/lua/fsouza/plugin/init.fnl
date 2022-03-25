@@ -169,7 +169,6 @@
   (schedule setup-lsp)
   (vim-schedule (require :fsouza.plugin.ts))
   (vim-schedule (require :fsouza.plugin.feline))
-  (vim-schedule (mod-invoke :fidget :setup {:window {:blend 0}}))
   (schedule setup-comment-nvim)
   (schedule setup-fuzzy-mappings)
   (schedule setup-autocompile)

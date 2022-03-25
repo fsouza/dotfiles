@@ -44,4 +44,7 @@
  :textDocument/signatureHelp popup-callback
  :textDocument/publishDiagnostics (fn [...]
                                     (let [buf-diagnostics (require :fsouza.lsp.buf-diagnostic)]
-                                      (buf-diagnostics.publish-diagnostics ...)))}
+                                      (buf-diagnostics.publish-diagnostics ...)))
+ :$/progress (fn [...]
+               (let [{: handler} (require :fsouza.lsp.progress)]
+                 (handler ...)))}
