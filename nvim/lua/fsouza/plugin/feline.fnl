@@ -27,6 +27,7 @@
     (string.format "[%s]" ft)))
 
 (let [gps (require :nvim-gps)
+      notif (require :fsouza.lib.notif)
       bg "#d0d0d0"
       fg "#262626"
       error "#990000"
@@ -45,7 +46,9 @@
                              :left_sep [" "
                                         {:str ">" :hl {:fg :fg :bg :bg}}
                                         " "]}]
-                           [{:provider :diagnostic_errors
+                           [{:provider notif.get-notification
+                             :enabled notif.has-notification}
+                            {:provider :diagnostic_errors
                              :hl {:fg :error}
                              :icon " E-"
                              :left_sep "  "}
