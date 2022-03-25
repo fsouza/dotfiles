@@ -59,6 +59,7 @@
              :as :feline.nvim
              :opt true
              :branch :develop}
+            {1 :j-hui/fidget.nvim :as :fidget.nvim :opt true}
             ; filetypes stuff
             ;
             ; Note: I used to use vim-polyglot, but it loads too much garbage and
