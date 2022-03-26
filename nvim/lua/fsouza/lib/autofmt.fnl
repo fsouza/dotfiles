@@ -11,7 +11,5 @@
       (tset ns :autoformat true)
       (tset ns :autoformat false)))
 
-(let [mod {: is-enabled
-           :toggle (partial toggle vim.b)
-           :toggle_g (partial toggle vim.g)}]
+(let [mod {: is-enabled :toggle #(toggle vim.b) :toggle_g #(toggle vim.g)}]
   mod)

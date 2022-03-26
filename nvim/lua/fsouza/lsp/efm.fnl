@@ -3,7 +3,9 @@
 (local path (require :pl.path))
 (local default-root-markers [:.git])
 (local cache-dir (vim.fn.stdpath :cache))
-(local quote-arg (partial string.format "\"%s\""))
+
+(macro quote-arg [arg]
+  `(string.format "\"%s\"" ,arg))
 
 (fn process-args [args]
   (let [args (if-nil args [])]

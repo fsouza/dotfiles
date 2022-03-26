@@ -154,11 +154,9 @@
                   :targets [(string.format "<buffer=%d>" bufnr)]
                   :callback #(codelens bufnr)}])
     (vim-schedule (let [buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
-                    (buf-diagnostic.register-hook augroup-id
-                                                  (partial codelens bufnr))
+                    (buf-diagnostic.register-hook augroup-id #(codelens bufnr))
                     (vim.api.nvim_buf_attach bufnr false
-                                             {:on_detach (partial on-detach
-                                                                  bufnr)})))
+                                             {:on_detach #(on-detach bufnr)})))
     (when opts.mapping
       (vim.keymap.set :n opts.mapping execute {:silent true :buffer bufnr}))))
 

@@ -13,10 +13,9 @@
                                                                          vim.o.shell
                                                                          term-id)
                                                           {:detach false
-                                                           :on_exit (partial tset
-                                                                             terminals
-                                                                             term-id
-                                                                             nil)})]
+                                                           :on_exit #(tset terminals
+                                                                           term-id
+                                                                           nil)})]
                               (tset terminals term-id {: bufnr : job-id}))))
   (. terminals term-id))
 

@@ -36,7 +36,7 @@
       (filter:subscribe hs.window.filter.windowUnfocused enable-hks))))
 
 (let [prefix [:cmd :ctrl]]
-  (hs.hotkey.bind prefix :R (partial hs.reload))
+  (hs.hotkey.bind prefix :R hs.reload)
   (hs.hotkey.bind prefix :V
                   #(hs.eventtap.keyStrokes (hs.pasteboard.getContents))))
 

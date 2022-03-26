@@ -22,8 +22,7 @@
                   #(mod-invoke :fsouza.plugin.fuzzy :grep-visual)))
 
 (fn setup-git-messenger []
-  (let [load-git-messenger (helpers.once (partial vim.cmd
-                                                  "packadd git-messenger.vim"))]
+  (let [load-git-messenger (helpers.once #(vim.cmd "packadd git-messenger.vim"))]
     (vim.keymap.set :n :<leader>gm
                     #(do
                        (load-git-messenger)

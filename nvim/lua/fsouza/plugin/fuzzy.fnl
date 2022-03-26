@@ -99,7 +99,7 @@
       mod {:find-files #(let [fzf-lua (fzf-lua)]
                           (fzf-lua.files {:cwd $1}))
            :grep (partial grep rg-opts)
-           :grep-visual (partial grep-visual rg-opts)
+           :grep-visual #(grep-visual rg-opts)
            : send-items}]
   (setmetatable mod {:__index (fn [table key]
                                 (let [fzf-lua (fzf-lua)

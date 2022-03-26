@@ -25,7 +25,7 @@
                     :let_binding
                     :value_definition]
         tablex (require :fsouza.tablex)]
-    (tablex.exists node-types (partial = node-type))))
+    (tablex.exists node-types #(= $1 node-type))))
 
 (fn normalize-loc [loc]
   (when (not loc.uri)

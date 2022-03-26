@@ -43,7 +43,7 @@
 (fn fmt [client bufnr cb]
   (let [(_ req-id) (client.request :textDocument/formatting
                                    (formatting-params bufnr) cb bufnr)]
-    (values req-id (partial client.cancel_request req-id))))
+    (values req-id #(client.cancel_request req-id))))
 
 (fn organize-imports-and-write [client bufnr]
   (let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)

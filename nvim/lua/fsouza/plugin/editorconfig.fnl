@@ -38,7 +38,7 @@
 
 (fn trim-whitespace []
   (let [view (vim.fn.winsaveview)]
-    (pcall (partial vim.cmd "silent! keeppatterns %s/\\v\\s+$//"))
+    (pcall #(vim.cmd "silent! keeppatterns %s/\\v\\s+$//"))
     (vim.fn.winrestview view)))
 
 (fn handle-whitespaces [bufnr v]
@@ -96,4 +96,4 @@
                       (set-config bufnr))))
     (mod-invoke :fsouza.lib.nvim-helpers :augroup :editorconfig commands)))
 
-{:enable (partial set-enabled true) :disable (partial set-enabled false)}
+{:enable #(set-enabled true) :disable #(set-enabled false)}

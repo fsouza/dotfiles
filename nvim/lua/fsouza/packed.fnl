@@ -36,8 +36,7 @@
             [:tpope/vim-rhubarb]
             [:tpope/vim-sexp-mappings-for-regular-people]
             [:tpope/vim-surround]
-            {1 :nvim-treesitter/nvim-treesitter
-             :run (partial vim.cmd :TSUpdate)}
+            {1 :nvim-treesitter/nvim-treesitter :run #(vim.cmd :TSUpdate)}
             [:nvim-treesitter/nvim-treesitter-textobjects]
             [:nvim-treesitter/nvim-treesitter-refactor]
             [:nvim-treesitter/playground]
