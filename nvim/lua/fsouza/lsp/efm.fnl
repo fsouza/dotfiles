@@ -10,7 +10,8 @@
     (accumulate [acc "" _ arg (ipairs args)]
       (.. acc " " (quote-arg arg)))))
 
-(local find-venv-bin (partial path.join cache-dir :venv :bin))
+(macro find-venv-bin [bin-name]
+  `(path.join cache-dir :venv :bin ,bin-name))
 
 (macro if-bin [bin-to-check fallback-bin cb]
   `(vim.loop.fs_stat ,bin-to-check
