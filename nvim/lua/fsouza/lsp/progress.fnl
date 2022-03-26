@@ -1,4 +1,4 @@
-(import-macros {: if-nil} :helpers)
+(import-macros {: if-nil : mod-invoke} :helpers)
 
 (fn handler [_ res ctx]
   (let [age 2000
@@ -17,10 +17,8 @@
         (notify {: msg : age})))))
 
 (fn make-handler [debounce-ms]
-  (let [{: debounce} (require :fsouza.lib.debounce)
-        debounced-handler (debounce debounce-ms (vim.schedule_wrap handler))]
-    (fn [...]
-      (let [{: mode} (vim.api.nvim_get_mode)]
-        (debounced-handler.call ...)))))
+  (let [debounced-handler (mod-invoke :fsouza.lib.debounce :debounce
+                                      debounce-ms (vim.schedule_wrap handler))]
+    debounced-handler.call))
 
 {:handler (make-handler 100)}
