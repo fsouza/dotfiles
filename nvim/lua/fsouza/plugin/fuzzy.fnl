@@ -95,11 +95,42 @@
   (let [fzf-lua (fzf-lua)]
     (fzf-lua.grep_visual {:rg_opts rg-opts})))
 
+(fn find-files [cwd]
+  (let [fzf-lua (fzf-lua)]
+    (fzf-lua.files {: cwd})))
+
+(fn go-to-repo [selected]
+  (when (= (length selected) 1)
+    (let [[sel] selected
+          sel (vim.fn.fnamemodify sel ":p")]
+      (vim.api.nvim_set_current_dir sel)
+      (find-files)
+      ;; TODO: figure out why this is needed, or if there's a better way
+      ;; (can look at how "FzfLua builtin" works).
+      (vim.api.nvim_feedkeys :i :n false))))
+
+(fn git-repos [cwd]
+  (let [prompt "Git repos："
+        cwd (if-nil cwd (vim.loop.cwd))
+        fzf-lua (fzf-lua)
+        config (require :fzf-lua.config)
+        core (require :fzf-lua.core)
+        opts (config.normalize_opts {: prompt
+                                     : cwd
+                                     :actions {:default go-to-repo}}
+                                    config.globals.files)
+        contents (core.mt_cmd_wrapper {:cmd "fd --hidden --type d --exec dirname {} ';' -- '^.git$'"})
+        opts (core.set_fzf_field_index opts)]
+    (tset opts.fzf_opts :--no-multi "")
+    ;; TODO: implement a previewer.
+    (tset opts :previewer nil)
+    (core.fzf_files opts contents)))
+
 (let [rg-opts "--column -n --hidden --no-heading --color=always -S --glob '!.git' --glob '!.hg'"
-      mod {:find-files #(let [fzf-lua (fzf-lua)]
-                          (fzf-lua.files {:cwd $1}))
+      mod {: find-files
            :grep (partial grep rg-opts)
            :grep-visual #(grep-visual rg-opts)
+           : git-repos
            : send-items}]
   (setmetatable mod {:__index (fn [table key]
                                 (let [fzf-lua (fzf-lua)
