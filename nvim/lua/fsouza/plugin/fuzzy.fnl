@@ -102,12 +102,11 @@
 (fn go-to-repo [selected]
   (when (= (length selected) 1)
     (let [[sel] selected
-          sel (vim.fn.fnamemodify sel ":p")]
+          sel (vim.fn.fnamemodify sel ":p")
+          {: ensure_insert_mode} (require :fzf-lua.actions)]
       (vim.api.nvim_set_current_dir sel)
       (find-files)
-      ;; TODO: figure out why this is needed, or if there's a better way
-      ;; (can look at how "FzfLua builtin" works).
-      (vim.api.nvim_feedkeys :i :n false))))
+      (ensure_insert_mode))))
 
 (fn git-repos [cwd]
   (let [prompt "Git repos："
