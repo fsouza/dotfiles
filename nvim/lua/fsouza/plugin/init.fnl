@@ -9,6 +9,8 @@
                   {:silent true})
   (vim.keymap.set :n :<leader>zt #(mod-invoke :fsouza.plugin.fuzzy :tagstack)
                   {:silent true})
+  (vim.keymap.set :n :<leader>zp #(mod-invoke :fsouza.plugin.fuzzy :git-repos)
+                  {:silent true})
   (vim.keymap.set :n "<leader>;" #(mod-invoke :fsouza.plugin.fuzzy :commands)
                   {:silent true})
   (vim.keymap.set :n :<leader>zj
