@@ -7,6 +7,8 @@
                   {:silent true})
   (vim.keymap.set :n :<leader>zz #(mod-invoke :fsouza.plugin.fuzzy :find-files)
                   {:silent true})
+  (vim.keymap.set :n :<leader>zt #(mod-invoke :fsouza.plugin.fuzzy :tagstack)
+                  {:silent true})
   (vim.keymap.set :n "<leader>;" #(mod-invoke :fsouza.plugin.fuzzy :commands)
                   {:silent true})
   (vim.keymap.set :n :<leader>zj
