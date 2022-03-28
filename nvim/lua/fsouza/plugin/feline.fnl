@@ -69,7 +69,7 @@
                             {:provider :line_percentage
                              :right_sep " "
                              :icon ""}]]
-                  :inactive [[{:provider :get-file-type :icon ""}]]}
+                  :inactive [[cwd-provider {:provider :get-file-type :icon ""}]]}
       feline (require :feline)]
   (feline.setup {: theme
                  : components
