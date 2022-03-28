@@ -148,7 +148,7 @@
                     (when (not= client.server_capabilities.documentFormattingProvider
                                 nil)
                       (let [formatting (require :fsouza.lsp.formatting)]
-                        (formatting.on-attach client bufnr)
+                        (formatting.on-attach bufnr)
                         (register-detach formatting.on-detach)))
                     (when (not= client.server_capabilities.documentHighlightProvider
                                 nil)
