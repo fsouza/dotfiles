@@ -121,7 +121,6 @@
         contents (core.mt_cmd_wrapper {:cmd "fd --hidden --type d --exec dirname {} ';' -- '^.git$'"})
         opts (core.set_fzf_field_index opts)]
     (tset opts.fzf_opts :--no-multi "")
-    ;; TODO: implement a previewer.
     (tset opts :previewer nil)
     (core.fzf_files opts contents)))
 
