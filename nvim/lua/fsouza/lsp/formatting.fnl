@@ -12,6 +12,7 @@
 
 (fn should-skip-buffer [bufnr]
   (let [file-path (vim.api.nvim_buf_get_name bufnr)
+        file-path (vim.fn.fnamemodify file-path ":p")
         cwd (vim.fn.getcwd)
         prefix (if (vim.endswith cwd "/")
                    cwd
