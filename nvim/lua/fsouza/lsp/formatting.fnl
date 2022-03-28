@@ -99,11 +99,9 @@
                                       result)
                              (vim.api.nvim_buf_call bufnr
                                                     #(do
-                                                       (mod-invoke :fsouza.lib.nvim-helpers
-                                                                   :rewrite-wrap
-                                                                   #(vim.lsp.util.apply_text_edits result
-                                                                                                   bufnr
-                                                                                                   client.offset_encoding))
+                                                       (vim.lsp.util.apply_text_edits result
+                                                                                      bufnr
+                                                                                      client.offset_encoding)
                                                        (let [last-update (get-last-update bufnr)]
                                                          (if (and last-update
                                                                   (< (- (os.clock)
