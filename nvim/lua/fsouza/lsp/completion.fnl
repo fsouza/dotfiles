@@ -35,25 +35,26 @@
     (math.min max-width available-space)))
 
 (fn show-popup [contents]
-  (let [popup (require :fsouza.lib.popup)
-        {: row : col : width : scrollbar} (vim.fn.pum_getpos)
-        scrollbar (if scrollbar 1 0)
-        end-col (+ col width scrollbar)
-        max-width (calc-max-width 100 end-col true)
-        right (> max-width 25)
-        max-width (if right max-width (calc-max-width 100 col false))
-        left-col (if right end-col nil)
-        right-col (if right nil col)
-        (popup-winid _) (popup.open {:lines contents
-                                     :enter false
-                                     :type-name :completion-doc
-                                     :markdown true
-                                     : row
-                                     :col left-col
-                                     : right-col
-                                     :relative :editor
-                                     : max-width})]
-    (set winid popup-winid)))
+  (when (not= (vim.fn.pumvisible) 0)
+    (let [popup (require :fsouza.lib.popup)
+          {: row : col : width : scrollbar} (vim.fn.pum_getpos)
+          scrollbar (if scrollbar 1 0)
+          end-col (+ col width scrollbar)
+          max-width (calc-max-width 100 end-col true)
+          right (> max-width 25)
+          max-width (if right max-width (calc-max-width 100 col false))
+          left-col (if right end-col nil)
+          right-col (if right nil col)
+          (popup-winid _) (popup.open {:lines contents
+                                       :enter false
+                                       :type-name :completion-doc
+                                       :markdown true
+                                       : row
+                                       :col left-col
+                                       : right-col
+                                       :relative :editor
+                                       : max-width})]
+      (set winid popup-winid))))
 
 (fn augroup-name [bufnr]
   (string.format "fsouza-completion-%d" bufnr))
