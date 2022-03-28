@@ -5,7 +5,8 @@
         {: notify} (require :fsouza.lib.notif)
         {:client_id client-id} ctx
         client (vim.lsp.get_client_by_id client-id)
-        client-name (if-nil client.name (string.format "client-%d" client-id))
+        client-name (if-nil (?. client :name)
+                            (string.format "client-%d" client-id))
         message (?. res :value :message)
         percentage (?. res :value :percentage)]
     (when message
