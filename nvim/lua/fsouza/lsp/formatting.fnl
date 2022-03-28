@@ -98,24 +98,24 @@
                                          (vim.api.nvim_buf_get_changedtick bufnr))
                                       result)
                              (vim.api.nvim_buf_call bufnr
-                                                    #(mod-invoke :fsouza.lib.nvim-helpers
-                                                                 :rewrite-wrap
-                                                                 #(do
-                                                                    (vim.lsp.util.apply_text_edits result
+                                                    #(do
+                                                       (mod-invoke :fsouza.lib.nvim-helpers
+                                                                   :rewrite-wrap
+                                                                   #(vim.lsp.util.apply_text_edits result
                                                                                                    bufnr
-                                                                                                   client.offset_encoding)
-                                                                    (let [last-update (get-last-update bufnr)]
-                                                                      (if (and last-update
-                                                                               (< (- (os.clock)
-                                                                                     last-update)
-                                                                                  0.01))
-                                                                          (vim.cmd "noau update")
-                                                                          (do
-                                                                            (vim.cmd :update)
-                                                                            (set-last-update bufnr))))
-                                                                    (when (should-organize-imports client.name)
-                                                                      (organize-imports-and-write client
-                                                                                                  bufnr))))))))))))))
+                                                                                                   client.offset_encoding))
+                                                       (let [last-update (get-last-update bufnr)]
+                                                         (if (and last-update
+                                                                  (< (- (os.clock)
+                                                                        last-update)
+                                                                     0.01))
+                                                             (vim.cmd "noau update")
+                                                             (do
+                                                               (vim.cmd :update)
+                                                               (set-last-update bufnr))))
+                                                       (when (should-organize-imports client.name)
+                                                         (organize-imports-and-write client
+                                                                                     bufnr)))))))))))))
 
 (fn augroup-name [bufnr]
   (.. :lsp_autofmt_ bufnr))
