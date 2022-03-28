@@ -27,6 +27,29 @@
       result)
     result))
 
+;; Provides a wrapper to a function that rewrites the current buffer, and does
+;; a best effort to keep the buffer position.
+(fn rewrite-wrap [f]
+  (let [bufnr (vim.api.nvim_get_current_buf)
+        cursor (vim.api.nvim_win_get_cursor 0)
+        orig-lineno (. cursor 1)
+        orig-colno (. cursor 2)
+        orig-line (. (vim.api.nvim_buf_get_lines bufnr (- orig-lineno 1)
+                                                 orig-lineno true)
+                     1)
+        orig-nlines (vim.api.nvim_buf_line_count bufnr)
+        view (vim.fn.winsaveview)]
+    (f)
+    (let [line-offset (- (vim.api.nvim_buf_line_count bufnr) orig-nlines)
+          lineno (+ orig-lineno line-offset)
+          new-line (. (vim.api.nvim_buf_get_lines bufnr (- lineno 1) lineno
+                                                  true) 1)
+          col-offset (- (string.len (if-nil new-line ""))
+                        (string.len orig-line))]
+      (tset view :lnum lineno)
+      (tset view :col (+ orig-colno col-offset))
+      (vim.fn.winrestview view))))
+
 (fn get-visual-selection-range []
   (fn from-markers []
     (let [[_ srow scol _] (vim.fn.getpos "'<")
@@ -59,5 +82,6 @@
 {:reset-augroup #(vim.api.nvim_create_augroup $1 {:clear true})
  : augroup
  : once
+ : rewrite-wrap
  : get-visual-selection-contents
  : get-visual-selection-range}
