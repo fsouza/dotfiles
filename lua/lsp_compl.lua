@@ -280,9 +280,8 @@ local function augroup(bufnr)
   return vim.api.nvim_create_augroup(name, {clear=true})
 end
 
-function M.detach(client_id, bufnr)
-  augroup(client_id, bufnr)
-  client_settings[client_id] = nil
+function M.detach(bufnr)
+  augroup(bufnr)
 end
 
 function M.attach(bufnr)
