@@ -88,7 +88,7 @@
                                   :i []
                                   :x []}]
                     (let [shell-post (require :fsouza.lsp.shell-post)]
-                      (shell-post.on-attach {: bufnr : client})
+                      (shell-post.on-attach bufnr)
                       (register-detach shell-post.on-detach))
                     (when (not= client.server_capabilities.completionProvider
                                 nil)
