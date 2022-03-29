@@ -14,7 +14,7 @@
     (each [_ sel (ipairs selected)]
       (let [{: path : line : col} (fzf-path.entry_to_file sel)]
         (vim.cmd (string.format "silent! edit %s" (vim.fn.fnameescape path)))
-        (when (and (not= line 1) (not= col 1))
+        (when (or (not= line 1) (not= col 1))
           (vim.api.nvim_win_set_cursor 0 [line (- col 1)])
           (vim.api.nvim_feedkeys :zz :n false))))))
 
