@@ -87,19 +87,20 @@
                                              on-resolve bufnr)]
               (when req-id
                 (set request-id req-id)
-                (tset state.inflight-requests req-id true))))))))
+                (tset state.inflight-requests req-id client))))))))
 
-(fn reset-state [client]
+(fn reset-state []
   (close)
-  (each [req-id _ (pairs state.inflight-requests)]
+  (each [req-id client (pairs state.inflight-requests)]
     (vim-schedule (client.cancel_request req-id)))
   (tset state :inflight-requests {})
   (tset state :resolved-items {}))
 
-(fn do-completeChanged [client bufnr item]
+(fn do-completeChanged [bufnr item client-id]
   (close)
   (when item
-    (let [completion-provider (?. client :server_capabilities
+    (let [client (vim.lsp.get_client_by_id client-id)
+          completion-provider (?. client :server_capabilities
                                   :completionProvider)
           completion-provider (if-nil completion-provider {})
           resolve-provider (. completion-provider :resolveProvider)]
@@ -107,50 +108,49 @@
           (resolve-item client bufnr item render-docs)
           (render-docs item)))))
 
-(fn on-CompleteChanged [client bufnr]
-  (let [item (?. vim :v :event :completed_item :user_data)]
-    (vim-schedule (do-completeChanged client bufnr item))))
+(fn on-CompleteChanged [bufnr]
+  (let [user-data (if-nil (?. vim :v :event :completed_item :user_data) {})
+        {: item :client_id client-id} user-data]
+    (vim-schedule (do-completeChanged bufnr item client-id))))
 
-(fn do-InsertLeave [client bufnr]
-  (reset-state client)
+(fn do-InsertLeave [bufnr]
+  (reset-state)
   (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup (augroup-name bufnr)))
 
-(fn on-InsertLeave [client bufnr]
-  (vim-schedule (do-InsertLeave client bufnr)))
+(fn on-InsertLeave [bufnr]
+  (vim-schedule (do-InsertLeave bufnr)))
 
-(fn on-attach [client bufnr]
-  (tset client.server_capabilities.completionProvider :triggerCharacters [])
-  (tset client.resolved_capabilities :signature_help_trigger_characters [])
+(fn on-attach [bufnr]
   (let [lsp-compl (require :lsp_compl)]
     (fn complete []
       (mod-invoke :fsouza.lib.nvim-helpers :augroup (augroup-name bufnr)
                   [{:events [:CompleteChanged]
                     :targets [(string.format "<buffer=%d>" bufnr)]
-                    :callback #(on-CompleteChanged client bufnr)}
+                    :callback #(on-CompleteChanged bufnr)}
                    {:events [:CompleteDone]
                     :targets [(string.format "<buffer=%d>" bufnr)]
                     :once true
-                    :callback #(reset-state client)}
+                    :callback reset-state}
                    {:events [:InsertLeave]
                     :targets [(string.format "<buffer=%d>" bufnr)]
                     :once true
-                    :callback #(on-InsertLeave client bufnr)}])
-      (lsp-compl.trigger_completion client bufnr)
+                    :callback #(on-InsertLeave bufnr)}])
+      (lsp-compl.trigger_completion bufnr)
       "")
 
-    (lsp-compl.attach client bufnr)
+    (lsp-compl.attach bufnr)
     (vim-schedule (vim.keymap.set :i :<c-x><c-o> complete
                                   {:remap false :buffer bufnr})
                   (vim.keymap.set :i :<cr>
                                   #(cr-key-for-comp-info (vim.fn.complete_info))
                                   {:remap false :buffer bufnr :expr true}))))
 
-(fn on-detach [client bufnr]
+(fn on-detach [bufnr]
   (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup (augroup-name bufnr))
   (when (vim.api.nvim_buf_is_valid bufnr)
     (pcall vim.keymap.del :i :<cr> {:buffer bufnr})
     (pcall vim.keymap.del :i :<c-x><c-o> {:buffer bufnr}))
   (let [lsp-compl (require :lsp_compl)]
-    (lsp-compl.detach client.id bufnr)))
+    (lsp-compl.detach bufnr)))
 
 {: on-attach : on-detach}

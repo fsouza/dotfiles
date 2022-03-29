@@ -93,8 +93,8 @@
                     (when (not= client.server_capabilities.completionProvider
                                 nil)
                       (let [completion (require :fsouza.lsp.completion)]
-                        (completion.on-attach client bufnr)
-                        (register-detach (partial completion.on-detach client))))
+                        (completion.on-attach bufnr)
+                        (register-detach completion.on-detach)))
                     (when (not= client.server_capabilities.renameProvider nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>r
