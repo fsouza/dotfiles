@@ -4,8 +4,7 @@
                          :zsh :sh
                          :/sh :sh
                          "env sh" :sh}
-        lines (vim.api.nvim_buf_get_lines bufnr 0 1 true)
-        first-line (. lines 1)
+        [first-line] (vim.api.nvim_buf_get_lines bufnr 0 1 true)
         (_ _ prog) (string.find first-line "^#!(.+)")]
     (when prog
       (each [pattern ft (pairs pattern-mapping)]

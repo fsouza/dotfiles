@@ -33,15 +33,13 @@
   (let [winid (vim.api.nvim_get_current_win)
         bufnr (vim.api.nvim_get_current_buf)
         [orig-lineno orig-colno] (vim.api.nvim_win_get_cursor winid)
-        orig-line (. (vim.api.nvim_buf_get_lines bufnr (- orig-lineno 1)
-                                                 orig-lineno true)
-                     1)
+        [orig-line] (vim.api.nvim_buf_get_lines bufnr (- orig-lineno 1)
+                                                orig-lineno true)
         orig-nlines (vim.api.nvim_buf_line_count bufnr)]
     (f)
     (let [line-offset (- (vim.api.nvim_buf_line_count bufnr) orig-nlines)
           lineno (+ orig-lineno line-offset)
-          new-line (. (vim.api.nvim_buf_get_lines bufnr (- lineno 1) lineno
-                                                  true) 1)
+          [new-line] (vim.api.nvim_buf_get_lines bufnr (- lineno 1) lineno true)
           col-offset (- (string.len (if-nil new-line ""))
                         (string.len orig-line))]
       (vim.api.nvim_win_set_cursor winid [lineno (+ orig-colno col-offset)]))))

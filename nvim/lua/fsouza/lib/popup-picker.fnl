@@ -1,7 +1,7 @@
 (import-macros {: mod-invoke} :helpers)
 
 (fn handle-selection [cb winid]
-  (let [index (. (vim.api.nvim_win_get_cursor 0) 1)]
+  (let [[index _] (vim.api.nvim_win_get_cursor 0)]
     (vim.cmd "wincmd p")
     (when (vim.api.nvim_win_is_valid winid)
       (vim.api.nvim_win_close winid false))

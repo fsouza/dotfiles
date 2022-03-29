@@ -117,8 +117,8 @@
 (fn execute []
   (let [winid (vim.api.nvim_get_current_win)
         bufnr (vim.api.nvim_get_current_buf)
-        cursor (vim.api.nvim_win_get_cursor winid)
-        line-id (- (. cursor 1) 1)
+        [line-no _] (vim.api.nvim_win_get_cursor winid)
+        line-id (- line-no 1)
         buffer-results (if-nil (. code-lenses bufnr) {})
         line-codelenses (. buffer-results line-id)]
     (when line-codelenses
