@@ -7,7 +7,8 @@
 (local filters {})
 
 (fn get-filters [client-name]
-  (if-nil (. filters client-name) []))
+  (if client-name
+      (if-nil (. filters client-name) [])))
 
 (fn register-filter [client-name f]
   (let [client-filters (get-filters client-name)]
@@ -17,10 +18,10 @@
 (fn filter [result context]
   (when result
     (let [tablex (require :fsouza.tablex)
-          {:name client-name} (vim.lsp.get_client_by_id context.client_id)
-          client-filters (get-filters client-name)
+          client (vim.lsp.get_client_by_id context.client_id)
+          client-filters (get-filters (?. client :name))
           {: diagnostics} result]
-      (when diagnostics
+      (when (and diagnostics client)
         (tset result :diagnostics (icollect [_ d (ipairs diagnostics)]
                                     (when (tablex.for-all client-filters
                                                           #($1 d))
