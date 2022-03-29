@@ -228,7 +228,7 @@ local function on_CompleteDone(bufnr)
     return
   end
   local completed_item = api.nvim_get_vvar('completed_item')
-  if not completed_item or not completed_item.user_data then
+  if not completed_item or not completed_item.user_data or not completed_item.user_data.item then
     completion_ctx.reset()
     return
   end
