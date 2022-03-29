@@ -1,31 +1,38 @@
+import contextlib
 import os
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
-from typing import NoReturn
 
 
-def main(args: list[str]) -> NoReturn:
+def main(args: list[str]) -> int:
     src_file_name = args.pop()
 
     mypy_exe = os.getenv("MYPY_EXE")
     if mypy_exe is None:
         mypy_exe = relative_mypy()
 
-    _, shadow_file = tempfile.mkstemp()
-    with open(shadow_file, "wb") as f:
+    _, shadow_file_name = tempfile.mkstemp()
+    with open(shadow_file_name, "wb") as shadow_file:
         for line in sys.stdin.buffer:
-            f.write(line)
+            shadow_file.write(line)
 
-    os.execl(
-        mypy_exe,
-        mypy_exe,
-        *args,
-        "--shadow-file",
-        src_file_name,
-        shadow_file,
-        src_file_name,
+    cmd = subprocess.run(
+        [
+            mypy_exe,
+            *args,
+            "--shadow-file",
+            src_file_name,
+            shadow_file_name,
+            src_file_name,
+        ],
     )
+
+    with contextlib.suppress(FileNotFoundError):
+        os.unlink(shadow_file_name)
+
+    return cmd.returncode
 
 
 def relative_mypy() -> str:
@@ -40,4 +47,4 @@ def relative_mypy() -> str:
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    sys.exit(main(sys.argv[1:]))
