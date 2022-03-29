@@ -39,18 +39,10 @@
               :insertSpaces (vim.api.nvim_buf_get_option bufnr :expandtab)}]
     {:textDocument {:uri (vim.uri_from_bufnr bufnr)} :options opts}))
 
-;; if this proves to be good, I should also revisit how I keep clients in
-;; codelens.fnl.
-(fn get-client [bufnr]
-  (let [buf-clients (collect [_ client (pairs (vim.lsp.buf_get_clients bufnr))]
-                      (if (not= client.server_capabilities.documentFormattingProvider
-                                nil)
-                          (values client.name client)))]
-    (if-nil (. buf-clients :efm) (let [(_ client) (next buf-clients)]
-                                   client))))
-
 (fn fmt [client bufnr cb]
-  (let [client (if-nil client (get-client bufnr))
+  (let [client (if-nil client
+                       (mod-invoke :fsouza.lsp.clients :get-client bufnr
+                                   :documentFormattingProvider))
         (_ req-id) (client.request :textDocument/formatting
                                    (formatting-params bufnr) cb bufnr)]
     (values req-id #(client.cancel_request req-id))))
@@ -89,7 +81,8 @@
         enable (autofmt.is-enabled bufnr)]
     (when (not enable)
       (lua :return))
-    (let [client (get-client bufnr)]
+    (let [client (mod-invoke :fsouza.lsp.clients :get-client bufnr
+                             :documentFormattingProvider)]
       (if (not client)
           (error (string.format "couldn't find client for buffer %d" bufnr))
           (pcall #(let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)]
