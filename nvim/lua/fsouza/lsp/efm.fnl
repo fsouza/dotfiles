@@ -68,6 +68,26 @@
                                 :rootMarkers [:.flake8 :.git ""]}
                                get-autoflake8)))
 
+(fn get-mypy [args cb]
+  (get-python-bin :mypy #(let [mypyw (path.join config-dir :langservers :bin
+                                                :mypyw.py)
+                               py3 (find-venv-bin :python3)]
+                           (cb {:lintCommand (string.format "%s %s --show-column-numbers %s ${INPUT}"
+                                                            py3 mypyw
+                                                            (process-args args))
+                                :lintStdin true
+                                :lintSource :mypy
+                                :lintFormats ["%f:%l:%c: %trror: %m"
+                                              "%f:%l:%c: %tarning: %m"
+                                              "%f:%l:%c: %tote: %m"]
+                                :lintIgnoreExitCode true
+                                :env [(.. :MYPY_EXE= $1)]
+                                :rootMarkers [:setup.cfg
+                                              :.mypy.ini
+                                              :pyproject.toml
+                                              :.git
+                                              ""]}))))
+
 (fn get-add-trailing-comma [args cb]
   (get-python-bin :add-trailing-comma
                   #(cb {:formatCommand (string.format "%s --exit-zero-even-if-changed %s -"
@@ -228,7 +248,8 @@
                                                       "https://github.com/pre-commit/mirrors-isort" get-isort
                                                       "https://github.com/pycqa/isort" get-isort
                                                       "https://github.com/timothycrosley/isort" get-isort
-                                                      "https://github.com/fsouza/autoflake8" get-autoflake8}
+                                                      "https://github.com/fsouza/autoflake8" get-autoflake8
+                                                      "https://github.com/pre-commit/mirrors-mypy" get-mypy}
                                        tablex (require :fsouza.tablex)
                                        find-repo (fn [repo]
                                                    (let [repo-url (string.lower repo.repo)

@@ -8,5 +8,7 @@ flake8-builtins
 flake8-comprehensions
 flake8-tidy-imports
 isort
+mypy
 pyupgrade
 reorder-python-imports
+types-all
