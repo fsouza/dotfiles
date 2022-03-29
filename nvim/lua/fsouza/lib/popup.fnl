@@ -1,15 +1,5 @@
 (import-macros {: if-nil} :helpers)
 
-(fn min [x y]
-  (if (< x y)
-      x
-      y))
-
-(fn max [x y]
-  (if (> x y)
-      x
-      y))
-
 (fn close-others [win-var-identifier]
   (each [_ winid (ipairs (vim.api.nvim_list_wins))]
     (when (pcall vim.api.nvim_win_get_var winid win-var-identifier)
@@ -18,12 +8,12 @@
 (fn open [opts]
   (let [{: lines : type-name : markdown : min-width : max-width : wrap} opts
         longest (* 2 (accumulate [longest 0 _ line (ipairs lines)]
-                       (max longest (length line))))
+                       (math.max longest (length line))))
         min-width (if-nil min-width 50)
         max-width (if-nil max-width (* 3 min-width))
         bufnr (vim.api.nvim_create_buf false true)
         win-var-identifier (string.format "fsouza__popup-%s" type-name)
-        width (min (max longest min-width) max-width)
+        width (math.min (math.max longest min-width) max-width)
         height (length lines)
         col (if opts.right-col
                 (- opts.right-col width)

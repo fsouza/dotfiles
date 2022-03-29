@@ -1,4 +1,4 @@
-(import-macros {: if-nil : send-esc} :helpers)
+(import-macros {: if-nil : send-esc : max-col} :helpers)
 
 (fn wrap-callback [cb]
   (if (not= cb nil)
@@ -42,7 +42,12 @@
           [new-line] (vim.api.nvim_buf_get_lines bufnr (- lineno 1) lineno true)
           col-offset (- (string.len (if-nil new-line ""))
                         (string.len orig-line))]
-      (vim.api.nvim_win_set_cursor winid [lineno (+ orig-colno col-offset)]))))
+      (vim.api.nvim_win_set_cursor winid
+                                   [lineno
+                                    (math.min (math.max 0
+                                                        (+ orig-colno
+                                                           col-offset))
+                                              (max-col))]))))
 
 (fn get-visual-selection-range []
   (fn from-markers []
@@ -54,7 +59,7 @@
     (let [[_ srow scol _] (vim.fn.getpos ".")
           [_ erow ecol _] (vim.fn.getpos :v)]
       (send-esc)
-      (if (= mode :V) [srow 0 erow 2147483647] [srow scol erow ecol])))
+      (if (= mode :V) [srow 0 erow (max-col)] [srow scol erow ecol])))
 
   (let [mode (vim.fn.mode)
         [srow scol erow ecol] (if (or (= mode :v) (= mode :V))

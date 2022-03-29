@@ -30,4 +30,7 @@
 (fn mod-invoke [mod fn-name ...]
   `((. (require ,mod) ,fn-name) ,...))
 
-{: vim-schedule : if-nil : send-esc : reload : abuf : mod-invoke}
+(fn max-col []
+  2147483647)
+
+{: vim-schedule : if-nil : send-esc : reload : abuf : mod-invoke : max-col}
