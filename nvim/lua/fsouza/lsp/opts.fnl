@@ -191,15 +191,7 @@
                                                (lsp_workspace_symbols {: query})))}))
                     (when (not= client.server_capabilities.codeLensProvider nil)
                       (let [codelens (require :fsouza.lsp.codelens)]
-                        (codelens.on-attach {: bufnr
-                                             : client
-                                             :mapping :<leader><cr>
-                                             :can-resolve (not= (?. client.server_capabilities
-                                                                    :codeLensProvider
-                                                                    :resolveProvider)
-                                                                nil)
-                                             :supports-command (not= client.server_capabilities.executeCommandProvider
-                                                                     nil)})
+                        (codelens.on-attach {: bufnr :mapping :<leader><cr>})
                         (register-detach codelens.on-detach)))
                     (vim-schedule (each [mode keymaps (pairs mappings)]
                                     (each [_ {: lhs : rhs} (ipairs keymaps)]
