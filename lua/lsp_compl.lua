@@ -3,7 +3,6 @@ local lsp = vim.lsp
 local M = {}
 local SNIPPET = 2
 
-local client_settings = {}
 local completion_ctx
 completion_ctx = {
   expand_snippet = false,
@@ -52,7 +51,7 @@ local function get_detail(item)
   return string.format("%s...", string.sub(item.detail, 1, max_width))
 end
 
-function M.text_document_completion_list_to_complete_items(result, prefix, fuzzy)
+function M.text_document_completion_list_to_complete_items(result, prefix, client_id)
   local items = lsp.util.extract_completion_items(result)
   if #items == 0 then
     return {}
@@ -78,7 +77,7 @@ function M.text_document_completion_list_to_complete_items(result, prefix, fuzzy
     else
       word = (item.textEdit and item.textEdit.newText) or item.insertText or item.label
     end
-    if fuzzy or vim.startswith(word, prefix) then
+    if vim.startswith(word, prefix) then
       table.insert(matches, {
         word = word,
         abbr = item.label,
@@ -87,13 +86,16 @@ function M.text_document_completion_list_to_complete_items(result, prefix, fuzzy
         icase = 1,
         dup = 1,
         empty = 1,
-        equal = fuzzy and 1 or 0,
-        user_data = item
+        equal = 0,
+        user_data = {
+          item = item,
+          client_id = client_id
+        }
       })
     end
   end
   table.sort(matches, function(a, b)
-    return (a.user_data.sortText or a.user_data.label) < (b.user_data.sortText or b.user_data.label)
+    return (a.user_data.item.sortText or a.user_data.item.label) < (b.user_data.item.sortText or b.user_data.item.label)
   end)
   return matches
 end
@@ -155,14 +157,14 @@ local function adjust_start_col(lnum, line, items, encoding)
 end
 
 
-function M.trigger_completion(client, bufnr)
+function M.trigger_completion(bufnr)
   completion_ctx.cancel_pending()
   local lnum, cursor_pos = unpack(api.nvim_win_get_cursor(0))
   local line = api.nvim_get_current_line()
   local line_to_cursor = line:sub(1, cursor_pos)
   local col = vim.fn.match(line_to_cursor, '\\k*$') + 1
   local params = lsp.util.make_position_params()
-  local _, req_id = client.request('textDocument/completion', params, function(err, result, ctx)
+  local _, cancel_reqs = vim.lsp.buf_request(bufnr, 'textDocument/completion', params, function(err, result, ctx)
     local client_id = ctx.client_id
     completion_ctx.pending_requests = {}
     assert(not err, vim.inspect(err))
@@ -180,19 +182,12 @@ function M.trigger_completion(client, bufnr)
     local items = lsp.util.extract_completion_items(result)
     local encoding = client and client.offset_encoding or 'utf-16'
     local startbyte = adjust_start_col(lnum, line, items, encoding) or col
-    local opts = client_settings[client_id] or {}
     local prefix = line:sub(startbyte, cursor_pos)
-    local matches = M.text_document_completion_list_to_complete_items(
-      result,
-      prefix,
-      opts.server_side_fuzzy_completion
-    )
+    local matches = M.text_document_completion_list_to_complete_items(result, prefix, client_id)
     vim.fn.complete(startbyte, matches)
   end, bufnr)
-  if req_id then
-    table.insert(completion_ctx.pending_requests, function ()
-      client.cancel_request(req_id)
-    end)
+  if cancel_reqs then
+    table.insert(completion_ctx.pending_requests, cancel_reqs)
   end
 end
 
@@ -227,7 +222,7 @@ local function apply_snippet(item, suffix)
 end
 
 
-local function on_CompleteDone(client_id, bufnr)
+local function on_CompleteDone(bufnr)
   if completion_ctx.suppress_completeDone then
     completion_ctx.suppress_completeDone = false
     return
@@ -239,7 +234,9 @@ local function on_CompleteDone(client_id, bufnr)
   end
   local lnum, col = unpack(api.nvim_win_get_cursor(0))
   lnum = lnum - 1
-  local item = completed_item.user_data
+  local item = completed_item.user_data.item
+  local client_id = completed_item.user_data.client_id
+  local client = vim.lsp.get_client_by_id(client_id)
   local expand_snippet = item.insertTextFormat == SNIPPET and completion_ctx.expand_snippet
   local suffix = nil
   if expand_snippet then
@@ -250,7 +247,6 @@ local function on_CompleteDone(client_id, bufnr)
     api.nvim_buf_set_text(bufnr, lnum, start_char, lnum, #line, {''})
   end
   completion_ctx.reset()
-  local client = vim.lsp.get_client_by_id(client_id)
   if not client then
     return
   end
@@ -279,8 +275,8 @@ local function on_CompleteDone(client_id, bufnr)
   end
 end
 
-local function augroup(client_id, bufnr)
-  local name = string.format('lsp_compl_%d_%d', client_id, bufnr)
+local function augroup(bufnr)
+  local name = string.format('lsp_compl_%d', bufnr)
   return vim.api.nvim_create_augroup(name, {clear=true})
 end
 
@@ -289,10 +285,9 @@ function M.detach(client_id, bufnr)
   client_settings[client_id] = nil
 end
 
-function M.attach(client, bufnr, opts)
+function M.attach(bufnr)
   opts = opts or {}
-  client_settings[client.id] = opts
-  local group = augroup(client.id, bufnr)
+  local group = augroup(bufnr)
   vim.api.nvim_create_autocmd('InsertLeave', {
     group = group,
     buffer = bufnr,
@@ -302,7 +297,7 @@ function M.attach(client, bufnr, opts)
     group = group,
     buffer = bufnr,
     callback = function()
-      on_CompleteDone(client.id, bufnr)
+      on_CompleteDone(bufnr)
     end,
   })
 end
