@@ -13,6 +13,7 @@ def main(args: Sequence[str]) -> NoReturn:
 
     os.execl(
         f"{cache_dir}/langservers/bin/buildifier",
+        f"{cache_dir}/langservers/bin/buildifier",
         "--lint=fix",
         "--warnings=all",
         f"--type={file_type}",
