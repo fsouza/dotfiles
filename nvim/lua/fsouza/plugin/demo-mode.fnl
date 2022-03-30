@@ -23,7 +23,6 @@
   (when colors-name
     (vim.cmd (string.format "colorscheme %s" colors-name))
     (set colors-name nil)
-    (let [feline (require :feline)]
-      (feline.use_theme :none))))
+    (mod-invoke :feline :use_theme :none)))
 
 {: enable : disable}

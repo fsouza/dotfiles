@@ -75,15 +75,13 @@
                (not (?. vim :bo bufnr :readonly)) (not= filename ""))
       (let [filename (if (vim.startswith filename "/")
                          filename
-                         (let [pl-path (require :pl.path)]
-                           (pl-path.join (vim.fn.getcwd) filename)))
-            cmd (require :fsouza.lib.cmd)]
-        (cmd.run :editorconfig {:args [filename]} nil
-                 (fn [result]
-                   (if (= result.exit-status 0)
-                       (set-opts bufnr (parse-output result.stdout))
-                       (vim.notify (string.format "failed to run editorconfig: %s"
-                                                  (vim.inspect result))))))))))
+                         (mod-invoke :pl.path :join (vim.fn.getcwd) filename))]
+        (mod-invoke :fsouza.lib.cmd :run :editorconfig {:args [filename]} nil
+                    (fn [result]
+                      (if (= result.exit-status 0)
+                          (set-opts bufnr (parse-output result.stdout))
+                          (vim.notify (string.format "failed to run editorconfig: %s"
+                                                     (vim.inspect result))))))))))
 
 (fn set-enabled [v]
   (let [commands []]

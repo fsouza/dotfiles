@@ -1,4 +1,4 @@
-(import-macros {: if-nil} :helpers)
+(import-macros {: if-nil : mod-invoke} :helpers)
 
 (local debouncers {})
 
@@ -17,14 +17,13 @@
 
 (fn filter [result context]
   (when result
-    (let [tablex (require :fsouza.tablex)
-          client (vim.lsp.get_client_by_id context.client_id)
+    (let [client (vim.lsp.get_client_by_id context.client_id)
           client-filters (get-filters (?. client :name))
           {: diagnostics} result]
       (when (and diagnostics client)
         (tset result :diagnostics (icollect [_ d (ipairs diagnostics)]
-                                    (when (tablex.for-all client-filters
-                                                          #($1 d))
+                                    (when (mod-invoke :fsouza.tablex :for-all
+                                                      client-filters #($1 d))
                                       d)))
         result))))
 
@@ -52,10 +51,9 @@
         (handler err result context ...)))))
 
 (fn make-debounced-handler [bufnr debouncer-key]
-  (let [debounce (require :fsouza.lib.debounce)
-        interval-ms (if-nil vim.b.lsp_diagnostic_debouncing_ms 250)
-        handler (debounce.debounce interval-ms
-                                   (vim.schedule_wrap (make-handler)))]
+  (let [interval-ms (if-nil vim.b.lsp_diagnostic_debouncing_ms 250)
+        handler (mod-invoke :fsouza.lib.debounce :debounce interval-ms
+                            (vim.schedule_wrap (make-handler)))]
     (tset debouncers debouncer-key handler)
     (vim.api.nvim_buf_attach bufnr false
                              {:on_detach (fn []

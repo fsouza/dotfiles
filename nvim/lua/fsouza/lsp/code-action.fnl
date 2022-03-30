@@ -51,8 +51,8 @@
                               (code-action-for-buf handler)))))
 
 (fn visual-code-action []
-  (let [helpers (require :fsouza.lib.nvim-helpers)
-        [srow scol erow ecol] (helpers.get-visual-selection-range)]
+  (let [[srow scol erow ecol] (mod-invoke :fsouza.lib.nvim-helpers
+                                          :get-visual-selection-range)]
     (range-code-action nil [srow scol] [erow ecol] handler)))
 
 {: code-action : visual-code-action}

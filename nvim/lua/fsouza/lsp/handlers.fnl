@@ -1,4 +1,4 @@
-(import-macros {: if-nil} :helpers)
+(import-macros {: if-nil : mod-invoke} :helpers)
 
 (local non-focusable-handlers {})
 
@@ -15,10 +15,9 @@
     (let [client (vim.lsp.get_client_by_id ctx.client_id)]
       (if (vim.tbl_islist result)
           (if (> (length result) 1)
-              (let [fuzzy (require :fsouza.plugin.fuzzy)
-                    items (vim.lsp.util.locations_to_items result
+              (let [items (vim.lsp.util.locations_to_items result
                                                            client.offset_encoding)]
-                (fuzzy.send-items items :Locations))
+                (mod-invoke :fsouza.plugin.fuzzy :send-items items :Locations))
               (vim.lsp.util.jump_to_location (. result 1)
                                              client.offset_encoding))
           (vim.lsp.util.jump_to_location result client.offset_encoding)))))
@@ -28,8 +27,8 @@
  :textDocument/typeDefinition fzf-location-callback
  :textDocument/implementation fzf-location-callback
  :textDocument/references (fn [err result ...]
-                            (let [{: filter-references} (require :fsouza.lsp.references)
-                                  result (filter-references result)]
+                            (let [result (mod-invoke :fsouza.lsp.references
+                                                     :filter-references result)]
                               (fzf-location-callback err result ...)))
  :textDocument/documentHighlight (fn [_ result context]
                                    (when (not result)

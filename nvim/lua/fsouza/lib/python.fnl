@@ -1,13 +1,13 @@
-(import-macros {: vim-schedule} :helpers)
+(import-macros {: vim-schedule : mod-invoke} :helpers)
 
 (fn set-from-env-var [cb]
   (cb (os.getenv :VIRTUAL_ENV)))
 
 (fn set-from-cmd [exec args cb]
-  (let [cmd (require :fsouza.lib.cmd)]
-    (cmd.run exec {: args} nil #(if (= $1.exit-status 0)
-                                    (cb (vim.trim $1.stdout))
-                                    (cb nil)))))
+  (mod-invoke :fsouza.lib.cmd :run exec {: args} nil
+              #(if (= $1.exit-status 0)
+                   (cb (vim.trim $1.stdout))
+                   (cb nil))))
 
 (fn set-from-poetry [cb]
   (vim.loop.fs_stat :poetry.lock

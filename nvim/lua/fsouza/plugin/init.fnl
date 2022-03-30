@@ -62,15 +62,13 @@
   (helpers.augroup :yank_highlight
                    [{:events [:TextYankPost]
                      :targets ["*"]
-                     :callback #(let [vhl (require :vim.highlight)]
-                                  (vhl.on_yank {:higroup :HlYank
-                                                :timeout 200
-                                                :on_macro false}))}]))
+                     :callback #(mod-invoke :vim.highlight :on_yank
+                                            {:higroup :HlYank
+                                             :timeout 200
+                                             :on_macro false})}]))
 
 (fn setup-word-replace []
-  (vim.keymap.set :n :<leader>e
-                  #(let [word-sub (require :fsouza.plugin.word-sub)]
-                     (word-sub.run))))
+  (vim.keymap.set :n :<leader>e #(mod-invoke :fsouza.plugin.word-sub :run)))
 
 (fn setup-spell []
   (helpers.augroup :fsouza__auto_spell
@@ -79,8 +77,7 @@
                      :command "setlocal spell"}]))
 
 (fn setup-editorconfig []
-  (let [editorconfig (require :fsouza.plugin.editorconfig)]
-    (editorconfig.enable))
+  (mod-invoke :fsouza.plugin.editorconfig :enable)
   (vim-schedule (vim.api.nvim_add_user_command :EnableEditorConfig
                                                "lua require('fsouza.plugin.editorconfig').enable()"
                                                {:force true})
@@ -96,8 +93,7 @@
 
 (fn setup-terminal-mappings []
   (fn term-open [term-id]
-    (let [{: open} (require :fsouza.plugin.terminal)]
-      (open term-id)))
+    (mod-invoke :fsouza.plugin.terminal :open term-id))
 
   (macro term-mapping [term-id]
     `(vim.keymap.set :n ,(.. :<a-t> term-id) #(term-open ,term-id)))
@@ -115,19 +111,18 @@
         (error (string.format "failed to compile fnl: %s" (vim.inspect result)))))
 
   (fn repaq []
-    (let [packed (require :fsouza.packed)]
-      (packed.repack)))
+    (mod-invoke :fsouza.packed :repack))
 
   (fn make []
     (when (not vim.g.fennel_ks)
-      (let [cmd (require :fsouza.lib.cmd)
-            file-name (vim.fn.expand :<afile>)
+      (let [file-name (vim.fn.expand :<afile>)
             make-target :install-site
             next (if (vim.endswith file-name :/packed.fnl)
                      repaq
                      nil)]
-        (cmd.run :make {:args [:-C config-dir make-target]} nil
-                 (partial handle-result next)))))
+        (mod-invoke :fsouza.lib.cmd :run :make
+                    {:args [:-C config-dir make-target]} nil
+                    (partial handle-result next)))))
 
   (helpers.augroup :fsouza__autocompile-fennel
                    [{:events [:BufWritePost]

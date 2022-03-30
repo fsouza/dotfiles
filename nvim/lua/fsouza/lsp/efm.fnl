@@ -202,8 +202,7 @@
                     (check-eslint-config 1)))))
 
 (fn try-read-precommit-config [file-path cb]
-  (let [empty-result {:repos []}
-        lyaml (require :lyaml)]
+  (let [empty-result {:repos []}]
     (vim.loop.fs_open file-path :r (tonumber :644 8)
                       (fn [err fd]
                         (if err
@@ -218,7 +217,7 @@
                                     (if (= (length chunk) 0)
                                         (do
                                           (vim.loop.fs_close fd)
-                                          (cb (lyaml.load content)))
+                                          (cb (mod-invoke :lyaml :load content)))
                                         (do
                                           (set content (.. content chunk))
                                           (set offset (+ offset block-size))
@@ -248,7 +247,6 @@
                                                       "https://github.com/timothycrosley/isort" get-isort
                                                       "https://github.com/fsouza/autoflake8" get-autoflake8
                                                       "https://github.com/pre-commit/mirrors-mypy" get-mypy}
-                                       tablex (require :fsouza.tablex)
                                        find-repo (fn [repo]
                                                    (let [repo-url (string.lower repo.repo)
                                                          args (if-nil (?. repo
@@ -260,8 +258,10 @@
                                                               repo-url)]
                                                      (if f {:fn f : args} nil)))
                                        pre-commit-fns (if pre-commit-config
-                                                          (tablex.filter-map find-repo
-                                                                             pre-commit-config.repos)
+                                                          (mod-invoke :fsouza.tablex
+                                                                      :filter-map
+                                                                      find-repo
+                                                                      pre-commit-config.repos)
                                                           nil)]
                                    (let [fns (if-nil pre-commit-fns fns)
                                          tools []

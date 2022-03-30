@@ -62,13 +62,13 @@
                                   (vim.api.nvim_buf_get_changedtick bufnr))
                         (lua :return))
                       (when (and actions (not (vim.tbl_isempty actions)))
-                        (let [tablex (require :fsouza.tablex)
-                              (_ code-action) (tablex.find_if actions
-                                                              (fn [action]
-                                                                (if (= action.kind
-                                                                       :source.organizeImports)
-                                                                    action
-                                                                    false)))]
+                        (let [(_ code-action) (mod-invoke :fsouza.tablex
+                                                          :find_if actions
+                                                          (fn [action]
+                                                            (if (= action.kind
+                                                                   :source.organizeImports)
+                                                                action
+                                                                false)))]
                           (when (and code-action code-action.edit)
                             (vim.api.nvim_buf_call bufnr
                                                    (fn []
@@ -77,8 +77,7 @@
                                                      (vim.cmd :update))))))))))
 
 (fn autofmt-and-write [bufnr]
-  (let [autofmt (require :fsouza.lib.autofmt)
-        enable (autofmt.is-enabled bufnr)]
+  (let [enable (mod-invoke :fsouza.lib.autofmt :is-enabled bufnr)]
     (when (not enable)
       (lua :return))
     (let [client (mod-invoke :fsouza.lsp.clients :get-client bufnr

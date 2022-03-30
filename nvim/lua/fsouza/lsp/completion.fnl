@@ -36,8 +36,7 @@
 
 (fn show-popup [contents]
   (when (not= (vim.fn.pumvisible) 0)
-    (let [popup (require :fsouza.lib.popup)
-          {: row : col : width : scrollbar} (vim.fn.pum_getpos)
+    (let [{: row : col : width : scrollbar} (vim.fn.pum_getpos)
           scrollbar (if scrollbar 1 0)
           end-col (+ col width scrollbar)
           max-width (calc-max-width 100 end-col true)
@@ -45,7 +44,8 @@
           max-width (if right max-width (calc-max-width 100 col false))
           left-col (if right end-col nil)
           right-col (if right nil col)
-          (popup-winid _) (popup.open {:lines contents
+          (popup-winid _) (mod-invoke :fsouza.lib.popup :open
+                                      {:lines contents
                                        :enter false
                                        :type-name :completion-doc
                                        :markdown true
@@ -150,7 +150,6 @@
   (when (vim.api.nvim_buf_is_valid bufnr)
     (pcall vim.keymap.del :i :<cr> {:buffer bufnr})
     (pcall vim.keymap.del :i :<c-x><c-o> {:buffer bufnr}))
-  (let [lsp-compl (require :lsp_compl)]
-    (lsp-compl.detach bufnr)))
+  (mod-invoke :lsp_compl :detach bufnr))
 
 {: on-attach : on-detach}

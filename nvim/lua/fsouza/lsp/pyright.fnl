@@ -11,8 +11,7 @@
 ;; See docs for Diagnostic.Tags:
 ;; https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#diagnosticTag
 (fn valid-diagnostic [d]
-  (let [tablex (require :fsouza.tablex)
-        tags (if-nil (. d :tags) [])]
-    (tablex.for-all tags #(not= $1 1))))
+  (let [tags (if-nil (. d :tags) [])]
+    (mod-invoke :fsouza.tablex :for-all tags #(not= $1 1))))
 
 {: detect-pythonPath : valid-diagnostic}

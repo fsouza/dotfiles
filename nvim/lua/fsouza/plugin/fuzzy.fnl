@@ -1,13 +1,12 @@
-(import-macros {: if-nil} :helpers)
+(import-macros {: if-nil : mod-invoke} :helpers)
 
 (local helpers (require :fsouza.lib.nvim-helpers))
 
 (fn should-qf [selected]
-  (let [n-selected (length selected)
-        tablex (require :fsouza.tablex)]
+  (let [n-selected (length selected)]
     (if (<= (length selected) 1) false
-        (tablex.exists selected #(if (string.match $1 "^.+:%d+:%d+:") true
-                                     false)))))
+        (mod-invoke :fsouza.tablex :exists selected
+                    #(if (string.match $1 "^.+:%d+:%d+:") true false)))))
 
 (fn edit [selected]
   (let [fzf-path (require :fzf-lua.path)]
@@ -19,12 +18,11 @@
           (vim.api.nvim_feedkeys :zz :n false))))))
 
 (fn edit-or-qf [selected]
-  (let [actions (require :fzf-lua.actions)]
-    (if (should-qf selected)
-        (do
-          (actions.file_sel_to_qf selected)
-          (vim.cmd :cc))
-        (edit selected))))
+  (if (should-qf selected)
+      (do
+        (mod-invoke :fzf-lua.actions :file_sel_to_qf selected)
+        (vim.cmd :cc))
+      (edit selected)))
 
 (fn file-actions []
   (let [actions (require :fzf-lua.actions)]
@@ -102,11 +100,10 @@
 (fn go-to-repo [selected]
   (when (= (length selected) 1)
     (let [[sel] selected
-          sel (vim.fn.fnamemodify sel ":p")
-          {: ensure_insert_mode} (require :fzf-lua.actions)]
+          sel (vim.fn.fnamemodify sel ":p")]
       (vim.api.nvim_set_current_dir sel)
       (find-files)
-      (ensure_insert_mode))))
+      (mod-invoke :fzf-lua.actions :ensure_insert_mode))))
 
 (fn git-repos [cwd]
   (let [prompt "Git repos："

@@ -1,3 +1,5 @@
+(import-macros {: mod-invoke} :helpers)
+
 (fn should-use-ts [node]
   (when (= node nil)
     (lua "return false"))
@@ -23,9 +25,8 @@
                     :var_spec
                     ; ocaml
                     :let_binding
-                    :value_definition]
-        tablex (require :fsouza.tablex)]
-    (tablex.exists node-types #(= $1 node-type))))
+                    :value_definition]]
+    (mod-invoke :fsouza.tablex :exists node-types #(= $1 node-type))))
 
 (fn normalize-loc [loc]
   (when (not loc.uri)

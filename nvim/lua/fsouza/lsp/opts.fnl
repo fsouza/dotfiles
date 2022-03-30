@@ -186,10 +186,11 @@
                                 nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>T
-                                     :rhs #(let [{: lsp_workspace_symbols} (require :fsouza.plugin.fuzzy)
-                                                 query (vim.fn.input "query：")]
+                                     :rhs #(let [query (vim.fn.input "query：")]
                                              (when (not= query "")
-                                               (lsp_workspace_symbols {: query})))}))
+                                               (mod-invoke :fsouza.plugin.fuzzy
+                                                           :lsp_workspace_symbols
+                                                           {: query})))}))
                     (when (not= client.server_capabilities.codeLensProvider nil)
                       (let [codelens (require :fsouza.lsp.codelens)]
                         (codelens.on-attach {: bufnr :mapping :<leader><cr>})

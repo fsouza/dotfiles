@@ -33,8 +33,7 @@
   (let [lsp (require :lspconfig)
         opts (require :fsouza.lsp.opts)]
     (if-executable :fnm
-                   (let [tablex (require :fsouza.tablex)
-                         nvim-python (path.join cache-dir :venv :bin :python3)
+                   (let [nvim-python (path.join cache-dir :venv :bin :python3)
                          nvim-node-ls (get-local-cmd :node-lsp.py)]
                      (macro node-lsp [name ...]
                        `(let [mod# (. lsp ,name)
@@ -72,8 +71,9 @@
                                                                                                                       :basic)
                                                                                             :useLibraryCodeForTypes true}}}
                                                              :on_init (fn [client]
-                                                                        (let [pyright (require :fsouza.lsp.pyright)]
-                                                                          (pyright.detect-pythonPath client))
+                                                                        (mod-invoke :fsouza.lsp.pyright
+                                                                                    :detect-pythonPath
+                                                                                    client)
                                                                         true)}))))
     (if-executable :go
                    (do

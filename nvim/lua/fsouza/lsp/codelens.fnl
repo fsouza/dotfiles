@@ -83,8 +83,8 @@
 
 (fn make-debounced-codelenses [bufnr debouncer-key]
   (let [interval-ms (if-nil vim.b.lsp_codelens_debouncing_ms 50)
-        debounce (require :fsouza.lib.debounce)
-        debounced (debounce.debounce interval-ms (vim.schedule_wrap codelenses))]
+        debounced (mod-invoke :fsouza.lib.debounce :debounce interval-ms
+                              (vim.schedule_wrap codelenses))]
     (tset debouncers debouncer-key debounced)
     (vim.api.nvim_buf_attach bufnr false
                              {:on_detach (fn []
@@ -111,12 +111,12 @@
                            (run selected)))]
       (if (> (length items) 1)
           (let [tablex (require :fsouza.tablex)
-                popup-picker (require :fsouza.lib.popup-picker)
                 popup-lines (tablex.filter-map (fn [item]
                                                  (when item.command
                                                    item.command.title))
                                                items)]
-            (popup-picker.open popup-lines #(execute-item (. items $1))))
+            (mod-invoke :fsouza.lib.popup-picker :open popup-lines
+                        #(execute-item (. items $1))))
           (execute-item (. items 1))))))
 
 (fn execute []
