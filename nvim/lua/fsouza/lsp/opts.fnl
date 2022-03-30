@@ -68,7 +68,8 @@
       `(detach.register bufnr ,cb))
     (vim-schedule (let [mappings {:n [{:lhs :<leader>l
                                        :rhs #(vim.diagnostic.open_float {: bufnr
-                                                                         :scope :line})}
+                                                                         :scope :line
+                                                                         :source :if_many})}
                                       {:lhs :<leader>df
                                        :rhs #(mod-invoke :fsouza.lsp.diagnostics
                                                          :list-file-diagnostics)}
