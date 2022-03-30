@@ -22,7 +22,7 @@
         (download-paq paq-dir cb))))
 
 (let [path (require :pl.path)
-      paq-dir (path.join (vim.fn.stdpath :data) :site :pack :paqs)
+      paq-dir (path.join data-dir :site :pack :paqs)
       paqs [{1 :savq/paq-nvim :opt true :as :paq-nvim}
             [:chaoren/vim-wordmotion]
             [:godlygeek/tabular]

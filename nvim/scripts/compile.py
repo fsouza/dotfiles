@@ -15,7 +15,7 @@ def main(args: Sequence[str]) -> int:
             "--load",
             "macros/init.fnl",
             "--globals",
-            "vim,config-dir",
+            "vim,config-dir,cache-dir,data-dir",
             "-c",
             fnl_file,
         ],

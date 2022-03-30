@@ -1,14 +1,12 @@
-(import-macros {: if-nil} :helpers)
+(import-macros {: if-nil : mod-invoke} :helpers)
 
 (fn detect-pythonPath [client]
-  (let [{: detect-python-interpreter} (require :fsouza.lib.python)
-        cache-dir (vim.fn.stdpath :cache)]
-    (detect-python-interpreter (fn [python-path]
-                                 (when python-path
-                                   (tset client.config.settings.python
-                                         :pythonPath python-path)
-                                   (client.notify :workspace/didChangeConfiguration
-                                                  {:settings client.config.settings}))))))
+  (mod-invoke :fsouza.lib.python :detect-python-interpreter
+              (fn [python-path]
+                (when python-path
+                  (tset client.config.settings.python :pythonPath python-path)
+                  (client.notify :workspace/didChangeConfiguration
+                                 {:settings client.config.settings})))))
 
 ;; See docs for Diagnostic.Tags:
 ;; https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#diagnosticTag

@@ -2,8 +2,6 @@
 
 (local path (require :pl.path))
 
-(local cache-dir (vim.fn.stdpath :cache))
-
 (macro get-local-cmd [cmd]
   `(path.join config-dir :langservers :bin ,cmd))
 

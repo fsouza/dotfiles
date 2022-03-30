@@ -1,11 +1,12 @@
 (import-macros {: vim-schedule : mod-invoke} :helpers)
 
 (global config-dir (vim.fn.expand "~/.dotfiles/nvim"))
+(global cache-dir (vim.fn.stdpath :cache))
+(global data-dir (vim.fn.stdpath :data))
 
 (macro hererocks []
   `(let [lua-version# (string.gsub _G._VERSION "Lua " "")
-         cache-dir# (vim.fn.stdpath :cache)
-         hererocks-path# (.. cache-dir# :/hr)
+         hererocks-path# (.. cache-dir :/hr)
          share-path# (.. hererocks-path# :/share/lua/ lua-version#)
          lib-path# (.. hererocks-path# :/lib/lua/ lua-version#)]
      (tset package :path (table.concat [(.. share-path# :/?.lua)
@@ -36,7 +37,7 @@
      (tset vim.g :mapleader " ")))
 
 (macro set-neovim-global-vars []
-  (let [vars {:netrw_home `(vim.fn.stdpath :data)
+  (let [vars {:netrw_home `data-dir
               :netrw_banner 0
               :netrw_liststyle 3
               :surround_no_insert_mappings true

@@ -92,7 +92,7 @@
   (let [shortcut (require :fsouza.plugin.shortcut)
         path (require :pl.path)]
     (shortcut.register :Dotfiles (vim.fn.expand "~/.dotfiles"))
-    (shortcut.register :Site (path.join (vim.fn.stdpath :data) :site))))
+    (shortcut.register :Site (path.join data-dir :site))))
 
 (fn setup-terminal-mappings []
   (fn term-open [term-id]

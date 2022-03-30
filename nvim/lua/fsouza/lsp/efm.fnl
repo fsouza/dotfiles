@@ -1,8 +1,7 @@
-(import-macros {: vim-schedule : if-nil} :helpers)
+(import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
 
 (local path (require :pl.path))
 (local default-root-markers [:.git])
-(local cache-dir (vim.fn.stdpath :cache))
 
 (macro quote-arg [arg]
   `(string.format "\"%s\"" ,arg))
@@ -69,24 +68,23 @@
                                get-autoflake8)))
 
 (fn get-mypy [args cb]
-  (let [{: detect-python-interpreter} (require :fsouza.lib.python)]
-    (detect-python-interpreter #(let [mypyw (path.join config-dir :langservers
-                                                       :bin :mypyw.py)
-                                      py3 (find-venv-bin :python3)]
-                                  (cb {:lintCommand (string.format "%s %s --python-executable %s %s ${INPUT}"
-                                                                   py3 mypyw $1
-                                                                   (process-args args))
-                                       :lintStdin true
-                                       :lintSource :mypy
-                                       :lintFormats ["%f:%l:%c: %trror: %m"
-                                                     "%f:%l:%c: %tarning: %m"
-                                                     "%f:%l:%c: %tote: %m"]
-                                       :lintIgnoreExitCode true
-                                       :rootMarkers [:setup.cfg
-                                                     :.mypy.ini
-                                                     :pyproject.toml
-                                                     :.git
-                                                     ""]})))))
+  (mod-invoke :fsouza.lib.python :detect-python-interpreter
+              #(let [mypyw (path.join config-dir :langservers :bin :mypyw.py)
+                     py3 (find-venv-bin :python3)]
+                 (cb {:lintCommand (string.format "%s %s --python-executable %s %s ${INPUT}"
+                                                  py3 mypyw $1
+                                                  (process-args args))
+                      :lintStdin true
+                      :lintSource :mypy
+                      :lintFormats ["%f:%l:%c: %trror: %m"
+                                    "%f:%l:%c: %tarning: %m"
+                                    "%f:%l:%c: %tote: %m"]
+                      :lintIgnoreExitCode true
+                      :rootMarkers [:setup.cfg
+                                    :.mypy.ini
+                                    :pyproject.toml
+                                    :.git
+                                    ""]}))))
 
 (fn get-add-trailing-comma [args cb]
   (get-python-bin :add-trailing-comma
