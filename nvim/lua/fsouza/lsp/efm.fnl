@@ -72,7 +72,7 @@
   (get-python-bin :mypy #(let [mypyw (path.join config-dir :langservers :bin
                                                 :mypyw.py)
                                py3 (find-venv-bin :python3)]
-                           (cb {:lintCommand (string.format "%s %s --show-column-numbers %s ${INPUT}"
+                           (cb {:lintCommand (string.format "%s %s %s ${INPUT}"
                                                             py3 mypyw
                                                             (process-args args))
                                 :lintStdin true

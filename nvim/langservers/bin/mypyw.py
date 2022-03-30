@@ -18,6 +18,9 @@ def main(args: list[str]) -> int:
         for line in sys.stdin.buffer:
             shadow_file.write(line)
 
+    if "--show-column-numbers" not in args:
+        args.append("--show-column-numbers")
+
     cmd = subprocess.run(
         [
             mypy_exe,
