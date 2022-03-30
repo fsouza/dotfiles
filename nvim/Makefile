@@ -5,14 +5,14 @@ FENNEL := $(if $(shell command -v fennel 2>/dev/null),fennel,$(NVIM_CACHE_DIR)/h
 PYTHON ?= python3.10
 
 .PHONY: all
-all: bootstrap gen-init-lua update-paq update-treesitter kill-daemons clear-logs
+all: bootstrap update-paq update-treesitter kill-daemons clear-logs
 
 .PHONY: bootstrap
 bootstrap:
 	$(PYTHON) scripts/bootstrap.py
 
 .PHONY: update-paq
-update-paq: install-site
+update-paq: install
 	env BOOTSTRAP_PAQ=1 nvim --headless -E +'autocmd User PaqDoneSync quit' || true
 
 .PHONY: update-treesitter
@@ -31,10 +31,18 @@ clear-logs:
 FNL_FILES := $(shell find . -name '*.fnl' | grep -v 'macros/.*\.fnl' | sed -e 's;./;;')
 LUA_FILES := $(patsubst %.fnl,build/%.lua,$(FNL_FILES))
 
+.PHONY: install
+install: install-site install-init.lua
+
 .PHONY: install-site
 install-site: build
 	@ mkdir -p $(NVIM_DATA_DIR)/site
 	cp -prv build/* $(NVIM_DATA_DIR)/site
+
+.PHONY: install-init.llua
+install-init.lua: build/init.lua
+	@ mkdir -p $(NVIM_CONFIG_DIR)
+	cp -p build/init.lua $(NVIM_CONFIG_DIR)
 
 .PHONY: rebuild
 rebuild: clean build
@@ -51,8 +59,3 @@ build: $(LUA_FILES)
 
 build/%.lua: %.fnl
 	env FENNEL=$(FENNEL) $(PYTHON) scripts/compile.py $< $@
-
-.PHONY: gen-init-lua
-gen-init-lua:
-	@ mkdir -p $(NVIM_CONFIG_DIR)
-	echo 'require("fsouza")' > $(NVIM_CONFIG_DIR)/init.lua

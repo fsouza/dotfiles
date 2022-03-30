@@ -116,7 +116,7 @@
   (fn make []
     (when (not vim.g.fennel_ks)
       (let [file-name (vim.fn.expand :<afile>)
-            make-target :install-site
+            make-target :install
             next (if (vim.endswith file-name :/packed.fnl)
                      repaq
                      nil)]
