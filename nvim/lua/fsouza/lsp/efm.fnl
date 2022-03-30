@@ -69,7 +69,7 @@
                                get-autoflake8)))
 
 (fn get-mypy [args cb]
-  (let [{: detect-python-interpreter} (require :fsouza.lsp.python)]
+  (let [{: detect-python-interpreter} (require :fsouza.lib.python)]
     (detect-python-interpreter #(let [mypyw (path.join config-dir :langservers
                                                        :bin :mypyw.py)
                                       py3 (find-venv-bin :python3)]

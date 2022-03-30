@@ -1,7 +1,7 @@
 (import-macros {: if-nil} :helpers)
 
 (fn detect-pythonPath [client]
-  (let [{: detect-python-interpreter} (require :fsouza.lsp.python)
+  (let [{: detect-python-interpreter} (require :fsouza.lib.python)
         cache-dir (vim.fn.stdpath :cache)]
     (detect-python-interpreter (fn [python-path]
                                  (when python-path
