@@ -83,9 +83,11 @@
                                        :rhs #(mod-invoke :fsouza.lsp.buf-diagnostic
                                                          :buf-clear-all-diagnostics)}
                                       {:lhs :<c-n>
-                                       :rhs #(vim.diagnostic.goto_next {:focusable false})}
+                                       :rhs #(vim.diagnostic.goto_next {:focusable false
+                                                                        :float {:source :if_many}})}
                                       {:lhs :<c-p>
-                                       :rhs #(vim.diagnostic.goto_prev {:focusable false})}]
+                                       :rhs #(vim.diagnostic.goto_prev {:focusable false
+                                                                        :float {:source :if_many}})}]
                                   :i []
                                   :x []}]
                     (let [shell-post (require :fsouza.lsp.shell-post)]
