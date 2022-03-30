@@ -170,5 +170,5 @@
   (schedule setup-comment-nvim)
   (schedule setup-fuzzy-mappings)
   (schedule setup-autocompile)
-  (vim-schedule (vim.cmd "doautoall FileType"))
-  (vim-schedule (vim.cmd "doautocmd User PluginReady")))
+  (vim-schedule (vim.api.nvim_exec_autocmd [:FileType] {}))
+  (vim-schedule (vim.api.nvim_exec_autocmd [:User] {:pattern :PluginReady})))

@@ -3,9 +3,7 @@
 (fn cleanup [cbs]
   (var finished 0)
   (each [_ cb (ipairs cbs)]
-    (vim-schedule (do
-                    (cb)
-                    (set finished (+ finished 1)))))
+    (vim-schedule (cb) (set finished (+ finished 1))))
   (vim.wait 500 #(= (length cbs) finished) 25))
 
 (let [cbs []]
