@@ -74,7 +74,6 @@
                  (cb {:lintCommand (string.format "%s %s --python-executable %s %s ${INPUT}"
                                                   py3 mypyw $1
                                                   (process-args args))
-                      :lintStdin true
                       :lintSource :mypy
                       :lintFormats ["%f:%l:%c: %trror: %m"
                                     "%f:%l:%c: %tarning: %m"
@@ -245,8 +244,8 @@
                                                       "https://github.com/pre-commit/mirrors-isort" get-isort
                                                       "https://github.com/pycqa/isort" get-isort
                                                       "https://github.com/timothycrosley/isort" get-isort
-                                                      "https://github.com/fsouza/autoflake8" get-autoflake8
-                                                      "https://github.com/pre-commit/mirrors-mypy" get-mypy}
+                                                      "https://github.com/pre-commit/mirrors-mypy" get-mypy
+                                                      "https://github.com/fsouza/autoflake8" get-autoflake8}
                                        find-repo (fn [repo]
                                                    (let [repo-url (string.lower repo.repo)
                                                          args (if-nil (?. repo

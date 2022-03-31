@@ -1,52 +1,49 @@
-import contextlib
-import os
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 
 def main(args: list[str]) -> int:
-    src_file_name = args.pop()
+    # discard the source file name
+    args.pop()
 
-    mypy_exe = os.getenv("MYPY_EXE")
-    if mypy_exe is None:
-        mypy_exe = relative_mypy()
+    dmypy_exe = relative_dmypy()
 
-    _, shadow_file_name = tempfile.mkstemp()
-    with open(shadow_file_name, "wb") as shadow_file:
-        for line in sys.stdin.buffer:
-            shadow_file.write(line)
-
-    if "--show-column-numbers" not in args:
-        args.append("--show-column-numbers")
+    default_args = (
+        "--show-column-numbers",
+        "--ignore-missing-imports",
+        "--scripts-are-modules",
+    )
+    for arg in default_args:
+        if arg not in args:
+            args.append(arg)
 
     cmd = subprocess.run(
         [
-            mypy_exe,
+            dmypy_exe,
+            "run",
+            "--",
             *args,
-            "--shadow-file",
-            src_file_name,
-            shadow_file_name,
-            src_file_name,
+            "--exclude",
+            "venv",
+            "--exclude",
+            ".venv",
+            ".",
         ],
     )
-
-    with contextlib.suppress(FileNotFoundError):
-        os.unlink(shadow_file_name)
 
     return cmd.returncode
 
 
-def relative_mypy() -> str:
+def relative_dmypy() -> str:
     executable = Path(sys.executable)
-    mypy_executable = executable.parent / "mypy"
-    if not mypy_executable.exists():
+    dmypy_executable = executable.parent / "dmypy"
+    if not dmypy_executable.exists():
         raise ValueError(
-            f"cannot find mypy next to {sys.executable}, please specify MYPY_EXE",
+            f"cannot find dmypy next to {sys.executable}, please install mypy",
         )
 
-    return str(mypy_executable)
+    return str(dmypy_executable)
 
 
 if __name__ == "__main__":
