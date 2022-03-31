@@ -65,8 +65,10 @@
   (let [options {:cursorline true
                  :cursorlineopt :number
                  :showcmd false
-                 :laststatus 3
-                 :showmode false
+                 :laststatus 0
+                 :showmode true
+                 :ruler true
+                 :rulerformat "%-14.(%l,%c   %o%)"
                  :guicursor "a:block"
                  :mouse ""
                  :shiftround true
