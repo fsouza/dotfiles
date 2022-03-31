@@ -197,6 +197,7 @@
                       (let [codelens (require :fsouza.lsp.codelens)]
                         (codelens.on-attach {: bufnr :mapping :<leader><cr>})
                         (register-detach codelens.on-detach)))
+                    (mod-invoke :fsouza.lsp.diagnostics :on-attach)
                     (vim-schedule (each [mode keymaps (pairs mappings)]
                                     (each [_ {: lhs : rhs} (ipairs keymaps)]
                                       (vim.keymap.set mode lhs rhs

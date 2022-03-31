@@ -68,7 +68,7 @@
                  :laststatus 0
                  :showmode true
                  :ruler true
-                 :rulerformat "%-14.(%l,%c   %o%)"
+                 :rulerformat "%30(%=%{v:lua.require('fsouza.lsp.diagnostics').ruler()}   %l,%c   %P%)"
                  :guicursor "a:block"
                  :mouse ""
                  :shiftround true

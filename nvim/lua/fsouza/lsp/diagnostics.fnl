@@ -1,3 +1,7 @@
+(import-macros {: mod-invoke : if-nil} :helpers)
+
+(var n-diag-per-buf {})
+
 (macro render-diagnostics [diagnostics]
   `(let [items# (vim.diagnostic.toqflist ,diagnostics)]
      (vim.fn.setqflist items#)
@@ -15,4 +19,21 @@
 (fn list-workspace-diagnostics []
   (render-diagnostics (vim.diagnostic.get)))
 
-{: list-file-diagnostics : list-workspace-diagnostics}
+(fn on-DiagnosticChanged []
+  (set n-diag-per-buf (accumulate [acc {} _ {: bufnr} (ipairs (vim.diagnostic.get))]
+                        (let [curr (if-nil (. acc bufnr) 0)]
+                          (tset acc bufnr (+ curr 1))
+                          acc))))
+
+(fn ruler []
+  (let [bufnr (vim.api.nvim_get_current_buf)
+        count (if-nil (. n-diag-per-buf bufnr) 0)]
+    (if (= count 0) "" (string.format "D:%d" count))))
+
+(fn on-attach []
+  (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__lsp_diagnostic
+              [{:events [:DiagnosticChanged]
+                :targets ["*"]
+                :callback on-DiagnosticChanged}]))
+
+{: list-file-diagnostics : list-workspace-diagnostics : on-attach : ruler}
