@@ -38,6 +38,7 @@ async def run_cmd(
     args: list[object],
     cwd: Path | None = None,
     env: dict[str, str] | None = None,
+    ignore_errors: bool = False,
     capture_output: Literal[False] = False,
 ) -> None:
     ...
@@ -49,6 +50,7 @@ async def run_cmd(
     args: list[object],
     cwd: Path | None = None,
     env: dict[str, str] | None = None,
+    ignore_errors: bool = False,
     capture_output: Literal[True] = True,
 ) -> tuple[bytes, bytes]:
     ...
@@ -59,6 +61,7 @@ async def run_cmd(
     args: list[object],
     cwd: Path | None = None,
     env: dict[str, str] | None = None,
+    ignore_errors: bool = False,
     capture_output: bool = False,
 ) -> tuple[bytes, bytes] | None:
     stdout, stderr = sys.stdout, sys.stderr
@@ -88,6 +91,9 @@ async def run_cmd(
         if capture_output:
             sys.stdout.buffer.write(stdout)
             sys.stderr.buffer.write(stderr)
+
+        if ignore_errors:
+            return
 
         raise CommandError(
             f"command '{cmd} {' '.join(str_args)}' exited with status {returncode}",
@@ -303,7 +309,12 @@ async def install_zls(langservers_cache_dir: Path) -> None:
     )
 
     await asyncio.gather(
-        run_cmd(cmd="zig", args=["build", "-Drelease-safe"], cwd=repo_dir),
+        run_cmd(
+            cmd="zig",
+            args=["build", "-Drelease-safe"],
+            cwd=repo_dir,
+            ignore_errors=True,
+        ),
         configure_zls(),
     )
 
