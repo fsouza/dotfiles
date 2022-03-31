@@ -23,6 +23,7 @@ update-treesitter:
 kill-daemons:
 	pkill prettierd || true
 	pkill eslint_d || true
+	pkill -f dmypy || true
 
 .PHONY: clear-logs
 clear-logs:
