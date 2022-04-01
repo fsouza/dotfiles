@@ -6,4 +6,5 @@
                   {:buffer true :remap false})
   (vim.keymap.set :x :<cr>
                   #(mod-invoke :fsouza.plugin.qf :set-from-visual-selection
-                               {:open true :jump-to-first true})))
+                               {:open true :jump-to-first true})
+                  {:buffer true :remap false}))
