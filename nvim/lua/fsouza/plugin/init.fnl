@@ -125,15 +125,12 @@
             (vim.cmd :copen)
             (vim.cmd :cfirst)))))
 
-  (fn repaq []
-    (mod-invoke :fsouza.packed :repack))
-
   (fn make []
     (when (not vim.g.fennel_ks)
       (let [file-name (vim.fn.expand :<afile>)
             make-target :install
             next (if (vim.endswith file-name :/packed.fnl)
-                     repaq
+                     #(mod-invoke :fsouza.packed :repack)
                      nil)]
         (mod-invoke :fsouza.lib.cmd :run :make
                     {:args [:-C config-dir make-target]} nil
