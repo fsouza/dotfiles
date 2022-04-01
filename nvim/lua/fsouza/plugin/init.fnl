@@ -120,10 +120,10 @@
             (next)))
         (do
           (when (mod-invoke :fsouza.plugin.qf :set-from-contents result.stderr
-                            transform-qf-item)
-            (set should-clear-qf true)
-            (vim.cmd :copen)
-            (vim.cmd :cfirst)))))
+                            {:hook transform-qf-item
+                             :open true
+                             :jump-to-first true})
+            (set should-clear-qf true)))))
 
   (fn make []
     (when (not vim.g.fennel_ks)

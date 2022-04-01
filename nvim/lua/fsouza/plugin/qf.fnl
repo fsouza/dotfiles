@@ -21,17 +21,21 @@
     (icollect [_ line (ipairs lines)]
       (parse-line line hook))))
 
-(fn set-from-lines [lines hook]
-  (let [list (load-from-lines lines hook)]
+(fn set-from-lines [lines opts]
+  (let [opts (if-nil opts {})
+        list (load-from-lines lines opts.hook)]
     (vim.fn.setqflist list)
-    (> (length list) 0)))
+    (when opts.open
+      (vim.cmd :copen))
+    (when opts.jump-to-first
+      (vim.cmd :cfirst))))
 
-(fn set-from-contents [content hook]
-  (set-from-lines (vim.split content "\n" {:plain true :trimempty true}) hook))
+(fn set-from-contents [content opts]
+  (set-from-lines (vim.split content "\n" {:plain true :trimempty true}) opts))
 
-(fn set-from-visual-selection [hook]
+(fn set-from-visual-selection [opts]
   (let [lines (mod-invoke :fsouza.lib.nvim-helpers
                           :get-visual-selection-contents)]
-    (set-from-lines lines hook)))
+    (set-from-lines lines opts)))
 
 {: set-from-visual-selection : set-from-contents}
