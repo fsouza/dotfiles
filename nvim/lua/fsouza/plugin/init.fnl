@@ -102,13 +102,28 @@
   (term-mapping :l))
 
 (fn setup-autocompile []
+  (var should-clear-qf false)
+
+  (fn transform-qf-item [item]
+    (tset item :filename (vim.fn.fnamemodify (.. :nvim/ item.filename) ":p"))
+    item)
+
   (fn handle-result [next result]
     (if (= result.exit-status 0)
         (do
+          (when should-clear-qf
+            (set should-clear-qf false)
+            (vim.fn.setqflist [])
+            (vim.cmd :cclose))
           (vim.notify "Successfully compiled")
           (when next
             (next)))
-        (error (string.format "failed to compile fnl: %s" (vim.inspect result)))))
+        (do
+          (when (mod-invoke :fsouza.plugin.qf :set-from-contents result.stderr
+                            transform-qf-item)
+            (set should-clear-qf true)
+            (vim.cmd :copen)
+            (vim.cmd :cfirst)))))
 
   (fn repaq []
     (mod-invoke :fsouza.packed :repack))
