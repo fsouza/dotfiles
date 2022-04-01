@@ -167,6 +167,7 @@
   (schedule setup-lsp)
   (vim-schedule (require :fsouza.plugin.ts))
   (vim-schedule (require :fsouza.plugin.fidget))
+  (vim-schedule (mod-invoke :fsouza.plugin.rg-complete :setup :<c-x><c-n>))
   (schedule setup-comment-nvim)
   (schedule setup-fuzzy-mappings)
   (schedule setup-autocompile)
