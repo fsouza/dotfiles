@@ -28,7 +28,8 @@
     (when opts.open
       (vim.cmd :copen))
     (when opts.jump-to-first
-      (vim.cmd :cfirst))))
+      (vim.cmd :cfirst))
+    (> (length list) 0)))
 
 (fn set-from-contents [content opts]
   (set-from-lines (vim.split content "\n" {:plain true :trimempty true}) opts))
