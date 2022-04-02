@@ -14,10 +14,12 @@
       (mod-invoke :fsouza.lib.cmd :run :rg
                   {:args [:--case-sensitive
                           :--fixed-strings
-                          current-line
                           :--no-line-number
                           :--no-filename
                           :--no-heading
+                          :--hidden
+                          "--"
+                          current-line
                           "."]} nil
                   (fn [result]
                     (when (= result.exit-status 0)
