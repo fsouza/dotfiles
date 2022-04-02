@@ -120,9 +120,7 @@
             (next)))
         (do
           (when (mod-invoke :fsouza.plugin.qf :set-from-contents result.stderr
-                            {:hook transform-qf-item
-                             :open true
-                             :jump-to-first true})
+                            {:hook transform-qf-item :open true})
             (set should-clear-qf true)))))
 
   (fn make []
