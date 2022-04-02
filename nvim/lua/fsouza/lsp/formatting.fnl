@@ -42,10 +42,11 @@
 (fn fmt [client bufnr cb]
   (let [client (if-nil client
                        (mod-invoke :fsouza.lsp.clients :get-client bufnr
-                                   :documentFormattingProvider))
-        (_ req-id) (client.request :textDocument/formatting
-                                   (formatting-params bufnr) cb bufnr)]
-    (values req-id #(client.cancel_request req-id))))
+                                   :documentFormattingProvider))]
+    (when client
+      (let [(_ req-id) (client.request :textDocument/formatting
+                                       (formatting-params bufnr) cb bufnr)]
+        (values req-id #(client.cancel_request req-id))))))
 
 (fn organize-imports-and-write [client bufnr]
   (let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)

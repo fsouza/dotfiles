@@ -79,7 +79,8 @@
                   bufnr
                   (vim.api.nvim_get_current_buf))
         params {:textDocument {:uri (vim.uri_from_bufnr bufnr)}}]
-    (client.request :textDocument/codeLens params codelenses-handler bufnr)))
+    (when client
+      (client.request :textDocument/codeLens params codelenses-handler bufnr))))
 
 (fn make-debounced-codelenses [bufnr debouncer-key]
   (let [interval-ms (if-nil vim.b.lsp_codelens_debouncing_ms 50)
