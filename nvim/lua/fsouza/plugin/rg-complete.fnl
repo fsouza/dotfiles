@@ -8,8 +8,13 @@
                        uniq-lines))]
     (vim.tbl_keys uniq-lines)))
 
+(fn find-pos [line]
+  (string.find line "[^%s]"))
+
 (fn complete []
-  (let [current-line (vim.trim (vim.api.nvim_get_current_line))]
+  (let [current-line (vim.api.nvim_get_current_line)
+        compl-pos (find-pos current-line)
+        current-line (vim.trim current-line)]
     (when current-line
       (mod-invoke :fsouza.lib.cmd :run :rg
                   {:args [:--case-sensitive
@@ -25,7 +30,7 @@
                     (when (= result.exit-status 0)
                       (->> result.stdout
                            (process-stdout)
-                           (vim.fn.complete 1)))))))
+                           (vim.fn.complete compl-pos)))))))
   "")
 
 (fn setup [keybind]
