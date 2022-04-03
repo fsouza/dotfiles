@@ -38,7 +38,6 @@
             [:nvim-treesitter/nvim-treesitter-textobjects]
             [:nvim-treesitter/nvim-treesitter-refactor]
             [:nvim-treesitter/playground]
-            [:SmiteshP/nvim-gps]
             [:JoosepAlviste/nvim-ts-context-commentstring]
             {1 :fsouza/nvim-lsp-compl :as :nvim-lsp-compl :opt true}
             {1 :l3mon4d3/luasnip :as :luasnip :opt true}

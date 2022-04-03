@@ -45,5 +45,4 @@
                :refactor {:navigation {:enable true
                                        :keymaps {:goto_definition :gd}}}
                :ensure_installed :maintained})
-  (set-folding)
-  (mod-invoke :nvim-gps :setup {:disable_icons true}))
+  (set-folding))
