@@ -121,6 +121,7 @@
         (do
           (when (mod-invoke :fsouza.plugin.qf :set-from-contents result.stderr
                             {:hook transform-qf-item :open true})
+            (vim.cmd "wincmd p")
             (set should-clear-qf true)))))
 
   (fn make []
