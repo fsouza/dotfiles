@@ -30,6 +30,8 @@ clear-logs:
 
 FNL_FILES := $(shell find . -name '*.fnl' | grep -v 'macros/.*\.fnl' | sed -e 's;./;;')
 LUA_FILES := $(patsubst %.fnl,build/%.lua,$(FNL_FILES))
+VIM_FILES := $(shell find . -name '*.vim' | sed -e 's;./;;' | grep -v '^build/')
+TARGET_VIM_FILES := $(patsubst %,build/%,$(VIM_FILES))
 
 .PHONY: install
 install: install-site install-init.lua
@@ -55,7 +57,11 @@ clean:
 clean-site: clean
 	rm -rf $(NVIM_DATA_DIR)/site
 
-build: $(LUA_FILES)
+build: $(LUA_FILES) $(TARGET_VIM_FILES)
 
 build/%.lua: %.fnl
 	env FENNEL=$(FENNEL) $(PYTHON) scripts/compile.py $< $@
+
+build/%.vim: %.vim
+	@ mkdir -p $(dir $@)
+	cp $< $@

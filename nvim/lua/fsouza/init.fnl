@@ -98,7 +98,8 @@
                  :joinspaces false
                  :synmaxcol 300
                  :showmatch true
-                 :matchtime 1}]
+                 :matchtime 1
+                 :completefilterfunc "fsouza#CompleteFilter"}]
     (icollect [name value (pairs options)]
       `(tset vim.o ,name ,value))))
 
