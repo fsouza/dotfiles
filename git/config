@@ -30,3 +30,5 @@
 	detachedHead = false
 [merge]
 	conflictStyle = zdiff3
+[url "https://github.com/"]
+	insteadOf = git://github.com/
