@@ -11,7 +11,8 @@
 (fn edit [selected]
   (let [fzf-path (require :fzf-lua.path)]
     (each [_ sel (ipairs selected)]
-      (let [{: path : line : col} (fzf-path.entry_to_file sel)]
+      (let [{: path : line : col} (fzf-path.entry_to_file sel)
+            path (vim.fn.fnamemodify path ":p:.")]
         (vim.cmd (string.format "silent! edit %s" (vim.fn.fnameescape path)))
         (when (or (not= line 1) (not= col 1))
           (vim.api.nvim_win_set_cursor 0 [line (- col 1)])
@@ -39,21 +40,27 @@
                                  (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
                                                   :fzf_layout :default
                                                   :buffers {:file_icons false
-                                                            :git_icons false}
+                                                            :git_icons false
+                                                            :color_icons false}
                                                   :files {:file_icons false
                                                           :git_icons false
+                                                          :color_icons false
                                                           : actions}
                                                   :git {:file_icons false
                                                         :git_icons false
+                                                        :color_icons false
                                                         : actions}
                                                   :grep {:file_icons false
                                                          :git_icons false
+                                                         :color_icons false
                                                          : actions}
                                                   :oldfiles {:file_icons false
                                                              :git_icons false
+                                                             :color_icons false
                                                              : actions}
                                                   :lsp {:file_icons false
                                                         :git_icons false
+                                                        :color_icons false
                                                         : actions}
                                                   :winopts {:win_height 0.75
                                                             :win_width 0.9}
