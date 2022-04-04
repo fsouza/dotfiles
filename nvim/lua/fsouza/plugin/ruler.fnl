@@ -8,7 +8,8 @@
          (string.format "%2d%%" (math.ceil (* (/ lnum# lines#) 99))))))
 
 (macro default-ruler []
-  `(let [[lnum# col#] (vim.api.nvim_win_get_cursor 0)]
+  `(let [[lnum# col#] (vim.api.nvim_win_get_cursor 0)
+         col# (+ (vim.str_utfindex (vim.api.nvim_get_current_line) col#) 1)]
      (string.format "%s   %d,%d   %s"
                     (mod-invoke :fsouza.lsp.diagnostics :ruler) lnum# col#
                     (line-percentage))))
