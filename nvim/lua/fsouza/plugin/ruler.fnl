@@ -16,33 +16,31 @@
 (macro update-rulerformat [width]
   `(vim-schedule (tset vim.o :rulerformat (make-rulerformat ,width))))
 
-(macro default-ruler []
+(macro render-ruler [msg]
   `(let [[lnum# col#] (vim.api.nvim_win_get_cursor 0)
          col# (+ (vim.str_utfindex (vim.api.nvim_get_current_line) col#) 1)]
-     (string.format "%s   %d,%d   %s"
+     (string.format "%s   %s   %d,%d   %s" ,msg
                     (mod-invoke :fsouza.lsp.diagnostics :ruler) lnum# col#
                     (line-percentage))))
 
 (macro trim [msg width]
-  `(let [chars# (- ,width 6)]
+  `(let [chars# (- ,width 9)]
      (.. (string.sub ,msg 1 chars#) "...")))
 
-(let [default-ruler-width 17
-      max-ruler-width (math.floor (/ vim.o.columns 2))
+(let [default-ruler-width 19
+      max-ruler-width 100
+      max-msg-width (- max-ruler-width default-ruler-width)
       default-rulerformat (make-rulerformat default-ruler-width)]
-  (fn adjust-ruler [msg]
+  (fn extend-ruler [msg]
     (let [width (length msg)
-          msg (if (> width max-ruler-width) (trim msg max-ruler-width) msg)
-          width (if (> width max-ruler-width) max-ruler-width width)]
-      (update-rulerformat width)
-      msg))
+          msg (if (> width max-msg-width) (trim msg max-msg-width) msg)
+          width (length msg)]
+      (update-rulerformat (+ default-ruler-width width 5))))
 
   (fn ruler []
     (let [notif (require :fsouza.lib.notif)]
-      (if (notif.has-notification)
-          (adjust-ruler (notif.get-notification))
-          (do
-            (tset vim.o :rulerformat default-rulerformat)
-            (default-ruler)))))
+      (let [msg (if (notif.has-notification) (notif.get-notification) "")]
+        (extend-ruler msg)
+        (render-ruler msg))))
 
   {: ruler : default-rulerformat})
