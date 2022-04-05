@@ -68,7 +68,8 @@
                  :laststatus 0
                  :showmode true
                  :ruler true
-                 :rulerformat "%17(%=%{v:lua.require('fsouza.plugin.ruler').ruler()}%)"
+                 :rulerformat `(. (require :fsouza.plugin.ruler)
+                                  :default-rulerformat)
                  :guicursor "a:block"
                  :mouse ""
                  :shiftround true
