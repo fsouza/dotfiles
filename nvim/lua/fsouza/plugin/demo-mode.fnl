@@ -6,7 +6,7 @@
   (when (not colors-name)
     (set colors-name vim.g.colors_name)
     (vim.cmd "colorscheme solarized")
-    (vim.cmd "highlight WinSeparator gui=NONE guibg=NONE guifg=#839496")))
+    (vim.api.nvim_set_hl 0 :WinSeparator {:fg "#839496"})))
 
 (fn disable []
   (when colors-name
