@@ -332,7 +332,7 @@ async def configure_zls() -> None:
 
 
 async def install_rust_analyzer(langservers_cache_dir: Path) -> None:
-    if not await has_command("cargo"):
+    if not await has_command("rustup"):
         print("skipping rust-analyzer")
         return
 
