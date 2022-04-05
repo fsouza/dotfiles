@@ -54,13 +54,4 @@
     (vim.cmd :copen)
     (vim.cmd "wincmd p")))
 
-(fn split [term-id opts]
-  (let [{: percent} opts
-        percent (if-nil percent 40)
-        percent (/ percent 100)
-        {: bufnr} (ensure-term term-id)
-        winheight (vim.api.nvim_win_get_height 0)
-        split (* winheight percent)]
-    (vim.cmd (string.format "botright %dsplit|buffer %d" split bufnr))))
-
-{: open : cr : run : split : v-cr}
+{: open : cr : run : v-cr}

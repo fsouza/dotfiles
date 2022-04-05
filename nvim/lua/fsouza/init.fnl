@@ -106,8 +106,8 @@
 
 (macro set-folding []
   `(do
-     (vim.api.nvim_set_option :foldlevelstart 99)
-     (vim.cmd "set foldmethod=indent")))
+     (tset vim.o :foldlevelstart 99)
+     (tset vim.o :foldmethod :indent)))
 
 (macro set-global-mappings []
   (let [rl-bindings [{:lhs :<c-a> :rhs :<home>}
