@@ -28,8 +28,10 @@
                 {:name :WinSeparator :opts {:fg `colors.black}}
                 {:name :StatusLine
                  :opts {:bg `colors.light-gray :fg `colors.black}}
+                {:name :LspCodeLensVirtualText :opts {:fg `colors.gray}}
                 {:name :StatusLineNC
-                 :opts {:bg `colors.light-gray :fg `colors.black}}]]
+                 :opts {:bg `colors.light-gray :fg `colors.black}}
+                {:name :HlYank :opts {:bg `colors.orange}}]]
     (icollect [_ group (ipairs groups)]
       `(vim.api.nvim_set_hl 0 ,group.name ,group.opts))))
 
@@ -101,12 +103,6 @@
          (vim.api.nvim_set_hl 0 sign-group# ,diagnostics-sign)
          (vim.api.nvim_set_hl 0 floating-group# ,diagnostics-floating)))))
 
-(macro lsp-codelens []
-  `(vim.api.nvim_set_hl 0 :LspCodeLensVirtualText {:fg colors.gray}))
-
-(macro custom-groups []
-  `(vim.api.nvim_set_hl 0 :HlYank {:fg colors.orange}))
-
 (do
   (tset vim.o :termguicolors true)
   (tset vim.o :background :light)
@@ -127,6 +123,4 @@
     (noners)
     (reversers)
     (lsp-references)
-    (lsp-diagnostics)
-    (lsp-codelens)
-    (custom-groups)))
+    (lsp-diagnostics)))
