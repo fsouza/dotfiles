@@ -28,7 +28,7 @@
 (fn ruler []
   (let [bufnr (vim.api.nvim_get_current_buf)
         count (if-nil (. n-diag-per-buf bufnr) 0)]
-    (if (= count 0) "" (string.format "D:%d" count))))
+    (if (= count 0) "    " (string.format "D:%02d" count))))
 
 (fn on-attach []
   (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__lsp_diagnostic
