@@ -91,6 +91,11 @@
     (shortcut.register :Dotfiles (vim.fn.expand "~/.dotfiles"))
     (shortcut.register :Site (path.join data-dir :site))))
 
+(fn setup-notif []
+  (vim.api.nvim_add_user_command :Notifications
+                                 "lua require('fsouza.lib.notif')['log-messages']()"
+                                 {:force true}))
+
 (fn setup-terminal-mappings []
   (fn term-open [term-id]
     (mod-invoke :fsouza.plugin.terminal :open term-id))
@@ -167,6 +172,7 @@
   (schedule setup-word-replace)
   (schedule setup-spell)
   (schedule setup-shortcuts)
+  (schedule setup-notif)
   (vim-schedule (mod-invoke :colorizer :setup
                             [:css
                              :fennel
