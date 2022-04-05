@@ -18,6 +18,7 @@ jobs:
 
       - name: install build deps
         run: |
+          brew tap homebrew/cask-fonts
           brew update
           brew install bash fnm libyaml git lua font-sauce-code-pro-nerd-font
 
