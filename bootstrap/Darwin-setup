@@ -2,14 +2,6 @@
 
 set -euo pipefail
 
-function install_source_code_pro {
-	tmp_dir=$(mktemp -d)
-	mkdir -p "${HOME}"/Library/Fonts
-	git clone --depth=1 "https://github.com/adobe-fonts/source-code-pro.git" "${tmp_dir}"
-	cp "${tmp_dir}/OTF/"*.otf "${HOME}"/Library/Fonts
-	rm -rf "${tmp_dir}"
-}
-
 # Increase window resize speed for Cocoa applications
 defaults write -g NSWindowResizeTime -float 0.001
 
@@ -171,5 +163,3 @@ defaults write com.apple.Spotlight orderedItems -array \
 	'{ enabled = 0; name = FONTS; }' \
 	'{ enabled = 0; name = "MENU_OTHER"; }' \
 	'{ enabled = 0; name = SOURCE; }'
-
-install_source_code_pro

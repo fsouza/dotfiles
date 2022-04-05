@@ -19,7 +19,7 @@ jobs:
       - name: install build deps
         run: |
           brew update
-          brew install bash fnm libyaml git lua
+          brew install bash fnm libyaml git lua font-sauce-code-pro-nerd-font
 
       - uses: actions/checkout@v3.0.0
 
