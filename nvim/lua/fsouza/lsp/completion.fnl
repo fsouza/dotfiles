@@ -2,9 +2,11 @@
 
 ; used to store information about ongoing completion, gets reset everytime we
 ; exit "completion mode".
-(local state {:inflight-requests {} :resolved-items {}})
+(local state {:inflight-requests {} :rendered-docs {}})
 
 (var winid nil)
+
+(var doc-bufnr nil)
 
 (fn cr-key-for-comp-info [comp-info]
   (if (= comp-info.mode "") :<cr>
@@ -17,15 +19,21 @@
     _ {:kind :plaintext :value (vim.trim (if-nil item.documentation ""))}))
 
 (fn popup-contents [item]
-  (let [doc-lines []
-        detail (if-nil (?. item :detail) "")
-        detail (vim.trim detail)
-        documentation (item-documentation item)]
-    (when (not= detail "")
-      (table.insert doc-lines {:kind :plaintext :value detail}))
-    (when (not= documentation.value "")
-      (table.insert doc-lines documentation.value))
-    (vim.lsp.util.convert_input_to_markdown_lines doc-lines)))
+  (let [item-key (vim.inspect item)
+        docs (. state.rendered-docs item-key)]
+    (if docs
+        docs
+        (let [doc-lines []
+              detail (if-nil (?. item :detail) "")
+              detail (vim.trim detail)
+              documentation (item-documentation item)]
+          (when (not= detail "")
+            (table.insert doc-lines {:kind :plaintext :value detail}))
+          (when (not= documentation.value "")
+            (table.insert doc-lines documentation.value))
+          (let [docs (vim.lsp.util.convert_input_to_markdown_lines doc-lines)]
+            (tset state.rendered-docs item-key docs)
+            docs)))))
 
 (fn calc-max-width [max-width starting-pos right]
   (let [cols vim.o.columns
@@ -34,7 +42,13 @@
                             (- starting-pos 2))]
     (math.min max-width available-space)))
 
-(fn show-popup [contents]
+(macro valid-winid []
+  `(and winid (vim.api.nvim_win_is_valid winid)))
+
+(macro valid-doc-bufnr []
+  `(and doc-bufnr (vim.api.nvim_buf_is_valid doc-bufnr)))
+
+(fn show-or-update-popup [contents]
   (when (not= (vim.fn.pumvisible) 0)
     (let [{: row : col : width : scrollbar} (vim.fn.pum_getpos)
           scrollbar (if scrollbar 1 0)
@@ -44,60 +58,58 @@
           max-width (if right max-width (calc-max-width 100 col false))
           left-col (if right end-col nil)
           right-col (if right nil col)
-          (popup-winid _) (mod-invoke :fsouza.lib.popup :open
-                                      {:lines contents
-                                       :enter false
-                                       :type-name :completion-doc
-                                       :markdown true
-                                       : row
-                                       :col left-col
-                                       : right-col
-                                       :relative :editor
-                                       : max-width})]
-      (set winid popup-winid))))
+          (popup-winid popup-bufnr) (mod-invoke :fsouza.lib.popup :open
+                                                {:lines contents
+                                                 :enter false
+                                                 :type-name :completion-doc
+                                                 :markdown true
+                                                 : row
+                                                 :col left-col
+                                                 : right-col
+                                                 :relative :editor
+                                                 : max-width})]
+      (set winid popup-winid)
+      (set doc-bufnr popup-bufnr))))
 
 (fn augroup-name [bufnr]
   (string.format "fsouza-completion-%d" bufnr))
 
 (fn close []
-  (when (and winid (vim.api.nvim_win_is_valid winid))
+  (when (valid-winid)
     (vim.api.nvim_win_close winid false))
-  (set winid nil))
+  (when (valid-doc-bufnr)
+    (vim.api.nvim_buf_delete doc-bufnr {:force true}))
+  (set winid nil)
+  (set doc-bufnr nil))
 
 (fn render-docs [item]
   (let [docs (popup-contents item)]
     (when (> (length docs) 0)
-      (vim-schedule (show-popup docs)))))
+      (vim-schedule (show-or-update-popup docs)))))
 
 (fn resolve-item [client bufnr item cb]
   (var request-id nil)
   (let [item-key (vim.inspect item)]
     (fn on-resolve [err item]
       (when (not err)
-        (tset state.resolved-items item-key item)
         (cb item))
       (if request-id
           (tset state.inflight-requests request-id nil)))
 
-    (let [resolved-item (. state.resolved-items item-key)]
-      (if resolved-item
-          (do
-            (cb resolved-item))
-          (let [(_ req-id) (client.request :completionItem/resolve item
-                                           on-resolve bufnr)]
-            (when req-id
-              (set request-id req-id)
-              (tset state.inflight-requests req-id client)))))))
+    (let [(_ req-id) (client.request :completionItem/resolve item on-resolve
+                                     bufnr)]
+      (when req-id
+        (set request-id req-id)
+        (tset state.inflight-requests req-id client)))))
 
 (fn reset-state []
   (close)
   (each [req-id client (pairs state.inflight-requests)]
     (vim-schedule (client.cancel_request req-id)))
   (tset state :inflight-requests {})
-  (tset state :resolved-items {}))
+  (tset state :rendered-docs {}))
 
 (fn do-completeChanged [bufnr item client-id]
-  (close)
   (when item
     (let [client (vim.lsp.get_client_by_id client-id)
           completion-provider (?. client :server_capabilities
