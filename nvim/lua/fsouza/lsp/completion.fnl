@@ -50,31 +50,27 @@
 
 (fn show-or-update-popup [contents]
   (when (not= (vim.fn.pumvisible) 0)
-    (if (and (valid-winid) (valid-doc-bufnr))
-        (let [width (vim.api.nvim_win_get_width winid)
-              height (vim.api.nvim_win_get_height winid)]
-          (mod-invoke :fsouza.lib.popup :update-content doc-bufnr contents
-                      {: width : height :markdown true}))
-        (let [{: row : col : width : scrollbar} (vim.fn.pum_getpos)
-              scrollbar (if scrollbar 1 0)
-              end-col (+ col width scrollbar)
-              max-width (calc-max-width 100 end-col true)
-              right (> max-width 25)
-              max-width (if right max-width (calc-max-width 100 col false))
-              left-col (if right end-col nil)
-              right-col (if right nil col)
-              (popup-winid popup-bufnr) (mod-invoke :fsouza.lib.popup :open
-                                                    {:lines contents
-                                                     :enter false
-                                                     :type-name :completion-doc
-                                                     :markdown true
-                                                     : row
-                                                     :col left-col
-                                                     : right-col
-                                                     :relative :editor
-                                                     : max-width})]
-          (set winid popup-winid)
-          (set doc-bufnr popup-bufnr)))))
+    (let [{: row : col : width : scrollbar} (vim.fn.pum_getpos)
+          scrollbar (if scrollbar 1 0)
+          end-col (+ col width scrollbar)
+          max-width (calc-max-width 100 end-col true)
+          right (> max-width 25)
+          max-width (if right max-width (calc-max-width 100 col false))
+          left-col (if right end-col nil)
+          right-col (if right nil col)
+          (popup-winid popup-bufnr) (mod-invoke :fsouza.lib.popup :open
+                                                {:lines contents
+                                                 :enter false
+                                                 :type-name :completion-doc
+                                                 :markdown true
+                                                 : row
+                                                 :col left-col
+                                                 : right-col
+                                                 :relative :editor
+                                                 : max-width
+                                                 :update-if-exists true})]
+      (set winid popup-winid)
+      (set doc-bufnr popup-bufnr))))
 
 (fn augroup-name [bufnr]
   (string.format "fsouza-completion-%d" bufnr))

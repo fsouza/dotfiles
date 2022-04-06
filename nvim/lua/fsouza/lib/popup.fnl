@@ -1,28 +1,53 @@
 (import-macros {: if-nil} :helpers)
 
-(fn close-others [win-var-identifier]
-  (each [_ winid (ipairs (vim.api.nvim_list_wins))]
-    (when (pcall vim.api.nvim_win_get_var winid win-var-identifier)
-      (vim.api.nvim_win_close winid true))))
+(fn find-other [win-var-identifier]
+  (let [winids (icollect [_ winid (ipairs (vim.api.nvim_list_wins))]
+                 (when (pcall vim.api.nvim_win_get_var winid win-var-identifier)
+                   winid))]
+    (assert (<= (length winids) 1))
+    (. winids 1)))
 
-(fn update-content [bufnr lines opts]
-  (vim.api.nvim_buf_set_option bufnr :readonly false)
-  (vim.api.nvim_buf_set_option bufnr :modifiable true)
-  (let [{: markdown : width : height} opts]
-    (if markdown
-        (vim.lsp.util.stylize_markdown bufnr lines
-                                       {: width : height :separator true})
-        (vim.api.nvim_buf_set_lines bufnr 0 -1 true lines)))
-  (vim.api.nvim_buf_set_option bufnr :readonly true)
-  (vim.api.nvim_buf_set_option bufnr :modifiable false))
+(fn set-content [bufnr lines opts]
+  (do
+    (vim.api.nvim_buf_set_option bufnr :readonly false)
+    (vim.api.nvim_buf_set_option bufnr :modifiable true)
+    (let [{: markdown : width : height} opts]
+      (if markdown
+          (vim.lsp.util.stylize_markdown bufnr lines
+                                         {: width : height :separator true})
+          (vim.api.nvim_buf_set_lines bufnr 0 -1 true lines)))
+    (vim.api.nvim_buf_set_option bufnr :readonly true)
+    (vim.api.nvim_buf_set_option bufnr :modifiable false)))
+
+(fn update-existing [winid lines opts]
+  (let [bufnr (vim.api.nvim_win_get_buf winid)]
+    (set-content bufnr lines opts)
+    (vim.api.nvim_win_set_width winid opts.width)
+    (vim.api.nvim_win_set_height winid opts.height)
+    (values winid bufnr)))
+
+(fn do-open [lines opts]
+  (let [bufnr (vim.api.nvim_create_buf false true)
+        {: win-opts : wrap : win-var-identifier : markdown} opts
+        winid (vim.api.nvim_open_win bufnr false win-opts)]
+    (set-content bufnr lines
+                 {: markdown :width win-opts.width :height win-opts.height})
+    (vim.api.nvim_win_set_option winid :wrap (= wrap true))
+    (vim.api.nvim_win_set_var winid win-var-identifier true)
+    (values winid bufnr)))
 
 (fn open [opts]
-  (let [{: lines : type-name : markdown : min-width : max-width : wrap} opts
+  (let [{: lines
+         : type-name
+         : markdown
+         : min-width
+         : max-width
+         : wrap
+         : update-if-exists} opts
         longest (* 2 (accumulate [longest 0 _ line (ipairs lines)]
                        (math.max longest (length line))))
         min-width (if-nil min-width 50)
         max-width (if-nil max-width (* 3 min-width))
-        bufnr (vim.api.nvim_create_buf false true)
         win-var-identifier (string.format "fsouza__popup-%s" type-name)
         width (math.min (math.max longest min-width) max-width)
         height (length lines)
@@ -35,11 +60,16 @@
                   : col
                   :row (if-nil opts.row 0)
                   :style :minimal}]
-    (update-content bufnr lines {: markdown : width : height})
-    (close-others win-var-identifier)
-    (let [winid (vim.api.nvim_open_win bufnr false win-opts)]
-      (vim.api.nvim_win_set_option winid :wrap (= wrap true))
-      (vim.api.nvim_win_set_var winid win-var-identifier true)
-      (values winid bufnr))))
+    (let [other (find-other win-var-identifier)]
+      (if other
+          (if update-if-exists
+              (update-existing other lines {: markdown : width : height})
+              (do
+                (vim.api.nvim_win_close other true)
+                (do-open lines {: win-opts
+                                : wrap
+                                : win-var-identifier
+                                : markdown})))
+          (do-open lines {: win-opts : wrap : win-var-identifier : markdown})))))
 
-{: open : update-content}
+{: open}
