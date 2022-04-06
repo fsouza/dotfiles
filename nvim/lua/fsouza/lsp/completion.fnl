@@ -104,13 +104,16 @@
                                   :completionProvider)
           completion-provider (if-nil completion-provider {})
           resolve-provider (. completion-provider :resolveProvider)]
-      (if resolve-provider
-          (resolve-item client bufnr item render-docs)
-          (render-docs item)))))
+      (if (and item.documentation (not= item.documentation ""))
+          (render-docs item)
+          (if resolve-provider
+              (resolve-item client bufnr item render-docs)
+              (render-docs item))))))
 
 (fn on-CompleteChanged [bufnr]
   (let [user-data (if-nil (?. vim :v :event :completed_item :user_data) {})
         {: item :client_id client-id} user-data]
+    (print (vim.inspect (?. vim :v :event :completed_item)))
     (vim-schedule (do-completeChanged bufnr item client-id))))
 
 (fn do-InsertLeave [bufnr]
