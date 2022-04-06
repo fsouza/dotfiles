@@ -4,7 +4,7 @@ VIRTUALENV_PYZ_LOCATION=${VIRTUALENVS}/virtualenv.pyz
 
 function _download_virtualenv() {
 	mkdir -p "${VIRTUALENVS}"
-	curl -Lo "${VIRTUALENV_PYZ_LOCATION}" https://bootstrap.pypa.io/virtualenv.pyz
+	curl -sLo "${VIRTUALENV_PYZ_LOCATION}" https://bootstrap.pypa.io/virtualenv.pyz
 }
 
 function virtualenv() {
