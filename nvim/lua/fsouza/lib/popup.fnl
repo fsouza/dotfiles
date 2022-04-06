@@ -5,6 +5,17 @@
     (when (pcall vim.api.nvim_win_get_var winid win-var-identifier)
       (vim.api.nvim_win_close winid true))))
 
+(fn update-content [bufnr lines opts]
+  (vim.api.nvim_buf_set_option bufnr :readonly false)
+  (vim.api.nvim_buf_set_option bufnr :modifiable true)
+  (let [{: markdown : width : height} opts]
+    (if markdown
+        (vim.lsp.util.stylize_markdown bufnr lines
+                                       {: width : height :separator true})
+        (vim.api.nvim_buf_set_lines bufnr 0 -1 true lines)))
+  (vim.api.nvim_buf_set_option bufnr :readonly true)
+  (vim.api.nvim_buf_set_option bufnr :modifiable false))
+
 (fn open [opts]
   (let [{: lines : type-name : markdown : min-width : max-width : wrap} opts
         longest (* 2 (accumulate [longest 0 _ line (ipairs lines)]
@@ -24,16 +35,11 @@
                   : col
                   :row (if-nil opts.row 0)
                   :style :minimal}]
-    (if markdown
-        (vim.lsp.util.stylize_markdown bufnr lines
-                                       {: width : height :separator true})
-        (vim.api.nvim_buf_set_lines bufnr 0 -1 true lines))
+    (update-content bufnr lines {: markdown : width : height})
     (close-others win-var-identifier)
     (let [winid (vim.api.nvim_open_win bufnr false win-opts)]
-      (vim.api.nvim_buf_set_option bufnr :readonly true)
-      (vim.api.nvim_buf_set_option bufnr :modifiable false)
       (vim.api.nvim_win_set_option winid :wrap (= wrap true))
       (vim.api.nvim_win_set_var winid win-var-identifier true)
       (values winid bufnr))))
 
-{: open}
+{: open : update-content}
