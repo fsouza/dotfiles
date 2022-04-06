@@ -71,23 +71,23 @@
 
 (fn resolve-item [client bufnr item cb]
   (var request-id nil)
-  (let [item-key (if-nil item.sortText item.label)]
-    (when item-key
-      (fn on-resolve [err item]
-        (when (not err)
-          (tset state.resolved-items item-key item)
-          (cb item))
-        (if request-id
-            (tset state.inflight-requests request-id nil)))
+  (let [item-key (vim.inspect item)]
+    (fn on-resolve [err item]
+      (when (not err)
+        (tset state.resolved-items item-key item)
+        (cb item))
+      (if request-id
+          (tset state.inflight-requests request-id nil)))
 
-      (let [resolved-item (. state.resolved-items item-key)]
-        (if resolved-item
-            (cb resolved-item)
-            (let [(_ req-id) (client.request :completionItem/resolve item
-                                             on-resolve bufnr)]
-              (when req-id
-                (set request-id req-id)
-                (tset state.inflight-requests req-id client))))))))
+    (let [resolved-item (. state.resolved-items item-key)]
+      (if resolved-item
+          (do
+            (cb resolved-item))
+          (let [(_ req-id) (client.request :completionItem/resolve item
+                                           on-resolve bufnr)]
+            (when req-id
+              (set request-id req-id)
+              (tset state.inflight-requests req-id client)))))))
 
 (fn reset-state []
   (close)
