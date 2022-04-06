@@ -110,6 +110,7 @@
   (tset state :rendered-docs {}))
 
 (fn do-completeChanged [bufnr item client-id]
+  (close)
   (when item
     (let [client (vim.lsp.get_client_by_id client-id)
           completion-provider (?. client :server_capabilities
