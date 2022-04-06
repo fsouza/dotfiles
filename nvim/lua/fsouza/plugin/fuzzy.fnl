@@ -104,23 +104,26 @@
   (let [fzf-lua (fzf-lua)]
     (fzf-lua.files {: cwd})))
 
-(fn go-to-repo [selected]
+(fn go-to-repo [run-fzf selected]
   (when (= (length selected) 1)
     (let [[sel] selected
           sel (vim.fn.fnamemodify sel ":p")]
       (vim.api.nvim_set_current_dir sel)
-      (find-files)
-      (mod-invoke :fzf-lua.actions :ensure_insert_mode))))
+      (when run-fzf
+        (find-files)
+        (mod-invoke :fzf-lua.actions :ensure_insert_mode)))))
 
-(fn git-repos [cwd]
-  (let [prompt "Git repos："
+(fn git-repos [cwd run-fzf]
+  (let [run-fzf (if-nil run-fzf true)
+        prompt "Git repos："
         cwd (if-nil cwd (vim.loop.cwd))
         fzf-lua (fzf-lua)
         config (require :fzf-lua.config)
         core (require :fzf-lua.core)
         opts (config.normalize_opts {: prompt
                                      : cwd
-                                     :actions {:default go-to-repo}}
+                                     :actions {:default (partial go-to-repo
+                                                                 run-fzf)}}
                                     config.globals.files)
         contents (core.mt_cmd_wrapper {:cmd "fd --hidden --type d --exec dirname {} ';' -- '^.git$'"})
         opts (core.set_fzf_field_index opts)]
