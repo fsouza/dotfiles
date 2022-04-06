@@ -50,26 +50,31 @@
 
 (fn show-or-update-popup [contents]
   (when (not= (vim.fn.pumvisible) 0)
-    (let [{: row : col : width : scrollbar} (vim.fn.pum_getpos)
-          scrollbar (if scrollbar 1 0)
-          end-col (+ col width scrollbar)
-          max-width (calc-max-width 100 end-col true)
-          right (> max-width 25)
-          max-width (if right max-width (calc-max-width 100 col false))
-          left-col (if right end-col nil)
-          right-col (if right nil col)
-          (popup-winid popup-bufnr) (mod-invoke :fsouza.lib.popup :open
-                                                {:lines contents
-                                                 :enter false
-                                                 :type-name :completion-doc
-                                                 :markdown true
-                                                 : row
-                                                 :col left-col
-                                                 : right-col
-                                                 :relative :editor
-                                                 : max-width})]
-      (set winid popup-winid)
-      (set doc-bufnr popup-bufnr))))
+    (if (and (valid-winid) (valid-doc-bufnr))
+        (let [width (vim.api.nvim_win_get_width winid)
+              height (vim.api.nvim_win_get_height winid)]
+          (mod-invoke :fsouza.lib.popup :update-content doc-bufnr contents
+                      {: width : height :markdown true}))
+        (let [{: row : col : width : scrollbar} (vim.fn.pum_getpos)
+              scrollbar (if scrollbar 1 0)
+              end-col (+ col width scrollbar)
+              max-width (calc-max-width 100 end-col true)
+              right (> max-width 25)
+              max-width (if right max-width (calc-max-width 100 col false))
+              left-col (if right end-col nil)
+              right-col (if right nil col)
+              (popup-winid popup-bufnr) (mod-invoke :fsouza.lib.popup :open
+                                                    {:lines contents
+                                                     :enter false
+                                                     :type-name :completion-doc
+                                                     :markdown true
+                                                     : row
+                                                     :col left-col
+                                                     : right-col
+                                                     :relative :editor
+                                                     : max-width})]
+          (set winid popup-winid)
+          (set doc-bufnr popup-bufnr)))))
 
 (fn augroup-name [bufnr]
   (string.format "fsouza-completion-%d" bufnr))
@@ -109,22 +114,22 @@
   (tset state :inflight-requests {})
   (tset state :rendered-docs {}))
 
-(fn do-completeChanged [bufnr item client-id]
-  (close)
-  (when item
-    (let [client (vim.lsp.get_client_by_id client-id)
-          completion-provider (?. client :server_capabilities
-                                  :completionProvider)
-          completion-provider (if-nil completion-provider {})
-          resolve-provider (. completion-provider :resolveProvider)]
-      (if resolve-provider
-          (resolve-item client bufnr item render-docs)
-          (render-docs item)))))
+(fn do-CompleteChanged [bufnr item client-id]
+  (if item
+      (let [client (vim.lsp.get_client_by_id client-id)
+            completion-provider (?. client :server_capabilities
+                                    :completionProvider)
+            completion-provider (if-nil completion-provider {})
+            resolve-provider (. completion-provider :resolveProvider)]
+        (if resolve-provider
+            (resolve-item client bufnr item render-docs)
+            (render-docs item)))
+      (close)))
 
 (fn on-CompleteChanged [bufnr]
   (let [user-data (if-nil (?. vim :v :event :completed_item :user_data) {})
         {: item :client_id client-id} user-data]
-    (vim-schedule (do-completeChanged bufnr item client-id))))
+    (vim-schedule (do-CompleteChanged bufnr item client-id))))
 
 (fn do-InsertLeave [bufnr]
   (reset-state)
