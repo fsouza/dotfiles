@@ -88,21 +88,6 @@
     (when (> (length docs) 0)
       (vim-schedule (show-or-update-popup docs)))))
 
-(fn resolve-item [client bufnr item cb]
-  (var request-id nil)
-  (let [item-key (vim.inspect item)]
-    (fn on-resolve [err item]
-      (when (not err)
-        (cb item))
-      (if request-id
-          (tset state.inflight-requests request-id nil)))
-
-    (let [(_ req-id) (client.request :completionItem/resolve item on-resolve
-                                     bufnr)]
-      (when req-id
-        (set request-id req-id)
-        (tset state.inflight-requests req-id client)))))
-
 (fn reset-state []
   (close)
   (each [req-id client (pairs state.inflight-requests)]
@@ -110,22 +95,14 @@
   (tset state :inflight-requests {})
   (tset state :rendered-docs {}))
 
-(fn do-CompleteChanged [bufnr item client-id]
-  (if item
-      (let [client (vim.lsp.get_client_by_id client-id)
-            completion-provider (?. client :server_capabilities
-                                    :completionProvider)
-            completion-provider (if-nil completion-provider {})
-            resolve-provider (. completion-provider :resolveProvider)]
-        (if resolve-provider
-            (resolve-item client bufnr item render-docs)
-            (render-docs item)))
+(fn do-CompleteChanged [bufnr user-data]
+  (if user-data.item
+      (mod-invoke :lsp_compl :resolve_item user-data render-docs)
       (close)))
 
 (fn on-CompleteChanged [bufnr]
-  (let [user-data (if-nil (?. vim :v :event :completed_item :user_data) {})
-        {: item :client_id client-id} user-data]
-    (vim-schedule (do-CompleteChanged bufnr item client-id))))
+  (let [user-data (if-nil (?. vim :v :event :completed_item :user_data) {})]
+    (vim-schedule (do-CompleteChanged bufnr user-data))))
 
 (fn do-InsertLeave [bufnr]
   (reset-state)
