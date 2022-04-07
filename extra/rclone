@@ -45,7 +45,7 @@ function ensure_rclone_mount {
 	local local_path=$2
 
 	if ! command -v rclone &>/dev/null; then
-		install_rclone 2>1
+		install_rclone 2>&1
 	fi
 
 	if ! rclone lsd "${remote}" &>/dev/null; then
