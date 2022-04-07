@@ -10,6 +10,7 @@ completion_ctx = {
   suppress_completeDone = false,
   cursor = nil,
 
+  resolved_items = {},
   pending_requests = {},
   cancel_pending = function()
     for _, cancel in pairs(completion_ctx.pending_requests) do
@@ -23,19 +24,9 @@ completion_ctx = {
     completion_ctx.isIncomplete = false
     completion_ctx.suppress_completeDone = false
     completion_ctx.cancel_pending()
+    completion_ctx.resolved_items = {}
   end
 }
-
-local function get_documentation(item)
-  local docs = item.documentation
-  if type(docs) == 'string' then
-    return docs
-  end
-  if type(docs) == 'table' and type(docs.value) == 'string' then
-    return docs.value
-  end
-  return ''
-end
 
 local function get_detail(item)
   local max_width = 10
@@ -221,6 +212,30 @@ local function apply_snippet(item, suffix)
   end
 end
 
+local function resolve_item(item, client, cb)
+  local key = vim.inspect(item)
+  if completion_ctx.resolved_items[key] then
+    cb(completion_ctx.resolved_items[key])
+  else
+    local resolve_edits = (client.server_capabilities.completionProvider or {}).resolveProvider
+    if resolve_edits then
+      local _, req_id = client.request('completionItem/resolve', item, function(err, result)
+        completion_ctx.pending_requests = {}
+        assert(not err, vim.inspect(err))
+        completion_ctx.resolved_items[key] = result
+        cb(result)
+      end, bufnr)
+      if req_id then
+        table.insert(completion_ctx.pending_requests, function()
+          client.cancel_request(req_id)
+        end)
+      end
+    else
+      completion_ctx.resolved_items[key] = item
+      cb(item)
+    end
+  end
+end
 
 local function on_CompleteDone(bufnr)
   if completion_ctx.suppress_completeDone then
@@ -229,7 +244,6 @@ local function on_CompleteDone(bufnr)
   end
   local completed_item = api.nvim_get_vvar('completed_item')
   if not completed_item or not completed_item.user_data or not completed_item.user_data.item then
-    completion_ctx.reset()
     return
   end
   local lnum, col = unpack(api.nvim_win_get_cursor(0))
@@ -246,7 +260,6 @@ local function on_CompleteDone(bufnr)
     suffix = line:sub(col + 1)
     api.nvim_buf_set_text(bufnr, lnum, start_char, lnum, #line, {''})
   end
-  completion_ctx.reset()
   if not client then
     return
   end
@@ -257,21 +270,23 @@ local function on_CompleteDone(bufnr)
     end
     apply_text_edits(bufnr, lnum, item.additionalTextEdits, client)
   elseif resolve_edits and type(item) == "table" then
-    local _, req_id = client.request('completionItem/resolve', item, function(err, result)
-      completion_ctx.pending_requests = {}
-      assert(not err, vim.inspect(err))
+    resolve_item(item, client, function(result)
       if expand_snippet then
         apply_snippet(item, suffix)
       end
       apply_text_edits(bufnr, lnum, result.additionalTextEdits, client)
-    end, bufnr)
-    if req_id then
-      table.insert(completion_ctx.pending_requests, function()
-        client.cancel_request(req_id)
-      end)
-    end
+    end)
   elseif expand_snippet then
     apply_snippet(item, suffix)
+  end
+end
+
+function M.resolve_item(user_data, cb)
+  local item = user_data.item
+  local client_id = user_data.client_id
+  local client = vim.lsp.get_client_by_id(client_id)
+  if client then
+    resolve_item(item, client, cb)
   end
 end
 
@@ -297,6 +312,7 @@ function M.attach(bufnr)
     buffer = bufnr,
     callback = function()
       on_CompleteDone(bufnr)
+      completion_ctx.reset()
     end,
   })
 end
