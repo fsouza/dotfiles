@@ -2,7 +2,7 @@ function _git_enable_difftastic {
 	local configs=(
 		diff.tool difftastic
 		difftool.prompt false
-		'difftool.difftastic.cmd' 'difft --background=light "${LOCAL}" "${REMOTE}"'
+		'difftool.difftastic.cmd' 'difft "${LOCAL}" "${REMOTE}"'
 		pager.difftool true
 	)
 	local config_idx=${GIT_CONFIG_COUNT:-0}
@@ -14,7 +14,7 @@ function _git_enable_difftastic {
 		config_idx=$((config_idx + 1))
 	done
 
-	export GIT_CONFIG_COUNT=${config_idx}
+	export GIT_CONFIG_COUNT=${config_idx} DFT_BACKGROUND=light
 }
 
 if [[ -v HOMEBREW_PREFIX ]]; then
