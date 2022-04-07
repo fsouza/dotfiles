@@ -55,7 +55,7 @@ function ensure_rclone_mount {
 
 	mkdir -p "${local_path}"
 	if ! (mount | grep -q ^"${remote} on ${local_path} "); then
-		rclone_mount "${remote}" "${local_path}" 2>1
+		rclone_mount "${remote}" "${local_path}" 2>&1
 	fi
 }
 
