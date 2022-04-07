@@ -10,7 +10,7 @@ function _normalize_name_version {
 }
 
 function refresh_go_tools {
-	go install honnef.co/go/tools/cmd/staticcheck@latest
+	env GOPROXY=https://proxy.golang.org go install honnef.co/go/tools/cmd/staticcheck@latest
 }
 
 function _goarch {
@@ -38,6 +38,7 @@ function _install_go {
 		local name=$(_normalize_name_version "${1}")
 		local temp_gobin=$(mktemp -d)
 		prepend_to_path "$(_bootstrap_go)"
+		export GOPROXY=https://proxy.golang.org
 
 		env GOBIN="${temp_gobin}" GOPATH="${GO_HOME}/selfpath" go install "golang.org/dl/${name}@latest" &&
 			env HOME="${GO_HOME}" GOROOT_BOOTSTRAP="$(go env GOROOT)" "${temp_gobin}/${name}" download &&
