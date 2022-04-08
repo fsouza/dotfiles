@@ -68,7 +68,7 @@
                  :laststatus 0
                  :showmode true
                  :ruler true
-                 :rulerformat "%30(%=%{v:lua.require('fsouza.lib.notif')['get-notification']()}%{v:lua.require('fsouza.lsp.diagnostics').ruler()}   %l,%c   %P%)"
+                 :rulerformat "%30(%=%{v:lua.require('fsouza.lib.notif')['get-notification']()}%{v:lua.require('fsouza.lsp.diagnostics').ruler()}   %l,%c%)"
                  :guicursor "a:block"
                  :mouse ""
                  :shiftround true
