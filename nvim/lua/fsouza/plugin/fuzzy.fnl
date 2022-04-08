@@ -79,7 +79,7 @@
                                                         :git_icons false
                                                         :color_icons false
                                                         :actions (lsp-actions)}
-                                                  :winopts {:win_height 0.75
+                                                  :winopts {:win_height 0.85
                                                             :win_width 0.9}
                                                   :keymap {:builtin {:<c-h> :toggle-preview
                                                                      :<c-u> :preview-page-up
