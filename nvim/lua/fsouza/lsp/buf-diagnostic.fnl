@@ -24,8 +24,8 @@
         (tset result :diagnostics (icollect [_ d (ipairs diagnostics)]
                                     (when (mod-invoke :fsouza.tablex :for-all
                                                       client-filters #($1 d))
-                                      d)))
-        result))))
+                                      d))))
+      result)))
 
 (fn buf-clear-all-diagnostics []
   (let [all-clients (vim.lsp.get_active_clients)]
@@ -45,11 +45,10 @@
                                :signs true
                                :update_in_insert false})]
     (fn [err result context ...]
-      (when result
-        (vim.schedule exec-hooks)
-        (vim.diagnostic.reset context.client_id context.bufnr)
-        (let [result (filter result context)]
-          (handler err result context ...))))))
+      (vim.schedule exec-hooks)
+      (vim.diagnostic.reset context.client_id context.bufnr)
+      (let [result (filter result context)]
+        (handler err result context ...)))))
 
 (fn make-debounced-handler [bufnr debouncer-key]
   (let [interval-ms (if-nil vim.b.lsp_diagnostic_debouncing_ms 250)
