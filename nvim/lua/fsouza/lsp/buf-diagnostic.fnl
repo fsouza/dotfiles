@@ -51,7 +51,7 @@
         (handler err result context ...)))))
 
 (fn make-debounced-handler [bufnr debouncer-key]
-  (let [interval-ms (if-nil vim.b.lsp_diagnostic_debouncing_ms 250)
+  (let [interval-ms (if-nil vim.b.lsp_diagnostic_debouncing_ms 100)
         handler (mod-invoke :fsouza.lib.debounce :debounce interval-ms
                             (vim.schedule_wrap (make-handler)))]
     (tset debouncers debouncer-key handler)
