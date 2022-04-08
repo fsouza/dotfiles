@@ -6,12 +6,10 @@
 (macro min-score []
   0)
 
-(local infinity-n (/ 1 0))
-
-(macro eq [left right]
-  `(let [left# (string.lower ,left)
-         right# (string.lower ,right)]
-     (= left# right#)))
+(fn eq [left right]
+  (let [left (string.lower left)
+        right (string.lower right)]
+    (= left right)))
 
 (fn filter [prefix entry]
   (if (= prefix "")
@@ -19,7 +17,7 @@
       (let [score (mod-invoke :fzy :score prefix entry)]
         (if (< score 0)
             (min-score)
-            (if (< score infinity-n)
+            (if (< score math.huge)
                 score
                 (if (eq prefix entry)
                     (max-score)
