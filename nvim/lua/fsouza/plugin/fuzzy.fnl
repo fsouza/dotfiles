@@ -8,6 +8,13 @@
         (mod-invoke :fsouza.tablex :exists selected
                     #(if (string.match $1 "^.+:%d+:%d+:") true false)))))
 
+(fn edit-or-qf [edit selected]
+  (if (should-qf selected)
+      (do
+        (mod-invoke :fzf-lua.actions :file_sel_to_qf selected)
+        (vim.cmd :cc))
+      (edit selected)))
+
 (fn edit [selected]
   (let [fzf-path (require :fzf-lua.path)]
     (each [_ sel (ipairs selected)]
@@ -18,20 +25,30 @@
           (vim.api.nvim_win_set_cursor 0 [line (- col 1)])
           (vim.api.nvim_feedkeys :zz :n false))))))
 
-(fn edit-or-qf [selected]
-  (if (should-qf selected)
-      (do
-        (mod-invoke :fzf-lua.actions :file_sel_to_qf selected)
-        (vim.cmd :cc))
-      (edit selected)))
-
 (fn file-actions []
   (let [actions (require :fzf-lua.actions)]
-    {:default edit-or-qf
+    {:default (partial edit-or-qf edit)
      :ctrl-s actions.file_spit
      :ctrl-v actions.file_vsplit
      :ctrl-t actions.file_tabedit
      :ctrl-q actions.file_sel_to_qf}))
+
+(fn save-stack-and-edit [selected]
+  (let [winid (vim.api.nvim_get_current_win)
+        [lnum col] (vim.api.nvim_win_get_cursor winid)
+        col (+ col 1)]
+    (vim.fn.settagstack (vim.api.nvim_get_current_win)
+                        {:items [{:tagname (vim.fn.expand :<cword>)
+                                  :from [(vim.api.nvim_get_current_buf)
+                                         lnum
+                                         col
+                                         0]}]} :a)
+    (edit selected)))
+
+(macro lsp-actions []
+  `(let [actions# (file-actions)]
+     (tset actions# :default (partial edit-or-qf save-stack-and-edit))
+     actions#))
 
 (local fzf-lua (helpers.once (fn []
                                (vim.cmd "packadd nvim-fzf")
@@ -61,7 +78,7 @@
                                                   :lsp {:file_icons false
                                                         :git_icons false
                                                         :color_icons false
-                                                        : actions}
+                                                        :actions (lsp-actions)}
                                                   :winopts {:win_height 0.75
                                                             :win_width 0.9}
                                                   :keymap {:builtin {:<c-h> :toggle-preview
