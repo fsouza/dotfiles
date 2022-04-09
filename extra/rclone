@@ -30,6 +30,7 @@ function rclone_mount {
 		return 2
 	fi
 
+	:>~/.cache/rclone.log
 	rclone mount "${1}" "${2}" \
 		--daemon \
 		--dir-cache-time 60s \
@@ -37,7 +38,9 @@ function rclone_mount {
 		--file-perms 0644 \
 		--poll-interval 20s \
 		--vfs-cache-mode full \
-		--write-back-cache
+		--write-back-cache \
+		--log-file ~/.cache/rclone.log \
+		--log-level INFO
 }
 
 function ensure_rclone_mount {
