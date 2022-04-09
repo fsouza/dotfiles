@@ -19,17 +19,6 @@ function upgrade_virtualenv() {
 	_download_virtualenv
 }
 
-function _disable_bare_python() {
-	function python() {
-		echo >&2 "please be explicit about the version of python you want to use"
-		return 1
-	}
-}
-
-function _enable_bare_python() {
-	unset -f python &>/dev/null || true
-}
-
 function _activate_virtualenv() {
 	local virtualenvpath=${1}
 	if [ -z "${oldpath}" ]; then
@@ -39,7 +28,6 @@ function _activate_virtualenv() {
 	alias cdvirtualenv='cd ${virtualenvpath}'
 	alias cdsitepackages='cd ${virtualenvpath}/lib/python*/site-packages'
 	export VIRTUAL_ENV=${virtualenvpath}
-	_enable_bare_python
 	hash -r
 }
 
@@ -69,7 +57,6 @@ function d() {
 	unalias cdvirtualenv cdsitepackages
 	unset oldpath
 	unset VIRTUAL_ENV
-	_disable_bare_python
 	hash -r
 }
 
@@ -127,7 +114,6 @@ function cv() {
 	fi
 }
 
-_disable_bare_python
 if [ -n "${VIRTUAL_ENV}" ]; then
 	_activate_virtualenv "${VIRTUAL_ENV}"
 fi
