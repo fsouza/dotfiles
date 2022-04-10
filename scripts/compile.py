@@ -3,19 +3,22 @@ import pathlib
 import subprocess
 import sys
 from collections.abc import Sequence
+from pathlib import Path
 
 
 def main(args: Sequence[str]) -> int:
     fennel = os.environ["FENNEL"]
     [fnl_file, out_file] = args
 
+    macros_file = Path(__file__).parent.parent / "macros" / "init.fnl"
+
     cmd = subprocess.run(
         [
             fennel,
             "--load",
-            "macros/init.fnl",
+            str(macros_file.absolute()),
             "--globals",
-            "vim,config-dir,cache-dir,data-dir",
+            "vim,config-dir,cache-dir,data-dir,hs",
             "--raw-errors",
             "-c",
             fnl_file,

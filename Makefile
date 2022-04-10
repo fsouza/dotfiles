@@ -5,11 +5,11 @@ FENNEL := $(if $(shell command -v fennel 2>/dev/null),fennel,$(NVIM_CACHE_DIR)/h
 PYTHON ?= python3.10
 
 .PHONY: all
-all: bootstrap update-paq update-treesitter kill-daemons clear-logs
+all: bootstrap-nvim update-paq update-treesitter kill-daemons clear-logs
 
-.PHONY: bootstrap
-bootstrap:
-	$(PYTHON) scripts/bootstrap.py
+.PHONY: bootstrap-nvim
+bootstrap-nvim:
+	$(PYTHON) nvim/scripts/bootstrap.py
 
 .PHONY: update-paq
 update-paq: install
@@ -34,17 +34,22 @@ VIM_FILES := $(shell find . -name '*.vim' | sed -e 's;./;;' | grep -v '^build/')
 TARGET_VIM_FILES := $(patsubst %,build/%,$(VIM_FILES))
 
 .PHONY: install
-install: install-site install-init.lua
+install: install-nvim-site install-nvim-init.lua install-hammerspoon
 
 .PHONY: install-site
-install-site: build
+install-nvim-site: build
 	@ mkdir -p $(NVIM_DATA_DIR)/site
-	cp -prv build/* $(NVIM_DATA_DIR)/site
+	cp -prv build/nvim/* $(NVIM_DATA_DIR)/site
 
-.PHONY: install-init.llua
-install-init.lua: build/init.lua
+.PHONY: install-nvim-init.lua
+install-nvim-init.lua: nvim/build/init.lua
 	@ mkdir -p $(NVIM_CONFIG_DIR)
-	cp -p build/init.lua $(NVIM_CONFIG_DIR)
+	cp -p build/nvim/init.lua $(NVIM_CONFIG_DIR)
+
+.PHONY: install-hammerspoon
+install-hammerspoon: build
+	@ mkdir -p ~/.hammerspoon
+	cp -p build/hammerspoon/init.lua ~/.hammerspoon/init.lua
 
 .PHONY: rebuild
 rebuild: clean build
@@ -56,6 +61,10 @@ clean:
 .PHONY: clean-site
 clean-site: clean
 	rm -rf $(NVIM_DATA_DIR)/site
+
+.PHONY: clean-hammerspoon
+clean-hammerspoon:
+	rm -rf ~/.hammerspoon
 
 build: $(LUA_FILES) $(TARGET_VIM_FILES)
 
