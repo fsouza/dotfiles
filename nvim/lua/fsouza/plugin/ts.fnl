@@ -44,5 +44,6 @@
                :context_commentstring {:enable true :enable_autocmd false}
                :refactor {:navigation {:enable true
                                        :keymaps {:goto_definition :gd}}}
-               :ensure_installed :all})
+               :ensure_installed :all
+               :ignore_install [:phpdoc]})
   (set-folding))
