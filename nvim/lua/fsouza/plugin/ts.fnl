@@ -7,7 +7,7 @@
 
 (fn get-file-types []
   (let [parsers-mod (require :nvim-treesitter.parsers)
-        wanted-parsers (parsers-mod.maintained_parsers)]
+        wanted-parsers (parsers-mod.available_parsers)]
     (mod-invoke :fsouza.tablex :flat-map lang-to-ft wanted-parsers)))
 
 (fn set-folding []
@@ -44,5 +44,5 @@
                :context_commentstring {:enable true :enable_autocmd false}
                :refactor {:navigation {:enable true
                                        :keymaps {:goto_definition :gd}}}
-               :ensure_installed :maintained})
+               :ensure_installed :all})
   (set-folding))
