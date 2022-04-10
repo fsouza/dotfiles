@@ -33,14 +33,10 @@
                     {:args [:-C dotfiles-dir :install]} nil
                     (partial handle-result next)))))
 
-  (let [home (vim.fn.expand "~")
-        dotfiles (mod-invoke :pl.path :join home :.dotfiles)]
+  (let [dotfiles (mod-invoke :pl.path :join (vim.fn.expand "~") :.dotfiles)]
     (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__autocompile-fennel
                 [{:events [:BufWritePost]
-                  :targets [(.. home :/.dotfiles/nvim/*.fnl)
-                            (.. home :/.dotfiles/nvim/*.vim)
-                            (.. home :/.dotfiles/hammerspoon/*.fnl)
-                            (.. home :/.dotfiles/wezterm/*.fnl)]
+                  :targets [(.. dotfiles :/*.fnl) (.. dotfiles :/nvim/*.vim)]
                   :callback #(make dotfiles)}])))
 
 {: setup}
