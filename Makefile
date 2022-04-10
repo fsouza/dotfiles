@@ -42,7 +42,7 @@ install-nvim-site: build
 	cp -prv build/nvim/* $(NVIM_DATA_DIR)/site
 
 .PHONY: install-nvim-init.lua
-install-nvim-init.lua: nvim/build/init.lua
+install-nvim-init.lua: build/nvim/init.lua
 	@ mkdir -p $(NVIM_CONFIG_DIR)
 	cp -p build/nvim/init.lua $(NVIM_CONFIG_DIR)
 
