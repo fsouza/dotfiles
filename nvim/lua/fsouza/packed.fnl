@@ -55,8 +55,10 @@
             ; filetypes stuff
             ;
             ; Note: I used to use vim-polyglot, but it loads too much garbage and
-            ; requires setting some global variables that I don't want to have to set
-            ; :)
+            ; requires setting some global variables that I don't want to have
+            ; to set, so whenever I want to add something new, I just look at
+            ; what's used in vim-polyglot and bring it from there, unless I
+            ; know a better alternative.
             [:clojure-vim/clojure.vim]
             [:fsouza/fennel.vim]
             [:HerringtonDarkholme/yats.vim]
