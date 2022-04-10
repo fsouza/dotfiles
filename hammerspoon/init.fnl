@@ -40,4 +40,4 @@
   (hs.hotkey.bind prefix :V
                   #(hs.eventtap.keyStrokes (hs.pasteboard.getContents))))
 
-(set-readline-shortcuts [:Alacritty :Terminal])
+(set-readline-shortcuts [:Alacritty :Terminal :WezTerm])
