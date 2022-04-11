@@ -46,17 +46,8 @@
                                     {:force true}))
 
 (fn setup-lsp []
-  (fn do-setup []
-    (require :fsouza.lsp)
-    (setup-lsp-commands))
-
-  (if (= (vim.loop.cwd) (vim.loop.os_homedir))
-      (helpers.augroup :fsouza-lsp-change-dir-setup
-                       [{:events [:DirChanged]
-                         :targets ["*"]
-                         :callback do-setup
-                         :once true}])
-      (do-setup)))
+  (require :fsouza.lsp)
+  (setup-lsp-commands))
 
 (fn setup-hlyank []
   (helpers.augroup :yank_highlight
