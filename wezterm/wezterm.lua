@@ -1,6 +1,6 @@
 local wezterm = require('wezterm')
 
-local tab_color_bg = '#afafaf'
+local tab_color_bg = '#cccccc'
 
 local inactive_tab_colors = {fg_color = '#262626'; bg_color = tab_color_bg}
 
@@ -57,15 +57,21 @@ local function get_keys()
     {key = 'l'; mods = 'LEADER'; action = wezterm.action({ActivatePaneDirection = 'Right'})};
     {key = 'k'; mods = 'LEADER'; action = wezterm.action({ActivatePaneDirection = 'Up'})};
     {key = 'j'; mods = 'LEADER'; action = wezterm.action({ActivatePaneDirection = 'Down'})};
-
-    -- missing this: basically ActivateLastPane
-    -- {key = ';'; mods = 'LEADER'; action = wezterm.action({ActivatePaneDirection = 'Down'})};
+    {key = ';'; mods = 'LEADER'; action = wezterm.action({ActivatePaneDirection = 'Next'})};
+    {key = ';'; mods = 'LEADER|CTRL'; action = wezterm.action({ActivatePaneDirection = 'Next'})};
+    {key = 'w'; mods = 'SUPER'; action = wezterm.action({CloseCurrentTab = {confirm = false}})};
   }
 
   for n = 1, 9 do
     table.insert(keys, {
       key = tostring(n);
       mods = 'LEADER';
+      action = wezterm.action({ActivateTab = n - 1});
+    })
+
+    table.insert(keys, {
+      key = tostring(n);
+      mods = 'SUPER';
       action = wezterm.action({ActivateTab = n - 1});
     })
   end
@@ -91,7 +97,7 @@ return {
     selection_bg = '#ffd787';
     tab_bar = {
       background = tab_color_bg;
-      active_tab = {fg_color = '#262626'; bg_color = '#d0d0d0'; intensity = 'Bold'};
+      active_tab = {fg_color = '#262626'; bg_color = '#ececec'; intensity = 'Bold'};
       inactive_tab = inactive_tab_colors;
       inactive_tab_hover = inactive_tab_colors;
       new_tab = inactive_tab_colors;
@@ -100,10 +106,12 @@ return {
   };
   default_prog = {find_zsh(); '-l'};
   disable_default_key_bindings = true;
-  enable_tab_bar = false;
-  font = wezterm.font('Source Code Pro');
+  enable_tab_bar = true;
+  exit_behavior = "Close";
+  font = wezterm.font('SauceCodePro Nerd Font Mono', {weight = 'Regular'});
   font_size = 12;
   force_reverse_video_cursor = true;
+  hide_tab_bar_if_only_one_tab = true;
   inactive_pane_hsb = {saturation = 1.0; brightness = 1.0};
   keys = get_keys();
   leader = {key = ' '; mods = 'CTRL'; timeout_milliseconds = 1000};
@@ -120,8 +128,10 @@ return {
       action = 'OpenLinkAtMouseCursor';
     };
   };
-  scrollback_lines = 50000;
+  scrollback_lines = 500000;
+  tab_bar_at_bottom = true;
   unix_domains = {{name = 'unix'; connect_automatically = true; skip_permissions_check = false}};
+  use_fancy_tab_bar = false;
   window_close_confirmation = 'NeverPrompt';
-  window_padding = {top = 2; right = 2; bottom = 2; left = 2};
+  window_padding = {top = 0; right = 10; bottom = 0; left = 10};
 }
