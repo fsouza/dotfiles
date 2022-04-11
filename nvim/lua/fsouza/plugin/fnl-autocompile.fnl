@@ -3,10 +3,6 @@
 (fn setup []
   (var should-clear-qf false)
 
-  (fn transform-qf-item [item]
-    (tset item :filename (vim.fn.fnamemodify (.. :nvim/ item.filename) ":p"))
-    item)
-
   (fn handle-result [next result]
     (if (= result.exit-status 0)
         (do
@@ -19,7 +15,7 @@
             (next)))
         (do
           (when (mod-invoke :fsouza.plugin.qf :set-from-contents result.stderr
-                            {:hook transform-qf-item :open true})
+                            {:open true})
             (vim.cmd "wincmd p")
             (set should-clear-qf true)))))
 
