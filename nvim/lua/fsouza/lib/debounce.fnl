@@ -9,8 +9,8 @@
     (timer:start interval-ms interval-ms make-call)
     {:call (fn [...]
              (set last-call [...]))
-     :stop (fn []
-             (make-call)
-             (timer:close))}))
+     :stop #(do
+              (timer:close)
+              (set last-call nil))}))
 
 {: debounce}
