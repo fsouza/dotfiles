@@ -18,10 +18,10 @@
                                    (vim-schedule (if is-dir
                                                      (fzf-dir path cd)
                                                      (vim.cmd (.. "edit " path))))))))))
-  (vim.api.nvim_add_user_command command
-                                 (string.format "lua require('fsouza.plugin.shortcut').registry['%s'](vim.fn.expand('<bang>'))"
-                                                command)
-                                 {:force true :bang true}))
+  (vim.api.nvim_create_user_command command
+                                    (string.format "lua require('fsouza.plugin.shortcut').registry['%s'](vim.fn.expand('<bang>'))"
+                                                   command)
+                                    {:force true :bang true}))
 
 (let [registry []]
   {: registry :register (partial register registry)})

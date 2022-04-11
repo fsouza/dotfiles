@@ -33,17 +33,17 @@
                        (vim.cmd :GitMessenger)))))
 
 (fn setup-autofmt-commands []
-  (vim.api.nvim_add_user_command :ToggleAutofmt
-                                 "lua require('fsouza.lib.autofmt').toggle()"
-                                 {:force true})
-  (vim.api.nvim_add_user_command :ToggleGlobalAutofmt
-                                 "lua require('fsouza.lib.autofmt').toggle_g()"
-                                 {:force true}))
+  (vim.api.nvim_create_user_command :ToggleAutofmt
+                                    "lua require('fsouza.lib.autofmt').toggle()"
+                                    {:force true})
+  (vim.api.nvim_create_user_command :ToggleGlobalAutofmt
+                                    "lua require('fsouza.lib.autofmt').toggle_g()"
+                                    {:force true}))
 
 (fn setup-lsp-commands []
-  (vim.api.nvim_add_user_command :LspRestart
-                                 "lua require('fsouza.lsp.detach').restart()"
-                                 {:force true}))
+  (vim.api.nvim_create_user_command :LspRestart
+                                    "lua require('fsouza.lsp.detach').restart()"
+                                    {:force true}))
 
 (fn setup-lsp []
   (fn do-setup []
@@ -78,12 +78,12 @@
 
 (fn setup-editorconfig []
   (mod-invoke :fsouza.plugin.editorconfig :enable)
-  (vim-schedule (vim.api.nvim_add_user_command :EnableEditorConfig
-                                               "lua require('fsouza.plugin.editorconfig').enable()"
-                                               {:force true})
-                (vim.api.nvim_add_user_command :DisableEditorConfig
-                                               "lua require('fsouza.plugin.editorconfig').disable()"
-                                               {:force true})))
+  (vim-schedule (vim.api.nvim_create_user_command :EnableEditorConfig
+                                                  "lua require('fsouza.plugin.editorconfig').enable()"
+                                                  {:force true})
+                (vim.api.nvim_create_user_command :DisableEditorConfig
+                                                  "lua require('fsouza.plugin.editorconfig').disable()"
+                                                  {:force true})))
 
 (fn setup-shortcuts []
   (let [shortcut (require :fsouza.plugin.shortcut)
@@ -92,9 +92,9 @@
     (shortcut.register :Site (path.join data-dir :site))))
 
 (fn setup-notif []
-  (vim.api.nvim_add_user_command :Notifications
-                                 "lua require('fsouza.lib.notif')['log-messages']()"
-                                 {:force true}))
+  (vim.api.nvim_create_user_command :Notifications
+                                    "lua require('fsouza.lib.notif')['log-messages']()"
+                                    {:force true}))
 
 (fn setup-terminal-mappings []
   (fn term-open [term-id]
