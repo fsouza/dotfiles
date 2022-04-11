@@ -4,14 +4,6 @@ local tab_color_bg = '#cccccc'
 
 local inactive_tab_colors = {fg_color = '#262626'; bg_color = tab_color_bg}
 
-local function find_zsh()
-  local homebrew_prefix = os.getenv('HOMEBREW_PREFIX')
-  if homebrew_prefix then
-    return homebrew_prefix .. '/bin/zsh'
-  end
-  return '/bin/zsh'
-end
-
 local function get_keys()
   local keys = {
     {key = 'c'; mods = 'SUPER'; action = wezterm.action({CopyTo = 'Clipboard'})};
@@ -104,7 +96,7 @@ return {
       new_tab_hover = inactive_tab_colors;
     };
   };
-  default_prog = {find_zsh(); '-l'};
+  default_gui_startup_args = {'connect'; 'unix'};
   disable_default_key_bindings = true;
   enable_tab_bar = true;
   exit_behavior = "Close";
@@ -133,5 +125,5 @@ return {
   unix_domains = {{name = 'unix'; connect_automatically = true; skip_permissions_check = false}};
   use_fancy_tab_bar = false;
   window_close_confirmation = 'NeverPrompt';
-  window_padding = {top = 0; right = 10; bottom = 0; left = 10};
+  window_padding = {top = 4; right = 10; bottom = 4; left = 10};
 }
