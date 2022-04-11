@@ -28,7 +28,7 @@ function _setup_fzf {
 	if command -v fd &>/dev/null; then
 		export FZF_DEFAULT_COMMAND="fd --type f --hidden -E '.git' -E '.hg'"
 	fi
-	export FZF_DEFAULT_OPTS='--color=light,prompt:232,marker:232,pointer:232,hl:236,hl+:232'
+	export FZF_DEFAULT_OPTS='--color=light,prompt:#080808,marker:#080808,pointer:#080808,hl:#030303,hl+:#080808,info:#333333'
 
 	# ensure fzf completion and key-bindings is configured.
 	if [[ -v HOMEBREW_PREFIX ]] && [ -d "${HOMEBREW_PREFIX}/opt/fzf" ]; then
