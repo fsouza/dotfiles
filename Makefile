@@ -58,6 +58,9 @@ rebuild: clean build
 clean:
 	rm -rf build
 
+.PHONY: uninstall
+uninstall: clean-site clean-hammerspoon
+
 .PHONY: clean-site
 clean-site: clean
 	rm -rf $(NVIM_DATA_DIR)/site
