@@ -22,6 +22,22 @@
                                              client.offset_encoding))
           (vim.lsp.util.jump_to_location result client.offset_encoding)))))
 
+(fn register-capability [_ result ctx]
+  (when (and result result.registrations)
+    (each [_ registration (pairs result.registrations)]
+      (when (and (= registration.method :workspace/didChangeWatchedFiles)
+                 (?. registration :registerOptions :watchers))
+        (mod-invoke :fsouza.lsp.fs-watch :register ctx.client_id
+                    registration.registerOptions.watchers))))
+  vim.NIL)
+
+(fn unregister-capability [_ result ctx]
+  (when (and result result.unregisterations)
+    (each [_ unregistration (pairs result.unregisterations)]
+      (when (= unregistration.method :workspace/didChangeWatchedFiles)
+        (mod-invoke :fsouza.lsp.fs-watch :unregister ctx.client_id))))
+  vim.NIL)
+
 {:textDocument/declaration fzf-location-callback
  :textDocument/definition fzf-location-callback
  :textDocument/typeDefinition fzf-location-callback
@@ -43,4 +59,6 @@
  :textDocument/signatureHelp popup-callback
  :textDocument/publishDiagnostics (fn [...]
                                     (let [buf-diagnostics (require :fsouza.lsp.buf-diagnostic)]
-                                      (buf-diagnostics.publish-diagnostics ...)))}
+                                      (buf-diagnostics.publish-diagnostics ...)))
+ :client/registerCapability register-capability
+ :client/unregisterCapability unregister-capability}

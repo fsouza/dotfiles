@@ -223,6 +223,8 @@
 (fn with-defaults [opts]
   (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
     (tset capabilities.workspace :executeCommand {:dynamicRegistration false})
+    (tset capabilities.workspace :didChangeWatchedFiles
+          {:dynamicRegistration true})
     (let [defaults {:handlers (require :fsouza.lsp.handlers)
                     :on_attach on-attach
                     : capabilities
