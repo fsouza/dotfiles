@@ -25,15 +25,17 @@
           (if client
               (let [filepath (pl-path.join path filename)
                     uri (vim.uri_from_fname filepath)]
-                (when events.rename
-                  (vim.loop.fs_stat filepath
-                                    #(if $1
-                                         (notify-server client uri
-                                                        file-change-type.Deleted
-                                                        watch-kind.Delete)
-                                         (notify-server client uri
-                                                        file-change-type.Created
-                                                        watch-kind.Create)))))
+                (if events.rename
+                    (vim.loop.fs_stat filepath
+                                      #(if $1
+                                           (notify-server client uri
+                                                          file-change-type.Deleted
+                                                          watch-kind.Delete)
+                                           (notify-server client uri
+                                                          file-change-type.Created
+                                                          watch-kind.Create)))
+                    (notify-server client uri file-change-type.Changed
+                                   watch-kind.Change)))
               (delete-client client-id)))))))
 
 ;; TODO: implement filters based on the provided globPattern.
