@@ -95,13 +95,16 @@
 
 (macro lsp-diagnostics []
   (let [diagnostics-sign `{:fg colors.red :bold true}
+        diagnostics-underline `{:underline true}
         levels [:Error :Warn :Info :Hint]]
     (icollect [_ level (ipairs levels)]
       `(let [diagn-group# ,(.. :Diagnostic level)
              sign-group# ,(.. :DiagnosticSign level)
+             underline-group# ,(.. :DiagnosticUnderline level)
              floating-group# ,(.. :DiagnosticFloating level)]
          (vim.api.nvim_set_hl 0 diagn-group# {})
          (vim.api.nvim_set_hl 0 floating-group# {})
+         (vim.api.nvim_set_hl 0 underline-group# ,diagnostics-underline)
          (vim.api.nvim_set_hl 0 sign-group# ,diagnostics-sign)))))
 
 (do
