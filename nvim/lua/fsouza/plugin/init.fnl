@@ -13,6 +13,8 @@
                   {:silent true})
   (vim.keymap.set :n "<leader>;" #(mod-invoke :fsouza.plugin.fuzzy :commands)
                   {:silent true})
+  (vim.keymap.set :n :<leader>gs #(mod-invoke :fsouza.plugin.fuzzy :git_status)
+                  {:silent true})
   (vim.keymap.set :n :<leader>zj
                   #(let [dir-path (vim.fn.expand "%:p:h")]
                      (when (vim.startswith dir-path "/")
