@@ -21,7 +21,8 @@
                   (hs.window.filter.new #(let [application ($1:application)
                                                app-name (if application
                                                             (application:name)
-                                                            nil)]
+                                                            "")
+                                               app-name (string.lower app-name)]
                                            (= app-name app))))]
     (fn enable-hks []
       (each [_ hk (ipairs hks)]
@@ -40,4 +41,4 @@
   (hs.hotkey.bind prefix :V
                   #(hs.eventtap.keyStrokes (hs.pasteboard.getContents))))
 
-(set-readline-shortcuts [:Alacritty :Terminal :WezTerm])
+(set-readline-shortcuts [:alacritty :kitty :terminal :wezterm])
