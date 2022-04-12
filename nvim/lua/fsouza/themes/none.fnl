@@ -94,14 +94,15 @@
                             {:bg colors.light-gray}))))
 
 (macro lsp-diagnostics []
-  (let [diagnostics-floating `{:fg colors.black}
-        diagnostics-sign `{:fg colors.red :bold true}
+  (let [diagnostics-sign `{:fg colors.red :bold true}
         levels [:Error :Warn :Info :Hint]]
     (icollect [_ level (ipairs levels)]
-      `(let [sign-group# ,(.. :DiagnosticSign level)
+      `(let [diagn-group# ,(.. :Diagnostic level)
+             sign-group# ,(.. :DiagnosticSign level)
              floating-group# ,(.. :DiagnosticFloating level)]
-         (vim.api.nvim_set_hl 0 sign-group# ,diagnostics-sign)
-         (vim.api.nvim_set_hl 0 floating-group# ,diagnostics-floating)))))
+         (vim.api.nvim_set_hl 0 diagn-group# {})
+         (vim.api.nvim_set_hl 0 floating-group# {})
+         (vim.api.nvim_set_hl 0 sign-group# ,diagnostics-sign)))))
 
 (do
   (tset vim.o :termguicolors true)
