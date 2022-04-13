@@ -8,6 +8,7 @@ dependencies = {
   "fennel ~> 1.0.0";
   "luafilesystem ~> 1.8.0";
   "fzy ~> 0.4";
-  "luabitop"
+  "luabitop";
+  "lua-glob-pattern ~> 0.2.1"
 }
 build = {type = "builtin"; modules = {}}

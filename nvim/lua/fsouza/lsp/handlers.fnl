@@ -26,16 +26,18 @@
   (when (and result result.registrations)
     (each [_ registration (pairs result.registrations)]
       (when (and (= registration.method :workspace/didChangeWatchedFiles)
-                 (?. registration :registerOptions :watchers))
+                 (?. registration :registerOptions :watchers)
+                 (. registration :id))
         (mod-invoke :fsouza.lsp.fs-watch :register ctx.client_id
-                    registration.registerOptions.watchers))))
+                    registration.id registration.registerOptions.watchers))))
   vim.NIL)
 
 (fn unregister-capability [_ result ctx]
   (when (and result result.unregisterations)
     (each [_ unregistration (pairs result.unregisterations)]
       (when (= unregistration.method :workspace/didChangeWatchedFiles)
-        (mod-invoke :fsouza.lsp.fs-watch :unregister ctx.client_id))))
+        (mod-invoke :fsouza.lsp.fs-watch :unregister ctx.client_id
+                    unregistration.id))))
   vim.NIL)
 
 {:textDocument/declaration fzf-location-callback
