@@ -13,37 +13,38 @@
       (tset client-watchers client-id nil))))
 
 (fn make-notifier [client-id path kind]
-  (fn notify-server [client uri type ordinal]
-    (when (not= (bit.band kind ordinal) 0)
-      (client.notify :workspace/didChangeWatchedFiles
-                     {:changes [{: uri : type}]})))
+  (let [backupext vim.o.backupext]
+    (fn notify-server [client uri type ordinal]
+      (when (not= (bit.band kind ordinal) 0)
+        (client.notify :workspace/didChangeWatchedFiles
+                       {:changes [{: uri : type}]})))
 
-  (let [pl-path (require :pl.path)
-        buffers (require :fsouza.plugin.buffers)]
-    (fn [err filename events]
-      (when (and (not err) (not (vim.endswith filename "~")))
-        (let [client (vim.lsp.get_client_by_id client-id)]
-          (if client
-              (let [filepath (->> filename
-                                  (pl-path.join path)
-                                  (pl-path.abspath))
-                    uri (vim.uri_from_fname filepath)]
-                (if events.rename
-                    (vim.loop.fs_stat filepath
-                                      #(if $1
-                                           (notify-server client uri
-                                                          file-change-type.Deleted
-                                                          watch-kind.Delete)
-                                           (if (buffers.has-file filepath)
-                                               (notify-server client uri
-                                                              file-change-type.Changed
-                                                              watch-kind.Change)
-                                               (notify-server client uri
-                                                              file-change-type.Created
-                                                              watch-kind.Create))))
-                    (notify-server client uri file-change-type.Changed
-                                   watch-kind.Change)))
-              (delete-client client-id)))))))
+    (let [pl-path (require :pl.path)
+          buffers (require :fsouza.plugin.buffers)]
+      (fn [err filename events]
+        (when (and (not err) (not (vim.endswith filename backupext)))
+          (let [client (vim.lsp.get_client_by_id client-id)]
+            (if client
+                (let [filepath (->> filename
+                                    (pl-path.join path)
+                                    (pl-path.abspath))
+                      uri (vim.uri_from_fname filepath)]
+                  (if events.rename
+                      (vim.loop.fs_stat filepath
+                                        #(if $1
+                                             (notify-server client uri
+                                                            file-change-type.Deleted
+                                                            watch-kind.Delete)
+                                             (if (buffers.has-file filepath)
+                                                 (notify-server client uri
+                                                                file-change-type.Changed
+                                                                watch-kind.Change)
+                                                 (notify-server client uri
+                                                                file-change-type.Created
+                                                                watch-kind.Create))))
+                      (notify-server client uri file-change-type.Changed
+                                     watch-kind.Change)))
+                (delete-client client-id))))))))
 
 ;; TODO: implement filters based on the provided globPattern.
 ;;
