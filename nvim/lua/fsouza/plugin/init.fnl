@@ -121,6 +121,7 @@
   (schedule setup-git-messenger)
   (schedule setup-hlyank)
   (vim-schedule (mod-invoke :fsouza.plugin.mkdir :setup))
+  (vim-schedule (mod-invoke :fsouza.plugin.buffers :setup))
   (schedule setup-autofmt-commands)
   (schedule setup-word-replace)
   (schedule setup-spell)
