@@ -47,12 +47,12 @@
                                                           watch-kind.Create)))))
               (delete-client client-id)))))))
 
-(macro set-from-bufnr [bufnr v]
-  `(let [bufname# (vim.api.nvim_buf_get_name ,bufnr)]
-     (when (not= bufname# "")
-       (let [path# (require :pl.path)
-             filepath# (path#.abspath bufname#)]
-         (tset all-files filepath# ,v)))))
+(fn set-from-bufnr [bufnr v]
+  (let [bufname (vim.api.nvim_buf_get_name bufnr)]
+    (when (not= bufname "")
+      (let [path (require :pl.path)
+            filepath (path.abspath bufname)]
+        (tset all-files filepath v)))))
 
 (fn set-afile [v]
   (let [bufnr (abuf)]
