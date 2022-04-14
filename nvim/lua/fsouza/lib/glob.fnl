@@ -24,7 +24,7 @@
     literal))
 
 (let [lpeg (require :lpeg)
-      {: C : P : S : R : V : Ct} (require :lpeg)
+      {: P : S : R : V} (require :lpeg)
       glob-parser (let [GroupLiteralChar (+ (R :AZ) (R :az) (R :09)
                                             (S "-+@_~;:./"))
                         LiteralChar (+ GroupLiteralChar (S ",}"))
