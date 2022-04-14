@@ -3,8 +3,7 @@
 ;; `match` that takes a compiled glob and a filepath as a string and returns a
 ;; boolean indicating whether or not the path matches the given glob.
 
-;; This doesn't support negation nor nested groups (are nested groups a thing
-;; in globs?).
+;; This doesn't support negation.
 
 (fn escape-literal [literal]
   (let [special-chars {"\\" true
@@ -54,7 +53,7 @@
                                       (.. acc rule))))
                         :InsideGroup (* GroupGlob (^ (* Comma GroupGlob) 0))
                         :GroupGlob (^ GroupTerm 1)
-                        :GroupTerm (+ TwoStars OneStar QuestionMark
+                        :GroupTerm (+ TwoStars OneStar QuestionMark Group
                                       GroupLiteral)}))
       glob-parser (* glob-parser -1)]
   (fn compile [glob]
