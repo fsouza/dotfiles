@@ -6,9 +6,22 @@
 ;; This doesn't support negation nor nested groups (are nested groups a thing
 ;; in globs?).
 
-;; TODO: don't use vim.fn, this lib should be standalone.
 (fn escape-literal [literal]
-  (vim.fn.escape literal "^$.*?/\\[]()"))
+  (let [special-chars {"\\" true
+                       :^ true
+                       :$ true
+                       :. true
+                       :* true
+                       :? true
+                       "[" true
+                       "]" true
+                       "(" true
+                       ")" true}
+        (literal _) (string.gsub literal "."
+                                 #(if (. special-chars $1)
+                                      (.. "\\" $1)
+                                      $1))]
+    literal))
 
 (let [lpeg (require :lpeg)
       {: C : P : S : R : V : Ct} (require :lpeg)
