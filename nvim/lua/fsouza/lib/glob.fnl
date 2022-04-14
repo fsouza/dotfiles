@@ -29,7 +29,7 @@
                         LiteralChar (+ GroupLiteralChar (S ",}"))
                         OneStar (/ (P "*") "[^/]*")
                         QuestionMark (/ (P "?") ".")
-                        TwoStars (/ (P "**") ".*")
+                        TwoStars (/ (* (P "**") (^ (P "/*") 0)) ".*")
                         OpenGroup (/ (P "{") "(")
                         CloseGroup (/ (P "}") ")")
                         Comma (/ (P ",") "|")
