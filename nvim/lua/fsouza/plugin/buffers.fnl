@@ -31,7 +31,7 @@
 (fn register-current-buffers []
   (let [bufs (vim.api.nvim_list_bufs)]
     (each [_ bufnr (ipairs bufs)]
-      (set-from-bufnr bufnr))))
+      (set-from-bufnr bufnr true))))
 
 (fn setup []
   (setup-augroup)
