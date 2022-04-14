@@ -38,10 +38,6 @@ jobs:
           default: true
           components: clippy, rustfmt, rust-src
 
-      - uses: actions/setup-dotnet@v2.0.0
-        with:
-          dotnet-version: "5.x"
-
       - uses: goto-bus-stop/setup-zig@v1.3.0
         with:
           version: master

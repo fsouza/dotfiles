@@ -101,9 +101,6 @@
     (if-executable :dune
                    (lsp.ocamllsp.setup (opts.with-defaults {:root_dir (opts.root-pattern-with-fallback :.merlin
                                                                                                        :package.json)})))
-    (if-executable :dotnet
-                   (lsp.fsautocomplete.setup (opts.with-defaults {:root_dir (opts.root-pattern-with-fallback :*.fsproj
-                                                                                                             :*.sln)})))
     (if-executable :zig
                    (lsp.zls.setup (opts.with-defaults {:cmd [(get-cache-path :zls
                                                                              :zig-out

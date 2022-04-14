@@ -290,14 +290,6 @@ async def install_buildifier(langservers_cache_dir: Path) -> None:
     )
 
 
-async def install_fsautocomplete() -> None:
-    if not await has_command("dotnet"):
-        print("skipping fsautocomplete")
-        return
-
-    await run_cmd("dotnet", ["tool", "update", "--global", "fsautocomplete"])
-
-
 async def install_zls(langservers_cache_dir: Path) -> None:
     if not await has_command("zig"):
         print("skipping zls")
@@ -373,7 +365,6 @@ async def setup_langservers(cache_dir: Path) -> None:
         install_shfmt(langservers_cache_dir),
         install_efm(langservers_cache_dir),
         install_buildifier(langservers_cache_dir),
-        install_fsautocomplete(),
         install_zls(langservers_cache_dir),
         install_rust_analyzer(langservers_cache_dir),
     )
