@@ -1,4 +1,4 @@
-(import-macros {: if-nil : mod-invoke : abuf} :helpers)
+(import-macros {: if-nil : mod-invoke : abuf : vim-schedule} :helpers)
 
 (local watch-kind {:Create 1 :Change 2 :Delete 4})
 
@@ -19,13 +19,8 @@
 ;;   : pattern ;; pattern for this watcher
 ;;   : kind ;; kind of events of interest
 ;; }
-;;
-;; The watcher is mostly derived directly from LSP, with naming conventions
-;; adjusted:
-;; - https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#fileSystemWatcher
 (local state {})
 
-;; index from client-id -> set of registrations, just to dedupe notifications.
 (local registrations {})
 
 (fn delete-registration [reg-id]
@@ -39,40 +34,82 @@
             (tset state folder nil))
           (tset state folder {: event : watchers})))))
 
-(fn make-notifier [root-dir]
-  ;; TODO: use a timer or something like to batch notifications (will require
-  ;; deduping).
+(fn reg-key [client-id reg-id]
+  (string.format "%d/%s" client-id reg-id))
+
+(fn group-notifications [notifications]
+  (let [client-notifications (accumulate [client-notifications {} _ {: client-id
+                                                                     : reg-id
+                                                                     : uri
+                                                                     : type} (ipairs notifications)]
+                               (let [reg-key (reg-key client-id reg-id)
+                                     client-notification (if-nil (. client-notifications
+                                                                    reg-key)
+                                                                 {: client-id
+                                                                  : reg-id
+                                                                  :changes {}})]
+                                 (tset client-notification.changes uri type)
+                                 (tset client-notifications reg-key
+                                       client-notification)
+                                 client-notifications))]
+    (icollect [_ {: changes : client-id : reg-id} (pairs client-notifications)]
+      {: client-id
+       : reg-id
+       :changes (icollect [uri type (pairs changes)]
+                  {: uri : type})})))
+
+(fn start-notifier [interval-ms]
+  (var notifications [])
+  (let [interval-ms (if-nil interval-ms 200)
+        timer (vim.loop.new_timer)]
+    (fn notify [client-id reg-id changes]
+      (let [client (vim.lsp.get_client_by_id client-id)]
+        (if client
+            (do
+              (print "sending notification " client-id (vim.inspect changes))
+              (client.notify :workspace/didChangeWatchedFiles {: changes}))
+            (delete-registration reg-id))))
+
+    (fn timer-cb []
+      (let [client-notifications (group-notifications notifications)]
+        (set notifications [])
+        (each [_ {: client-id : reg-id : changes} (pairs client-notifications)]
+          (vim-schedule (notify client-id reg-id changes)))))
+
+    (vim.loop.timer_start timer interval-ms interval-ms timer-cb)
+    (fn [client-id reg-id uri type]
+      (table.insert notifications {: client-id : reg-id : uri : type}))))
+
+(local start-notifier
+       (mod-invoke :fsouza.lib.nvim-helpers :once start-notifier))
+
+(fn make-fs-event-handler [root-dir notify-server]
   (let [backupext vim.o.backupext
         tablex (require :fsouza.tablex)
         pl-path (require :pl.path)
         glob (require :fsouza.lib.glob)
         buffers (require :fsouza.plugin.buffers)]
     (fn notify [client-id reg-id filepath events kind]
-      (fn notify-server [client uri type ordinal]
+      (fn try-notify-server [client-id reg-id uri type ordinal]
         (when (not= (bit.band kind ordinal) 0)
-          (client.notify :workspace/didChangeWatchedFiles
-                         {:changes [{: uri : type}]})))
+          (notify-server client-id reg-id uri type)))
 
-      (let [client (vim.lsp.get_client_by_id client-id)]
-        (if client
-            (let [uri (vim.uri_from_fname filepath)]
-              (assert (= root-dir client.config.root_dir))
-              (if events.rename
-                  (vim.loop.fs_stat filepath
-                                    #(if $1
-                                         (notify-server client uri
-                                                        file-change-type.Deleted
-                                                        watch-kind.Delete)
-                                         (if (buffers.has-file filepath)
-                                             (notify-server client uri
-                                                            file-change-type.Changed
-                                                            watch-kind.Change)
-                                             (notify-server client uri
-                                                            file-change-type.Created
-                                                            watch-kind.Create))))
-                  (notify-server client uri file-change-type.Changed
-                                 watch-kind.Change)))
-            (delete-registration reg-id))))
+      (let [uri (vim.uri_from_fname filepath)]
+        (if events.rename
+            (vim.loop.fs_stat filepath
+                              #(if $1
+                                   (try-notify-server client-id reg-id uri
+                                                      file-change-type.Deleted
+                                                      watch-kind.Delete)
+                                   (if (buffers.has-file filepath)
+                                       (try-notify-server client-id reg-id uri
+                                                          file-change-type.Changed
+                                                          watch-kind.Change)
+                                       (try-notify-server client-id reg-id uri
+                                                          file-change-type.Created
+                                                          watch-kind.Create))))
+            (try-notify-server client-id reg-id uri file-change-type.Changed
+                               watch-kind.Change))))
 
     (fn [err filename events]
       (when (and (not err) (not (vim.endswith filename backupext)))
@@ -85,10 +122,11 @@
                       (glob.match pattern filepath))
               (notify client-id reg-id filepath events kind))))))))
 
-(fn make-event [root-dir]
+(fn make-event [root-dir notify-server]
   (let [event (vim.loop.new_fs_event)
         (ok err) (vim.loop.fs_event_start event root-dir {:recursive true}
-                                          (make-notifier root-dir))]
+                                          (make-fs-event-handler root-dir
+                                                                 notify-server))]
     (when (not ok)
       (error err))
     event))
@@ -100,11 +138,9 @@
     (tset entry :watchers (vim.tbl_values unique-watchers))
     entry))
 
-(fn reg-key [client-id reg-id]
-  (string.format "%d/%s" client-id reg-id))
-
 (fn register [client-id reg-id watchers]
-  (let [reg-key (reg-key client-id reg-id)]
+  (let [notify-server (start-notifier)
+        reg-key (reg-key client-id reg-id)]
     (when (not (?. registrations reg-key))
       (let [client-registrations (if-nil (. registrations client-id) {})
             client (vim.lsp.get_client_by_id client-id)]
@@ -113,7 +149,8 @@
           (let [glob (require :fsouza.lib.glob)
                 root-dir client.config.root_dir
                 entry (if-nil (. state root-dir)
-                              {:watchers [] :event (make-event root-dir)})]
+                              {:watchers []
+                               :event (make-event root-dir notify-server)})]
             (each [_ watcher (ipairs watchers)]
               (let [(ok pattern) (glob.compile watcher.globPattern)]
                 (if ok
