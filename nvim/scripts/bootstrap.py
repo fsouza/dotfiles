@@ -183,9 +183,11 @@ async def ensure_hererocks(cache_dir: Path) -> Path:
             [hererocks_py, "-j", luajit_version, "-r", "latest", hr_dir],
         )
 
+    rocks_dir = os.getenv("HOMEBREW_PREFIX", "/usr/local")
+
     await run_cmd(
         hr_dir / "bin" / "luarocks",
-        ["make", "--force", f"YAML_DIR={os.getenv('HOMEBREW_PREFIX', '/usr/local')}"],
+        ["make", "--force", f"YAML_DIR={rocks_dir}", f"PCRE_DIR={rocks_dir}"],
         cwd=base_dir,
     )
 
