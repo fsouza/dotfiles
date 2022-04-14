@@ -22,7 +22,7 @@ jobs:
           brew update
           brew install bash fnm libyaml git lua font-sauce-code-pro-nerd-font
 
-      - uses: actions/checkout@v3.0.0
+      - uses: actions/checkout@v3.0.1
 
       - uses: actions/setup-python@v3.1.2
         with:
@@ -87,7 +87,7 @@ jobs:
     name: pre-commit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.0.0
+      - uses: actions/checkout@v3.0.1
 
       - uses: actions/setup-python@v3.1.2
         with:
