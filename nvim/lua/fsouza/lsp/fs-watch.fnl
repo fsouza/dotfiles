@@ -23,7 +23,12 @@
 
 (local registrations {})
 
-(fn delete-registration [reg-id]
+(fn reg-key [reg-id client-id]
+  (string.format "%d/%s" client-id reg-id))
+
+(fn delete-registration [reg-id client-id]
+  (let [reg-key (reg-key reg-id client-id)]
+    (tset registrations reg-key nil))
   (each [folder {: event : watchers} (pairs state)]
     (let [watchers (icollect [_ watcher (ipairs watchers)]
                      (if (not= watcher.reg-id reg-id)
@@ -34,15 +39,12 @@
             (tset state folder nil))
           (tset state folder {: event : watchers})))))
 
-(fn reg-key [client-id reg-id]
-  (string.format "%d/%s" client-id reg-id))
-
 (fn group-notifications [notifications]
   (let [client-notifications (accumulate [client-notifications {} _ {: client-id
                                                                      : reg-id
                                                                      : uri
                                                                      : type} (ipairs notifications)]
-                               (let [reg-key (reg-key client-id reg-id)
+                               (let [reg-key (reg-key reg-id client-id)
                                      client-notification (if-nil (. client-notifications
                                                                     reg-key)
                                                                  {: client-id
@@ -65,10 +67,8 @@
     (fn notify [client-id reg-id changes]
       (let [client (vim.lsp.get_client_by_id client-id)]
         (if client
-            (do
-              (print "sending notification " client-id (vim.inspect changes))
-              (client.notify :workspace/didChangeWatchedFiles {: changes}))
-            (delete-registration reg-id))))
+            (client.notify :workspace/didChangeWatchedFiles {: changes})
+            (delete-registration reg-id client-id))))
 
     (fn timer-cb []
       (let [client-notifications (group-notifications notifications)]
@@ -140,10 +140,9 @@
 
 (fn register [client-id reg-id watchers]
   (let [notify-server (start-notifier)
-        reg-key (reg-key client-id reg-id)]
-    (when (not (?. registrations reg-key))
-      (let [client-registrations (if-nil (. registrations client-id) {})
-            client (vim.lsp.get_client_by_id client-id)]
+        reg-key (reg-key reg-id client-id)]
+    (when (not (. registrations reg-key))
+      (let [client (vim.lsp.get_client_by_id client-id)]
         (tset registrations reg-key true)
         (when (and client client.config.root_dir)
           (let [glob (require :fsouza.lib.glob)
@@ -163,9 +162,4 @@
                                           pattern)))))
             (tset state root-dir (dedupe-watchers entry))))))))
 
-(fn unregister [client-id reg-id]
-  (let [reg-key (reg-key client-id reg-id)]
-    (tset registrations reg-key nil))
-  (delete-registration reg-id))
-
-{: register : unregister}
+{: register :unregister delete-registration : state}

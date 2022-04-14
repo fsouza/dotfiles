@@ -36,8 +36,8 @@
   (when (and result result.unregisterations)
     (each [_ unregistration (pairs result.unregisterations)]
       (when (= unregistration.method :workspace/didChangeWatchedFiles)
-        (mod-invoke :fsouza.lsp.fs-watch :unregister ctx.client_id
-                    unregistration.id))))
+        (mod-invoke :fsouza.lsp.fs-watch :unregister unregistration.id
+                    ctx.client_id))))
   vim.NIL)
 
 {:textDocument/declaration fzf-location-callback
