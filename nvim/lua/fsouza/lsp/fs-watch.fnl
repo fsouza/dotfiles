@@ -163,4 +163,4 @@
                                           pattern)))))
             (tset state root-dir (dedupe-watchers entry))))))))
 
-{: register :unregister delete-registration : state}
+{: register :unregister delete-registration}
