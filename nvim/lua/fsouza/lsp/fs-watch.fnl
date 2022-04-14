@@ -157,6 +157,7 @@
                                   {: reg-id
                                    : pattern
                                    : client-id
+                                   :glob-pattern watcher.globPattern
                                    :kind (if-nil watcher.kind 7)})
                     (error (string.format "error compiling glob from server: %s"
                                           pattern)))))
