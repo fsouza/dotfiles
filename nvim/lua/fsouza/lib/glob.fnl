@@ -10,7 +10,6 @@
 (fn escape-literal [literal]
   (vim.fn.escape literal "^$.*?/\\[]()"))
 
-;; note: do we really need lpeg? could we just tokenize and parse it manually?
 (let [lpeg (require :lpeg)
       {: C : P : S : R : V : Ct} (require :lpeg)
       glob-parser (let [GroupLiteralChar (+ (R :AZ) (R :az) (R :09)

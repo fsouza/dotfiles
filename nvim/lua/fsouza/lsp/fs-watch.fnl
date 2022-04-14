@@ -14,6 +14,7 @@
 ;; The shape for the watcher is:
 ;;
 ;; {
+;;   : reg-id ;; the id of the registration that added this watcher
 ;;   : client-id ;; the client-id that registered this watcher
 ;;   : pattern ;; pattern for this watcher
 ;;   : kind ;; kind of events of interest
@@ -27,10 +28,10 @@
 ;; index from client-id -> set of registrations, just to dedupe notifications.
 (local registrations {})
 
-(fn delete-client [client-id]
+(fn delete-registration [reg-id]
   (each [folder {: event : watchers} (pairs state)]
     (let [watchers (icollect [_ watcher (ipairs watchers)]
-                     (if (not= watcher.client-id client-id)
+                     (if (not= watcher.reg-id reg-id)
                          watcher))]
       (if (= (length watchers) 0)
           (do
@@ -46,11 +47,8 @@
         pl-path (require :pl.path)
         glob (require :fsouza.lib.glob)
         buffers (require :fsouza.plugin.buffers)]
-    (fn notify [client-id filepath events kind]
+    (fn notify [client-id reg-id filepath events kind]
       (fn notify-server [client uri type ordinal]
-        (mod-invoke :fsouza.lib.notif :notify
-                    {:msg (string.format "notifying uri=%s type=%s" uri type)
-                     :age 5000})
         (when (not= (bit.band kind ordinal) 0)
           (client.notify :workspace/didChangeWatchedFiles
                          {:changes [{: uri : type}]})))
@@ -74,7 +72,7 @@
                                                             watch-kind.Create))))
                   (notify-server client uri file-change-type.Changed
                                  watch-kind.Change)))
-            (delete-client client-id))))
+            (delete-registration reg-id))))
 
     (fn [err filename events]
       (when (and (not err) (not (vim.endswith filename backupext)))
@@ -82,16 +80,10 @@
                             (pl-path.join root-dir)
                             (pl-path.abspath))
               {: watchers} (. state root-dir)]
-          (each [_ {: pattern : client-id : kind} (ipairs watchers)]
-            (mod-invoke :fsouza.lib.notif :notify
-                        {:msg (string.format "checking %s or %s" filename
-                                             filepath)
-                         :age 5000})
+          (each [_ {: pattern : client-id : kind : reg-id} (ipairs watchers)]
             (when (or (glob.match pattern filename)
                       (glob.match pattern filepath))
-              (mod-invoke :fsouza.lib.notif :notify
-                          {:msg "it matches!" :age 5000})
-              (notify client-id filepath events kind))))))))
+              (notify client-id reg-id filepath events kind))))))))
 
 (fn make-event [root-dir]
   (let [event (vim.loop.new_fs_event)
@@ -102,39 +94,41 @@
     event))
 
 (fn dedupe-watchers [entry]
-  ;; TODO: find a less dumb way of doing this.
   (let [unique-watchers {}]
     (each [_ watcher (ipairs entry.watchers)]
       (tset unique-watchers (vim.inspect watcher) watcher))
     (tset entry :watchers (vim.tbl_values unique-watchers))
     entry))
 
+(fn reg-key [client-id reg-id]
+  (string.format "%d/%s" client-id reg-id))
+
 (fn register [client-id reg-id watchers]
-  (when (not (?. registrations client-id reg-id))
-    (let [client-registrations (if-nil (. registrations client-id) {})
-          client (vim.lsp.get_client_by_id client-id)]
-      (tset client-registrations reg-id true)
-      (tset registrations client-id client-registrations)
-      (when (and client client.config.root_dir)
-        (let [glob (require :fsouza.lib.glob)
-              root-dir client.config.root_dir
-              entry (if-nil (. state root-dir)
-                            {:watchers [] :event (make-event root-dir)})]
-          (each [_ watcher (ipairs watchers)]
-            (let [(ok pattern) (glob.compile watcher.globPattern)]
-              (if ok
-                  (table.insert entry.watchers
-                                {: pattern
-                                 : client-id
-                                 :kind (if-nil watcher.kind 7)})
-                  (error (string.format "error compiling glob from server: %s"
-                                        pattern)))))
-          (tset state root-dir (dedupe-watchers entry)))))))
+  (let [reg-key (reg-key client-id reg-id)]
+    (when (not (?. registrations reg-key))
+      (let [client-registrations (if-nil (. registrations client-id) {})
+            client (vim.lsp.get_client_by_id client-id)]
+        (tset registrations reg-key true)
+        (when (and client client.config.root_dir)
+          (let [glob (require :fsouza.lib.glob)
+                root-dir client.config.root_dir
+                entry (if-nil (. state root-dir)
+                              {:watchers [] :event (make-event root-dir)})]
+            (each [_ watcher (ipairs watchers)]
+              (let [(ok pattern) (glob.compile watcher.globPattern)]
+                (if ok
+                    (table.insert entry.watchers
+                                  {: reg-id
+                                   : pattern
+                                   : client-id
+                                   :kind (if-nil watcher.kind 7)})
+                    (error (string.format "error compiling glob from server: %s"
+                                          pattern)))))
+            (tset state root-dir (dedupe-watchers entry))))))))
 
 (fn unregister [client-id reg-id]
-  (delete-client client-id)
-  (let [client-registrations (if-nil (. registrations client-id) {})]
-    (tset client-registrations reg-id nil)
-    (tset registrations client-id client-registrations)))
+  (let [reg-key (reg-key client-id reg-id)]
+    (tset registrations reg-key nil))
+  (delete-registration reg-id))
 
 {: register : unregister}
