@@ -9,7 +9,7 @@ dependencies = {
   "luafilesystem ~> 1.8.0";
   "fzy ~> 0.4";
   "luabitop";
-  "lua-glob-pattern ~> 0.2.1";
-  "lpeg ~> 0.12"
+  "lpeg ~> 0.12";
+  "lrexlib-pcre ~> 2.9.1"
 }
 build = {type = "builtin"; modules = {}}

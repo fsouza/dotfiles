@@ -1,89 +1,65 @@
-;; This uses a lpeg parser to parse a glob, and the output is another lpeg
-;; parser that represents that glob.
+;; This library provides two functions: `compile`, that compiles a given glob
+;; into an internal representation that can be used later for matches, and
+;; `match` that takes a compiled glob and a filepath as a string and returns a
+;; boolean indicating whether or not the path matches the given glob.
 
-;; It doesn't support escape sequences nor negations.
+;; This doesn't support negation nor nested groups (are nested groups a thing
+;; in globs?).
 
-;; This is WIP. Currently ** and * are both broken. Example of matches that don't work:
-;;
-;; - *.go doesn't match fi.le.go (it does match file.go though)
-;; - **/*.go doesn't match dir/subdir/file.go (it does match dir/file.go though)
+;; TODO: don't use vim.fn, this lib should be standalone.
+(fn escape-literal [literal]
+  (vim.fn.escape literal "^$.*?/\\[]()"))
 
-(local letters (let [first-upper (string.byte :A)
-                     t []]
-                 (for [b first-upper (+ first-upper 25)]
-                   (let [c (string.char b)]
-                     (table.insert t c)
-                     (table.insert t (string.lower c))))
-                 t))
-
-(local digits (let [t []]
-                (for [digit 0 9]
-                  (table.insert t (tostring digit)))
-                t))
-
-(local special-chars ["-" "+" "@" "_" "~" ";" ":" "."])
-
-(fn make-literal-set [exclude extra]
-  (let [chars (or extra [])
-        exclude (or exclude {})]
-    (fn add-to-chars [list]
-      (each [_ ch (ipairs list)]
-        (when (= (. exclude ch) nil)
-          (table.insert chars ch))))
-
-    (add-to-chars letters)
-    (add-to-chars digits)
-    (add-to-chars special-chars)
-    (table.concat chars "")))
-
+;; note: do we really need lpeg? could we just tokenize and parse it manually?
 (let [lpeg (require :lpeg)
       {: C : P : S : R : V : Ct} (require :lpeg)
-      glob-parser (let [CompLiteralChar (S (make-literal-set))
-                        GroupLiteralChar (+ CompLiteralChar (S "/"))
+      glob-parser (let [GroupLiteralChar (+ (R :AZ) (R :az) (R :09)
+                                            (S "-+@_~;:./"))
                         LiteralChar (+ GroupLiteralChar (S ",}"))
-                        OneStar (/ (+ (* (C (P "*")) (C (P 1))) (P "*"))
-                                   #(if $2
-                                        (* (^ (S (make-literal-set {$2 true}))
-                                              1)
-                                           (P $2))
-                                        (^ CompLiteralChar 1)))
-                        SingleMatch (/ (P "?") #LiteralChar)
-                        TwoStars (/ (+ (* (C (P "**")) (C (P 1))) (P "**"))
-                                    #(if $2
-                                         (* (^ (S (make-literal-set {$2 true}))
-                                               0)
-                                            (P $2))
-                                         (^ LiteralChar 1)))
-                        OpenGroup (P "{")
-                        CloseGroup (P "}")
-                        Comma (P ",")
-                        Literal (/ (^ LiteralChar 1) #(P $1))
-                        GroupLiteral (/ (^ GroupLiteralChar 1) #(P $1))
+                        OneStar (/ (P "*") "[^/]*")
+                        QuestionMark (/ (P "?") ".")
+                        TwoStars (/ (P "**") ".*")
+                        OpenGroup (/ (P "{") "(")
+                        CloseGroup (/ (P "}") ")")
+                        Comma (/ (P ",") "|")
+                        GroupLiteral (/ (^ GroupLiteralChar 1) escape-literal)
+                        Literal (/ (^ LiteralChar 1) escape-literal)
                         Glob (V :Glob)
                         Term (V :Term)
+                        InsideGroup (V :InsideGroup)
                         GroupGlob (V :GroupGlob)
                         GroupTerm (V :GroupTerm)
                         Group (V :Group)]
                     (P {1 Glob
                         :Glob (/ (^ Term 1)
                                  (fn [...]
-                                   (let [p (accumulate [acc nil _ rule (ipairs [...])]
-                                             (if (= acc nil) rule (* acc rule)))]
-                                     (* p -1))))
-                        :Term (+ TwoStars OneStar SingleMatch Group Literal)
-                        :Group (/ (* OpenGroup
-                                     (+ (* GroupGlob Comma GroupGlob) GroupGlob)
-                                     CloseGroup)
+                                   (accumulate [acc "" _ rule (ipairs [...])]
+                                     (.. acc rule))))
+                        :Term (+ TwoStars OneStar QuestionMark Group Literal)
+                        :Group (/ (* OpenGroup InsideGroup CloseGroup)
                                   (fn [...]
-                                    (accumulate [acc nil _ rule (ipairs [...])]
-                                      (if (= acc nil) rule (+ acc rule)))))
+                                    (accumulate [acc "" _ rule (ipairs [...])]
+                                      (.. acc rule))))
+                        :InsideGroup (* GroupGlob (^ (* Comma GroupGlob) 0))
                         :GroupGlob (^ GroupTerm 1)
-                        :GroupTerm (+ TwoStars OneStar SingleMatch Group
-                                      GroupLiteral)}))]
+                        :GroupTerm (+ TwoStars OneStar QuestionMark
+                                      GroupLiteral)}))
+      glob-parser (* glob-parser -1)]
   (fn compile [glob]
-    (let [parser (lpeg.match glob-parser glob)]
-      (if parser
-          (values true parser)
-          (values false (string.format "invalid glob: '%s'" glob)))))
+    (let [re (lpeg.match glob-parser glob)]
+      (if re
+          (let [rex (require :rex_pcre)
+                re (.. "^" re "$")
+                (ok pat-or-err) (pcall rex.new re)]
+            (if ok
+                (values true pat-or-err)
+                (values false (string.format "internal error compiling glob string '%s' to a regular expression:
+generated regex: %s
+pcre error: %s" glob re pat-or-err))))
+          (values false (string.format "invalid glob string '%s'" glob)))))
 
-  {: compile})
+  (fn do-match [patt str]
+    (let [m (patt:exec str)]
+      (if m true false)))
+
+  {: compile :match do-match})
