@@ -52,6 +52,7 @@
             {1 :numToStr/Comment.nvim :as :Comment.nvim :opt true}
             {1 :b0o/SchemaStore.nvim :as :SchemaStore.nvim :opt true}
             {1 :j-hui/fidget.nvim :as :fidget.nvim :opt true}
+            {1 :nvim-lua/plenary.nvim :as :plenary.nvim :opt true}
             ; filetypes stuff
             ;
             ; Note: I used to use vim-polyglot, but it loads too much garbage and

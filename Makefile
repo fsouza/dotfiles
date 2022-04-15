@@ -77,3 +77,7 @@ build/%.lua: %.fnl
 build/%.vim: %.vim
 	@ mkdir -p $(dir $@)
 	cp $< $@
+
+.PHONY: nvim-tests
+nvim-tests:
+	nvim --headless -c 'autocmd User PluginReady ++once RunTests'

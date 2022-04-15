@@ -42,6 +42,11 @@
                                     "lua require('fsouza.lib.autofmt').toggle_g()"
                                     {:force true}))
 
+(fn setup-test-commands []
+  (vim.api.nvim_create_user_command :RunTests
+                                    "lua require('fsouza.plugin.plenary-tests')['run-tests']()"
+                                    {:force true}))
+
 (fn setup-lsp-commands []
   (vim.api.nvim_create_user_command :LspRestart
                                     "lua require('fsouza.lsp.detach').restart()"
@@ -123,6 +128,7 @@
   (vim-schedule (mod-invoke :fsouza.plugin.mkdir :setup))
   (vim-schedule (mod-invoke :fsouza.plugin.buffers :setup))
   (schedule setup-autofmt-commands)
+  (schedule setup-test-commands)
   (schedule setup-word-replace)
   (schedule setup-spell)
   (schedule setup-shortcuts)
