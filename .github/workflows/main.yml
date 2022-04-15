@@ -85,7 +85,7 @@ jobs:
 
       - name: run nvim tests
         run: |
-          make nvim-test
+          make nvim-tests
 
   pre-commit:
     name: pre-commit
