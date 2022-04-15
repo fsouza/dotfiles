@@ -17,25 +17,63 @@
                                       $1))]
     literal))
 
+(fn make-special [value]
+  {:type :special : value})
+
+(fn make-literal [value is-literal]
+  {:type :literal : value : is-literal})
+
+(fn startswith [str prefix]
+  (= (string.sub str 1 (length prefix)) prefix))
+
+(fn compile-to-regex [tree]
+  (fn compile-special [value]
+    (match value
+      "*" "[^/]*"
+      "?" "."
+      "{" "["
+      "}" "]"
+      "," "|"
+      (where value (startswith value "**")) ".*"
+      value value))
+
+  (fn compile-literal [value is-literal]
+    (if is-literal
+        value
+        (escape-literal value)))
+
+  (fn get-type [v]
+    (if v.type
+        v.type
+        :tree))
+
+  (accumulate [regex "" _ node (ipairs tree)]
+    (let [node-str (match (get-type node)
+                     :tree (compile-to-regex node)
+                     :special (compile-special node.value)
+                     :literal (compile-literal node.value node.is-literal))]
+      (.. regex node-str))))
+
 (let [lpeg (require :lpeg)
-      {: C : P : S : R : V} (require :lpeg)
+      {: Ct : C : P : S : R : V} (require :lpeg)
       glob-parser (let [GroupLiteralChar (+ (R :AZ) (R :az) (R :09)
                                             (S "-+@_~;:./$^"))
                         LiteralChar (+ GroupLiteralChar (S ",}"))
-                        OneStar (/ (P "*") "[^/]*")
-                        QuestionMark (/ (P "?") ".")
-                        TwoStars (/ (* (P "**") (^ (P "/*") 0)) ".*")
-                        OpenGroup (/ (P "{") "(")
-                        CloseGroup (/ (P "}") ")")
-                        Comma (/ (P ",") "|")
-                        GroupLiteral (/ (^ GroupLiteralChar 1) escape-literal)
-                        Literal (/ (^ LiteralChar 1) escape-literal)
-                        OpenRange (C (P "["))
-                        CloseRange (C (P "]"))
-                        RangeNegation (/ (P "!") "^")
-                        RangeLiteral (C (^ (- (P 1) (P "]")) 1))
+                        OneStar (/ (P "*") make-special)
+                        QuestionMark (/ (P "?") make-special)
+                        TwoStars (/ (* (P "**") (^ (P "/*") 0)) make-special)
+                        OpenGroup (/ (P "{") make-special)
+                        CloseGroup (/ (P "}") make-special)
+                        Comma (/ (P ",") make-special)
+                        OpenRange (/ (P "[") make-special)
+                        CloseRange (/ (P "]") make-special)
+                        RangeNegation (/ (P "!") make-special)
+                        RangeLiteral (/ (^ (- (P 1) (P "]")) 1)
+                                        #(make-literal $1 true))
                         InsideRange (* (^ RangeNegation -1) RangeLiteral)
                         Range (* OpenRange InsideRange CloseRange)
+                        GroupLiteral (/ (^ GroupLiteralChar 1) make-literal)
+                        Literal (/ (^ LiteralChar 1) make-literal)
                         Glob (V :Glob)
                         Term (V :Term)
                         InsideGroup (V :InsideGroup)
@@ -43,32 +81,28 @@
                         GroupTerm (V :GroupTerm)
                         Group (V :Group)]
                     (P {1 Glob
-                        :Glob (/ (^ Term 1)
-                                 (fn [...]
-                                   (accumulate [acc "" _ rule (ipairs [...])]
-                                     (.. acc rule))))
+                        :Glob (Ct (^ Term 1))
                         :Term (+ TwoStars OneStar QuestionMark Group Literal
                                  Range)
-                        :Group (/ (* OpenGroup InsideGroup CloseGroup)
-                                  (fn [...]
-                                    (accumulate [acc "" _ rule (ipairs [...])]
-                                      (.. acc rule))))
+                        :Group (Ct (* OpenGroup InsideGroup CloseGroup))
                         :InsideGroup (* GroupGlob (^ (* Comma GroupGlob) 0))
                         :GroupGlob (^ GroupTerm 1)
                         :GroupTerm (+ TwoStars OneStar QuestionMark Group
                                       GroupLiteral Range)}))
       glob-parser (* glob-parser -1)]
   (fn compile [glob]
-    (let [re (lpeg.match glob-parser glob)]
-      (if re
+    (let [tree (lpeg.match glob-parser glob)]
+      (if tree
           (let [rex (require :rex_pcre)
+                re (compile-to-regex tree)
                 re (.. "^" re "$")
                 (ok pat-or-err) (pcall rex.new re)]
             (if ok
                 (values true pat-or-err)
-                (values false (string.format "internal error compiling glob string '%s' to a regular expression:
-generated regex: %s
-pcre error: %s" glob re pat-or-err))))
+                (values false
+                        (string.format "internal error compiling glob string '%s' to a regular expression:
+  generated regex: %s
+  pcre error: %s" glob re pat-or-err))))
           (values false (string.format "invalid glob string '%s'" glob)))))
 
   (fn do-match [patt str]
