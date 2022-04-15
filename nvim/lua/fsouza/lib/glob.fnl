@@ -109,4 +109,14 @@
     (let [m (patt:exec str)]
       (if m true false)))
 
-  {: compile :match do-match})
+  (fn break [glob]
+    ;; breaks the glob into multiple items
+    ;;
+    ;;   **/*.go becomes [**/*.go]
+    ;;   **/*.{go,mod,sum,work} becomes [**/*.go, **/*.mod, **/*.sum, **/*.work]
+    [glob])
+
+  (fn parse [glob]
+    (lpeg.match glob-parser glob))
+
+  {: compile :match do-match : break : parse})
