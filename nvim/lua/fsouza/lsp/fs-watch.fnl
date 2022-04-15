@@ -112,7 +112,8 @@
                                watch-kind.Change))))
 
     (fn [err filename events]
-      (when (and (not err) (not (vim.endswith filename backupext)))
+      (when (and (not err) (not (vim.endswith filename backupext))
+                 (not (vim.endswith filename :4913)))
         (let [filepath (->> filename
                             (pl-path.join root-dir)
                             (pl-path.abspath))
