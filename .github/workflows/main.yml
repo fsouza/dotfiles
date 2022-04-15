@@ -85,7 +85,7 @@ jobs:
 
       - name: run nvim tests
         run: |
-          make nvim-tests
+          env PLENARY_TEST_DIR=${PWD}/nvim/plenary make nvim-tests
 
   pre-commit:
     name: pre-commit

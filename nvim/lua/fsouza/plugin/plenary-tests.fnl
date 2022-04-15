@@ -1,7 +1,8 @@
-(import-macros {: mod-invoke} :helpers)
+(import-macros {: mod-invoke : if-nil} :helpers)
 
 (macro test-dir []
-  `(mod-invoke :pl.path :join config-dir :tests :plenary))
+  `(if-nil vim.env.PLENARY_TEST_DIR
+           (mod-invoke :pl.path :join config-dir :tests :plenary)))
 
 (fn run-tests []
   (let [test-harness (require :plenary.test_harness)]
