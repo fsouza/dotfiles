@@ -38,10 +38,6 @@ jobs:
           default: true
           components: clippy, rustfmt, rust-src
 
-      - uses: goto-bus-stop/setup-zig@v1.3.0
-        with:
-          version: master
-
       - name: langservers cache
         id: nvim-langservers-cache
         uses: actions/cache@v3.0.2
@@ -85,7 +81,7 @@ jobs:
 
       - name: run nvim tests
         run: |
-          env PLENARY_TEST_DIR=${PWD}/nvim/plenary make nvim-tests
+          env PLENARY_TEST_DIR=${PWD}/nvim/tests make nvim-tests
 
   pre-commit:
     name: pre-commit
