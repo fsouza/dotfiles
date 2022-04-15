@@ -3,17 +3,12 @@
 ;; `match` that takes a compiled glob and a filepath as a string and returns a
 ;; boolean indicating whether or not the path matches the given glob.
 
-;; This doesn't support negation.
-
 (fn escape-literal [literal]
   (let [special-chars {"\\" true
                        :^ true
                        :$ true
                        :. true
                        :* true
-                       :? true
-                       "[" true
-                       "]" true
                        "(" true
                        ")" true}
         (literal _) (string.gsub literal "."
@@ -23,9 +18,9 @@
     literal))
 
 (let [lpeg (require :lpeg)
-      {: P : S : R : V} (require :lpeg)
+      {: C : P : S : R : V} (require :lpeg)
       glob-parser (let [GroupLiteralChar (+ (R :AZ) (R :az) (R :09)
-                                            (S "-+@_~;:./"))
+                                            (S "-+@_~;:./$^"))
                         LiteralChar (+ GroupLiteralChar (S ",}"))
                         OneStar (/ (P "*") "[^/]*")
                         QuestionMark (/ (P "?") ".")
@@ -35,6 +30,12 @@
                         Comma (/ (P ",") "|")
                         GroupLiteral (/ (^ GroupLiteralChar 1) escape-literal)
                         Literal (/ (^ LiteralChar 1) escape-literal)
+                        OpenRange (C (P "["))
+                        CloseRange (C (P "]"))
+                        RangeNegation (/ (P "!") "^")
+                        RangeLiteral (C (^ (- (P 1) (P "]")) 1))
+                        InsideRange (* (^ RangeNegation -1) RangeLiteral)
+                        Range (* OpenRange InsideRange CloseRange)
                         Glob (V :Glob)
                         Term (V :Term)
                         InsideGroup (V :InsideGroup)
@@ -46,7 +47,8 @@
                                  (fn [...]
                                    (accumulate [acc "" _ rule (ipairs [...])]
                                      (.. acc rule))))
-                        :Term (+ TwoStars OneStar QuestionMark Group Literal)
+                        :Term (+ TwoStars OneStar QuestionMark Group Literal
+                                 Range)
                         :Group (/ (* OpenGroup InsideGroup CloseGroup)
                                   (fn [...]
                                     (accumulate [acc "" _ rule (ipairs [...])]
@@ -54,7 +56,7 @@
                         :InsideGroup (* GroupGlob (^ (* Comma GroupGlob) 0))
                         :GroupGlob (^ GroupTerm 1)
                         :GroupTerm (+ TwoStars OneStar QuestionMark Group
-                                      GroupLiteral)}))
+                                      GroupLiteral Range)}))
       glob-parser (* glob-parser -1)]
   (fn compile [glob]
     (let [re (lpeg.match glob-parser glob)]
