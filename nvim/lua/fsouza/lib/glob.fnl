@@ -31,8 +31,8 @@
     (match value
       "*" "[^/]*"
       "?" "."
-      "{" "["
-      "}" "]"
+      "{" "("
+      "}" ")"
       "," "|"
       (where value (startswith value "**")) ".*"
       value value))
