@@ -138,18 +138,29 @@
     (tset entry :watchers (vim.tbl_values unique-watchers))
     entry))
 
+(fn workspace-folders [client]
+  ;; this function uses ?. everywhere because client may be nil.
+  (let [folders (icollect [_ {: name} (ipairs (if-nil (?. client :config
+                                                          :workspace_folders)
+                                                      []))]
+                  name)]
+    (when (and (= (length folders) 0) (?. client :config :root_dir))
+      (table.insert folders client.config.root_dir))
+    folders))
+
 (fn register [client-id reg-id watchers]
   (let [notify-server (start-notifier)
         reg-key (reg-key reg-id client-id)]
     (when (not (. registrations reg-key))
-      (let [client (vim.lsp.get_client_by_id client-id)]
+      (let [client (vim.lsp.get_client_by_id client-id)
+            workspace-folders (workspace-folders client)]
         (tset registrations reg-key true)
-        (when (and client client.config.root_dir)
+        (each [_ workspace-folder (ipairs workspace-folders)]
           (let [glob (require :fsouza.lib.glob)
-                root-dir client.config.root_dir
-                entry (if-nil (. state root-dir)
+                entry (if-nil (. state workspace-folder)
                               {:watchers []
-                               :event (make-event root-dir notify-server)})]
+                               :event (make-event workspace-folder
+                                                  notify-server)})]
             (each [_ watcher (ipairs watchers)]
               (let [(ok pattern) (glob.compile watcher.globPattern)]
                 (if ok
@@ -161,6 +172,6 @@
                                    :kind (if-nil watcher.kind 7)})
                     (error (string.format "error compiling glob from server: %s"
                                           pattern)))))
-            (tset state root-dir (dedupe-watchers entry))))))))
+            (tset state workspace-folder (dedupe-watchers entry))))))))
 
 {: register :unregister delete-registration}
