@@ -39,29 +39,8 @@
             (tset state folder nil))
           (tset state folder {: event : watchers})))))
 
-(fn group-notifications [notifications]
-  (let [client-notifications (accumulate [client-notifications {} _ {: client-id
-                                                                     : reg-id
-                                                                     : uri
-                                                                     : type} (ipairs notifications)]
-                               (let [reg-key (reg-key reg-id client-id)
-                                     client-notification (if-nil (. client-notifications
-                                                                    reg-key)
-                                                                 {: client-id
-                                                                  : reg-id
-                                                                  :changes {}})]
-                                 (tset client-notification.changes uri type)
-                                 (tset client-notifications reg-key
-                                       client-notification)
-                                 client-notifications))]
-    (icollect [_ {: changes : client-id : reg-id} (pairs client-notifications)]
-      {: client-id
-       : reg-id
-       :changes (icollect [uri type (pairs changes)]
-                  {: uri : type})})))
-
 (fn start-notifier [interval-ms]
-  (var notifications [])
+  (var client-notifications {})
   (let [interval-ms (if-nil interval-ms 200)
         timer (vim.loop.new_timer)]
     (fn notify [client-id reg-id changes]
@@ -71,14 +50,19 @@
             (delete-registration reg-id client-id))))
 
     (fn timer-cb []
-      (let [client-notifications (group-notifications notifications)]
-        (set notifications [])
-        (each [_ {: client-id : reg-id : changes} (pairs client-notifications)]
-          (vim-schedule (notify client-id reg-id changes)))))
+      (each [_ {: client-id : reg-id : changes} (pairs client-notifications)]
+        (let [changes (icollect [uri type (pairs changes)]
+                        {: uri : type})]
+          (vim-schedule (notify client-id reg-id changes))))
+      (set client-notifications {}))
 
     (vim.loop.timer_start timer interval-ms interval-ms timer-cb)
     (fn [client-id reg-id uri type]
-      (table.insert notifications {: client-id : reg-id : uri : type}))))
+      (let [reg-key (reg-key reg-id client-id)
+            client-notification (if-nil (. client-notifications reg-key)
+                                        {: client-id : reg-id :changes {}})]
+        (tset client-notification.changes uri type)
+        (tset client-notifications reg-key client-notification)))))
 
 (local start-notifier
        (mod-invoke :fsouza.lib.nvim-helpers :once start-notifier))
