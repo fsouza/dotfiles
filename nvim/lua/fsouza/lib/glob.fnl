@@ -42,7 +42,7 @@
   (let [output []]
     (each [_ node (ipairs group)]
       (if (is-group node)
-          (table.insert (. output (length output)) (split-group node))
+          (table.insert (. output (length output)) node)
           (= node.type :special)
           (if (or (= node.value "{") (= node.value ","))
               (table.insert output [])
