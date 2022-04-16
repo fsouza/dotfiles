@@ -95,3 +95,25 @@ describe("break", function()
     assert.are.same({"**/*.go"; "**/*.mod"; "**/*.wark"; "**/*.work"}, parts)
   end)
 end)
+
+describe("strip", function()
+  it("should strip up to the first special char", function()
+    local src = "/usr/local/Cellar/python@3.10/3.10.2/Frameworks/Python.framework/Versions/3.10/lib/python3.10/lib-dynload/**"
+    assert.are.same("/usr/local/Cellar/python@3.10/3.10.2/Frameworks/Python.framework/Versions/3.10/lib/python3.10/lib-dynload", glob["strip-special"](src))
+  end)
+
+  it("should return the value unchanged if no special characters are declared", function()
+    local src = "/usr/local/Cellar/python@3.10/3.10.2/Frameworks/Python.framework/Versions/3.10/lib/python3.10/lib-dynload/"
+    assert.are.same("/usr/local/Cellar/python@3.10/3.10.2/Frameworks/Python.framework/Versions/3.10/lib/python3.10/lib-dynload/", glob["strip-special"](src))
+  end)
+
+  it("should look back for the path component", function()
+    local src = "/usr/local/Cellar/python@3.10/3.10.2/Frameworks/Python.framework/Versions/3.10/lib/python3.10/lib-d?nload/"
+    assert.are.same("/usr/local/Cellar/python@3.10/3.10.2/Frameworks/Python.framework/Versions/3.10/lib/python3.10", glob["strip-special"](src))
+  end)
+
+  it("should handle special chars at the beginning", function()
+    local src = "**/*.go"
+    assert.are.same("", glob["strip-special"](src))
+  end)
+end)

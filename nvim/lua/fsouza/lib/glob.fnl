@@ -145,9 +145,12 @@
           (icollect [_ e (ipairs acc)]
             (.. e node.value)))))
 
+  (fn strip-special [glob]
+    (string.gsub glob "/?[^/]+[*?[{].*" ""))
+
   (fn break [glob]
     (->> glob
          (parse)
          (break-tree)))
 
-  {: compile :match do-match : break : parse})
+  {: compile :match do-match : break : parse : strip-special})
