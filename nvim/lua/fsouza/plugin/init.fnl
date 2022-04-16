@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : mod-invoke} :helpers)
+(import-macros {: vim-schedule : mod-invoke : if-nil} :helpers)
 
 (local helpers (require :fsouza.lib.nvim-helpers))
 
@@ -36,20 +36,28 @@
 
 (fn setup-autofmt-commands []
   (vim.api.nvim_create_user_command :ToggleAutofmt
-                                    "lua require('fsouza.lib.autofmt').toggle()"
+                                    #(mod-invoke :fsouza.lib.autofmt :toggle)
                                     {:force true})
   (vim.api.nvim_create_user_command :ToggleGlobalAutofmt
-                                    "lua require('fsouza.lib.autofmt').toggle_g()"
+                                    #(mod-invoke :fsouza.lib.autofmt :toggle_g)
                                     {:force true}))
 
-(fn setup-test-commands []
-  (vim.api.nvim_create_user_command :RunTests
-                                    "lua require('fsouza.plugin.plenary-tests')['run-tests']()"
-                                    {:force true}))
+(fn setup-test-command [cwd]
+  (let [cwd (if-nil cwd (vim.loop.cwd))]
+    (if (= cwd dotfiles-dir)
+        (vim.api.nvim_create_user_command :RunTests
+                                          #(mod-invoke :fsouza.plugin.plenary-tests
+                                                       :run-tests)
+                                          {:force true})
+        (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__test_command
+                    [{:events [:DirChanged]
+                      :targets ["*"]
+                      :callback #(setup-test-command vim.v.cwd)
+                      :once true}]))))
 
 (fn setup-lsp-commands []
   (vim.api.nvim_create_user_command :LspRestart
-                                    "lua require('fsouza.lsp.detach').restart()"
+                                    #(mod-invoke :fsouza.lsp.detach :restart)
                                     {:force true}))
 
 (fn setup-lsp []
@@ -66,7 +74,10 @@
                                              :on_macro false})}]))
 
 (fn setup-word-replace []
-  (vim.keymap.set :n :<leader>e #(mod-invoke :fsouza.plugin.word-sub :run)))
+  (vim.keymap.set :n :<leader>e
+                  #(let [word (vim.fn.expand :<cword>)]
+                     (vim.api.nvim_input (.. ":%s/\\v<lt>" word
+                                             :>//g<left><left>)))))
 
 (fn setup-spell []
   (helpers.augroup :fsouza__auto_spell
@@ -77,10 +88,12 @@
 (fn setup-editorconfig []
   (mod-invoke :fsouza.plugin.editorconfig :enable)
   (vim-schedule (vim.api.nvim_create_user_command :EnableEditorConfig
-                                                  "lua require('fsouza.plugin.editorconfig').enable()"
+                                                  #(mod-invoke :fsouza.plugin.editorconfig
+                                                               :enable)
                                                   {:force true})
                 (vim.api.nvim_create_user_command :DisableEditorConfig
-                                                  "lua require('fsouza.plugin.editorconfig').disable()"
+                                                  #(mod-invoke :fsouza.plugin.editorconfig
+                                                               :disable)
                                                   {:force true})))
 
 (fn setup-shortcuts []
@@ -91,7 +104,8 @@
 
 (fn setup-notif []
   (vim.api.nvim_create_user_command :Notifications
-                                    "lua require('fsouza.lib.notif')['log-messages']()"
+                                    #(mod-invoke :fsouza.lib.notif
+                                                 :log-messages)
                                     {:force true}))
 
 (fn setup-terminal-mappings []
@@ -128,7 +142,7 @@
   (vim-schedule (mod-invoke :fsouza.plugin.mkdir :setup))
   (vim-schedule (mod-invoke :fsouza.plugin.buffers :setup))
   (schedule setup-autofmt-commands)
-  (schedule setup-test-commands)
+  (schedule setup-test-command)
   (schedule setup-word-replace)
   (schedule setup-spell)
   (schedule setup-shortcuts)

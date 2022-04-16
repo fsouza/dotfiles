@@ -8,20 +8,18 @@
           (fuzzy.find-files))
         (fuzzy.find-files directory))))
 
-(fn register [registry command path]
-  (tset registry command
-        #(let [cd (= $1 "!")]
-           (vim.loop.fs_stat path
-                             (fn [err stat]
-                               (when (not err)
-                                 (let [is-dir (= stat.type :directory)]
-                                   (vim-schedule (if is-dir
-                                                     (fzf-dir path cd)
-                                                     (vim.cmd (.. "edit " path))))))))))
-  (vim.api.nvim_create_user_command command
-                                    (string.format "lua require('fsouza.plugin.shortcut').registry['%s'](vim.fn.expand('<bang>'))"
-                                                   command)
+(fn make-callback [path]
+  (fn [bang]
+    (let [cd (= bang "!")]
+      (vim.loop.fs_stat path
+                        #(when (not $1)
+                           (let [is-dir (= $2.type :directory)]
+                             (vim-schedule (if is-dir
+                                               (fzf-dir path cd)
+                                               (vim.cmd (.. "edit " path))))))))))
+
+(fn register [command path]
+  (vim.api.nvim_create_user_command command (make-callback path)
                                     {:force true :bang true}))
 
-(let [registry []]
-  {: registry :register (partial register registry)})
+{: register}

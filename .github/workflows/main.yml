@@ -81,7 +81,7 @@ jobs:
 
       - name: run nvim tests
         run: |
-          env PLENARY_TEST_DIR=${PWD}/nvim/tests make nvim-tests
+          env FSOUZA_DOTFILES_DIR=${PWD} make nvim-tests
 
   pre-commit:
     name: pre-commit

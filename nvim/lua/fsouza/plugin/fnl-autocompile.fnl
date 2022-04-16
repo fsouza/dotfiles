@@ -19,7 +19,7 @@
             (vim.cmd "wincmd p")
             (set should-clear-qf true)))))
 
-  (fn make [dotfiles-dir]
+  (fn make []
     (when (not vim.g.fennel_ks)
       (let [file-name (vim.fn.expand :<afile>)
             next (if (vim.endswith file-name :/packed.fnl)
@@ -29,10 +29,10 @@
                     {:args [:-C dotfiles-dir :install]} nil
                     (partial handle-result next)))))
 
-  (let [dotfiles (mod-invoke :pl.path :join (vim.fn.expand "~") :.dotfiles)]
-    (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__autocompile-fennel
-                [{:events [:BufWritePost]
-                  :targets [(.. dotfiles :/*.fnl) (.. dotfiles :/nvim/*.vim)]
-                  :callback #(make dotfiles)}])))
+  (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__autocompile-fennel
+              [{:events [:BufWritePost]
+                :targets [(.. dotfiles-dir :/*.fnl)
+                          (.. dotfiles-dir :/nvim/*.vim)]
+                :callback make}]))
 
 {: setup}
