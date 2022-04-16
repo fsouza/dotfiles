@@ -58,3 +58,35 @@ describe("compile and match", function()
     assert.is_not_true(glob.match(matcher, "fzle.pyy"))
   end)
 end)
+
+describe("break", function()
+  it("should return a list", function()
+    local parts = glob["break"]("**/*.go")
+    assert.are.same({"**/*.go"}, parts)
+  end)
+
+  it("should not break down ranges", function()
+    local parts = glob["break"]("**/[abc].go")
+    assert.are.same({"**/[abc].go"}, parts)
+  end)
+
+  it("should break down group options", function()
+    local parts = glob["break"]("**/*.{go,mod,work}")
+    assert.are.same({"**/*.go"; "**/*.mod"; "**/*.work"}, parts)
+  end)
+
+  it("full paths too", function()
+    local parts = glob["break"]("{/home/user/src/project,/home/user/src/project/pkg1,/home/user/src/project/pkg2,/home/user/src/project/pkg3}")
+    assert.are.same({
+      "/home/user/src/project";
+      "/home/user/src/project/pkg1";
+      "/home/user/src/project/pkg2";
+      "/home/user/src/project/pkg3";
+    }, parts)
+  end)
+
+  it("should break down group with special chars", function()
+    local parts = glob["break"]("**/*.{go,mod,w?rk}")
+    assert.are.same({"**/*.go"; "**/*.mod"; "**/*.w?rk"}, parts)
+  end)
+end)

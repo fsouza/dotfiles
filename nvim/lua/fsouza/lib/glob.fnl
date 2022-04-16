@@ -26,6 +26,31 @@
 (fn startswith [str prefix]
   (= (string.sub str 1 (length prefix)) prefix))
 
+(fn get-node-type [v]
+  (if v.type v.type
+      (= (type v) :table) :tree
+      (error (string.format "not a node: %s" v))))
+
+(fn is-group [v]
+  (if (not= (get-node-type v) :tree) false
+      (let [first-node (. v 1)]
+        (and (= first-node.type :special) (= first-node.value "{")))))
+
+(fn split-group [group]
+  ;; split the group into sub-trees. Maybe I should fix the grammar so this
+  ;; happens automatically?
+  (let [output []]
+    (each [_ node (ipairs group)]
+      (if (is-group node)
+          (table.insert (. output (length output)) (split-group node))
+          (= node.type :special)
+          (if (or (= node.value "{") (= node.value ","))
+              (table.insert output [])
+              (not= node.value "}")
+              (table.insert (. output (length output)) node))
+          (table.insert (. output (length output)) node)))
+    output))
+
 (fn compile-to-regex [tree]
   (fn compile-special [value]
     (match value
@@ -42,13 +67,8 @@
         value
         (escape-literal value)))
 
-  (fn get-type [v]
-    (if v.type
-        v.type
-        :tree))
-
   (accumulate [regex "" _ node (ipairs tree)]
-    (let [node-str (match (get-type node)
+    (let [node-str (match (get-node-type node)
                      :tree (compile-to-regex node)
                      :special (compile-special node.value)
                      :literal (compile-literal node.value node.is-literal))]
@@ -90,8 +110,11 @@
                         :GroupTerm (+ TwoStars OneStar QuestionMark Group
                                       GroupLiteral Range)}))
       glob-parser (* glob-parser -1)]
+  (fn parse [glob]
+    (lpeg.match glob-parser glob))
+
   (fn compile [glob]
-    (let [tree (lpeg.match glob-parser glob)]
+    (let [tree (parse glob)]
       (if tree
           (let [rex (require :rex_pcre)
                 re (compile-to-regex tree)
@@ -109,14 +132,37 @@
     (let [m (patt:exec str)]
       (if m true false)))
 
-  (fn break [glob]
-    ;; breaks the glob into multiple items
-    ;;
-    ;;   **/*.go becomes [**/*.go]
-    ;;   **/*.{go,mod,sum,work} becomes [**/*.go, **/*.mod, **/*.sum, **/*.work]
-    [glob])
+  (fn add-group [acc group]
+    (accumulate [result [] _ n (ipairs group)]
+      (do
+        (if n.value
+            (when (and (not= n.value "{") (not= n.value "}") (not= n.value ","))
+              (each [_ v (ipairs acc)]
+                (table.insert result (.. v n.value))))
+            (let [subg (add-group [""] n)]
+              (each [_ v (ipairs acc)]
+                (each [_ sg (ipairs subg)]
+                  (table.insert result (.. v sg))))))
+        result)))
 
-  (fn parse [glob]
-    (lpeg.match glob-parser glob))
+  (fn break-tree [tree]
+    (accumulate [acc [""] _ node (ipairs tree)]
+      (if (is-group node)
+          (let [trees (split-group node)
+                broken-trees (icollect [_ t (ipairs trees)]
+                               (break-tree t))]
+            (accumulate [result [] _ nodes-str (ipairs broken-trees)]
+              (do
+                (each [_ node-str (ipairs nodes-str)]
+                  (each [_ e (ipairs acc)]
+                    (table.insert result (.. e node-str))))
+                result)))
+          (icollect [_ e (ipairs acc)]
+            (.. e node.value)))))
+
+  (fn break [glob]
+    (->> glob
+         (parse)
+         (break-tree)))
 
   {: compile :match do-match : break : parse})
