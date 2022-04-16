@@ -1,6 +1,9 @@
-(import-macros {: vim-schedule : mod-invoke} :helpers)
+(import-macros {: vim-schedule : mod-invoke : if-nil} :helpers)
 
-(global config-dir (vim.fn.expand "~/.dotfiles/nvim"))
+(global dotfiles-dir
+        (if-nil vim.env.FSOUZA_DOTFILES_DIR (vim.fn.expand "~/.dotfiles")))
+
+(global config-dir (.. dotfiles-dir :/nvim))
 (global cache-dir (vim.fn.stdpath :cache))
 (global data-dir (vim.fn.stdpath :data))
 

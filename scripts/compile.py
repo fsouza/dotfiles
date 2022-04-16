@@ -18,7 +18,7 @@ def main(args: Sequence[str]) -> int:
             "--load",
             str(macros_file.absolute()),
             "--globals",
-            "vim,config-dir,cache-dir,data-dir,hs",
+            "vim,dotfiles-dir,config-dir,cache-dir,data-dir,hs",
             "--raw-errors",
             "-c",
             fnl_file,
