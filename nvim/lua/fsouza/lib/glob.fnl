@@ -132,19 +132,6 @@
     (let [m (patt:exec str)]
       (if m true false)))
 
-  (fn add-group [acc group]
-    (accumulate [result [] _ n (ipairs group)]
-      (do
-        (if n.value
-            (when (and (not= n.value "{") (not= n.value "}") (not= n.value ","))
-              (each [_ v (ipairs acc)]
-                (table.insert result (.. v n.value))))
-            (let [subg (add-group [""] n)]
-              (each [_ v (ipairs acc)]
-                (each [_ sg (ipairs subg)]
-                  (table.insert result (.. v sg))))))
-        result)))
-
   (fn break-tree [tree]
     (accumulate [acc [""] _ node (ipairs tree)]
       (if (is-group node)
