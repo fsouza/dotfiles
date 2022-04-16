@@ -140,13 +140,49 @@
     entry))
 
 (fn workspace-folders [client]
-  ;; this function uses ?. everywhere because client may be nil.
-  (let [folders (icollect [_ {: name} (ipairs (if-nil (?. client :config
-                                                          :workspace_folders)
-                                                      []))]
-                  name)]
-    (when (and (= (length folders) 0) (?. client :config :root_dir))
-      (table.insert folders client.config.root_dir))
+  (icollect [_ {: name} (ipairs (if-nil (?. client :config :workspace_folders)
+                                        []))]
+    name))
+
+(fn is-relative-to [p start]
+  (let [path (require :pl.path)]
+    (not (vim.startswith (path.relpath p start) "../"))))
+
+(fn map-watchers [client watchers]
+  (let [glob (require :fsouza.lib.glob)
+        path (require :pl.path)
+        folders (collect [_ folder (ipairs (workspace-folders client))]
+                  (values folder []))
+        abs-folders []]
+    (each [_ watcher (ipairs watchers)]
+      (let [pats (glob.break watcher.globPattern)
+            sample (. pats 1)]
+        (var is-abs (path.isabs sample))
+        (each [folder _ (pairs folders)]
+          (when (is-relative-to sample folder)
+            (table.insert (. folders folder) watcher)
+            (set is-abs false)))
+        (when is-abs
+          (each [folder _ (pairs state)]
+            (when (is-relative-to sample folder)
+              (tset folders folder [watcher])
+              (set is-abs false)))
+          (when is-abs
+            (table.insert abs-folders {: watcher : pats})))))
+
+    (fn find-best-folder [folder]
+      (each [registered _ (pairs folders)]
+        (if (is-relative-to folder registered)
+            (lua "return registered")))
+      folder)
+
+    (each [_ {: pats : watcher} (ipairs abs-folders)]
+      (each [_ pat (ipairs pats)]
+        (let [pat (glob.strip-special pat)
+              folder (find-best-folder pat)
+              watchers (if-nil (. folders folder) [])]
+          (table.insert watchers watcher)
+          (tset folders folder watchers))))
     folders))
 
 (fn register [client-id reg-id watchers]
@@ -154,14 +190,13 @@
         reg-key (reg-key reg-id client-id)]
     (when (not (. registrations reg-key))
       (let [client (vim.lsp.get_client_by_id client-id)
-            workspace-folders (workspace-folders client)]
+            folder-map (map-watchers client watchers)]
         (tset registrations reg-key true)
-        (each [_ workspace-folder (ipairs workspace-folders)]
+        (each [folder watchers (pairs folder-map)]
           (let [glob (require :fsouza.lib.glob)
-                entry (if-nil (. state workspace-folder)
+                entry (if-nil (. state folder)
                               {:watchers []
-                               :event (make-event workspace-folder
-                                                  notify-server)})]
+                               :event (make-event folder notify-server)})]
             (each [_ watcher (ipairs watchers)]
               (let [(ok pattern) (glob.compile watcher.globPattern)]
                 (if ok
@@ -173,6 +208,6 @@
                                    :kind (if-nil watcher.kind 7)})
                     (error (string.format "error compiling glob from server: %s"
                                           pattern)))))
-            (tset state workspace-folder (dedupe-watchers entry))))))))
+            (tset state folder (dedupe-watchers entry))))))))
 
 {: register :unregister delete-registration}
