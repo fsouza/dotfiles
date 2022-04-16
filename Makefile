@@ -80,4 +80,4 @@ build/%.vim: %.vim
 
 .PHONY: nvim-tests
 nvim-tests:
-	nvim --headless -c 'autocmd User PluginReady ++once RunTests'
+	nvim --headless -c 'autocmd User PluginReady ++once lua require("fsouza.plugin.plenary-tests")["run-tests"]()'

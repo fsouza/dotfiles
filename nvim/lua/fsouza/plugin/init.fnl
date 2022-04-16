@@ -42,19 +42,6 @@
                                     #(mod-invoke :fsouza.lib.autofmt :toggle_g)
                                     {:force true}))
 
-(fn setup-test-command [cwd]
-  (let [cwd (if-nil cwd (vim.loop.cwd))]
-    (if (= cwd dotfiles-dir)
-        (vim.api.nvim_create_user_command :RunTests
-                                          #(mod-invoke :fsouza.plugin.plenary-tests
-                                                       :run-tests)
-                                          {:force true})
-        (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__test_command
-                    [{:events [:DirChanged]
-                      :targets ["*"]
-                      :callback #(setup-test-command vim.v.cwd)
-                      :once true}]))))
-
 (fn setup-lsp-commands []
   (vim.api.nvim_create_user_command :LspRestart
                                     #(mod-invoke :fsouza.lsp.detach :restart)
@@ -142,7 +129,6 @@
   (vim-schedule (mod-invoke :fsouza.plugin.mkdir :setup))
   (vim-schedule (mod-invoke :fsouza.plugin.buffers :setup))
   (schedule setup-autofmt-commands)
-  (schedule setup-test-command)
   (schedule setup-word-replace)
   (schedule setup-spell)
   (schedule setup-shortcuts)
