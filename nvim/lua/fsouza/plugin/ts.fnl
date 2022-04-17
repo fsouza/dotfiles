@@ -17,6 +17,10 @@
   (vim.keymap.set :n :<e #(mod-invoke :syntax-tree-surfer :surf :prev :normal
                                       true)
                   {: buffer :silent true})
+  (vim.keymap.set :n :>f #(mod-invoke :syntax-tree-surfer :move :n false)
+                  {: buffer :silent true})
+  (vim.keymap.set :n :<f #(mod-invoke :syntax-tree-surfer :move :n true)
+                  {: buffer :silent true})
   (vim.keymap.set :n :vv #(mod-invoke :syntax-tree-surfer :select_current_node)
                   {: buffer :silent true})
   (vim.keymap.set :x :J #(mod-invoke :syntax-tree-surfer :surf :next :visual)
