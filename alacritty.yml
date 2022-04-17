@@ -118,6 +118,8 @@ key_bindings:
   - { key: T, mods: Alt, chars: "\x1bt" }
   - { key: T, mods: Command, chars: "\x1bt" }
   - { key: A, mods: Command, chars: "\x1ba" }
+  - { key: J, mods: Command, chars: "\x1bj" }
+  - { key: K, mods: Command, chars: "\x1bk" }
   - { key: Q, mods: Alt, chars: "\x1bq" }
   - { key: Space, mods: Control, chars: "\x00" }
   - { key: Space, mods: Shift|Control, action: None }
