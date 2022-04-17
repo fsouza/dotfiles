@@ -29,3 +29,6 @@ type = "string"
 
 [[it.args]]
 type = "function"
+
+[assert]
+any = true
