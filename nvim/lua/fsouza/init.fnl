@@ -126,12 +126,13 @@
                      {:lhs :<m-d> :rhs :<s-right><c-w>}]
         rl-insert-mode-bindings [{:lhs :<c-f> :rhs :<right>}
                                  {:lhs :<c-b> :rhs :<left>}
-                                 {:lhs :<c-d> :rhs :<del>}]]
-    (list (sym :do)
-          (icollect [_ {: lhs : rhs} (ipairs rl-bindings)]
-            `(vim.keymap.set [:c :o] ,lhs ,rhs {:remap false}))
-          (icollect [_ {: lhs : rhs} (ipairs rl-insert-mode-bindings)]
-            `(vim.keymap.set :i ,lhs ,rhs {:remap false})))))
+                                 {:lhs :<c-d> :rhs :<del>}]
+        exprs [`(vim.keymap.set [:n] "/" "/\\v" {:remap false})]]
+    (each [_ {: lhs : rhs} (ipairs rl-bindings)]
+      (table.insert exprs `(vim.keymap.set [:c :o] ,lhs ,rhs {:remap false})))
+    (each [_ {: lhs : rhs} (ipairs rl-insert-mode-bindings)]
+      (table.insert exprs `(vim.keymap.set :i ,lhs ,rhs {:remap false})))
+    exprs))
 
 (do
   (hererocks)

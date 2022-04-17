@@ -23,9 +23,9 @@
       `(vim.fn.sign_define ,sign-name
                            {:text "" :texthl ,sign-name :numhl ,sign-name}))))
 
-(macro if-executable [name expr]
+(macro if-executable [name ...]
   `(when (= (vim.fn.executable ,name) 1)
-     ,expr))
+     ,...))
 
 (fn setup []
   (define-signs)
@@ -76,28 +76,27 @@
                                                                                     client)
                                                                         true)}))))
     (if-executable :go
-                   (do
-                     (lsp.gopls.setup (opts.with-defaults {:cmd [(get-cache-cmd :gopls)]
-                                                           :root_dir (opts.root-pattern-with-fallback :go.mod)
-                                                           :init_options {:deepCompletion false
-                                                                          :staticcheck true
-                                                                          :analyses {:fillreturns true
-                                                                                     :nonewvars true
-                                                                                     :undeclaredname true
-                                                                                     :unusedparams true
-                                                                                     :ST1000 false}
-                                                                          :linksInHover false
-                                                                          :codelenses {:vendor false}
-                                                                          :gofumpt true}}))
-                     (let [efm (require :fsouza.lsp.efm)
-                           (settings filetypes) (efm.basic-settings)]
-                       (lsp.efm.setup (opts.with-defaults {:cmd [(get-cache-cmd :efm-langserver)]
-                                                           :init_options {:documentFormatting true}
-                                                           : settings
-                                                           : filetypes
-                                                           :on_init (fn [client]
-                                                                      (efm.gen-config client)
-                                                                      true)})))))
+                   (lsp.gopls.setup (opts.with-defaults {:cmd [(get-cache-cmd :gopls)]
+                                                         :root_dir (opts.root-pattern-with-fallback :go.mod)
+                                                         :init_options {:deepCompletion false
+                                                                        :staticcheck true
+                                                                        :analyses {:fillreturns true
+                                                                                   :nonewvars true
+                                                                                   :undeclaredname true
+                                                                                   :unusedparams true
+                                                                                   :ST1000 false}
+                                                                        :linksInHover false
+                                                                        :codelenses {:vendor false}
+                                                                        :gofumpt true}}))
+                   (let [efm (require :fsouza.lsp.efm)
+                         (settings filetypes) (efm.basic-settings)]
+                     (lsp.efm.setup (opts.with-defaults {:cmd [(get-cache-cmd :efm-langserver)]
+                                                         :init_options {:documentFormatting true}
+                                                         : settings
+                                                         : filetypes
+                                                         :on_init (fn [client]
+                                                                    (efm.gen-config client)
+                                                                    true)}))))
     (if-executable :dune
                    (lsp.ocamllsp.setup (opts.with-defaults {:root_dir (opts.root-pattern-with-fallback :.merlin
                                                                                                        :package.json)})))
@@ -108,7 +107,6 @@
                                                                              :zls)]})))
     (if-executable :cargo
                    (lsp.rust_analyzer.setup (opts.with-defaults {:cmd [(get-cache-cmd :rust-analyzer)]})))
-    (if-executable :sourcekit-lsp (lsp.sourcekit.setup (opts.with-defaults {})))
-    (if-executable :clojure-lsp (lsp.clojure_lsp.setup (opts.with-defaults {})))))
+    (if-executable :sourcekit-lsp (lsp.sourcekit.setup (opts.with-defaults {})))))
 
 {: setup}

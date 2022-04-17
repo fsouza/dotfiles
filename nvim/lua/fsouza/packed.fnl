@@ -60,16 +60,15 @@
             ; to set, so whenever I want to add something new, I just look at
             ; what's used in vim-polyglot and bring it from there, unless I
             ; know a better alternative.
-            [:clojure-vim/clojure.vim]
             [:fsouza/fennel.vim]
             [:HerringtonDarkholme/yats.vim]
             [:jakwings/vim-pony]
-            [:keith/swift.vim]
             [:ocaml/vim-ocaml]
             [:pangloss/vim-javascript]
             [:tbastos/vim-lua]
             [:Vimjas/vim-python-pep8-indent]
             [:ziglang/zig.vim]
+            ;; themes, for demos/presentations.
             [:shaunsingh/solarized.nvim]]]
   {: paq-dir
    : paqs

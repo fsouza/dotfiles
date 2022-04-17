@@ -1,7 +1,6 @@
 tap "homebrew/cask-fonts"
 
 brew "bash"
-brew "clojure-lsp"
 brew "fnm"
 brew "git"
 brew "libyaml"
