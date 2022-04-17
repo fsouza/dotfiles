@@ -78,7 +78,7 @@ jobs:
           env FSOUZA_DOTFILES_DIR=${PWD} make nvim-tests nvim-lint
         env:
           NVIM_SKIP_TREESITTER: true
-          NVIM_TEST_TIMEOUT: 1000
+          NVIM_TEST_TIMEOUT: 10000
 
   pre-commit:
     name: pre-commit
