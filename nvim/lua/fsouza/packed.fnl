@@ -36,6 +36,7 @@
             [:nvim-treesitter/nvim-treesitter-textobjects]
             [:nvim-treesitter/nvim-treesitter-refactor]
             [:nvim-treesitter/playground]
+            [:numToStr/Comment.nvim]
             [:JoosepAlviste/nvim-ts-context-commentstring]
             {1 :fsouza/nvim-lsp-compl :as :nvim-lsp-compl :opt true}
             {1 :l3mon4d3/luasnip :as :luasnip :opt true}
@@ -47,7 +48,6 @@
              :opt true
              :as :symbols-outline.nvim}
             {1 :vijaymarupudi/nvim-fzf :opt true}
-            {1 :numToStr/Comment.nvim :as :Comment.nvim :opt true}
             {1 :b0o/SchemaStore.nvim :as :SchemaStore.nvim :opt true}
             {1 :j-hui/fidget.nvim :as :fidget.nvim :opt true}
             {1 :nvim-lua/plenary.nvim :as :plenary.nvim :opt true}
