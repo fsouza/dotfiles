@@ -24,7 +24,6 @@
       paqs [{1 :savq/paq-nvim :opt true :as :paq-nvim}
             [:chaoren/vim-wordmotion]
             [:godlygeek/tabular]
-            [:guns/vim-sexp]
             [:justinmk/vim-dirvish]
             [:justinmk/vim-sneak]
             [:mattn/emmet-vim]
@@ -32,7 +31,6 @@
             [:tpope/vim-fugitive]
             [:tpope/vim-repeat]
             [:tpope/vim-rhubarb]
-            [:tpope/vim-sexp-mappings-for-regular-people]
             [:tpope/vim-surround]
             {1 :nvim-treesitter/nvim-treesitter :run #(vim.cmd :TSUpdate)}
             [:nvim-treesitter/nvim-treesitter-textobjects]
@@ -53,6 +51,9 @@
             {1 :b0o/SchemaStore.nvim :as :SchemaStore.nvim :opt true}
             {1 :j-hui/fidget.nvim :as :fidget.nvim :opt true}
             {1 :nvim-lua/plenary.nvim :as :plenary.nvim :opt true}
+            {1 :ziontee113/syntax-tree-surfer
+             :as :syntax-tree-surfer
+             :opt true}
             ; filetypes stuff
             ;
             ; Note: I used to use vim-polyglot, but it loads too much garbage and

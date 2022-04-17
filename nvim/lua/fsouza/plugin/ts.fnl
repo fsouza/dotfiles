@@ -10,11 +10,43 @@
         wanted-parsers (parsers-mod.available_parsers)]
     (mod-invoke :fsouza.tablex :flat-map lang-to-ft wanted-parsers)))
 
-(fn set-folding []
-  (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__folding_config
-              [{:events [:FileType]
-                :targets (get-file-types)
-                :command "setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()"}]))
+(fn setup-keymaps [buffer]
+  (vim.keymap.set :n :>e #(mod-invoke :syntax-tree-surfer :surf :next :normal
+                                      true)
+                  {: buffer :silent true})
+  (vim.keymap.set :n :<e #(mod-invoke :syntax-tree-surfer :surf :prev :normal
+                                      true)
+                  {: buffer :silent true})
+  (vim.keymap.set :n :>f #(mod-invoke :syntax-tree-surfer :move :n false)
+                  {: buffer :silent true})
+  (vim.keymap.set :n :<f #(mod-invoke :syntax-tree-surfer :move :n true)
+                  {: buffer :silent true})
+  (vim.keymap.set :n :vv #(mod-invoke :syntax-tree-surfer :select_current_node)
+                  {: buffer :silent true})
+  (vim.keymap.set :x :J #(mod-invoke :syntax-tree-surfer :surf :next :visual)
+                  {: buffer :silent true})
+  (vim.keymap.set :x :K #(mod-invoke :syntax-tree-surfer :surf :prev :visual)
+                  {: buffer :silent true})
+  (vim.keymap.set :x :<leader>a
+                  #(mod-invoke :syntax-tree-surfer :surf :next :visual true)
+                  {: buffer :silent true})
+  (vim.keymap.set :x :<leader>A
+                  #(mod-invoke :syntax-tree-surfer :surf :prev :visual true)
+                  {: buffer :silent true}))
+
+(fn on-FileType []
+  (let [bufnr (abuf)]
+    (when bufnr
+      (setup-keymaps bufnr)
+      (vim.api.nvim_buf_call bufnr
+                             #(do
+                                (vim.cmd "setlocal foldmethod=expr")
+                                (vim.cmd "setlocal foldexpr=nvim_treesitter#foldexpr()"))))))
+
+(fn setup-autocmds []
+  (let [targets (get-file-types)]
+    (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__treesitter_autocmd
+                [{:events [:FileType] : targets :callback on-FileType}])))
 
 (fn setup []
   (mod-invoke :nvim-treesitter.configs :setup
@@ -37,15 +69,12 @@
                              :move {:enable true
                                     :set_jumps true
                                     :goto_next_start {:<leader>m "@function.outer"}
-                                    :goto_previous_start {:<leader>M "@function.outer"}}
-                             :swap {:enable true
-                                    :swap_next {:<leader>a "@parameter.inner"}
-                                    :swap_previos {:<leader>A "@parameter.inner"}}}
+                                    :goto_previous_start {:<leader>M "@function.outer"}}}
                :context_commentstring {:enable true :enable_autocmd false}
                :refactor {:navigation {:enable true
                                        :keymaps {:goto_definition :gd}}}
                :ensure_installed :all
                :ignore_install [:phpdoc]})
-  (set-folding))
+  (setup-autocmds))
 
 {: setup}
