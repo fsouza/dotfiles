@@ -121,6 +121,10 @@
 
   (mod-invoke :Comment :setup {:pre_hook pre-hook :ignore #"^$"}))
 
+(fn setup-treesitter []
+  (when (not vim.env.NVIM_SKIP_TREESITTER)
+    (require :fsouza.plugin.ts)))
+
 (let [schedule vim.schedule]
   (vim-schedule (mod-invoke :fsouza.lib.cleanup :setup))
   (schedule setup-editorconfig)
@@ -143,7 +147,7 @@
                              :yaml]))
   (schedule setup-terminal-mappings)
   (schedule setup-lsp)
-  (vim-schedule (require :fsouza.plugin.ts))
+  (schedule setup-treesitter)
   (vim-schedule (require :fsouza.plugin.fidget))
   (vim-schedule (mod-invoke :fsouza.plugin.rg-complete :setup :<c-x><c-n>))
   (schedule setup-comment-nvim)
