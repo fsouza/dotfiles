@@ -255,7 +255,10 @@ async def _go_install(
     await run_cmd(
         "go",
         ["install", *args],
-        env={"GOBIN": str(langservers_cache_dir / "bin")},
+        env={
+            "GOBIN": str(langservers_cache_dir / "bin"),
+            "GOPROXY": "https://proxy.golang.org",
+        },
         cwd=cwd,
     )
 
