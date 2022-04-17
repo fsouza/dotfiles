@@ -48,7 +48,7 @@
                                     {:force true}))
 
 (fn setup-lsp []
-  (require :fsouza.lsp)
+  (mod-invoke :fsouza.lsp :setup)
   (setup-lsp-commands))
 
 (fn setup-hlyank []
@@ -123,10 +123,9 @@
 
 (fn setup-treesitter []
   (when (not vim.env.NVIM_SKIP_TREESITTER)
-    (require :fsouza.plugin.ts)))
+    (mod-invoke :fsouza.plugin.ts :setup)))
 
 (let [schedule vim.schedule]
-  (vim-schedule (mod-invoke :fsouza.lib.cleanup :setup))
   (schedule setup-editorconfig)
   (schedule setup-git-messenger)
   (schedule setup-hlyank)
@@ -148,7 +147,7 @@
   (schedule setup-terminal-mappings)
   (schedule setup-lsp)
   (schedule setup-treesitter)
-  (vim-schedule (require :fsouza.plugin.fidget))
+  (vim-schedule (mod-invoke :fsouza.plugin.fidget :setup))
   (vim-schedule (mod-invoke :fsouza.plugin.rg-complete :setup :<c-x><c-n>))
   (schedule setup-comment-nvim)
   (schedule setup-fuzzy-mappings)

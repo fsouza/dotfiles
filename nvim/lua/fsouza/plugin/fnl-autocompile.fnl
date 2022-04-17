@@ -14,7 +14,7 @@
           (when next
             (next)))
         (do
-          (when (mod-invoke :fsouza.plugin.qf :set-from-contents result.stderr
+          (when (mod-invoke :fsouza.lib.qf :set-from-contents result.stderr
                             {:open true})
             (vim.cmd "wincmd p")
             (set should-clear-qf true)))))

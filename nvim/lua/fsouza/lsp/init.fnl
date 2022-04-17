@@ -27,7 +27,7 @@
   `(when (= (vim.fn.executable ,name) 1)
      ,expr))
 
-(do
+(fn setup []
   (define-signs)
   (config-log)
   (let [lsp (require :lspconfig)
@@ -110,3 +110,5 @@
                    (lsp.rust_analyzer.setup (opts.with-defaults {:cmd [(get-cache-cmd :rust-analyzer)]})))
     (if-executable :sourcekit-lsp (lsp.sourcekit.setup (opts.with-defaults {})))
     (if-executable :clojure-lsp (lsp.clojure_lsp.setup (opts.with-defaults {})))))
+
+{: setup}

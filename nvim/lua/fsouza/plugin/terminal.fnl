@@ -48,7 +48,7 @@
       (vim.cmd "wincmd F"))))
 
 (fn v-cr []
-  (when (mod-invoke :fsouza.plugin.qf :set-from-visual-selection)
+  (when (mod-invoke :fsouza.lib.qf :set-from-visual-selection)
     (vim.cmd "silent! only")
     (vim.cmd :cfirst)
     (vim.cmd :copen)

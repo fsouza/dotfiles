@@ -16,7 +16,7 @@
                 :targets (get-file-types)
                 :command "setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()"}]))
 
-(do
+(fn setup []
   (mod-invoke :nvim-treesitter.configs :setup
               {:highlight {:enable true}
                :incremental_selection {:enable true
@@ -47,3 +47,5 @@
                :ensure_installed :all
                :ignore_install [:phpdoc]})
   (set-folding))
+
+{: setup}

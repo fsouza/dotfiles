@@ -9,4 +9,7 @@
                    "")]
     (.. message mid suffix)))
 
-(mod-invoke :fidget :setup {:window {:blend 0} :fmt {:task fmt-task}})
+(fn setup []
+  (mod-invoke :fidget :setup {:window {:blend 0} :fmt {:task fmt-task}}))
+
+{: setup}
