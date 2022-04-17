@@ -1,5 +1,5 @@
 function tmux {
-	command tmux -u -f $HOME/.config/tmux.conf $@
+	command tmux -u -f $HOME/.config/tmux/tmux.conf $@
 }
 
 function _tmux_toggle_pane {

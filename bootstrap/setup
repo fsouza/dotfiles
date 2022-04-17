@@ -26,7 +26,7 @@ for file in "${xdg_files[@]}"; do
 	ln -sf "${basedir}"/"${file}" "${HOME}"/.config/"${file}"
 done
 
-xdg_dirs=(git fd utop)
+xdg_dirs=(git fd utop tmux)
 for dir in "${xdg_dirs[@]}"; do
 	link="${HOME}"/.config/"${dir}"
 	if ! [ -L "${link}" ] && [ -d "${link}" ]; then
@@ -47,7 +47,7 @@ fi
 touch "${HOME}"/.zsh_sessions_disable
 
 if command -v brew &>/dev/null; then
-	brew bundle --no-lock --file bootstrap/Brewfile
+	brew bundle --no-lock --file "${basedir}"/bootstrap/Brewfile
 fi
 
 if command -v nvim &>/dev/null; then
