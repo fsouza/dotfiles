@@ -16,12 +16,8 @@
         cwd (vim.fn.getcwd)
         prefix (if (vim.endswith cwd "/")
                    cwd
-                   (.. cwd "/"))
-        skip (not (vim.startswith file-path prefix))]
-    (when skip
-      (vim.notify (string.format "[DEBUG] skipping %s because it's not in %s"
-                                 file-path prefix)))
-    skip))
+                   (.. cwd "/"))]
+    (not (vim.startswith file-path prefix))))
 
 (fn should-organize-imports [server-name]
   (. langservers-org-imports-set server-name))
@@ -115,12 +111,11 @@
   (.. :lsp_autofmt_ bufnr))
 
 (fn on-attach [bufnr]
-  (when (should-skip-buffer bufnr)
-    (lua :return))
-  (mod-invoke :fsouza.lib.nvim-helpers :augroup (augroup-name bufnr)
-              [{:events [:BufWritePost]
-                :targets [(string.format "<buffer=%d>" bufnr)]
-                :callback #(autofmt-and-write bufnr)}])
+  (when (not (should-skip-buffer bufnr))
+    (mod-invoke :fsouza.lib.nvim-helpers :augroup (augroup-name bufnr)
+                [{:events [:BufWritePost]
+                  :targets [(string.format "<buffer=%d>" bufnr)]
+                  :callback #(autofmt-and-write bufnr)}]))
   (vim.keymap.set :n :<leader>f #(fmt nil bufnr) {:silent true :buffer bufnr}))
 
 (fn on-detach [bufnr]
