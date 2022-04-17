@@ -79,9 +79,9 @@ jobs:
         run: |
           ./bootstrap/setup
 
-      - name: run nvim tests
+      - name: nvim lint & tests
         run: |
-          env FSOUZA_DOTFILES_DIR=${PWD} make nvim-tests
+          env FSOUZA_DOTFILES_DIR=${PWD} make nvim-tests nvim-lint
 
   pre-commit:
     name: pre-commit

@@ -81,3 +81,15 @@ build/%.vim: %.vim
 .PHONY: nvim-tests
 nvim-tests:
 	nvim --headless -c 'autocmd User PluginReady ++once lua require("fsouza.plugin.plenary-tests")["run-tests"]()'
+
+.PHONY: nvim-lint
+nvim-lint: nvim-selene nvim-stylua
+
+
+.PHONY: nvim-selene
+nvim-selene:
+	cd nvim && selene .
+
+.PHONY: nvim-stylua
+nvim-stylua:
+	cd nvim && stylua --check .
