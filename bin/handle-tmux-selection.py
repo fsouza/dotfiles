@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 import os
+import re
 import subprocess
 import sys
 import tempfile
+
+line_regex = re.compile(rb"^.+:\d+:(\d+:)?.+")
 
 
 def main() -> int:
@@ -15,8 +18,7 @@ def main() -> int:
 
 
 def should_send_to_nvim(lines: list[bytes]) -> bool:
-    print(lines)
-    return any(line for line in lines)
+    return any(bool(line_regex.match(line)) for line in lines)
 
 
 def send_to_nvim(contents: bytes) -> int:
