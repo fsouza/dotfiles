@@ -121,6 +121,17 @@
        :formatStdin true
        :rootMarkers [:.ocamlformat]}))
 
+(fn get-selene [cb]
+  (cb {:lintCommand "selene --display-style quiet -"
+       :lintStdin true
+       :lintSource :selene
+       :lintFormats ["-:%l:%c: %m"]
+       :lintIgnoreExitCode true
+       :rootMarkers [:selene.toml]}))
+
+(fn get-stylua [cb]
+  (cb {:formatCommand "stylua -" :formatStdin true :rootMarkers [:stylua.toml]}))
+
 (fn get-shellcheck [cb]
   (cb {:lintCommand "shellcheck -f gcc -x -"
        :lintStdin true
@@ -274,7 +285,7 @@
                       :yaml])
 
 (fn get-filetypes []
-  (vim.tbl_flatten [:bzl :dune :fennel :ocaml :python :sh prettierd-fts]))
+  (vim.tbl_flatten [:bzl :dune :fennel :lua :ocaml :python :sh prettierd-fts]))
 
 (fn basic-settings []
   (values {:lintDebounce 250000000
@@ -304,7 +315,9 @@
                                  {:language :dune :fn get-dune}
                                  {:language :ocaml :fn get-ocamlformat}
                                  {:language :bzl :fn get-buildifier}
-                                 {:language :fennel :fn get-fnlfmt}]
+                                 {:language :fennel :fn get-fnlfmt}
+                                 {:language :lua :fn get-selene}
+                                 {:language :lua :fn get-stylua}]
           timer (vim.loop.new_timer)]
       (each [_ f (ipairs simple-tool-factories)]
         (let [{:fn f : language} f]
