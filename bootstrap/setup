@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
+#!/bin/zsh -e
 
 os=$(uname -s)
 basedir=$(cd "$(dirname "${0}")"/.. && pwd -P)
@@ -47,6 +45,10 @@ if [ -f "${basedir}"/bootstrap/"${os}"-setup ]; then
 fi
 
 touch "${HOME}"/.zsh_sessions_disable
+
+if command -v brew &>/dev/null; then
+	brew bundle --no-lock --file bootstrap/Brewfile
+fi
 
 if command -v nvim &>/dev/null; then
 	env NVIM_DEBUG=1 make -C "${basedir}"

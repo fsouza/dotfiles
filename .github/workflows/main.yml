@@ -16,12 +16,6 @@ jobs:
         run: |
           curl -L https://github.com/fsouza/neovim/releases/download/nightly/nvim-macos.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
 
-      - name: install build deps
-        run: |
-          brew tap homebrew/cask-fonts
-          brew update
-          brew install bash fnm libyaml git lua font-sauce-code-pro-nerd-font
-
       - uses: actions/checkout@v3.0.1
 
       - uses: actions/setup-python@v3.1.2
