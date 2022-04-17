@@ -17,15 +17,17 @@
   (vim.keymap.set :n :<e #(mod-invoke :syntax-tree-surfer :surf :prev :normal
                                       true)
                   {: buffer :silent true})
-  (vim.keymap.set :n :>f #(mod-invoke :syntax-tree-surfer :move :n false)
-                  {: buffer :silent true})
-  (vim.keymap.set :n :<f #(mod-invoke :syntax-tree-surfer :move :n true)
-                  {: buffer :silent true})
   (vim.keymap.set :n :vv #(mod-invoke :syntax-tree-surfer :select_current_node)
                   {: buffer :silent true})
   (vim.keymap.set :x :J #(mod-invoke :syntax-tree-surfer :surf :next :visual)
                   {: buffer :silent true})
   (vim.keymap.set :x :K #(mod-invoke :syntax-tree-surfer :surf :prev :visual)
+                  {: buffer :silent true})
+  (vim.keymap.set :x :<tab> #(mod-invoke :syntax-tree-surfer :surf :parent
+                                         :visual)
+                  {: buffer :silent true})
+  (vim.keymap.set :x :<s-tab>
+                  #(mod-invoke :syntax-tree-surfer :surf :child :visual)
                   {: buffer :silent true})
   (vim.keymap.set :x :<leader>a
                   #(mod-invoke :syntax-tree-surfer :surf :next :visual true)
@@ -51,10 +53,6 @@
 (fn setup []
   (mod-invoke :nvim-treesitter.configs :setup
               {:highlight {:enable true}
-               :incremental_selection {:enable true
-                                       :keymaps {:init_selection :gnn
-                                                 :node_incremental :<tab>
-                                                 :node_decremental :<s-tab>}}
                :playground {:enable true :updatetime 10}
                :textobjects {:select {:enable true
                                       :lookahead true
@@ -69,7 +67,10 @@
                              :move {:enable true
                                     :set_jumps true
                                     :goto_next_start {:<leader>m "@function.outer"}
-                                    :goto_previous_start {:<leader>M "@function.outer"}}}
+                                    :goto_previous_start {:<leader>M "@function.outer"}}
+                             :swap {:enable true
+                                    :swap_next {:<leader>a "@parameter.inner"}
+                                    :swap_previous {:<leader>A "@parameter.inner"}}}
                :context_commentstring {:enable true :enable_autocmd false}
                :refactor {:navigation {:enable true
                                        :keymaps {:goto_definition :gd}}}
