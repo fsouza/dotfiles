@@ -1,7 +1,7 @@
 local cmd = require("fsouza.lib.cmd")
 
 local function run_cmd(prg, opts, input_data, timeout)
-  timeout = timeout or 200
+  timeout = tonumber(timeout or os.getenv("NVIM_TEST_TIMEOUT") or 500)
   local result = nil
 
   cmd.run(prg, opts, input_data, function(r)
@@ -11,7 +11,7 @@ local function run_cmd(prg, opts, input_data, timeout)
     return result ~= nil
   end, 25)
 
-  assert(ok)
+  assert(ok, string.format("command didn't complete after %dms", timeout))
   return result
 end
 
