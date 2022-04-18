@@ -4,8 +4,7 @@
   (let [paq-repo-dir (mod-invoke :pl.path :join paq-dir :opt :paq-nvim)]
     (mod-invoke :fsouza.lib.cmd :run :git
                 {:args [:clone
-                        :--depth=1
-                        "https://github.com/savq/paq-nvim.git"
+                        "https://github.com/fsouza/paq-nvim.git"
                         paq-repo-dir]} nil
                 #(if (= $1.exit-status 0)
                      (do
@@ -22,22 +21,22 @@
 
 (let [paq-dir (mod-invoke :pl.path :join data-dir :site :pack :paqs)
       paqs [{1 :savq/paq-nvim :opt true :as :paq-nvim}
-            [:chaoren/vim-wordmotion]
-            [:godlygeek/tabular]
-            [:justinmk/vim-dirvish]
-            [:justinmk/vim-sneak]
-            [:mattn/emmet-vim]
-            [:michaeljsmith/vim-indent-object]
-            [:tpope/vim-fugitive]
-            [:tpope/vim-repeat]
-            [:tpope/vim-rhubarb]
-            [:tpope/vim-surround]
-            {1 :nvim-treesitter/nvim-treesitter :run #(vim.cmd :TSUpdate)}
-            [:nvim-treesitter/nvim-treesitter-textobjects]
-            [:nvim-treesitter/nvim-treesitter-refactor]
-            [:nvim-treesitter/playground]
-            [:numToStr/Comment.nvim]
-            [:JoosepAlviste/nvim-ts-context-commentstring]
+            {1 :chaoren/vim-wordmotion}
+            {1 :godlygeek/tabular}
+            {1 :justinmk/vim-dirvish}
+            {1 :justinmk/vim-sneak}
+            {1 :mattn/emmet-vim}
+            {1 :michaeljsmith/vim-indent-object}
+            {1 :tpope/vim-fugitive}
+            {1 :tpope/vim-repeat}
+            {1 :tpope/vim-rhubarb}
+            {1 :tpope/vim-surround}
+            {1 :nvim-treesitter/nvim-treesitter}
+            {1 :nvim-treesitter/nvim-treesitter-textobjects}
+            {1 :nvim-treesitter/nvim-treesitter-refactor}
+            {1 :nvim-treesitter/playground}
+            {1 :numToStr/Comment.nvim}
+            {1 :JoosepAlviste/nvim-ts-context-commentstring}
             {1 :fsouza/nvim-lsp-compl :as :nvim-lsp-compl :opt true}
             {1 :l3mon4d3/luasnip :as :luasnip :opt true}
             {1 :ibhagwan/fzf-lua :as :fzf-lua :opt true}
@@ -61,16 +60,16 @@
             ; to set, so whenever I want to add something new, I just look at
             ; what's used in vim-polyglot and bring it from there, unless I
             ; know a better alternative.
-            [:fsouza/fennel.vim]
-            [:HerringtonDarkholme/yats.vim]
-            [:jakwings/vim-pony]
-            [:ocaml/vim-ocaml]
-            [:pangloss/vim-javascript]
-            [:tbastos/vim-lua]
-            [:Vimjas/vim-python-pep8-indent]
-            [:ziglang/zig.vim]
+            {1 :fsouza/fennel.vim}
+            {1 :HerringtonDarkholme/yats.vim}
+            {1 :jakwings/vim-pony}
+            {1 :ocaml/vim-ocaml}
+            {1 :pangloss/vim-javascript}
+            {1 :tbastos/vim-lua}
+            {1 :Vimjas/vim-python-pep8-indent}
+            {1 :ziglang/zig.vim}
             ;; themes, for demos/presentations.
-            [:shaunsingh/solarized.nvim]]]
+            {1 :shaunsingh/solarized.nvim}]]
   {: paq-dir
    : paqs
    :setup #(with-paq paq-dir (fn [paq]
