@@ -3,6 +3,7 @@
                          :bash :sh
                          :zsh :sh
                          :/sh :sh
+                         :ruby :ruby
                          "env sh" :sh}
         [first-line] (vim.api.nvim_buf_get_lines bufnr 0 1 true)
         (_ _ prog) (string.find first-line "^#!(.+)")]
