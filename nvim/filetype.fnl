@@ -19,5 +19,8 @@
                        :fnl :fennel
                        :fsproj :fsharp_project
                        "" from-shebang}
-           :filename {:Tiltfile :bzl :go.mod :gomod :setup.cfg :pysetupcfg}}]
+           :filename {:Tiltfile :bzl
+                      :go.mod :gomod
+                      :setup.cfg :pysetupcfg
+                      :Brewfile :ruby}}]
   (vim.filetype.add fts))
