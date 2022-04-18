@@ -101,7 +101,8 @@
                     (when (not= client.server_capabilities.renameProvider nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>r
-                                     :rhs #(vim.lsp.buf.rename)}))
+                                     :rhs #(mod-invoke :fsouza.lsp.rename
+                                                       :rename)}))
                     (when (not= client.server_capabilities.codeActionProvider
                                 nil)
                       (table.insert mappings.n
