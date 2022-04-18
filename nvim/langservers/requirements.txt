@@ -4,7 +4,7 @@
 #
 #    pip-compile
 #
-add-trailing-comma==2.2.2
+add-trailing-comma==2.2.3
     # via -r requirements.in
 aspy-refactor-imports==3.0.0
     # via reorder-python-imports
