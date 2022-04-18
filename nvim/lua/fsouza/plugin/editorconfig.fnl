@@ -88,9 +88,7 @@
         filename (vim.api.nvim_buf_get_name bufnr)]
     (when (and (?. vim :bo bufnr :modifiable)
                (not (?. vim :bo bufnr :readonly)) (not= filename ""))
-      (let [filename (if (vim.startswith filename "/")
-                         filename
-                         (mod-invoke :pl.path :join (vim.fn.getcwd) filename))
+      (let [filename (mod-invoke :pl.path :abspath filename)
             filename (modify-filename-if-needed filename bufnr)]
         (mod-invoke :fsouza.lib.cmd :run :editorconfig {:args [filename]} nil
                     (fn [result]
