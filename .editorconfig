@@ -7,7 +7,7 @@ indent_style = tab
 insert_final_line = true
 trim_trailing_whitespace = true
 
-[*.{bazel,bzl,d,elm,fs,fsi,fsproj,fsx,proto,ps1,py,rs,rst,tilt,tl,ts,zig}]
+[*.{bazel,bzl,d,fs,fsi,fsproj,fsx,proto,py,rs,rst,tilt,ts,zig}]
 indent_style = space
 indent_size = 4
 
@@ -15,7 +15,7 @@ indent_size = 4
 indent_style = space
 indent_size = 4
 
-[*.{atd,chpl,clj,cr,erb,erl,ex,exs,f90,fnl,js,jsonnet,lua,ml,mli,mll,mly,pony,rb,re,rei,rkt,rockspec,scala,scm,sls,sml,tf,tfstate,toml,yaml,yml}]
+[*.{chpl,clj,erb,erl,fnl,js,jsonnet,lua,ml,mli,mll,mly,pony,rb,rkt,rockspec,scala,scm,sls,sml,tf,tfstate,toml,yaml,yml}]
 indent_style = space
 indent_size = 2
 
