@@ -127,7 +127,7 @@
         rl-insert-mode-bindings [{:lhs :<c-f> :rhs :<right>}
                                  {:lhs :<c-b> :rhs :<left>}
                                  {:lhs :<c-d> :rhs :<del>}]
-        exprs [`(vim.keymap.set [:n] "/" "/\\v" {:remap false})]]
+        exprs []]
     (each [_ {: lhs : rhs} (ipairs rl-bindings)]
       (table.insert exprs `(vim.keymap.set [:c :o] ,lhs ,rhs {:remap false})))
     (each [_ {: lhs : rhs} (ipairs rl-insert-mode-bindings)]
