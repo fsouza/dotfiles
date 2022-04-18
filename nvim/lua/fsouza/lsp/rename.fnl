@@ -23,7 +23,8 @@
                 pos-last-char (+ result.end.character)
                 placeholder (string.sub line pos-first-char pos-last-char)]
             (rename placeholder))
-          (vim.notify "can't rename current position")))
+          (vim.api.nvim_echo [["can't rename at current position" :WarningMsg]]
+                             true {})))
 
     (when client
       (let [provider client.server_capabilities.renameProvider
