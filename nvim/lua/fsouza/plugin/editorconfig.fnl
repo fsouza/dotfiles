@@ -68,6 +68,21 @@
                     (each [option-name value (pairs vim-opts)]
                       (vim.api.nvim_buf_set_option bufnr option-name value))))))
 
+(fn modify-filename-if-needed [name bufnr]
+  ;; editorconfig isn't aware of filetypes, so if we get a file with no
+  ;; extension for which neovim can figure out the filetype in some other form
+  ;; (usually the shebang, but the actual form doesn't matter), we add an
+  ;; extension that we know will lead to that filetype.
+  (let [ft-map {:python :.py :sh :.sh :ruby :.rb}
+        (_ ext) (mod-invoke :pl.path :splitext name)]
+    (if (not= ext "")
+        name
+        (let [ft (vim.api.nvim_buf_get_option bufnr :filetype)
+              ext (. ft-map ft)]
+          (if ext
+              (.. name ext)
+              name)))))
+
 (fn set-config [bufnr]
   (let [bufnr (if-nil bufnr (vim.api.nvim_get_current_buf))
         filename (vim.api.nvim_buf_get_name bufnr)]
@@ -75,7 +90,8 @@
                (not (?. vim :bo bufnr :readonly)) (not= filename ""))
       (let [filename (if (vim.startswith filename "/")
                          filename
-                         (mod-invoke :pl.path :join (vim.fn.getcwd) filename))]
+                         (mod-invoke :pl.path :join (vim.fn.getcwd) filename))
+            filename (modify-filename-if-needed filename bufnr)]
         (mod-invoke :fsouza.lib.cmd :run :editorconfig {:args [filename]} nil
                     (fn [result]
                       (if (= result.exit-status 0)
@@ -87,7 +103,7 @@
   (let [commands []]
     (when v
       (table.insert commands
-                    {:events [:BufNewFile :BufReadPost :BufFilePost]
+                    {:events [:BufNewFile :BufReadPost :BufFilePost :FileType]
                      :targets ["*"]
                      :callback set-config})
       (vim-schedule (each [_ bufnr (ipairs (vim.api.nvim_list_bufs))]
