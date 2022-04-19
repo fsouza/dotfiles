@@ -49,7 +49,7 @@
                                          lnum
                                          col
                                          0]}]} :a)
-    (edit selected)))
+    (edit :edit selected)))
 
 (macro lsp-actions []
   `(let [actions# (file-actions)]
