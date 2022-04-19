@@ -127,10 +127,25 @@
        :lintSource :selene
        :lintFormats ["-:%l:%c: %m"]
        :lintIgnoreExitCode true
-       :rootMarkers [:selene.toml]}))
+       :rootMarkers [:selene.toml]
+       :requireMarker true}))
+
+(fn get-luacheck [cb]
+  (let [luacheck (path.join cache-dir :hr :bin :luacheck)]
+    (cb {:lintCommand (string.format "%s --formatter plain --filename ${INPUT} -"
+                                     luacheck)
+         :lintStdin true
+         :lintSource :luacheck
+         :lintFormats ["%f:%l:%c: %m"]
+         :lintIgnoreExitCode true
+         :rootMarkers [:.luacheckrc]
+         :requireMarker true})))
 
 (fn get-stylua [cb]
-  (cb {:formatCommand "stylua -" :formatStdin true :rootMarkers [:stylua.toml]}))
+  (cb {:formatCommand "stylua -"
+       :formatStdin true
+       :rootMarkers [:stylua.toml]
+       :requireMarker true}))
 
 (fn get-shellcheck [cb]
   (cb {:lintCommand "shellcheck -f gcc -x -"
@@ -317,7 +332,8 @@
                                  {:language :bzl :fn get-buildifier}
                                  {:language :fennel :fn get-fnlfmt}
                                  {:language :lua :fn get-selene}
-                                 {:language :lua :fn get-stylua}]
+                                 {:language :lua :fn get-stylua}
+                                 {:language :lua :fn get-luacheck}]
           timer (vim.loop.new_timer)]
       (each [_ f (ipairs simple-tool-factories)]
         (let [{:fn f : language} f]
