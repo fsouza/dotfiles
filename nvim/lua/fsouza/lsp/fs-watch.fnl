@@ -128,13 +128,9 @@
                                         []))]
     name))
 
-(fn is-relative-to [p start]
-  (let [path (require :pl.path)]
-    (not (vim.startswith (path.relpath p start) "../"))))
-
 (fn map-watchers [client watchers]
   (let [glob (require :fsouza.lib.glob)
-        path (require :pl.path)
+        path (require :fsouza.path)
         folders (collect [_ folder (ipairs (workspace-folders client))]
                   (values folder []))
         abs-folders []]
@@ -143,12 +139,12 @@
             sample (. pats 1)]
         (var is-abs (path.isabs sample))
         (each [folder _ (pairs folders)]
-          (when (is-relative-to sample folder)
+          (when (path.isrel sample folder)
             (table.insert (. folders folder) watcher)
             (set is-abs false)))
         (when is-abs
           (each [folder _ (pairs state)]
-            (when (is-relative-to sample folder)
+            (when (path.isrel sample folder)
               (tset folders folder [watcher])
               (set is-abs false)))
           (when is-abs
@@ -156,7 +152,7 @@
 
     (fn find-best-folder [folder]
       (each [registered _ (pairs folders)]
-        (if (is-relative-to folder registered)
+        (if (path.isrel folder registered)
             (lua "return registered")))
       folder)
 

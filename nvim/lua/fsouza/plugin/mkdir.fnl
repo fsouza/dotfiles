@@ -1,7 +1,7 @@
 (import-macros {: if-nil : abuf : mod-invoke} :helpers)
 
 (fn run [bufname]
-  (let [dir (vim.fn.fnamemodify bufname ":h")]
+  (let [dir (mod-invoke :pl.path :dirname bufname)]
     (vim.fn.mkdir dir :p)))
 
 (fn register-for-buffer []

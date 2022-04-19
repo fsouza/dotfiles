@@ -15,22 +15,28 @@
         (vim.cmd :cc))
       (edit selected)))
 
-(fn edit [selected]
-  (let [fzf-path (require :fzf-lua.path)]
+(fn edit [command selected]
+  (let [fzf-path (require :fzf-lua.path)
+        pl-path (require :pl.path)]
     (each [_ sel (ipairs selected)]
       (let [{: path : line : col} (fzf-path.entry_to_file sel)
-            path (vim.fn.fnamemodify path ":p:.")]
-        (vim.cmd (string.format "silent! edit %s" (vim.fn.fnameescape path)))
+            path (pl-path.relpath path)
+            path (if (vim.startswith path ".")
+                     (pl-path.abspath path)
+                     path)]
+        (vim.cmd (string.format "silent! %s %s" command
+                                (vim.fn.fnameescape path)))
         (when (or (not= line 1) (not= col 1))
           (vim.api.nvim_win_set_cursor 0 [line (- col 1)])
           (vim.api.nvim_feedkeys :zz :n false))))))
 
 (fn file-actions []
   (let [actions (require :fzf-lua.actions)]
-    {:default (partial edit-or-qf edit)
-     :ctrl-s actions.file_spit
-     :ctrl-v actions.file_vsplit
-     :ctrl-t actions.file_tabedit
+    {:default (partial edit-or-qf (partial edit :edit))
+     :ctrl-s (partial edit-or-qf (partial edit :split))
+     :ctrl-x (partial edit-or-qf (partial edit :split))
+     :ctrl-v (partial edit-or-qf (partial edit :vsplit))
+     :ctrl-t (partial edit-or-qf (partial edit :tabedit))
      :ctrl-q actions.file_sel_to_qf}))
 
 (fn save-stack-and-edit [selected]
@@ -105,7 +111,7 @@
         fzf-lua (fzf-lua)
         config (require :fzf-lua.config)
         core (require :fzf-lua.core)
-        opts (config.normalize_opts {: prompt :cwd (vim.fn.getcwd)}
+        opts (config.normalize_opts {: prompt :cwd (vim.loop.cwd)}
                                     config.globals.lsp)]
     (tset opts :fzf_fn
           (icollect [_ item (ipairs items)]
@@ -124,7 +130,7 @@
 (fn go-to-repo [run-fzf selected]
   (when (= (length selected) 1)
     (let [[sel] selected
-          sel (vim.fn.fnamemodify sel ":p")]
+          sel (mod-invoke :pl.path :abspath sel)]
       (vim.api.nvim_set_current_dir sel)
       (when run-fzf
         (find-files)

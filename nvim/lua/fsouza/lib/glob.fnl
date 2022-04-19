@@ -1,8 +1,3 @@
-;; This library provides two functions: `compile`, that compiles a given glob
-;; into an internal representation that can be used later for matches, and
-;; `match` that takes a compiled glob and a filepath as a string and returns a
-;; boolean indicating whether or not the path matches the given glob.
-
 (fn escape-literal [literal]
   (let [special-chars {"\\" true
                        :^ true

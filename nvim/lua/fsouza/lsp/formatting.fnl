@@ -11,13 +11,10 @@
   `(. updates ,bufnr))
 
 (fn should-skip-buffer [bufnr]
-  (let [file-path (vim.api.nvim_buf_get_name bufnr)
-        file-path (vim.fn.fnamemodify file-path ":p")
-        cwd (vim.fn.getcwd)
-        prefix (if (vim.endswith cwd "/")
-                   cwd
-                   (.. cwd "/"))]
-    (not (vim.startswith file-path prefix))))
+  (let [path (require :fsouza.path)
+        file-path (vim.api.nvim_buf_get_name bufnr)
+        file-path (path.abspath file-path)]
+    (not (path.isrel file-path))))
 
 (fn should-organize-imports [server-name]
   (. langservers-org-imports-set server-name))

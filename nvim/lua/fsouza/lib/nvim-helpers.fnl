@@ -61,7 +61,7 @@
       (send-esc)
       (if (= mode :V) [srow 0 erow (max-col)] [srow scol erow ecol])))
 
-  (let [mode (vim.fn.mode)
+  (let [{: mode} (vim.api.nvim_get_mode)
         [srow scol erow ecol] (if (or (= mode :v) (= mode :V))
                                   (from-current mode)
                                   (from-markers))]
