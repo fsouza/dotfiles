@@ -19,8 +19,8 @@
   (not= (pl-tablex.find_if t pred) nil))
 
 (fn for-all [t pred]
-  (not (exists pl-tablex t (fn [...]
-                             (not (pred ...))))))
+  (not (exists t (fn [...]
+                   (not (pred ...))))))
 
 (let [mod {: flat-map : filter-map :flatten vim.tbl_flatten : exists : for-all}]
   (setmetatable mod {:__index (fn [table key]
