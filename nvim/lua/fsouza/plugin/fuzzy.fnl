@@ -5,7 +5,7 @@
 (fn should-qf [selected]
   (let [n-selected (length selected)]
     (if (<= (length selected) 1) false
-        (mod-invoke :fsouza.tablex :exists selected
+        (mod-invoke :fsouza.pl.tablex :exists selected
                     #(if (string.match $1 "^.+:%d+:%d+:") true false)))))
 
 (fn edit-or-qf [edit selected]
@@ -17,7 +17,7 @@
 
 (fn edit [command selected]
   (let [fzf-path (require :fzf-lua.path)
-        pl-path (require :pl.path)]
+        pl-path (require :fsouza.pl.path)]
     (each [_ sel (ipairs selected)]
       (let [{: path : line : col} (fzf-path.entry_to_file sel)
             path (pl-path.relpath path)
@@ -130,7 +130,7 @@
 (fn go-to-repo [run-fzf selected]
   (when (= (length selected) 1)
     (let [[sel] selected
-          sel (mod-invoke :pl.path :abspath sel)]
+          sel (mod-invoke :fsouza.pl.path :abspath sel)]
       (vim.api.nvim_set_current_dir sel)
       (when run-fzf
         (find-files)

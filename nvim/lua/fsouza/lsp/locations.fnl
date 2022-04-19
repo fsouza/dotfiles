@@ -26,7 +26,7 @@
                     ; ocaml
                     :let_binding
                     :value_definition]]
-    (mod-invoke :fsouza.tablex :exists node-types #(= $1 node-type))))
+    (mod-invoke :fsouza.pl.tablex :exists node-types #(= $1 node-type))))
 
 (fn normalize-loc [loc]
   (when (not loc.uri)

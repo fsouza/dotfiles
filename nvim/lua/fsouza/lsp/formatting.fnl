@@ -11,7 +11,7 @@
   `(. updates ,bufnr))
 
 (fn should-skip-buffer [bufnr]
-  (let [path (require :fsouza.path)
+  (let [path (require :fsouza.pl.path)
         file-path (vim.api.nvim_buf_get_name bufnr)
         file-path (path.abspath file-path)]
     (not (path.isrel file-path))))
@@ -56,7 +56,7 @@
                                   (vim.api.nvim_buf_get_changedtick bufnr))
                         (lua :return))
                       (when (and actions (not (vim.tbl_isempty actions)))
-                        (let [(_ code-action) (mod-invoke :fsouza.tablex
+                        (let [(_ code-action) (mod-invoke :fsouza.pl.tablex
                                                           :find_if actions
                                                           (fn [action]
                                                             (if (= action.kind

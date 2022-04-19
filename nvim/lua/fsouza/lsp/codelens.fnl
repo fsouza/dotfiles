@@ -111,7 +111,7 @@
                                     (not= selected.command.command ""))
                            (run selected)))]
       (if (> (length items) 1)
-          (let [tablex (require :fsouza.tablex)
+          (let [tablex (require :fsouza.pl.tablex)
                 popup-lines (tablex.filter-map (fn [item]
                                                  (when item.command
                                                    item.command.title))

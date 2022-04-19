@@ -74,7 +74,7 @@
   ;; (usually the shebang, but the actual form doesn't matter), we add an
   ;; extension that we know will lead to that filetype.
   (let [ft-map {:python :.py :sh :.sh :ruby :.rb}
-        (_ ext) (mod-invoke :pl.path :splitext name)]
+        (_ ext) (mod-invoke :fsouza.pl.path :splitext name)]
     (if (not= ext "")
         name
         (let [ft (vim.api.nvim_buf_get_option bufnr :filetype)
@@ -88,7 +88,7 @@
         filename (vim.api.nvim_buf_get_name bufnr)]
     (when (and (?. vim :bo bufnr :modifiable)
                (not (?. vim :bo bufnr :readonly)) (not= filename ""))
-      (let [filename (mod-invoke :pl.path :abspath filename)
+      (let [filename (mod-invoke :fsouza.pl.path :abspath filename)
             filename (modify-filename-if-needed filename bufnr)]
         (mod-invoke :fsouza.lib.cmd :run :editorconfig {:args [filename]} nil
                     (fn [result]

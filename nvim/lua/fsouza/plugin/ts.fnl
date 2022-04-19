@@ -8,7 +8,7 @@
 (fn get-file-types []
   (let [parsers-mod (require :nvim-treesitter.parsers)
         wanted-parsers (parsers-mod.available_parsers)]
-    (mod-invoke :fsouza.tablex :flat-map lang-to-ft wanted-parsers)))
+    (mod-invoke :fsouza.pl.tablex :flat-map lang-to-ft wanted-parsers)))
 
 (fn setup-keymaps [buffer]
   (vim.keymap.set :n :>e #(mod-invoke :syntax-tree-surfer :surf :next :normal

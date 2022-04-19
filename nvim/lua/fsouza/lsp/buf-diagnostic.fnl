@@ -22,7 +22,7 @@
           {: diagnostics} result]
       (when (and diagnostics client)
         (tset result :diagnostics (icollect [_ d (ipairs diagnostics)]
-                                    (when (mod-invoke :fsouza.tablex :for-all
+                                    (when (mod-invoke :fsouza.pl.tablex :for-all
                                                       client-filters #($1 d))
                                       d))))
       result)))

@@ -22,7 +22,7 @@
                          (set-from-cmd :pipenv [:--venv] cb))))
 
 (fn set-from-venv-folder [cb]
-  (let [path (require :pl.path)
+  (let [path (require :fsouza.pl.path)
         folders [:venv :.venv]]
     (fn test-folder [idx]
       (let [folder (. folders idx)]
@@ -51,7 +51,7 @@
     (detect 1)))
 
 (fn detect-python-interpreter [cb]
-  (let [path (require :pl.path)]
+  (let [path (require :fsouza.pl.path)]
     (detect-virtualenv (fn [virtualenv]
                          (when virtualenv
                            (vim-schedule (tset vim.env :VIRTUAL_ENV virtualenv))

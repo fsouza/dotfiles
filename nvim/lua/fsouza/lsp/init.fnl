@@ -1,6 +1,6 @@
 (import-macros {: if-nil : mod-invoke} :helpers)
 
-(local path (require :pl.path))
+(local path (require :fsouza.pl.path))
 
 (macro get-local-cmd [cmd]
   `(path.join config-dir :langservers :bin ,cmd))

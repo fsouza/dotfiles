@@ -1,6 +1,6 @@
 (import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
 
-(local path (require :pl.path))
+(local path (require :fsouza.pl.path))
 (local default-root-markers [:.git])
 
 (macro quote-arg [arg]
@@ -249,7 +249,7 @@
                                                               repo-url)]
                                                      (if f {:fn f : args} nil)))
                                        pre-commit-fns (if pre-commit-config
-                                                          (mod-invoke :fsouza.tablex
+                                                          (mod-invoke :fsouza.pl.tablex
                                                                       :filter-map
                                                                       find-repo
                                                                       pre-commit-config.repos)

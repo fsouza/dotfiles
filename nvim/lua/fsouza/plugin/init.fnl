@@ -85,7 +85,7 @@
 
 (fn setup-shortcuts []
   (let [shortcut (require :fsouza.plugin.shortcut)
-        path (require :pl.path)]
+        path (require :fsouza.pl.path)]
     (shortcut.register :Dotfiles (vim.fn.expand "~/.dotfiles"))
     (shortcut.register :Site (path.join data-dir :site))))
 

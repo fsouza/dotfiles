@@ -9,7 +9,7 @@
 (fn set-from-bufnr [bufnr v]
   (let [bufname (vim.api.nvim_buf_get_name bufnr)]
     (when (not= bufname "")
-      (let [path (require :pl.path)
+      (let [path (require :fsouza.pl.path)
             filepath (path.abspath bufname)]
         (tset files filepath v)))))
 

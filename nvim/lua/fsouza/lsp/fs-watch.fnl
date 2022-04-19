@@ -69,8 +69,8 @@
 
 (fn make-fs-event-handler [root-dir notify-server]
   (let [backupext vim.o.backupext
-        tablex (require :fsouza.tablex)
-        pl-path (require :pl.path)
+        tablex (require :fsouza.pl.tablex)
+        pl-path (require :fsouza.pl.path)
         glob (require :fsouza.lib.glob)
         buffers (require :fsouza.plugin.buffers)]
     (fn notify [client-id reg-id filepath events kind]
@@ -130,7 +130,7 @@
 
 (fn map-watchers [client watchers]
   (let [glob (require :fsouza.lib.glob)
-        path (require :fsouza.path)
+        path (require :fsouza.pl.path)
         folders (collect [_ folder (ipairs (workspace-folders client))]
                   (values folder []))
         abs-folders []]

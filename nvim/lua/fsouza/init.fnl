@@ -20,7 +20,7 @@
                                         ";"))))
 
 (macro add-paqs-opt-to-path []
-  `(let [path# (require :pl.path)
+  `(let [path# (require :fsouza.pl.path)
          packed# (require :fsouza.packed)
          opt-dir# (path#.join packed#.paq-dir :opt)]
      (each [_# paq# (ipairs packed#.paqs)]
