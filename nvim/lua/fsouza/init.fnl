@@ -60,7 +60,13 @@
               :loaded_python3_provider 0
               :loaded_ruby_provider 0
               :loaded_perl_provider 0
-              :loaded_node_provider 0}]
+              :loaded_node_provider 0
+              :loaded_remote_plugins 1
+              :loaded_tarPlugin 1
+              :loaded_2html_plugin 1
+              :loaded_tutor_mode_plugin 1
+              :loaded_zipPlugin 1
+              :no_plugin_maps 1}]
     (icollect [name value (pairs vars)]
       `(tset vim.g ,name ,value))))
 
