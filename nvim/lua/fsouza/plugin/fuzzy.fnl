@@ -123,6 +123,10 @@
   (let [fzf-lua (fzf-lua)]
     (fzf-lua.grep_visual {:rg_opts rg-opts})))
 
+(fn grep-last [rg-opts]
+  (let [fzf-lua (fzf-lua)]
+    (fzf-lua.grep_last {:rg_opts rg-opts})))
+
 (fn find-files [cwd]
   (let [fzf-lua (fzf-lua)]
     (fzf-lua.files {: cwd})))
@@ -158,6 +162,7 @@
       mod {: find-files
            :grep (partial grep rg-opts)
            :grep-visual #(grep-visual rg-opts)
+           :grep-last #(grep-last rg-opts)
            : git-repos
            : send-items}]
   (setmetatable mod {:__index (fn [table key]
