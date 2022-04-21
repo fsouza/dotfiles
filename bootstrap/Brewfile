@@ -2,7 +2,7 @@ tap "homebrew/cask-fonts"
 
 brew "bash"
 brew "fnm"
-brew "git", args: ["--overwrite"]
+brew "git", args: ["overwrite"]
 brew "libyaml"
 brew "lua"
 brew "selene"
