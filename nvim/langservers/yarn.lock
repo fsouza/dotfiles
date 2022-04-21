@@ -561,10 +561,10 @@ eslint@^8.12.0:
     text-table "^0.2.0"
     v8-compile-cache "^2.0.3"
 
-eslint_d@^12.0.0:
-  version "12.0.0"
-  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-12.0.0.tgz#d278a5bdc27f525f9a84f16b1af6e273cdd03875"
-  integrity sha512-jSueemgxyOsxVLOWkJuBbJfQB1vt9rjCqAbht51W/2982VcDxQ3ywjUaEvWTF+oTFWe2M1ER+d54kFgoZCGevg==
+eslint_d@^12.1.0:
+  version "12.1.0"
+  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-12.1.0.tgz#d069c025565041083cb922cdae1d6461926801cd"
+  integrity sha512-mRttHSO/sC6oxnfdlnLUTfB1sI2ApmbPAHSNx60+8jQmwwvEZjUv4WDmv20g7i9DSBuK8Y5boTyz4ijBAujk0Q==
   dependencies:
     core_d "^4.0.0"
     eslint "^8.12.0"
