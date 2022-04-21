@@ -53,6 +53,8 @@
             {1 :ziontee113/syntax-tree-surfer
              :as :syntax-tree-surfer
              :opt true}
+            {1 :guns/vim-sexp}
+            {1 :tpope/vim-sexp-mappings-for-regular-people}
             ; filetypes stuff
             ;
             ; Note: I used to use vim-polyglot, but it loads too much garbage and
