@@ -20,7 +20,7 @@
                   {:silent true})
   (vim.keymap.set :n :<leader>zr #(mod-invoke :fsouza.plugin.fuzzy :resume)
                   {:silent true})
-  (vim.keymap.set :n :<lcader>zj
+  (vim.keymap.set :n :<leader>zj
                   #(let [dir-path (vim.fn.expand "%:p:h")]
                      (when (vim.startswith dir-path "/")
                        (mod-invoke :fsouza.plugin.fuzzy :find-files dir-path)))
