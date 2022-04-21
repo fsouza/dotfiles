@@ -144,7 +144,7 @@
 (fn get-stylua [cb]
   (cb {:formatCommand "stylua -"
        :formatStdin true
-       :rootMarkers [:stylua.toml]
+       :rootMarkers [:stylua.toml :.stylua.toml]
        :requireMarker true}))
 
 (fn get-shellcheck [cb]
