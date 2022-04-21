@@ -15,7 +15,12 @@
                   {:silent true})
   (vim.keymap.set :n :<leader>gs #(mod-invoke :fsouza.plugin.fuzzy :git_status)
                   {:silent true})
-  (vim.keymap.set :n :<leader>zj
+  (vim.keymap.set :n :<leader>zh
+                  #(mod-invoke :fsouza.plugin.fuzzy :search_history)
+                  {:silent true})
+  (vim.keymap.set :n :<leader>zr #(mod-invoke :fsouza.plugin.fuzzy :resume)
+                  {:silent true})
+  (vim.keymap.set :n :<lcader>zj
                   #(let [dir-path (vim.fn.expand "%:p:h")]
                      (when (vim.startswith dir-path "/")
                        (mod-invoke :fsouza.plugin.fuzzy :find-files dir-path)))
