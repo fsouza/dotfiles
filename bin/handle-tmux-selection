@@ -4,8 +4,9 @@ import re
 import subprocess
 import sys
 import tempfile
+from pathlib import Path
 
-line_regex = re.compile(rb"^.+:\d+:(\d+:)?.+")
+line_regex = re.compile(rb"^([^:]+):\d+:(\d+:)?.+")
 
 
 def main() -> int:
@@ -18,7 +19,16 @@ def main() -> int:
 
 
 def should_send_to_nvim(lines: list[bytes]) -> bool:
-    return any(bool(line_regex.match(line)) for line in lines)
+    return any(_valid_diagnostic(line) for line in lines)
+
+
+def _valid_diagnostic(line: bytes) -> bool:
+    m = line_regex.match(line)
+    if not m:
+        return False
+
+    file_path = Path(m.group(1).decode())
+    return file_path.exists()
 
 
 def send_to_nvim(contents: bytes) -> int:
