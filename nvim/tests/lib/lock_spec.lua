@@ -24,6 +24,32 @@ describe("with-lock", function()
     assert.is_true(ok)
     assert.are.same(1, #locks)
   end)
+
+  it("should auto-unlock on VimLeave", function()
+    local lock_count = 0
+
+    with_lock(lockfile, function()
+      lock_count = lock_count + 1
+    end)
+
+    local timeout = 1000
+    local ok = vim.wait(timeout, function()
+      return lock_count > 0
+    end, 100)
+    assert.is_true(ok)
+
+    vim.api.nvim_exec_autocmds({ "VimLeave" }, {})
+    vim.defer_fn(function()
+      with_lock(lockfile, function()
+        lock_count = lock_count + 1
+      end)
+    end, 250)
+
+    ok = vim.wait(timeout, function()
+      return lock_count > 1
+    end, 100)
+    assert.is_true(ok)
+  end)
 end)
 
 describe("unlock", function()
