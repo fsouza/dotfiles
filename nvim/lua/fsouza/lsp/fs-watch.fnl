@@ -131,6 +131,7 @@
 (fn map-watchers [client watchers]
   (let [glob (require :fsouza.lib.glob)
         path (require :fsouza.pl.path)
+        seq (require :pl.seq)
         folders (collect [_ folder (ipairs (workspace-folders client))]
                   (values folder []))
         abs-folders []]
@@ -151,10 +152,11 @@
             (table.insert abs-folders {: watcher : pats})))))
 
     (fn find-best-folder [folder]
-      (each [registered _ (pairs folders)]
-        (if (path.isrel folder registered)
-            (lua "return registered")))
-      folder)
+      (let [s (-> folders
+                  (seq.keys)
+                  (seq.filter #(path.isrel folder $1))
+                  (seq.take 1))]
+        (if-nil (s) folder)))
 
     (each [_ {: pats : watcher} (ipairs abs-folders)]
       (each [_ pat (ipairs pats)]

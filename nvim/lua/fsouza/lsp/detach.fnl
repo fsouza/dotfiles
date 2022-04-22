@@ -24,14 +24,16 @@
       (detach bufnr))))
 
 (fn restart []
-  (let [original-client-ids (get-lsp-client-ids)
-        check-new-clients #(let [current-client-ids (get-lsp-client-ids)]
-                             (each [_ client-id (ipairs current-client-ids)]
-                               (when (not (vim.tbl_contains original-client-ids
-                                                            client-id))
-                                 (lua "return true, #current_client_ids")))
-                             (values false (length current-client-ids)))
+  (let [seq (require :pl.seq)
+        original-client-ids (get-lsp-client-ids)
         timer (vim.loop.new_timer)]
+    (fn check-new-clients []
+      (let [current-client-ids (get-lsp-client-ids)
+            s (-> current-client-ids
+                  (seq.filter #(not (vim.tbl_contains original-client-ids $1))))
+            has-new-clients (if (s) true false)]
+        (values has-new-clients (length current-client-ids))))
+
     (vim.lsp.stop_client original-client-ids)
     (detach-all-buffers)
     (timer:start 50 50

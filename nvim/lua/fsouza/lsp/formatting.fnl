@@ -52,10 +52,9 @@
           {:diagnostics (vim.diagnostic.get bufnr {:namespace client.id})})
     (client.request :textDocument/codeAction params
                     (fn [_ actions]
-                      (when (not= changed-tick
-                                  (vim.api.nvim_buf_get_changedtick bufnr))
-                        (lua :return))
-                      (when (and actions (not (vim.tbl_isempty actions)))
+                      (when (and (= changed-tick
+                                    (vim.api.nvim_buf_get_changedtick bufnr))
+                                 actions (not (vim.tbl_isempty actions)))
                         (let [(_ code-action) (mod-invoke :fsouza.pl.tablex
                                                           :find_if actions
                                                           (fn [action]
@@ -72,37 +71,36 @@
 
 (fn autofmt-and-write [bufnr]
   (let [enable (mod-invoke :fsouza.lib.autofmt :is-enabled bufnr)]
-    (when (not enable)
-      (lua :return))
-    (let [client (mod-invoke :fsouza.lsp.clients :get-client bufnr
-                             :documentFormattingProvider)]
-      (if (not client)
-          (error (string.format "couldn't find client for buffer %d" bufnr))
-          (pcall #(let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)]
-                    (fmt client bufnr
-                         (fn [_ result]
-                           (when (and (= changed-tick
-                                         (vim.api.nvim_buf_get_changedtick bufnr))
-                                      result)
-                             (vim.api.nvim_buf_call bufnr
-                                                    #(do
-                                                       (mod-invoke :fsouza.lib.nvim-helpers
-                                                                   :rewrite-wrap
-                                                                   #(vim.lsp.util.apply_text_edits result
-                                                                                                   bufnr
-                                                                                                   client.offset_encoding))
-                                                       (let [last-update (get-last-update bufnr)]
-                                                         (if (and last-update
-                                                                  (< (- (os.clock)
-                                                                        last-update)
-                                                                     0.01))
-                                                             (vim.cmd "noau update")
-                                                             (do
-                                                               (vim.cmd :update)
-                                                               (set-last-update bufnr))))
-                                                       (when (should-organize-imports client.name)
-                                                         (organize-imports-and-write client
-                                                                                     bufnr)))))))))))))
+    (when enable
+      (let [client (mod-invoke :fsouza.lsp.clients :get-client bufnr
+                               :documentFormattingProvider)]
+        (if (not client)
+            (error (string.format "couldn't find client for buffer %d" bufnr))
+            (pcall #(let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)]
+                      (fmt client bufnr
+                           (fn [_ result]
+                             (when (and (= changed-tick
+                                           (vim.api.nvim_buf_get_changedtick bufnr))
+                                        result)
+                               (vim.api.nvim_buf_call bufnr
+                                                      #(do
+                                                         (mod-invoke :fsouza.lib.nvim-helpers
+                                                                     :rewrite-wrap
+                                                                     #(vim.lsp.util.apply_text_edits result
+                                                                                                     bufnr
+                                                                                                     client.offset_encoding))
+                                                         (let [last-update (get-last-update bufnr)]
+                                                           (if (and last-update
+                                                                    (< (- (os.clock)
+                                                                          last-update)
+                                                                       0.01))
+                                                               (vim.cmd "noau update")
+                                                               (do
+                                                                 (vim.cmd :update)
+                                                                 (set-last-update bufnr))))
+                                                         (when (should-organize-imports client.name)
+                                                           (organize-imports-and-write client
+                                                                                       bufnr))))))))))))))
 
 (fn augroup-name [bufnr]
   (.. :lsp_autofmt_ bufnr))
