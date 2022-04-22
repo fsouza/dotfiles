@@ -1,0 +1,55 @@
+local lock = require("fsouza.lib.lock")
+
+describe("with-lock", function()
+  local with_lock = lock["with-lock"]
+  local lockfile = "lockfile1"
+
+  before_each(function()
+    vim.loop.fs_unlink(".fsouza/" .. lockfile)
+  end)
+
+  it("only one should succeed", function()
+    local locks = {}
+
+    for _ = 1, 10 do
+      with_lock(lockfile, function()
+        table.insert(locks, true)
+      end)
+    end
+
+    local timeout = 1000
+    local ok = vim.wait(timeout, function()
+      return #locks > 0
+    end, 100)
+    assert.is_true(ok)
+    assert.are.same(1, #locks)
+  end)
+end)
+
+describe("unlock", function()
+  local unlock = lock["unlock"]
+  local lockfile = "lockfile1"
+
+  before_each(function()
+    vim.loop.fs_unlink(".fsouza/" .. lockfile)
+  end)
+
+  it("only one should succeed", function()
+    local lock_count = 0
+
+    lock["with-lock"](lockfile, function()
+      lock_count = lock_count + 1
+      unlock(lockfile, function()
+        lock["with-lock"](lockfile, function()
+          lock_count = lock_count + 1
+        end)
+      end)
+    end)
+
+    local timeout = 1000
+    local ok = vim.wait(timeout, function()
+      return lock_count == 2
+    end, 100)
+    assert.is_true(ok)
+  end)
+end)
