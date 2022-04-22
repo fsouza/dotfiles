@@ -7,8 +7,10 @@
     (fn check [idx]
       (let [arg (. args idx)]
         (if (< idx (length args))
-            (list (sym :if) (list (sym :not=) arg (sym :nil)) arg
-                  (check (+ idx 1)))
+            `(let [v# ,arg]
+               (if (not= v# nil)
+                   v#
+                   ,(check (+ idx 1))))
             arg)))
 
     (check 1)))
