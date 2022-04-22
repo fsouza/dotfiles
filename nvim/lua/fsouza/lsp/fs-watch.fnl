@@ -75,7 +75,7 @@
         buffers (require :fsouza.plugin.buffers)]
     (fn notify [client-id reg-id filepath events kind]
       (fn try-notify-server [client-id reg-id uri type ordinal]
-        (when (not= (bit.band kind ordinal) 0)
+        (when (not= (band kind ordinal) 0)
           (notify-server client-id reg-id uri type)))
 
       (let [uri (vim.uri_from_fname filepath)]

@@ -24,8 +24,8 @@
         lock-file (lock-file-path name)]
     (vim.loop.fs_mkdir :.fsouza dir-perm
                        #(vim.loop.fs_open lock-file
-                                          (bit.bor vim.loop.constants.O_CREAT
-                                                   vim.loop.constants.O_EXCL)
+                                          (bor vim.loop.constants.O_CREAT
+                                               vim.loop.constants.O_EXCL)
                                           file-perm
                                           #(when (= $1 nil)
                                              (vim.loop.fs_close $2

@@ -20,6 +20,7 @@ def main(args: Sequence[str]) -> int:
             "--globals",
             "vim,dotfiles-dir,config-dir,cache-dir,data-dir,hs",
             "--raw-errors",
+            "--use-bit-lib",
             "-c",
             fnl_file,
         ],
