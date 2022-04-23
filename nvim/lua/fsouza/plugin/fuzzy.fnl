@@ -98,14 +98,6 @@
                                                         :ctrl-h :toggle-preview}})
                                  fzf-lua-))))
 
-(fn grep [rg-opts search]
-  (let [search (if-nil search (vim.fn.input "rg："))
-        fzf-lua (fzf-lua)]
-    (when (not= search "")
-      (fzf-lua.grep {: search
-                     :raw_cmd (string.format "rg %s -- %s" rg-opts
-                                             (vim.fn.shellescape search))}))))
-
 (fn send-items [items prompt]
   (let [prompt (.. prompt "：")
         fzf-lua (fzf-lua)
@@ -119,13 +111,16 @@
               (core.make_entry_file opts item))))
     (core.fzf_files (core.set_fzf_field_index opts))))
 
-(fn grep-visual [rg-opts]
-  (let [fzf-lua (fzf-lua)]
-    (fzf-lua.grep_visual {:rg_opts rg-opts})))
+(var last-search nil)
 
-(fn grep-last [rg-opts]
-  (let [fzf-lua (fzf-lua)]
-    (fzf-lua.grep_last {:rg_opts rg-opts})))
+(fn grep [rg-opts search]
+  (let [search (if-nil search (vim.fn.input "rg："))
+        fzf-lua (fzf-lua)]
+    (when (not= search "")
+      (set last-search search)
+      (fzf-lua.grep {: search
+                     :raw_cmd (string.format "rg %s -- %s" rg-opts
+                                             (vim.fn.shellescape search))}))))
 
 (fn find-files [cwd]
   (let [fzf-lua (fzf-lua)]
@@ -161,8 +156,8 @@
 (let [rg-opts "--column -n --hidden --no-heading --color=always --colors 'match:fg:0x99,0x00,0x00' --colors line:none --colors path:none --colors column:none -S --glob '!.git' --glob '!.hg'"
       mod {: find-files
            :grep (partial grep rg-opts)
-           :grep-visual #(grep-visual rg-opts)
-           :grep-last #(grep-last rg-opts)
+           :grep-visual #(grep rg-opts (helpers.get-visual-selection-contents))
+           :grep-last #(grep rg-opts last-search)
            : git-repos
            : send-items}]
   (setmetatable mod {:__index (fn [table key]
