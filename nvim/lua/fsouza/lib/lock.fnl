@@ -7,13 +7,12 @@
 
 (fn unlock [name cb]
   (let [lock-file (lock-file-path name)]
-    (vim.loop.fs_unlink lock-file #(when cb
-                                     (cb)))))
+    (vim.loop.fs_unlink lock-file)))
 
 (fn setup-autocmd [name]
   (mod-invoke :fsouza.lib.nvim-helpers :augroup
               (string.format "fsouza-autounlock-%s" name)
-              [{:events [:VimLeave]
+              [{:events [:VimLeavePre]
                 :targets ["*"]
                 :callback #(unlock name)
                 :once true}]))
