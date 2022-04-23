@@ -1,7 +1,5 @@
 (import-macros {: if-nil : mod-invoke} :helpers)
 
-(local helpers (require :fsouza.lib.nvim-helpers))
-
 (fn should-qf [selected]
   (let [n-selected (length selected)]
     (if (<= (length selected) 1) false
@@ -56,47 +54,48 @@
      (tset actions# :default (partial edit-or-qf save-stack-and-edit))
      actions#))
 
-(local fzf-lua (helpers.once (fn []
-                               (vim.cmd "packadd nvim-fzf")
-                               (let [actions (file-actions)
-                                     fzf-lua- (require :fzf-lua)]
-                                 (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
-                                                  :fzf_layout :default
-                                                  :buffers {:file_icons false
-                                                            :git_icons false
-                                                            :color_icons false}
-                                                  :files {:file_icons false
+(local fzf-lua (mod-invoke :fsouza.lib.nvim-helpers :once
+                           (fn []
+                             (vim.cmd "packadd nvim-fzf")
+                             (let [actions (file-actions)
+                                   fzf-lua- (require :fzf-lua)]
+                               (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
+                                                :fzf_layout :default
+                                                :buffers {:file_icons false
                                                           :git_icons false
-                                                          :color_icons false
-                                                          : actions}
-                                                  :git {:file_icons false
+                                                          :color_icons false}
+                                                :files {:file_icons false
                                                         :git_icons false
                                                         :color_icons false
                                                         : actions}
-                                                  :grep {:file_icons false
-                                                         :git_icons false
-                                                         :color_icons false
-                                                         : actions}
-                                                  :oldfiles {:file_icons false
-                                                             :git_icons false
-                                                             :color_icons false
-                                                             : actions}
-                                                  :lsp {:file_icons false
-                                                        :git_icons false
-                                                        :color_icons false
-                                                        :actions (lsp-actions)}
-                                                  :winopts {:win_height 0.85
-                                                            :win_width 0.9}
-                                                  :keymap {:builtin {:<c-h> :toggle-preview
-                                                                     :<c-u> :preview-page-up
-                                                                     :<c-d> :preview-page-down
-                                                                     :<c-r> :preview-page-reset}}
-                                                  :fzf {:alt-a :toggle-all
-                                                        :ctrl-l :clear-query
-                                                        :ctrl-d :preview-half-page-down
-                                                        :ctrl-u :preview-half-page-up
-                                                        :ctrl-h :toggle-preview}})
-                                 fzf-lua-))))
+                                                :git {:file_icons false
+                                                      :git_icons false
+                                                      :color_icons false
+                                                      : actions}
+                                                :grep {:file_icons false
+                                                       :git_icons false
+                                                       :color_icons false
+                                                       : actions}
+                                                :oldfiles {:file_icons false
+                                                           :git_icons false
+                                                           :color_icons false
+                                                           : actions}
+                                                :lsp {:file_icons false
+                                                      :git_icons false
+                                                      :color_icons false
+                                                      :actions (lsp-actions)}
+                                                :winopts {:win_height 0.85
+                                                          :win_width 0.9}
+                                                :keymap {:builtin {:<c-h> :toggle-preview
+                                                                   :<c-u> :preview-page-up
+                                                                   :<c-d> :preview-page-down
+                                                                   :<c-r> :preview-page-reset}}
+                                                :fzf {:alt-a :toggle-all
+                                                      :ctrl-l :clear-query
+                                                      :ctrl-d :preview-half-page-down
+                                                      :ctrl-u :preview-half-page-up
+                                                      :ctrl-h :toggle-preview}})
+                               fzf-lua-))))
 
 (fn send-items [items prompt]
   (let [prompt (.. prompt "：")
@@ -156,7 +155,9 @@
 (let [rg-opts "--column -n --hidden --no-heading --color=always --colors 'match:fg:0x99,0x00,0x00' --colors line:none --colors path:none --colors column:none -S --glob '!.git' --glob '!.hg'"
       mod {: find-files
            :grep (partial grep rg-opts)
-           :grep-visual #(grep rg-opts (helpers.get-visual-selection-contents))
+           :grep-visual #(grep rg-opts
+                               (mod-invoke :fsouza.lib.nvim-helpers
+                                           :get-visual-selection-contents))
            :grep-last #(grep rg-opts last-search)
            : git-repos
            : send-items}]
