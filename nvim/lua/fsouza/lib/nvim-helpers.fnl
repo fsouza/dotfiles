@@ -78,9 +78,15 @@
     (tset lines 1 (string.sub (. lines 1) scol))
     lines))
 
+(fn extract-luv-error [err]
+  (if (= err nil)
+      nil
+      (. (vim.split err ":" {:plain true :trimempty true}) 1)))
+
 {:reset-augroup #(vim.api.nvim_create_augroup $1 {:clear true})
  : augroup
  : once
  : rewrite-wrap
  : get-visual-selection-contents
- : get-visual-selection-range}
+ : get-visual-selection-range
+ : extract-luv-error}

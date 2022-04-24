@@ -135,3 +135,15 @@ describe("fsouza.lib.nvim-helpers once", function()
     assert.are.equal(t1, t2)
   end)
 end)
+
+describe("fsouza.lib.nvim-helpers extract-luv-error", function()
+  local extract_luv_error = helpers["extract-luv-error"]
+
+  it("extracts the part before the colon", function()
+    assert.are_same("EEXIST", extract_luv_error("EEXIST: file already exists: /tmp/a"))
+  end)
+
+  it("returns the string if it doesn't have a colon", function()
+    assert.are_same("whatever", extract_luv_error("whatever"))
+  end)
+end)
