@@ -46,9 +46,12 @@
       (setup-keymaps bufnr)
       (vim.api.nvim_buf_call bufnr
                              #(do
-                                (tset vim.opt_local :foldmethod :expr)
-                                (tset vim.opt_local :foldexpr
-                                      "nvim_treesitter#foldexpr()"))))))
+                                (vim.api.nvim_set_option_value :foldemethod
+                                                               :expr
+                                                               {:scope :local})
+                                (vim.api.nvim_set_option_value :foldexpr
+                                                               "nvim_treesitter#foldexpr()"
+                                                               {:scope :local}))))))
 
 (fn setup-autocmds []
   (let [targets (get-file-types)]
