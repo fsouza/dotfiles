@@ -1,11 +1,22 @@
 local lock = require("fsouza.lib.lock")
+local path = require("fsouza.pl.path")
 
 describe("with-lock", function()
   local with_lock = lock["with-lock"]
   local lockfile = "lockfile1"
+  local dir = path.join("/tmp", "a")
 
   before_each(function()
-    vim.loop.fs_unlink(".fsouza/" .. lockfile)
+    local cache_dir = vim.fn.stdpath("cache")
+    vim.fn.mkdir(dir, "p")
+    vim.fn.chdir(dir)
+    vim.fn.system(
+      "rm -rf " .. vim.fn.shellescape(path.join(cache_dir, "fsouza-locks", vim.fn.getcwd():sub(2)))
+    )
+  end)
+
+  after_each(function()
+    vim.fn.system("rm -rf " .. vim.fn.shellescape(dir))
   end)
 
   it("only one should succeed", function()
@@ -55,9 +66,19 @@ end)
 describe("unlock", function()
   local unlock = lock["unlock"]
   local lockfile = "lockfile1"
+  local dir = path.join("/tmp", "a")
 
   before_each(function()
-    vim.loop.fs_unlink(".fsouza/" .. lockfile)
+    local cache_dir = vim.fn.stdpath("cache")
+    vim.fn.mkdir(dir, "p")
+    vim.fn.chdir(dir)
+    vim.fn.system(
+      "rm -rf " .. vim.fn.shellescape(path.join(cache_dir, "fsouza-locks", vim.fn.getcwd():sub(2)))
+    )
+  end)
+
+  after_each(function()
+    vim.fn.system("rm -rf " .. vim.fn.shellescape(dir))
   end)
 
   it("only one should succeed", function()
