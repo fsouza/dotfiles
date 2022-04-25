@@ -1,4 +1,6 @@
-(fn config-fennel []
+(local path (require :pl.path))
+
+(fn require-fennel []
   (let [fennel (require :fennel)
         macro-path (.. fennel.macro-path ";macros/?.fnl")]
     (tset fennel :macro-path macro-path)
@@ -9,13 +11,26 @@
       (= (string.sub str 1 (length prefix)) prefix)
       false))
 
+(fn dotfiles-dir []
+  (let [{: source} (debug.getinfo 1)]
+    (-> source
+        (string.sub 2)
+        (path.abspath)
+        (path.dirname)
+        (path.dirname))))
+
+(fn isrel [p start]
+  (not (startswith (path.relpath p start) "../")))
+
 (fn compile-opts [opts]
   (let [{: filename} opts
-        is-nvim (startswith filename :nvim/)
-        globals (if (startswith filename :hammerspoon/) [:hs] is-nvim
+        filename (path.abspath filename)
+        dotfiles-dir (dotfiles-dir)
+        is-nvim (isrel filename (path.join dotfiles-dir :nvim))
+        is-hammerspoon (isrel filename (path.join dotfiles-dir :hammerspoon))
+        globals (if is-hammerspoon [:hs] is-nvim
                     [:vim :dotfiles-dir :config-dir :cache-dir :data-dir] [])
-        compile-opts {:plugins []
-                      : filename
+        compile-opts {: filename
                       :allowedGlobals globals
                       :unfriendly true
                       :useBitLib is-nvim}]
@@ -24,7 +39,7 @@
     compile-opts))
 
 (fn compile [opts]
-  (let [fennel (config-fennel)
+  (let [fennel (require-fennel)
         (ok output) (pcall fennel.compile-string opts.src (compile-opts opts))]
     (if (not ok)
         (values 1 "" output)
@@ -45,8 +60,7 @@
     opts))
 
 (fn mkdir [dir recursive]
-  (let [path (require :pl.path)
-        (ok _ code) (path.mkdir dir)]
+  (let [(ok _ code) (path.mkdir dir)]
     (match code
       17 recursive
       2 (if recursive
@@ -56,8 +70,7 @@
       nil true
       _ false)))
 
-(let [path (require :pl.path)
-      opts (parse-args arg)
+(let [opts (parse-args arg)
       (status-code stdout stderr) (compile opts)]
   (if (= status-code 0)
       (let [output (if opts.output
