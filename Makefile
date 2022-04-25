@@ -1,7 +1,8 @@
 NVIM_CACHE_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)
 NVIM_CONFIG_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("config")' +q 2>&1)
 NVIM_DATA_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("data")' +q 2>&1)
-FENNEL := $(if $(shell command -v fennel 2>/dev/null),fennel,$(NVIM_CACHE_DIR)/hr/bin/fennel)
+LUA := $(NVIM_CACHE_DIR)/hr/bin/lua
+FENNEL := $(NVIM_CACHE_DIR)/hr/bin/fennel
 PYTHON ?= python3.10
 
 .PHONY: all
@@ -28,7 +29,7 @@ kill-daemons:
 clear-logs:
 	:> $(NVIM_CACHE_DIR)/lsp.log
 
-FNL_FILES := $(shell find . -name '*.fnl' | grep -v 'macros/.*\.fnl' | sed -e 's;./;;')
+FNL_FILES := $(shell find . -name '*.fnl' | grep -v 'macros/.*\.fnl' | grep -v 'scripts/.*\.fnl' | sed -e 's;./;;')
 LUA_FILES := $(patsubst %.fnl,build/%.lua,$(FNL_FILES))
 VIM_FILES := $(shell find . -name '*.vim' | sed -e 's;./;;' | grep -v '^build/')
 TARGET_VIM_FILES := $(patsubst %,build/%,$(VIM_FILES))
@@ -69,14 +70,19 @@ clean-site: clean
 clean-hammerspoon:
 	rm -rf ~/.hammerspoon
 
-build: $(LUA_FILES) $(TARGET_VIM_FILES)
+build: scripts/compile.lua $(LUA_FILES) $(TARGET_VIM_FILES)
 
 build/%.lua: %.fnl
-	env FENNEL=$(FENNEL) $(PYTHON) scripts/compile.py $< $@
+	$(LUA) scripts/compile.lua --output $@ $<
 
 build/%.vim: %.vim
 	@ mkdir -p $(dir $@)
 	cp $< $@
+
+scripts/compile.lua: scripts/compile.fnl
+	$(eval TMP_FILE := $(shell mktemp))
+	$(FENNEL) -c $< >$(TMP_FILE)
+	mv $(TMP_FILE) $@
 
 .PHONY: nvim-tests
 nvim-tests:
