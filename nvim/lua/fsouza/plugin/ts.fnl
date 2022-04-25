@@ -46,7 +46,7 @@
       (setup-keymaps bufnr)
       (vim.api.nvim_buf_call bufnr
                              #(do
-                                (vim.api.nvim_set_option_value :foldemethod
+                                (vim.api.nvim_set_option_value :foldmethod
                                                                :expr
                                                                {:scope :local})
                                 (vim.api.nvim_set_option_value :foldexpr
