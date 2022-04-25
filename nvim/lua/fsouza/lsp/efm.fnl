@@ -111,6 +111,16 @@
          :rootMarkers default-root-markers
          :env [(.. :NVIM_CACHE_DIR= cache-dir)]})))
 
+(fn get-fnl-compile [cb]
+  (let [lua-bin (path.join cache-dir :hr :bin :lua)]
+    (cb {:lintCommand (string.format "%s %s/scripts/compile.lua --stdin-filename ${INPUT} -"
+                                     lua-bin dotfiles-dir)
+         :lintStdin true
+         :lintSource :fennel
+         :lintFormats ["%f:%l: %m"]
+         :lintIgnoreExitCode true
+         :rootMarkers default-root-markers})))
+
 (fn get-dune [cb]
   (cb {:formatCommand "dune format-dune-file"
        :formatStdin true
@@ -119,7 +129,8 @@
 (fn get-ocamlformat [cb]
   (cb {:formatCommand "ocamlformat --name ${INPUT} -"
        :formatStdin true
-       :rootMarkers [:.ocamlformat]}))
+       :rootMarkers [:.ocamlformat]
+       :requireMarker true}))
 
 (fn get-selene [cb]
   (cb {:lintCommand "selene --display-style quiet -"
@@ -331,6 +342,7 @@
                                  {:language :ocaml :fn get-ocamlformat}
                                  {:language :bzl :fn get-buildifier}
                                  {:language :fennel :fn get-fnlfmt}
+                                 {:language :fennel :fn get-fnl-compile}
                                  {:language :lua :fn get-selene}
                                  {:language :lua :fn get-stylua}
                                  {:language :lua :fn get-luacheck}]
