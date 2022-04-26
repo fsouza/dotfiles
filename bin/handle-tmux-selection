@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import functools
 import os
 import re
 import subprocess
@@ -27,16 +28,20 @@ def _valid_diagnostic(line: bytes) -> bool:
     if not m:
         return False
 
+    file_path = Path(m.group(1).decode())
+    return (_panel_cwd() / file_path).exists()
+
+
+@functools.lru_cache
+def _panel_cwd() -> Path:
     proc = subprocess.run(
         ["tmux", "display-message", "-p", "#{pane_current_path}"],
         capture_output=True,
     )
     if proc.returncode != 0:
-        return False
+        raise ValueError(proc.stderr)
 
-    cwd = Path(proc.stdout.strip().decode())
-    file_path = Path(m.group(1).decode())
-    return (cwd / file_path).exists()
+    return Path(proc.stdout.strip().decode())
 
 
 def send_to_nvim(contents: bytes) -> int:
