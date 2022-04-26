@@ -27,8 +27,16 @@ def _valid_diagnostic(line: bytes) -> bool:
     if not m:
         return False
 
+    proc = subprocess.run(
+        ["tmux", "display-message", "-p", "#{pane_current_path}"],
+        capture_output=True,
+    )
+    if proc.returncode != 0:
+        return False
+
+    cwd = Path(proc.stdout.strip().decode())
     file_path = Path(m.group(1).decode())
-    return file_path.exists()
+    return (cwd / file_path).exists()
 
 
 def send_to_nvim(contents: bytes) -> int:
