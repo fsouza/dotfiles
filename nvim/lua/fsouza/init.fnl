@@ -150,4 +150,4 @@
   (set-neovim-global-vars)
   (if vim.env.BOOTSTRAP_PAQ
       (mod-invoke :fsouza.packed :setup)
-      (vim-schedule (require :fsouza.plugin))))
+      (require :fsouza.plugin)))
