@@ -51,6 +51,10 @@
 (fn setup-lsp-commands []
   (vim.api.nvim_create_user_command :LspRestart
                                     #(mod-invoke :fsouza.lsp.detach :restart)
+                                    {:force true})
+  (vim.api.nvim_create_user_command :LspSync
+                                    #(mod-invoke :fsouza.lsp.sync
+                                                 :sync-all-buffers)
                                     {:force true}))
 
 (fn setup-lsp []
@@ -131,7 +135,19 @@
   (when (not vim.env.NVIM_SKIP_TREESITTER)
     (mod-invoke :fsouza.plugin.ts :setup)))
 
+(macro setup-delayed-commands []
+  (let [commands [:LspRestart
+                  :LspSync
+                  :EnableEditorConfig
+                  :DisableEditorConfig
+                  :ToggleAutofmt
+                  :ToggleGlobalAutofmt]]
+    `(let [delayed-commands# (require :fsouza.plugin.delayed-commands)]
+       ,(icollect [_ command (ipairs commands)]
+          `(delayed-commands#.add ,command)))))
+
 (let [schedule vim.schedule]
+  (setup-delayed-commands)
   (schedule setup-editorconfig)
   (schedule setup-git-messenger)
   (schedule setup-hlyank)
