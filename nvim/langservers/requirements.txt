@@ -55,7 +55,7 @@ pyflakes==2.4.0
     #   flake8
 pyupgrade==2.32.0
     # via -r requirements.in
-reorder-python-imports==3.0.1
+reorder-python-imports==3.1.0
     # via -r requirements.in
 tokenize-rt==4.2.1
     # via
