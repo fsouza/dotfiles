@@ -37,9 +37,9 @@
     (tset vim-opts :softtabstop indent-size)))
 
 (fn trim-whitespace []
-  (let [view (vim.fn.winsaveview)]
+  (let [cursor (vim.api.nvim_win_get_cursor 0)]
     (pcall #(vim.cmd "silent! keeppatterns %s/\\v\\s+$//"))
-    (vim.fn.winrestview view)))
+    (vim.api.nvim_win_set_cursor 0 cursor)))
 
 (fn handle-whitespaces [bufnr v]
   (let [commands []]
