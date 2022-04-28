@@ -77,7 +77,6 @@
                                                                         true)}))))
     (if-executable :go
                    (lsp.gopls.setup (opts.with-defaults {:cmd [(get-cache-cmd :gopls)]
-                                                         :root_dir (opts.root-pattern-with-fallback :go.mod)
                                                          :init_options {:deepCompletion false
                                                                         :staticcheck true
                                                                         :analyses {:fillreturns true
@@ -98,8 +97,7 @@
                                                                     (efm.gen-config client)
                                                                     true)}))))
     (if-executable :dune
-                   (lsp.ocamllsp.setup (opts.with-defaults {:root_dir (opts.root-pattern-with-fallback :.merlin
-                                                                                                       :package.json)})))
+                   (lsp.ocamllsp.setup (opts.with-defaults {:root_dir (opts.root-pattern-with-fallback :.merlin)})))
     (if-executable :zig
                    (lsp.zls.setup (opts.with-defaults {:cmd [(get-cache-path :zls
                                                                              :zig-out
