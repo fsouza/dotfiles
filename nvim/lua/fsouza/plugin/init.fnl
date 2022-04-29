@@ -171,6 +171,7 @@
   (schedule setup-treesitter)
   (vim-schedule (mod-invoke :fsouza.plugin.fidget :setup))
   (vim-schedule (mod-invoke :fsouza.plugin.rg-complete :setup :<c-x><c-n>))
+  (vim-schedule (mod-invoke :fsouza.plugin.auto-delete :setup))
   (schedule setup-comment-nvim)
   (schedule setup-fuzzy-mappings)
   (vim-schedule (mod-invoke :fsouza.plugin.fnl-autocompile :setup))
