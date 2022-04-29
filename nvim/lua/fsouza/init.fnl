@@ -97,7 +97,7 @@
                  :wildmenu true
                  :wildmode "list:longest"
                  :backup false
-                 :inccommand :nosplit
+                 :inccommand :split
                  :jumpoptions :stack
                  :scrolloff 2
                  :autoindent true
