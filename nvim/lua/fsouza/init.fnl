@@ -112,11 +112,6 @@
     (icollect [name value (pairs options)]
       `(tset vim.o ,name ,value))))
 
-(macro set-folding []
-  `(do
-     (tset vim.o :foldlevelstart 99)
-     (tset vim.o :foldmethod :indent)))
-
 (macro set-global-mappings []
   (let [rl-bindings [{:lhs :<c-a> :rhs :<home>}
                      {:lhs :<c-e> :rhs :<end>}
@@ -146,7 +141,6 @@
   (initial-mappings)
   (vim-schedule (set-global-options) (set-global-mappings))
   (set-ui-options)
-  (set-folding)
   (set-neovim-global-vars)
   (if vim.env.BOOTSTRAP_PAQ
       (mod-invoke :fsouza.packed :setup)
