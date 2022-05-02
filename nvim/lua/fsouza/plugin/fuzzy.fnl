@@ -156,8 +156,9 @@
       mod {: find-files
            :grep (partial grep rg-opts)
            :grep-visual #(grep rg-opts
-                               (mod-invoke :fsouza.lib.nvim-helpers
-                                           :get-visual-selection-contents))
+                               (. (mod-invoke :fsouza.lib.nvim-helpers
+                                              :get-visual-selection-contents)
+                                  1))
            :grep-last #(grep rg-opts last-search)
            : git-repos
            : send-items}]
