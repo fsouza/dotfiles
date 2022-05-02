@@ -30,6 +30,7 @@
     (fn check-new-clients []
       (let [current-client-ids (get-lsp-client-ids)
             s (-> current-client-ids
+                  (seq.keys)
                   (seq.filter #(not (vim.tbl_contains original-client-ids $1))))
             has-new-clients (if (s) true false)]
         (values has-new-clients (length current-client-ids))))
