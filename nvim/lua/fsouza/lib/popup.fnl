@@ -33,6 +33,8 @@
     (set-content bufnr lines
                  {: markdown :width win-opts.width :height win-opts.height})
     (vim.api.nvim_win_set_option winid :wrap (= wrap true))
+    (vim.api.nvim_win_set_option winid :winhighlight
+                                 "Normal:PopupNormal,CursorLineNr:PopupCursorLineNr,CursorLine:PopupCursorLine")
     (vim.api.nvim_win_set_var winid win-var-identifier true)
     (values winid bufnr)))
 

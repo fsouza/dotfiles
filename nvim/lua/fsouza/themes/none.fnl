@@ -82,6 +82,12 @@
     (icollect [_ group-name (ipairs groups)]
       `(vim.api.nvim_set_hl 0 ,group-name {}))))
 
+(macro popup []
+  `(do
+     (vim.api.nvim_set_hl 0 :PopupNormal {:link :Pmenu})
+     (vim.api.nvim_set_hl 0 :PopupCursorLine {:link :CursorLine})
+     (vim.api.nvim_set_hl 0 :PopupCursorLineNr {:link :PopupCursorLine})))
+
 (macro reversers []
   (let [groups [:Cursor :MoreMsg]]
     (icollect [_ group-name (ipairs groups)]
@@ -126,5 +132,6 @@
     (basics colors)
     (noners)
     (reversers)
+    (popup)
     (lsp-references)
     (lsp-diagnostics)))
