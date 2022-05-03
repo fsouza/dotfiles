@@ -12,7 +12,7 @@
   `(get-cache-path :bin ,cmd))
 
 (macro config-log []
-  `(let [level# (if vim.env.NVIM_DEBUG :trace :error)
+  `(let [level# (if vim.env.NVIM_DEBUG :trace :off)
          lsp-log# (require :vim.lsp.log)]
      (lsp-log#.set_level level#)
      (lsp-log#.set_format_func vim.inspect)))
