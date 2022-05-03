@@ -5,6 +5,7 @@ brew "fd"
 brew "fnm"
 brew "fzf"
 brew "git", args: ["overwrite"]
+brew "gnu-sed"
 brew "libyaml"
 brew "lua"
 brew "ripgrep"
