@@ -97,7 +97,7 @@
 (fn setup-shortcuts []
   (let [shortcut (require :fsouza.plugin.shortcut)
         path (require :fsouza.pl.path)]
-    (shortcut.register :Dotfiles (vim.fn.expand "~/.dotfiles"))
+    (shortcut.register :Dotfiles dotfiles-dir)
     (shortcut.register :Site (path.join data-dir :site))))
 
 (fn setup-notif []
@@ -142,7 +142,9 @@
                   :EnableEditorConfig
                   :DisableEditorConfig
                   :ToggleAutofmt
-                  :ToggleGlobalAutofmt]]
+                  :ToggleGlobalAutofmt
+                  :Dotfiles
+                  :Site]]
     `(let [delayed-commands# (require :fsouza.plugin.delayed-commands)]
        ,(icollect [_ command (ipairs commands)]
           `(delayed-commands#.add ,command)))))
