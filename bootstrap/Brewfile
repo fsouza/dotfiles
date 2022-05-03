@@ -1,10 +1,14 @@
 tap "homebrew/cask-fonts"
 
 brew "bash"
+brew "fd"
 brew "fnm"
+brew "fzf"
 brew "git", args: ["overwrite"]
 brew "libyaml"
 brew "lua"
+brew "ripgrep"
+brew "sd"
 brew "selene"
 brew "stylua"
 
