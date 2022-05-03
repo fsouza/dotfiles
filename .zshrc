@@ -1,5 +1,5 @@
-basedir=$(dirname "$(readlink "${(%):-%N}")")
-source "${basedir}"/extra/init-functions
+FSOUZA_DOTFILES_DIR=$(dirname "$(readlink "${(%):-%N}")")
+source "${FSOUZA_DOTFILES_DIR}"/extra/init-functions
 
 mkdir -p ~/.cache/{go,node,zsh}
 
@@ -9,13 +9,13 @@ export LESSHISTFILE=${HOME}/.cache/lesshst
 export NODE_REPL_HISTORY=${HOME}/.cache/node/history
 
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin
-source "${basedir}"/extra/brew
+source "${FSOUZA_DOTFILES_DIR}"/extra/brew
 
 prepend_to_path \
 	"${HOME}"/.cargo/bin \
 	"${HOME}"/.local/bin \
 	"${HOME}/.dotnet/tools" \
-	"${basedir}"/bin
+	"${FSOUZA_DOTFILES_DIR}"/bin
 
 export MANPATH="${HOME}/.local/share/man${MANPATH+:$MANPATH}:"
 
@@ -25,21 +25,21 @@ fi
 
 cond_source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
 
-source "${basedir}"/extra/virtualenv
+source "${FSOUZA_DOTFILES_DIR}"/extra/virtualenv
 
-source "${basedir}"/extra/z
-source "${basedir}"/extra/git
-source "${basedir}"/extra/go
-source "${basedir}"/extra/mail
-source "${basedir}"/extra/ocaml
-source "${basedir}"/extra/neovim
-source "${basedir}"/extra/rclone
-source "${basedir}"/extra/zig
+source "${FSOUZA_DOTFILES_DIR}"/extra/z
+source "${FSOUZA_DOTFILES_DIR}"/extra/git
+source "${FSOUZA_DOTFILES_DIR}"/extra/go
+source "${FSOUZA_DOTFILES_DIR}"/extra/mail
+source "${FSOUZA_DOTFILES_DIR}"/extra/ocaml
+source "${FSOUZA_DOTFILES_DIR}"/extra/neovim
+source "${FSOUZA_DOTFILES_DIR}"/extra/rclone
+source "${FSOUZA_DOTFILES_DIR}"/extra/zig
 
-cond_source "${basedir}/extra/local-functions"
-cond_source "${basedir}/extra/$(uname -s)-functions"
+cond_source "${FSOUZA_DOTFILES_DIR}/extra/local-functions"
+cond_source "${FSOUZA_DOTFILES_DIR}/extra/$(uname -s)-functions"
 
-source "${basedir}"/extra/tmux
+source "${FSOUZA_DOTFILES_DIR}"/extra/tmux
 
 fpath=(${HOMEBREW_PREFIX}/share/zsh-completions ~/.cache/zsh/zfunc $fpath)
 export ZLE_SPACE_SUFFIX_CHARS=$'|&'
@@ -68,9 +68,10 @@ bindkey '^x^e' edit-command-line
 autoload -U select-word-style
 select-word-style bash
 
-alias bump_dotfiles="git -C ${basedir} pull && ${basedir}/bootstrap/setup && upgrade_virtualenv"
+alias bump_dotfiles="git -C ${FSOUZA_DOTFILES_DIR} pull && ${FSOUZA_DOTFILES_DIR}/bootstrap/setup && upgrade_virtualenv"
 
-source "${basedir}"/extra/fzf
-unset basedir
+source "${FSOUZA_DOTFILES_DIR}"/extra/fzf
 
 PROMPT="％ " PROMPT2="\\ "
+
+export FSOUZA_DOTFILES_DIR

@@ -1,12 +1,5 @@
 (import-macros {: vim-schedule : mod-invoke : if-nil} :helpers)
 
-(global dotfiles-dir
-        (if-nil vim.env.FSOUZA_DOTFILES_DIR (vim.fn.expand "~/.dotfiles")))
-
-(global config-dir (.. dotfiles-dir :/nvim))
-(global cache-dir (vim.fn.stdpath :cache))
-(global data-dir (vim.fn.stdpath :data))
-
 (macro hererocks []
   `(let [lua-version# (string.gsub _G._VERSION "Lua " "")
          hererocks-path# (.. cache-dir :/hr)
@@ -135,7 +128,11 @@
       (table.insert exprs `(vim.keymap.set :i ,lhs ,rhs {:remap false})))
     exprs))
 
-(do
+(when vim.env.FSOUZA_DOTFILES_DIR
+  (global dotfiles-dir vim.env.FSOUZA_DOTFILES_DIR)
+  (global config-dir (.. dotfiles-dir :/nvim))
+  (global cache-dir (vim.fn.stdpath :cache))
+  (global data-dir (vim.fn.stdpath :data))
   (hererocks)
   (add-paqs-opt-to-path)
   (initial-mappings)

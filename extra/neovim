@@ -44,15 +44,18 @@ function enter_demo_mode {
 	cat >"${dir}/demo.lua" <<EOF
 require('fsouza.plugin.demo-mode').enable()
 EOF
-	cp ~/.dotfiles/alacritty.yml{,.old}
-	sd '^colors:.+' 'colors: *solarized-light' ~/.dotfiles/alacritty.yml
-	sd 'size: .+$' 'size: 24.0' ~/.dotfiles/alacritty.yml
+	(
+		cd "${FSOUZA_DOTFILES_DIR}"
+		cp alacritty.yml{,.old}
+		sd '^colors:.+' 'colors: *solarized-light' alacritty.yml
+		sd 'size: .+$' 'size: 24.0' alacritty.yml
+	)
 }
 
 function leave_demo_mode {
 	rm -f ~/.local/share/nvim/site/after/plugin/demo.lua
 	(
-		cd ~/.dotfiles && test -f alacritty.yml.old && mv alacritty.yml.old alacritty.yml
+		cd "${FSOUZA_DOTFILES_DIR}" && test -f alacritty.yml.old && mv alacritty.yml.old alacritty.yml
 	)
 }
 
