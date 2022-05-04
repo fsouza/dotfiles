@@ -29,9 +29,9 @@ kill-daemons:
 clear-logs:
 	:> $(NVIM_CACHE_DIR)/lsp.log
 
-FNL_FILES := $(shell find . -type f -name '*.fnl' | grep -v 'macros/.*\.fnl' | grep -v 'scripts/.*\.fnl' | sed -e 's;./;;')
+FNL_FILES := $(shell fd --type f '.+\.fnl' | grep -Ev 'scripts/.+\.fnl' | grep -Ev 'macros/.+\.fnl' | sd '^./' '')
 LUA_FILES := $(patsubst %.fnl,build/%.lua,$(FNL_FILES))
-VIM_FILES := $(shell find . -name '*.vim' | sed -e 's;./;;' | grep -v '^build/')
+VIM_FILES := $(shell fd --type f '.+\.vim' | sd '^./' '')
 TARGET_VIM_FILES := $(patsubst %,build/%,$(VIM_FILES))
 
 .PHONY: install
