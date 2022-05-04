@@ -3,17 +3,7 @@
 os=$(uname -s)
 basedir=$(cd "$(dirname "${0}")"/.. && pwd -P)
 
-function gen_hammerspoon_config {
-	local nvim_cache_dir temp_file fennel
-
-	nvim_cache_dir=$(nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)
-	fennel=${nvim_cache_dir}/hr/bin/fennel
-	temp_file=$(mktemp)
-
-	"${fennel}" --globals hs -c "${basedir}"/hammerspoon/init.fnl >"${temp_file}" &&
-		mkdir -p ~/.hammerspoon &&
-		mv "${temp_file}" ~/.hammerspoon/init.lua
-}
+export FSOUZA_DOTFILES_DIR=${FSOUZA_DOTFILES_DIR:-${basedir}}
 
 home_files=(.zshrc .editorconfig)
 for file in "${home_files[@]}"; do

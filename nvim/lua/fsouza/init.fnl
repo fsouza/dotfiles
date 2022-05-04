@@ -128,17 +128,21 @@
       (table.insert exprs `(vim.keymap.set :i ,lhs ,rhs {:remap false})))
     exprs))
 
-(when vim.env.FSOUZA_DOTFILES_DIR
-  (global dotfiles-dir vim.env.FSOUZA_DOTFILES_DIR)
-  (global config-dir (.. dotfiles-dir :/nvim))
-  (global cache-dir (vim.fn.stdpath :cache))
-  (global data-dir (vim.fn.stdpath :data))
-  (hererocks)
-  (add-paqs-opt-to-path)
-  (initial-mappings)
-  (vim-schedule (set-global-options) (set-global-mappings))
-  (set-ui-options)
-  (set-neovim-global-vars)
-  (if vim.env.BOOTSTRAP_PAQ
-      (mod-invoke :fsouza.packed :setup)
-      (require :fsouza.plugin)))
+(if vim.env.FSOUZA_DOTFILES_DIR
+    (do
+      (global dotfiles-dir vim.env.FSOUZA_DOTFILES_DIR)
+      (global config-dir (.. dotfiles-dir :/nvim))
+      (global cache-dir (vim.fn.stdpath :cache))
+      (global data-dir (vim.fn.stdpath :data))
+      (hererocks)
+      (add-paqs-opt-to-path)
+      (initial-mappings)
+      (vim-schedule (set-global-options) (set-global-mappings))
+      (set-ui-options)
+      (set-neovim-global-vars)
+      (if vim.env.BOOTSTRAP_PAQ
+          (mod-invoke :fsouza.packed :setup)
+          (require :fsouza.plugin)))
+    (do
+      (print "[ERROR] missing FSOUZA_DOTFILES_DIR\n")
+      (vim.cmd :cq)))
