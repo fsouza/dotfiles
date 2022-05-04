@@ -55,7 +55,6 @@
              :opt true}
             {1 :guns/vim-sexp}
             {1 :tpope/vim-sexp-mappings-for-regular-people}
-            {1 :famiu/bufdelete.nvim :as :bufdelete.nvim :opt true}
             ; filetypes stuff
             ;
             ; Note: I used to use vim-polyglot, but it loads too much garbage and

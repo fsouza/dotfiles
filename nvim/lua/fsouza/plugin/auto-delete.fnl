@@ -4,7 +4,7 @@
   (let [bufnr (abuf)]
     (when bufnr
       (if (= vim.v.fcs_reason :deleted)
-          (vim-schedule (mod-invoke :bufdelete :bufwipeout bufnr true))
+          (vim-schedule (vim.cmd (.. :bwipeout! bufnr)))
           (not= vim.v.fcs_reason :conflict)
           (tset vim.v :fcs_choice :reload)))))
 
