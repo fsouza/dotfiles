@@ -1,4 +1,4 @@
-(import-macros {: if-nil : send-esc : max-col} :helpers)
+(import-macros {: if-nil : send-esc : max-col : mod-invoke} :helpers)
 
 (fn wrap-callback [cb]
   (if (not= cb nil)
@@ -83,10 +83,17 @@
       nil
       (. (vim.split err ":" {:plain true :trimempty true}) 1)))
 
+(fn hash-buffer [bufnr]
+  (let [lines (-> bufnr
+                  (vim.api.nvim_buf_get_lines 0 -1 true)
+                  (table.concat "\n"))]
+    (mod-invoke :lsha2 :hash256 lines)))
+
 {:reset-augroup #(vim.api.nvim_create_augroup $1 {:clear true})
  : augroup
  : once
  : rewrite-wrap
  : get-visual-selection-contents
  : get-visual-selection-range
- : extract-luv-error}
+ : extract-luv-error
+ : hash-buffer}

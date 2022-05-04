@@ -2,14 +2,6 @@
 
 (local langservers-org-imports-set {:gopls true})
 
-(local updates {})
-
-(macro set-last-update [bufnr]
-  `(tset updates ,bufnr (os.clock)))
-
-(macro get-last-update [bufnr]
-  `(. updates ,bufnr))
-
 (fn should-skip-buffer [bufnr]
   (let [path (require :fsouza.pl.path)
         file-path (vim.api.nvim_buf_get_name bufnr)
@@ -84,20 +76,15 @@
                                         result)
                                (vim.api.nvim_buf_call bufnr
                                                       #(do
-                                                         (mod-invoke :fsouza.lib.nvim-helpers
-                                                                     :rewrite-wrap
-                                                                     #(vim.lsp.util.apply_text_edits result
-                                                                                                     bufnr
-                                                                                                     client.offset_encoding))
-                                                         (let [last-update (get-last-update bufnr)]
-                                                           (if (and last-update
-                                                                    (< (- (os.clock)
-                                                                          last-update)
-                                                                       0.01))
-                                                               (vim.cmd "noau update")
-                                                               (do
-                                                                 (vim.cmd :update)
-                                                                 (set-last-update bufnr))))
+                                                         (let [helpers (require :fsouza.lib.nvim-helpers)
+                                                               hash (helpers.hash-buffer bufnr)]
+                                                           (helpers.rewrite-wrap #(vim.lsp.util.apply_text_edits result
+                                                                                                                 bufnr
+                                                                                                                 client.offset_encoding))
+                                                           (let [new-hash (helpers.hash-buffer bufnr)]
+                                                             (when (not= new-hash
+                                                                         hash)
+                                                               (vim.cmd :update))))
                                                          (when (should-organize-imports client.name)
                                                            (organize-imports-and-write client
                                                                                        bufnr))))))))))))))
@@ -116,7 +103,6 @@
 (fn on-detach [bufnr]
   (when (vim.api.nvim_buf_is_valid bufnr)
     (pcall vim.keymap.del :n :<leader>f {:buffer bufnr}))
-  (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup (augroup-name bufnr))
-  (tset updates bufnr nil))
+  (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup (augroup-name bufnr)))
 
 {: on-attach : on-detach}

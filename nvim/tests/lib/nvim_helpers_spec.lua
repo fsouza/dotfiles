@@ -147,3 +147,22 @@ describe("fsouza.lib.nvim-helpers extract-luv-error", function()
     assert.are_same("whatever", extract_luv_error("whatever"))
   end)
 end)
+
+describe("fsouza.lib.nvim-helpers hash-buffer", function()
+  local hash_buffer = helpers["hash-buffer"]
+
+  it("calculates sha256 from the buffer contents", function()
+    local stub = require("luassert.stub")
+
+    local lines = { "line1", "line2", "line3" }
+    stub(vim.api, "nvim_buf_get_lines", lines)
+
+    local expected_hash = require("lsha2").hash256(table.concat(lines, "\n"))
+    local hash = hash_buffer(2)
+
+    assert.are.same(expected_hash, hash)
+    assert.stub(vim.api.nvim_buf_get_lines).was.called_with(2, 0, -1, true)
+
+    vim.api.nvim_buf_get_lines:revert()
+  end)
+end)
