@@ -20,8 +20,7 @@
 (macro define-signs []
   (icollect [_ level (ipairs [:Error :Warn :Info :Hint])]
     (let [sign-name (.. :DiagnosticSign level)]
-      `(vim.fn.sign_define ,sign-name
-                           {:text "" :texthl ,sign-name :numhl ,sign-name}))))
+      `(vim.fn.sign_define ,sign-name {:text "" :numhl ,sign-name}))))
 
 (macro if-executable [name ...]
   `(when (= (vim.fn.executable ,name) 1)
