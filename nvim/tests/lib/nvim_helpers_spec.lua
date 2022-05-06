@@ -55,6 +55,7 @@ describe("fsouza.lib.nvim-helpers augroup", function()
         command = "echo hi",
         buflocal = false,
         group = group,
+        group_name = group_name,
       },
       {
         event = "BufWritePost",
@@ -63,6 +64,7 @@ describe("fsouza.lib.nvim-helpers augroup", function()
         command = "echo bye",
         buflocal = false,
         group = group,
+        group_name = group_name,
       },
       {
         event = "BufWritePre",
@@ -71,6 +73,7 @@ describe("fsouza.lib.nvim-helpers augroup", function()
         command = "echo bye",
         buflocal = false,
         group = group,
+        group_name = group_name,
       },
       {
         event = "BufWritePost",
@@ -79,6 +82,7 @@ describe("fsouza.lib.nvim-helpers augroup", function()
         command = "echo bye",
         buflocal = false,
         group = group,
+        group_name = group_name,
       },
       {
         event = "BufWritePre",
@@ -87,6 +91,7 @@ describe("fsouza.lib.nvim-helpers augroup", function()
         command = "echo bye",
         buflocal = false,
         group = group,
+        group_name = group_name,
       },
     }, autocmds)
   end)
