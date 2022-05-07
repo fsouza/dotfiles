@@ -73,7 +73,7 @@
                                     :swap_previous {:<leader>A "@parameter.inner"}}}
                :context_commentstring {:enable true :enable_autocmd false}
                :ensure_installed :all
-               :ignore_install [:phpdoc]})
+               :ignore_install [:phpdoc :markdown]})
   (setup-autocmds))
 
 {: setup}
