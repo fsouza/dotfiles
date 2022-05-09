@@ -1,9 +1,12 @@
 (import-macros {: if-nil : abuf : mod-invoke} :helpers)
 
+(local ignore-install [:phpdoc :markdown])
+
 (fn lang-to-ft [lang]
-  (let [parsers (require :nvim-treesitter.parsers)
-        obj (. parsers.list lang)]
-    (vim.tbl_flatten [(if-nil obj.filetype lang)] (if-nil obj.used_by []))))
+  (if (vim.tbl_contains ignore-install lang) []
+      (let [parsers (require :nvim-treesitter.parsers)
+            obj (. parsers.list lang)]
+        (vim.tbl_flatten [(if-nil obj.filetype lang)] (if-nil obj.used_by [])))))
 
 (fn get-file-types []
   (let [parsers-mod (require :nvim-treesitter.parsers)
@@ -73,7 +76,7 @@
                                     :swap_previous {:<leader>A "@parameter.inner"}}}
                :context_commentstring {:enable true :enable_autocmd false}
                :ensure_installed :all
-               :ignore_install [:phpdoc :markdown]})
+               :ignore_install ignore-install})
   (setup-autocmds))
 
 {: setup}
