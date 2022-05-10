@@ -143,6 +143,4 @@
       (if vim.env.BOOTSTRAP_PAQ
           (mod-invoke :fsouza.packed :setup)
           (require :fsouza.plugin)))
-    (do
-      (print "[ERROR] missing FSOUZA_DOTFILES_DIR\n")
-      (vim.cmd :cq)))
+    (error "missing FSOUZA_DOTFILES_DIR\n"))
