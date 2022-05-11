@@ -128,6 +128,11 @@
       (table.insert exprs `(vim.keymap.set :i ,lhs ,rhs {:remap false})))
     exprs))
 
+(macro override-ui-functions []
+  `(tset vim.ui :select
+         (fn [...]
+           (mod-invoke :fsouza.lib.popup-picker :ui-select ...))))
+
 (if vim.env.FSOUZA_DOTFILES_DIR
     (do
       (global dotfiles-dir vim.env.FSOUZA_DOTFILES_DIR)
@@ -137,7 +142,8 @@
       (hererocks)
       (add-paqs-opt-to-path)
       (initial-mappings)
-      (vim-schedule (set-global-options) (set-global-mappings))
+      (vim-schedule (set-global-options) (set-global-mappings)
+                    (override-ui-functions))
       (set-ui-options)
       (set-neovim-global-vars)
       (if vim.env.BOOTSTRAP_PAQ

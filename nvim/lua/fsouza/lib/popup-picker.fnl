@@ -1,11 +1,13 @@
-(import-macros {: mod-invoke} :helpers)
+(import-macros {: mod-invoke : if-nil} :helpers)
 
-(fn handle-selection [cb winid]
+(fn handle-action [action cb winid]
   (let [[index _] (vim.api.nvim_win_get_cursor 0)]
     (vim.cmd "wincmd p")
     (when (vim.api.nvim_win_is_valid winid)
       (vim.api.nvim_win_close winid false))
-    (cb index)))
+    (match action
+      :abort (cb nil)
+      :select (cb index))))
 
 (fn open [lines cb]
   (let [(winid bufnr) (mod-invoke :fsouza.lib.popup :open
@@ -20,10 +22,17 @@
                   :targets [(string.format "<buffer=%d>" bufnr)]
                   :once true
                   :callback #(vim.api.nvim_win_close winid false)}])
-    (vim.keymap.set :n :<esc> #(vim.api.nvim_win_close winid false)
-                    mapping-opts)
-    (vim.keymap.set :n :<cr> #(handle-selection cb winid) mapping-opts)
+    (vim.keymap.set :n :<esc> #(handle-action :abort cb winid) mapping-opts)
+    (vim.keymap.set :n :<cr> #(handle-action :select cb winid) mapping-opts)
     (vim.keymap.set :n :<c-n> :<down> {:remap false :buffer bufnr})
     (vim.keymap.set :n :<c-p> :<up> {:remap false :buffer bufnr})))
 
-{: open}
+(fn ui-select [items opts cb]
+  (let [format-item (if-nil (?. opts :format_item) tostring)
+        lines (icollect [_ item (ipairs items)]
+                (format-item item))]
+    (open lines #(if $1
+                     (cb (. items $1) $1)
+                     (cb nil nil)))))
+
+{: open : ui-select}
