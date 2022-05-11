@@ -9,14 +9,16 @@
         (fuzzy.find-files directory))))
 
 (fn make-callback [path]
-  (fn [bang]
-    (let [cd (= bang "!")]
+  (fn [args]
+    (let [{: bang} args]
       (vim.loop.fs_stat path
                         #(when (not $1)
                            (let [is-dir (= $2.type :directory)]
                              (vim-schedule (if is-dir
-                                               (fzf-dir path cd)
-                                               (vim.cmd (.. "edit " path))))))))))
+                                               (fzf-dir path bang)
+                                               (vim.api.nvim_cmd {:cmd :edit
+                                                                  :args [path]}
+                                                                 {})))))))))
 
 (fn register [command path]
   (vim.api.nvim_create_user_command command (make-callback path)

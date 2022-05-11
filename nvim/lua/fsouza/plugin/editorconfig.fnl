@@ -38,7 +38,14 @@
 
 (fn trim-whitespace []
   (let [cursor (vim.api.nvim_win_get_cursor 0)]
-    (pcall #(vim.cmd "silent! keeppatterns %s/\\v\\s+$//"))
+    (pcall #(vim.api.nvim_cmd {:cmd :substitute
+                               :cmd :substitute
+                               :args ["/\\v\\s+$//"]
+                               :range [1 (vim.api.nvim_buf_line_count 0)]
+                               :mods {:silent true
+                                      :bang true
+                                      :keeppatterns true}}
+                              {}))
     (vim.api.nvim_win_set_cursor 0 cursor)))
 
 (fn handle-whitespaces [bufnr v]

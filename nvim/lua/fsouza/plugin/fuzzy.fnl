@@ -10,7 +10,7 @@
   (if (should-qf selected)
       (do
         (mod-invoke :fzf-lua.actions :file_sel_to_qf selected)
-        (vim.cmd :cc))
+        (vim.api.nvim_cmd {:cmd :cc} {}))
       (edit selected)))
 
 (fn edit [command selected]
@@ -22,8 +22,10 @@
             path (if (vim.startswith path ".")
                      (pl-path.abspath path)
                      path)]
-        (vim.cmd (string.format "silent! %s %s" command
-                                (vim.fn.fnameescape path)))
+        (vim.api.nvim_cmd {:cmd command
+                           :args [path]
+                           :bang true
+                           :mods {:silent true}} {})
         (when (or (not= line 1) (not= col 1))
           (vim.api.nvim_win_set_cursor 0 [line (- col 1)])
           (vim.api.nvim_feedkeys :zz :n false))))))
@@ -56,7 +58,9 @@
 
 (local fzf-lua (mod-invoke :fsouza.lib.nvim-helpers :once
                            (fn []
-                             (vim.cmd "packadd nvim-fzf")
+                             (vim.api.nvim_cmd {:cmd :packadd
+                                                :args [:nvim-fzf]}
+                                               {})
                              (let [actions (file-actions)
                                    fzf-lua- (require :fzf-lua)]
                                (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS

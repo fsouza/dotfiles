@@ -6,11 +6,11 @@
   `(let [items# (vim.diagnostic.toqflist ,diagnostics)]
      (vim.fn.setqflist items#)
      (if (vim.tbl_isempty items#)
-         (vim.cmd :cclose)
+         (vim.api.nvim_cmd {:cmd :cclose})
          (do
-           (vim.cmd :copen)
-           (vim.cmd "wincmd p")
-           (vim.cmd :cc)))))
+           (vim.api.nvim_cmd {:cmd :open} {})
+           (vim.api.nvim_cmd {:cmd :wincmd :args [:p]} {})
+           (vim.api.nvim_cmd {:cmd :cc} {})))))
 
 (fn list-file-diagnostics []
   (let [bufnr (vim.api.nvim_get_current_buf)]

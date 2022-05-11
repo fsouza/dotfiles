@@ -43,6 +43,8 @@
                                            (timer:stop)
                                            (when (= total-clients 0)
                                              (timer:stop)
-                                             (vim.cmd "silent! edit"))))))))
+                                             (vim.api.nvim_cmd {:cmd :edit
+                                                                :mods {:silent true}}
+                                                               {}))))))))
 
 {: register : restart}

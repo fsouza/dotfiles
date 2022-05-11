@@ -80,7 +80,7 @@
                  :isfname "@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@"}]
     (list (sym :do) (icollect [name value (pairs options)]
                       `(tset vim.o ,name ,value))
-          `(vim.cmd "color none"))))
+          `(vim.api.nvim_cmd {:cmd :color :args [:none]} {}))))
 
 (macro set-global-options []
   (let [options {:completeopt "menuone,noinsert,noselect"

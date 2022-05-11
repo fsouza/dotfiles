@@ -9,14 +9,14 @@
           (when should-clear-qf
             (set should-clear-qf false)
             (vim.fn.setqflist [])
-            (vim.cmd :cclose))
+            (vim.api.nvim_cmd {:cmd :cclose} {}))
           (vim.notify "Successfully compiled")
           (when next
             (next)))
         (do
           (when (mod-invoke :fsouza.lib.qf :set-from-contents result.stderr
                             {:open true})
-            (vim.cmd "wincmd p")
+            (vim.api.nvim_cmd {:cmd :wincmd :args [:p]} {})
             (set should-clear-qf true)))))
 
   (fn make []
