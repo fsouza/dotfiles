@@ -29,6 +29,8 @@
                 {:name :StatusLine
                  :opts {:bg `colors.light-gray :fg `colors.black}}
                 {:name :LspCodeLensVirtualText :opts {:fg `colors.gray}}
+                {:name :LspCodeLens :opts {:fg `colors.gray}}
+                {:name :LspCodeLensSeparator :opts {:fg `colors.gray}}
                 {:name :StatusLineNC
                  :opts {:bg `colors.light-gray :fg `colors.black}}
                 {:name :HlYank :opts {:bg `colors.orange}}]]
