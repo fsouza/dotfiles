@@ -16,5 +16,8 @@ if [ -n "${brew_path}" ]; then
 	export HOMEBREW_NO_EMOJI=1
 	export HOMEBREW_NO_GITHUB_API=1
 
-	prepend_to_path "$(brew --prefix)"/opt/coreutils/libexec/gnubin
+	prepend_to_path \
+		"${HOMEBREW_PREFIX}"/opt/coreutils/libexec/gnubin \
+		"${HOMEBREW_PREFIX}"/opt/curl/bin \
+		"${HOMEBREW_PREFIX}"/opt/python@3.10/bin
 fi
