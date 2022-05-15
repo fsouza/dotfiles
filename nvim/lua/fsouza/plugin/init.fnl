@@ -82,7 +82,7 @@
 (fn setup-spell []
   (helpers.augroup :fsouza__auto_spell
                    [{:events [:FileType]
-                     :targets [:changelog :gitcommit :markdown :text]
+                     :targets [:changelog :gitcommit :help :markdown :text]
                      :command "setlocal spell"}]))
 
 (fn setup-editorconfig []
