@@ -7,7 +7,7 @@
 		"@fsouza/prettierd": "^0.20.0",
 		"@typescript-eslint/typescript-estree": "^5.23.0",
 		"angular-html-parser": "^1.8.0",
-		"bash-language-server": "^2.1.0",
+		"bash-language-server": "^3.0.2",
 		"eslint_d": "^12.1.0",
 		"postcss-scss": "^4.0.4",
 		"pyright": "^1.1.246",
