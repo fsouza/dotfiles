@@ -5,7 +5,7 @@
     (when bufnr
       (if (= vim.v.fcs_reason :deleted)
           (vim-schedule (vim.api.nvim_cmd {:cmd :bwipeout
-                                           :args [bufnr]
+                                           :args [(tostring bufnr)]
                                            :mods {:bang true}}
                                           {}))
           (not= vim.v.fcs_reason :conflict)
