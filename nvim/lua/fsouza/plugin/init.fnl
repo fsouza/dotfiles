@@ -170,6 +170,7 @@
                              :html
                              :lua
                              :htmldjango
+                             :tmux
                              :yaml]))
   (schedule setup-terminal-mappings)
   (schedule setup-lsp)
