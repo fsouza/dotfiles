@@ -1622,10 +1622,10 @@ type-fest@^0.20.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.20.2.tgz#1bf207f4b28f91583666cb5fbd327887301cd5f4"
   integrity sha512-Ne+eE4r0/iWnpAxD852z3A+N0Bt5RN//NjJwRd2VFHEmrywxf5vsZlh4R6lixl6B+wz/8d+maTSAkN1FIkI3LQ==
 
-typescript-language-server@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-0.10.0.tgz#285ac26672637625d53965afe92b48505d709682"
-  integrity sha512-VHCrQT2Znbcb+Bbw+cE1vVN2k9mZCJzjxW/i8b3B8Vhw8PNCNHYkWE3i0SzYshWCktWQk/LepJX/imKHEXw6YA==
+typescript-language-server@^0.10.1:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-0.10.1.tgz#69232fcd860209f97f240a83532b306af960f6e1"
+  integrity sha512-Lk98jYbHthLOhldFziQhk0TubE7RvUtQaVW5un7hOR2uDVH78lQHf5RZsgtmlAECgZRxWXgTOJUZ+BWJ+v/a7A==
   dependencies:
     commander "^9.0.0"
     fs-extra "^10.0.0"
@@ -1634,8 +1634,8 @@ typescript-language-server@^0.10.0:
     semver "^7.3.5"
     tempy "^1.0.1"
     vscode-languageserver "^7.0.0"
-    vscode-languageserver-protocol "^3.16.0"
-    vscode-languageserver-textdocument "^1.0.1"
+    vscode-languageserver-protocol "3.16.0"
+    vscode-languageserver-textdocument "1.0.4"
     vscode-uri "^3.0.2"
     which "^2.0.2"
 
@@ -1805,7 +1805,7 @@ vscode-langservers-extracted@^4.2.1:
     vscode-nls "^5.0.1"
     vscode-uri "^3.0.3"
 
-vscode-languageserver-protocol@3.16.0, vscode-languageserver-protocol@^3.15.3, vscode-languageserver-protocol@^3.16.0:
+vscode-languageserver-protocol@3.16.0, vscode-languageserver-protocol@^3.15.3:
   version "3.16.0"
   resolved "https://registry.yarnpkg.com/vscode-languageserver-protocol/-/vscode-languageserver-protocol-3.16.0.tgz#34135b61a9091db972188a07d337406a3cdbe821"
   integrity sha512-sdeUoAawceQdgIfTI+sdcwkiK2KU+2cbEYA0agzM2uqaUy2UpnnGHtWTHVEtS0ES4zHU0eMFRGN+oQgDxlD66A==
@@ -1821,7 +1821,7 @@ vscode-languageserver-protocol@3.17.0-next.20:
     vscode-jsonrpc "8.0.0-next.8"
     vscode-languageserver-types "3.17.0-next.12"
 
-vscode-languageserver-textdocument@^1.0.1, vscode-languageserver-textdocument@^1.0.3, vscode-languageserver-textdocument@^1.0.4:
+vscode-languageserver-textdocument@1.0.4, vscode-languageserver-textdocument@^1.0.1, vscode-languageserver-textdocument@^1.0.3, vscode-languageserver-textdocument@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/vscode-languageserver-textdocument/-/vscode-languageserver-textdocument-1.0.4.tgz#3cd56dd14cec1d09e86c4bb04b09a246cb3df157"
   integrity sha512-/xhqXP/2A2RSs+J8JNXpiiNVvvNM0oTosNVmQnunlKvq9o4mupHOBAnnzH0lwIPKazXKvAKsVp1kr+H/K4lgoQ==
