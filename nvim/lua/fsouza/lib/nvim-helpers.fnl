@@ -89,6 +89,13 @@
                   (table.concat "\n"))]
     (mod-invoke :lsha2 :hash256 lines)))
 
+(fn keymap-repeat [lhs cb opts]
+  (vim.keymap.set :n lhs
+                  #(do
+                     (cb)
+                     (vim.api.nvim_call_function "repeat#set" [lhs]))
+                  opts))
+
 {:reset-augroup #(vim.api.nvim_create_augroup $1 {:clear true})
  : augroup
  : once
@@ -96,4 +103,5 @@
  : get-visual-selection-contents
  : get-visual-selection-range
  : extract-luv-error
- : hash-buffer}
+ : hash-buffer
+ : keymap-repeat}

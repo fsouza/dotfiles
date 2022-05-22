@@ -14,34 +14,35 @@
     (mod-invoke :fsouza.pl.tablex :flat-map lang-to-ft wanted-parsers)))
 
 (fn setup-keymaps [buffer]
-  (vim.keymap.set :n :>e #(mod-invoke :syntax-tree-surfer :surf :next :normal
-                                      true)
-                  {: buffer :silent true})
-  (vim.keymap.set :n :<e #(mod-invoke :syntax-tree-surfer :surf :prev :normal
-                                      true)
-                  {: buffer :silent true})
-  (vim.keymap.set :n :>f #(mod-invoke :syntax-tree-surfer :move :n false)
-                  {: buffer :silent true})
-  (vim.keymap.set :n :<f #(mod-invoke :syntax-tree-surfer :move :n true)
-                  {: buffer :silent true})
-  (vim.keymap.set :n :vv #(mod-invoke :syntax-tree-surfer :select_current_node)
-                  {: buffer :silent true})
-  (vim.keymap.set :x :J #(mod-invoke :syntax-tree-surfer :surf :next :visual)
-                  {: buffer :silent true})
-  (vim.keymap.set :x :K #(mod-invoke :syntax-tree-surfer :surf :prev :visual)
-                  {: buffer :silent true})
-  (vim.keymap.set :x :<tab> #(mod-invoke :syntax-tree-surfer :surf :parent
-                                         :visual)
-                  {: buffer :silent true})
-  (vim.keymap.set :x :<s-tab>
-                  #(mod-invoke :syntax-tree-surfer :surf :child :visual)
-                  {: buffer :silent true})
-  (vim.keymap.set :x :<leader>a
-                  #(mod-invoke :syntax-tree-surfer :surf :next :visual true)
-                  {: buffer :silent true})
-  (vim.keymap.set :x :<leader>A
-                  #(mod-invoke :syntax-tree-surfer :surf :prev :visual true)
-                  {: buffer :silent true}))
+  (let [{: keymap-repeat} (require :fsouza.lib.nvim-helpers)]
+    (keymap-repeat :>e #(mod-invoke :syntax-tree-surfer :surf :next :normal
+                                    true)
+                   {: buffer :silent true})
+    (keymap-repeat :<e #(mod-invoke :syntax-tree-surfer :surf :prev :normal
+                                    true)
+                   {: buffer :silent true})
+    (keymap-repeat :>f #(mod-invoke :syntax-tree-surfer :move :n false)
+                   {: buffer :silent true})
+    (keymap-repeat :<f #(mod-invoke :syntax-tree-surfer :move :n true)
+                   {: buffer :silent true})
+    (keymap-repeat :vv #(mod-invoke :syntax-tree-surfer :select_current_node)
+                   {: buffer :silent true})
+    (vim.keymap.set :x :J #(mod-invoke :syntax-tree-surfer :surf :next :visual)
+                    {: buffer :silent true})
+    (vim.keymap.set :x :K #(mod-invoke :syntax-tree-surfer :surf :prev :visual)
+                    {: buffer :silent true})
+    (vim.keymap.set :x :<tab>
+                    #(mod-invoke :syntax-tree-surfer :surf :parent :visual)
+                    {: buffer :silent true})
+    (vim.keymap.set :x :<s-tab>
+                    #(mod-invoke :syntax-tree-surfer :surf :child :visual)
+                    {: buffer :silent true})
+    (vim.keymap.set :x :<leader>a
+                    #(mod-invoke :syntax-tree-surfer :surf :next :visual true)
+                    {: buffer :silent true})
+    (vim.keymap.set :x :<leader>A
+                    #(mod-invoke :syntax-tree-surfer :surf :prev :visual true)
+                    {: buffer :silent true})))
 
 (fn on-FileType []
   (let [bufnr (abuf)]
