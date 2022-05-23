@@ -8,7 +8,7 @@
      (if (vim.tbl_isempty items#)
          (vim.api.nvim_cmd {:cmd :cclose})
          (do
-           (vim.api.nvim_cmd {:cmd :open} {})
+           (vim.api.nvim_cmd {:cmd :copen} {})
            (vim.api.nvim_cmd {:cmd :wincmd :args [:p]} {})
            (vim.api.nvim_cmd {:cmd :cc} {})))))
 

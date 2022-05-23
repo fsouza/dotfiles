@@ -19,3 +19,4 @@ __pycache__
 .clj-kondo
 .lsp
 .cpcache
+dump.rdb
