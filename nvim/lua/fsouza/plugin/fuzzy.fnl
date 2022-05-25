@@ -62,7 +62,9 @@
                                                 :args [:nvim-fzf]}
                                                {})
                              (let [actions (file-actions)
-                                   fzf-lua- (require :fzf-lua)]
+                                   fzf-lua- (require :fzf-lua)
+                                   f-utils (require :fzf-lua.utils)
+                                   id #$1]
                                (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
                                                 :fzf_layout :default
                                                 :buffers {:file_icons false
@@ -99,6 +101,8 @@
                                                       :ctrl-d :preview-half-page-down
                                                       :ctrl-u :preview-half-page-up
                                                       :ctrl-h :toggle-preview}})
+                               (each [name _ (pairs f-utils.ansi_codes)]
+                                 (tset f-utils.ansi_codes name id))
                                fzf-lua-))))
 
 (fn send-items [items prompt]
