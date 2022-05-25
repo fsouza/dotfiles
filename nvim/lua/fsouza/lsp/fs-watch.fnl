@@ -97,6 +97,8 @@
 
     (fn [err filename events]
       (when (and (not err) (not (vim.endswith filename backupext))
+                 (not (vim.startswith filename :.git/))
+                 (not (vim.startswith filename :.hg/))
                  (not (vim.endswith filename :4913)))
         (let [filepath (->> filename
                             (pl-path.join root-dir)
