@@ -48,7 +48,7 @@ def send_to_nvim(contents: bytes) -> int:
     os.close(fd)
 
     nvim_command = f"lua require('fsouza.plugin.tmux-selection').handle('{path}')"
-    proc = subprocess.run(["tmux", "send-keys", f'nvim -c "{nvim_command}"'])
+    proc = subprocess.run(["tmux", "send-keys", f' nvim -c "{nvim_command}"'])
     if proc.returncode != 0:
         return proc.returncode
 
