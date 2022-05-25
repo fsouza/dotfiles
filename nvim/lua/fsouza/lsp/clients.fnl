@@ -1,7 +1,7 @@
 (import-macros {: if-nil} :helpers)
 
 (fn get-client [bufnr server-capability]
-  (let [buf-clients (collect [_ client (pairs (vim.lsp.buf_get_clients bufnr))]
+  (let [buf-clients (collect [_ client (pairs (vim.lsp.get_active_clients {: bufnr}))]
                       (if (not= (. client.server_capabilities server-capability)
                                 nil)
                           (values client.name client)))]
