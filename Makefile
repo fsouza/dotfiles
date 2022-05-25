@@ -1,6 +1,7 @@
 NVIM_CACHE_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)
 NVIM_CONFIG_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("config")' +q 2>&1)
 NVIM_DATA_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("data")' +q 2>&1)
+NVIM_STATE_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("state")' +q 2>&1)
 LUA := $(NVIM_CACHE_DIR)/hr/bin/lua
 FENNEL := $(NVIM_CACHE_DIR)/hr/bin/fennel
 PYTHON ?= python3.10
@@ -27,7 +28,7 @@ kill-daemons:
 
 .PHONY: clear-logs
 clear-logs:
-	:> $(NVIM_CACHE_DIR)/lsp.log
+	:> $(NVIM_STATE_DIR)/lsp.log
 
 FNL_FILES := $(shell fd --type f '.+\.fnl' | grep -Ev 'scripts/.+\.fnl' | grep -Ev 'macros/.+\.fnl' | sd '^./' '')
 LUA_FILES := $(patsubst %.fnl,build/%.lua,$(FNL_FILES))
