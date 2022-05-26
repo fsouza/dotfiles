@@ -18,6 +18,8 @@
   (vim.keymap.set :n :<leader>zh
                   #(mod-invoke :fsouza.plugin.fuzzy :search_history)
                   {:silent true})
+  (vim.keymap.set :n :<leader>zo #(mod-invoke :fsouza.plugin.fuzzy :quickfix)
+                  {:silent true})
   (vim.keymap.set :n :<leader>zr #(mod-invoke :fsouza.plugin.fuzzy :resume)
                   {:silent true})
   (vim.keymap.set :n :<leader>zj
