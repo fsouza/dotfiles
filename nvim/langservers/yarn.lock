@@ -17,12 +17,12 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@fsouza/prettierd@^0.20.0":
-  version "0.20.0"
-  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.20.0.tgz#edc1eb9279103e2f10504db8e786604aac823093"
-  integrity sha512-FQ2WX17r2RErbsheFTg6ZjdP1FTZ02Urc9uORAxc3OXPRJaVmx1AzYgTY0w3LmPZs4YyiH0IZO+BrstobhjCjA==
+"@fsouza/prettierd@^0.21.1":
+  version "0.21.1"
+  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.21.1.tgz#c54fd82aed2908e6397d7d3d5e4fefc361c4d03d"
+  integrity sha512-xLGvk2csfCqTT3MZfXC7uGxdAy0HkMiYoVz2vCQbxNHCLSLBEoejNcbNh+MPWulRPSVBYN8jJJge6yychCU5KA==
   dependencies:
-    core_d "^4.0.0"
+    core_d "^5.0.1"
     nanolru "^1.0.0"
     prettier "^2.6.2"
 
@@ -315,13 +315,6 @@ core-util-is@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
   integrity sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=
-
-core_d@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/core_d/-/core_d-4.0.0.tgz#07d2540b72c553c90a575a31fd1f1de45671452a"
-  integrity sha512-dBxd0Ocxj3D3K+rJxutTAZ9LQHkuMZoc9HPWYwYRYK7swou5wuIRXxgJ39YLNDvFHfHyV3JbxVYluF/AOhcRnw==
-  dependencies:
-    supports-color "^8.1.0"
 
 core_d@^5.0.1:
   version "5.0.1"
