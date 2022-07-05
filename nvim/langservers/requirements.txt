@@ -6,8 +6,6 @@
 #
 add-trailing-comma==2.2.3
     # via -r requirements.in
-aspy-refactor-imports==3.0.0
-    # via reorder-python-imports
 attrs==21.4.0
     # via flake8-bugbear
 autoflake8==0.3.2
@@ -16,8 +14,8 @@ autopep8==1.6.0
     # via -r requirements.in
 black==22.6.0
     # via -r requirements.in
-cached-property==1.5.2
-    # via aspy-refactor-imports
+classify-imports==4.0.2
+    # via reorder-python-imports
 click==8.0.4
     # via black
 flake8==4.0.1
@@ -55,7 +53,7 @@ pyflakes==2.4.0
     #   flake8
 pyupgrade==2.34.0
     # via -r requirements.in
-reorder-python-imports==3.1.0
+reorder-python-imports==3.3.0
     # via -r requirements.in
 tokenize-rt==4.2.1
     # via
