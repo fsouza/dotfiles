@@ -22,14 +22,22 @@ function _goarch {
 	fi
 }
 
+function _gc_bootstrap {
+	local BOOTSTRAP_GO=$1
+	local base_dir=${GO_HOME}/bootstrap
+	fd --exact-depth 1 --type d --print0 --exclude "${BOOTSTRAP_GO}" .+ "${base_dir}" | xargs -0 -n 1 rm -rf
+	find "${base_dir}" -not -name "${BOOTSTRAP_GO}" -type d -depth 1 -print0 | xargs -0 -n 1 rm -rf
+}
+
 function _bootstrap_go {
-	local BOOTSTRAP_GO="go1.18.3"
-	local dest_dir=${GO_HOME}/bootstrap
+	local BOOTSTRAP_GO="go1.19rc1"
+	local dest_dir=${GO_HOME}/bootstrap/${BOOTSTRAP_GO}
 	local go_binary=${dest_dir}/go/bin/go
 	if ! [ -x "${go_binary}" ]; then
 		mkdir -p "${dest_dir}"
 		curl -sL "https://golang.org/dl/${BOOTSTRAP_GO}.$(uname -s | tr '[:upper:]' '[:lower:]')-$(_goarch).tar.gz" | tar -C "${dest_dir}" -xzf -
 	fi
+	_gc_bootstrap "${BOOTSTRAP_GO}"
 	dirname "${go_binary}"
 }
 
