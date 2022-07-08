@@ -48,8 +48,6 @@
               :sexp_filetypes "clojure,dune,fennel,scheme,lisp,timl"
               :sexp_enable_insert_mode_mappings 0
               :sexp_no_word_maps 1
-              :did_load_filetypes 0
-              :do_filetype_lua 1
               :loaded_python3_provider 0
               :loaded_ruby_provider 0
               :loaded_perl_provider 0
