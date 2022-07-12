@@ -14,7 +14,7 @@ autopep8==1.6.0
     # via -r requirements.in
 black==22.6.0
     # via -r requirements.in
-classify-imports==4.0.2
+classify-imports==4.1.0
     # via reorder-python-imports
 click==8.0.4
     # via black
@@ -53,7 +53,7 @@ pyflakes==2.4.0
     #   flake8
 pyupgrade==2.34.0
     # via -r requirements.in
-reorder-python-imports==3.3.0
+reorder-python-imports==3.8.1
     # via -r requirements.in
 tokenize-rt==4.2.1
     # via
