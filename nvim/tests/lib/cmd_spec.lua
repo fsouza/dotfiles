@@ -17,10 +17,8 @@ end
 
 describe("fsouza.lib.cmd", function()
   it("can run a command and capture stdout & stderr", function()
-    local result = run_cmd(
-      "bash",
-      { args = { "-c", "echo hi from stdout && echo >&2 hi from stderr" } }
-    )
+    local result =
+      run_cmd("bash", { args = { "-c", "echo hi from stdout && echo >&2 hi from stderr" } })
 
     assert.are.same(0, result["exit-status"])
     assert.are.same("hi from stdout\n", result.stdout)
