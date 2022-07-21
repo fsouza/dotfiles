@@ -888,10 +888,10 @@ json-stringify-safe@~5.0.1:
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
   integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
 
-jsonc-parser@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-3.0.0.tgz#abdd785701c7e7eaca8a9ec8cf070ca51a745a22"
-  integrity sha512-fQzRfAbIBnR0IQvftw9FJveWiHp72Fg20giDrHz6TdfB12UH/uue0D3hm57UB5KgAVuniLMCaS8P1IMj9NR7cA==
+jsonc-parser@^3.0.0, jsonc-parser@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-3.1.0.tgz#73b8f0e5c940b83d03476bc2e51a20ef0932615d"
+  integrity sha512-DRf0QjnNeCUds3xTjKlQQ3DpJD51GvDjJfnxUVWg6PZTo2otSm+slzNAxU/35hF8/oJIKoG9slq30JYOsF2azg==
 
 jsonfile@^6.0.1:
   version "6.1.0"
@@ -1755,24 +1755,24 @@ vfile@^5.0.0:
     unist-util-stringify-position "^3.0.0"
     vfile-message "^3.0.0"
 
-vscode-css-languageservice@^5.4.2:
-  version "5.4.2"
-  resolved "https://registry.yarnpkg.com/vscode-css-languageservice/-/vscode-css-languageservice-5.4.2.tgz#69ea74c000bd653dfc8e458a1720d28b9ffa5cfb"
-  integrity sha512-DT7+7vfdT2HDNjDoXWtYJ0lVDdeDEdbMNdK4PKqUl2MS8g7PWt7J5G9B6k9lYox8nOfhCEjLnoNC3UKHHCR1lg==
+vscode-css-languageservice@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/vscode-css-languageservice/-/vscode-css-languageservice-6.0.1.tgz#ccf94944e094dcc5833d1b4ac276994b698e9283"
+  integrity sha512-81n/eeYuJwQdvpoy6IK1258PtPbO720fl13FcJ5YQECPyHMFkmld1qKHwPJkyLbLPfboqJPM53ys4xW8v+iBVw==
   dependencies:
     vscode-languageserver-textdocument "^1.0.4"
-    vscode-languageserver-types "^3.16.0"
-    vscode-nls "^5.0.0"
+    vscode-languageserver-types "^3.17.1"
+    vscode-nls "^5.0.1"
     vscode-uri "^3.0.3"
 
-vscode-html-languageservice@^4.2.5:
-  version "4.2.5"
-  resolved "https://registry.yarnpkg.com/vscode-html-languageservice/-/vscode-html-languageservice-4.2.5.tgz#c0cc8ff3d824d16388bbac187e1828749eccf006"
-  integrity sha512-dbr10KHabB9EaK8lI0XZW7SqOsTfrNyT3Nuj0GoPi4LjGKUmMiLtsqzfedIzRTzqY+w0FiLdh0/kQrnQ0tLxrw==
+vscode-html-languageservice@^5.0.0:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/vscode-html-languageservice/-/vscode-html-languageservice-5.0.1.tgz#bdf7847d27a453a9e98ae2836ead7594784c5c1c"
+  integrity sha512-OYsyn5HGAhxs0OIG+M0jc34WnftLtD67Wg7+TfrYwvf0waOkkr13zUqtdrVm2JPNQ6fJx+qnuM+vTbq7o1dCdQ==
   dependencies:
     vscode-languageserver-textdocument "^1.0.4"
-    vscode-languageserver-types "^3.16.0"
-    vscode-nls "^5.0.0"
+    vscode-languageserver-types "^3.17.1"
+    vscode-nls "^5.0.1"
     vscode-uri "^3.0.3"
 
 vscode-json-languageservice@4.1.8:
@@ -1786,15 +1786,15 @@ vscode-json-languageservice@4.1.8:
     vscode-nls "^5.0.0"
     vscode-uri "^3.0.2"
 
-vscode-json-languageservice@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/vscode-json-languageservice/-/vscode-json-languageservice-4.2.1.tgz#94b6f471ece193bf4a1ef37f6ab5cce86d50a8b4"
-  integrity sha512-xGmv9QIWs2H8obGbWg+sIPI/3/pFgj/5OWBhNzs00BkYQ9UaB2F6JJaGB/2/YOZJ3BvLXQTC4Q7muqU25QgAhA==
+vscode-json-languageservice@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/vscode-json-languageservice/-/vscode-json-languageservice-5.1.0.tgz#b1f197a60338cb378189fcb41489a84846724dd9"
+  integrity sha512-D5612D7h/Gh4A0JmdttPveWzT9dur21WXvBHWKPdOt0sLO6ILz8vN6+IzWnvwDOVAEFTpzIAMVMZwbKZkwGGiA==
   dependencies:
-    jsonc-parser "^3.0.0"
-    vscode-languageserver-textdocument "^1.0.3"
-    vscode-languageserver-types "^3.16.0"
-    vscode-nls "^5.0.0"
+    jsonc-parser "^3.1.0"
+    vscode-languageserver-textdocument "^1.0.4"
+    vscode-languageserver-types "^3.17.1"
+    vscode-nls "^5.0.1"
     vscode-uri "^3.0.3"
 
 vscode-jsonrpc@6.0.0:
@@ -1802,26 +1802,28 @@ vscode-jsonrpc@6.0.0:
   resolved "https://registry.yarnpkg.com/vscode-jsonrpc/-/vscode-jsonrpc-6.0.0.tgz#108bdb09b4400705176b957ceca9e0880e9b6d4e"
   integrity sha512-wnJA4BnEjOSyFMvjZdpiOwhSq9uDoK8e/kpRJDTaMYzwlkrhG1fwDIZI94CLsLzlCK5cIbMMtFlJlfR57Lavmg==
 
-vscode-jsonrpc@8.0.0-next.8:
-  version "8.0.0-next.8"
-  resolved "https://registry.yarnpkg.com/vscode-jsonrpc/-/vscode-jsonrpc-8.0.0-next.8.tgz#2dd4704514ace3edd5dd946c4f15bed85737860c"
-  integrity sha512-2eh7v+rzttUG6wg21xnm3U4IaR/i8cU9vHI9ZntRXuBtCcyR3RrPBvl86Ffm91m/Cio45kmn/LskHK3BAKZILA==
+vscode-jsonrpc@8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/vscode-jsonrpc/-/vscode-jsonrpc-8.0.2.tgz#f239ed2cd6004021b6550af9fd9d3e47eee3cac9"
+  integrity sha512-RY7HwI/ydoC1Wwg4gJ3y6LpU9FJRZAUnTYMXthqhFXXu77ErDd/xkREpGuk4MyYkk4a+XDWAMqe0S3KkelYQEQ==
 
-vscode-langservers-extracted@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/vscode-langservers-extracted/-/vscode-langservers-extracted-4.2.1.tgz#627e0c2da3c1b8c48593881f1cc617f67733fc0b"
-  integrity sha512-Un7gzQgvACjGtsT0Yll5QqHgL65a4mTK5ChgMnO4dgTZ3tuwJCaP84oztBqvuFZzN9QxA3C07J4QEQvf1xjcgQ==
+vscode-langservers-extracted@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/vscode-langservers-extracted/-/vscode-langservers-extracted-4.4.0.tgz#55260ece2dc932ae20dd68e579cc4c4a7df9a7af"
+  integrity sha512-sWXDFmAvXMUhF5E+6v4e77SwhVPSvdLxGGfkOz15LmAsfKoamKMnW7aARnu6mRWOzqz3hKJqVZN4hnCpdvtLKg==
   dependencies:
     core-js "^3.20.1"
-    jsonc-parser "^3.0.0"
+    jsonc-parser "^3.1.0"
     regenerator-runtime "^0.13.9"
     request-light "^0.5.8"
     typescript "^4.0.5"
-    vscode-css-languageservice "^5.4.2"
-    vscode-html-languageservice "^4.2.5"
-    vscode-json-languageservice "^4.2.1"
-    vscode-languageserver "^8.0.0-next.14"
-    vscode-languageserver-textdocument "^1.0.4"
+    vscode-css-languageservice "^6.0.1"
+    vscode-html-languageservice "^5.0.0"
+    vscode-json-languageservice "^5.1.0"
+    vscode-languageserver "^8.0.2"
+    vscode-languageserver-textdocument "^1.0.5"
+    vscode-languageserver-types "^3.17.2"
+    vscode-markdown-languageservice "^0.0.0-alpha.10"
     vscode-nls "^5.0.1"
     vscode-uri "^3.0.3"
 
@@ -1833,28 +1835,28 @@ vscode-languageserver-protocol@3.16.0, vscode-languageserver-protocol@^3.15.3:
     vscode-jsonrpc "6.0.0"
     vscode-languageserver-types "3.16.0"
 
-vscode-languageserver-protocol@3.17.0-next.20:
-  version "3.17.0-next.20"
-  resolved "https://registry.yarnpkg.com/vscode-languageserver-protocol/-/vscode-languageserver-protocol-3.17.0-next.20.tgz#a6a3512ab95adfb8acc78fb1a5d48be98dfa4268"
-  integrity sha512-uQSgoKsxFH+74NRwoWGYWr/FwmtN0XGesh+jHqTGhmVsMco9I5Li8kAc5et6zA7yt1RQcUAW3Jqim7Uvb0Npfg==
+vscode-languageserver-protocol@3.17.2:
+  version "3.17.2"
+  resolved "https://registry.yarnpkg.com/vscode-languageserver-protocol/-/vscode-languageserver-protocol-3.17.2.tgz#beaa46aea06ed061576586c5e11368a9afc1d378"
+  integrity sha512-8kYisQ3z/SQ2kyjlNeQxbkkTNmVFoQCqkmGrzLH6A9ecPlgTbp3wDTnUNqaUxYr4vlAcloxx8zwy7G5WdguYNg==
   dependencies:
-    vscode-jsonrpc "8.0.0-next.8"
-    vscode-languageserver-types "3.17.0-next.12"
+    vscode-jsonrpc "8.0.2"
+    vscode-languageserver-types "3.17.2"
 
-vscode-languageserver-textdocument@1.0.5, vscode-languageserver-textdocument@^1.0.1, vscode-languageserver-textdocument@^1.0.3, vscode-languageserver-textdocument@^1.0.4:
+vscode-languageserver-textdocument@1.0.5, vscode-languageserver-textdocument@^1.0.1, vscode-languageserver-textdocument@^1.0.4, vscode-languageserver-textdocument@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/vscode-languageserver-textdocument/-/vscode-languageserver-textdocument-1.0.5.tgz#838769940ece626176ec5d5a2aa2d0aa69f5095c"
   integrity sha512-1ah7zyQjKBudnMiHbZmxz5bYNM9KKZYz+5VQLj+yr8l+9w3g+WAhCkUkWbhMEdC5u0ub4Ndiye/fDyS8ghIKQg==
 
-vscode-languageserver-types@3.16.0, vscode-languageserver-types@^3.16.0:
+vscode-languageserver-types@3.16.0:
   version "3.16.0"
   resolved "https://registry.yarnpkg.com/vscode-languageserver-types/-/vscode-languageserver-types-3.16.0.tgz#ecf393fc121ec6974b2da3efb3155644c514e247"
   integrity sha512-k8luDIWJWyenLc5ToFQQMaSrqCHiLwyKPHKPQZ5zz21vM+vIVUSvsRpcbiECH4WR88K2XZqc4ScRcZ7nk/jbeA==
 
-vscode-languageserver-types@3.17.0-next.12:
-  version "3.17.0-next.12"
-  resolved "https://registry.yarnpkg.com/vscode-languageserver-types/-/vscode-languageserver-types-3.17.0-next.12.tgz#dfc62588d3821cd0c1e99509d2ab18549eec1e0b"
-  integrity sha512-kaXEKkIrkd8UaQzkwUYSMgG6VVr8lplvng+/UKPb6rPYdOJ5a6JqNd87ohgIIWFE/tDWPiFM8TTGIQ2IJe02eg==
+vscode-languageserver-types@3.17.2, vscode-languageserver-types@^3.16.0, vscode-languageserver-types@^3.17.1, vscode-languageserver-types@^3.17.2:
+  version "3.17.2"
+  resolved "https://registry.yarnpkg.com/vscode-languageserver-types/-/vscode-languageserver-types-3.17.2.tgz#b2c2e7de405ad3d73a883e91989b850170ffc4f2"
+  integrity sha512-zHhCWatviizPIq9B7Vh9uvrH6x3sK8itC84HkamnBWoDFJtzBf7SWlpLCZUit72b3os45h6RWQNC9xHRDF8dRA==
 
 vscode-languageserver@^6.1.1:
   version "6.1.1"
@@ -1870,12 +1872,23 @@ vscode-languageserver@^7.0.0:
   dependencies:
     vscode-languageserver-protocol "3.16.0"
 
-vscode-languageserver@^8.0.0-next.14:
-  version "8.0.0-next.14"
-  resolved "https://registry.yarnpkg.com/vscode-languageserver/-/vscode-languageserver-8.0.0-next.14.tgz#d77b200449b2b4a002996f28baef4179d8f4d3ef"
-  integrity sha512-8CjwnSuKuIs71E9dCtx8MBTCKmH7KvWZHgTf2KN9Pa03IshdNU3zcFs/yfifpDSWpE1EcLeWYCvZwir/1Jt5kA==
+vscode-languageserver@^8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/vscode-languageserver/-/vscode-languageserver-8.0.2.tgz#cfe2f0996d9dfd40d3854e786b2821604dfec06d"
+  integrity sha512-bpEt2ggPxKzsAOZlXmCJ50bV7VrxwCS5BI4+egUmure/oI/t4OlFzi/YNtVvY24A2UDOZAgwFGgnZPwqSJubkA==
   dependencies:
-    vscode-languageserver-protocol "3.17.0-next.20"
+    vscode-languageserver-protocol "3.17.2"
+
+vscode-markdown-languageservice@^0.0.0-alpha.10:
+  version "0.0.0-alpha.11"
+  resolved "https://registry.yarnpkg.com/vscode-markdown-languageservice/-/vscode-markdown-languageservice-0.0.0-alpha.11.tgz#9dcdfc23f9dcaeaca3b2a2c76fc504619eaeb284"
+  integrity sha512-syFamf99xx+Q9DkA66+8fbSz2A2LJkyOV+nSziGgAzdDPv4jkb7eWF6l+nUteHTGbRLQ+q0tfkj0A7OovueCSQ==
+  dependencies:
+    picomatch "^2.3.1"
+    vscode-languageserver-textdocument "^1.0.5"
+    vscode-languageserver-types "^3.17.1"
+    vscode-nls "^5.0.1"
+    vscode-uri "^3.0.3"
 
 vscode-nls@^5.0.0, vscode-nls@^5.0.1:
   version "5.0.1"
