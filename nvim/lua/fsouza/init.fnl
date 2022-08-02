@@ -117,8 +117,7 @@
                      {:lhs :<m-f> :rhs :<s-right>}
                      {:lhs :<m-d> :rhs :<s-right><c-w>}]
         rl-insert-mode-bindings [{:lhs :<c-f> :rhs :<right>}
-                                 {:lhs :<c-b> :rhs :<left>}
-                                 {:lhs :<c-d> :rhs :<del>}]
+                                 {:lhs :<c-b> :rhs :<left>}]
         exprs [`(vim.keymap.set [:x :v] "#"
                                 "\"my?\\V<C-R>=escape(getreg(\"m\"), \"?\")<CR><CR>"
                                 {:remap false})
