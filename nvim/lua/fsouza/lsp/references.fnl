@@ -8,7 +8,9 @@
 
 (fn filter-references [refs]
   (if (vim.tbl_islist refs)
-      (do-filter refs)
+      (if (> (length refs) 1)
+          (do-filter refs)
+          refs)
       refs))
 
 {: filter-references}
