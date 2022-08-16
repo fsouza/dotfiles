@@ -11,19 +11,26 @@
                      (key-event#:post))))
 
 (fn set-readline-shortcuts [opt-out-apps]
+  (fn check-window [window]
+    (let [application (window:application)
+          app-name (if application
+                       (application:name)
+                       "")
+          app-name (string.lower app-name)]
+      (fn check-app [idx]
+        (if (> idx (length opt-out-apps)) false
+            (let [app (. opt-out-apps idx)]
+              (if (= app app-name) true (check-app (+ idx 1))))))
+
+      (check-app 1)))
+
   (let [hks [(make-hotkey :ctrl :n [] :down)
              (make-hotkey :ctrl :p [] :up)
              (make-hotkey :ctrl :f [] :right)
              (make-hotkey :ctrl :b [] :left)
              (make-hotkey :ctrl :w [:alt] hs.keycodes.map.delete)
              (make-hotkey :ctrl :u [:cmd] hs.keycodes.map.delete)]
-        filters (icollect [_ app (ipairs opt-out-apps)]
-                  (hs.window.filter.new #(let [application ($1:application)
-                                               app-name (if application
-                                                            (application:name)
-                                                            "")
-                                               app-name (string.lower app-name)]
-                                           (= app-name app))))]
+        filter (hs.window.filter.new check-window)]
     (fn enable-hks []
       (each [_ hk (ipairs hks)]
         (hk:enable)))
@@ -32,9 +39,10 @@
       (each [_ hk (ipairs hks)]
         (hk:disable)))
 
-    (each [_ filter (ipairs filters)]
-      (filter:subscribe hs.window.filter.windowFocused disable-hks)
-      (filter:subscribe hs.window.filter.windowUnfocused enable-hks))))
+    (filter:subscribe hs.window.filter.windowFocused disable-hks)
+    (filter:subscribe hs.window.filter.windowUnfocused enable-hks)
+    (if (not (check-window (hs.window.focusedWindow)))
+        (enable-hks))))
 
 (let [prefix [:cmd :ctrl]]
   (hs.hotkey.bind prefix :R hs.reload)
