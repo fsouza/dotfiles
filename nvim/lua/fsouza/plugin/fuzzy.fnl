@@ -6,18 +6,18 @@
         (mod-invoke :fsouza.pl.tablex :exists selected
                     #(if (string.match $1 "^.+:%d+:%d+:") true false)))))
 
-(fn edit-or-qf [edit selected]
+(fn edit-or-qf [edit selected opts]
   (if (should-qf selected)
       (do
-        (mod-invoke :fzf-lua.actions :file_sel_to_qf selected)
+        (mod-invoke :fzf-lua.actions :file_sel_to_qf selected opts)
         (vim.cmd.cc))
-      (edit selected)))
+      (edit selected opts)))
 
-(fn edit [command selected]
+(fn edit [command selected opts]
   (let [fzf-path (require :fzf-lua.path)
         pl-path (require :fsouza.pl.path)]
     (each [_ sel (ipairs selected)]
-      (let [{: path : line : col} (fzf-path.entry_to_file sel)
+      (let [{: path : line : col} (fzf-path.entry_to_file sel opts)
             path (pl-path.relpath path)
             path (if (vim.startswith path ".")
                      (pl-path.abspath path)
