@@ -110,12 +110,12 @@
         fzf-lua (fzf-lua)
         config (require :fzf-lua.config)
         core (require :fzf-lua.core)
+        make-entry (require :fzf-lua.make_entry)
         opts (config.normalize_opts {: prompt :cwd (vim.loop.cwd)}
                                     config.globals.lsp)]
-    (tset opts :fzf_fn
-          (icollect [_ item (ipairs items)]
-            (let [item (core.make_entry_lcol opts item)]
-              (core.make_entry_file opts item))))
+    (tset opts :fzf_fn (icollect [_ item (ipairs items)]
+                         (let [item (make-entry.lcol item opts)]
+                           (make-entry.file item opts))))
     (core.fzf_files (core.set_fzf_field_index opts))))
 
 (var last-search nil)
