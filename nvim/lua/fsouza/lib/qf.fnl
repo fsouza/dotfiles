@@ -26,9 +26,9 @@
         list (load-from-lines lines opts.hook)]
     (vim.fn.setqflist list)
     (when opts.open
-      (vim.api.nvim_cmd {:cmd :copen} {}))
+      (vim.cmd.copen))
     (when opts.jump-to-first
-      (vim.api.nvim_cmd {:cmd :cfirst} {}))
+      (vim.cmd.cfirst))
     (> (length list) 0)))
 
 (fn set-from-contents [content opts]

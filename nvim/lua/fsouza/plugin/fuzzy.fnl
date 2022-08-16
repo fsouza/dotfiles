@@ -10,7 +10,7 @@
   (if (should-qf selected)
       (do
         (mod-invoke :fzf-lua.actions :file_sel_to_qf selected)
-        (vim.api.nvim_cmd {:cmd :cc} {}))
+        (vim.cmd.cc))
       (edit selected)))
 
 (fn edit [command selected]
@@ -58,9 +58,7 @@
 
 (local fzf-lua (mod-invoke :fsouza.lib.nvim-helpers :once
                            (fn []
-                             (vim.api.nvim_cmd {:cmd :packadd
-                                                :args [:nvim-fzf]}
-                                               {})
+                             (vim.cmd.packadd :nvim-fzf)
                              (let [actions (file-actions)
                                    fzf-lua- (require :fzf-lua)
                                    f-utils (require :fzf-lua.utils)

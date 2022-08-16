@@ -37,13 +37,11 @@
   (vim.keymap.set :n :<leader>zl #(mod-invoke :fsouza.plugin.fuzzy :lines)))
 
 (fn setup-git-messenger []
-  (let [load-git-messenger (helpers.once #(vim.api.nvim_cmd {:cmd :packadd
-                                                             :args [:git-messenger.vim]}
-                                                            {}))]
+  (let [load-git-messenger (helpers.once #(vim.cmd.packadd :git-messenger.vim))]
     (vim.keymap.set :n :<leader>gm
                     #(do
                        (load-git-messenger)
-                       (vim.api.nvim_cmd {:cmd :GitMessenger} {})))))
+                       (vim.cmd.GitMessenger)))))
 
 (fn setup-autofmt-commands []
   (vim.api.nvim_create_user_command :ToggleAutofmt

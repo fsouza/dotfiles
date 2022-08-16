@@ -2,7 +2,7 @@
 
 (fn handle-action [action cb winid]
   (let [[index _] (vim.api.nvim_win_get_cursor 0)]
-    (vim.api.nvim_cmd {:cmd :wincmd :args [:p]} {})
+    (vim.cmd.wincmd :p)
     (when (vim.api.nvim_win_is_valid winid)
       (vim.api.nvim_win_close winid false))
     (match action

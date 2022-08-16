@@ -16,9 +16,7 @@
                            (let [is-dir (= $2.type :directory)]
                              (vim-schedule (if is-dir
                                                (fzf-dir path bang)
-                                               (vim.api.nvim_cmd {:cmd :edit
-                                                                  :args [path]}
-                                                                 {})))))))))
+                                               (vim.cmd.edit path)))))))))
 
 (fn register [command path]
   (vim.api.nvim_create_user_command command (make-callback path)

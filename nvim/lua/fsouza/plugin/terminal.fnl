@@ -44,14 +44,14 @@
 (fn cr []
   (let [cfile (vim.fn.expand :<cfile>)]
     (when (= (vim.fn.filereadable cfile) 1)
-      (vim.api.nvim_cmd {:cmd :only :mods {:silent true}} {})
-      (vim.api.nvim_cmd {:cmd :wincmd :args [:F]} {}))))
+      (vim.cmd.only {:mods {:silent true}})
+      (vim.cmd.wincmd :F))))
 
 (fn v-cr []
   (when (mod-invoke :fsouza.lib.qf :set-from-visual-selection)
-    (vim.api.nvim_cmd {:cmd :only :mods {:silent true}} {})
-    (vim.api.nvim_cmd {:cmd :cfirst} {})
-    (vim.api.nvim_cmd {:cmd :copen} {})
-    (vim.api.nvim_cmd {:cmd :wincmd :args [:p]} {})))
+    (vim.cmd.only {:mods {:silent true}})
+    (vim.cmd.cfirst)
+    (vim.cmd.copen)
+    (vim.cmd.wincmd :p)))
 
 {: open : cr : run : v-cr}

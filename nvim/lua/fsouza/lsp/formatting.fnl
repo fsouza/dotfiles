@@ -59,8 +59,7 @@
                                                    (fn []
                                                      (vim.lsp.util.apply_workspace_edit code-action.edit
                                                                                         client.offset_encoding)
-                                                     (vim.api.nvim_cmd {:cmd :update}
-                                                                       {}))))))))))
+                                                     (vim.cmd.update))))))))))
 
 (fn autofmt-and-write [bufnr]
   (let [enable (mod-invoke :fsouza.lib.autofmt :is-enabled bufnr)]
@@ -85,8 +84,7 @@
                                                            (let [new-hash (helpers.hash-buffer bufnr)]
                                                              (when (not= new-hash
                                                                          hash)
-                                                               (vim.api.nvim_cmd {:cmd :update}
-                                                                                 {}))))
+                                                               (vim.cmd.update))))
                                                          (when (should-organize-imports client.name)
                                                            (organize-imports-and-write client
                                                                                        bufnr))))))))))))))

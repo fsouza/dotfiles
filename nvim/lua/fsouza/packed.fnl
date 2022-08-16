@@ -8,10 +8,7 @@
                         paq-repo-dir]} nil
                 #(if (= $1.exit-status 0)
                      (do
-                       (vim.api.nvim_cmd {:cmd :packadd
-                                          :args [:paq-nvim]
-                                          :bang true}
-                                         {})
+                       (vim.cmd.packadd {:args [:paq-nvim] :bang true})
                        (cb (require :paq)))
                      (error (string.format "failed to clone paq-nvim: %s"
                                            (vim.inspect $1)))))))
