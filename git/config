@@ -31,3 +31,7 @@
 	detachedHead = false
 [merge]
 	conflictStyle = zdiff3
+[gpg]
+	program = gpg
+[commit]
+	gpgsign = true

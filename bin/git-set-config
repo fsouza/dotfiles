@@ -15,6 +15,7 @@ function main {
 	fi
 	git config user.name "$name"
 	git config user.email "${email}"
+	git config user.signingkey "${email}"
 }
 
 main "$@"
