@@ -71,23 +71,22 @@
             (pcall #(let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)]
                       (fmt client bufnr
                            (fn [_ result]
-                             (when (and (= changed-tick
-                                           (vim.api.nvim_buf_get_changedtick bufnr))
-                                        result)
-                               (vim.api.nvim_buf_call bufnr
-                                                      #(do
-                                                         (let [helpers (require :fsouza.lib.nvim-helpers)
-                                                               hash (helpers.hash-buffer bufnr)]
-                                                           (helpers.rewrite-wrap #(vim.lsp.util.apply_text_edits result
-                                                                                                                 bufnr
-                                                                                                                 client.offset_encoding))
-                                                           (let [new-hash (helpers.hash-buffer bufnr)]
-                                                             (when (not= new-hash
-                                                                         hash)
-                                                               (vim.cmd.update))))
-                                                         (when (should-organize-imports client.name)
-                                                           (organize-imports-and-write client
-                                                                                       bufnr))))))))))))))
+                             (when (= changed-tick
+                                      (vim.api.nvim_buf_get_changedtick bufnr))
+                               (when result
+                                 (vim.api.nvim_buf_call bufnr
+                                                        #(do
+                                                           (let [helpers (require :fsouza.lib.nvim-helpers)
+                                                                 hash (helpers.hash-buffer bufnr)]
+                                                             (helpers.rewrite-wrap #(vim.lsp.util.apply_text_edits result
+                                                                                                                   bufnr
+                                                                                                                   client.offset_encoding))
+                                                             (let [new-hash (helpers.hash-buffer bufnr)]
+                                                               (when (not= new-hash
+                                                                           hash)
+                                                                 (vim.cmd.update)))))))
+                               (when (should-organize-imports client.name)
+                                 (organize-imports-and-write client bufnr))))))))))))
 
 (fn augroup-name [bufnr]
   (.. :lsp_autofmt_ bufnr))
