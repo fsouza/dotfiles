@@ -32,7 +32,8 @@
                 {:name :LspCodeLensSeparator :opts {:fg `colors.gray}}
                 {:name :StatusLineNC
                  :opts {:bg `colors.light-gray :fg `colors.black}}
-                {:name :HlYank :opts {:bg `colors.orange}}]]
+                {:name :HlYank :opts {:bg `colors.orange}}
+                {:name :FidgetTask :opts {:link :Normal}}]]
     (icollect [_ group (ipairs groups)]
       `(vim.api.nvim_set_hl 0 ,group.name ,group.opts))))
 
