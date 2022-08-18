@@ -192,7 +192,7 @@
                                              (when (not= query "")
                                                (mod-invoke :fsouza.plugin.fuzzy
                                                            :lsp_workspace_symbols
-                                                           {: query})))}))
+                                                           {:lsp_query query})))}))
                     (when (not= client.server_capabilities.codeLensProvider nil)
                       (let [codelens (require :fsouza.lsp.codelens)]
                         (codelens.on-attach {: bufnr :mapping :<leader><cr>})
