@@ -20,4 +20,12 @@ if [ -n "${brew_path}" ]; then
 		"${HOMEBREW_PREFIX}"/opt/coreutils/libexec/gnubin \
 		"${HOMEBREW_PREFIX}"/opt/curl/bin \
 		"${HOMEBREW_PREFIX}"/opt/python@3.10/bin
+
+	if [ -x /usr/local/bin/brew ]; then
+		alias brew_x86=/usr/local/bin/brew
+	fi
+
+	if [ -x /opt/homebrew/bin/brew ]; then
+		alias brew_arm=/opt/homebrew/bin/brew
+	fi
 fi
