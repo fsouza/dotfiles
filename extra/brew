@@ -29,3 +29,4 @@ if [ -n "${brew_path}" ]; then
 		alias brew_arm="arch -arm64 /opt/homebrew/bin/brew"
 	fi
 fi
+unset brew_path
