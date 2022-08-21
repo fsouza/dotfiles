@@ -7,11 +7,16 @@ function _download_virtualenv() {
 	curl -sLo "${VIRTUALENV_PYZ_LOCATION}" https://bootstrap.pypa.io/virtualenv.pyz
 }
 
+function _global_python() {
+	local brew=${BREW:-brew}
+	echo $("${brew}" --prefix)/bin/python3
+}
+
 function virtualenv() {
 	if ! [ -f "${VIRTUALENV_PYZ_LOCATION}" ]; then
 		_download_virtualenv
 	fi
-	python3 "${VIRTUALENV_PYZ_LOCATION}" "${@}"
+	"$(_global_python)" "${VIRTUALENV_PYZ_LOCATION}" "${@}"
 }
 
 function upgrade_virtualenv() {
