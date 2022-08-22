@@ -34,7 +34,7 @@ jobs:
 
       - name: langservers cache
         id: nvim-langservers-cache
-        uses: actions/cache@v3.0.7
+        uses: actions/cache@v3.0.8
         with:
           path: ~/.cache/nvim/langservers
           key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-20220128101400"
@@ -52,7 +52,7 @@ jobs:
 
       - name: hererocks cache
         id: nvim-hererocks-cache
-        uses: actions/cache@v3.0.7
+        uses: actions/cache@v3.0.8
         with:
           path: ~/.cache/nvim/hr
           key: "${{ runner.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}-20220128101400"
@@ -64,7 +64,7 @@ jobs:
 
       - name: virtualenv cache
         id: nvim-virtualenv-cache
-        uses: actions/cache@v3.0.7
+        uses: actions/cache@v3.0.8
         with:
           path: ~/.cache/nvim/venv
           key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.get-python-version.outputs.version }}-20220128123800"
@@ -95,7 +95,7 @@ jobs:
         run: pip install pre-commit
 
       - name: pre-commit cache
-        uses: actions/cache@v3.0.7
+        uses: actions/cache@v3.0.8
         with:
           path: ~/.cache/pre-commit
           key: "${{ hashFiles('.pre-commit-config.yaml') }}"
