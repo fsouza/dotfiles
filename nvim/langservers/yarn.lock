@@ -362,6 +362,11 @@ deep-is@^0.1.3:
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.4.tgz#a6f2dce612fadd2ef1f519b73551f17e85199831"
   integrity sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==
 
+deepmerge@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
+  integrity sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==
+
 delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
@@ -1594,12 +1599,13 @@ type-fest@^2.12.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.18.0.tgz#fdef3a74e0a9e68ebe46054836650fb91ac3881e"
   integrity sha512-pRS+/yrW5TjPPHNOvxhbNZexr2bS63WjrMU8a+VzEBhUi9Tz1pZeD+vQz3ut0svZ46P+SRqMEPnJmk2XnvNzTw==
 
-typescript-language-server@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-1.0.0.tgz#a01881e162dd2d98aa2a406039cde9900ffac8bd"
-  integrity sha512-5T7YSHCP4qXOg5j6dzm7H1r9V7RGxKtc5DMpdVPOCaiprPxpNUqJqPPcZB0sJDPKFSuCPhRfG/fg+sLuso5Z3Q==
+typescript-language-server@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-1.1.1.tgz#2b852d14b8fc003a92ee41ca41f62b972ab46c2e"
+  integrity sha512-06nAh6bsrIJlJ8fPwMEVKXz+Yi26+uyJEDkNbbUdfolSwwsBaiFt90yOTgnNTULGzFM/+WQ+dba8I/6YxSEgVA==
   dependencies:
     commander "^9.4.0"
+    deepmerge "^4.2.2"
     fs-extra "^10.1.0"
     p-debounce "^4.0.0"
     pkg-up "^4.0.0"
