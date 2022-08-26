@@ -12,7 +12,7 @@
 		"postcss-scss": "^4.0.4",
 		"pyright": "^1.1.268",
 		"remark-parse": "^10.0.1",
-		"typescript": "^4.7.4",
+		"typescript": "^4.8.2",
 		"typescript-language-server": "^1.1.1",
 		"vscode-langservers-extracted": "^4.4.0",
 		"yaml": "^2.1.1",
