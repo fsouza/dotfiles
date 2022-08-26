@@ -1599,10 +1599,10 @@ type-fest@^2.12.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.18.0.tgz#fdef3a74e0a9e68ebe46054836650fb91ac3881e"
   integrity sha512-pRS+/yrW5TjPPHNOvxhbNZexr2bS63WjrMU8a+VzEBhUi9Tz1pZeD+vQz3ut0svZ46P+SRqMEPnJmk2XnvNzTw==
 
-typescript-language-server@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-1.1.1.tgz#2b852d14b8fc003a92ee41ca41f62b972ab46c2e"
-  integrity sha512-06nAh6bsrIJlJ8fPwMEVKXz+Yi26+uyJEDkNbbUdfolSwwsBaiFt90yOTgnNTULGzFM/+WQ+dba8I/6YxSEgVA==
+typescript-language-server@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-1.1.2.tgz#ae0749fee0f4a18de03206dbcf1b36f4412d0352"
+  integrity sha512-gQf4p3FvKKpShCwZclIh7b3VtmmuMEtur1xPz6pTH+ilaw3jUCmrcvLU5zz59/9RHBHkdP6XrR6p9RdQ8K+8KQ==
   dependencies:
     commander "^9.4.0"
     deepmerge "^4.2.2"
