@@ -1,5 +1,5 @@
 add_trailing_comma
-autoflake8
+autoflake
 autopep8
 black
 flake8
