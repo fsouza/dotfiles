@@ -49,9 +49,9 @@
                         :formatStdin true
                         :rootMarkers [:.isort.cfg :.git ""]})))
 
-(fn get-autoflake8 [_ cb]
-  (get-python-bin :autoflake8
-                  #(cb {:formatCommand (string.format "%s --expand-star-imports --exit-zero-even-if-changed -"
+(fn get-autoflake [_ cb]
+  (get-python-bin :autoflake
+                  #(cb {:formatCommand (string.format "%s --expand-star-imports -"
                                                       $1)
                         :formatStdin true
                         :rootMarkers default-root-markers})))
@@ -65,7 +65,7 @@
                                 :lintFormats ["%f:%l:%c: %m"]
                                 :lintIgnoreExitCode true
                                 :rootMarkers [:.flake8 :.git ""]}
-                               get-autoflake8)))
+                               get-autoflake)))
 
 (fn get-add-trailing-comma [args cb]
   (get-python-bin :add-trailing-comma
@@ -249,7 +249,7 @@
              {:fn get-black}
              {:fn get-add-trailing-comma}
              {:fn get-reorder-python-imports}
-             {:fn get-autoflake8}]
+             {:fn get-autoflake}]
         pre-commit-config-file-path :.pre-commit-config.yaml]
     (try-read-precommit-config pre-commit-config-file-path
                                (fn [pre-commit-config]
@@ -262,8 +262,7 @@
                                                       "https://github.com/pre-commit/mirrors-autopep8" get-autopep8
                                                       "https://github.com/pre-commit/mirrors-isort" get-isort
                                                       "https://github.com/pycqa/isort" get-isort
-                                                      "https://github.com/timothycrosley/isort" get-isort
-                                                      "https://github.com/fsouza/autoflake8" get-autoflake8}
+                                                      "https://github.com/timothycrosley/isort" get-isort}
                                        find-repo (fn [repo]
                                                    (let [repo-url (string.lower repo.repo)
                                                          args (if-nil (?. repo
