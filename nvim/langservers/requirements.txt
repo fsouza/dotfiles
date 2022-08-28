@@ -8,7 +8,7 @@ add-trailing-comma==2.2.3
     # via -r requirements.in
 attrs==22.1.0
     # via flake8-bugbear
-autoflake==1.5.0
+autoflake==1.5.1
     # via -r requirements.in
 autopep8==1.7.0
     # via -r requirements.in
