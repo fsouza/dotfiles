@@ -36,10 +36,10 @@ repos:
     hooks:
       - id: flake8
 
-  - repo: https://github.com/fsouza/autoflake8
-    rev: v0.4.0
+  - repo: https://github.com/pycqa/autoflake
+    rev: v1.5.2
     hooks:
-      - id: autoflake8
+      - id: autoflake
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.8.0.4
