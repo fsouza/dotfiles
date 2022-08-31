@@ -75,7 +75,10 @@
                                                                                     client)
                                                                         true)}))))
     (if-executable :go
-                   (lsp.gopls.setup (opts.with-defaults {:cmd [(get-cache-cmd :gopls)]
+                   (lsp.gopls.setup (opts.with-defaults {:cmd [(get-cache-cmd :gopls)
+                                                               :-remote=auto
+                                                               "-debug=:0"
+                                                               "-remote.debug=:0"]
                                                          :root_dir (opts.root-pattern-with-fallback :go.work
                                                                                                     :go.mod)
                                                          :init_options {:deepCompletion false
