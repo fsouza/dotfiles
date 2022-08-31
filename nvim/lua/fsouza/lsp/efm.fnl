@@ -57,7 +57,6 @@
                         :rootMarkers default-root-markers})))
 
 (fn get-flake8 [args cb]
-  (print :aaaaaaaaaaaaaaa)
   (get-python-bin :flake8 #(cb {:lintCommand (string.format "%s --stdin-display-name ${INPUT} --format \"%%(path)s:%%(row)d:%%(col)d: %%(code)s %%(text)s\" %s -"
                                                             $1
                                                             (process-args args))
