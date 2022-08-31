@@ -57,6 +57,7 @@
                         :rootMarkers default-root-markers})))
 
 (fn get-flake8 [args cb]
+  (print :aaaaaaaaaaaaaaa)
   (get-python-bin :flake8 #(cb {:lintCommand (string.format "%s --stdin-display-name ${INPUT} --format \"%%(path)s:%%(row)d:%%(col)d: %%(code)s %%(text)s\" %s -"
                                                             $1
                                                             (process-args args))
@@ -254,6 +255,7 @@
     (try-read-precommit-config pre-commit-config-file-path
                                (fn [pre-commit-config]
                                  (let [pc-repo-tools {"https://github.com/pycqa/flake8" get-flake8
+                                                      "https://gitlab.com/pycqa/flake8" get-flake8
                                                       "https://github.com/psf/black" get-black
                                                       "https://github.com/ambv/black" get-black
                                                       "https://github.com/asottile/add-trailing-comma" get-add-trailing-comma
