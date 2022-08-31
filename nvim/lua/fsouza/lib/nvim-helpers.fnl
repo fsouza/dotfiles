@@ -43,7 +43,7 @@
           col-offset (- (string.len (if-nil new-line ""))
                         (string.len orig-line))]
       (vim.api.nvim_win_set_cursor winid
-                                   [lineno
+                                   [(math.max lineno 1)
                                     (math.min (math.max 0
                                                         (+ orig-colno
                                                            col-offset))
