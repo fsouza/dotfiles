@@ -20,7 +20,7 @@
         (download-paq paq-dir cb))))
 
 (let [paq-dir (mod-invoke :fsouza.pl.path :join data-dir :site :pack :paqs)
-      paqs [{1 :savq/paq-nvim :opt true :as :paq-nvim}
+      paqs [{1 :fsouza/paq-nvim :opt true :as :paq-nvim}
             {1 :chaoren/vim-wordmotion}
             {1 :godlygeek/tabular}
             {1 :justinmk/vim-dirvish}
