@@ -144,8 +144,12 @@
     (string.gsub glob "/?[^/]+[*?[{].*" ""))
 
   (fn break [glob]
-    (->> glob
-         (parse)
-         (break-tree)))
+    (let [tree (parse glob)]
+      (if (not tree)
+          (vim.api.nvim_echo [[(string.format "invalid glob %s"
+                                              (vim.inspect glob))
+                               :WarningMsg]] true
+                             {})
+          (break-tree tree))))
 
   {: compile :match do-match : break : parse : strip-special})
