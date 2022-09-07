@@ -51,7 +51,7 @@
 
 (fn get-autoflake [_ cb]
   (get-python-bin :autoflake
-                  #(cb {:formatCommand (string.format "%s --expand-star-imports -"
+                  #(cb {:formatCommand (string.format "%s --expand-star-imports --remove-all-unused-imports -"
                                                       $1)
                         :formatStdin true
                         :rootMarkers default-root-markers})))
