@@ -27,7 +27,7 @@
                      (when (vim.startswith dir-path "/")
                        (mod-invoke :fsouza.plugin.fuzzy :find-files dir-path)))
                   {:silent true})
-  (vim.keymap.set :n :<leader>gg #(mod-invoke :fsouza.plugin.fuzzy :grep))
+  (vim.keymap.set :n :<leader>gg #(mod-invoke :fsouza.plugin.fuzzy :live_grep))
   (vim.keymap.set :n :<leader>gw
                   #(mod-invoke :fsouza.plugin.fuzzy :grep
                                (vim.fn.expand :<cword>)))

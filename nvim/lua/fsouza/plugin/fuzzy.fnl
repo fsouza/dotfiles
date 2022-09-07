@@ -162,7 +162,6 @@
 
 (let [rg-opts "--column -n --hidden --no-heading --color=always --colors 'match:fg:0x99,0x00,0x00' --colors line:none --colors path:none --colors column:none -S --glob '!.git' --glob '!.hg'"
       mod {: find-files
-           :grep (partial grep rg-opts)
            :grep-visual #(grep rg-opts
                                (. (mod-invoke :fsouza.lib.nvim-helpers
                                               :get-visual-selection-contents)
