@@ -41,13 +41,17 @@ function update_neovim {
 function enter_demo_mode {
 	dir=~/.local/share/nvim/site/after/plugin
 	mkdir -p "${dir}"
-	cat >"${dir}/demo.lua" <<EOF
+	if [[ $1 != "--no-color" ]]; then
+		cat >"${dir}/demo.lua" <<EOF
 require('fsouza.plugin.demo-mode').enable()
 EOF
+	fi
 	(
 		cd "${FSOUZA_DOTFILES_DIR}"
 		cp alacritty.yml{,.old}
-		sd '^colors:.+' 'colors: *rose-pine-dawn' alacritty.yml
+		if [[ $1 != "--no-color" ]]; then
+			sd '^colors:.+' 'colors: *rose-pine-dawn' alacritty.yml
+		fi
 		sd 'size: .+$' 'size: 24.0' alacritty.yml
 	)
 }
