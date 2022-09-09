@@ -47,7 +47,7 @@ EOF
 	(
 		cd "${FSOUZA_DOTFILES_DIR}"
 		cp alacritty.yml{,.old}
-		sd '^colors:.+' 'colors: *solarized-light' alacritty.yml
+		sd '^colors:.+' 'colors: *rose-pine-dawn' alacritty.yml
 		sd 'size: .+$' 'size: 24.0' alacritty.yml
 	)
 }

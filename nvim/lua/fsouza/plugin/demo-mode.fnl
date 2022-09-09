@@ -5,8 +5,8 @@
 (fn enable []
   (when (not colors-name)
     (set colors-name vim.g.colors_name)
-    (vim.cmd.colorscheme :solarized)
-    (vim.api.nvim_set_hl 0 :WinSeparator {:fg "#839496"})))
+    (tset vim.o :background :light)
+    (vim.cmd.colorscheme :rose-pine)))
 
 (fn disable []
   (when colors-name

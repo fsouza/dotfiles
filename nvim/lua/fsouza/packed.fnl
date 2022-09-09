@@ -70,7 +70,7 @@
             {1 :Vimjas/vim-python-pep8-indent}
             {1 :ziglang/zig.vim}
             ;; themes, for demos/presentations.
-            {1 :shaunsingh/solarized.nvim}]]
+            {1 :rose-pine/neovim}]]
   {: paq-dir
    : paqs
    :setup #(with-paq paq-dir (fn [paq]
