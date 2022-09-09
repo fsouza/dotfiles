@@ -57,6 +57,19 @@ describe("compile and match", function()
     assert.is_true(glob.match(matcher, "fzle.py"))
     assert.is_not_true(glob.match(matcher, "fzle.pyy"))
   end)
+
+  it("should support exclamation point as a literal character", function()
+    local ok, matcher = glob.compile(
+      "{/Users/user/go/path/pkg/mod/github.com/!victoria!metrics/metricsql@v0.37.0/binaryop}"
+    )
+    assert.is_true(ok)
+    assert.is_true(
+      glob.match(
+        matcher,
+        "/Users/user/go/path/pkg/mod/github.com/!victoria!metrics/metricsql@v0.37.0/binaryop"
+      )
+    )
+  end)
 end)
 
 describe("break", function()
