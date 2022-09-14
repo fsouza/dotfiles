@@ -62,6 +62,7 @@
                              (let [actions (file-actions)
                                    fzf-lua- (require :fzf-lua)
                                    f-utils (require :fzf-lua.utils)
+                                   f-config (require :fzf-lua.config)
                                    id #$1]
                                (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
                                                 :fzf_layout :default
@@ -99,6 +100,8 @@
                                                       :ctrl-d :preview-half-page-down
                                                       :ctrl-u :preview-half-page-up
                                                       :ctrl-h :toggle-preview}})
+                               (tset f-config.globals.keymap.fzf :ctrl-f nil)
+                               (tset f-config.globals.keymap.fzf :ctrl-b nil)
                                (each [name _ (pairs f-utils.ansi_codes)]
                                  (tset f-utils.ansi_codes name id))
                                fzf-lua-))))
