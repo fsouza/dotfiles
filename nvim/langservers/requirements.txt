@@ -8,7 +8,7 @@ add-trailing-comma==2.2.3
     # via -r requirements.in
 attrs==22.1.0
     # via flake8-bugbear
-autoflake==1.5.3
+autoflake==1.6.0
     # via -r requirements.in
 autopep8==1.7.0
     # via -r requirements.in
@@ -60,8 +60,8 @@ tokenize-rt==4.2.1
     #   add-trailing-comma
     #   pyupgrade
 toml==0.10.2
+    # via autopep8
+tomli==2.0.1
     # via
     #   autoflake
-    #   autopep8
-tomli==2.0.1
-    # via black
+    #   black
