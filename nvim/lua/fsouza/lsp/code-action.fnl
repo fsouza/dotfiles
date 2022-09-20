@@ -21,12 +21,9 @@
   (let [client (vim.lsp.get_client_by_id context.client_id)]
     (handle-actions actions client)))
 
-(macro line-diagnostics []
-  `(let [[lnum# _#] (vim.api.nvim_win_get_cursor 0)]
-     (vim.diagnostic.get 0 {:lnum (- lnum# 1)})))
-
 (fn range-code-action [context start-pos end-pos cb]
-  (let [context (if-nil context {:diagnostics (line-diagnostics)})
+  (let [context (if-nil context
+                        {:diagnostics (vim.lsp.diagnostic.get_line_diagnostics)})
         params (vim.lsp.util.make_given_range_params start-pos end-pos)]
     (tset params :context context)
     (vim.lsp.buf_request 0 :textDocument/codeAction params cb)))
@@ -40,7 +37,7 @@
     (range-code-action context start-pos end-pos cb)))
 
 (fn code-action-for-line [cb]
-  (let [context {:diagnostics (line-diagnostics)}
+  (let [context {:diagnostics (vim.lsp.diagnostic.get_line_diagnostics)}
         params (vim.lsp.util.make_range_params)]
     (tset params :context context)
     (vim.lsp.buf_request 0 :textDocument/codeAction params cb)))
