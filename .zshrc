@@ -14,6 +14,7 @@ source "${FSOUZA_DOTFILES_DIR}"/extra/brew
 prepend_to_path \
 	"${HOME}"/.cargo/bin \
 	"${HOME}"/.local/bin \
+	"${HOME}"/.rd/bin \
 	"${HOME}/.dotnet/tools" \
 	"${FSOUZA_DOTFILES_DIR}"/bin
 
