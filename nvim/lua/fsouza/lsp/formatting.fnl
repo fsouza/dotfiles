@@ -37,7 +37,7 @@
   (let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)
         params (vim.lsp.util.make_range_params)]
     (tset params.range :start {:line 0 :character 0})
-    (tset params.range :end {:line (- (vim.api.nvim_buf_line_count bufnr) 2)
+    (tset params.range :end {:line (vim.api.nvim_buf_line_count bufnr)
                              :character 0})
     (client.request :textDocument/codeAction params
                     (fn [_ actions]
