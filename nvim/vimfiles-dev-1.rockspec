@@ -7,7 +7,6 @@ dependencies = {
   "penlight ~> 1.12.0",
   "fennel ~> 1.1.0",
   "luafilesystem ~> 1.8.0",
-  "fzy ~> 0.4",
   "luabitop",
   "lpeg ~> 1.0.2",
   "lrexlib-pcre ~> 2.9.1",
