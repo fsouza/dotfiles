@@ -480,10 +480,10 @@ eslint@^8.12.0:
     text-table "^0.2.0"
     v8-compile-cache "^2.0.3"
 
-eslint_d@^12.2.0:
-  version "12.2.0"
-  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-12.2.0.tgz#4b67ac2de3e8be01daf436efb3b1055747c4d1ea"
-  integrity sha512-pra1cvdhKZCmrJHqlnm+EmbNeBQgd9sycQSlhWTl0RSiJEhjA1G8RJuaIaU5am0APIGHts/QbD0ZofS8pV0GKw==
+eslint_d@^12.2.1:
+  version "12.2.1"
+  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-12.2.1.tgz#e5faf55acdc74d0e6e4f13ade464421f1f8e4152"
+  integrity sha512-qOJ9cTi5AaH5bOgEoCkv41DJ637mHgzffbOLojwU4wadwC6qbR+OxVJRvVzH0v2XYmQOvw4eiJK7ivrr5SvzsA==
   dependencies:
     core_d "^5.0.1"
     eslint "^8.12.0"
