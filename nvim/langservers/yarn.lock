@@ -1599,10 +1599,10 @@ type-fest@^2.12.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.18.0.tgz#fdef3a74e0a9e68ebe46054836650fb91ac3881e"
   integrity sha512-pRS+/yrW5TjPPHNOvxhbNZexr2bS63WjrMU8a+VzEBhUi9Tz1pZeD+vQz3ut0svZ46P+SRqMEPnJmk2XnvNzTw==
 
-typescript-language-server@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-1.2.0.tgz#c4829fdda025e2fd305d7171a5e06283b4b0c415"
-  integrity sha512-Ahxko4dKgOY/pGTMdzeVw/NTIZC4z33OqEs7xlR3VEV36IZX12OfJ8uwXSbmTJlCh1QQ12dpQgwUuNvSfbWB4w==
+typescript-language-server@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-2.0.0.tgz#278d75b1577152748ebec8def1e0c5a12c31c12b"
+  integrity sha512-wBV3iSt2498Wl6wMozCRDyPrL0KsFtthvYqVZ3JFRyreBGlxEe3bfK2bnLSwtRwYAZuO9n1roi/NNn94rT5Y+w==
   dependencies:
     commander "^9.4.0"
     deepmerge "^4.2.2"
@@ -1614,7 +1614,7 @@ typescript-language-server@^1.2.0:
     vscode-languageserver "^8.0.2"
     vscode-languageserver-protocol "^3.17.2"
     vscode-languageserver-textdocument "1.0.7"
-    vscode-uri "^3.0.3"
+    vscode-uri "^3.0.6"
     which "^2.0.2"
 
 typescript@^4.0.5, typescript@^4.8.4:
@@ -1853,10 +1853,10 @@ vscode-nls@^5.0.0, vscode-nls@^5.0.1:
   resolved "https://registry.yarnpkg.com/vscode-nls/-/vscode-nls-5.0.1.tgz#ba23fc4d4420d25e7f886c8e83cbdcec47aa48b2"
   integrity sha512-hHQV6iig+M21lTdItKPkJAaWrxALQb/nqpVffakO4knJOh3DrU2SXOMzUzNgo1eADPzu3qSsJY1weCzvR52q9A==
 
-vscode-uri@^3.0.2, vscode-uri@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/vscode-uri/-/vscode-uri-3.0.3.tgz#a95c1ce2e6f41b7549f86279d19f47951e4f4d84"
-  integrity sha512-EcswR2S8bpR7fD0YPeS7r2xXExrScVMxg4MedACaWHEtx9ftCF/qHG1xGkolzTPcEmjTavCQgbVzHUIdTMzFGA==
+vscode-uri@^3.0.2, vscode-uri@^3.0.3, vscode-uri@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/vscode-uri/-/vscode-uri-3.0.6.tgz#5e6e2e1a4170543af30151b561a41f71db1d6f91"
+  integrity sha512-fmL7V1eiDBFRRnu+gfRWTzyPpNIHJTc4mWnFkwBUmO9U3KPgJAmTx7oxi2bl/Rh6HLdU7+4C9wlj0k2E4AdKFQ==
 
 web-tree-sitter@^0.20.5:
   version "0.20.5"
