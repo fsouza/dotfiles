@@ -11,5 +11,6 @@ brew "ripgrep"
 brew "sd"
 brew "selene"
 brew "stylua"
+brew "taplo"
 
 cask "font-sauce-code-pro-nerd-font"
