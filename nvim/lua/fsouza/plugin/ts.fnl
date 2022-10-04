@@ -70,8 +70,10 @@
                                                 "i," "@parameter.inner"}}
                              :move {:enable true
                                     :set_jumps true
-                                    :goto_next_start {:<leader>m "@function.outer"}
-                                    :goto_previous_start {:<leader>M "@function.outer"}}
+                                    :goto_next_start {"]m" "@function.outer"
+                                                      "]]" "@class.outer"}
+                                    :goto_previous_start {"[m" "@function.outer"
+                                                          "[[" "@class.outer"}}
                              :swap {:enable true
                                     :swap_next {:<leader>a "@parameter.inner"}
                                     :swap_previous {:<leader>A "@parameter.inner"}}}
