@@ -293,10 +293,10 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@^9.4.0:
-  version "9.4.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-9.4.0.tgz#bc4a40918fefe52e22450c111ecd6b7acce6f11c"
-  integrity sha512-sRPT+umqkz90UA8M1yqYfnHlZA7fF6nSphDtxeywPZ49ysjxDQybzk13CL+mXekDRG92skbcqCLVovuCusNmFw==
+commander@^9.4.1:
+  version "9.4.1"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-9.4.1.tgz#d1dd8f2ce6faf93147295c0df13c7c21141cfbdd"
+  integrity sha512-5EEkTNyHNGFPD2H+c/dXXfQZYa/scCKasxWcXJaWnNJ99pnQN9Vnmqow+p+PlFPE63Q6mThaZws1T+HxfpgtPw==
 
 concat-map@0.0.1:
   version "0.0.1"
@@ -1436,10 +1436,10 @@ safer-buffer@^2.0.2, safer-buffer@^2.1.0, safer-buffer@~2.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-semver@^7.3.7:
-  version "7.3.7"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.7.tgz#12c5b649afdbf9049707796e22a4028814ce523f"
-  integrity sha512-QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g==
+semver@^7.3.7, semver@^7.3.8:
+  version "7.3.8"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.8.tgz#07a78feafb3f7b32347d725e33de7e2a2df67798"
+  integrity sha512-NB1ctGL5rlHrPJtFDVIVzTyQylMLu9N9VICA6HSFJo8MCGVTMW6gfpicwKmmK/dAjTOrqu5l63JJOpDSrAis3A==
   dependencies:
     lru-cache "^6.0.0"
 
@@ -1604,17 +1604,17 @@ type-fest@^2.12.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.18.0.tgz#fdef3a74e0a9e68ebe46054836650fb91ac3881e"
   integrity sha512-pRS+/yrW5TjPPHNOvxhbNZexr2bS63WjrMU8a+VzEBhUi9Tz1pZeD+vQz3ut0svZ46P+SRqMEPnJmk2XnvNzTw==
 
-typescript-language-server@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-2.0.0.tgz#278d75b1577152748ebec8def1e0c5a12c31c12b"
-  integrity sha512-wBV3iSt2498Wl6wMozCRDyPrL0KsFtthvYqVZ3JFRyreBGlxEe3bfK2bnLSwtRwYAZuO9n1roi/NNn94rT5Y+w==
+typescript-language-server@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-2.0.1.tgz#5f1b3031ff9598740740d5dfa12a748feab287c7"
+  integrity sha512-UdXkgnP3UkZvQ4v6ma0mxSZ18m9WP6EuFt2nzlCCSCU+fw65J/Wis36Fwp5yBw9JhqAwlH9deFfq9xl2l/J5IQ==
   dependencies:
-    commander "^9.4.0"
+    commander "^9.4.1"
     deepmerge "^4.2.2"
     fs-extra "^10.1.0"
     p-debounce "^4.0.0"
     pkg-up "^4.0.0"
-    semver "^7.3.7"
+    semver "^7.3.8"
     tempy "^3.0.0"
     vscode-languageserver "^8.0.2"
     vscode-languageserver-protocol "^3.17.2"
