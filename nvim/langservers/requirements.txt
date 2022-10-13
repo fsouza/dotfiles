@@ -8,8 +8,6 @@ add-trailing-comma==2.3.0
     # via -r requirements.in
 attrs==22.1.0
     # via flake8-bugbear
-autoflake==1.7.4
-    # via -r requirements.in
 autopep8==1.7.0
     # via -r requirements.in
 black==22.10.0
@@ -39,7 +37,7 @@ mccabe==0.7.0
     # via flake8
 mypy-extensions==0.4.3
     # via black
-pathspec==0.9.0
+pathspec==0.10.1
     # via black
 platformdirs==2.5.2
     # via black
@@ -48,22 +46,18 @@ pycodestyle==2.9.1
     #   autopep8
     #   flake8
 pyflakes==2.5.0
-    # via
-    #   autoflake
-    #   flake8
+    # via flake8
 pyupgrade==3.1.0
     # via -r requirements.in
 reorder-python-imports==3.8.4
     # via -r requirements.in
-ruff==0.0.71
+ruff==0.0.72
     # via -r requirements.in
-tokenize-rt==4.2.1
+tokenize-rt==5.0.0
     # via
     #   add-trailing-comma
     #   pyupgrade
 toml==0.10.2
     # via autopep8
 tomli==2.0.1
-    # via
-    #   autoflake
-    #   black
+    # via black

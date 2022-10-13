@@ -49,10 +49,9 @@
                         :formatStdin true
                         :rootMarkers [:.isort.cfg :.git ""]})))
 
-(fn get-autoflake [_ cb]
-  (get-python-bin :autoflake
-                  #(cb {:formatCommand (string.format "%s --expand-star-imports --remove-all-unused-imports -"
-                                                      $1)
+(fn get-ruff-fix [_ cb]
+  (get-python-bin :ruff
+                  #(cb {:formatCommand (string.format "%s --fix -" $1)
                         :formatStdin true
                         :rootMarkers default-root-markers})))
 
@@ -65,14 +64,7 @@
                                 :lintFormats ["%f:%l:%c: %m"]
                                 :lintIgnoreExitCode true
                                 :rootMarkers [:.flake8 :.git ""]}
-                               get-autoflake)))
-
-;; this is unused for now, --fix isn't supported with stdin just yet.
-(fn get-ruff-fix [_ cb]
-  (get-python-bin :ruff
-                  #(cb {:formatCommand (string.format "%s --fix -" $1)
-                        :formatStdin true
-                        :rootMarkers default-root-markers})))
+                               get-ruff-fix)))
 
 (fn get-ruff [args cb]
   (get-python-bin :ruff #(cb {:lintCommand (string.format "%s --stdin-filename ${INPUT} -"
@@ -82,7 +74,7 @@
                               :lintFormats ["%f:%l:%c: %m"]
                               :lintIgnoreExitCode true
                               :rootMarkers default-root-markers}
-                             get-autoflake)))
+                             get-ruff-fix)))
 
 (fn get-add-trailing-comma [args cb]
   (get-python-bin :add-trailing-comma
@@ -266,7 +258,7 @@
              {:fn get-black}
              {:fn get-add-trailing-comma}
              {:fn get-reorder-python-imports}
-             {:fn get-autoflake}]
+             {:fn get-ruff-fix}]
         pre-commit-config-file-path :.pre-commit-config.yaml]
     (try-read-precommit-config pre-commit-config-file-path
                                (fn [pre-commit-config]
