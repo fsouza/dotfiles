@@ -10,3 +10,4 @@ flake8-tidy-imports
 isort
 pyupgrade
 reorder-python-imports
+ruff

@@ -67,6 +67,23 @@
                                 :rootMarkers [:.flake8 :.git ""]}
                                get-autoflake)))
 
+;; this is unused for now, --fix isn't supported with stdin just yet.
+(fn get-ruff-fix [_ cb]
+  (get-python-bin :ruff
+                  #(cb {:formatCommand (string.format "%s --fix -" $1)
+                        :formatStdin true
+                        :rootMarkers default-root-markers})))
+
+(fn get-ruff [args cb]
+  (get-python-bin :ruff #(cb {:lintCommand (string.format "%s --stdin-filename ${INPUT} -"
+                                                          $1)
+                              :lintStdin true
+                              :lintSource :ruff
+                              :lintFormats ["%f:%l:%c: %m"]
+                              :lintIgnoreExitCode true
+                              :rootMarkers default-root-markers}
+                             get-autoflake)))
+
 (fn get-add-trailing-comma [args cb]
   (get-python-bin :add-trailing-comma
                   #(cb {:formatCommand (string.format "%s --exit-zero-even-if-changed %s -"
@@ -245,7 +262,7 @@
                               (vim.loop.fs_read fd block-size offset on-read)))))))
 
 (fn get-python-tools [cb]
-  (let [fns [{:fn get-flake8}
+  (let [fns [{:fn get-ruff}
              {:fn get-black}
              {:fn get-add-trailing-comma}
              {:fn get-reorder-python-imports}
@@ -263,7 +280,8 @@
                                                       "https://github.com/pre-commit/mirrors-autopep8" get-autopep8
                                                       "https://github.com/pre-commit/mirrors-isort" get-isort
                                                       "https://github.com/pycqa/isort" get-isort
-                                                      "https://github.com/timothycrosley/isort" get-isort}
+                                                      "https://github.com/timothycrosley/isort" get-isort
+                                                      "https://github.com/charliermarsh/ruff-pre-commit" get-ruff}
                                        find-repo (fn [repo]
                                                    (let [repo-url (string.lower repo.repo)
                                                          args (if-nil (?. repo

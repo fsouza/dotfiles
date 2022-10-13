@@ -55,6 +55,8 @@ pyupgrade==3.1.0
     # via -r requirements.in
 reorder-python-imports==3.8.4
     # via -r requirements.in
+ruff==0.0.71
+    # via -r requirements.in
 tokenize-rt==4.2.1
     # via
     #   add-trailing-comma
