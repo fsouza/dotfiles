@@ -1,21 +1,25 @@
 (import-macros {: if-nil : mod-invoke : max-col} :helpers)
 
+(fn do-action [client action resolved]
+  (if (or action.edit (= (type action.command) :table))
+      (do
+        (when action.edit
+          (vim.lsp.util.apply_workspace_edit action.edit client.offset_encoding))
+        (when (= (type action.command) :table)
+          (vim.lsp.buf.execute_command action.command)))
+      (not resolved)
+      (client.request :codeAction/resolve action
+                      (fn [_ resolved-action]
+                        (do-action client resolved-action true)))
+      (vim.lsp.buf.execute_command action)))
+
 (fn handle-actions [actions client]
   (when (and actions (not (vim.tbl_isempty actions)))
     (let [lines (icollect [_ action (ipairs actions)]
                   action.title)]
       (mod-invoke :fsouza.lib.popup-picker :open lines
                   #(when $1
-                     (let [action-chosen (. actions $1)]
-                       (if (or action-chosen.edit
-                               (= (type action-chosen.command) :table))
-                           (do
-                             (when action-chosen.edit
-                               (vim.lsp.util.apply_workspace_edit action-chosen.edit
-                                                                  client.offset_encoding))
-                             (when (= (type action-chosen.command) :table)
-                               (vim.lsp.buf.execute_command action-chosen.command)))
-                           (vim.lsp.buf.execute_command action-chosen))))))))
+                     (do-action client (. actions $1)))))))
 
 (fn handler [_ actions context]
   (let [client (vim.lsp.get_client_by_id context.client_id)]
