@@ -54,6 +54,10 @@
                                  :pyright
                                  #(mod-invoke :fsouza.lsp.pyright
                                               :valid-diagnostic $1))
+                     (mod-invoke :fsouza.lsp.buf-diagnostic :register-filter
+                                 :rust_analyzer
+                                 #(mod-invoke :fsouza.lsp.rust-analyzer
+                                              :valid-diagnostic $1))
                      (lsp.pyright.setup (opts.with-defaults {:cmd [nvim-python
                                                                    nvim-node-ls
                                                                    :pyright-langserver
