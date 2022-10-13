@@ -103,7 +103,8 @@
     (if-executable :dune
                    (lsp.ocamllsp.setup (opts.with-defaults {:root_dir (opts.root-pattern-with-fallback :.merlin)})))
     (if-executable :cargo
-                   (lsp.rust_analyzer.setup (opts.with-defaults {:cmd [(get-cache-cmd :rust-analyzer)]})))
+                   (lsp.rust_analyzer.setup (opts.with-defaults {:cmd [(get-cache-cmd :rust-analyzer)]
+                                                                 :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})))
     (if-executable :taplo (lsp.taplo.setup (opts.with-defaults {})))
     (if-executable :sourcekit-lsp (lsp.sourcekit.setup (opts.with-defaults {})))
     (if-executable :jdtls (lsp.jdtls.setup (opts.with-defaults {})))))
