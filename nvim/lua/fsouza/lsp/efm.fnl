@@ -264,6 +264,8 @@
                                (fn [pre-commit-config]
                                  (let [pc-repo-tools {"https://github.com/pycqa/flake8" get-flake8
                                                       "https://gitlab.com/pycqa/flake8" get-flake8
+                                                      "https://github.com/pycqa/autoflake" get-ruff-fix
+                                                      "https://github.com/myint/autoflake" get-ruff-fix
                                                       "https://github.com/psf/black" get-black
                                                       "https://github.com/ambv/black" get-black
                                                       "https://github.com/asottile/add-trailing-comma" get-add-trailing-comma
