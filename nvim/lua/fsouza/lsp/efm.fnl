@@ -298,7 +298,14 @@
                                      (var pending 0)
 
                                      (fn process-result [tool next-fn]
-                                       (table.insert tools tool)
+                                       (let [key (if tool.formatCommand
+                                                     :formatCommand :lintCommand)
+                                             cmd (. tool key)]
+                                         (when (mod-invoke :fsouza.pl.tablex
+                                                           :for-all tools
+                                                           #(not= (. $1 key)
+                                                                  cmd))
+                                           (table.insert tools tool)))
                                        (if next-fn
                                            (next-fn nil process-result)
                                            (set pending (- pending 1))))
