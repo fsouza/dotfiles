@@ -49,7 +49,7 @@ pyflakes==2.5.0
     # via flake8
 pyupgrade==3.1.0
     # via -r requirements.in
-reorder-python-imports==3.8.4
+reorder-python-imports==3.8.5
     # via -r requirements.in
 ruff==0.0.72
     # via -r requirements.in
