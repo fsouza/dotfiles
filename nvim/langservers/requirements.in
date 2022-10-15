@@ -1,11 +1,7 @@
 add_trailing_comma
 autopep8
 black
-flake8
-flake8-bugbear
-flake8-builtins
-flake8-comprehensions
-flake8-tidy-imports
+flake8-ruff-wrapper
 isort
 pyupgrade
 reorder-python-imports
