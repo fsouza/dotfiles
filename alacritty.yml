@@ -18,7 +18,6 @@ font:
     style: Semibold
 
   size: 12.0
-  use_thin_strokes: false
 
 schemes:
   default-scheme: &default-scheme
