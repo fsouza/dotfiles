@@ -78,10 +78,12 @@
                                                              (helpers.rewrite-wrap #(vim.lsp.util.apply_text_edits result
                                                                                                                    bufnr
                                                                                                                    client.offset_encoding))
-                                                             (let [new-hash (helpers.hash-buffer bufnr)]
-                                                               (when (not= new-hash
-                                                                           hash)
-                                                                 (vim.cmd.update)))))))
+                                                             (when (not= changed-tick
+                                                                         (vim.api.nvim_buf_get_changedtick bufnr))
+                                                               (let [new-hash (helpers.hash-buffer bufnr)
+                                                                     noautocmd (= new-hash
+                                                                                  hash)]
+                                                                 (vim.cmd.update {:mods {: noautocmd}})))))))
                                (when (should-organize-imports client.name)
                                  (organize-imports-and-write client bufnr))))))))))))
 
