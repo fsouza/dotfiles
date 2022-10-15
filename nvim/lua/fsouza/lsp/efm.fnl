@@ -50,10 +50,10 @@
                         :rootMarkers [:.isort.cfg :.git ""]})))
 
 (fn get-ruff-fix [_ cb]
-  (get-python-bin :ruff
-                  #(cb {:formatCommand (string.format "%s --fix -" $1)
-                        :formatStdin true
-                        :rootMarkers default-root-markers})))
+  (get-python-bin :ruff #(cb {:formatCommand (string.format "%s --exit-zero --fix -"
+                                                            $1)
+                              :formatStdin true
+                              :rootMarkers [:.git ""]})))
 
 (fn get-flake8 [args cb]
   (get-python-bin :flake8 #(cb {:lintCommand (string.format "%s --stdin-display-name ${INPUT} --format \"%%(path)s:%%(row)d:%%(col)d: %%(code)s %%(text)s\" %s -"
@@ -73,7 +73,7 @@
                               :lintSource :ruff
                               :lintFormats ["%f:%l:%c: %m"]
                               :lintIgnoreExitCode true
-                              :rootMarkers default-root-markers}
+                              :rootMarkers [:.git ""]}
                              get-ruff-fix)))
 
 (fn get-add-trailing-comma [args cb]
