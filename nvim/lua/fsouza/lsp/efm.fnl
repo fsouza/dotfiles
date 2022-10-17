@@ -56,15 +56,13 @@
        :rootMarkers [:.git ""]}))
 
 (fn get-flake8 [_ cb]
-  (get-python-bin :flake8-ruff
-                  #(cb {:lintCommand (string.format "%s --stdin-display-name ${INPUT} -"
-                                                    $1)
-                        :lintStdin true
-                        :lintSource :flake8
-                        :lintFormats ["%f:%l:%c: %m"]
-                        :lintIgnoreExitCode true
-                        :rootMarkers [:.flake8 :.git ""]}
-                       get-ruff-fix)))
+  (cb {:lintCommand (->> :ruff-flake8 (find-venv-bin)
+                         (string.format "%s --stdin-display-name ${INPUT} -"))
+       :lintStdin true
+       :lintSource :flake8
+       :lintFormats ["%f:%l:%c: %m"]
+       :lintIgnoreExitCode true
+       :rootMarkers [:.flake8 :.git ""]} get-ruff-fix))
 
 (fn get-ruff [args cb]
   (cb {:lintCommand (->> :ruff (find-venv-bin)
