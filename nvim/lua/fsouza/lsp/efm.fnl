@@ -50,10 +50,10 @@
                         :rootMarkers [:.isort.cfg :.git ""]})))
 
 (fn get-ruff-fix [_ cb]
-  (get-python-bin :ruff #(cb {:formatCommand (string.format "%s --quiet --exit-zero --fix -"
-                                                            $1)
-                              :formatStdin true
-                              :rootMarkers [:.git ""]})))
+  (cb {:formatCommand (->> :ruff (find-venv-bin)
+                           (string.format "%s --quiet --exit-zero --fix -"))
+       :formatStdin true
+       :rootMarkers [:.git ""]}))
 
 (fn get-flake8 [_ cb]
   (get-python-bin :flake8-ruff
@@ -67,14 +67,13 @@
                        get-ruff-fix)))
 
 (fn get-ruff [args cb]
-  (get-python-bin :ruff #(cb {:lintCommand (string.format "%s --stdin-filename ${INPUT} -"
-                                                          $1)
-                              :lintStdin true
-                              :lintSource :ruff
-                              :lintFormats ["%f:%l:%c: %m"]
-                              :lintIgnoreExitCode true
-                              :rootMarkers [:.git ""]}
-                             get-ruff-fix)))
+  (cb {:lintCommand (->> :ruff (find-venv-bin)
+                         (string.format "%s --stdin-filename ${INPUT} -"))
+       :lintStdin true
+       :lintSource :ruff
+       :lintFormats ["%f:%l:%c: %m"]
+       :lintIgnoreExitCode true
+       :rootMarkers [:.git ""]} get-ruff-fix))
 
 (fn get-add-trailing-comma [args cb]
   (get-python-bin :add-trailing-comma
