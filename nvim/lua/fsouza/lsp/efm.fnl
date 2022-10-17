@@ -50,7 +50,7 @@
                         :rootMarkers [:.isort.cfg :.git ""]})))
 
 (fn get-ruff-fix [_ cb]
-  (get-python-bin :ruff #(cb {:formatCommand (string.format "%s --exit-zero --fix -"
+  (get-python-bin :ruff #(cb {:formatCommand (string.format "%s --quiet --exit-zero --fix -"
                                                             $1)
                               :formatStdin true
                               :rootMarkers [:.git ""]})))
