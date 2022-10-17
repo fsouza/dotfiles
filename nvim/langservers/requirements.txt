@@ -38,7 +38,7 @@ pyupgrade==3.1.0
     # via -r requirements.in
 reorder-python-imports==3.8.5
     # via -r requirements.in
-ruff==0.0.79
+ruff==0.0.80
     # via
     #   -r requirements.in
     #   flake8-ruff-wrapper
