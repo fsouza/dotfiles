@@ -56,7 +56,7 @@
        :rootMarkers [:.git ""]}))
 
 (fn get-flake8 [_ cb]
-  (cb {:lintCommand (->> :ruff-flake8 (find-venv-bin)
+  (cb {:lintCommand (->> :flake8-ruff (find-venv-bin)
                          (string.format "%s --stdin-display-name ${INPUT} -"))
        :lintStdin true
        :lintSource :flake8
