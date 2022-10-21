@@ -20,6 +20,7 @@
                        :fsx :fsharp
                        :fsi :fsharp
                        :fnl :fennel
+                       :thrift :thrift
                        :fsproj :fsharp_project
                        "" from-shebang}
            :filename {:Tiltfile :bzl
