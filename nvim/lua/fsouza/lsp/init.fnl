@@ -95,6 +95,7 @@
                                                                         :linksInHover false
                                                                         :codelenses {:vendor false}
                                                                         :gofumpt true}}))
+                   (lsp.jsonnet_ls.setup (opts.with-defaults {:cmd [(get-cache-cmd :jsonnet-language-server)]}))
                    (let [efm (require :fsouza.lsp.efm)
                          (settings filetypes) (efm.basic-settings)]
                      (lsp.efm.setup (opts.with-defaults {:cmd [(get-cache-cmd :efm-langserver)]
