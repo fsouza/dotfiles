@@ -38,7 +38,7 @@ jobs:
         uses: actions/cache@v3.0.11
         with:
           path: ~/.cache/nvim/langservers
-          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-20220128101400"
+          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-${{ steps.setup-python.outputs.python-version }}"
 
       - name: get luajit version
         id: get-luajit-version
@@ -56,14 +56,14 @@ jobs:
         uses: actions/cache@v3.0.11
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ runner.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}-20220128101400"
+          key: "${{ runner.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       - name: virtualenv cache
         id: nvim-virtualenv-cache
         uses: actions/cache@v3.0.11
         with:
           path: ~/.cache/nvim/venv
-          key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.setup-python.outputs.python-version }}-20220128123800"
+          key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.setup-python.outputs.python-version }}"
 
       - name: run setup
         run: |
