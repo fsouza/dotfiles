@@ -19,7 +19,7 @@ if [ -n "${brew_path}" ]; then
 	prepend_to_path \
 		"${HOMEBREW_PREFIX}"/opt/coreutils/libexec/gnubin \
 		"${HOMEBREW_PREFIX}"/opt/curl/bin \
-		"${HOMEBREW_PREFIX}"/opt/python@3.10/bin
+		"${HOMEBREW_PREFIX}"/opt/python@3.11/libexec/bin
 
 	if [ -x /usr/local/bin/brew ]; then
 		alias brew_x86="arch -x86_64 /usr/local/bin/brew"
