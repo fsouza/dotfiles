@@ -37,6 +37,7 @@ fi
 touch "${HOME}"/.zsh_sessions_disable
 
 if command -v brew &>/dev/null; then
+	brew update
 	brew bundle --no-lock --file "${basedir}"/bootstrap/Brewfile
 fi
 
