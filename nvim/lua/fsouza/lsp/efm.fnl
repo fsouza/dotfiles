@@ -51,7 +51,7 @@
 
 (fn get-ruff-fix [_ cb]
   (cb {:formatCommand (->> :ruff (find-venv-bin)
-                           (string.format "%s --quiet --exit-zero --fix -"))
+                           (string.format "%s --silent --exit-zero --fix -"))
        :formatStdin true
        :rootMarkers [:.git ""]}))
 
