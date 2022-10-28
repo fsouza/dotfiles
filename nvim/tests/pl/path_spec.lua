@@ -55,3 +55,27 @@ describe("async-mkdir", function()
     assert.is_true(#result == 0)
   end)
 end)
+
+describe("async-which", function()
+  local async_which = path["async-which"]
+
+  it("can check ls", function()
+    local expected = vim.trim(vim.fn.system("which ls"))
+    local result = block_on(1000, async_which, "ls")
+
+    assert.are_same(expected, result[1])
+  end)
+
+  it("can take full path", function()
+    local expected = vim.trim(vim.fn.system("which ls"))
+    local result = block_on(1000, async_which, expected)
+
+    assert.are_same(expected, result[1])
+  end)
+
+  it("empty string for thigns that can't be found", function()
+    local result = block_on(1000, async_which, "something-that-hopefully-doesnt-exist")
+
+    assert.are_same("", result[1])
+  end)
+end)

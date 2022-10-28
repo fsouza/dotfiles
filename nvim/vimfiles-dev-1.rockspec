@@ -12,5 +12,6 @@ dependencies = {
   "lrexlib-pcre ~> 2.9.1",
   "luacheck ~> 0.26.1",
   "lsha2 ~> 0.1",
+  "lua_system_constants ~> 0.1.4",
 }
 build = { type = "builtin", modules = {} }

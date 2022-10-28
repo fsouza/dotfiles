@@ -28,7 +28,36 @@
                                           (cb $1))
                               _ (cb $1))))))
 
-(let [mod {: isrel : async-mkdir}]
+(fn path-entries []
+  (vim.split (vim.loop.os_getenv :PATH) ":" {:trimempty true :plain true}))
+
+(fn async-which [exec cb]
+  (fn handle-p [p cb]
+    (vim.loop.fs_stat p #(if $1
+                             (cb "")
+                             (let [mode (. $2 :mode)
+                                   S_IXUSR (mod-invoke :lua_system_constants
+                                                       :S_IXUSR)]
+                               (if (band mode S_IXUSR)
+                                   (cb p)
+                                   (cb ""))))))
+
+  (if (pl-path.isabs exec)
+      (handle-p exec cb)
+      (let [dirs (path-entries)]
+        (fn try-dir [idx]
+          (if (> idx (length dirs))
+              (cb "")
+              (let [dir (. dirs idx)
+                    candidate (pl-path.join dir exec)]
+                (handle-p candidate
+                          #(if (= $1 "")
+                               (try-dir (+ idx 1))
+                               (cb $1))))))
+
+        (try-dir 1))))
+
+(let [mod {: isrel : async-mkdir : async-which}]
   (setmetatable mod {:__index (fn [table key]
                                 (let [value (. pl-path key)]
                                   (rawset table key value)
