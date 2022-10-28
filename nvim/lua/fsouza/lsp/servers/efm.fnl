@@ -1,4 +1,5 @@
 (import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
+(import-macros {: get-cache-cmd} :lsp-helpers)
 
 (local path (require :fsouza.pl.path))
 (local default-root-markers [:.git])
@@ -388,4 +389,17 @@
                   (client.notify :workspace/didChangeConfiguration
                                  {:settings client.config.settings}))))
 
-{: basic-settings : gen-config}
+(fn setup []
+  (let [(settings filetypes) (basic-settings)]
+    (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__lsp_start_efm
+                [{:events [:FileType]
+                  :targets filetypes
+                  :callback #(mod-invoke :fsouza.lsp.servers :start {:name :efm
+                                                                     :cmd [(get-cache-cmd :efm-langserver)]
+                                                                     :init_options {:documentFormatting true}
+                                                                     : settings
+                                                                     :on_init (fn [client]
+                                                                                (gen-config client)
+                                                                                true)})}])))
+
+{: setup}

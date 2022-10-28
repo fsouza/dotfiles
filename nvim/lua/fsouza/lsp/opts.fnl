@@ -214,12 +214,6 @@
         bufnr (if (= bufnr 0) (vim.api.nvim_get_current_buf) bufnr)]
     (attached bufnr client)))
 
-(fn cwd-if-not-home []
-  (let [cwd (vim.loop.cwd)
-        home (vim.loop.os_homedir)]
-    (when (not= cwd home)
-      cwd)))
-
 (fn with-defaults [opts]
   (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
     (tset capabilities.workspace :executeCommand {:dynamicRegistration false})
@@ -228,14 +222,7 @@
     (let [defaults {:handlers (require :fsouza.lsp.handlers)
                     :on_attach on-attach
                     : capabilities
-                    :root_dir cwd-if-not-home
                     :flags {:debounce_text_changes 0}}]
       (vim.tbl_extend :force defaults opts))))
 
-(fn root-pattern-with-fallback [...]
-  (let [lspconfig (require :lspconfig)
-        find-root (lspconfig.util.root_pattern ...)]
-    (fn [startpath]
-      (if-nil (find-root startpath) (cwd-if-not-home)))))
-
-{: with-defaults : root-pattern-with-fallback}
+{: with-defaults}

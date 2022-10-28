@@ -1,15 +1,4 @@
-(import-macros {: if-nil : mod-invoke} :helpers)
-
-(local path (require :fsouza.pl.path))
-
-(macro get-local-cmd [cmd]
-  `(path.join config-dir :langservers :bin ,cmd))
-
-(macro get-cache-path [...]
-  `(path.join cache-dir :langservers ,...))
-
-(macro get-cache-cmd [cmd]
-  `(get-cache-path :bin ,cmd))
+(import-macros {: mod-invoke} :helpers)
 
 (macro config-log []
   `(let [level# (if vim.env.NVIM_DEBUG :trace :off)
@@ -22,96 +11,14 @@
     (let [sign-name (.. :DiagnosticSign level)]
       `(vim.fn.sign_define ,sign-name {:text "" :numhl ,sign-name}))))
 
-(macro if-executable [name ...]
-  `(when (= (vim.fn.executable ,name) 1)
-     ,...))
-
 (fn setup []
   (define-signs)
   (config-log)
-  (let [lsp (require :lspconfig)
-        opts (require :fsouza.lsp.opts)]
-    (if-executable :fnm
-                   (let [nvim-python (path.join cache-dir :venv :bin :python3)
-                         nvim-node-ls (get-local-cmd :node-lsp.py)]
-                     (macro node-lsp [name ...]
-                       `(let [mod# (. lsp ,name)
-                              cmd# [nvim-python nvim-node-ls ,...]]
-                          (mod#.setup (opts.with-defaults {:cmd cmd#}))))
-                     (node-lsp :bashls :bash-language-server :start)
-                     (node-lsp :cssls :vscode-css-language-server :--stdio)
-                     (node-lsp :html :vscode-html-language-server :--stdio)
-                     (node-lsp :tsserver :typescript-language-server :--stdio)
-                     (node-lsp :yamlls :yaml-language-server :--stdio)
-                     (let [schemastore (require :schemastore)]
-                       (lsp.jsonls.setup (opts.with-defaults {:cmd [nvim-python
-                                                                    nvim-node-ls
-                                                                    :vscode-json-language-server
-                                                                    :--stdio]
-                                                              :settings {:format {:enable false}
-                                                                         :json {:schemas (schemastore.json.schemas)}}})))
-                     (mod-invoke :fsouza.lsp.buf-diagnostic :register-filter
-                                 :pyright
-                                 #(mod-invoke :fsouza.lsp.pyright
-                                              :valid-diagnostic $1))
-                     (mod-invoke :fsouza.lsp.buf-diagnostic :register-filter
-                                 :rust_analyzer
-                                 #(mod-invoke :fsouza.lsp.rust-analyzer
-                                              :valid-diagnostic $1))
-                     (lsp.pyright.setup (opts.with-defaults {:cmd [nvim-python
-                                                                   nvim-node-ls
-                                                                   :pyright-langserver
-                                                                   :--stdio]
-                                                             :settings {:pyright {}
-                                                                        :python {:pythonPath (path.join cache-dir
-                                                                                                        :venv
-                                                                                                        :bin
-                                                                                                        :python)
-                                                                                 :analysis {:autoImportCompletions true
-                                                                                            :autoSearchPaths true
-                                                                                            :diagnosticMode :workspace
-                                                                                            :typeCheckingMode (if-nil vim.g.pyright_type_checking_mode
-                                                                                                                      :basic)
-                                                                                            :useLibraryCodeForTypes true}}}
-                                                             :on_init (fn [client]
-                                                                        (mod-invoke :fsouza.lsp.pyright
-                                                                                    :detect-pythonPath
-                                                                                    client)
-                                                                        true)}))))
-    (if-executable :go
-                   (lsp.gopls.setup (opts.with-defaults {:cmd [(get-cache-cmd :gopls)
-                                                               :-remote=auto
-                                                               "-debug=:0"
-                                                               "-remote.debug=:0"]
-                                                         :root_dir (opts.root-pattern-with-fallback :go.work
-                                                                                                    :go.mod)
-                                                         :init_options {:deepCompletion false
-                                                                        :staticcheck true
-                                                                        :analyses {:fillreturns true
-                                                                                   :nonewvars true
-                                                                                   :undeclaredname true
-                                                                                   :unusedparams true
-                                                                                   :ST1000 false}
-                                                                        :linksInHover false
-                                                                        :codelenses {:vendor false}
-                                                                        :gofumpt true}}))
-                   (lsp.jsonnet_ls.setup (opts.with-defaults {:cmd [(get-cache-cmd :jsonnet-language-server)]}))
-                   (let [efm (require :fsouza.lsp.efm)
-                         (settings filetypes) (efm.basic-settings)]
-                     (lsp.efm.setup (opts.with-defaults {:cmd [(get-cache-cmd :efm-langserver)]
-                                                         :init_options {:documentFormatting true}
-                                                         : settings
-                                                         : filetypes
-                                                         :on_init (fn [client]
-                                                                    (efm.gen-config client)
-                                                                    true)}))))
-    (if-executable :dune
-                   (lsp.ocamllsp.setup (opts.with-defaults {:root_dir (opts.root-pattern-with-fallback :.merlin)})))
-    (if-executable :cargo
-                   (lsp.rust_analyzer.setup (opts.with-defaults {:cmd [(get-cache-cmd :rust-analyzer)]
-                                                                 :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})))
-    (if-executable :taplo (lsp.taplo.setup (opts.with-defaults {})))
-    (if-executable :sourcekit-lsp (lsp.sourcekit.setup (opts.with-defaults {})))
-    (if-executable :jdtls (lsp.jdtls.setup (opts.with-defaults {})))))
+  (mod-invoke :fsouza.lsp.buf-diagnostic :register-filter :pyright
+              #(mod-invoke :fsouza.lsp.servers.pyright :valid-diagnostic $1))
+  (mod-invoke :fsouza.lsp.buf-diagnostic :register-filter :rust_analyzer
+              #(mod-invoke :fsouza.lsp.servers.rust-analyzer :valid-diagnostic
+                           $1))
+  (mod-invoke :fsouza.lsp.servers.efm :setup))
 
 {: setup}
