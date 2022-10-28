@@ -16,7 +16,7 @@ click==8.1.3
     # via black
 flake8==5.0.4
     # via flake8-ruff-wrapper
-flake8-ruff-wrapper==0.1.2
+flake8-ruff-wrapper==0.2.0
     # via -r requirements.in
 isort==5.10.1
     # via -r requirements.in
