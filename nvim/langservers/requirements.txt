@@ -6,7 +6,7 @@
 #
 add-trailing-comma==2.3.0
     # via -r requirements.in
-autopep8==1.7.0
+autopep8==1.7.1
     # via -r requirements.in
 black==22.10.0
     # via -r requirements.in
@@ -47,8 +47,8 @@ tokenize-rt==5.0.0
     #   add-trailing-comma
     #   pyupgrade
 toml==0.10.2
+    # via flake8-ruff-wrapper
+tomli==2.0.1
     # via
     #   autopep8
-    #   flake8-ruff-wrapper
-tomli==2.0.1
-    # via black
+    #   black
