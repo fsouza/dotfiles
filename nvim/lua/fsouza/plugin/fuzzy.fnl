@@ -113,11 +113,11 @@
         core (require :fzf-lua.core)
         make-entry (require :fzf-lua.make_entry)
         opts (config.normalize_opts {: prompt :cwd (vim.loop.cwd)}
-                                    config.globals.lsp)]
-    (tset opts :fzf_fn (icollect [_ item (ipairs items)]
-                         (let [item (make-entry.lcol item opts)]
-                           (make-entry.file item opts))))
-    (core.fzf_files (core.set_fzf_field_index opts))))
+                                    config.globals.lsp)
+        contents (icollect [_ item (ipairs items)]
+                   (let [item (make-entry.lcol item opts)]
+                     (make-entry.file item opts)))]
+    (core.fzf_exec contents opts)))
 
 (var last-search nil)
 
@@ -161,7 +161,7 @@
         opts (core.set_fzf_field_index opts)]
     (tset opts.fzf_opts :--no-multi "")
     (tset opts :previewer nil)
-    (core.fzf_files opts contents)))
+    (core.fzf_exec contents opts)))
 
 (let [rg-opts "--column -n --hidden --no-heading --color=always --colors 'match:fg:0x99,0x00,0x00' --colors line:none --colors path:none --colors column:none -S --glob '!.git' --glob '!.hg'"
       mod {: find-files
