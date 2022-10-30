@@ -18,12 +18,15 @@
         (mod-invoke :fsouza.pl.path :dirname file)
         (cwd-if-not-home))))
 
+(macro should-start [bufnr]
+  `(not= (vim.api.nvim_buf_get_option ,bufnr :buftype) :nofile))
+
 (fn start [config find-root-dir]
   (let [find-root-dir (if-nil find-root-dir cwd-if-not-home)
         bufnr (vim.api.nvim_get_current_buf)
         exec (?. config :cmd 1)
         config (mod-invoke :fsouza.lsp.opts :with-defaults config)]
-    (when (not= (vim.api.nvim_buf_get_option bufnr :buftype) :nofile)
+    (when (should-start bufnr)
       (tset config :root_dir (find-root-dir))
       (if-executable exec #(vim-schedule (vim.lsp.start config {: bufnr}))))))
 
