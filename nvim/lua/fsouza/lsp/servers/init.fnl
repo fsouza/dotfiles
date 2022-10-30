@@ -23,7 +23,8 @@
         bufnr (vim.api.nvim_get_current_buf)
         exec (?. config :cmd 1)
         config (mod-invoke :fsouza.lsp.opts :with-defaults config)]
-    (tset config :root_dir (find-root-dir))
-    (if-executable exec #(vim-schedule (vim.lsp.start config {: bufnr})))))
+    (when (not= (vim.api.nvim_buf_get_option bufnr :buftype) :nofile)
+      (tset config :root_dir (find-root-dir))
+      (if-executable exec #(vim-schedule (vim.lsp.start config {: bufnr}))))))
 
 {: start : patterns-with-fallback}
