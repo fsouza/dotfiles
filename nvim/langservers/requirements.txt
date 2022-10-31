@@ -6,7 +6,7 @@
 #
 add-trailing-comma==2.3.0
     # via -r requirements.in
-autopep8==1.7.1
+autopep8==2.0.0
     # via -r requirements.in
 black==22.10.0
     # via -r requirements.in
