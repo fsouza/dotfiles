@@ -15,6 +15,6 @@
                                                                         :basic)
                                               :useLibraryCodeForTypes true}}}
                :on_init (fn [client]
-                          (mod-invoke :fsouza.lsp.pyright :detect-pythonPath
-                                      client)
+                          (mod-invoke :fsouza.lsp.servers.pyright
+                                      :detect-pythonPath client)
                           true)}))
