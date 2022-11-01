@@ -1,7 +1,6 @@
 tap "homebrew/cask-fonts"
 
 brew "bash"
-brew "docker", args: ["overwrite"]
 brew "fd"
 brew "fnm"
 brew "fzf"
