@@ -4,7 +4,10 @@
 (fn setup []
   (mod-invoke :fsouza.lsp.servers :start
               {:name :gopls
-               :cmd [(get-cache-cmd :gopls)]
+               :cmd [(get-cache-cmd :gopls)
+                     :-remote=auto
+                     "-debug=:0"
+                     "-remote.debug=:0"]
                :init_options {:deepCompletion false
                               :staticcheck true
                               :analyses {:fillreturns true
