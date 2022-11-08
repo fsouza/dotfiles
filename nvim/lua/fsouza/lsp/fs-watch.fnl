@@ -115,7 +115,7 @@
                                           (make-fs-event-handler root-dir
                                                                  notify-server))]
     (when (not ok)
-      (error err))
+      (error (string.format "failed to start fsevent at %s: %s" root-dir err)))
     event))
 
 (fn dedupe-watchers [entry]
@@ -158,7 +158,14 @@
                   (seq.keys)
                   (seq.filter #(path.isrel folder $1))
                   (seq.take 1))]
-        (if-nil (s) folder)))
+        (fn find-existing [folder]
+          (let [path (require :fsouza.pl.path)
+                (_ err) (vim.loop.fs_stat folder)]
+            (if err
+                (find-existing (path.dirname folder))
+                folder)))
+
+        (if-nil (s) (find-existing folder))))
 
     (each [_ {: pats : watcher} (ipairs abs-folders)]
       (each [_ pat (ipairs pats)]
