@@ -338,15 +338,15 @@ async def install_jdtls(langservers_cache_dir: Path) -> None:
         print("skipping jdtls")
         return
 
-    repo_dir = await _clone_or_update(
-        "https://github.com/eclipse/eclipse.jdt.ls.git",
-        langservers_cache_dir / "jdtls",
-    )
+    target_dir = langservers_cache_dir / "jdtls"
+    await asyncio.to_thread(target_dir.mkdir, parents=True, exist_ok=True)
 
+    url = (
+        "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz"
+    )
     await run_cmd(
-        cmd="./mvnw",
-        args=["verify", "-DskipTests=true"],
-        cwd=repo_dir,
+        cmd="bash",
+        args=["-c", f"curl -sL {url} | tar -C {target_dir} -xzf -"],
     )
 
 
