@@ -333,6 +333,23 @@ async def install_rust_analyzer(langservers_cache_dir: Path) -> None:
     await asyncio.to_thread(target_bin.chmod, 0o700)
 
 
+async def install_jdtls(langservers_cache_dir: Path) -> None:
+    if not await has_command("java"):
+        print("skipping jdtls")
+        return
+
+    repo_dir = await _clone_or_update(
+        "https://github.com/eclipse/eclipse.jdt.ls.git",
+        langservers_cache_dir / "jdtls",
+    )
+
+    await run_cmd(
+        cmd="./mvnw",
+        args=["verify", "-DskipTests=true"],
+        cwd=repo_dir,
+    )
+
+
 async def setup_langservers(cache_dir: Path) -> None:
     langservers_cache_dir = cache_dir / "langservers"
     await asyncio.gather(
@@ -344,6 +361,7 @@ async def setup_langservers(cache_dir: Path) -> None:
         install_efm(langservers_cache_dir),
         install_buildifier(langservers_cache_dir),
         install_rust_analyzer(langservers_cache_dir),
+        install_jdtls(langservers_cache_dir),
     )
 
 
