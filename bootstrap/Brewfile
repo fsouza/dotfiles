@@ -1,6 +1,7 @@
 tap "homebrew/cask-fonts"
 
 brew "bash"
+brew "curl"
 brew "fd"
 brew "fnm"
 brew "fzf"
