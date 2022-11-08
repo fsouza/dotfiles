@@ -85,6 +85,16 @@
                      :targets [:changelog :gitcommit :help :markdown :text]
                      :command "setlocal spell"}]))
 
+(fn setup-vim-notify []
+  (let [tablex (require :fsouza.pl.tablex)
+        patterns ["message with no corresponding"]
+        orig-notify vim.notify]
+    (fn notify [msg level opts]
+      (when (tablex.for-all patterns #(= (string.find msg $1) nil))
+        (orig-notify msg level opts)))
+
+    (tset vim :notify notify)))
+
 (fn setup-editorconfig []
   (mod-invoke :fsouza.plugin.editorconfig :enable)
   (vim-schedule (vim.api.nvim_create_user_command :EnableEditorConfig
@@ -153,6 +163,7 @@
 
 (let [schedule vim.schedule]
   (setup-delayed-commands)
+  (schedule setup-vim-notify)
   (schedule setup-editorconfig)
   (schedule setup-git-messenger)
   (schedule setup-hlyank)
