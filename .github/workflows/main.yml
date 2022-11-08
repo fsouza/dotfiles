@@ -28,10 +28,10 @@ jobs:
           go-version: "1.x"
 
       - uses: actions/setup-java@v3.6.0
+        id: setup-java
         with:
           distribution: adopt
           java-version: "17"
-          cache: maven
 
       - uses: fsouza/rs-toolchain@v1.1.0
         with:
@@ -70,6 +70,12 @@ jobs:
         with:
           path: ~/.cache/nvim/venv
           key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.setup-python.outputs.python-version }}"
+
+      - name: maven cache
+        uses: actions/cache@v3.0.11
+        with:
+          path: ~/.m2/repository
+          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/boostrap.py') }}-${{ steps.setup-java.outputs.version }}"
 
       - name: run setup
         run: |
