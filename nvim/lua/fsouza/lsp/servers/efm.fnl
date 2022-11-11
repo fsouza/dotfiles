@@ -394,12 +394,13 @@
     (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__lsp_start_efm
                 [{:events [:FileType]
                   :targets filetypes
-                  :callback #(mod-invoke :fsouza.lsp.servers :start {:name :efm
-                                                                     :cmd [(get-cache-cmd :efm-langserver)]
-                                                                     :init_options {:documentFormatting true}
-                                                                     : settings
-                                                                     :on_init (fn [client]
-                                                                                (gen-config client)
-                                                                                true)})}])))
+                  :callback #(mod-invoke :fsouza.lsp.servers :start
+                                         {:name :efm
+                                          :cmd [(get-cache-cmd :efm-langserver)]
+                                          :init_options {:documentFormatting true}
+                                          : settings
+                                          :on_init (fn [client]
+                                                     (gen-config client)
+                                                     true)})}])))
 
 {: setup}
