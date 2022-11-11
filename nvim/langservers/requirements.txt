@@ -34,7 +34,7 @@ pycodestyle==2.9.1
     #   flake8
 pyflakes==2.5.0
     # via flake8
-pyupgrade==3.2.1
+pyupgrade==3.2.2
     # via -r requirements.in
 reorder-python-imports==3.9.0
     # via -r requirements.in
