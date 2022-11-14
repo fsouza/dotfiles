@@ -261,7 +261,6 @@
     (try-read-precommit-config pre-commit-config-file-path
                                (fn [pre-commit-config]
                                  (let [pc-repo-tools {"https://github.com/pycqa/flake8" get-flake8
-                                                      "https://gitlab.com/pycqa/flake8" get-flake8
                                                       "https://github.com/pycqa/autoflake" get-ruff-fix
                                                       "https://github.com/myint/autoflake" get-ruff-fix
                                                       "https://github.com/psf/black" get-black
