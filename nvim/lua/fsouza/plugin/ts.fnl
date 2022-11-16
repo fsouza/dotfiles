@@ -82,6 +82,8 @@
                                     :swap_next {:<leader>a "@parameter.inner"}
                                     :swap_previous {:<leader>A "@parameter.inner"}}}
                :context_commentstring {:enable true :enable_autocmd false}
+               :refactor {:navigation {:enable [:proto :thrift]
+                                       :keymaps {:goto_definition :gd}}}
                :ensure_installed :all
                :ignore_install ignore-install})
   (setup-autocmds))

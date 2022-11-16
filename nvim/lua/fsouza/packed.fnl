@@ -32,6 +32,7 @@
             {1 :tpope/vim-rhubarb}
             {1 :tpope/vim-surround}
             {1 :nvim-treesitter/nvim-treesitter}
+            {1 :nvim-treesitter/nvim-treesitter-refactor}
             {1 :nvim-treesitter/nvim-treesitter-textobjects}
             {1 :nvim-treesitter/playground}
             {1 :numToStr/Comment.nvim}
