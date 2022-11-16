@@ -2,9 +2,12 @@
 
 (fn if-executable [exec cb]
   (when exec
-    (mod-invoke :fsouza.pl.path :async-which exec
-                #(when (not= $1 "")
-                   (cb)))))
+    (let [node-bin (mod-invoke :fsouza.pl.path :join config-dir :langservers
+                               :node_modules :.bin)
+          PATH (.. node-bin ":" (vim.loop.os_getenv :PATH))]
+      (mod-invoke :fsouza.pl.path :async-which exec
+                  #(when (not= $1 "")
+                     (cb $1)) PATH))))
 
 (fn cwd-if-not-home []
   (let [cwd (vim.loop.cwd)
@@ -28,6 +31,9 @@
         config (mod-invoke :fsouza.lsp.opts :with-defaults config)]
     (when (should-start bufnr)
       (tset config :root_dir (find-root-dir))
-      (if-executable exec #(vim-schedule (vim.lsp.start config {: bufnr}))))))
+      (if-executable exec
+                     #(do
+                        (tset config.cmd 1 $1)
+                        (vim-schedule (vim.lsp.start config {: bufnr})))))))
 
 {: start : patterns-with-fallback}

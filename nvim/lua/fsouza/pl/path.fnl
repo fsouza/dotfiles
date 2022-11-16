@@ -1,4 +1,4 @@
-(import-macros {: mod-invoke} :helpers)
+(import-macros {: if-nil : mod-invoke} :helpers)
 
 (local pl-path (require :pl.path))
 
@@ -28,10 +28,11 @@
                                           (cb $1))
                               _ (cb $1))))))
 
-(fn path-entries []
-  (vim.split (vim.loop.os_getenv :PATH) ":" {:trimempty true :plain true}))
+(fn path-entries [path]
+  (let [path (if-nil path (vim.loop.os_getenv :PATH))]
+    (vim.split path ":" {:trimempty true :plain true})))
 
-(fn async-which [exec cb]
+(fn async-which [exec cb path]
   (fn handle-p [p cb]
     (vim.loop.fs_stat p #(if $1
                              (cb "")
@@ -44,7 +45,7 @@
 
   (if (pl-path.isabs exec)
       (handle-p exec cb)
-      (let [dirs (path-entries)]
+      (let [dirs (path-entries path)]
         (fn try-dir [idx]
           (if (> idx (length dirs))
               (cb "")
