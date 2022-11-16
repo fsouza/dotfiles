@@ -34,6 +34,8 @@ FNL_FILES := $(shell fd --type f '.+\.fnl' | grep -Ev 'scripts/.+\.fnl' | grep -
 LUA_FILES := $(patsubst %.fnl,build/%.lua,$(FNL_FILES))
 VIM_FILES := $(shell fd --type f '.+\.vim' | sd '^./' '')
 TARGET_VIM_FILES := $(patsubst %,build/%,$(VIM_FILES))
+SCM_FILES := $(shell fd --type f '.+\.scm' | sd '^./' '')
+TARGET_SCM_FILES := $(patsubst %,build/%,$(SCM_FILES))
 
 .PHONY: install
 install: install-nvim-site install-nvim-init.lua install-hammerspoon
@@ -71,12 +73,16 @@ clean-site: clean
 clean-hammerspoon:
 	rm -rf ~/.hammerspoon
 
-build: scripts/compile.lua $(LUA_FILES) $(TARGET_VIM_FILES)
+build: scripts/compile.lua $(LUA_FILES) $(TARGET_VIM_FILES) $(TARGET_SCM_FILES)
 
 build/%.lua: %.fnl
 	$(LUA) scripts/compile.lua --output $@ $<
 
 build/%.vim: %.vim
+	@ mkdir -p $(dir $@)
+	cp $< $@
+
+build/%.scm: %.scm
 	@ mkdir -p $(dir $@)
 	cp $< $@
 
