@@ -71,11 +71,8 @@
 
 (fn get-visual-selection-contents []
   (let [[srow scol erow ecol] (get-visual-selection-range)
-        lines (vim.api.nvim_buf_get_lines 0 (- srow 1) erow true)
-        nlines (length lines)
-        eline (+ 1 (- erow srow))]
-    (tset lines eline (string.sub (. lines eline) 1 ecol))
-    (tset lines 1 (string.sub (. lines 1) scol))
+        lines (vim.api.nvim_buf_get_text 0 (- srow 1) (- scol 1) (- erow 1)
+                                         ecol {})]
     lines))
 
 (fn extract-luv-error [err]
