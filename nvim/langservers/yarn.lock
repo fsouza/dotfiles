@@ -149,12 +149,12 @@ ajv@^8.11.0:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-angular-html-parser@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/angular-html-parser/-/angular-html-parser-2.1.0.tgz#e250f814c3d036e101158aaabdbd1ae0a91373b7"
-  integrity sha512-hCDgpIO0m13YPfTPZUIYX4NoczFo5FBftyXQ3TXKRAJnSVRaywWLzU6U8P6uq9JGLWQHCGTWKuBVsEim3k/s1Q==
+angular-html-parser@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/angular-html-parser/-/angular-html-parser-3.0.0.tgz#00b245940a86a74e05d83f8455862914798de82b"
+  integrity sha512-2UVNx5UmO2wj2JzwIIb0927/jr3d8vYv4cMIFsh4a8dLUIhf2YpMU7UgRMXJJo19jAihTW/MO2whnl/0xvAfqg==
   dependencies:
-    tslib "2.4.0"
+    tslib "2.4.1"
 
 ansi-regex@^5.0.1:
   version "5.0.1"
@@ -1554,10 +1554,10 @@ trough@^2.0.0:
   resolved "https://registry.yarnpkg.com/trough/-/trough-2.1.0.tgz#0f7b511a4fde65a46f18477ab38849b22c554876"
   integrity sha512-AqTiAOLcj85xS7vQ8QkAV41hPDIJ71XJB4RCUrzo/1GM2CQwhkJGaf9Hgr7BOugMRpgGUrqRg/DrBDl4H40+8g==
 
-tslib@2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
-  integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
+tslib@2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.1.tgz#0d0bfbaac2880b91e22df0768e55be9753a5b17e"
+  integrity sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==
 
 tslib@^1.8.1:
   version "1.14.1"
