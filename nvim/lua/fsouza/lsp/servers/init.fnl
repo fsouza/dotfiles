@@ -4,7 +4,7 @@
   (when exec
     (let [node-bin (mod-invoke :fsouza.pl.path :join config-dir :langservers
                                :node_modules :.bin)
-          PATH (.. node-bin ":" (vim.loop.os_getenv :PATH))]
+          PATH (.. node-bin ":" (vim.loop.os_getenv :PATH 2048))]
       (mod-invoke :fsouza.pl.path :async-which exec
                   #(when (not= $1 "")
                      (cb $1)) PATH))))
