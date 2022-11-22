@@ -71,10 +71,6 @@
                       (vim.api.nvim_buf_set_option bufnr option-name value))))))
 
 (fn modify-filename-if-needed [name bufnr]
-  ;; editorconfig isn't aware of filetypes, so if we get a file with no
-  ;; extension for which neovim can figure out the filetype in some other form
-  ;; (usually the shebang, but the actual form doesn't matter), we add an
-  ;; extension that we know will lead to that filetype.
   (let [ft-map {:python :.py :sh :.sh :ruby :.rb :query :.scm}
         (_ ext) (mod-invoke :fsouza.pl.path :splitext name)]
     (if (not= ext "")
