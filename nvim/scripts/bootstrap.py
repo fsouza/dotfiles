@@ -112,6 +112,16 @@ async def ensure_virtualenv(cache_dir: Path) -> Path:
         [
             "install",
             "--upgrade",
+            "pip",
+            "pip-tools",
+        ],
+    )
+
+    await run_cmd(
+        venv_dir / "bin" / "pip",
+        [
+            "install",
+            "--upgrade",
             "-r",
             base_dir / "langservers" / "requirements.txt",
         ],
