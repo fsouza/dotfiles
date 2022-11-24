@@ -16,6 +16,11 @@ jobs:
         run: |
           curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-macos.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
 
+      - name: install early dependencies
+        run: |
+          brew update
+          brew install jq
+
       - uses: actions/checkout@v3.1.0
 
       - uses: actions/setup-python@v4.3.0
@@ -51,6 +56,11 @@ jobs:
         run: |
           echo "version=$(nvim --version | grep LuaJIT)" >>${GITHUB_OUTPUT}
 
+      - name: get pcre version
+        id: get-pcre-version
+        run: |
+          echo "version=$(brew info pcre --json | jq -r '.[0].versions.stable')" >>${GITHUB_OUTPUT}
+
       - name: set MACOSX_DEPLOYMENT_TARGET
         id: macosx-deployment-target
         run: |
@@ -62,7 +72,7 @@ jobs:
         uses: actions/cache@v3.0.11
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ runner.os }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
+          key: "${{ runner.os }}-${{ steps.get-pcre-version.outputs.version }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       - name: virtualenv cache
         id: nvim-virtualenv-cache
