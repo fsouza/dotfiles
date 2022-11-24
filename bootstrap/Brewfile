@@ -8,6 +8,7 @@ brew "fzf"
 brew "git", args: ["overwrite"]
 brew "libyaml"
 brew "lua"
+brew "pcre"
 brew "python@3.11", args: ["overwrite"]
 brew "ripgrep"
 brew "sd"
