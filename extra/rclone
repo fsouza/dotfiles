@@ -1,24 +1,3 @@
-function install_rclone {
-	local arch=$(uname -m)
-	if [[ $arch == "x86_64" ]]; then
-		arch=amd64
-	fi
-
-	# note: no Linux support :)
-	local download_url=https://beta.rclone.org/rclone-beta-latest-osx-${arch}.zip
-	local dst=$(mktemp -d)
-
-	curl -sLo "${dst}/rclone.zip" "${download_url}"
-	pushd "${dst}"
-	unzip -j rclone.zip
-	mkdir -p ~/.local/bin ~/.local/share/man
-	mv rclone ~/.local/bin/rclone
-	mv rclone.1 ~/.local/share/man
-	popd
-
-	rm -rf "${dst}"
-}
-
 function rclone_mount {
 	if [ -z "$1" ]; then
 		echo >&2 please specify the remote
@@ -46,10 +25,6 @@ function rclone_mount {
 function ensure_rclone_mount {
 	local remote=$1
 	local local_path=$2
-
-	if ! command -v rclone &>/dev/null; then
-		install_rclone 2>&1
-	fi
 
 	if ! rclone lsd "${remote}" &>/dev/null; then
 		echo "remote ${remote} not defined in rclone"
