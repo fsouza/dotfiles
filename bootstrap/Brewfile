@@ -10,7 +10,6 @@ brew "libyaml"
 brew "lua"
 brew "pcre"
 brew "python@3.11", args: ["overwrite"]
-brew "rclone"
 brew "ripgrep"
 brew "sd"
 brew "selene"
