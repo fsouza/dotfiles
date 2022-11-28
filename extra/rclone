@@ -1,3 +1,9 @@
+function _latest_rclone_version {
+	local version_url=https://downloads.rclone.org/version.txt
+
+	curl -sL "${version_url}" | awk '{print $NF}'
+}
+
 function install_rclone {
 	local arch=$(uname -m)
 	if [[ $arch == "x86_64" ]]; then
@@ -5,7 +11,8 @@ function install_rclone {
 	fi
 
 	# note: no Linux support :)
-	local download_url=https://beta.rclone.org/rclone-beta-latest-osx-${arch}.zip
+	local version=$(_latest_rclone_version)
+	local download_url=https://downloads.rclone.org/${version}/rclone-${version}-osx-${arch}.zip
 	local dst=$(mktemp -d)
 
 	curl -sLo "${dst}/rclone.zip" "${download_url}"
