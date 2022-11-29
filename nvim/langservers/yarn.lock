@@ -206,10 +206,10 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-bash-language-server@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/bash-language-server/-/bash-language-server-3.3.0.tgz#3e397eb60afd0039e0268b0f50f7969930ef6354"
-  integrity sha512-t4Chy3qfoyd2tc5GmBbxGnKtZZx93QCJSFRovwT4hslukjRlK63aCbOqqXZ8Re0MKH3+vJlKGIxepS0TN1ykeA==
+bash-language-server@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/bash-language-server/-/bash-language-server-3.3.1.tgz#432296d15ba74875f951869d78bb89a03802c9d6"
+  integrity sha512-93Ts6rQTEP8rvGZ3XPSy105GM4Qs6yvIuCUvRiDIx0gMLFemscCkvyrrihDEMkmjb0T3TaRZyFXgoZk5Ea8blw==
   dependencies:
     "@types/node-fetch" "2.6.2"
     fast-glob "3.2.12"
