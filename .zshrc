@@ -30,6 +30,7 @@ source "${FSOUZA_DOTFILES_DIR}"/extra/virtualenv
 source "${FSOUZA_DOTFILES_DIR}"/extra/z
 source "${FSOUZA_DOTFILES_DIR}"/extra/git
 source "${FSOUZA_DOTFILES_DIR}"/extra/go
+source "${FSOUZA_DOTFILES_DIR}"/extra/java
 source "${FSOUZA_DOTFILES_DIR}"/extra/mail
 source "${FSOUZA_DOTFILES_DIR}"/extra/ocaml
 source "${FSOUZA_DOTFILES_DIR}"/extra/neovim
