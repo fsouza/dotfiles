@@ -2,6 +2,7 @@
 	useConfigOnly = true
 [core]
 	filemode = true
+	precomposeunicode = true
 [diff]
 	compactionHeuristic = 1
 	indentHeuristic = 1
@@ -37,3 +38,5 @@
 	gpgsign = true
 [feature]
 	manyFiles = true
+[rerere]
+	enabled = true
