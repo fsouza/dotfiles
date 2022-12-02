@@ -61,6 +61,13 @@
                                                                         :hl :TSParameter}}})
                       symbols-outline)))
 
+;; hack to disable features per server
+(fn mutate-server-capabilities [client]
+  (let [per-server-caps {:jdtls [:codeLensProvider]}
+        caps (if-nil (. per-server-caps client.name) [])]
+    (each [_ cap (ipairs caps)]
+      (tset client.server_capabilities cap nil))))
+
 (fn attached [bufnr client]
   (let [detach (require :fsouza.lsp.detach)]
     (macro register-detach [cb]
@@ -89,6 +96,7 @@
                                                                         :float {:source :if_many}})}]
                                   :i []
                                   :x []}]
+                    (mutate-server-capabilities client)
                     (let [shell-post (require :fsouza.lsp.shell-post)]
                       (shell-post.on-attach bufnr)
                       (register-detach shell-post.on-detach))
