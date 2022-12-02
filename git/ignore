@@ -20,3 +20,8 @@ __pycache__
 .lsp
 .cpcache
 dump.rdb
+
+# jdtls
+.settings
+.project
+.classpath
