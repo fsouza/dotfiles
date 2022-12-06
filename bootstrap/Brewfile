@@ -13,6 +13,7 @@ brew "python@3.11", args: ["overwrite"]
 brew "ripgrep"
 brew "sd"
 brew "selene"
+brew "shellcheck"
 brew "stylua"
 brew "taplo"
 

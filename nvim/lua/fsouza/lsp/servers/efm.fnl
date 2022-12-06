@@ -165,16 +165,6 @@
        :rootMarkers [:stylua.toml :.stylua.toml]
        :requireMarker true}))
 
-(fn get-shellcheck [cb]
-  (cb {:lintCommand "shellcheck -f gcc -x -"
-       :lintStdin true
-       :lintSource :shellcheck
-       :lintFormats ["%f:%l:%c: %trror: %m"
-                     "%f:%l:%c: %tarning: %m"
-                     "%f:%l:%c: %tote: %m"]
-       :lintIgnoreExitCode true
-       :rootMarkers default-root-markers}))
-
 (fn get-shfmt [cb]
   (let [shfmt-path (path.join cache-dir :langservers :bin :shfmt)]
     (cb {:formatCommand (string.format "%s -" shfmt-path)
@@ -352,8 +342,7 @@
            (original-cb ...)
            (set pending (- pending 1)))))
 
-    (let [simple-tool-factories [{:language :sh :fn get-shellcheck}
-                                 {:language :sh :fn get-shfmt}
+    (let [simple-tool-factories [{:language :sh :fn get-shfmt}
                                  {:language :dune :fn get-dune}
                                  {:language :ocaml :fn get-ocamlformat}
                                  {:language :bzl :fn get-buildifier}
