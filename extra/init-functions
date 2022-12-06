@@ -11,6 +11,15 @@ function prepend_to_path {
 	export PATH
 }
 
+function append_to_path {
+	for dir in $@; do
+		if [ -d "$dir" ]; then
+			PATH=PATH:${dir}
+		fi
+	done
+	export PATH
+}
+
 function realpath {
 	local resolved=$(readlink "${1}")
 	if [ -n "${resolved}" ]; then
