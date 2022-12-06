@@ -124,7 +124,7 @@
                                      lua-bin dotfiles-dir)
          :lintStdin true
          :lintSource :fennel
-         :lintFormats ["%f:%l:%c: %m"]
+         :lintFormats ["%f:%l:%c %m"]
          :lintIgnoreExitCode true
          :rootMarkers default-root-markers})))
 
