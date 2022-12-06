@@ -1,6 +1,6 @@
 (import-macros {: if-nil : mod-invoke : max-col} :helpers)
 
-(local langservers-org-imports-set {:gopls true})
+(local langservers-org-imports-set {:gopls true :jdtls true})
 
 (fn should-skip-buffer [bufnr]
   (let [path (require :fsouza.pl.path)
@@ -36,8 +36,10 @@
 (fn organize-imports-and-write [client bufnr]
   (let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)
         params (vim.lsp.util.make_range_params)]
+    (tset params :context
+          {:diagnostics (vim.diagnostic.get bufnr {:namespace client.id})})
     (tset params.range :start {:line 0 :character 0})
-    (tset params.range :end {:line (vim.api.nvim_buf_line_count bufnr)
+    (tset params.range :end {:line (- (vim.api.nvim_buf_line_count bufnr) 1)
                              :character 0})
     (client.request :textDocument/codeAction params
                     (fn [_ actions]
@@ -51,11 +53,12 @@
                                                                    :source.organizeImports)
                                                                 action
                                                                 false)))]
-                          (when (and code-action code-action.edit)
+                          (when code-action
                             (vim.api.nvim_buf_call bufnr
                                                    (fn []
-                                                     (vim.lsp.util.apply_workspace_edit code-action.edit
-                                                                                        client.offset_encoding)
+                                                     (mod-invoke :fsouza.lsp.code-action
+                                                                 :execute client
+                                                                 code-action)
                                                      (vim.cmd.update))))))))))
 
 (fn autofmt-and-write [bufnr]

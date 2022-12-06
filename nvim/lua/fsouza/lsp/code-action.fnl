@@ -11,6 +11,7 @@
       (client.request :codeAction/resolve action
                       (fn [_ resolved-action]
                         (do-action client resolved-action true)))
+      (and action.command action.arguments)
       (vim.lsp.buf.execute_command action)))
 
 (fn handle-actions [actions client]
@@ -57,4 +58,4 @@
                                           :get-visual-selection-range)]
     (range-code-action nil [srow scol] [erow ecol] handler)))
 
-{: code-action : visual-code-action}
+{: code-action : visual-code-action :execute do-action}
