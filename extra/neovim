@@ -70,7 +70,7 @@ if [ -x "$NEOVIM_INSTALL_PREFIX/bin/nvim" ]; then
 		nvim +'autocmd User PluginReady ++once lua vim.schedule(function() require("fsouza.plugin.fuzzy")["find-files"]() end)' "$@"
 	}
 
-	export EDITOR=nvim GIT_EDITOR=nvim MANPAGER="nvim +'Man!'"
+	export GIT_EDITOR=nvim MANPAGER="nvim +'Man!'"
 else
 	unset EDITOR GIT_EDITOR MANPAGER
 fi
