@@ -12,8 +12,10 @@
       (let [s (-> pattern-mapping
                   (seq.keys)
                   (seq.filter #(if (string.find prog $1) true false))
-                  (seq.take 1))]
-        (s)))))
+                  (seq.take 1))
+            k (s)]
+        (when k
+          (. pattern-mapping k))))))
 
 (let [fts {:extension {:tilt :bzl
                        :fs :fsharp
