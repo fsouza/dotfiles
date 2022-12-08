@@ -43,27 +43,23 @@
                    set-from-pipenv]]
     (fn detect [idx]
       (let [detector (. detectors idx)]
-        (when detector
-          (detector #(if $1
-                         (cb $1)
-                         (detect (+ idx 1)))))))
+        (if detector
+            (detector #(if $1
+                           (cb $1)
+                           (detect (+ idx 1))))
+            (cb nil))))
 
     (detect 1)))
 
-(fn detect-python-interpreter [cb]
+(fn detect-interpreter [cb]
   (let [path (require :fsouza.pl.path)]
     (detect-virtualenv (fn [virtualenv]
-                         (when virtualenv
-                           (vim-schedule (tset vim.env :VIRTUAL_ENV virtualenv))
-                           (cb (path.join virtualenv :bin :python3)))))))
-
-(fn detect-pythonPath [client]
-  (detect-python-interpreter (fn [python-path]
-                               (when python-path
-                                 (tset client.config.settings.python
-                                       :pythonPath python-path)
-                                 (client.notify :workspace/didChangeConfiguration
-                                                {:settings client.config.settings})))))
+                         (if virtualenv
+                             (do
+                               (vim-schedule (tset vim.env :VIRTUAL_ENV
+                                                   virtualenv))
+                               (cb (path.join virtualenv :bin :python3)))
+                             (cb nil))))))
 
 ;; See docs for Diagnostic.Tags:
 ;; https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#diagnosticTag
@@ -71,4 +67,4 @@
   (let [tags (if-nil (. d :tags) [])]
     (mod-invoke :fsouza.pl.tablex :for-all tags #(not= $1 1))))
 
-{: detect-pythonPath : valid-diagnostic}
+{: detect-interpreter : valid-diagnostic}
