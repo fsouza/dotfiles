@@ -2,6 +2,26 @@ function tmux {
 	command tmux -u -f $HOME/.config/tmux/tmux.conf $@
 }
 
+function _tmux_ensure_pane {
+	local pane_name=${1}
+	local length=${2}
+	shift 2
+
+	local pane_id=$(tmux list-panes -F '#{pane_index} #{pane_title}' | grep "${pane_name}" | awk '{print $1}')
+	if [ -z "${pane_id}" ]; then
+		local pane_id=$(tmux split-window -P -F '#{pane_index}' -d -l "${length}" -fv -c "${PWD}" ${@})
+		tmux select-pane -t "${pane_id}" -T "${pane_name}"
+	fi
+}
+
+function _tmux_kill_pane {
+	local pane_name=${1}
+	local pane_id=$(tmux list-panes -F '#{pane_index} #{pane_title}' | grep "${pane_name}" | awk '{print $1}')
+	if [ -n "${pane_id}" ]; then
+		tmux kill-pane -t "${pane_id}"
+	fi
+}
+
 function _tmux_toggle_pane {
 	local pane_name=${1}
 	local length=${2}
