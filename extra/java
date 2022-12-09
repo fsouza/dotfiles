@@ -1,3 +1,5 @@
 function use_java {
-	export JAVA_HOME=$(/usr/libexec/java_home -v "${1}")
+	export JAVA_HOME=$(/usr/libexec/java_home -v "${1}" -F)
 }
+
+use_java 17
