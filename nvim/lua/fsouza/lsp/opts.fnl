@@ -63,7 +63,8 @@
 
 ;; hack to disable features per server
 (fn mutate-server-capabilities [client]
-  (let [per-server-caps {:jdtls [:codeLensProvider]}
+  (let [per-server-caps {:jdtls [:codeLensProvider]
+                         :kotlin-language-server [:semanticTokensProvider]}
         caps (if-nil (. per-server-caps client.name) [])]
     (each [_ cap (ipairs caps)]
       (tset client.server_capabilities cap nil))))
