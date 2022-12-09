@@ -1,15 +1,11 @@
 (import-macros {: mod-invoke : if-nil : vim-schedule} :helpers)
 
 (fn find-java-executable [java-version cb]
-  (fn on-finished [result]
-    (when (= result.exit-status 0)
-      (let [path (require :fsouza.pl.path)
-            java-home (vim.trim result.stdout)
-            java-bin (path.join java-home :bin :java)]
-        (cb java-bin))))
-
-  (mod-invoke :fsouza.lib.cmd :run :/usr/libexec/java_home
-              {:args [:-v java-version]} nil on-finished))
+  (mod-invoke :fsouza.lib.java :find-java-home java-version
+              #(let [path (require :fsouza.pl.path)
+                     java-home $1
+                     java-bin (path.join java-home :bin :java)]
+                 (cb java-bin))))
 
 (fn find-jdtls-jar [jdtls-dir cb]
   (let [path (require :fsouza.pl.path)
@@ -25,35 +21,6 @@
                                 (vim.loop.fs_closedir dir #nil)))))
 
     (vim.loop.fs_opendir plugins-dir #(process-dir $2) 512)))
-
-(fn detect-runtime-name [java-home cb]
-  (fn name-from-output [line]
-    (fn name-from-version-string [result]
-      (let [dot-pos (string.find result "%.")
-            version (string.sub result 2 (- dot-pos 1))]
-        (string.format "JavaSE-%s" version)))
-
-    (let [pattern-to-name {"\"%d+%.%d+%.%d+\"" name-from-version-string
-                           "\"1%.8%." :JavaSE-1.8}]
-      (each [pattern result (pairs pattern-to-name)]
-        (let [(start end) (string.find line pattern)]
-          (when start
-            (let [r (if (= (type result) :function)
-                        (result (string.sub line start end))
-                        result)]
-              (lua "return r")))))))
-
-  (fn on-finished [result]
-    (let [lines (vim.split result.stderr "\n")
-          first-line (. lines 1)]
-      (->> first-line
-           (name-from-output)
-           (cb))))
-
-  (let [path (require :fsouza.pl.path)
-        java-bin (path.join java-home :bin :java)]
-    (mod-invoke :fsouza.lib.cmd :run java-bin {:args [:-version]} nil
-                on-finished)))
 
 (fn start-jdtls [settings]
   (let [path (require :fsouza.pl.path)
@@ -87,14 +54,14 @@
                                                     : cmd
                                                     : settings})))))
 
-    (find-java-executable :19 with-executable)))
+    (find-java-executable :17 with-executable)))
 
 (let [java-home (vim.loop.os_getenv :JAVA_HOME)]
   (if java-home
-      (detect-runtime-name java-home
-                           #(let [name $1
-                                  settings {:java {:configuration {:runtimes [{: name
-                                                                               :path java-home
-                                                                               :default true}]}}}]
-                              (start-jdtls settings)))
+      (mod-invoke :fsouza.lib.java :detect-runtime-name java-home
+                  #(let [name $1
+                         settings {:java {:configuration {:runtimes [{: name
+                                                                      :path java-home
+                                                                      :default true}]}}}]
+                     (start-jdtls settings)))
       (start-jdtls nil)))
