@@ -292,13 +292,6 @@ async def install_shfmt(langservers_cache_dir: Path) -> None:
     await _go_install(langservers_cache_dir, "mvdan.cc/sh/v3/cmd/shfmt@master")
 
 
-async def install_jsonnetls(langservers_cache_dir: Path) -> None:
-    await _go_install(
-        langservers_cache_dir,
-        "github.com/grafana/jsonnet-language-server@main",
-    )
-
-
 async def install_efm(langservers_cache_dir: Path) -> None:
     await _go_install(langservers_cache_dir, "github.com/mattn/efm-langserver@master")
 
@@ -367,7 +360,6 @@ async def setup_langservers(cache_dir: Path) -> None:
         install_ocaml_lsp(),
         install_gopls(langservers_cache_dir),
         install_shfmt(langservers_cache_dir),
-        install_jsonnetls(langservers_cache_dir),
         install_efm(langservers_cache_dir),
         install_buildifier(langservers_cache_dir),
         install_rust_analyzer(langservers_cache_dir),
