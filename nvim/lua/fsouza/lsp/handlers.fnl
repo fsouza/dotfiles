@@ -40,6 +40,32 @@
                     ctx.client_id))))
   vim.NIL)
 
+(local log-files {})
+
+(fn get-log-file [client-name]
+  (let [log-file (. log-files client-name)]
+    (if log-file
+        log-file
+        (do
+          (let [path (require :fsouza.pl.path)
+                log-filename (path.join cache-dir :langservers
+                                        (string.format "%s.log" client-name))
+                log-file (io.open log-filename :a)]
+            (tset log-files :client-name log-file)
+            log-file)))))
+
+(fn log-message [err result ctx]
+  (let [clients-to-echo {:kotlin-language-server true}
+        {:client_id client-id} ctx
+        client (vim.lsp.get_client_by_id client-id)
+        client-name (?. client :name)]
+    (if (and client-name (. clients-to-echo client-name))
+        (let [log-file (get-log-file client-name)]
+          (log-file:write (string.format "[%s] %s\n" client-name result.message))
+          (log-file:flush))
+        (let [handler (. vim.lsp.handlers :window/logMessage)]
+          (handler err result ctx)))))
+
 {:textDocument/declaration fzf-location-callback
  :textDocument/definition fzf-location-callback
  :textDocument/typeDefinition fzf-location-callback
@@ -62,4 +88,5 @@
                                     (let [buf-diagnostics (require :fsouza.lsp.buf-diagnostic)]
                                       (buf-diagnostics.publish-diagnostics ...)))
  :client/registerCapability register-capability
- :client/unregisterCapability unregister-capability}
+ :client/unregisterCapability unregister-capability
+ :window/logMessage log-message}
