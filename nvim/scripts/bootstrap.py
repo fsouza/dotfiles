@@ -353,23 +353,6 @@ async def install_jdtls(langservers_cache_dir: Path) -> None:
     )
 
 
-async def install_kotlin_language_server(langservers_cache_dir: Path) -> None:
-    if not await has_command("java"):
-        print("skipping kotlin-language-server")
-        return
-
-    repo_dir = await _clone_or_update(
-        "https://github.com/fwcd/kotlin-language-server.git",
-        langservers_cache_dir / "kotlin-language-server",
-    )
-
-    await run_cmd(
-        cmd="./gradlew",
-        args=[":server:installDist"],
-        cwd=repo_dir,
-    )
-
-
 async def setup_langservers(cache_dir: Path) -> None:
     langservers_cache_dir = cache_dir / "langservers"
     await asyncio.gather(
@@ -381,7 +364,6 @@ async def setup_langservers(cache_dir: Path) -> None:
         install_buildifier(langservers_cache_dir),
         install_rust_analyzer(langservers_cache_dir),
         install_jdtls(langservers_cache_dir),
-        install_kotlin_language_server(langservers_cache_dir),
     )
 
 
