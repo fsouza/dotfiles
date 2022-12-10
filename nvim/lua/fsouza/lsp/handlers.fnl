@@ -55,16 +55,13 @@
             log-file)))))
 
 (fn log-message [err result ctx]
-  (let [clients-to-echo {:kotlin-language-server true}
-        {:client_id client-id} ctx
+  (let [{:client_id client-id} ctx
         client (vim.lsp.get_client_by_id client-id)
         client-name (?. client :name)]
-    (if (and client-name (. clients-to-echo client-name))
-        (let [log-file (get-log-file client-name)]
-          (log-file:write (string.format "[%s] %s\n" client-name result.message))
-          (log-file:flush))
-        (let [handler (. vim.lsp.handlers :window/logMessage)]
-          (handler err result ctx)))))
+    (when client-name
+      (let [log-file (get-log-file client-name)]
+        (log-file:write (string.format "%s\n" result.message))
+        (log-file:flush)))))
 
 {:textDocument/declaration fzf-location-callback
  :textDocument/definition fzf-location-callback
