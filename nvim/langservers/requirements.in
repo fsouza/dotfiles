@@ -1,4 +1,5 @@
 add_trailing_comma
+autoflake
 autopep8
 black
 flake8-ruff-wrapper
