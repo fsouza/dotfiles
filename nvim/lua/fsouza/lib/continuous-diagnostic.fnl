@@ -10,7 +10,7 @@
 ;; }
 (local state {})
 
-(fn transform-diagnostic [diagnostic]
+(lambda transform-diagnostic [diagnostic]
   (let [bufnr (vim.uri_to_bufnr diagnostic.uri)]
     (tset diagnostic :uri nil)
     (tset diagnostic :bufnr bufnr)
@@ -30,30 +30,30 @@
                                  (tset watcher-diagnostics bufnr
                                        buf-diagnostics)))))
 
-(fn set-diagnostics [name]
+(lambda set-diagnostics [name]
   (let [watcher (. state name)]
     (when watcher
       (let [{: ns-id : diagnostics} watcher]
         (each [bufnr buf-diagnostics (pairs diagnostics)]
           (vim.diagnostic.set ns-id bufnr buf-diagnostics))))))
 
-(fn make-chunk-processor [name process-line]
+(lambda make-chunk-processor [name process-line]
   (var partial-line "")
   (let [{: set-diagnostics} (. state name)]
     (fn [payload]
       (let [{: chunk : type} payload
             chunk (if-nil chunk "")]
-        (when (= type :STDOUT)
-          (let [lines (vim.split chunk "\n")]
-            (tset lines 1 (.. partial-line (. lines 1)))
-            (->> lines
-                 (table.remove)
-                 (set partial-line))
-            (each [_ line (ipairs lines)]
-              (process-line line))
-            (set-diagnostics.call)))))))
+        (let [lines (vim.split chunk "\n")]
+          (tset lines 1 (.. partial-line (. lines 1)))
+          (->> lines
+               (table.remove)
+               (set partial-line))
+          (each [_ line (ipairs lines)]
+            (->> (process-line line type)
+                 (process-result name)))
+          (set-diagnostics.call))))))
 
-(fn stop [name]
+(lambda stop [name]
   (let [{: pid : set-diagnostics} (if-nil (. state name) {})]
     (when pid
       (vim-schedule (vim.loop.kill pid vim.loop.constants.SIGTERM)))
@@ -61,15 +61,16 @@
       (set-diagnostics.stop))
     (tset state name nil)))
 
-(fn make-ns [name]
-  (let [n (vim.api.nvim_create_namespace (string.format "fsouza/continuous/%s"
-                                                        name))]
-    (->> n
-         (vim.diagnostic.config {:underline true
-                                 :virtual_text false
-                                 :signs true
-                                 :update_in_insert false}))
-    n))
+(lambda make-ns [name]
+  (let [ns (->> name
+                (string.format "fsouza/continous/%s")
+                (vim.api.nvim_create_namespace))]
+    (vim.diagnostic.config {:underline true
+                            :virtual_text false
+                            :signs true
+                            :update_in_insert false}
+                           ns)
+    ns))
 
 (fn start [opts]
   (let [{: name : cmd : args : process-line} opts]
@@ -80,7 +81,7 @@
            :set-diagnostics (mod-invoke :fsouza.lib.debounce :debounce 250
                                         #(set-diagnostics name))})
     (let [pid (mod-invoke :fsouza.lib.cmd :start cmd {: args}
-                          (make-chunk-processor process-line) #nil)]
+                          (make-chunk-processor name process-line) #nil)]
       (if pid
           (do
             (tset (. state name) :pid pid)
