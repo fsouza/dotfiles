@@ -32,6 +32,7 @@
   (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__autocompile-fennel
               [{:events [:BufWritePost]
                 :targets [(.. dotfiles-dir :/*.fnl)
+                          (.. dotfiles-dir :/nvim/*.scm)
                           (.. dotfiles-dir :/nvim/*.vim)]
                 :callback make}]))
 
