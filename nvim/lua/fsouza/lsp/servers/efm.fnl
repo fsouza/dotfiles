@@ -50,6 +50,13 @@
                         :formatStdin true
                         :rootMarkers [:.isort.cfg :.git ""]})))
 
+(fn get-autoflake [_ cb]
+  (get-python-bin :autoflake
+                  #(cb {:formatCommand (string.format "%s --expand-star-imports --remove-all-unused-imports -"
+                                                      $1)
+                        :formatStdin true
+                        :rootMarkers default-root-markers})))
+
 (fn get-ruff-fix [_ cb]
   (cb {:formatCommand (->> :ruff (find-venv-bin)
                            (string.format "%s --silent --exit-zero --fix -"))
@@ -248,13 +255,13 @@
              {:fn get-black}
              {:fn get-add-trailing-comma}
              {:fn get-reorder-python-imports}
-             {:fn get-ruff-fix}]
+             {:fn get-autoflake}]
         pre-commit-config-file-path :.pre-commit-config.yaml]
     (try-read-precommit-config pre-commit-config-file-path
                                (fn [pre-commit-config]
                                  (let [pc-repo-tools {"https://github.com/pycqa/flake8" get-flake8
-                                                      "https://github.com/pycqa/autoflake" get-ruff-fix
-                                                      "https://github.com/myint/autoflake" get-ruff-fix
+                                                      "https://github.com/pycqa/autoflake" get-autoflake
+                                                      "https://github.com/myint/autoflake" get-autoflake
                                                       "https://github.com/psf/black" get-black
                                                       "https://github.com/ambv/black" get-black
                                                       "https://github.com/asottile/add-trailing-comma" get-add-trailing-comma
