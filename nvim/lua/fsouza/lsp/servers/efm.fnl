@@ -56,14 +56,16 @@
        :formatStdin true
        :rootMarkers [:.git ""]}))
 
-(fn get-flake8 [_ cb]
-  (cb {:lintCommand (->> :flake8-ruff (find-venv-bin)
-                         (string.format "%s --stdin-display-name ${INPUT} -"))
-       :lintStdin true
-       :lintSource :flake8
-       :lintFormats ["%f:%l:%c: %m"]
-       :lintIgnoreExitCode true
-       :rootMarkers [:.flake8 :.git ""]} get-ruff-fix))
+(fn get-flake8 [args cb]
+  (get-python-bin :flake8 #(cb {:lintCommand (string.format "%s --stdin-display-name ${INPUT} --format \"%%(path)s:%%(row)d:%%(col)d: %%(code)s %%(text)s\" %s -"
+                                                            $1
+                                                            (process-args args))
+                                :lintStdin true
+                                :lintSource :flake8
+                                :lintFormats ["%f:%l:%c: %m"]
+                                :lintIgnoreExitCode true
+                                :rootMarkers [:.flake8 :.git ""]}
+                               get-ruff-fix)))
 
 (fn get-ruff [args cb]
   (cb {:lintCommand (->> :ruff (find-venv-bin)
@@ -242,7 +244,7 @@
                               (vim.loop.fs_read fd block-size offset on-read)))))))
 
 (fn get-python-tools [cb]
-  (let [fns [{:fn get-ruff}
+  (let [fns [{:fn get-flake8}
              {:fn get-black}
              {:fn get-add-trailing-comma}
              {:fn get-reorder-python-imports}
