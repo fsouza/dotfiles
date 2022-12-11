@@ -345,15 +345,10 @@
                     :sh
                     prettierd-fts]))
 
-(fn basic-settings []
-  (values {:lintDebounce 250000000
-           :rootMarkers default-root-markers
-           :languages (vim.empty_dict)} (get-filetypes)))
-
 (fn get-settings [cb]
-  (let [settings (basic-settings)]
-    (tset settings :languages {})
-
+  (let [settings {:lintDebounce 250000000
+                  :rootMarkers default-root-markers
+                  :languages {}}]
     (fn add-if-not-empty [language tool]
       (when (or tool.formatCommand tool.lintCommand)
         (let [tools (if-nil (?. settings :languages language) [])]
@@ -399,24 +394,18 @@
                            (vim-schedule (cb settings))
                            (timer:close))))))
 
-(fn gen-config [client]
-  (get-settings (fn [settings]
-                  (tset client.config :settings settings)
-                  (client.notify :workspace/didChangeConfiguration
-                                 {:settings client.config.settings}))))
+(fn start-efm [settings]
+  (mod-invoke :fsouza.lsp.servers :start
+              {:name :efm
+               :cmd [(get-cache-cmd :efm-langserver)]
+               :init_options {:documentFormatting true}
+               : settings}))
 
 (fn setup []
-  (let [(settings filetypes) (basic-settings)]
+  (let [filetypes (get-filetypes)]
     (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__lsp_start_efm
                 [{:events [:FileType]
                   :targets filetypes
-                  :callback #(mod-invoke :fsouza.lsp.servers :start
-                                         {:name :efm
-                                          :cmd [(get-cache-cmd :efm-langserver)]
-                                          :init_options {:documentFormatting true}
-                                          : settings
-                                          :on_init (fn [client]
-                                                     (gen-config client)
-                                                     true)})}])))
+                  :callback #(get-settings start-efm)}])))
 
 {: setup}
