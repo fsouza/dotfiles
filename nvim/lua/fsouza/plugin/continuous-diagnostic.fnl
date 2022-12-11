@@ -1,28 +1,94 @@
 (import-macros {: mod-invoke : if-nil : vim-schedule} :helpers)
 
-(local pids {})
+;; state is a map from name to a table in the following schema:
+;;
+;; {
+;;   pid: number,
+;;   diagnostics: { [bufnr: number]: list<diagnostic-structure> },
+;;   set-diagnostics: debounce,
+;;   ns-id: number,
+;; }
+(local state {})
 
-(fn log-chunks [payload]
-  (let [{: chunk} payload]
-    (print (string.format "chunk=%s" (vim.inspect chunk)))))
+(fn transform-diagnostic [diagnostic]
+  (let [bufnr (vim.uri_to_bufnr diagnostic.uri)]
+    (tset diagnostic :uri nil)
+    (tset diagnostic :bufnr bufnr)
+    diagnostic))
+
+(fn process-result [name result]
+  (let [watcher (. state name)]
+    (match result
+      (:RESET _) (tset watcher :diagnostics {})
+      (:DIAGNOSTIC diagnostic) (let [diagnostic (transform-diagnostic diagnostic)
+                                     {: bufnr} diagnostic
+                                     watcher-diagnostics watcher.diagnostics
+                                     buf-diagnostics (if-nil (. watcher-diagnostics
+                                                                bufnr)
+                                                             [])]
+                                 (table.insert buf-diagnostics diagnostic)
+                                 (tset watcher-diagnostics bufnr
+                                       buf-diagnostics)))))
+
+(fn set-diagnostics [name]
+  (let [watcher (. state name)]
+    (when watcher
+      (let [{: ns-id : diagnostics} watcher]
+        (each [bufnr buf-diagnostics (pairs diagnostics)]
+          (vim.diagnostic.set ns-id bufnr buf-diagnostics))))))
+
+(fn make-chunk-processor [name process-line]
+  (var partial-line "")
+  (let [{: set-diagnostics} (. state name)]
+    (fn [payload]
+      (let [{: chunk : type} payload
+            chunk (if-nil chunk "")]
+        (when (= type :STDOUT)
+          (let [lines (vim.split chunk "\n")]
+            (tset lines 1 (.. partial-line (. lines 1)))
+            (->> lines
+                 (table.remove)
+                 (set partial-line))
+            (each [_ line (ipairs lines)]
+              (process-line line))
+            (set-diagnostics.call)))))))
 
 (fn stop [name]
-  (let [pid (. pids name)]
+  (let [{: pid : set-diagnostics} (if-nil (. state name) {})]
     (when pid
-      (vim-schedule (vim.loop.kill pid vim.loop.constants.SIGTERM))
-      (tset pids pid nil))))
+      (vim-schedule (vim.loop.kill pid vim.loop.constants.SIGTERM)))
+    (when set-diagnostics
+      (set-diagnostics.stop))
+    (tset state name nil)))
+
+(fn make-ns [name]
+  (let [n (vim.api.nvim_create_namespace (string.format "fsouza/continuous/%s"
+                                                        name))]
+    (->> n
+         (vim.diagnostic.config {:underline true
+                                 :virtual_text false
+                                 :signs true
+                                 :update_in_insert false}))
+    n))
 
 (fn start [opts]
-  (let [{: name : cmd : args : reset-fn} opts
-        ns (vim.api.nvim_create_namespace (string.format "fsouza/continuous/%s"
-                                                         name))
-        pid (mod-invoke :fsouza.lib.cmd :start cmd {: args} log-chunks #nil)]
-    (when pid
-      (tset pids name pid)
-      (mod-invoke :fsouza.lib.nvim-helpers :augroup
-                  (string.format "fsouza__continuous-autokill-%s" name)
-                  [{:events [:VimLeavePre]
-                    :targets ["*"]
-                    :callback #(stop name)}]))))
+  (let [{: name : cmd : args : process-line} opts]
+    (stop name)
+    (tset state name
+          {:diagnostics {}
+           :ns-id (make-ns name)
+           :set-diagnostics (mod-invoke :fsouza.lib.debounce :debounce 250
+                                        #(set-diagnostics name))})
+    (let [pid (mod-invoke :fsouza.lib.cmd :start cmd {: args}
+                          (make-chunk-processor process-line) #nil)]
+      (if pid
+          (do
+            (tset (. state name) :pid pid)
+            (mod-invoke :fsouza.lib.nvim-helpers :augroup
+                        (string.format "fsouza__continuous-autokill-%s" name)
+                        [{:events [:VimLeavePre]
+                          :targets ["*"]
+                          :callback #(stop name)}]))
+          (stop name)))))
 
 {: start : stop}
