@@ -225,6 +225,14 @@
 
                     (check-eslint-config 1)))))
 
+(fn get-spotless [cb]
+  (let [spotlessw (path.join config-dir :langservers :bin :spotlessw.py)
+        py3 (find-venv-bin :python3)]
+    (cb {:formatCommand (string.format "%s %s ${INPUT}" py3 spotlessw)
+         :formatStdin true
+         :rootMarkers [:gradlew]
+         :requireMarker true})))
+
 (fn try-read-precommit-config [file-path cb]
   (let [empty-result {:repos []}]
     (vim.loop.fs_open file-path :r (tonumber :644 8)
@@ -326,7 +334,16 @@
                       :yaml])
 
 (fn get-filetypes []
-  (vim.tbl_flatten [:bzl :dune :fennel :lua :ocaml :python :sh prettierd-fts]))
+  (vim.tbl_flatten [:bzl
+                    :dune
+                    :fennel
+                    :java
+                    :kotlin
+                    :lua
+                    :ocaml
+                    :python
+                    :sh
+                    prettierd-fts]))
 
 (fn basic-settings []
   (values {:lintDebounce 250000000
@@ -359,7 +376,9 @@
                                  {:language :fennel :fn get-fnl-compile}
                                  {:language :lua :fn get-selene}
                                  {:language :lua :fn get-stylua}
-                                 {:language :lua :fn get-luacheck}]
+                                 {:language :lua :fn get-luacheck}
+                                 {:language :java :fn get-spotless}
+                                 {:language :kotlin :fn get-spotless}]
           timer (vim.loop.new_timer)]
       (each [_ f (ipairs simple-tool-factories)]
         (let [{:fn f : language} f]

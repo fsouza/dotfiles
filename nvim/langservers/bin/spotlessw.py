@@ -6,7 +6,7 @@ from pathlib import Path
 
 def main(args: Sequence[str]) -> int:
     gradlew = Path("gradlew").absolute()
-    fileName = Path(args[0]).absolute()
+    fileName = Path(args[1]).absolute()
     contents = sys.stdin.buffer.read()
 
     process = subprocess.Popen(
@@ -20,6 +20,7 @@ def main(args: Sequence[str]) -> int:
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        stdin=subprocess.PIPE,
     )
 
     stdout, stderr = process.communicate(contents)
@@ -29,7 +30,7 @@ def main(args: Sequence[str]) -> int:
         sys.stderr.buffer.write(stderr)
         return process.returncode
 
-    match stderr:
+    match stderr.strip():
         case b"IS DIRTY":
             sys.stdout.buffer.write(stdout)
             return 0
