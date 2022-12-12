@@ -303,13 +303,6 @@ async def install_buildifier(langservers_cache_dir: Path) -> None:
     )
 
 
-async def install_ibazel(langservers_cache_dir: Path) -> None:
-    await _go_install(
-        langservers_cache_dir,
-        "github.com/bazelbuild/bazel-watcher/cmd/ibazel@master",
-    )
-
-
 async def install_rust_analyzer(langservers_cache_dir: Path) -> None:
     if not await has_command("rustup"):
         print("skipping rust-analyzer")
@@ -369,7 +362,6 @@ async def setup_langservers(cache_dir: Path) -> None:
         install_shfmt(langservers_cache_dir),
         install_efm(langservers_cache_dir),
         install_buildifier(langservers_cache_dir),
-        install_ibazel(langservers_cache_dir),
         install_rust_analyzer(langservers_cache_dir),
         install_jdtls(langservers_cache_dir),
     )
