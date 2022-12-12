@@ -37,7 +37,6 @@ source "${FSOUZA_DOTFILES_DIR}"/extra/mail
 source "${FSOUZA_DOTFILES_DIR}"/extra/ocaml
 source "${FSOUZA_DOTFILES_DIR}"/extra/neovim
 source "${FSOUZA_DOTFILES_DIR}"/extra/rclone
-source "${FSOUZA_DOTFILES_DIR}"/extra/zig
 source "${FSOUZA_DOTFILES_DIR}"/extra/ruby
 
 cond_source "${FSOUZA_DOTFILES_DIR}/extra/local-functions"
