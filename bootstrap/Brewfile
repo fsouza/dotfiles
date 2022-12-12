@@ -18,5 +18,6 @@ brew "selene"
 brew "shellcheck"
 brew "stylua"
 brew "taplo"
+brew "zoxide"
 
 cask "font-sauce-code-pro-nerd-font"
