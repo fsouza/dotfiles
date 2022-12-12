@@ -17,6 +17,22 @@ function _git_enable_difftastic {
 	export GIT_CONFIG_COUNT=${config_idx} DFT_BACKGROUND=light DFT_DISPLAY=inline
 }
 
+declare -A _GIT_HOST_EMAIL
+_GIT_HOST_EMAIL=( [git@github.com:]=108725+fsouza@users.noreply.github.com [https://github.com/]=108725+fsouza@users.noreply.github.com )
+
+function __auto_git_config {
+	if [ -d .git ] && ! git config user.email &>/dev/null; then
+		local remote=$(git remote get-url origin 2>/dev/null)
+		for key in ${(k)_GIT_HOST_EMAIL}; do
+			if [[ $remote =~ $key ]]; then
+				local email=$_GIT_HOST_EMAIL[$key]
+				git set-config "${email}" "francisco souza"
+				break
+			fi
+		done
+	fi
+}
+
 if [[ -v HOMEBREW_PREFIX ]]; then
 	export PERLLIB=${HOMEBREW_PREFIX}/opt/git/share/perl5:${PERLLIB+:$PERLLIB}
 fi
@@ -24,3 +40,6 @@ fi
 if command -v difft &>/dev/null; then
 	_git_enable_difftastic
 fi
+
+add-zsh-hook chpwd __auto_git_config
+__auto_git_config
