@@ -42,4 +42,3 @@ if command -v difft &>/dev/null; then
 fi
 
 add-zsh-hook chpwd __auto_git_config
-__auto_git_config
