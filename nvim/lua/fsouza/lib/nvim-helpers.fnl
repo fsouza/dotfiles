@@ -75,10 +75,10 @@
                                          ecol {})]
     lines))
 
-(lambda extract-luv-error [err]
-  (if (= err nil)
+(lambda extract-luv-error [?err]
+  (if (= ?err nil)
       nil
-      (. (vim.split err ":" {:plain true :trimempty true}) 1)))
+      (. (vim.split ?err ":" {:plain true :trimempty true}) 1)))
 
 (lambda hash-buffer [bufnr]
   (let [lines (-> bufnr
