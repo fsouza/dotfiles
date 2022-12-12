@@ -45,7 +45,12 @@
         (each [bufnr buf-diagnostics (pairs diagnostics)]
           (vim.diagnostic.set ns-id bufnr buf-diagnostics))))))
 
-(fn make-chunk-processor [name process-line]
+(fn tee [log-file line]
+  (when log-file
+    (log-file:write line))
+  line)
+
+(fn make-chunk-processor [name process-line log-file]
   (var partial-line "")
   (let [{: set-diagnostics} (. state name)]
     (vim.schedule_wrap (fn [payload]
@@ -57,7 +62,9 @@
                                   (table.remove)
                                   (set partial-line))
                              (each [_ line (ipairs lines)]
-                               (->> (process-line line type)
+                               (->> line
+                                    (tee log-file)
+                                    (process-line type)
                                     (process-result name)))
                              (set-diagnostics.call)))))))
 
@@ -83,7 +90,7 @@
     (tset state name nil)))
 
 (lambda start [opts]
-  (let [{: name : cmd : args : process-line} opts]
+  (let [{: name : cmd : args : process-line : log-file} opts]
     (stop name)
     (tset state name
           {:diagnostics {}
@@ -91,7 +98,7 @@
            :set-diagnostics (mod-invoke :fsouza.lib.debounce :debounce 250
                                         #(vim-schedule (set-diagnostics name)))})
     (let [pid (mod-invoke :fsouza.lib.cmd :start cmd {: args}
-                          (make-chunk-processor name process-line) #nil)]
+                          (make-chunk-processor name process-line log-file) #nil)]
       (if pid
           (do
             (tset (. state name) :pid pid)
