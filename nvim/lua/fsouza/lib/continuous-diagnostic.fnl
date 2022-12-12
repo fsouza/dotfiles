@@ -16,19 +16,21 @@
     (tset diagnostic :bufnr bufnr)
     diagnostic))
 
-(fn process-result [name result]
+(fn process-result [name outcome arg]
   (let [watcher (. state name)]
-    (match result
-      (:RESET _) (tset watcher :diagnostics {})
-      (:DIAGNOSTIC diagnostic) (let [diagnostic (transform-diagnostic diagnostic)
-                                     {: bufnr} diagnostic
-                                     watcher-diagnostics watcher.diagnostics
-                                     buf-diagnostics (if-nil (. watcher-diagnostics
-                                                                bufnr)
-                                                             [])]
-                                 (table.insert buf-diagnostics diagnostic)
-                                 (tset watcher-diagnostics bufnr
-                                       buf-diagnostics)))))
+    (match outcome
+      :RESET (do
+               (let [{: diagnostics : ns-id} watcher]
+                 (each [bufnr _ (pairs diagnostics)]
+                   (vim.diagnostic.set ns-id bufnr [])))
+               (tset watcher :diagnostics {}))
+      :DIAGNOSTIC (let [diagnostic (transform-diagnostic arg)
+                        {: bufnr} diagnostic
+                        watcher-diagnostics watcher.diagnostics
+                        buf-diagnostics (if-nil (. watcher-diagnostics bufnr)
+                                                [])]
+                    (table.insert buf-diagnostics diagnostic)
+                    (tset watcher-diagnostics bufnr buf-diagnostics)))))
 
 (lambda set-diagnostics [name]
   (let [watcher (. state name)]
@@ -40,23 +42,23 @@
 (lambda make-chunk-processor [name process-line]
   (var partial-line "")
   (let [{: set-diagnostics} (. state name)]
-    (fn [payload]
-      (let [{: chunk : type} payload
-            chunk (if-nil chunk "")]
-        (let [lines (vim.split chunk "\n")]
-          (tset lines 1 (.. partial-line (. lines 1)))
-          (->> lines
-               (table.remove)
-               (set partial-line))
-          (each [_ line (ipairs lines)]
-            (->> (process-line line type)
-                 (process-result name)))
-          (set-diagnostics.call))))))
+    (vim.schedule_wrap (fn [payload]
+                         (let [{: chunk : type} payload
+                               chunk (if-nil chunk "")]
+                           (let [lines (vim.split chunk "\n")]
+                             (tset lines 1 (.. partial-line (. lines 1)))
+                             (->> lines
+                                  (table.remove)
+                                  (set partial-line))
+                             (each [_ line (ipairs lines)]
+                               (->> (process-line line type)
+                                    (process-result name)))
+                             (set-diagnostics.call)))))))
 
 (lambda stop [name]
   (let [{: pid : set-diagnostics} (if-nil (. state name) {})]
     (when pid
-      (vim-schedule (vim.loop.kill pid vim.loop.constants.SIGTERM)))
+      (vim.loop.kill pid vim.loop.constants.SIGTERM))
     (when set-diagnostics
       (set-diagnostics.stop))
     (tset state name nil)))
@@ -79,7 +81,7 @@
           {:diagnostics {}
            :ns-id (make-ns name)
            :set-diagnostics (mod-invoke :fsouza.lib.debounce :debounce 250
-                                        #(set-diagnostics name))})
+                                        #(vim-schedule (set-diagnostics name)))})
     (let [pid (mod-invoke :fsouza.lib.cmd :start cmd {: args}
                           (make-chunk-processor name process-line) #nil)]
       (if pid
