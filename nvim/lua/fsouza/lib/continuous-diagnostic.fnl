@@ -7,6 +7,7 @@
 ;;   diagnostics: { [bufnr: number]: list<diagnostic-structure> },
 ;;   set-diagnostics: debounce,
 ;;   ns-id: number,
+;;   log-bufnr: number,
 ;; }
 (local state {})
 
@@ -45,9 +46,13 @@
         (each [bufnr buf-diagnostics (pairs diagnostics)]
           (vim.diagnostic.set ns-id bufnr buf-diagnostics))))))
 
+(fn tee [log-bufnr line]
+  (vim.api.nvim_buf_set_lines log-bufnr -1 -1 true [line])
+  line)
+
 (fn make-chunk-processor [name process-line]
   (var partial-line "")
-  (let [{: set-diagnostics} (. state name)]
+  (let [{: set-diagnostics : log-bufnr} (. state name)]
     (vim.schedule_wrap (fn [payload]
                          (let [{: chunk : type} payload
                                chunk (if-nil chunk "")]
@@ -57,7 +62,9 @@
                                   (table.remove)
                                   (set partial-line))
                              (each [_ line (ipairs lines)]
-                               (->> (process-line line type)
+                               (->> line
+                                    (tee log-bufnr)
+                                    (process-line type)
                                     (process-result name)))
                              (set-diagnostics.call)))))))
 
@@ -73,14 +80,21 @@
     ns))
 
 (lambda stop [name]
-  (let [{: pid : set-diagnostics : ns-id} (if-nil (. state name) {})]
+  (let [{: pid : set-diagnostics : ns-id : log-bufnr} (if-nil (. state name) {})]
     (when pid
       (vim.loop.kill pid vim.loop.constants.SIGTERM))
     (when set-diagnostics
       (set-diagnostics.stop))
     (when ns-id
       (clear-diagnostics (. state name)))
+    (when log-bufnr
+      (vim.api.nvim_buf_delete log-bufnr {:force true}))
     (tset state name nil)))
+
+(fn make-scratch-buffer [name]
+  (let [bufnr (vim.api.nvim_create_buf false true)]
+    (vim.api.nvim_buf_set_name bufnr (string.format "%s - Console Logs" name))
+    bufnr))
 
 (lambda start [opts]
   (let [{: name : cmd : args : process-line} opts]
@@ -88,6 +102,7 @@
     (tset state name
           {:diagnostics {}
            :ns-id (make-ns name)
+           :log-bufnr (make-scratch-buffer name)
            :set-diagnostics (mod-invoke :fsouza.lib.debounce :debounce 250
                                         #(vim-schedule (set-diagnostics name)))})
     (let [pid (mod-invoke :fsouza.lib.cmd :start cmd {: args}
@@ -102,4 +117,9 @@
                           :callback #(stop name)}]))
           (stop name)))))
 
-{: start : stop}
+(lambda show-logs [name]
+  (let [{: log-bufnr} (if-nil (. state name) {})]
+    (when log-bufnr
+      (vim.api.nvim_set_current_buf log-bufnr))))
+
+{: start : stop : show-logs}

@@ -3,7 +3,7 @@
 (local error-re
        (mod-invoke :rex_pcre :new "^([^:]+):([0-9]+):(?:([0-9]+):)? (.+)$"))
 
-(lambda process-line [line _]
+(lambda process-line [_ line]
   (let [reset-pattern ". Rebuilding...$"]
     (if (string.find line reset-pattern)
         (values :RESET nil)
