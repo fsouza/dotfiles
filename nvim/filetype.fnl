@@ -2,7 +2,7 @@
   (let [seq (require :pl.seq)
         pattern-mapping {:python :python
                          :bash :sh
-                         :zsh :sh
+                         :zsh :zsh
                          :/sh :sh
                          :ruby :ruby
                          "env sh" :sh}
