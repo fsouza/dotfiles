@@ -289,7 +289,7 @@ async def install_gopls(langservers_cache_dir: Path) -> None:
 
 
 async def install_shfmt(langservers_cache_dir: Path) -> None:
-    await _go_install(langservers_cache_dir, "mvdan.cc/sh/v3/cmd/shfmt@master")
+    await _go_install(langservers_cache_dir, "mvdan.cc/sh/v3/cmd/shfmt@latest")
 
 
 async def install_efm(langservers_cache_dir: Path) -> None:
