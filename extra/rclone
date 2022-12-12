@@ -10,9 +10,13 @@ function install_rclone {
 		arch=amd64
 	fi
 
-	# note: no Linux support :)
+	local os_name=osx
+	if [[ $(uname -s) == "Linux" ]]; then
+		os_name=linux
+	fi
+
 	local version=$(_latest_rclone_version)
-	local download_url=https://downloads.rclone.org/${version}/rclone-${version}-osx-${arch}.zip
+	local download_url=https://downloads.rclone.org/${version}/rclone-${version}-${os_name}-${arch}.zip
 	local dst=$(mktemp -d)
 
 	curl -sLo "${dst}/rclone.zip" "${download_url}"
