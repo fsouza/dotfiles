@@ -1,5 +1,5 @@
 function find_brew {
-	local paths=(/opt/homebrew/bin/brew /usr/local/bin/brew)
+	local paths=(/opt/homebrew/bin/brew /usr/local/bin/brew /home/linuxbrew/.linuxbrew/bin/brew)
 	for path in "${paths[@]}"; do
 		if [ -x "${path}" ]; then
 			echo "${path}"
@@ -8,25 +8,20 @@ function find_brew {
 	done
 }
 
-brew_path=$(find_brew)
-if [ -n "${brew_path}" ]; then
-	eval "$(env -u HOMEBREW_SHELLENV_PREFIX "${brew_path}" shellenv)"
+function __setup_brew {
+	local brew_path=$(find_brew)
+	if [ -n "${brew_path}" ]; then
+		eval "$(env -u HOMEBREW_SHELLENV_PREFIX "${brew_path}" shellenv)"
 
-	export HOMEBREW_NO_ENV_HINTS=1
-	export HOMEBREW_NO_EMOJI=1
-	export HOMEBREW_NO_GITHUB_API=1
+		export HOMEBREW_NO_ENV_HINTS=1
+		export HOMEBREW_NO_EMOJI=1
+		export HOMEBREW_NO_GITHUB_API=1
 
-	prepend_to_path \
-		"${HOMEBREW_PREFIX}"/opt/coreutils/libexec/gnubin \
-		"${HOMEBREW_PREFIX}"/opt/curl/bin \
-		"${HOMEBREW_PREFIX}"/opt/python@3.11/libexec/bin
-
-	if [ -x /usr/local/bin/brew ]; then
-		alias brew_x86="arch -x86_64 /usr/local/bin/brew"
+		prepend_to_path \
+			"${HOMEBREW_PREFIX}"/opt/coreutils/libexec/gnubin \
+			"${HOMEBREW_PREFIX}"/opt/curl/bin \
+			"${HOMEBREW_PREFIX}"/opt/python@3.11/libexec/bin
 	fi
+}
 
-	if [ -x /opt/homebrew/bin/brew ]; then
-		alias brew_arm="arch -arm64 /opt/homebrew/bin/brew"
-	fi
-fi
-unset brew_path
+__setup_brew
