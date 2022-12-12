@@ -14,7 +14,7 @@
   (let [bufnr (vim.uri_to_bufnr diagnostic.uri)]
     (tset diagnostic :uri nil)
     (tset diagnostic :bufnr bufnr)
-    (when (not diagnostic.end_col)
+    (when (and diagnostic.col (not diagnostic.end_col))
       (tset diagnostic :end_col (+ diagnostic.col 1)))
     diagnostic))
 
