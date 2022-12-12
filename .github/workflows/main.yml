@@ -9,12 +9,32 @@ on:
       - main
 jobs:
   bootstrap:
+    strategy:
+      matrix:
+        os:
+          - macos-11
+          - ubuntu-latest
+
     name: bootstrap
-    runs-on: macos-11
+    runs-on: ${{ matrix.os }}
     steps:
-      - name: install neovim
+      - name: install neovim (macos)
+        if: runner.os == 'macOS'
         run: |
           curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-macos.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
+
+      - name: install neovim (linux)
+        if: runner.os == 'Linux'
+        run: |
+          curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
+
+      - name: install linuxbrew
+        if: runner.os == 'Linux'
+        run: |
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          echo "PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH" >>${GITHUB_ENV}
+        env:
+          NONINTERACTIVE: 1
 
       - name: install early dependencies
         run: |
