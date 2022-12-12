@@ -526,10 +526,10 @@ flatted@^3.1.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.2.5.tgz#76c8584f4fc843db64702a6bd04ab7a8bd666da3"
   integrity sha512-WIWGi2L3DyTUvUrwRKgGi9TwxQMUEqPOPQBVi71R96jZXJdFskXEmf54BoZaS1kknGODoIGASGEzBUYdyMCBJg==
 
-fs-extra@^10.1.0:
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-10.1.0.tgz#02873cfbc4084dde127eaa5f9905eef2325d1abf"
-  integrity sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==
+fs-extra@^11.1.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-11.1.0.tgz#5784b102104433bb0e090f48bfc4a30742c357ed"
+  integrity sha512-0rcTq621PD5jM/e0a3EJoGC/1TC5ZBCERW82LQuwfGnCa1V8w7dpYH1yNu+SLb6E5dkeCBzKEyLGlFrnr+dUyw==
   dependencies:
     graceful-fs "^4.2.0"
     jsonfile "^6.0.1"
@@ -1311,23 +1311,23 @@ type-fest@^2.12.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.18.0.tgz#fdef3a74e0a9e68ebe46054836650fb91ac3881e"
   integrity sha512-pRS+/yrW5TjPPHNOvxhbNZexr2bS63WjrMU8a+VzEBhUi9Tz1pZeD+vQz3ut0svZ46P+SRqMEPnJmk2XnvNzTw==
 
-typescript-language-server@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-2.1.0.tgz#00fba59a0ad50f1f6fedfdb1db1168a9db4ebf56"
-  integrity sha512-4l/pEcIauf48Mbojqhis+HLH42HpFtNbrYgXbvaDi4Szkk3iKKZa1ydoj2qk1y6+Bp1Rq18EdubitxGhwj/flA==
+typescript-language-server@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-2.2.0.tgz#2071f8bebb07ebdd4bf053dc22c60b0a0f241f9c"
+  integrity sha512-VHMBXzXZiyypn6rUtIC+1U8owmJu9bjVIceORVDZlJd+kFLZ45mk4OFIFKHN8TZN6VrcPyc1Eol4WHb7CqHWhg==
   dependencies:
     commander "^9.4.1"
     deepmerge "^4.2.2"
-    fs-extra "^10.1.0"
+    fs-extra "^11.1.0"
     p-debounce "^4.0.0"
     pkg-up "^4.0.0"
     semver "^7.3.8"
     tempy "^3.0.0"
     vscode-languageserver "^8.0.2"
     vscode-languageserver-protocol "^3.17.2"
-    vscode-languageserver-textdocument "1.0.7"
+    vscode-languageserver-textdocument "1.0.8"
     vscode-uri "^3.0.6"
-    which "^2.0.2"
+    which "^3.0.0"
 
 typescript@^4.0.5, typescript@^4.9.4:
   version "4.9.4"
@@ -1512,10 +1512,15 @@ vscode-languageserver-protocol@3.17.3-next.1:
     vscode-jsonrpc "8.1.0-next.1"
     vscode-languageserver-types "3.17.2"
 
-vscode-languageserver-textdocument@1.0.7, vscode-languageserver-textdocument@^1.0.1, vscode-languageserver-textdocument@^1.0.5, vscode-languageserver-textdocument@^1.0.7:
+vscode-languageserver-textdocument@1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/vscode-languageserver-textdocument/-/vscode-languageserver-textdocument-1.0.7.tgz#16df468d5c2606103c90554ae05f9f3d335b771b"
   integrity sha512-bFJH7UQxlXT8kKeyiyu41r22jCZXG8kuuVVA33OEJn1diWOZK5n8zBSPZFHVBOu8kXZ6h0LIRhf5UnCo61J4Hg==
+
+vscode-languageserver-textdocument@1.0.8, vscode-languageserver-textdocument@^1.0.1, vscode-languageserver-textdocument@^1.0.5, vscode-languageserver-textdocument@^1.0.7:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/vscode-languageserver-textdocument/-/vscode-languageserver-textdocument-1.0.8.tgz#9eae94509cbd945ea44bca8dcfe4bb0c15bb3ac0"
+  integrity sha512-1bonkGqQs5/fxGT5UchTgjGVnfysL0O8v1AYMBjqTbWQTFn721zaPGDYFkOKtfDgFiSgXM3KwaG3FMGfW4Ed9Q==
 
 vscode-languageserver-types@3.16.0:
   version "3.16.0"
@@ -1587,10 +1592,17 @@ whatwg-url@^5.0.0:
     tr46 "~0.0.3"
     webidl-conversions "^3.0.0"
 
-which@^2.0.1, which@^2.0.2:
+which@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/which/-/which-2.0.2.tgz#7c6a8dd0a636a0327e10b59c9286eee93f3f51b1"
   integrity sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==
+  dependencies:
+    isexe "^2.0.0"
+
+which@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/which/-/which-3.0.0.tgz#a9efd016db59728758a390d23f1687b6e8f59f8e"
+  integrity sha512-nla//68K9NU6yRiwDY/Q8aU6siKlSs64aEC7+IV56QoAuyQT2ovsJcgGYGyqMOmI/CGN1BOR6mM5EN0FBO+zyQ==
   dependencies:
     isexe "^2.0.0"
 
