@@ -23,11 +23,10 @@
 
 (lambda start [args]
   (let [path (require :fsouza.pl.path)
-        ibazel (path.join cache-dir :langservers :bin :ibazel)
         first-arg (. args 1)
         name (string.format "ibazel-%s" first-arg)]
     (mod-invoke :fsouza.lib.continuous-diagnostic :start
-                {: name :cmd ibazel : args : process-line})))
+                {: name :cmd :ibazel : args : process-line})))
 
 (lambda ibazel-cmd [{: fargs}]
   (start fargs))
