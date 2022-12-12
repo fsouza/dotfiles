@@ -4,7 +4,7 @@
        (mod-invoke :rex_pcre :new
                    "^e: ((?:file://)?[^:]+):([0-9]+):([0-9]+) (.+)$"))
 
-(lambda process-line [_ line]
+(lambda process-line [line _]
   (let [reset-pattern "^Change detected, "]
     (if (string.find line reset-pattern)
         (values :RESET nil)

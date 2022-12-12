@@ -3,7 +3,7 @@
 (local error-re
        (mod-invoke :rex_pcre :new "^([^:]+):([0-9]+):(?:([0-9]+):)? (.+)$"))
 
-(lambda process-line [_ line]
+(lambda process-line [line _]
   (let [reset-pattern ". Rebuilding...$"]
     (if (string.find line reset-pattern)
         (values :RESET nil)
@@ -23,13 +23,11 @@
 
 (lambda start [args]
   (let [path (require :fsouza.pl.path)
-        log-path (path.join cache-dir :bazel.log)
-        log-file (io.open log-path :w)
-        ibazel :ibazel
+        ibazel (path.join cache-dir :langservers :bin :ibazel)
         first-arg (. args 1)
         name (string.format "ibazel-%s" first-arg)]
     (mod-invoke :fsouza.lib.continuous-diagnostic :start
-                {: name :cmd ibazel : args : process-line : log-file})))
+                {: name :cmd ibazel : args : process-line})))
 
 (lambda ibazel-cmd [{: fargs}]
   (start fargs))
