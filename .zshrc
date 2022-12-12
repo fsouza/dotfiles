@@ -27,17 +27,15 @@ fi
 
 cond_source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
 
-source "${FSOUZA_DOTFILES_DIR}"/extra/virtualenv
-
-source "${FSOUZA_DOTFILES_DIR}"/extra/z
-source "${FSOUZA_DOTFILES_DIR}"/extra/git
-source "${FSOUZA_DOTFILES_DIR}"/extra/go
-source "${FSOUZA_DOTFILES_DIR}"/extra/java
-source "${FSOUZA_DOTFILES_DIR}"/extra/mail
-source "${FSOUZA_DOTFILES_DIR}"/extra/ocaml
-source "${FSOUZA_DOTFILES_DIR}"/extra/neovim
-source "${FSOUZA_DOTFILES_DIR}"/extra/rclone
-source "${FSOUZA_DOTFILES_DIR}"/extra/ruby
+local extras=(virtualenv z git go java mail ocaml neovim rclone ruby)
+local extras_skip=( "${FSOUZA_EXTRAS_SKIP[@]}" )
+for extra in "${extras[@]}"; do
+	if ! (($extras_skip[(Ie)$extra])); then
+		source "${FSOUZA_DOTFILES_DIR}/extra/${extra}"
+	fi
+done
+unset extras
+unset extras_skip
 
 cond_source "${FSOUZA_DOTFILES_DIR}/extra/local-functions"
 cond_source "${FSOUZA_DOTFILES_DIR}/extra/$(uname -s)-functions"
@@ -71,7 +69,7 @@ bindkey '^x^e' edit-command-line
 autoload -U select-word-style
 select-word-style bash
 
-alias bump_dotfiles="git -C ${FSOUZA_DOTFILES_DIR} pull && ${FSOUZA_DOTFILES_DIR}/bootstrap/setup && upgrade_virtualenv"
+alias bump_dotfiles="git -C ${FSOUZA_DOTFILES_DIR} pull && ${FSOUZA_DOTFILES_DIR}/bootstrap/setup"
 
 source "${FSOUZA_DOTFILES_DIR}"/extra/fzf
 
