@@ -42,6 +42,10 @@ jobs:
         env:
           NONINTERACTIVE: 1
 
+      - name: set brew env vars
+        run: |
+          echo "HOMEBREW_PREFIX=$(brew --prefix)" >>${GITHUB_ENV}
+
       - name: install early dependencies
         run: |
           brew update
