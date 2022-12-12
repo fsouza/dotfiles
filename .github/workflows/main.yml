@@ -133,3 +133,12 @@ jobs:
           key: "${{ hashFiles('.pre-commit-config.yaml') }}"
 
       - run: pre-commit run --all-files --show-diff-on-failure
+
+  unblock-pr:
+    name: unblock-pr
+    runs-on: ubuntu-latest
+    needs:
+      - bootstrap
+      - pre-commit
+    steps:
+      - run: "true"
