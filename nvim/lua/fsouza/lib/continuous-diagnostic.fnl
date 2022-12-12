@@ -14,6 +14,8 @@
   (let [bufnr (vim.uri_to_bufnr diagnostic.uri)]
     (tset diagnostic :uri nil)
     (tset diagnostic :bufnr bufnr)
+    (when (not diagnostic.end_col)
+      (tset diagnostic :end_col (+ diagnostic.col 1)))
     diagnostic))
 
 (fn clear-diagnostics [watcher]
@@ -25,7 +27,9 @@
 (fn process-result [name outcome arg]
   (let [watcher (. state name)]
     (match outcome
-      :RESET (clear-diagnostics watcher)
+      :RESET (let [{: diagnostics} watcher]
+               (each [bufnr _ (pairs diagnostics)]
+                 (tset diagnostics bufnr [])))
       :DIAGNOSTIC (let [diagnostic (transform-diagnostic arg)
                         {: bufnr} diagnostic
                         watcher-diagnostics watcher.diagnostics
