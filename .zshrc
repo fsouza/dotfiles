@@ -1,6 +1,6 @@
 autoload -U add-zsh-hook
 
-FSOUZA_DOTFILES_DIR=$(dirname "$(readlink "${(%):-%N}")")
+FSOUZA_DOTFILES_DIR=${FSOUZA_DOTFILES_DIR:-$(dirname "$(readlink "${(%):-%N}")")}
 source "${FSOUZA_DOTFILES_DIR}"/extra/init-functions
 
 mkdir -p ~/.cache/{go,node,zsh}
