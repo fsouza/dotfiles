@@ -10,23 +10,23 @@
 ;; }
 (local state {})
 
-(lambda transform-diagnostic [diagnostic]
+(fn transform-diagnostic [diagnostic]
   (let [bufnr (vim.uri_to_bufnr diagnostic.uri)]
     (tset diagnostic :uri nil)
     (tset diagnostic :bufnr bufnr)
     diagnostic))
 
-(lambda clear-diagnostics [watcher]
+(fn clear-diagnostics [watcher]
   (let [{: diagnostics : ns-id} watcher]
     (each [bufnr _ (pairs diagnostics)]
       (vim.diagnostic.set ns-id bufnr [])))
   (tset watcher :diagnostics {}))
 
-(lambda process-result [name ?outcome ?arg]
+(fn process-result [name outcome arg]
   (let [watcher (. state name)]
-    (match ?outcome
+    (match outcome
       :RESET (clear-diagnostics watcher)
-      :DIAGNOSTIC (let [diagnostic (transform-diagnostic ?arg)
+      :DIAGNOSTIC (let [diagnostic (transform-diagnostic arg)
                         {: bufnr} diagnostic
                         watcher-diagnostics watcher.diagnostics
                         buf-diagnostics (if-nil (. watcher-diagnostics bufnr)
@@ -34,14 +34,14 @@
                     (table.insert buf-diagnostics diagnostic)
                     (tset watcher-diagnostics bufnr buf-diagnostics)))))
 
-(lambda set-diagnostics [name]
+(fn set-diagnostics [name]
   (let [watcher (. state name)]
     (when watcher
       (let [{: ns-id : diagnostics} watcher]
         (each [bufnr buf-diagnostics (pairs diagnostics)]
           (vim.diagnostic.set ns-id bufnr buf-diagnostics))))))
 
-(lambda make-chunk-processor [name process-line]
+(fn make-chunk-processor [name process-line]
   (var partial-line "")
   (let [{: set-diagnostics} (. state name)]
     (vim.schedule_wrap (fn [payload]
@@ -57,17 +57,7 @@
                                     (process-result name)))
                              (set-diagnostics.call)))))))
 
-(lambda stop [name]
-  (let [{: pid : set-diagnostics : ns-id} (if-nil (. state name) {})]
-    (when pid
-      (vim.loop.kill pid vim.loop.constants.SIGTERM))
-    (when set-diagnostics
-      (set-diagnostics.stop))
-    (when ns-id
-      (clear-diagnostics (. state name)))
-    (tset state name nil)))
-
-(lambda make-ns [name]
+(fn make-ns [name]
   (let [ns (->> name
                 (string.format "fsouza/continous/%s")
                 (vim.api.nvim_create_namespace))]
@@ -78,7 +68,17 @@
                            ns)
     ns))
 
-(fn start [opts]
+(lambda stop [name]
+  (let [{: pid : set-diagnostics : ns-id} (if-nil (. state name) {})]
+    (when pid
+      (vim.loop.kill pid vim.loop.constants.SIGTERM))
+    (when set-diagnostics
+      (set-diagnostics.stop))
+    (when ns-id
+      (clear-diagnostics (. state name)))
+    (tset state name nil)))
+
+(lambda start [opts]
   (let [{: name : cmd : args : process-line} opts]
     (stop name)
     (tset state name

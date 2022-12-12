@@ -5,7 +5,7 @@
         cwd (vim.loop.cwd)]
     (path.join cache-dir :fsouza-locks (string.sub cwd 2) name)))
 
-(fn unlock [name cb]
+(lambda unlock [name cb]
   (let [lock-file (lock-file-path name)]
     (vim.loop.fs_unlink lock-file)))
 
@@ -17,7 +17,7 @@
                 :callback #(unlock name)
                 :once true}]))
 
-(fn with-lock [name cb]
+(lambda with-lock [name cb]
   (let [path (require :fsouza.pl.path)
         dir-perm 448 ;; 0o700
         file-perm 384 ;; 0o600

@@ -38,7 +38,7 @@
     (vim.api.nvim_win_set_var winid win-var-identifier true)
     (values winid bufnr)))
 
-(fn open [opts]
+(lambda open [opts]
   (let [{: lines
          : type-name
          : markdown

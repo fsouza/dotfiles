@@ -7,7 +7,7 @@
          nil)
       nil))
 
-(fn augroup [name commands]
+(lambda augroup [name commands]
   (let [group (vim.api.nvim_create_augroup name {:clear true})]
     (each [_ c (ipairs commands)]
       (vim.api.nvim_create_autocmd c.events
@@ -17,7 +17,7 @@
                                     : group
                                     :once c.once}))))
 
-(fn once [f]
+(lambda once [f]
   (var result nil)
   (var called false)
   (fn [...]
@@ -29,7 +29,7 @@
 
 ;; Provides a wrapper to a function that rewrites the current buffer, and does
 ;; a best effort to restore the cursor position.
-(fn rewrite-wrap [f]
+(lambda rewrite-wrap [f]
   (let [winid (vim.api.nvim_get_current_win)
         bufnr (vim.api.nvim_get_current_buf)
         [orig-lineno orig-colno] (vim.api.nvim_win_get_cursor winid)
@@ -49,7 +49,7 @@
                                                            col-offset))
                                               (max-col))]))))
 
-(fn get-visual-selection-range []
+(lambda get-visual-selection-range []
   (fn from-markers []
     (let [[_ srow scol _] (vim.fn.getpos "'<")
           [_ erow ecol _] (vim.fn.getpos "'>")]
@@ -69,24 +69,24 @@
         (if (> srow erow) [erow ecol srow scol]
             (if (<= scol ecol) [srow scol erow ecol] [erow ecol srow scol])))))
 
-(fn get-visual-selection-contents []
+(lambda get-visual-selection-contents []
   (let [[srow scol erow ecol] (get-visual-selection-range)
         lines (vim.api.nvim_buf_get_text 0 (- srow 1) (- scol 1) (- erow 1)
                                          ecol {})]
     lines))
 
-(fn extract-luv-error [err]
+(lambda extract-luv-error [err]
   (if (= err nil)
       nil
       (. (vim.split err ":" {:plain true :trimempty true}) 1)))
 
-(fn hash-buffer [bufnr]
+(lambda hash-buffer [bufnr]
   (let [lines (-> bufnr
                   (vim.api.nvim_buf_get_lines 0 -1 true)
                   (table.concat "\n"))]
     (mod-invoke :lsha2 :hash256 lines)))
 
-(fn keymap-repeat [lhs cb opts]
+(lambda keymap-repeat [lhs cb opts]
   (vim.keymap.set :n lhs
                   #(do
                      (cb)

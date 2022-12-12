@@ -1,6 +1,6 @@
 (import-macros {: mod-invoke} :helpers)
 
-(fn find-java-home [java-version cb]
+(lambda find-java-home [java-version cb]
   (fn on-finished [result]
     (when (= result.exit-status 0)
       (cb (vim.trim result.stdout))))
@@ -8,7 +8,7 @@
   (mod-invoke :fsouza.lib.cmd :run :/usr/libexec/java_home
               {:args [:-v java-version]} nil on-finished))
 
-(fn detect-runtime-name [java-home cb]
+(lambda detect-runtime-name [java-home cb]
   (fn name-from-output [line]
     (fn name-from-version-string [result]
       (let [dot-pos (string.find result "%.")

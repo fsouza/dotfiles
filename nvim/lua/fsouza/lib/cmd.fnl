@@ -36,7 +36,7 @@
 ;;   signal: number;
 ;;   errors: string table;
 ;; }
-(fn run [cmd opts input-data on-finished debug-fn]
+(lambda run [cmd opts ?input-data on-finished ?debug-fn]
   (var cmd-handle nil)
   (let [loop vim.loop
         stdout (loop.new_pipe false)
@@ -49,8 +49,8 @@
                 (safe-close stderr)
                 (safe-close stdin)
                 (safe-close cmd-handle))
-        stdout-handler (input-collector :STDOUT debug-fn)
-        stderr-handler (input-collector :STDERR debug-fn)
+        stdout-handler (input-collector :STDOUT ?debug-fn)
+        stderr-handler (input-collector :STDERR ?debug-fn)
         r {:abort false :finished false}
         on-exit (fn [code signal]
                   (let [code (if (and r.abort (= code 0)) -1 code)]
@@ -74,12 +74,12 @@
           (set cmd-handle spawn-handle)
           (loop.read_start stdout stdout-handler.callback)
           (loop.read_start stderr stderr-handler.callback)
-          (when input-data
-            (loop.write stdin input-data))
+          (when ?input-data
+            (loop.write stdin ?input-data))
           (loop.shutdown stdin))
         (vim-schedule (on-finished {:exit-status -1 :stderr pid-or-err})))))
 
-(fn start [cmd opts output-handler exit-handler]
+(lambda start [cmd opts output-handler exit-handler]
   (fn make-handler [type]
     (fn [err chunk]
       (output-handler {: type : err : chunk})))

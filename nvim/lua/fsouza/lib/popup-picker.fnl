@@ -9,7 +9,7 @@
       :abort (cb nil)
       :select (cb index))))
 
-(fn open [lines cb]
+(lambda open [lines cb]
   (let [(winid bufnr) (mod-invoke :fsouza.lib.popup :open
                                   {: lines :type-name :picker :row 1})
         mapping-opts {:buffer bufnr}]
@@ -27,7 +27,7 @@
     (vim.keymap.set :n :<c-n> :<down> {:remap false :buffer bufnr})
     (vim.keymap.set :n :<c-p> :<up> {:remap false :buffer bufnr})))
 
-(fn ui-select [items opts cb]
+(lambda ui-select [items opts cb]
   (let [format-item (if-nil (?. opts :format_item) tostring)
         lines (icollect [_ item (ipairs items)]
                 (format-item item))]

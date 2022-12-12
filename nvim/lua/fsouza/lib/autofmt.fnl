@@ -1,12 +1,12 @@
 (import-macros {: if-nil} :helpers)
 
-(fn is-enabled [bufnr]
+(lambda is-enabled [bufnr]
   (let [(defined buf-autoformat) (pcall vim.api.nvim_buf_get_var bufnr
                                         :autoformat)
         buf-autoformat (if defined buf-autoformat nil)]
     (if-nil buf-autoformat vim.g.autoformat true)))
 
-(fn toggle [ns]
+(lambda toggle [ns]
   (if (= (. ns :autoformat) false)
       (tset ns :autoformat true)
       (tset ns :autoformat false)))
