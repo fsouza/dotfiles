@@ -5,15 +5,27 @@ basedir=$(cd "$(dirname "${0}")"/.. && pwd -P)
 
 export FSOUZA_DOTFILES_DIR=${FSOUZA_DOTFILES_DIR:-${basedir}}
 
+local link_skip=( "${FSOUZA_BOOTSTRAP_LINK_SKIP[@]}" )
+
+function __link {
+	local name=${1}
+	local source=${2}
+	local target=${3}
+
+	if ! (($link_skip[(Ie)$name])); then
+		ln -sf "${source}" "${target}"
+	fi
+}
+
 home_files=(.zshrc .editorconfig)
 for file in "${home_files[@]}"; do
-	ln -sf "${basedir}"/"${file}" "${HOME}"/"${file}"
+	__link "${file}" "${basedir}"/"${file}" "${HOME}"/"${file}"
 done
 
 mkdir -p "${HOME}"/.config
 xdg_files=(tmux.conf alacritty.yml rgrc)
 for file in "${xdg_files[@]}"; do
-	ln -sf "${basedir}"/"${file}" "${HOME}"/.config/"${file}"
+	__link "${file}" "${basedir}"/"${file}" "${HOME}"/.config/"${file}"
 done
 
 xdg_dirs=(git fd utop tmux)
@@ -25,7 +37,7 @@ for dir in "${xdg_dirs[@]}"; do
 	fi
 
 	if ! [ -L "${link}" ]; then
-		ln -s "${basedir}"/"${dir}" "${link}"
+		__link "${dir}" "${basedir}"/"${dir}" "${link}"
 	fi
 done
 
