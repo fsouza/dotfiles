@@ -9,7 +9,10 @@
         (values :RESET nil)
         (let [(fname lnum col message) (error-re:match line)]
           (if fname
-              (let [uri (vim.uri_from_fname fname)
+              (let [path (require :fsouza.pl.path)
+                    uri (->> fname
+                             (path.abspath)
+                             (vim.uri_from_fname))
                     lnum (- (tonumber lnum) 1)
                     col (if col (- (tonumber col) 1) nil)]
                 (values :DIAGNOSTIC
