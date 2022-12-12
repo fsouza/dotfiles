@@ -16,15 +16,17 @@
     (tset diagnostic :bufnr bufnr)
     diagnostic))
 
-(fn process-result [name outcome arg]
+(lambda clear-diagnostics [watcher]
+  (let [{: diagnostics : ns-id} watcher]
+    (each [bufnr _ (pairs diagnostics)]
+      (vim.diagnostic.set ns-id bufnr [])))
+  (tset watcher :diagnostics {}))
+
+(lambda process-result [name ?outcome ?arg]
   (let [watcher (. state name)]
-    (match outcome
-      :RESET (do
-               (let [{: diagnostics : ns-id} watcher]
-                 (each [bufnr _ (pairs diagnostics)]
-                   (vim.diagnostic.set ns-id bufnr [])))
-               (tset watcher :diagnostics {}))
-      :DIAGNOSTIC (let [diagnostic (transform-diagnostic arg)
+    (match ?outcome
+      :RESET (clear-diagnostics watcher)
+      :DIAGNOSTIC (let [diagnostic (transform-diagnostic ?arg)
                         {: bufnr} diagnostic
                         watcher-diagnostics watcher.diagnostics
                         buf-diagnostics (if-nil (. watcher-diagnostics bufnr)
@@ -56,11 +58,13 @@
                              (set-diagnostics.call)))))))
 
 (lambda stop [name]
-  (let [{: pid : set-diagnostics} (if-nil (. state name) {})]
+  (let [{: pid : set-diagnostics : ns-id} (if-nil (. state name) {})]
     (when pid
       (vim.loop.kill pid vim.loop.constants.SIGTERM))
     (when set-diagnostics
       (set-diagnostics.stop))
+    (when ns-id
+      (clear-diagnostics (. state name)))
     (tset state name nil)))
 
 (lambda make-ns [name]
