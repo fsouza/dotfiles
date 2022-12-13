@@ -7,3 +7,6 @@
 (function_declaration
   (function_body
     (statements) @function.inner))
+
+(function_declaration
+  (parameter) @parameter.inner)
