@@ -33,7 +33,7 @@ flake8-comprehensions==3.10.1
     # via -r requirements.in
 flake8-tidy-imports==4.8.0
     # via -r requirements.in
-isort==5.10.1
+isort==5.11.1
     # via -r requirements.in
 mccabe==0.7.0
     # via flake8
