@@ -21,7 +21,7 @@ declare -A _GIT_HOST_EMAIL
 _GIT_HOST_EMAIL=( [git@github.com:]=108725+fsouza@users.noreply.github.com [https://github.com/]=108725+fsouza@users.noreply.github.com )
 
 function __auto_git_config {
-	if [ -d .git ] && ! git config user.email &>/dev/null; then
+	if [ -d .git ] && ! git config --local user.email &>/dev/null; then
 		local remote=$(git remote get-url origin 2>/dev/null)
 		for key in ${(k)_GIT_HOST_EMAIL}; do
 			if [[ $remote =~ $key ]]; then
