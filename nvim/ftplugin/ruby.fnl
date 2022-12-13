@@ -1,4 +1,4 @@
-(import-macros {: mod-invoke} :helpers)
+(import-macros {: mod-invoke : vim-schedule} :helpers)
 
 (fn start-sorbet []
   (mod-invoke :fsouza.lsp.servers :start
@@ -8,6 +8,7 @@
   (mod-invoke :fsouza.lsp.servers :start
               {:name :solargraph :cmd [:solargraph :stdio]}))
 
-(vim.loop.fs_stat :sorbet #(if $1
-                               (start-solargraph)
-                               (start-sorbet)))
+(start-solargraph)
+(vim.loop.fs_stat :sorbet
+                  #(when (not $1)
+                     (vim-schedule (start-sorbet))))
