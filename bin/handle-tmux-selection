@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
+import functools
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -12,7 +14,7 @@ line_regex = re.compile(rb"^([^:]+):\d+:(\d+:)?.+")
 def main() -> int:
     lines = sys.stdin.buffer.readlines()
 
-    if os.getenv("EDITOR") == "nvim" and should_send_to_nvim(lines):
+    if shutil.which("nvim") != "" and should_send_to_nvim(lines):
         return send_to_nvim(b"".join(lines))
     else:
         return copy(b"".join(lines))
@@ -31,6 +33,7 @@ def _valid_diagnostic(line: bytes) -> bool:
     return (_panel_cwd() / file_path).exists()
 
 
+@functools.lru_cache(maxsize=1)
 def _panel_cwd() -> Path:
     proc = subprocess.run(
         ["tmux", "display-message", "-p", "#{pane_current_path}"],
@@ -48,7 +51,9 @@ def send_to_nvim(contents: bytes) -> int:
     os.close(fd)
 
     nvim_command = f"lua require('fsouza.plugin.tmux-selection').handle('{path}')"
-    proc = subprocess.run(["tmux", "send-keys", f' nvim -c "{nvim_command}"'])
+    proc = subprocess.run(
+        ["tmux", "split-window", "-c", _panel_cwd(), "-Z", "nvim", "-c", nvim_command],
+    )
     if proc.returncode != 0:
         return proc.returncode
 
