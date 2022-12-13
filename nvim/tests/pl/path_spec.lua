@@ -61,20 +61,20 @@ describe("async-which", function()
 
   it("can check ls", function()
     local expected = vim.trim(vim.fn.system("which ls"))
-    local result = block_on(1000, async_which, "ls")
+    local result = block_on(10000, async_which, "ls")
 
     assert.are_same(expected, result[1])
   end)
 
   it("can take full path", function()
     local expected = vim.trim(vim.fn.system("which ls"))
-    local result = block_on(1000, async_which, expected)
+    local result = block_on(10000, async_which, expected)
 
     assert.are_same(expected, result[1])
   end)
 
   it("empty string for thigns that can't be found", function()
-    local result = block_on(1000, async_which, "something-that-hopefully-doesnt-exist")
+    local result = block_on(10000, async_which, "something-that-hopefully-doesnt-exist")
 
     assert.are_same("", result[1])
   end)
