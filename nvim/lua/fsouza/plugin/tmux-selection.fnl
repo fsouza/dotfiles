@@ -4,6 +4,6 @@
   (vim-schedule (os.remove filepath))
   (vim.cmd.cfile filepath)
   (vim.cmd.copen)
-  (vim.cmd.wincmd :p))
+  (vim.cmd.cfirst))
 
 {: handle}
