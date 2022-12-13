@@ -28,6 +28,7 @@
   (let [path (require :fsouza.pl.path)
         first-arg (. args 1)
         name (string.format "ibazel-%s" first-arg)]
+    (table.insert args :--color=no)
     (mod-invoke :fsouza.lib.continuous-diagnostic :start
                 {: name :cmd :ibazel : args : process-line})))
 
