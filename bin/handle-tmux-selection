@@ -52,7 +52,17 @@ def send_to_nvim(contents: bytes) -> int:
 
     nvim_command = f"lua require('fsouza.plugin.tmux-selection').handle('{path}')"
     proc = subprocess.run(
-        ["tmux", "split-window", "-c", _panel_cwd(), "-Z", "nvim", "-c", nvim_command],
+        [
+            "tmux",
+            "split-window",
+            "-b",
+            "-c",
+            _panel_cwd(),
+            "-Z",
+            "nvim",
+            "-c",
+            nvim_command,
+        ],
     )
     if proc.returncode != 0:
         return proc.returncode
