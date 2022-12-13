@@ -17,6 +17,8 @@
     (tset diagnostic :bufnr bufnr)
     (when (and diagnostic.col (not diagnostic.end_col))
       (tset diagnostic :end_col (+ diagnostic.col 1)))
+    (when (not diagnostic.col)
+      (tset diagnostic :col 0))
     diagnostic))
 
 (fn clear-diagnostics [watcher]
