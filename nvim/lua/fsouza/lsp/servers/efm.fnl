@@ -233,6 +233,15 @@
          :rootMarkers [:gradlew]
          :requireMarker true})))
 
+(fn get-rubocop [cb]
+  (cb {:lintCommand "bundle exec rubocop --stdin ${INPUT}"
+       :lintStdin true
+       :lintSource :luacheck
+       :lintFormats ["%f:%l:%c: %m"]
+       :lintIgnoreExitCode true
+       :rootMarkers [:.rubocop.yml]
+       :requireMarker true}))
+
 (fn try-read-precommit-config [file-path cb]
   (let [empty-result {:repos []}]
     (vim.loop.fs_open file-path :r (tonumber :644 8)
@@ -343,6 +352,7 @@
                     :ocaml
                     :python
                     :sh
+                    :ruby
                     prettierd-fts]))
 
 (fn get-settings [cb]
@@ -373,6 +383,7 @@
                                  {:language :lua :fn get-stylua}
                                  {:language :lua :fn get-luacheck}
                                  {:language :java :fn get-spotless}
+                                 {:language :ruby :fn get-rubocop}
                                  {:language :kotlin :fn get-spotless}]
           timer (vim.loop.new_timer)]
       (each [_ f (ipairs simple-tool-factories)]
