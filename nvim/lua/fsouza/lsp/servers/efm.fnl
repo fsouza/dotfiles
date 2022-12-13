@@ -72,7 +72,7 @@
                                 :lintFormats ["%f:%l:%c: %m"]
                                 :lintIgnoreExitCode true
                                 :rootMarkers [:.flake8 :.git ""]}
-                               get-ruff-fix)))
+                               get-autoflake)))
 
 (fn get-ruff [args cb]
   (cb {:lintCommand (->> :ruff (find-venv-bin)
