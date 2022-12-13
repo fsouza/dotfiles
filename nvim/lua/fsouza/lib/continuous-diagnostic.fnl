@@ -25,12 +25,13 @@
       (vim.diagnostic.set ns-id bufnr [])))
   (tset watcher :diagnostics {}))
 
-(fn process-result [name outcome arg]
+(fn process-result [log-bufnr name outcome arg]
   (let [watcher (. state name)]
     (match outcome
       :RESET (let [{: diagnostics} watcher]
                (each [bufnr _ (pairs diagnostics)]
-                 (tset diagnostics bufnr [])))
+                 (tset diagnostics bufnr []))
+               (vim.api.nvim_buf_set_lines log-bufnr 0 -2 true []))
       :DIAGNOSTIC (let [diagnostic (transform-diagnostic arg)
                         {: bufnr} diagnostic
                         watcher-diagnostics watcher.diagnostics
@@ -65,7 +66,7 @@
                                (->> line
                                     (tee log-bufnr)
                                     (process-line type)
-                                    (process-result name)))
+                                    (process-result log-bufnr name)))
                              (set-diagnostics.call)))))))
 
 (fn make-ns [name]
