@@ -236,7 +236,7 @@
 (fn get-rubocop [cb]
   (cb {:lintCommand "bundle exec rubocop --stdin ${INPUT}"
        :lintStdin true
-       :lintSource :luacheck
+       :lintSource :rubocop
        :lintFormats ["%f:%l:%c: %m"]
        :lintIgnoreExitCode true
        :rootMarkers [:.rubocop.yml]
