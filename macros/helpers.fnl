@@ -24,15 +24,10 @@
      (tset package.loaded ,mod-name nil)
      (require ,mod-name)))
 
-(fn abuf []
-  `(let [abuf# (vim.fn.expand :<abuf>)]
-     (when abuf#
-       (tonumber abuf#))))
-
 (fn mod-invoke [mod fn-name ...]
   `((. (require ,mod) ,fn-name) ,...))
 
 (fn max-col []
   2147483647)
 
-{: vim-schedule : if-nil : send-esc : reload : abuf : mod-invoke : max-col}
+{: vim-schedule : if-nil : send-esc : reload : mod-invoke : max-col}

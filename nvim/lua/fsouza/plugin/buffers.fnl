@@ -2,7 +2,7 @@
 ;; The idea is to make that information available in libuv callbacks (can't
 ;; call vim.api.nvim_list_bufs from a luv callback).
 
-(import-macros {: if-nil : mod-invoke : abuf} :helpers)
+(import-macros {: if-nil : mod-invoke} :helpers)
 
 (local files {})
 

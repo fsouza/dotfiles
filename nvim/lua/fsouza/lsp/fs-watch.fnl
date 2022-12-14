@@ -1,4 +1,4 @@
-(import-macros {: if-nil : mod-invoke : abuf : vim-schedule} :helpers)
+(import-macros {: if-nil : mod-invoke : vim-schedule} :helpers)
 
 (local watch-kind {:Create 1 :Change 2 :Delete 4})
 
