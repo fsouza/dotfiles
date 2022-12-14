@@ -14,10 +14,33 @@ line_regex = re.compile(rb"^\s*([^:]+):\d+:(\d+:)?.+")
 def main() -> int:
     lines = sys.stdin.buffer.readlines()
 
+    if len(lines) == 0:
+        return handle_current_line()
+
+    subprocess.run(["tmux", "send-keys", "-X", "cancel"])
+
     if shutil.which("nvim") != "" and should_send_to_nvim(lines):
         return send_to_nvim(b"".join(lines))
     else:
         return copy(b"".join(lines))
+
+
+def handle_current_line() -> int:
+    proc = subprocess.run(
+        [
+            "tmux",
+            "send-keys",
+            "-X",
+            "select-line",
+            ";",
+            "send-keys",
+            "-X",
+            "copy-pipe-and-cancel",
+            sys.argv[0],
+        ],
+    )
+
+    return proc.returncode
 
 
 def should_send_to_nvim(lines: list[bytes]) -> bool:
