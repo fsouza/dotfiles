@@ -64,10 +64,8 @@ def send_to_nvim(contents: bytes) -> int:
             nvim_command,
         ],
     )
-    if proc.returncode != 0:
-        return proc.returncode
 
-    return subprocess.run(["tmux", "send-keys", "C-m"]).returncode
+    return proc.returncode
 
 
 def copy(contents: bytes) -> int:
