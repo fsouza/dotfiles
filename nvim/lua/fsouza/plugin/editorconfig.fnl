@@ -101,7 +101,7 @@
       (table.insert commands
                     {:events [:BufNewFile :BufReadPost :BufFilePost :FileType]
                      :targets ["*"]
-                     :callback set-config})
+                     :callback #(set-config)})
       (vim-schedule (each [_ bufnr (ipairs (vim.api.nvim_list_bufs))]
                       (set-config bufnr))))
     (mod-invoke :fsouza.lib.nvim-helpers :augroup :editorconfig commands)))
