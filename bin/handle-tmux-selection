@@ -7,40 +7,38 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from typing import NoReturn
 
 line_regex = re.compile(rb"^\s*([^:]+):\d+:(\d+:)?.+")
 
 
-def main() -> int:
+def main() -> NoReturn:
     lines = sys.stdin.buffer.readlines()
 
     if len(lines) == 0:
         return handle_current_line()
 
-    subprocess.run(["tmux", "send-keys", "-X", "cancel"])
-
     if shutil.which("nvim") != "" and should_send_to_nvim(lines):
+        subprocess.run(["tmux", "send-keys", "-X", "cancel"])
+
         return send_to_nvim(b"".join(lines))
     else:
-        return copy(b"".join(lines))
+        return os.execlp("tmux", "tmux", "send-keys", "-X", "copy-selection-and-cancel")
 
 
-def handle_current_line() -> int:
-    proc = subprocess.run(
-        [
-            "tmux",
-            "send-keys",
-            "-X",
-            "select-line",
-            ";",
-            "send-keys",
-            "-X",
-            "copy-pipe-and-cancel",
-            sys.argv[0],
-        ],
+def handle_current_line() -> NoReturn:
+    return os.execlp(
+        "tmux",
+        "tmux",
+        "send-keys",
+        "-X",
+        "select-line",
+        ";",
+        "send-keys",
+        "-X",
+        "copy-pipe-and-cancel",
+        sys.argv[0],
     )
-
-    return proc.returncode
 
 
 def should_send_to_nvim(lines: list[bytes]) -> bool:
@@ -68,38 +66,24 @@ def _panel_cwd() -> Path:
     return Path(proc.stdout.strip().decode())
 
 
-def send_to_nvim(contents: bytes) -> int:
+def send_to_nvim(contents: bytes) -> NoReturn:
     fd, path = tempfile.mkstemp()
     os.write(fd, contents)
     os.close(fd)
 
     nvim_command = f"lua require('fsouza.plugin.tmux-selection').handle('{path}')"
-    proc = subprocess.run(
-        [
-            "tmux",
-            "split-window",
-            "-b",
-            "-c",
-            _panel_cwd(),
-            "-Z",
-            "nvim",
-            "-c",
-            nvim_command,
-        ],
+    return os.execlp(
+        "tmux",
+        "tmux",
+        "split-window",
+        "-b",
+        "-c",
+        _panel_cwd(),
+        "-Z",
+        "nvim",
+        "-c",
+        nvim_command,
     )
-
-    return proc.returncode
-
-
-def copy(contents: bytes) -> int:
-    command = os.environ["TMUX_COPY_CMD"]
-
-    with tempfile.TemporaryFile() as f:
-        f.write(contents.rstrip())
-        f.seek(0, os.SEEK_SET)
-
-        proc = subprocess.run([command], stdin=f)
-        return proc.returncode
 
 
 if __name__ == "__main__":
