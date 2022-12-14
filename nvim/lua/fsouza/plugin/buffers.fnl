@@ -13,11 +13,6 @@
             filepath (path.abspath bufname)]
         (tset files filepath v)))))
 
-(fn set-abuf [v]
-  (let [bufnr (abuf)]
-    (when bufnr
-      (set-from-bufnr bufnr v))))
-
 (fn has-file [filepath]
   (. files filepath))
 
@@ -25,8 +20,10 @@
   (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__buffers
               [{:events [:BufNewFile :BufReadPost]
                 :targets ["*"]
-                :callback #(set-abuf true)}
-               {:events [:BufDelete] :targets ["*"] :callback #(set-abuf nil)}]))
+                :callback #(set-from-bufnr $1.buf true)}
+               {:events [:BufDelete]
+                :targets ["*"]
+                :callback #(set-from-bufnr $1.buf nil)}]))
 
 (fn register-current-buffers []
   (let [bufs (vim.api.nvim_list_bufs)]

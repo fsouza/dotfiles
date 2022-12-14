@@ -36,12 +36,15 @@
     (tset vim-opts :shiftwidth indent-size)
     (tset vim-opts :softtabstop indent-size)))
 
-(fn trim-whitespace []
-  (let [cursor (vim.api.nvim_win_get_cursor 0)]
-    (pcall #(vim.cmd.substitute {:args ["/\\v\\s+$//"]
-                                 :range [1 (vim.api.nvim_buf_line_count 0)]
-                                 :mods {:silent true :keeppatterns true}}))
-    (vim.api.nvim_win_set_cursor 0 cursor)))
+(fn trim-whitespace [{: buf}]
+  (vim.api.nvim_buf_call buf
+                         #(let [cursor (vim.api.nvim_win_get_cursor 0)]
+                            (pcall #(vim.cmd.substitute {:args ["/\\v\\s+$//"]
+                                                         :range [1
+                                                                 (vim.api.nvim_buf_line_count 0)]
+                                                         :mods {:silent true
+                                                                :keeppatterns true}}))
+                            (vim.api.nvim_win_set_cursor 0 cursor))))
 
 (fn handle-whitespaces [bufnr v]
   (let [commands []]
@@ -82,8 +85,7 @@
               name)))))
 
 (fn set-config [bufnr]
-  (let [bufnr (if-nil bufnr (vim.api.nvim_get_current_buf))
-        filename (vim.api.nvim_buf_get_name bufnr)]
+  (let [filename (vim.api.nvim_buf_get_name bufnr)]
     (when (and (?. vim :bo bufnr :modifiable)
                (not (?. vim :bo bufnr :readonly)) (not= filename ""))
       (let [filename (mod-invoke :fsouza.pl.path :abspath filename)
@@ -101,7 +103,7 @@
       (table.insert commands
                     {:events [:BufNewFile :BufReadPost :BufFilePost :FileType]
                      :targets ["*"]
-                     :callback #(set-config)})
+                     :callback #(set-config $1.buf)})
       (vim-schedule (each [_ bufnr (ipairs (vim.api.nvim_list_bufs))]
                       (set-config bufnr))))
     (mod-invoke :fsouza.lib.nvim-helpers :augroup :editorconfig commands)))

@@ -1,12 +1,11 @@
-(import-macros {: if-nil : abuf : mod-invoke} :helpers)
+(import-macros {: if-nil : mod-invoke} :helpers)
 
 (fn run [bufname]
   (let [dir (mod-invoke :fsouza.pl.path :dirname bufname)]
     (vim.fn.mkdir dir :p)))
 
-(fn register-for-buffer []
-  (let [bufnr (if-nil (abuf) (vim.api.nvim_get_current_buf))
-        bufname (vim.api.nvim_buf_get_name bufnr)]
+(fn register-for-buffer [bufnr]
+  (let [bufname (vim.api.nvim_buf_get_name bufnr)]
     (when (not= "" bufname)
       (mod-invoke :fsouza.lib.nvim-helpers :augroup (.. :fsouza__mkdir_ bufnr)
                   [{:events [:BufWritePre]
@@ -16,7 +15,9 @@
 
 (fn setup []
   (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__mkdir
-              [{:events [:BufNew] :targets ["*"] :callback register-for-buffer}])
-  (register-for-buffer))
+              [{:events [:BufNew]
+                :targets ["*"]
+                :callback #(register-for-buffer $1.buf)}])
+  (register-for-buffer (vim.api.nvim_get_current_buf)))
 
 {: setup}

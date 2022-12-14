@@ -44,10 +44,8 @@
                     #(mod-invoke :syntax-tree-surfer :surf :prev :visual true)
                     {: buffer :silent true})))
 
-(fn on-FileType []
-  (let [bufnr (abuf)]
-    (when bufnr
-      (setup-keymaps bufnr))))
+(fn on-FileType [{: buf}]
+  (setup-keymaps buf))
 
 (fn setup-autocmds []
   (let [targets (get-file-types)]

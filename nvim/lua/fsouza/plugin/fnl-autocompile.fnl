@@ -19,10 +19,9 @@
             (vim.cmd.wincmd :p)
             (set should-clear-qf true)))))
 
-  (fn make []
+  (fn make [{: file}]
     (when (not vim.g.fennel_ks)
-      (let [file-name (vim.fn.expand :<afile>)
-            next (if (vim.endswith file-name :/packed.fnl)
+      (let [next (if (vim.endswith file :/packed.fnl)
                      #(mod-invoke :fsouza.packed :repack)
                      nil)]
         (mod-invoke :fsouza.lib.cmd :run :make
