@@ -25,11 +25,21 @@
   `(and (vim.api.nvim_buf_is_valid ,bufnr)
         (not= (vim.api.nvim_buf_get_option ,bufnr :buftype) :nofile)))
 
+(fn with-defaults [opts]
+  (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
+    (tset capabilities.workspace :executeCommand {:dynamicRegistration false})
+    (tset capabilities.workspace :didChangeWatchedFiles
+          {:dynamicRegistration true})
+    (let [defaults {:handlers (require :fsouza.lsp.handlers)
+                    : capabilities
+                    :flags {:debounce_text_changes 0}}]
+      (vim.tbl_extend :force defaults opts))))
+
 (fn start [{: config : find-root-dir : bufnr}]
   (let [find-root-dir (if-nil find-root-dir cwd-if-not-home)
         bufnr (if-nil bufnr (vim.api.nvim_get_current_buf))
         exec (?. config :cmd 1)
-        config (mod-invoke :fsouza.lsp.opts :with-defaults config)]
+        config (with-defaults config)]
     (when (should-start bufnr)
       (tset config :root_dir (find-root-dir))
       (if-executable exec
