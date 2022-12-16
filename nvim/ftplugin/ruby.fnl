@@ -1,14 +1,16 @@
 (import-macros {: mod-invoke : vim-schedule} :helpers)
 
-(fn start-sorbet []
+(fn start-sorbet [bufnr]
   (mod-invoke :fsouza.lsp.servers :start
-              {:name :sorbet :cmd [:bundle :exec :srb :tc :--lsp]}))
+              {: bufnr
+               :config {:name :sorbet :cmd [:bundle :exec :srb :tc :--lsp]}}))
 
-(fn start-solargraph []
+(fn start-solargraph [bufnr]
   (mod-invoke :fsouza.lsp.servers :start
-              {:name :solargraph :cmd [:solargraph :stdio]}))
+              {: bufnr :config {:name :solargraph :cmd [:solargraph :stdio]}}))
 
-(start-solargraph)
-(vim.loop.fs_stat :sorbet
-                  #(when (not $1)
-                     (vim-schedule (start-sorbet))))
+(let [bufnr (vim.api.nvim_get_current_buf)]
+  (start-solargraph bufnr)
+  (vim.loop.fs_stat :sorbet
+                    #(when (not $1)
+                       (vim-schedule (start-sorbet bufnr)))))

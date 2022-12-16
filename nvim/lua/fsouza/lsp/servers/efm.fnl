@@ -405,18 +405,20 @@
                            (vim-schedule (cb settings))
                            (timer:close))))))
 
-(fn start-efm [settings]
+(fn start-efm [bufnr settings]
   (mod-invoke :fsouza.lsp.servers :start
-              {:name :efm
-               :cmd [(get-cache-cmd :efm-langserver)]
-               :init_options {:documentFormatting true}
-               : settings}))
+              {: bufnr
+               :config {:name :efm
+                        :cmd [(get-cache-cmd :efm-langserver)]
+                        :init_options {:documentFormatting true}
+                        : settings}}))
 
 (fn setup []
   (let [filetypes (get-filetypes)]
     (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__lsp_start_efm
                 [{:events [:FileType]
                   :targets filetypes
-                  :callback #(get-settings start-efm)}])))
+                  :callback #(let [{: buf} $1]
+                               (get-settings #(start-efm buf $1)))}])))
 
 {: setup}

@@ -24,9 +24,9 @@
 (macro should-start [bufnr]
   `(not= (vim.api.nvim_buf_get_option ,bufnr :buftype) :nofile))
 
-(fn start [config find-root-dir]
+(fn start [{: config : find-root-dir : bufnr}]
   (let [find-root-dir (if-nil find-root-dir cwd-if-not-home)
-        bufnr (vim.api.nvim_get_current_buf)
+        bufnr (if-nil bufnr (vim.api.nvim_get_current_buf))
         exec (?. config :cmd 1)
         config (mod-invoke :fsouza.lsp.opts :with-defaults config)]
     (when (should-start bufnr)

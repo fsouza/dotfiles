@@ -22,7 +22,7 @@
 
     (vim.loop.fs_opendir plugins-dir #(process-dir $2) 512)))
 
-(fn start-jdtls [settings]
+(fn start-jdtls [bufnr settings]
   (let [path (require :fsouza.pl.path)
         jdtls-dir (path.join cache-dir :langservers :jdtls)
         shared-config-dir (path.join jdtls-dir :config_mac)
@@ -50,18 +50,20 @@
                          (table.insert cmd :-data)
                          (table.insert cmd data-dir)
                          (vim-schedule (mod-invoke :fsouza.lsp.servers :start
-                                                   {:name :jdtls
-                                                    : cmd
-                                                    : settings})))))
+                                                   {: bufnr
+                                                    :config {:name :jdtls
+                                                             : cmd
+                                                             : settings}})))))
 
     (find-java-executable :17 with-executable)))
 
-(let [java-home (vim.loop.os_getenv :JAVA_HOME)]
+(let [bufnr (vim.api.nvim_get_current_buf)
+      java-home (vim.loop.os_getenv :JAVA_HOME)]
   (if java-home
       (mod-invoke :fsouza.lib.java :detect-runtime-name java-home
                   #(let [name $1
                          settings {:java {:configuration {:runtimes [{: name
                                                                       :path java-home
                                                                       :default true}]}}}]
-                     (start-jdtls settings)))
-      (start-jdtls nil)))
+                     (start-jdtls bufnr settings)))
+      (start-jdtls bufnr nil)))
