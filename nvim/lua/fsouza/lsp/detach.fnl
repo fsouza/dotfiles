@@ -24,17 +24,25 @@
       (detach bufnr))))
 
 (fn restart []
-  (let [seq (require :pl.seq)
+  (let [buffers {}
+        seq (require :pl.seq)
         original-client-ids (get-lsp-client-ids)
         timer (vim.loop.new_timer)]
     (fn check-new-clients []
       (let [current-client-ids (get-lsp-client-ids)
             s (-> current-client-ids
-                  (seq.keys)
+                  (seq.list)
                   (seq.filter #(not (vim.tbl_contains original-client-ids $1))))
             has-new-clients (if (s) true false)]
         (values has-new-clients (length current-client-ids))))
 
+    (fn edit-buffers []
+      (each [bufnr _ (pairs buffers)]
+        (vim.api.nvim_buf_call bufnr #(vim.cmd.edit {:mods {:silent true}}))))
+
+    (each [_ client-id (ipairs original-client-ids)]
+      (each [_ bufnr (ipairs (vim.lsp.get_buffers_by_client_id client-id))]
+        (tset buffers bufnr true)))
     (vim.lsp.stop_client original-client-ids)
     (detach-all-buffers)
     (timer:start 50 50
@@ -43,6 +51,6 @@
                                            (timer:stop)
                                            (when (= total-clients 0)
                                              (timer:stop)
-                                             (vim.cmd.edit {:mods {:silent true}}))))))))
+                                             (edit-buffers))))))))
 
 {: register : restart}
