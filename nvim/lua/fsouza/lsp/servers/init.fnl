@@ -22,7 +22,8 @@
         (cwd-if-not-home))))
 
 (macro should-start [bufnr]
-  `(not= (vim.api.nvim_buf_get_option ,bufnr :buftype) :nofile))
+  `(and (vim.api.nvim_buf_is_valid ,bufnr)
+        (not= (vim.api.nvim_buf_get_option ,bufnr :buftype) :nofile)))
 
 (fn start [{: config : find-root-dir : bufnr}]
   (let [find-root-dir (if-nil find-root-dir cwd-if-not-home)
