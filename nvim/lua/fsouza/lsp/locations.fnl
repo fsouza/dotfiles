@@ -24,7 +24,8 @@
                         :var_spec
                         ; ocaml
                         :let_binding
-                        :value_definition]]
+                        :value_definition
+                        :type_definition]]
         (mod-invoke :fsouza.pl.tablex :exists node-types #(= $1 node-type)))))
 
 (fn normalize-loc [loc]
@@ -57,9 +58,11 @@
                                                                   start-pos.character
                                                                   end-pos.line
                                                                   end-pos.character)
-                            parent-node (node:parent)]
-                        (when (should-use-ts parent-node)
-                          (let [(sl sc el ec) (parent-node:range)]
+                            parent-node (node:parent)
+                            ts-node (if (should-use-ts parent-node) parent-node
+                                        (should-use-ts node) node)]
+                        (when ts-node
+                          (let [(sl sc el ec) (ts-node:range)]
                             (tset loc.range.start :line sl)
                             (tset loc.range.start :character sc)
                             (tset loc.range.end :line el)
