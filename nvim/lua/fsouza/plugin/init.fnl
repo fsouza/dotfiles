@@ -15,8 +15,7 @@
                   {:silent true})
   (vim.keymap.set :n :<leader>gs #(mod-invoke :fsouza.plugin.fuzzy :git_status)
                   {:silent true})
-  (vim.keymap.set :n :<leader>zh
-                  #(mod-invoke :fsouza.plugin.fuzzy :search_history)
+  (vim.keymap.set :n :<leader>zh #(mod-invoke :fsouza.plugin.fuzzy :help_tags)
                   {:silent true})
   (vim.keymap.set :n :<leader>zo #(mod-invoke :fsouza.plugin.fuzzy :quickfix)
                   {:silent true})
