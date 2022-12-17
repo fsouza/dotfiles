@@ -155,7 +155,7 @@
                                 nil)
                       (table.insert mappings.n
                                     {:lhs :<leader>gt
-                                     :rhs #(vim.lsp.type_definition)})
+                                     :rhs #(vim.lsp.buf.type_definition)})
                       (table.insert mappings.n
                                     {:lhs :<leader>pt
                                      :rhs #(mod-invoke :fsouza.lsp.locations
