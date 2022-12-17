@@ -192,5 +192,5 @@
   (schedule setup-comment-nvim)
   (schedule setup-fuzzy-mappings)
   (vim-schedule (mod-invoke :fsouza.plugin.fnl-autocompile :setup))
-  (vim-schedule (vim.api.nvim_exec_autocmds [:FileType] {}))
+  (vim-schedule (vim.cmd.doautoall :FileType))
   (vim-schedule (vim.api.nvim_exec_autocmds [:User] {:pattern :PluginReady})))
