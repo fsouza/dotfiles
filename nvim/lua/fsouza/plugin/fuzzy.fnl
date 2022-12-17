@@ -130,6 +130,10 @@
                      :raw_cmd (string.format "rg %s -- %s" rg-opts
                                              (vim.fn.shellescape search))}))))
 
+(fn live-grep [rg-opts]
+  (let [fzf-lua (fzf-lua)]
+    (fzf-lua.live_grep_native {:raw_cmd (.. "rg " rg-opts) :multiprocess true})))
+
 (fn find-files [cwd]
   (let [fzf-lua (fzf-lua)]
     (fzf-lua.files {: cwd})))
@@ -165,6 +169,7 @@
 
 (let [rg-opts "--column -n --hidden --no-heading --color=always --colors 'match:fg:0x99,0x00,0x00' --colors line:none --colors path:none --colors column:none -S --glob '!.git' --glob '!.hg'"
       mod {: find-files
+           :live-grep #(live-grep rg-opts)
            :grep (partial grep rg-opts)
            :grep-visual #(grep rg-opts
                                (. (mod-invoke :fsouza.lib.nvim-helpers
