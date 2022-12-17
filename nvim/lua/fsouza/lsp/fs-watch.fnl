@@ -67,12 +67,23 @@
 (local start-notifier
        (mod-invoke :fsouza.lib.nvim-helpers :once start-notifier))
 
+(fn is-file-open [filepath]
+  (let [path (require :fsouza.pl.path)
+        seq (require :fsouza.pl.seq)
+        s (-> (vim.api.nvim_list_bufs)
+              (seq.list)
+              (seq.filter vim.api.nvim_buf_is_loaded)
+              (seq.map #(let [bufname (vim.api.nvim_buf_get_name $1)]
+                          (path.abspath bufname)))
+              (seq.filter #(= $1 filepath))
+              (seq.take 1))]
+    (not= (s) nil)))
+
 (fn make-fs-event-handler [root-dir notify-server]
   (let [backupext vim.o.backupext
         tablex (require :fsouza.pl.tablex)
         pl-path (require :fsouza.pl.path)
-        glob (require :fsouza.lib.glob)
-        buffers (require :fsouza.plugin.buffers)]
+        glob (require :fsouza.lib.glob)]
     (fn notify [client-id reg-id filepath events kind]
       (fn try-notify-server [client-id reg-id uri type ordinal]
         (when (not= (band kind ordinal) 0)
@@ -85,7 +96,7 @@
                                    (try-notify-server client-id reg-id uri
                                                       file-change-type.Deleted
                                                       watch-kind.Delete)
-                                   (if (buffers.has-file filepath)
+                                   (if (is-file-open filepath)
                                        (try-notify-server client-id reg-id uri
                                                           file-change-type.Changed
                                                           watch-kind.Change)
@@ -107,7 +118,7 @@
           (each [_ {: pattern : client-id : kind : reg-id} (ipairs watchers)]
             (when (or (glob.match pattern filename)
                       (glob.match pattern filepath))
-              (notify client-id reg-id filepath events kind))))))))
+              (vim-schedule (notify client-id reg-id filepath events kind)))))))))
 
 (fn make-event [root-dir notify-server]
   (let [event (vim.loop.new_fs_event)
