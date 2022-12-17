@@ -63,6 +63,7 @@
 
 (fn mutate-server-capabilities [client]
   (let [per-server-caps {:jdtls [:codeLensProvider]
+                         :ocaml-lsp [:semanticTokensProvider]
                          :sorbet [:definitionProvider
                                   :referencesProvider
                                   :hoverProvider
