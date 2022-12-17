@@ -18,6 +18,7 @@
               [{:events [:BufNew]
                 :targets ["*"]
                 :callback #(register-for-buffer $1.buf)}])
-  (register-for-buffer (vim.api.nvim_get_current_buf)))
+  (each [_ bufnr (ipairs (vim.api.nvim_list_bufs))]
+    (register-for-buffer bufnr)))
 
 {: setup}
