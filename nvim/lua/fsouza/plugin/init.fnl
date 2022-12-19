@@ -32,7 +32,7 @@
                                (vim.fn.expand :<cword>)))
   (vim.keymap.set :x :<leader>gw
                   #(mod-invoke :fsouza.plugin.fuzzy :grep-visual))
-  (vim.keymap.set :n :<leader>gl #(mod-invoke :fsouza.plugin.fuzzy :grep-last))
+  (vim.keymap.set :n :<leader>gl #(mod-invoke :fsouza.plugin.fuzzy :grep_last))
   (vim.keymap.set :n :<leader>zl #(mod-invoke :fsouza.plugin.fuzzy :lines)))
 
 (fn setup-git-messenger []
