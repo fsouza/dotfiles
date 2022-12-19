@@ -12,16 +12,17 @@
   (. langservers-org-imports-set server-name))
 
 (fn formatting-params [bufnr]
-  (let [sts (vim.api.nvim_buf_get_option bufnr :softtabstop)
-        sw (vim.api.nvim_buf_get_option bufnr :shiftwidth)
-        ts (vim.api.nvim_buf_get_option bufnr :tabstop)
+  (let [sts (vim.api.nvim_get_option_value :softtabstop {:buf bufnr})
+        sw (vim.api.nvim_get_option_value :shiftwidth {:buf bufnr})
+        ts (vim.api.nvim_get_option_value :tabstop {:buf bufnr})
         tab-size (if (> sts 0)
                      sts
                      (if (< sts 0)
                          sw
                          ts))
         opts {:tabSize tab-size
-              :insertSpaces (vim.api.nvim_buf_get_option bufnr :expandtab)}]
+              :insertSpaces (vim.api.nvim_get_option_value :expandtab
+                                                           {:buf bufnr})}]
     {:textDocument {:uri (vim.uri_from_bufnr bufnr)} :options opts}))
 
 (fn fmt [client bufnr cb]

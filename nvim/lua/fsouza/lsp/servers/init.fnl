@@ -23,7 +23,7 @@
 
 (macro should-start [bufnr]
   `(and (vim.api.nvim_buf_is_valid ,bufnr)
-        (not= (vim.api.nvim_buf_get_option ,bufnr :buftype) :nofile)))
+        (not= (vim.api.nvim_get_option_value :buftype {:buf ,bufnr}) :nofile)))
 
 (fn with-defaults [opts]
   (let [capabilities (vim.lsp.protocol.make_client_capabilities)]

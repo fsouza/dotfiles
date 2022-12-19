@@ -5,7 +5,7 @@
 (fn enable []
   (when (not colors-name)
     (set colors-name vim.g.colors_name)
-    (tset vim.o :background :light)
+    (vim.api.nvim_set_option_value :background :light {:scope :global})
     (vim.cmd.colorscheme :rose-pine)))
 
 (fn disable []

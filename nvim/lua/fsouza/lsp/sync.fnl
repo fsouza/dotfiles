@@ -1,6 +1,6 @@
 (fn read-buffer [bufnr]
   (let [lines (table.concat (vim.api.nvim_buf_get_lines bufnr 0 -1 true) "\n")]
-    (if (vim.api.nvim_buf_get_option bufnr :eol)
+    (if (vim.api.nvim_get_option_value :eol {:buf bufnr})
         (.. lines "\n")
         lines)))
 

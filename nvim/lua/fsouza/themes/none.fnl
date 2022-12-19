@@ -116,8 +116,8 @@
          (vim.api.nvim_set_hl 0 sign-group# ,diagnostics-sign)))))
 
 (do
-  (tset vim.o :termguicolors true)
-  (tset vim.o :background :light)
+  (vim.api.nvim_set_option_value :termguicolors true {:scope :global})
+  (vim.api.nvim_set_option_value :background :light {:scope :global})
   (tset vim.g :colors_name :none)
   (let [colors {:darker-gray "#333333"
                 :dark-gray "#5f5f5f"

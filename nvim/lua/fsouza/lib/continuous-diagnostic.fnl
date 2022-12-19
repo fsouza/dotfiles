@@ -97,7 +97,7 @@
 (fn make-scratch-buffer [name]
   (let [bufnr (vim.api.nvim_create_buf false true)]
     (vim.api.nvim_buf_set_name bufnr (string.format "%s - Console Logs" name))
-    (vim.api.nvim_buf_set_option bufnr :filetype :fsouza-terminal)
+    (vim.api.nvim_set_option_value :filetype :fsouza-terminal {:buf bufnr})
     bufnr))
 
 (lambda start [opts]

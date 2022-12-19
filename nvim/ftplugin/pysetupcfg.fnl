@@ -1,2 +1,1 @@
-(let [bufnr (vim.api.nvim_get_current_buf)]
-  (vim.api.nvim_buf_set_option bufnr :commentstring "#%s"))
+(vim.api.nvim_set_option_value :commentstring "#%s" {:scope :local})

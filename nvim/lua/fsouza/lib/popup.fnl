@@ -9,15 +9,15 @@
 
 (fn set-content [bufnr lines opts]
   (do
-    (vim.api.nvim_buf_set_option bufnr :readonly false)
-    (vim.api.nvim_buf_set_option bufnr :modifiable true)
+    (vim.api.nvim_set_option_value :readonly false {:buf bufnr})
+    (vim.api.nvim_set_option_value :modifiable true {:buf bufnr})
     (let [{: markdown : width : height} opts]
       (if markdown
           (vim.lsp.util.stylize_markdown bufnr lines
                                          {: width : height :separator true})
           (vim.api.nvim_buf_set_lines bufnr 0 -1 true lines)))
-    (vim.api.nvim_buf_set_option bufnr :readonly true)
-    (vim.api.nvim_buf_set_option bufnr :modifiable false)))
+    (vim.api.nvim_set_option_value :readonly true {:buf bufnr})
+    (vim.api.nvim_set_option_value :modifiable false {:buf bufnr})))
 
 (fn update-existing [winid lines opts]
   (let [bufnr (vim.api.nvim_win_get_buf winid)]
