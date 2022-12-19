@@ -21,9 +21,14 @@
         (mod-invoke :fsouza.pl.path :dirname file)
         (cwd-if-not-home))))
 
-(macro should-start [bufnr]
+(fn disabled-servers []
+  (-> :DISABLED_LSPS (vim.loop.os_getenv) (if-nil "")
+      (vim.split "\n" {:plain true :trimempty true})))
+
+(macro should-start [bufnr name]
   `(and (vim.api.nvim_buf_is_valid ,bufnr)
-        (not= (vim.api.nvim_get_option_value :buftype {:buf ,bufnr}) :nofile)))
+        (not= (vim.api.nvim_get_option_value :buftype {:buf ,bufnr}) :nofile)
+        (not (vim.tbl_contains (disabled-servers) ,name))))
 
 (fn with-defaults [opts]
   (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
@@ -39,8 +44,9 @@
   (let [find-root-dir (if-nil find-root-dir cwd-if-not-home)
         bufnr (if-nil bufnr (vim.api.nvim_get_current_buf))
         exec (?. config :cmd 1)
+        name config.name
         config (with-defaults config)]
-    (when (should-start bufnr)
+    (when (should-start bufnr name)
       (tset config :root_dir (find-root-dir))
       (if-executable exec
                      #(do
