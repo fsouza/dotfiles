@@ -78,7 +78,7 @@
                  :isfname "@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@"}]
     (list (sym :do)
           (icollect [name value (pairs options)]
-            `(vim.api.nvim_set_option_value ,name ,value {:scope :global}))
+            `(vim.api.nvim_set_option_value ,name ,value {}))
           `(vim.cmd.color :none))))
 
 (macro set-global-options []
@@ -101,7 +101,7 @@
                  :showmatch true
                  :matchtime 1}]
     (icollect [name value (pairs options)]
-      `(vim.api.nvim_set_option_value ,name ,value {:scope :global}))))
+      `(vim.api.nvim_set_option_value ,name ,value {}))))
 
 (macro set-global-mappings []
   (let [rl-bindings [{:lhs :<c-a> :rhs :<home>}
