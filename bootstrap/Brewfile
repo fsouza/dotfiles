@@ -12,7 +12,6 @@ brew "libyaml"
 brew "lua"
 brew "pcre"
 brew "python@3.11", args: ["overwrite"]
-brew "rbenv"
 brew "ripgrep"
 brew "sd"
 brew "selene"
