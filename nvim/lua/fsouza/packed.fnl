@@ -1,26 +1,30 @@
 (import-macros {: reload : mod-invoke} :helpers)
 
-(fn download-paq [paq-dir cb]
-  (let [paq-repo-dir (mod-invoke :fsouza.pl.path :join paq-dir :opt :paq-nvim)]
+(fn download-packer [packer-dir cb]
+  (let [packer-repo-dir (mod-invoke :fsouza.pl.path :join packer-dir :opt
+                                    :packer.nvim)]
     (mod-invoke :fsouza.lib.cmd :run :git
                 {:args [:clone
-                        "https://github.com/fsouza/paq-nvim.git"
-                        paq-repo-dir]} nil
+                        "https://github.com/wbthomason/packer.nvim.git"
+                        packer-repo-dir]} nil
                 #(if (= $1.exit-status 0)
                      (do
-                       (vim.cmd.packadd {:args [:paq-nvim] :bang true})
-                       (cb (require :paq)))
+                       (vim.cmd.packadd {:args [:packer.nvim] :bang true})
+                       (cb (require :packer)))
                      (error (string.format "failed to clone paq-nvim: %s"
                                            (vim.inspect $1)))))))
 
-(fn with-paq [paq-dir cb]
-  (let [(ok? paq) (pcall require :paq)]
+(fn with-packer [packer-dir cb]
+  (let [(ok? packer) (pcall require :packer)]
     (if ok?
-        (cb paq)
-        (download-paq paq-dir cb))))
+        (cb packer)
+        (download-packer packer-dir cb))))
 
-(let [paq-dir (mod-invoke :fsouza.pl.path :join data-dir :site :pack :paqs)
-      paqs [{1 :fsouza/paq-nvim :opt true :as :paq-nvim}
+(let [path (require :fsouza.pl.path)
+      package-root (path.join data-dir :site :pack)
+      plugin-package :packer
+      packer-dir (path.join package-root plugin-package)
+      pkgs [{1 :wbthomason/packer.nvim :opt true :as :packer.nvim}
             {1 :chaoren/vim-wordmotion}
             {1 :godlygeek/tabular}
             {1 :justinmk/vim-dirvish}
@@ -31,7 +35,7 @@
             {1 :tpope/vim-repeat}
             {1 :tpope/vim-rhubarb}
             {1 :tpope/vim-surround}
-            {1 :nvim-treesitter/nvim-treesitter}
+            {1 :nvim-treesitter/nvim-treesitter :run :TSUpdateSync}
             {1 :nvim-treesitter/nvim-treesitter-refactor}
             {1 :nvim-treesitter/nvim-treesitter-textobjects}
             {1 :nvim-treesitter/playground}
@@ -71,12 +75,20 @@
             {1 :ziglang/zig.vim}
             ;; themes, for demos/presentations.
             {1 :rose-pine/neovim}]]
-  {: paq-dir
-   : paqs
-   :setup #(with-paq paq-dir (fn [paq]
-                               (paq:setup {:paq_dir paq-dir})
-                               (paq paqs)
-                               (paq:sync)))
+  {: packer-dir
+   : pkgs
+   :setup #(with-packer packer-dir
+                        (fn [packer]
+                          (packer.startup {1 #(let [use $1]
+                                                (each [_ pkg (ipairs pkgs)]
+                                                  (use pkg)))
+                                           :config {:package_root package-root
+                                                    :plugin_package plugin-package
+                                                    :disable_commands true
+                                                    :display {:non_interactive true
+                                                              :compact true}
+                                                    :autoremove true}})
+                          (packer.sync)))
    :repack (fn []
              (let [packed (reload :fsouza.packed)]
                (packed.setup)))})

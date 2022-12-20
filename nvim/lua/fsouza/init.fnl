@@ -12,13 +12,13 @@
      (tset package :cpath (table.concat [(.. lib-path# :/?.so) package.cpath]
                                         ";"))))
 
-(macro add-paqs-opt-to-path []
+(macro add-pkgs-opt-to-path []
   `(let [path# (require :fsouza.pl.path)
          packed# (require :fsouza.packed)
-         opt-dir# (path#.join packed#.paq-dir :opt)]
-     (each [_# paq# (ipairs packed#.paqs)]
-       (when (and paq#.opt paq#.as)
-         (let [paq-dir# (path#.join opt-dir# paq#.as)]
+         opt-dir# (path#.join packed#.packer-dir :opt)]
+     (each [_# pkg# (ipairs packed#.pkgs)]
+       (when (and pkg#.opt pkg#.as)
+         (let [paq-dir# (path#.join opt-dir# pkg#.as)]
            (tset package :path
                  (table.concat [package.path
                                 (path#.join paq-dir# :lua :?.lua)
@@ -143,13 +143,13 @@
       (global cache-dir (vim.fn.stdpath :cache))
       (global data-dir (vim.fn.stdpath :data))
       (hererocks)
-      (add-paqs-opt-to-path)
+      (add-pkgs-opt-to-path)
       (initial-mappings)
       (vim-schedule (set-global-options) (set-global-mappings)
                     (override-ui-functions))
       (set-ui-options)
       (set-neovim-global-vars)
-      (if vim.env.BOOTSTRAP_PAQ
+      (if vim.env.BOOTSTRAP_PACKER
           (mod-invoke :fsouza.packed :setup)
           (require :fsouza.plugin)))
     (error "missing FSOUZA_DOTFILES_DIR\n"))
