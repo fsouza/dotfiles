@@ -85,8 +85,6 @@
                                            :config {:package_root package-root
                                                     :plugin_package plugin-package
                                                     :disable_commands true
-                                                    :display {:non_interactive true
-                                                              :compact true}
                                                     :autoremove true}})
                           (packer.sync)))
    :repack (fn []
