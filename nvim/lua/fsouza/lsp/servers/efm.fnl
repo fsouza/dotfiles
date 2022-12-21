@@ -120,32 +120,6 @@
        :rootMarkers [:.ocamlformat]
        :requireMarker true}))
 
-(fn get-selene [cb]
-  (cb {:lintCommand "selene --display-style quiet -"
-       :lintStdin true
-       :lintSource :selene
-       :lintFormats ["-:%l:%c: %m"]
-       :lintIgnoreExitCode true
-       :rootMarkers [:selene.toml]
-       :requireMarker true}))
-
-(fn get-luacheck [cb]
-  (let [luacheck (path.join cache-dir :hr :bin :luacheck)]
-    (cb {:lintCommand (string.format "%s --formatter plain --filename ${INPUT} -"
-                                     luacheck)
-         :lintStdin true
-         :lintSource :luacheck
-         :lintFormats ["%f:%l:%c: %m"]
-         :lintIgnoreExitCode true
-         :rootMarkers [:.luacheckrc]
-         :requireMarker true})))
-
-(fn get-stylua [cb]
-  (cb {:formatCommand "stylua -"
-       :formatStdin true
-       :rootMarkers [:stylua.toml :.stylua.toml]
-       :requireMarker true}))
-
 (fn get-shfmt [cb]
   (let [shfmt-path (path.join cache-dir :langservers :bin :shfmt)]
     (cb {:formatCommand (string.format "%s -" shfmt-path)
@@ -306,19 +280,6 @@
                       :typescriptreact
                       :yaml])
 
-(fn get-filetypes []
-  (vim.tbl_flatten [:bzl
-                    :dune
-                    :fennel
-                    :java
-                    :kotlin
-                    :lua
-                    :ocaml
-                    :python
-                    :sh
-                    :ruby
-                    prettierd-fts]))
-
 (fn get-settings [cb]
   (let [settings {:lintDebounce :250ms
                   :rootMarkers default-root-markers
@@ -342,9 +303,6 @@
                                  {:language :dune :fn get-dune}
                                  {:language :ocaml :fn get-ocamlformat}
                                  {:language :bzl :fn get-buildifier}
-                                 {:language :lua :fn get-selene}
-                                 {:language :lua :fn get-stylua}
-                                 {:language :lua :fn get-luacheck}
                                  {:language :ruby :fn get-rubocop}]
           timer (vim.loop.new_timer)]
       (each [_ f (ipairs simple-tool-factories)]
