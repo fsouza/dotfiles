@@ -9,5 +9,6 @@ flake8-comprehensions
 flake8-tidy-imports
 isort
 pyupgrade
+PyYAML
 reorder-python-imports
 ruff
