@@ -101,14 +101,6 @@
                         :formatStdin true
                         :rootMarkers default-root-markers})))
 
-(fn get-buildifier [cb]
-  (let [buildifierw (path.join config-dir :langservers :bin :buildifierw.py)
-        py3 (find-venv-bin :python3)]
-    (cb {:formatCommand (string.format "%s %s ${INPUT}" py3 buildifierw)
-         :formatStdin true
-         :rootMarkers default-root-markers
-         :env [(.. :NVIM_CACHE_DIR= cache-dir)]})))
-
 (fn get-dune [cb]
   (cb {:formatCommand "dune format-dune-file"
        :formatStdin true
@@ -292,8 +284,7 @@
     (let [simple-tool-factories [{:language :sh :fn get-shfmt}
                                  {:language :bash :fn get-shfmt}
                                  {:language :dune :fn get-dune}
-                                 {:language :ocaml :fn get-ocamlformat}
-                                 {:language :bzl :fn get-buildifier}]
+                                 {:language :ocaml :fn get-ocamlformat}]
           timer (vim.loop.new_timer)]
       (each [_ f (ipairs simple-tool-factories)]
         (let [{:fn f : language} f]
