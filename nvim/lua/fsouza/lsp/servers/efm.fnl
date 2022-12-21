@@ -101,23 +101,6 @@
                         :formatStdin true
                         :rootMarkers default-root-markers})))
 
-(fn get-dune [cb]
-  (cb {:formatCommand "dune format-dune-file"
-       :formatStdin true
-       :rootMarkers default-root-markers}))
-
-(fn get-ocamlformat [cb]
-  (cb {:formatCommand "ocamlformat --name ${INPUT} -"
-       :formatStdin true
-       :rootMarkers [:.ocamlformat]
-       :requireMarker true}))
-
-(fn get-shfmt [cb]
-  (let [shfmt-path (path.join cache-dir :langservers :bin :shfmt)]
-    (cb {:formatCommand (string.format "%s -" shfmt-path)
-         :formatStdin true
-         :rootMarkers default-root-markers})))
-
 (fn get-prettierd [cb]
   (get-node-bin :prettierd
                 #(cb {:formatCommand (string.format "%s ${INPUT}" $1)
@@ -281,14 +264,7 @@
            (original-cb ...)
            (set pending (- pending 1)))))
 
-    (let [simple-tool-factories [{:language :sh :fn get-shfmt}
-                                 {:language :bash :fn get-shfmt}
-                                 {:language :dune :fn get-dune}
-                                 {:language :ocaml :fn get-ocamlformat}]
-          timer (vim.loop.new_timer)]
-      (each [_ f (ipairs simple-tool-factories)]
-        (let [{:fn f : language} f]
-          (pending-wrapper f #(add-if-not-empty language $1))))
+    (let [timer (vim.loop.new_timer)]
       (pending-wrapper get-eslintd-config
                        #(let [eslint-fts [:javascript
                                           :javascriptreact
