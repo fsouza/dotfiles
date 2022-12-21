@@ -1,6 +1,6 @@
 (import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
 
-(fn if-executable [exec cb]
+(fn with-executable [exec cb]
   (when exec
     (let [node-bin (mod-invoke :fsouza.pl.path :join config-dir :langservers
                                :node_modules :.bin)
@@ -40,17 +40,20 @@
                     :flags {:debounce_text_changes 0}}]
       (vim.tbl_extend :force defaults opts))))
 
-(fn start [{: config : find-root-dir : bufnr}]
+(fn start [{: config : find-root-dir : bufnr : cb}]
   (let [find-root-dir (if-nil find-root-dir cwd-if-not-home)
         bufnr (if-nil bufnr (vim.api.nvim_get_current_buf))
         exec (?. config :cmd 1)
         name config.name
-        config (with-defaults config)]
+        config (with-defaults config)
+        cb (if-nil cb #nil)]
     (when (should-start bufnr name)
       (tset config :root_dir (find-root-dir))
-      (if-executable exec
-                     #(do
-                        (tset config.cmd 1 $1)
-                        (vim-schedule (vim.lsp.start config {: bufnr})))))))
+      (with-executable exec
+                       #(do
+                          (tset config.cmd 1 $1)
+                          (vim-schedule (let [client-id (vim.lsp.start config
+                                                                       {: bufnr})]
+                                          (cb client-id))))))))
 
 {: start : patterns-with-fallback}
