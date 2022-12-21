@@ -32,9 +32,10 @@
               current-tools (if-nil (?. settings :languages language) [])]
           (each [_ tool (ipairs tools)]
             (when (should-add current-tools tool)
-              (table.insert current-tools tool)
-              (tset settings.languages language current-tools)))
+              (set changed true)
+              (table.insert current-tools tool)))
           (when changed
+            (tset settings.languages language current-tools)
             (tset client.config :settings settings)
             (client.notify :workspace/didChangeConfiguration {: settings}))))))
 
