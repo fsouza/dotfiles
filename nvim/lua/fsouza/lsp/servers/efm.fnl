@@ -171,15 +171,6 @@
 
                     (check-eslint-config 1)))))
 
-(fn get-rubocop [cb]
-  (cb {:lintCommand "bundle exec rubocop --stdin ${INPUT}"
-       :lintStdin true
-       :lintSource :rubocop
-       :lintFormats ["%f:%l:%c: %m"]
-       :lintIgnoreExitCode true
-       :rootMarkers [:.rubocop.yml]
-       :requireMarker true}))
-
 (fn try-read-precommit-config [file-path cb]
   (let [empty-result {:repos []}]
     (vim.loop.fs_open file-path :r (tonumber :644 8)
@@ -302,8 +293,7 @@
                                  {:language :bash :fn get-shfmt}
                                  {:language :dune :fn get-dune}
                                  {:language :ocaml :fn get-ocamlformat}
-                                 {:language :bzl :fn get-buildifier}
-                                 {:language :ruby :fn get-rubocop}]
+                                 {:language :bzl :fn get-buildifier}]
           timer (vim.loop.new_timer)]
       (each [_ f (ipairs simple-tool-factories)]
         (let [{:fn f : language} f]
