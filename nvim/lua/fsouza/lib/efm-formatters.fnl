@@ -1,8 +1,6 @@
 ;; this module exists for efm tools that are shared across different file
 ;; types, such as prettierd and eslintd.
 
-(import-macros {: if-bin} :lsp-helpers)
-
 (fn get-shfmt [cb]
   (let [path (require :fsouza.pl.path)
         shfmt-path (path.join cache-dir :langservers :bin :shfmt)]
@@ -13,7 +11,11 @@
         local-bin (path.join :node_modules :.bin bin-name)
         default-bin (path.join config-dir :langservers :node_modules :.bin
                                bin-name)]
-    (if-bin local-bin default-bin cb)))
+    (vim.loop.fs_stat local-bin
+                      (fn [err# stat#]
+                        (if (and (= err# nil) (= stat#.type :file))
+                            (cb local-bin)
+                            (cb default-bin))))))
 
 (fn get-prettierd [cb]
   (get-node-bin :prettierd

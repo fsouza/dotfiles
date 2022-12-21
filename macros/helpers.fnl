@@ -15,10 +15,6 @@
 
     (check 1)))
 
-(fn send-esc []
-  `(-> :<esc> (vim.api.nvim_replace_termcodes true false true)
-       (vim.api.nvim_feedkeys :map true)))
-
 (fn reload [mod-name]
   `(do
      (tset package.loaded ,mod-name nil)
@@ -30,4 +26,4 @@
 (fn max-col []
   2147483647)
 
-{: vim-schedule : if-nil : send-esc : reload : mod-invoke : max-col}
+{: vim-schedule : if-nil : reload : mod-invoke : max-col}

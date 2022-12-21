@@ -1,5 +1,4 @@
 (import-macros {: mod-invoke : if-nil : vim-schedule} :helpers)
-(import-macros {: find-venv-bin} :lsp-helpers)
 
 (fn start-pyright [bufnr python-interpreter]
   (let [path (require :fsouza.pl.path)
@@ -20,7 +19,7 @@
 
 (fn get-python-tools [cb]
   (let [path (require :fsouza.pl.path)
-        py3 (find-venv-bin :python3)
+        py3 (path.join cache-dir :venv :bin :python3)
         gen-python-tools (path.join config-dir :langservers :bin
                                     :gen-efm-python-tools.py)]
     (fn on-finished [result]

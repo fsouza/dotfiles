@@ -1,4 +1,4 @@
-(import-macros {: if-nil : send-esc : max-col : mod-invoke} :helpers)
+(import-macros {: if-nil : max-col : mod-invoke} :helpers)
 
 (fn wrap-callback [cb]
   (if cb
@@ -58,7 +58,8 @@
   (fn from-current [mode]
     (let [[_ srow scol _] (vim.fn.getpos ".")
           [_ erow ecol _] (vim.fn.getpos :v)]
-      (send-esc)
+      (-> :<esc> (vim.api.nvim_replace_termcodes true false true)
+          (vim.api.nvim_feedkeys :map true))
       (if (= mode :V) [srow 0 erow (max-col)] [srow scol erow ecol])))
 
   (let [{: mode} (vim.api.nvim_get_mode)
