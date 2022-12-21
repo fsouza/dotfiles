@@ -195,7 +195,7 @@ async def ensure_hererocks(cache_dir: Path) -> Path:
 
     await run_cmd(
         hr_dir / "bin" / "luarocks",
-        ["make", "--force", f"YAML_DIR={rocks_dir}", f"PCRE_DIR={rocks_dir}"],
+        ["make", "--force", f"PCRE_DIR={rocks_dir}"],
         cwd=base_dir,
     )
 

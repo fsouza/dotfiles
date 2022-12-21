@@ -3,7 +3,6 @@ version = "dev-1"
 description = { license = "ISC" }
 source = { url = "https://github.com/fsouza/dotfiles.git" }
 dependencies = {
-  "lyaml ~> 6.2.8",
   "penlight ~> 1.13.1",
   "fennel ~> 1.2.1",
   "luafilesystem ~> 1.8.0",
