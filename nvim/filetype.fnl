@@ -1,7 +1,9 @@
+(import-macros {: if-nil} :helpers)
+
 (fn from-shebang [path bufnr]
   (let [seq (require :pl.seq)
         pattern-mapping {:python :python
-                         :bash :sh
+                         :bash :bash
                          :zsh :zsh
                          :/sh :sh
                          :ruby :ruby
@@ -17,6 +19,12 @@
         (when k
           (. pattern-mapping k))))))
 
+(fn from-current-shell []
+  (let [path (require :fsouza.pl.path)
+        shell (vim.loop.os_getenv :SHELL)]
+    (when shell
+      (path.basename shell))))
+
 (let [fts {:extension {:tilt :bzl
                        :fs :fsharp
                        :fsx :fsharp
@@ -24,6 +32,7 @@
                        :fnl :fennel
                        :thrift :thrift
                        :fsproj :fsharp_project
+                       :sh #(if-nil (from-shebang $...) (from-current-shell))
                        "" from-shebang}
            :filename {:Tiltfile :bzl
                       :go.mod :gomod
