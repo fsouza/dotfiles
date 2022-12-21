@@ -374,6 +374,7 @@
            (set pending (- pending 1)))))
 
     (let [simple-tool-factories [{:language :sh :fn get-shfmt}
+                                 {:language :bash :fn get-shfmt}
                                  {:language :dune :fn get-dune}
                                  {:language :ocaml :fn get-ocamlformat}
                                  {:language :bzl :fn get-buildifier}
