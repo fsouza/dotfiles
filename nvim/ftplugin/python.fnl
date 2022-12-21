@@ -1,5 +1,8 @@
 (import-macros {: mod-invoke : if-nil : vim-schedule} :helpers)
 
+(fn add-to-efm [bufnr tools]
+  (mod-invoke :fsouza.lsp.servers.efm :add bufnr :python tools))
+
 (fn start-pyright [bufnr python-interpreter]
   (let [path (require :fsouza.pl.path)
         python-interpreter (if-nil python-interpreter
@@ -18,5 +21,7 @@
                                                          :useLibraryCodeForTypes true}}}}})))
 
 (let [bufnr (vim.api.nvim_get_current_buf)]
+  (mod-invoke :fsouza.lib.efm-python :get-python-tools
+              #(vim-schedule (add-to-efm bufnr $1)))
   (mod-invoke :fsouza.lib.python :detect-interpreter
               #(vim-schedule (start-pyright bufnr $1))))
