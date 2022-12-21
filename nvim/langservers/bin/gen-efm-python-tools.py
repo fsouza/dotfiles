@@ -77,8 +77,7 @@ async def main() -> int:
         [tool] if isinstance(tool, Formatter) else tool for tool in result
     )
 
-    output = [dataclasses.asdict(tool) for tool in set(tools)]
-    print(json.dumps(output))
+    json.dump([dataclasses.asdict(tool) for tool in set(tools)], sys.stdout)
     return 0
 
 
