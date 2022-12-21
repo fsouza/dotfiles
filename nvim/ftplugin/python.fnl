@@ -1,4 +1,5 @@
 (import-macros {: mod-invoke : if-nil : vim-schedule} :helpers)
+(import-macros {: find-venv-bin} :lsp-helpers)
 
 (fn add-to-efm [bufnr tools]
   (mod-invoke :fsouza.lsp.servers.efm :add bufnr :python tools))
@@ -20,8 +21,22 @@
                                                                                    :basic)
                                                          :useLibraryCodeForTypes true}}}}})))
 
+(fn get-python-tools [cb]
+  (let [path (require :fsouza.pl.path)
+        py3 (find-venv-bin :python3)
+        gen-python-tools (path.join config-dir :langservers :bin
+                                    :gen-efm-python-tools.py)]
+    (fn on-finished [result]
+      (if (not= result.exit-status 0)
+          (error result.stderr)
+          (->> result.stdout
+               (vim.fn.json_decode)
+               (cb))))
+
+    (mod-invoke :fsouza.lib.cmd :run py3 {:args [gen-python-tools]} nil
+                on-finished)))
+
 (let [bufnr (vim.api.nvim_get_current_buf)]
-  (mod-invoke :fsouza.lib.efm-python :get-python-tools
-              #(vim-schedule (add-to-efm bufnr $1)))
+  (get-python-tools #(vim-schedule (add-to-efm bufnr $1)))
   (mod-invoke :fsouza.lib.python :detect-interpreter
               #(vim-schedule (start-pyright bufnr $1))))
