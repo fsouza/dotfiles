@@ -225,14 +225,6 @@
 
                     (check-eslint-config 1)))))
 
-(fn get-spotless [cb]
-  (let [spotlessw (path.join config-dir :langservers :bin :spotlessw.py)
-        py3 (find-venv-bin :python3)]
-    (cb {:formatCommand (string.format "%s %s ${INPUT}" py3 spotlessw)
-         :formatStdin true
-         :rootMarkers [:gradlew]
-         :requireMarker true})))
-
 (fn get-rubocop [cb]
   (cb {:lintCommand "bundle exec rubocop --stdin ${INPUT}"
        :lintStdin true
@@ -383,9 +375,7 @@
                                  {:language :lua :fn get-selene}
                                  {:language :lua :fn get-stylua}
                                  {:language :lua :fn get-luacheck}
-                                 {:language :java :fn get-spotless}
-                                 {:language :ruby :fn get-rubocop}
-                                 {:language :kotlin :fn get-spotless}]
+                                 {:language :ruby :fn get-rubocop}]
           timer (vim.loop.new_timer)]
       (each [_ f (ipairs simple-tool-factories)]
         (let [{:fn f : language} f]
