@@ -76,7 +76,12 @@
                                                      {:buf bufnr}))))))
 
 (fn modify-filename-if-needed [name bufnr]
-  (let [ft-map {:python :.py :sh :.sh :ruby :.rb :query :.scm}
+  (let [ft-map {:python :.py
+                :sh :.sh
+                :ruby :.rb
+                :query :.scm
+                :bash :.sh
+                :zsh :.zsh}
         (_ ext) (mod-invoke :fsouza.pl.path :splitext name)]
     (if (not= ext "")
         name
