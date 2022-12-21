@@ -1,5 +1,5 @@
 (import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
-(import-macros {: get-cache-cmd} :lsp-helpers)
+(import-macros {: get-cache-cmd : find-venv-bin : if-bin} :lsp-helpers)
 
 (local path (require :fsouza.pl.path))
 (local default-root-markers [:.git])
@@ -11,16 +11,6 @@
   (let [args (if-nil args [])]
     (accumulate [acc "" _ arg (ipairs args)]
       (.. acc " " (quote-arg arg)))))
-
-(macro find-venv-bin [bin-name]
-  `(path.join cache-dir :venv :bin ,bin-name))
-
-(macro if-bin [bin-to-check fallback-bin cb]
-  `(vim.loop.fs_stat ,bin-to-check
-                     (fn [err# stat#]
-                       (if (and (= err# nil) (= stat#.type :file))
-                           (,cb ,bin-to-check)
-                           (,cb ,fallback-bin)))))
 
 (fn get-node-bin [bin-name cb]
   (let [local-bin (path.join :node_modules :.bin bin-name)
@@ -118,24 +108,6 @@
          :formatStdin true
          :rootMarkers default-root-markers
          :env [(.. :NVIM_CACHE_DIR= cache-dir)]})))
-
-(fn get-fnlfmt [cb]
-  (let [fnlfmt (path.join config-dir :langservers :bin :fnlfmt.py)
-        py3 (find-venv-bin :python3)]
-    (cb {:formatCommand (string.format "%s %s -" py3 fnlfmt)
-         :formatStdin true
-         :rootMarkers default-root-markers
-         :env [(.. :NVIM_CACHE_DIR= cache-dir)]})))
-
-(fn get-fnl-compile [cb]
-  (let [lua-bin (path.join cache-dir :hr :bin :lua)]
-    (cb {:lintCommand (string.format "%s %s/scripts/compile.lua --stdin-filename ${INPUT} -"
-                                     lua-bin dotfiles-dir)
-         :lintStdin true
-         :lintSource :fennel
-         :lintFormats ["%f:%l:%c %m" "%f:%l: %m"]
-         :lintIgnoreExitCode true
-         :rootMarkers default-root-markers})))
 
 (fn get-dune [cb]
   (cb {:formatCommand "dune format-dune-file"
@@ -348,7 +320,7 @@
                     prettierd-fts]))
 
 (fn get-settings [cb]
-  (let [settings {:lintDebounce 250000000
+  (let [settings {:lintDebounce :250ms
                   :rootMarkers default-root-markers
                   :languages {}}]
     (fn add-if-not-empty [language tool]
@@ -370,8 +342,6 @@
                                  {:language :dune :fn get-dune}
                                  {:language :ocaml :fn get-ocamlformat}
                                  {:language :bzl :fn get-buildifier}
-                                 {:language :fennel :fn get-fnlfmt}
-                                 {:language :fennel :fn get-fnl-compile}
                                  {:language :lua :fn get-selene}
                                  {:language :lua :fn get-stylua}
                                  {:language :lua :fn get-luacheck}
@@ -396,20 +366,43 @@
                            (vim-schedule (cb settings))
                            (timer:close))))))
 
-(fn start-efm [bufnr settings]
+(fn start-efm [bufnr cb]
   (mod-invoke :fsouza.lsp.servers :start
               {: bufnr
+               : cb
                :config {:name :efm
                         :cmd [(get-cache-cmd :efm-langserver)]
                         :init_options {:documentFormatting true}
-                        : settings}}))
+                        :settings {:lintDebounce :250ms
+                                   :rootMarkers default-root-markers
+                                   :languages {}}}}))
 
-(fn setup []
-  (let [filetypes (get-filetypes)]
-    (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__lsp_start_efm
-                [{:events [:FileType]
-                  :targets filetypes
-                  :callback #(let [{: buf} $1]
-                               (get-settings #(start-efm buf $1)))}])))
+(fn should-add [current-tools tool]
+  (if (or tool.formatCommand tool.lintCommand)
+      (let [seq (require :fsouza.pl.seq)
+            s (-> current-tools
+                  (seq.list)
+                  (seq.filter #(and (= $1.formatCommand tool.formatCommad)
+                                    (= $1.lintCommand tool.lintCommand)))
+                  (seq.take 1))]
+        (= (s) nil))
+      false))
 
-{: setup}
+(lambda add [bufnr language tools]
+  (fn update-config [client-id]
+    (let [client (vim.lsp.get_client_by_id client-id)]
+      (when client
+        (var changed false)
+        (let [settings client.config.settings
+              current-tools (if-nil (?. settings :languages language) [])]
+          (each [_ tool (ipairs tools)]
+            (when (should-add current-tools tool)
+              (table.insert current-tools tool)
+              (tset settings.languages language current-tools)))
+          (when changed
+            (tset client.config :settings settings)
+            (client.notify :workspace/didChangeConfiguration {: settings}))))))
+
+  (start-efm bufnr update-config))
+
+{: add}

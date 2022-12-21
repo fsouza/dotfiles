@@ -242,7 +242,6 @@
               #(mod-invoke :fsouza.lsp.servers.pyright :valid-diagnostic $1))
   (mod-invoke :fsouza.lsp.buf-diagnostic :register-filter :rust_analyzer
               #(mod-invoke :fsouza.lsp.servers.rust-analyzer :valid-diagnostic
-                           $1))
-  (mod-invoke :fsouza.lsp.servers.efm :setup))
+                           $1)))
 
 {: setup}
