@@ -12,12 +12,6 @@
     (accumulate [acc "" _ arg (ipairs args)]
       (.. acc " " (quote-arg arg)))))
 
-(fn get-node-bin [bin-name cb]
-  (let [local-bin (path.join :node_modules :.bin bin-name)
-        default-bin (path.join config-dir :langservers :node_modules :.bin
-                               bin-name)]
-    (if-bin local-bin default-bin cb)))
-
 (fn get-python-bin [bin-name cb]
   (let [virtualenv (os.getenv :VIRTUAL_ENV)
         default-bin (find-venv-bin bin-name)]
@@ -100,51 +94,6 @@
                                                       $1 (process-args args))
                         :formatStdin true
                         :rootMarkers default-root-markers})))
-
-(fn get-prettierd [cb]
-  (get-node-bin :prettierd
-                #(cb {:formatCommand (string.format "%s ${INPUT}" $1)
-                      :formatStdin true
-                      :env [(.. :XDG_RUNTIME_DIR= cache-dir)]})))
-
-(fn get-eslintd-config [cb]
-  (get-node-bin :eslint_d
-                (fn [eslint_d-path]
-                  (let [eslint-config-files [:.eslintrc.js
-                                             :.eslintrc.cjs
-                                             :.eslintrc.yaml
-                                             :.eslintrc.yml
-                                             :.eslintrc.json]]
-                    (fn check-eslint-config [idx]
-                      (let [config-file (. eslint-config-files idx)]
-                        (if (not config-file)
-                            (cb [])
-                            (vim.loop.fs_stat config-file
-                                              (fn [err stat]
-                                                (if (and (= err nil)
-                                                         (= stat.type :file))
-                                                    (cb [{:formatCommand (string.format "%s --stdin --stdin-filename ${INPUT} --fix-to-stdout"
-                                                                                        eslint_d-path)
-                                                          :formatStdin true
-                                                          :env [(.. :XDG_RUNTIME_DIR=
-                                                                    cache-dir)]}
-                                                         {:lintCommand (string.format "%s --stdin --stdin-filename ${INPUT} --format unix"
-                                                                                      eslint_d-path)
-                                                          :lintStdin true
-                                                          :lintSource :eslint
-                                                          :lintIgnoreExitCode true
-                                                          :lintFormats ["%f:%l:%c: %m"]
-                                                          :rootMarkers [:.eslintrc.js
-                                                                        :.eslintrc.cjs
-                                                                        :.eslintrc.yaml
-                                                                        :.eslintrc.yml
-                                                                        :.eslintrc.json
-                                                                        :.git
-                                                                        :package.json]}])
-                                                    (check-eslint-config (+ idx
-                                                                            1))))))))
-
-                    (check-eslint-config 1)))))
 
 (fn try-read-precommit-config [file-path cb]
   (let [empty-result {:repos []}]
@@ -234,52 +183,6 @@
                                                   #(when (= pending 0)
                                                      (vim-schedule (cb tools))
                                                      (timer:close)))))))))
-
-(local prettierd-fts [:changelog
-                      :css
-                      :graphql
-                      :html
-                      :javascript
-                      :javascriptreact
-                      :json
-                      :typescript
-                      :typescriptreact
-                      :yaml])
-
-(fn get-settings [cb]
-  (let [settings {:lintDebounce :250ms
-                  :rootMarkers default-root-markers
-                  :languages {}}]
-    (fn add-if-not-empty [language tool]
-      (when (or tool.formatCommand tool.lintCommand)
-        (let [tools (if-nil (?. settings :languages language) [])]
-          (table.insert tools tool)
-          (tset settings.languages language tools))))
-
-    (var pending 0)
-
-    (fn pending-wrapper [f original-cb]
-      (set pending (+ pending 1))
-      (f (fn [...]
-           (original-cb ...)
-           (set pending (- pending 1)))))
-
-    (let [timer (vim.loop.new_timer)]
-      (pending-wrapper get-eslintd-config
-                       #(let [eslint-fts [:javascript
-                                          :javascriptreact
-                                          :typescript
-                                          :typescriptreact]]
-                          (each [_ eslint (ipairs $1)]
-                            (each [_ ft (ipairs eslint-fts)]
-                              (add-if-not-empty ft eslint)))))
-      (pending-wrapper get-prettierd
-                       #(each [_ ft (ipairs prettierd-fts)]
-                          (add-if-not-empty ft $1)))
-      (pending-wrapper get-python-tools #(tset settings.languages :python $1))
-      (timer:start 0 25 #(when (= pending 0)
-                           (vim-schedule (cb settings))
-                           (timer:close))))))
 
 (fn start-efm [bufnr cb]
   (mod-invoke :fsouza.lsp.servers :start

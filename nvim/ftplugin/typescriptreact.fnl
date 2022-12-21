@@ -1,5 +1,3 @@
 (import-macros {: mod-invoke} :helpers)
 
-(mod-invoke :fsouza.lsp.servers :start
-            {:config {:name :typescript-language-server
-                      :cmd [:typescript-language-server :--stdio]}})
+(mod-invoke :fsouza.lsp.servers.efm-ts :start :typescriptreact)
