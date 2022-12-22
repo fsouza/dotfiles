@@ -5,4 +5,4 @@
 (fn get-cache-cmd [cmd]
   (get-cache-path :bin cmd))
 
-{: get-cache-cmd : if-bin}
+{: get-cache-cmd}
