@@ -16,6 +16,7 @@ from dataclasses import dataclass
 from dataclasses import field
 from pathlib import Path
 from typing import NotRequired
+from typing import TypeAlias
 from typing import TypedDict
 
 import yaml
@@ -45,6 +46,13 @@ class Linter:
 
     def __hash__(self) -> int:
         return hash(self.lintCommand)
+
+
+LinterFactory: TypeAlias = Callable[
+    [Sequence[str]],
+    Awaitable[tuple[Linter, Formatter]],
+]
+FormatterFactory: TypeAlias = Callable[[Sequence[str]], Awaitable[Formatter]]
 
 
 class PrecommitRepo(TypedDict):
@@ -85,11 +93,7 @@ def from_precommit(
     file: Path,
 ) -> Iterable[Awaitable[Formatter | tuple[Linter, Formatter]]]:
     pc_repos = read_precommit_config(file)
-    repo_mapping: Mapping[
-        str,
-        Callable[[Sequence[str]], Awaitable[tuple[Linter, Formatter]]]
-        | Callable[[Sequence[str]], Awaitable[Formatter]],
-    ] = {
+    repo_mapping: Mapping[str, LinterFactory | FormatterFactory] = {
         "https://github.com/pycqa/flake8": get_flake8,
         "https://github.com/pycqa/autoflake": get_autoflake,
         "https://github.com/myint/autoflake": get_autoflake,
