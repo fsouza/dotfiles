@@ -146,8 +146,8 @@
         (mod-invoke :fzf-lua.actions :ensure_insert_mode)))))
 
 (fn git-repos [cwd cd run-fzf]
-  (let [run-fzf (if-nil run-fzf true)
-        cd (if-nil cd true)
+  (let [run-fzf (or run-fzf true)
+        cd (or cd true)
         prompt "Git repos："
         cwd (if-nil cwd (vim.loop.cwd))
         fzf-lua (fzf-lua)

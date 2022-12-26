@@ -68,7 +68,7 @@
                                   :referencesProvider
                                   :hoverProvider
                                   :typeDefinitionProvider]}
-        caps (if-nil (. per-server-caps client.name) [])]
+        caps (or (. per-server-caps client.name) [])]
     (each [_ cap (ipairs caps)]
       (tset client.server_capabilities cap nil))))
 

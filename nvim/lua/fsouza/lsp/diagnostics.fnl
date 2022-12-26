@@ -1,4 +1,4 @@
-(import-macros {: mod-invoke : if-nil} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (var n-diag-per-buf {})
 
@@ -21,13 +21,13 @@
 
 (fn on-DiagnosticChanged []
   (set n-diag-per-buf (accumulate [acc {} _ {: bufnr} (ipairs (vim.diagnostic.get))]
-                        (let [curr (if-nil (. acc bufnr) 0)]
+                        (let [curr (or (. acc bufnr) 0)]
                           (tset acc bufnr (+ curr 1))
                           acc))))
 
 (fn ruler []
   (let [bufnr (vim.api.nvim_get_current_buf)
-        count (if-nil (. n-diag-per-buf bufnr) 0)]
+        count (or (. n-diag-per-buf bufnr) 0)]
     (if (= count 0) "    " (string.format "D:%02d" count))))
 
 (fn on-attach []

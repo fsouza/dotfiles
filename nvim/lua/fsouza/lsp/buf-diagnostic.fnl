@@ -8,7 +8,7 @@
 
 (fn get-filters [client-name]
   (if client-name
-      (if-nil (. filters client-name) [])))
+      (or (. filters client-name) [])))
 
 (fn register-filter [client-name f]
   (let [client-filters (get-filters client-name)]
@@ -52,7 +52,7 @@
         (handler err result context ...)))))
 
 (fn make-debounced-handler [bufnr debouncer-key]
-  (let [interval-ms (if-nil vim.b.lsp_diagnostic_debouncing_ms 200)
+  (let [interval-ms (or vim.b.lsp_diagnostic_debouncing_ms 200)
         handler (mod-invoke :fsouza.lib.debounce :debounce interval-ms
                             (vim.schedule_wrap (make-handler)))]
     (tset debouncers debouncer-key handler)

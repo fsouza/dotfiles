@@ -13,8 +13,8 @@
                                               :analysis {:autoImportCompletions true
                                                          :autoSearchPaths true
                                                          :diagnosticMode :workspace
-                                                         :typeCheckingMode (if-nil vim.g.pyright_type_checking_mode
-                                                                                   :basic)
+                                                         :typeCheckingMode (or vim.g.pyright_type_checking_mode
+                                                                               :basic)
                                                          :useLibraryCodeForTypes true}}}}})))
 
 (fn get-python-tools [cb]

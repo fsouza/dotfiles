@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
+(import-macros {: vim-schedule : mod-invoke} :helpers)
 
 ; used to store information about ongoing completion, gets reset everytime we
 ; exit "completion mode".
@@ -16,7 +16,7 @@
 (fn item-documentation [item]
   (match (type item.documentation)
     :table item.documentation
-    _ {:kind :plaintext :value (vim.trim (if-nil item.documentation ""))}))
+    _ {:kind :plaintext :value (vim.trim (or item.documentation ""))}))
 
 (fn popup-contents [item]
   (let [item-key (vim.inspect item)
@@ -24,7 +24,7 @@
     (if docs
         docs
         (let [doc-lines []
-              detail (if-nil (?. item :detail) "")
+              detail (or (?. item :detail) "")
               detail (vim.trim detail)
               documentation (item-documentation item)]
           (when (not= detail "")
@@ -101,7 +101,7 @@
       (close)))
 
 (fn on-CompleteChanged [bufnr]
-  (let [user-data (if-nil (?. vim :v :event :completed_item :user_data) {})]
+  (let [user-data (or (?. vim :v :event :completed_item :user_data) {})]
     (vim-schedule (do-CompleteChanged bufnr user-data))))
 
 (fn do-InsertLeave [bufnr]

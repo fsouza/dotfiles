@@ -1,4 +1,4 @@
-(import-macros {: if-nil : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 (import-macros {: get-cache-cmd} :lsp-helpers)
 
 (fn start-efm [bufnr cb]
@@ -29,7 +29,7 @@
       (when client
         (var changed false)
         (let [settings client.config.settings
-              current-tools (if-nil (?. settings :languages language) [])]
+              current-tools (or (?. settings :languages language) [])]
           (each [_ tool (ipairs tools)]
             (when (should-add current-tools tool)
               (set changed true)

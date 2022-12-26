@@ -1,4 +1,4 @@
-(import-macros {: mod-invoke : if-nil} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (fn handle-action [action cb winid]
   (let [[index _] (vim.api.nvim_win_get_cursor 0)]
@@ -28,7 +28,7 @@
     (vim.keymap.set :n :<c-p> :<up> {:remap false :buffer bufnr})))
 
 (lambda ui-select [items opts cb]
-  (let [format-item (if-nil (?. opts :format_item) tostring)
+  (let [format-item (or (?. opts :format_item) tostring)
         lines (icollect [_ item (ipairs items)]
                 (format-item item))]
     (open lines #(if $1

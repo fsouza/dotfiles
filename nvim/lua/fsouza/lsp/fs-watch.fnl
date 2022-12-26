@@ -41,7 +41,7 @@
 
 (fn start-notifier [interval-ms]
   (var client-notifications {})
-  (let [interval-ms (if-nil interval-ms 200)
+  (let [interval-ms (or interval-ms 200)
         timer (vim.loop.new_timer)]
     (fn notify [client-id reg-id changes]
       (let [client (vim.lsp.get_client_by_id client-id)]
@@ -137,8 +137,7 @@
     entry))
 
 (fn workspace-folders [client]
-  (icollect [_ {: name} (ipairs (if-nil (?. client :config :workspace_folders)
-                                        []))]
+  (icollect [_ {: name} (ipairs (or (?. client :config :workspace_folders) []))]
     name))
 
 (fn map-watchers [client watchers]
@@ -182,7 +181,7 @@
       (each [_ pat (ipairs pats)]
         (let [pat (glob.strip-special pat)
               folder (find-best-folder pat)
-              watchers (if-nil (. folders folder) [])]
+              watchers (or (. folders folder) [])]
           (table.insert watchers watcher)
           (tset folders folder watchers))))
     folders))
@@ -207,7 +206,7 @@
                                    : pattern
                                    : client-id
                                    :glob-pattern watcher.globPattern
-                                   :kind (if-nil watcher.kind 7)})
+                                   :kind (or watcher.kind 7)})
                     (error (string.format "error compiling glob from server: %s"
                                           pattern)))))
             (tset state folder (dedupe-watchers entry))))))))

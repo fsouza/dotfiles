@@ -1,4 +1,4 @@
-(import-macros {: if-nil : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (local ignore-install [:phpdoc :markdown])
 
@@ -6,7 +6,7 @@
   (if (vim.tbl_contains ignore-install lang) []
       (let [parsers (require :nvim-treesitter.parsers)
             obj (. parsers.list lang)]
-        (vim.tbl_flatten [(if-nil obj.filetype lang)] (if-nil obj.used_by [])))))
+        (vim.tbl_flatten [(or obj.filetype lang)] (or obj.used_by [])))))
 
 (fn get-file-types []
   (let [parsers-mod (require :nvim-treesitter.parsers)

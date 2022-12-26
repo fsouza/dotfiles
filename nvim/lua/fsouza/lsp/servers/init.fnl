@@ -22,7 +22,7 @@
         (cwd-if-not-home))))
 
 (fn disabled-servers []
-  (-> :DISABLED_LSPS (vim.loop.os_getenv) (if-nil "")
+  (-> :DISABLED_LSPS (vim.loop.os_getenv) (or "")
       (vim.split "\n" {:plain true :trimempty true})))
 
 (macro should-start [bufnr name]
@@ -41,7 +41,7 @@
       (vim.tbl_extend :force defaults opts))))
 
 (fn start [{: config : find-root-dir : bufnr : cb}]
-  (let [find-root-dir (if-nil find-root-dir cwd-if-not-home)
+  (let [find-root-dir (or find-root-dir cwd-if-not-home)
         bufnr (if-nil bufnr (vim.api.nvim_get_current_buf))
         exec (?. config :cmd 1)
         name config.name
@@ -52,8 +52,8 @@
       (with-executable exec
                        #(do
                           (tset config.cmd 1 $1)
-                          (vim-schedule (let [client-id (vim.lsp.start config
-                                                                       {: bufnr})]
-                                          (cb client-id))))))))
+                          (vim-schedule (->> {: bufnr}
+                                             (vim.lsp.start config)
+                                             (cb))))))))
 
 {: start : patterns-with-fallback}

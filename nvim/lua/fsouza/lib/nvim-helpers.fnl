@@ -1,4 +1,4 @@
-(import-macros {: if-nil : max-col : mod-invoke} :helpers)
+(import-macros {: max-col : mod-invoke} :helpers)
 
 (fn wrap-callback [cb]
   (if cb
@@ -40,8 +40,7 @@
     (let [line-offset (- (vim.api.nvim_buf_line_count bufnr) orig-nlines)
           lineno (+ orig-lineno line-offset)
           [new-line] (vim.api.nvim_buf_get_lines bufnr (- lineno 1) lineno true)
-          col-offset (- (string.len (if-nil new-line ""))
-                        (string.len orig-line))]
+          col-offset (- (string.len (or new-line "")) (string.len orig-line))]
       (vim.api.nvim_win_set_cursor winid
                                    [(math.max lineno 1)
                                     (math.min (math.max 0

@@ -1,5 +1,3 @@
-(import-macros {: if-nil} :helpers)
-
 (fn find-other [win-var-identifier]
   (let [winids (icollect [_ winid (ipairs (vim.api.nvim_list_wins))]
                  (when (pcall vim.api.nvim_win_get_var winid win-var-identifier)
@@ -48,19 +46,19 @@
          : update-if-exists} opts
         longest (* 2 (accumulate [longest 0 _ line (ipairs lines)]
                        (math.max longest (length line))))
-        min-width (if-nil min-width 50)
-        max-width (if-nil max-width (* 3 min-width))
+        min-width (or min-width 50)
+        max-width (or max-width (* 3 min-width))
         win-var-identifier (string.format "fsouza__popup-%s" type-name)
         width (math.min (math.max longest min-width) max-width)
         height (length lines)
         col (if opts.right-col
                 (- opts.right-col width)
-                (if-nil opts.col 0))
-        win-opts {:relative (if-nil opts.relative :cursor)
+                (or opts.col 0))
+        win-opts {:relative (or opts.relative :cursor)
                   : width
                   : height
                   : col
-                  :row (if-nil opts.row 0)
+                  :row (or opts.row 0)
                   :style :minimal}]
     (let [other (find-other win-var-identifier)]
       (if other

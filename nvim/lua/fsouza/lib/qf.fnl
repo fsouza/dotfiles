@@ -22,7 +22,7 @@
       (parse-line line map))))
 
 (fn set-from-lines [lines opts]
-  (let [opts (if-nil opts {})
+  (let [opts (or opts {})
         list (load-from-lines lines opts.map)]
     (vim.fn.setqflist list)
     (when opts.open

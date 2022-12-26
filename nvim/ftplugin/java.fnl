@@ -1,4 +1,4 @@
-(import-macros {: mod-invoke : if-nil : vim-schedule} :helpers)
+(import-macros {: mod-invoke : vim-schedule} :helpers)
 
 (fn find-java-executable [java-version cb]
   (mod-invoke :fsouza.lib.java :find-java-home java-version
@@ -13,7 +13,7 @@
     (fn process-dir [dir]
       (when dir
         (vim.loop.fs_readdir dir
-                             #(let [entries (if-nil $2 [])]
+                             #(let [entries (or $2 [])]
                                 (each [_ entry (ipairs entries)]
                                   (when (vim.startswith entry.name
                                                         :org.eclipse.equinox.launcher_)
