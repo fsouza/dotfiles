@@ -26,7 +26,7 @@
       (if (not= result.exit-status 0)
           (error result.stderr)
           (->> result.stdout
-               (vim.fn.json_decode)
+               (vim.json.decode)
                (cb))))
 
     (mod-invoke :fsouza.lib.cmd :run py3 {:args [gen-python-tools]} nil
