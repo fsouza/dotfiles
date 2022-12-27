@@ -3,7 +3,7 @@ local path = require("fsouza.pl.path")
 
 describe("with-lock", function()
   local with_lock = lock["with-lock"]
-  local lockfile = "lockfile1"
+  local lockname = "lockfile1"
   local dir = path.join("/tmp", "a")
 
   before_each(function()
@@ -23,7 +23,7 @@ describe("with-lock", function()
     local locks = {}
 
     for _ = 1, 10 do
-      with_lock(lockfile, function()
+      with_lock(lockname, function()
         table.insert(locks, true)
       end)
     end
@@ -39,7 +39,7 @@ describe("with-lock", function()
   it("should auto-unlock on VimLeavePre", function()
     local lock_count = 0
 
-    with_lock(lockfile, function()
+    with_lock(lockname, function()
       lock_count = lock_count + 1
     end)
 
@@ -51,7 +51,7 @@ describe("with-lock", function()
 
     vim.api.nvim_exec_autocmds({ "VimLeavePre" }, {})
     vim.defer_fn(function()
-      with_lock(lockfile, function()
+      with_lock(lockname, function()
         lock_count = lock_count + 1
       end)
     end, 250)
@@ -65,7 +65,7 @@ end)
 
 describe("unlock", function()
   local unlock = lock["unlock"]
-  local lockfile = "lockfile1"
+  local lockname = "lockfile1"
   local dir = path.join("/tmp", "a")
 
   before_each(function()
@@ -81,14 +81,16 @@ describe("unlock", function()
     vim.fn.system("rm -rf " .. vim.fn.shellescape(dir))
   end)
 
-  it("only one should succeed", function()
+  it("can lock again after unlocking", function()
     local lock_count = 0
 
-    lock["with-lock"](lockfile, function()
+    lock["with-lock"](lockname, function()
       lock_count = lock_count + 1
-      unlock(lockfile)
-      lock["with-lock"](lockfile, function()
-        lock_count = lock_count + 1
+      vim.schedule(function()
+        unlock(lockname)
+        lock["with-lock"](lockname, function()
+          lock_count = lock_count + 1
+        end)
       end)
     end)
 
