@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
+(import-macros {: vim-schedule : mod-invoke} :helpers)
 
 (local mapping-per-buf {})
 

@@ -1,4 +1,4 @@
-(import-macros {: if-nil : mod-invoke : max-col} :helpers)
+(import-macros {: mod-invoke : max-col} :helpers)
 
 (fn do-action [client action resolved]
   (if (or action.edit (= (type action.command) :table))
@@ -27,8 +27,8 @@
     (handle-actions actions client)))
 
 (fn range-code-action [context start-pos end-pos cb]
-  (let [context (if-nil context
-                        {:diagnostics (vim.lsp.diagnostic.get_line_diagnostics)})
+  (let [context (or context
+                    {:diagnostics (vim.lsp.diagnostic.get_line_diagnostics)})
         params (vim.lsp.util.make_given_range_params start-pos end-pos)]
     (tset params :context context)
     (vim.lsp.buf_request 0 :textDocument/codeAction params cb)))

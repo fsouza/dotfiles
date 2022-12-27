@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : mod-invoke : if-nil} :helpers)
+(import-macros {: vim-schedule : mod-invoke } :helpers)
 
 (local helpers (require :fsouza.lib.nvim-helpers))
 

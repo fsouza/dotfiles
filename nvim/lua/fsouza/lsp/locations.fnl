@@ -36,20 +36,20 @@
       (tset loc :range loc.targetRange)))
   loc)
 
-(fn ts-range [loc]
+(fn ts-range [current-buf loc]
   (let [loc (normalize-loc loc)]
     (if (not loc.uri)
         loc
         (let [parsers (require :nvim-treesitter.parsers)
-              lang (parsers.ft_to_lang vim.bo.filetype)]
+              filetype (. vim :bo current-buf :filetype)
+              lang (parsers.ft_to_lang filetype)]
           (if (or (not lang) (= lang "") (not (parsers.has_parser lang)))
               loc
               (let [bufnr (vim.uri_to_bufnr loc.uri)
                     start-pos loc.range.start
                     end-pos loc.range.end]
                 (vim.api.nvim_set_option_value :buflisted true {:buf bufnr})
-                (vim.api.nvim_set_option_value :filetype vim.bo.filetype
-                                               {:buf bufnr})
+                (vim.api.nvim_set_option_value :filetype filetype {:buf bufnr})
                 (let [parser (vim.treesitter.get_parser bufnr lang)
                       (_ t) (next (parser:trees))]
                   (if (not t)
@@ -70,9 +70,9 @@
                             (tset loc.range.end :character ec)))
                         loc)))))))))
 
-(fn peek-location-callback [_ result]
+(fn peek-location-callback [_ result context]
   (when (and result (not (vim.tbl_isempty result)))
-    (let [loc (ts-range (. result 1))]
+    (let [loc (ts-range context.bufnr (. result 1))]
       (vim.lsp.util.preview_location loc))))
 
 (macro make-lsp-loc-action [method]

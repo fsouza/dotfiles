@@ -1,4 +1,4 @@
-(import-macros {: if-nil : mod-invoke : vim-schedule} :helpers)
+(import-macros {: mod-invoke : vim-schedule} :helpers)
 
 (local watch-kind {:Create 1 :Change 2 :Delete 4})
 
@@ -59,8 +59,8 @@
     (vim.loop.timer_start timer interval-ms interval-ms timer-cb)
     (fn [client-id reg-id uri type]
       (let [reg-key (reg-key reg-id client-id)
-            client-notification (if-nil (. client-notifications reg-key)
-                                        {: client-id : reg-id :changes {}})]
+            client-notification (or (. client-notifications reg-key)
+                                    {: client-id : reg-id :changes {}})]
         (tset client-notification.changes uri type)
         (tset client-notifications reg-key client-notification)))))
 
@@ -175,7 +175,7 @@
                 (find-existing (path.dirname folder))
                 folder)))
 
-        (if-nil (s) (find-existing folder))))
+        (or (s) (find-existing folder))))
 
     (each [_ {: pats : watcher} (ipairs abs-folders)]
       (each [_ pat (ipairs pats)]
@@ -195,9 +195,9 @@
         (tset registrations reg-key true)
         (each [folder watchers (pairs folder-map)]
           (let [glob (require :fsouza.lib.glob)
-                entry (if-nil (. state folder)
-                              {:watchers []
-                               :event (make-event folder notify-server)})]
+                entry (or (. state folder)
+                          {:watchers []
+                           :event (make-event folder notify-server)})]
             (each [_ watcher (ipairs watchers)]
               (let [(ok pattern) (glob.compile watcher.globPattern)]
                 (if ok

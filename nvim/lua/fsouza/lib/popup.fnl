@@ -1,6 +1,6 @@
 (fn find-other [win-var-identifier]
   (let [winids (icollect [_ winid (ipairs (vim.api.nvim_list_wins))]
-                 (when (pcall vim.api.nvim_win_get_var winid win-var-identifier)
+                 (when (. vim :w winid win-var-identifier)
                    winid))]
     (assert (<= (length winids) 1))
     (. winids 1)))

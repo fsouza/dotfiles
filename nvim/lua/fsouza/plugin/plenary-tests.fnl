@@ -1,4 +1,4 @@
-(import-macros {: mod-invoke : if-nil} :helpers)
+(import-macros {: mod-invoke } :helpers)
 
 (macro test-dir []
   `(mod-invoke :fsouza.pl.path :join config-dir :tests))

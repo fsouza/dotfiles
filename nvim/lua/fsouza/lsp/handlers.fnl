@@ -1,12 +1,12 @@
-(import-macros {: if-nil : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (local non-focusable-handlers {})
 
 (fn popup-callback [err result context ...]
   (let [method context.method
-        handler (if-nil (. non-focusable-handlers method)
-                        (vim.lsp.with (. vim.lsp.handlers method)
-                                      {:focusable false}))]
+        handler (or (. non-focusable-handlers method)
+                    (vim.lsp.with (. vim.lsp.handlers method)
+                                  {:focusable false}))]
     (tset non-focusable-handlers method handler)
     (handler err result context ...)))
 

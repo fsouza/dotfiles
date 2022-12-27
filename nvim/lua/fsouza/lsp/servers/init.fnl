@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
+(import-macros {: vim-schedule : mod-invoke} :helpers)
 
 (fn with-executable [exec cb]
   (when exec
@@ -42,11 +42,11 @@
 
 (fn start [{: config : find-root-dir : bufnr : cb}]
   (let [find-root-dir (or find-root-dir cwd-if-not-home)
-        bufnr (if-nil bufnr (vim.api.nvim_get_current_buf))
+        bufnr (or bufnr (vim.api.nvim_get_current_buf))
         exec (?. config :cmd 1)
         name config.name
         config (with-defaults config)
-        cb (if-nil cb #nil)]
+        cb (or cb #nil)]
     (when (should-start bufnr name)
       (tset config :root_dir (find-root-dir))
       (with-executable exec

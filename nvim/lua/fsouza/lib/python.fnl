@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
+(import-macros {: vim-schedule : mod-invoke} :helpers)
 
 (fn set-from-env-var [cb]
   (cb (os.getenv :VIRTUAL_ENV)))

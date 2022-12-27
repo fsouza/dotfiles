@@ -1,4 +1,4 @@
-(import-macros {: if-nil : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (fn run [bufname]
   (let [dir (mod-invoke :fsouza.pl.path :dirname bufname)]

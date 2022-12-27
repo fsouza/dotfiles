@@ -1,5 +1,3 @@
-(import-macros {: if-nil} :helpers)
-
 (fn from-shebang [path bufnr]
   (let [seq (require :pl.seq)
         pattern-mapping {:python :python
@@ -32,7 +30,7 @@
                        :fnl :fennel
                        :thrift :thrift
                        :fsproj :fsharp_project
-                       :sh #(if-nil (from-shebang $...) (from-current-shell))
+                       :sh #(or (from-shebang $...) (from-current-shell))
                        "" from-shebang}
            :filename {:Tiltfile :bzl
                       :go.mod :gomod

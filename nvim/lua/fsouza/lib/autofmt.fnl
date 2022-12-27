@@ -1,10 +1,8 @@
-(import-macros {: if-nil} :helpers)
-
 (lambda is-enabled [bufnr]
-  (let [(defined buf-autoformat) (pcall vim.api.nvim_buf_get_var bufnr
-                                        :autoformat)
-        buf-autoformat (if defined buf-autoformat nil)]
-    (if-nil buf-autoformat vim.g.autoformat true)))
+  (let [buf-autoformat (. vim :b bufnr :autoformat)]
+    (if (not= buf-autoformat nil) buf-autoformat
+        (not= vim.g.autoformat nil) vim.g.autoformat
+        true)))
 
 (lambda toggle [ns]
   (if (= (. ns :autoformat) false)

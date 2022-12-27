@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
+(import-macros {: vim-schedule : mod-invoke} :helpers)
 
 (local setup-symbols-outline
        (mod-invoke :fsouza.lib.nvim-helpers :once

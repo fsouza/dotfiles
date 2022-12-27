@@ -1,9 +1,9 @@
-(import-macros {: mod-invoke : if-nil : vim-schedule} :helpers)
+(import-macros {: mod-invoke : vim-schedule} :helpers)
 
 (fn start-pyright [bufnr python-interpreter]
   (let [path (require :fsouza.pl.path)
-        python-interpreter (if-nil python-interpreter
-                                   (path.join cache-dir :venv :bin :python3))]
+        python-interpreter (or python-interpreter
+                               (path.join cache-dir :venv :bin :python3))]
     (mod-invoke :fsouza.lsp.servers :start
                 {: bufnr
                  :config {:name :pyright

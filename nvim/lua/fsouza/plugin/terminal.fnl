@@ -1,4 +1,4 @@
-(import-macros {: if-nil : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 ;; maps number to a terminal, where a terminal is a table with the following
 ;; shape: { bufnr: ..., job-id: ... }

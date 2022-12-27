@@ -1,4 +1,4 @@
-(import-macros {: if-nil : mod-invoke : max-col} :helpers)
+(import-macros {: mod-invoke : max-col} :helpers)
 
 (local langservers-org-imports-set {:gopls true :jdtls true})
 
@@ -26,9 +26,9 @@
     {:textDocument {:uri (vim.uri_from_bufnr bufnr)} :options opts}))
 
 (fn fmt [client bufnr cb]
-  (let [client (if-nil client
-                       (mod-invoke :fsouza.lsp.clients :get-client bufnr
-                                   :documentFormattingProvider))]
+  (let [client (or client
+                   (mod-invoke :fsouza.lsp.clients :get-client bufnr
+                               :documentFormattingProvider))]
     (when client
       (let [(_ req-id) (client.request :textDocument/formatting
                                        (formatting-params bufnr) cb bufnr)]

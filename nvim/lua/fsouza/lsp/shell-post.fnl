@@ -1,4 +1,4 @@
-(import-macros {: if-nil : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (fn augroup-name [bufnr]
   (.. :fsouza__lsp_shell-post_ bufnr))

@@ -1,4 +1,4 @@
-(import-macros {: if-nil : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (local debouncers {})
 
@@ -52,7 +52,7 @@
         (handler err result context ...)))))
 
 (fn make-debounced-handler [bufnr debouncer-key]
-  (let [interval-ms (or vim.b.lsp_diagnostic_debouncing_ms 200)
+  (let [interval-ms (or (. vim :b bufnr :lsp_diagnostic_debouncing_ms) 200)
         handler (mod-invoke :fsouza.lib.debounce :debounce interval-ms
                             (vim.schedule_wrap (make-handler)))]
     (tset debouncers debouncer-key handler)
@@ -69,8 +69,8 @@
       (when bufnr
         (tset context :bufnr bufnr)
         (let [debouncer-key (string.format "%d/%s" context.client_id uri)
-              handler (if-nil (. debouncers debouncer-key)
-                              (make-debounced-handler bufnr debouncer-key))]
+              handler (or (. debouncers debouncer-key)
+                          (make-debounced-handler bufnr debouncer-key))]
           (handler.call err result context ...))))))
 
 {: buf-clear-all-diagnostics

@@ -1,4 +1,4 @@
-(import-macros {: if-nil : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (fn should-qf [selected]
   (let [n-selected (length selected)]
@@ -120,7 +120,7 @@
     (core.fzf_exec contents opts)))
 
 (fn grep [rg-opts search]
-  (let [search (if-nil search (vim.fn.input "rg："))
+  (let [search (or search (vim.fn.input "rg："))
         fzf-lua (fzf-lua)]
     (when (not= search "")
       (fzf-lua.grep {: search
@@ -149,7 +149,7 @@
   (let [run-fzf (or run-fzf true)
         cd (or cd true)
         prompt "Git repos："
-        cwd (if-nil cwd (vim.loop.cwd))
+        cwd (or cwd (vim.loop.cwd))
         fzf-lua (fzf-lua)
         config (require :fzf-lua.config)
         core (require :fzf-lua.core)

@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : if-nil : mod-invoke} :helpers)
+(import-macros {: vim-schedule : mod-invoke} :helpers)
 
 (fn parse-output [data]
   (collect [_ line (ipairs (vim.split data "\n"))]

@@ -1,11 +1,11 @@
-(import-macros {: if-nil : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (fn rename []
   (let [bufnr (vim.api.nvim_get_current_buf)
         client (mod-invoke :fsouza.lsp.clients :get-client bufnr
                            :renameProvider)]
     (fn rename [placeholder]
-      (let [placeholder (if-nil placeholder (vim.fn.expand :<cword>))
+      (let [placeholder (or placeholder (vim.fn.expand :<cword>))
             new-name (vim.fn.input "New name: " placeholder)
             params (vim.lsp.util.make_position_params)]
         (when (and new-name (not= new-name ""))

@@ -1,4 +1,4 @@
-(import-macros {: if-nil : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (fn parse-line [line map]
   (let [col-pattern "^([a-zA-Z0-9/][^:]+):(%d+):(%d+):(.+)"
@@ -17,7 +17,7 @@
               nil)))))
 
 (fn load-from-lines [lines map]
-  (let [map (if-nil map #$1)]
+  (let [map (or map #$1)]
     (icollect [_ line (ipairs lines)]
       (parse-line line map))))
 

@@ -1,4 +1,4 @@
-(import-macros {: if-nil : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (local pl-path (require :pl.path))
 
@@ -29,7 +29,7 @@
                               _ (cb $1))))))
 
 (fn path-entries [path]
-  (let [path (if-nil path (vim.loop.os_getenv :PATH))]
+  (let [path (or path (vim.loop.os_getenv :PATH))]
     (vim.split path ":" {:trimempty true :plain true})))
 
 (fn async-which [exec cb path]

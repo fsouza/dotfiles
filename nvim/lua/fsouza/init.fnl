@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : mod-invoke : if-nil} :helpers)
+(import-macros {: vim-schedule : mod-invoke } :helpers)
 
 (macro hererocks []
   `(let [lua-version# (string.gsub _G._VERSION "Lua " "")
