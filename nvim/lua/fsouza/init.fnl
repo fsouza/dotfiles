@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : mod-invoke } :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (macro hererocks []
   `(let [lua-version# (string.gsub _G._VERSION "Lua " "")
@@ -145,8 +145,9 @@
       (hererocks)
       (add-pkgs-opt-to-path)
       (initial-mappings)
-      (vim-schedule (set-global-options) (set-global-mappings)
-                    (override-ui-functions))
+      (set-global-options)
+      (set-global-mappings)
+      (override-ui-functions)
       (set-ui-options)
       (set-neovim-global-vars)
       (if vim.env.BOOTSTRAP_PACKER

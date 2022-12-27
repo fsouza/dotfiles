@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (fn with-executable [exec cb]
   (when exec
@@ -52,8 +52,8 @@
       (with-executable exec
                        #(do
                           (tset config.cmd 1 $1)
-                          (vim-schedule (->> {: bufnr}
-                                             (vim.lsp.start config)
-                                             (cb))))))))
+                          (vim.schedule #(->> {: bufnr}
+                                              (vim.lsp.start config)
+                                              (cb))))))))
 
 {: start : patterns-with-fallback}

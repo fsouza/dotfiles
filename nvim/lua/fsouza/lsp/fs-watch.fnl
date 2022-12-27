@@ -1,4 +1,4 @@
-(import-macros {: mod-invoke : vim-schedule} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (local watch-kind {:Create 1 :Change 2 :Delete 4})
 
@@ -53,7 +53,7 @@
       (each [_ {: client-id : reg-id : changes} (pairs client-notifications)]
         (let [changes (icollect [uri type (pairs changes)]
                         {: uri : type})]
-          (vim-schedule (notify client-id reg-id changes))))
+          (vim.schedule #(notify client-id reg-id changes))))
       (set client-notifications {}))
 
     (vim.loop.timer_start timer interval-ms interval-ms timer-cb)
@@ -118,7 +118,7 @@
           (each [_ {: pattern : client-id : kind : reg-id} (ipairs watchers)]
             (when (or (glob.match pattern filename)
                       (glob.match pattern filepath))
-              (vim-schedule (notify client-id reg-id filepath events kind)))))))))
+              (vim.schedule #(notify client-id reg-id filepath events kind)))))))))
 
 (fn make-event [root-dir notify-server]
   (let [event (vim.loop.new_fs_event)

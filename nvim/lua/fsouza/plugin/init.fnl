@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : mod-invoke } :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (local helpers (require :fsouza.lib.nvim-helpers))
 
@@ -96,14 +96,14 @@
 
 (fn setup-editorconfig []
   (mod-invoke :fsouza.plugin.editorconfig :enable)
-  (vim-schedule (vim.api.nvim_create_user_command :EnableEditorConfig
-                                                  #(mod-invoke :fsouza.plugin.editorconfig
-                                                               :enable)
-                                                  {:force true})
-                (vim.api.nvim_create_user_command :DisableEditorConfig
-                                                  #(mod-invoke :fsouza.plugin.editorconfig
-                                                               :disable)
-                                                  {:force true})))
+  (vim.api.nvim_create_user_command :EnableEditorConfig
+                                    #(mod-invoke :fsouza.plugin.editorconfig
+                                                 :enable)
+                                    {:force true})
+  (vim.api.nvim_create_user_command :DisableEditorConfig
+                                    #(mod-invoke :fsouza.plugin.editorconfig
+                                                 :disable)
+                                    {:force true}))
 
 (fn setup-shortcuts []
   (let [shortcut (require :fsouza.plugin.shortcut)
@@ -166,29 +166,29 @@
   (schedule setup-editorconfig)
   (schedule setup-git-messenger)
   (schedule setup-hlyank)
-  (vim-schedule (mod-invoke :fsouza.plugin.mkdir :setup))
+  (schedule #(mod-invoke :fsouza.plugin.mkdir :setup))
   (schedule setup-autofmt-commands)
   (schedule setup-word-replace)
   (schedule setup-spell)
   (schedule setup-shortcuts)
   (schedule setup-notif)
-  (vim-schedule (mod-invoke :colorizer :setup
-                            [:css
-                             :fennel
-                             :javascript
-                             :html
-                             :lua
-                             :htmldjango
-                             :tmux
-                             :yaml]))
+  (schedule #(mod-invoke :colorizer :setup
+                         [:css
+                          :fennel
+                          :javascript
+                          :html
+                          :lua
+                          :htmldjango
+                          :tmux
+                          :yaml]))
   (schedule setup-terminal-mappings)
   (schedule setup-lsp)
   (schedule setup-treesitter)
-  (vim-schedule (mod-invoke :fsouza.plugin.fidget :setup))
-  (vim-schedule (mod-invoke :fsouza.plugin.rg-complete :setup :<c-x><c-n>))
-  (vim-schedule (mod-invoke :fsouza.plugin.auto-delete :setup))
+  (schedule #(mod-invoke :fsouza.plugin.fidget :setup))
+  (schedule #(mod-invoke :fsouza.plugin.rg-complete :setup :<c-x><c-n>))
+  (schedule #(mod-invoke :fsouza.plugin.auto-delete :setup))
   (schedule setup-comment-nvim)
   (schedule setup-fuzzy-mappings)
-  (vim-schedule (mod-invoke :fsouza.plugin.fnl-autocompile :setup))
-  (vim-schedule (vim.cmd.doautoall :FileType))
-  (vim-schedule (vim.api.nvim_exec_autocmds [:User] {:pattern :PluginReady})))
+  (schedule #(mod-invoke :fsouza.plugin.fnl-autocompile :setup))
+  (schedule #(vim.cmd.doautoall :FileType))
+  (schedule #(vim.api.nvim_exec_autocmds [:User] {:pattern :PluginReady})))

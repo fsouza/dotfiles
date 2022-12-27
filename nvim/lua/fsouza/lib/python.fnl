@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (fn set-from-env-var [cb]
   (cb (os.getenv :VIRTUAL_ENV)))
@@ -56,8 +56,8 @@
     (detect-virtualenv (fn [virtualenv]
                          (if virtualenv
                              (do
-                               (vim-schedule (tset vim.env :VIRTUAL_ENV
-                                                   virtualenv))
+                               (vim.schedule #(tset vim.env :VIRTUAL_ENV
+                                                    virtualenv))
                                (cb (path.join virtualenv :bin :python3)))
                              (cb nil))))))
 

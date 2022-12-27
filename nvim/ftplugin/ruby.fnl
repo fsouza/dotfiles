@@ -1,4 +1,4 @@
-(import-macros {: mod-invoke : vim-schedule} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (fn start-sorbet [bufnr]
   (mod-invoke :fsouza.lsp.servers :start
@@ -24,4 +24,4 @@
   (start-efm bufnr)
   (vim.loop.fs_stat :sorbet
                     #(when (not $1)
-                       (vim-schedule (start-sorbet bufnr)))))
+                       (vim.schedule #(start-sorbet bufnr)))))

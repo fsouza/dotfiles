@@ -1,4 +1,4 @@
-(import-macros {: mod-invoke : vim-schedule} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (fn add-to-efm [lang-id bufnr]
   (let [efm-formatters (require :fsouza.lib.efm-formatters)]
@@ -6,11 +6,11 @@
                                      (efm-formatters.get-eslintd #(let [tools $1]
                                                                     (table.insert tools
                                                                                   prettierd)
-                                                                    (vim-schedule (mod-invoke :fsouza.lsp.servers.efm
-                                                                                              :add
-                                                                                              bufnr
-                                                                                              lang-id
-                                                                                              tools))))))))
+                                                                    (vim.schedule #(mod-invoke :fsouza.lsp.servers.efm
+                                                                                               :add
+                                                                                               bufnr
+                                                                                               lang-id
+                                                                                               tools))))))))
 
 (fn start-typescript-language-server [bufnr]
   (mod-invoke :fsouza.lsp.servers :start

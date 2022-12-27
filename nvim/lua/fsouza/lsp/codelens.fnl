@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (local mapping-per-buf {})
 
@@ -24,11 +24,11 @@
                 [{:events [:InsertLeave :BufWritePost]
                   :targets [(string.format "<buffer=%d>" bufnr)]
                   :callback vim.lsp.codelens.refresh}])
-    (vim-schedule (let [buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
-                    (buf-diagnostic.register-hook augroup-id
-                                                  vim.lsp.codelens.refresh)
-                    (vim.api.nvim_buf_attach bufnr false
-                                             {:on_detach #(on-detach bufnr)})))
+    (vim.schedule #(let [buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
+                     (buf-diagnostic.register-hook augroup-id
+                                                   vim.lsp.codelens.refresh)
+                     (vim.api.nvim_buf_attach bufnr false
+                                              {:on_detach #(on-detach bufnr)})))
     (when opts.mapping
       (vim.keymap.set :n opts.mapping vim.lsp.codelens.run
                       {:silent true :buffer bufnr}))))

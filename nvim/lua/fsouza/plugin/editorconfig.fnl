@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (fn parse-output [data]
   (collect [_ line (ipairs (vim.split data "\n"))]
@@ -67,13 +67,13 @@
         :insert_final_line (handle-insert-final-line vim-opts v)
         :insert_final_newline (handle-insert-final-line vim-opts v)
         :indent_size (handle-indent-size vim-opts v)
-        :trim_trailing_whitespace (vim-schedule (handle-whitespaces bufnr v))))
-    (vim-schedule (when (and (vim.api.nvim_buf_is_valid bufnr)
-                             (vim.api.nvim_get_option_value :modifiable
-                                                            {:buf bufnr}))
-                    (each [option-name value (pairs vim-opts)]
-                      (vim.api.nvim_set_option_value option-name value
-                                                     {:buf bufnr}))))))
+        :trim_trailing_whitespace (vim.schedule #(handle-whitespaces bufnr v))))
+    (vim.schedule #(when (and (vim.api.nvim_buf_is_valid bufnr)
+                              (vim.api.nvim_get_option_value :modifiable
+                                                             {:buf bufnr}))
+                     (each [option-name value (pairs vim-opts)]
+                       (vim.api.nvim_set_option_value option-name value
+                                                      {:buf bufnr}))))))
 
 (fn modify-filename-if-needed [name bufnr]
   (let [ft-map {:python :.py
@@ -111,8 +111,8 @@
                     {:events [:BufNewFile :BufReadPost :BufFilePost :FileType]
                      :targets ["*"]
                      :callback #(set-config $1.buf)})
-      (vim-schedule (each [_ bufnr (ipairs (vim.api.nvim_list_bufs))]
-                      (set-config bufnr))))
+      (vim.schedule #(each [_ bufnr (ipairs (vim.api.nvim_list_bufs))]
+                       (set-config bufnr))))
     (mod-invoke :fsouza.lib.nvim-helpers :augroup :editorconfig commands)))
 
 {:enable #(set-enabled true) :disable #(set-enabled false)}

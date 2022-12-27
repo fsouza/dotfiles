@@ -1,11 +1,11 @@
 (local callbacks {})
 
-(fn register [bufnr cb]
+(lambda register [bufnr cb]
   (let [buf-cbs (or (. callbacks bufnr) [])]
     (table.insert buf-cbs cb)
     (tset callbacks bufnr buf-cbs)))
 
-(fn detach [bufnr]
+(lambda detach [bufnr]
   (let [buf-cbs (or (. callbacks bufnr) [])]
     (each [_ cb (ipairs buf-cbs)]
       (pcall cb bufnr)))

@@ -1,5 +1,3 @@
-(import-macros {: vim-schedule} :helpers)
-
 (fn make-debug [prefix debug-fn]
   (if (= debug-fn nil)
       #nil
@@ -54,19 +52,19 @@
         r {:abort false :finished false}
         on-exit (fn [code signal]
                   (let [code (if (and r.abort (= code 0)) -1 code)]
-                    (vim-schedule (let [errors []]
-                                    (when stdout-handler.err
-                                      (table.insert errors stdout-handler.err))
-                                    (when stderr-handler.err
-                                      (table.insert errors stderr-handler.err))
-                                    (on-finished {:exit-status code
-                                                  :aborted r.abort
-                                                  : signal
-                                                  :stdout stdout-handler.data
-                                                  :stderr stderr-handler.data
-                                                  : errors})
-                                    (tset r :finished true)
-                                    (close)))))
+                    (vim.schedule #(let [errors []]
+                                     (when stdout-handler.err
+                                       (table.insert errors stdout-handler.err))
+                                     (when stderr-handler.err
+                                       (table.insert errors stderr-handler.err))
+                                     (on-finished {:exit-status code
+                                                   :aborted r.abort
+                                                   : signal
+                                                   :stdout stdout-handler.data
+                                                   :stderr stderr-handler.data
+                                                   : errors})
+                                     (tset r :finished true)
+                                     (close)))))
         opts (vim.tbl_extend :error opts {:stdio [stdin stdout stderr]})
         (spawn-handle pid-or-err) (loop.spawn cmd opts on-exit)]
     (if spawn-handle
@@ -77,7 +75,7 @@
           (when ?input-data
             (loop.write stdin ?input-data))
           (loop.shutdown stdin))
-        (vim-schedule (on-finished {:exit-status -1 :stderr pid-or-err})))))
+        (vim.schedule #(on-finished {:exit-status -1 :stderr pid-or-err})))))
 
 (lambda start [cmd opts output-handler exit-handler]
   (fn make-handler [type]
@@ -108,6 +106,6 @@
           (loop.read_start stderr stderr-handler)
           (loop.shutdown stdin)
           pid-or-err)
-        (vim-schedule (exit-handler {:exit-status -1 :stderr pid-or-err})))))
+        (vim.schedule #(exit-handler {:exit-status -1 :stderr pid-or-err})))))
 
 {: run : start}

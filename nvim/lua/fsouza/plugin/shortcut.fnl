@@ -1,5 +1,3 @@
-(import-macros {: vim-schedule} :helpers)
-
 (fn fzf-dir [directory cd]
   (let [fuzzy (require :fsouza.plugin.fuzzy)]
     (if cd
@@ -14,9 +12,9 @@
       (vim.loop.fs_stat path
                         #(when (not $1)
                            (let [is-dir (= $2.type :directory)]
-                             (vim-schedule (if is-dir
-                                               (fzf-dir path bang)
-                                               (vim.cmd.edit path)))))))))
+                             (vim.schedule #(if is-dir
+                                                (fzf-dir path bang)
+                                                (vim.cmd.edit path)))))))))
 
 (fn register [command path]
   (vim.api.nvim_create_user_command command (make-callback path)

@@ -1,20 +1,28 @@
-(import-macros {: mod-invoke : vim-schedule} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (fn lock-file-path [name]
   (let [path (require :fsouza.pl.path)
         cwd (vim.loop.cwd)]
     (path.join cache-dir :fsouza-locks (string.sub cwd 2) name)))
 
-(lambda unlock [name]
+(macro remove-autocmd [name]
+  `(mod-invoke :fsouza.lib.nvim-helpers :reset-augroup
+               (string.format "fsouza-autounlock-%s" ,name)))
+
+(fn delete-lock-file [name]
   (let [lock-file (lock-file-path name)]
     (vim.loop.fs_unlink lock-file)))
+
+(lambda unlock [name]
+  (remove-autocmd name)
+  (delete-lock-file name))
 
 (fn setup-autocmd [name]
   (mod-invoke :fsouza.lib.nvim-helpers :augroup
               (string.format "fsouza-autounlock-%s" name)
               [{:events [:VimLeavePre]
                 :targets ["*"]
-                :callback #(unlock name)
+                :callback #(delete-lock-file name)
                 :once true}]))
 
 (lambda with-lock [name cb]
@@ -30,7 +38,7 @@
                                          #(when (= $1 nil)
                                             (vim.loop.fs_close $2
                                                                #(do
-                                                                  (vim-schedule (setup-autocmd name))
+                                                                  (vim.schedule #(setup-autocmd name))
                                                                   (cb))))))))
 
 {: with-lock : unlock}

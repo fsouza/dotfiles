@@ -1,4 +1,4 @@
-(import-macros {: mod-invoke : vim-schedule} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (fn find-java-executable [java-version cb]
   (mod-invoke :fsouza.lib.java :find-java-home java-version
@@ -49,11 +49,11 @@
                          (table.insert cmd $1)
                          (table.insert cmd :-data)
                          (table.insert cmd data-dir)
-                         (vim-schedule (mod-invoke :fsouza.lsp.servers :start
-                                                   {: bufnr
-                                                    :config {:name :jdtls
-                                                             : cmd
-                                                             : settings}})))))
+                         (vim.schedule #(mod-invoke :fsouza.lsp.servers :start
+                                                    {: bufnr
+                                                     :config {:name :jdtls
+                                                              : cmd
+                                                              : settings}})))))
 
     (find-java-executable :17 with-executable)))
 

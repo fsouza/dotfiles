@@ -1,4 +1,4 @@
-(import-macros {: vim-schedule : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 ; used to store information about ongoing completion, gets reset everytime we
 ; exit "completion mode".
@@ -86,12 +86,12 @@
 (fn render-docs [item]
   (let [docs (popup-contents item)]
     (when (> (length docs) 0)
-      (vim-schedule (show-or-update-popup docs)))))
+      (vim.schedule #(show-or-update-popup docs)))))
 
 (fn reset-state []
   (close)
   (each [req-id client (pairs state.inflight-requests)]
-    (vim-schedule (client.cancel_request req-id)))
+    (vim.schedule #(client.cancel_request req-id)))
   (tset state :inflight-requests {})
   (tset state :rendered-docs {}))
 
@@ -102,14 +102,14 @@
 
 (fn on-CompleteChanged [bufnr]
   (let [user-data (or (?. vim :v :event :completed_item :user_data) {})]
-    (vim-schedule (do-CompleteChanged bufnr user-data))))
+    (vim.schedule #(do-CompleteChanged bufnr user-data))))
 
 (fn do-InsertLeave [bufnr]
   (reset-state)
   (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup (augroup-name bufnr)))
 
 (fn on-InsertLeave [bufnr]
-  (vim-schedule (do-InsertLeave bufnr)))
+  (vim.schedule #(do-InsertLeave bufnr)))
 
 (fn on-attach [bufnr]
   (let [lsp-compl (require :lsp_compl)]
@@ -130,11 +130,9 @@
       "")
 
     (lsp-compl.attach bufnr)
-    (vim-schedule (vim.keymap.set :i :<c-x><c-o> complete
-                                  {:remap false :buffer bufnr})
-                  (vim.keymap.set :i :<cr>
-                                  #(cr-key-for-comp-info (vim.fn.complete_info))
-                                  {:remap false :buffer bufnr :expr true}))))
+    (vim.keymap.set :i :<c-x><c-o> complete {:remap false :buffer bufnr})
+    (vim.keymap.set :i :<cr> #(cr-key-for-comp-info (vim.fn.complete_info))
+                    {:remap false :buffer bufnr :expr true})))
 
 (fn on-detach [bufnr]
   (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup (augroup-name bufnr))
