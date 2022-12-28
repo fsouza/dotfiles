@@ -81,7 +81,8 @@
                 :ruby :.rb
                 :query :.scm
                 :bash :.sh
-                :zsh :.zsh}
+                :zsh :.zsh
+                :javascript :.js}
         (_ ext) (mod-invoke :fsouza.pl.path :splitext name)]
     (if (not= ext "")
         name
