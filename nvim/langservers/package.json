@@ -4,7 +4,7 @@
 	"scripts": {},
 	"license": "ISC",
 	"dependencies": {
-		"@fsouza/prettierd": "^0.22.5",
+		"@fsouza/prettierd": "^0.23.0",
 		"@typescript-eslint/typescript-estree": "^5.47.1",
 		"angular-html-parser": "^3.0.0",
 		"bash-language-server": "^4.1.3",
