@@ -1,58 +1,77 @@
-#!/bin/zsh -e
+#!/usr/bin/env python3
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
 
-os=$(uname -s)
-basedir=$(cd "$(dirname "${0}")"/.. && pwd -P)
+BASEDIR = Path(__file__).parent.parent.absolute()
+SYMLINK_SKIP = set(os.getenv("FSOUZA_BOOTSTRAP_LINK_SKIP", "").split())
 
-export FSOUZA_DOTFILES_DIR=${FSOUZA_DOTFILES_DIR:-${basedir}}
 
-local link_skip=( "${FSOUZA_BOOTSTRAP_LINK_SKIP[@]}" )
+def create_symlink(name: str, source: Path, target: Path) -> None:
+    if name not in SYMLINK_SKIP:
+        if target.exists() and not target.is_symlink():
+            target.unlink()
 
-function __link {
-	local name=${1}
-	local source=${2}
-	local target=${3}
+        if not target.is_symlink():
+            target.symlink_to(source)
 
-	if ! (($link_skip[(Ie)$name])); then
-		ln -sf "${source}" "${target}"
-	fi
-}
 
-home_files=(.zshrc .editorconfig)
-for file in "${home_files[@]}"; do
-	__link "${file}" "${basedir}"/"${file}" "${HOME}"/"${file}"
-done
+def main() -> int:
+    home = Path.home()
+    config_dir = home / ".config"
+    config_dir.mkdir(exist_ok=True)
 
-mkdir -p "${HOME}"/.config
-xdg_files=(tmux.conf alacritty.yml rgrc)
-for file in "${xdg_files[@]}"; do
-	__link "${file}" "${basedir}"/"${file}" "${HOME}"/.config/"${file}"
-done
+    home_files = [".zshrc", ".editorconfig"]
+    for file in home_files:
+        create_symlink(file, BASEDIR / file, home / file)
 
-xdg_dirs=(git fd utop tmux)
-for dir in "${xdg_dirs[@]}"; do
-	link="${HOME}"/.config/"${dir}"
-	if ! [ -L "${link}" ] && [ -d "${link}" ]; then
-		echo >&2 "${link} exists, aborting"
-		exit 2
-	fi
+    xdg_files = ["alacritty.yml", "rgrc"]
+    for file in xdg_files:
+        create_symlink(file, BASEDIR / file, config_dir / file)
 
-	if ! [ -L "${link}" ]; then
-		__link "${dir}" "${basedir}"/"${dir}" "${link}"
-	fi
-done
+    xdg_dirs = ["git", "fd", "utop", "tmux"]
+    for xdg_dir in xdg_dirs:
+        target = config_dir / xdg_dir
 
-export basedir
-if [ -f "${basedir}"/bootstrap/"${os}"-setup ]; then
-	"${basedir}"/bootstrap/"${os}"-setup
-fi
+        if target.is_dir() and not target.is_symlink():
+            sys.stderr.write(f"{target} alread exists, skipping")
+            return 2
 
-touch "${HOME}"/.zsh_sessions_disable
+        create_symlink(xdg_dir, BASEDIR / xdg_dir, target)
 
-if command -v brew &>/dev/null; then
-	brew update
-	brew bundle --no-lock --no-upgrade --file "${basedir}"/bootstrap/Brewfile
-fi
+    os_bootstrap = BASEDIR / "bootstrap" / f"{sys.platform}-setup"
+    if os_bootstrap.exists():
+        subprocess.check_call([os_bootstrap])
 
-if command -v nvim &>/dev/null; then
-	env NVIM_DEBUG=1 make -C "${basedir}"
-fi
+    (home / ".zsh_sessions_disable").touch(exist_ok=True)
+
+    if shutil.which("brew") != "":
+        subprocess.check_call(["brew", "update"])
+        subprocess.check_call(
+            [
+                "brew",
+                "bundle",
+                "--no-lock",
+                "--no-upgrade",
+                "--file",
+                BASEDIR / "bootstrap" / "Brewfile",
+            ],
+        )
+
+    if shutil.which("nvim") != "":
+        subprocess.check_call(
+            ["make", "-C", BASEDIR],
+            env={
+                **os.environ,
+                "NVIM_DEBUG": "1",
+                "FSOUZA_DOTFILES_DIR": os.getenv("FSOUZA_DOTFILES_DIR", str(BASEDIR)),
+            },
+        )
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
