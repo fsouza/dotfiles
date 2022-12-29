@@ -19,7 +19,7 @@ prepend_to_path \
 	"${HOME}/.dotnet/tools" \
 	"${FSOUZA_DOTFILES_DIR}"/bin
 
-export MANPATH="${HOME}/.local/share/man${MANPATH+:$MANPATH}:"
+export MANPATH="${HOME}/.local/share/man${MANPATH+:$MANPATH}"
 
 if command -v fnm &>/dev/null; then
 	eval "$(fnm env)"
