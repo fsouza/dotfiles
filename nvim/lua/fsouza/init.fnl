@@ -131,10 +131,23 @@
       (table.insert exprs `(vim.keymap.set :i ,lhs ,rhs {:remap false})))
     exprs))
 
-(macro override-ui-functions []
-  `(tset vim.ui :select
-         (fn [...]
-           (mod-invoke :fsouza.lib.popup-picker :ui-select ...))))
+(macro override-builtin-functions []
+  `(do
+     (tset vim.ui :select
+           (fn [...]
+             (mod-invoke :fsouza.lib.popup-picker :ui-select ...)))
+     (let [orig-uri-to-fname# vim.uri_to_fname]
+       (fn uri-to-fname# [uri#]
+         (-> uri#
+             (orig-uri-to-fname#)
+             (vim.fn.fnamemodify ":.")))
+
+       (tset vim :uri_to_fname uri-to-fname#)
+       (tset vim :uri_to_bufnr
+             (fn [uri#]
+               (-> uri#
+                   (uri-to-fname#)
+                   (vim.fn.bufadd)))))))
 
 (if vim.env.FSOUZA_DOTFILES_DIR
     (do
@@ -147,7 +160,7 @@
       (initial-mappings)
       (set-global-options)
       (set-global-mappings)
-      (override-ui-functions)
+      (override-builtin-functions)
       (set-ui-options)
       (set-neovim-global-vars)
       (if vim.env.BOOTSTRAP_PACKER
