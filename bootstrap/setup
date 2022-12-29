@@ -27,23 +27,13 @@ def main() -> int:
     for file in home_files:
         create_symlink(file, BASEDIR / file, home / file)
 
-    xdg_files = ["alacritty.yml", "rgrc"]
-    for file in xdg_files:
+    xdg_items = ["alacritty.yml", "rgrc", "git", "fd", "utop", "tmux"]
+    for file in xdg_items:
         create_symlink(file, BASEDIR / file, config_dir / file)
 
-    xdg_dirs = ["git", "fd", "utop", "tmux"]
-    for xdg_dir in xdg_dirs:
-        target = config_dir / xdg_dir
-
-        if target.is_dir() and not target.is_symlink():
-            sys.stderr.write(f"{target} alread exists, skipping")
-            return 2
-
-        create_symlink(xdg_dir, BASEDIR / xdg_dir, target)
-
-    os_bootstrap = BASEDIR / "bootstrap" / f"{sys.platform}-setup"
-    if os_bootstrap.exists():
-        subprocess.check_call([os_bootstrap])
+    os_setup_script = BASEDIR / "bootstrap" / f"{sys.platform}-setup"
+    if os_setup_script.exists():
+        subprocess.check_call([os_setup_script])
 
     (home / ".zsh_sessions_disable").touch(exist_ok=True)
 
