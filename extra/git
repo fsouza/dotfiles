@@ -18,7 +18,7 @@ function _git_enable_difftastic {
 }
 
 declare -A _GIT_HOST_EMAIL
-_GIT_HOST_EMAIL=( [git@github.com:]=108725+fsouza@users.noreply.github.com [https://github.com/]=108725+fsouza@users.noreply.github.com )
+_GIT_HOST_EMAIL=( [git@github.com:]=108725+fsouza@users.noreply.github.com )
 
 function __auto_git_config {
 	if [ -d .git ] && ! git config --local user.email &>/dev/null; then
@@ -26,7 +26,8 @@ function __auto_git_config {
 		for key in ${(k)_GIT_HOST_EMAIL}; do
 			if [[ $remote =~ $key ]]; then
 				local email=$_GIT_HOST_EMAIL[$key]
-				git set-config "${email}" "francisco souza"
+				git config --local user.email "${email}"
+				git config --local user.signingkey "${email}"
 				break
 			fi
 		done

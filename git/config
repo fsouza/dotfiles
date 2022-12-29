@@ -1,5 +1,6 @@
 [user]
 	useConfigOnly = true
+	name = francisco souza
 [core]
 	filemode = true
 	precomposeunicode = true
