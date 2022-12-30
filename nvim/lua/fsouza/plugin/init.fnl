@@ -152,7 +152,7 @@
   (vim.keymap.set :i :<cr> #(cr-key-for-comp-info (vim.fn.complete_info))
                   {:remap false :expr true})
   (mod-invoke :mini.completion :setup
-              {:delay {:completion 250 :info 0 :signature 0}
+              {:delay {:completion 100 :info 0 :signature 0}
                :set_vim_settings false}))
 
 (fn setup-treesitter []
