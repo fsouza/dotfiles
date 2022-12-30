@@ -104,7 +104,9 @@
     (shell-post.on-attach bufnr)
     (detach.register bufnr shell-post.on-detach)
     (when (not= client.server_capabilities.completionProvider nil)
-      (tset (. vim :bo bufnr) :omnifunc "v:lua.MiniCompletion.completefunc_lsp"))
+      (let [completion (require :fsouza.lsp.completion)]
+        (completion.on-attach bufnr)
+        (detach.register bufnr completion.on-detach)))
     (when (not= client.server_capabilities.renameProvider nil)
       (table.insert mappings.n
                     {:lhs :<leader>r

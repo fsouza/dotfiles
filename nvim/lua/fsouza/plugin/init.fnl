@@ -143,26 +143,6 @@
 
   (mod-invoke :Comment :setup {:pre_hook pre-hook :ignore #"^$"}))
 
-(fn setup-completion []
-  (fn cr-key-for-comp-info [comp-info]
-    (if (= comp-info.mode "") :<cr>
-        (if (and (= comp-info.pum_visible 1) (= comp-info.selected -1))
-            :<c-e><cr> :<cr>)))
-
-  (fn process-items [items base]
-    (let [mini-completion (require :mini.completion)
-          tablex (require :fsouza.pl.tablex)]
-      (-> items
-          (mini-completion.default_process_items base)
-          (tablex.filter #(not= (. $1 :kind) 14)))))
-
-  (vim.keymap.set :i :<cr> #(cr-key-for-comp-info (vim.fn.complete_info))
-                  {:remap false :expr true})
-  (mod-invoke :mini.completion :setup
-              {:delay {:completion 100 :info 0 :signature 0}
-               :lsp_completion {:process_items process-items}
-               :set_vim_settings false}))
-
 (fn setup-treesitter []
   (when (not vim.env.NVIM_SKIP_TREESITTER)
     (mod-invoke :fsouza.plugin.ts :setup)))
@@ -208,7 +188,6 @@
   (schedule #(mod-invoke :fsouza.plugin.rg-complete :setup :<c-x><c-n>))
   (schedule #(mod-invoke :fsouza.plugin.auto-delete :setup))
   (schedule setup-comment-nvim)
-  (schedule setup-completion)
   (schedule setup-fuzzy-mappings)
   (schedule #(mod-invoke :fsouza.plugin.fnl-autocompile :setup))
   (schedule #(vim.api.nvim_exec_autocmds [:User] {:pattern :PluginReady})))

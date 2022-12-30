@@ -41,7 +41,7 @@
             {1 :nvim-treesitter/playground}
             {1 :numToStr/Comment.nvim}
             {1 :JoosepAlviste/nvim-ts-context-commentstring}
-            {1 :echasnovski/mini.completion :as :mini.completion :opt true}
+            {1 :fsouza/nvim-lsp-compl :as :nvim-lsp-compl :opt true}
             {1 :l3mon4d3/luasnip :as :luasnip :opt true}
             {1 :ibhagwan/fzf-lua :as :fzf-lua :opt true}
             {1 :norcalli/nvim-colorizer.lua :as :nvim-colorizer.lua :opt true}
