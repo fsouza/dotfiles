@@ -96,7 +96,6 @@ nvim-tests:
 .PHONY: nvim-lint
 nvim-lint: nvim-selene nvim-stylua
 
-
 .PHONY: nvim-selene
 nvim-selene:
 	cd nvim && selene .
@@ -104,3 +103,7 @@ nvim-selene:
 .PHONY: nvim-stylua
 nvim-stylua:
 	cd nvim && stylua --check .
+
+.PHONY: fnlfmt
+fnlfmt:
+	git ls-files -- '*.fnl' | xargs -n 1 $(NVIM_CACHE_DIR)/fnlfmt/fnlfmt --fix
