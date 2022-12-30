@@ -1,0 +1,18 @@
+function gh_dependabot_approve {
+	(
+		gh api 'search/issues?q=is%3Aopen+is%3Apr+user%3Afsouza+author%3Aapp%2Fdependabot+archived%3Afalse' \
+			| jq -r '.items[].url' \
+			| sed 's;/issues/;/pulls/;' \
+			| sed 's;https://api.github.com/;;' \
+			| xargs -tI {} gh api --silent -F event=APPROVE "{}/reviews"
+	)
+}
+
+function gh_dependabot_rebase {
+	(
+		gh api 'search/issues?q=is%3Aopen+is%3Apr+user%3Afsouza+author%3Aapp%2Fdependabot+archived%3Afalse' \
+			| jq -r '.items[].url' \
+			| sed 's;https://api.github.com/;;' \
+			| xargs -tI {} gh api --silent -F body='\@dependabot rebase' "{}/comments"
+	)
+}

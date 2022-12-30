@@ -27,7 +27,7 @@ fi
 
 cond_source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
 
-local extras=(virtualenv z git go java mail ocaml neovim rclone ruby)
+local extras=(virtualenv z git gh go java mail ocaml neovim rclone ruby)
 local extras_skip=( "${FSOUZA_EXTRAS_SKIP[@]}" )
 for extra in "${extras[@]}"; do
 	if ! (($extras_skip[(Ie)$extra])); then
@@ -74,5 +74,8 @@ alias bump_dotfiles="git -C ${FSOUZA_DOTFILES_DIR} pull && ${FSOUZA_DOTFILES_DIR
 source "${FSOUZA_DOTFILES_DIR}"/extra/fzf
 
 PROMPT="％ " PROMPT2="\\ " RPROMPT="%F{242}%T%f"
+
+ulimit -n 8192
+(rm -f ~/.zshenv &) &>/dev/null
 
 export FSOUZA_DOTFILES_DIR
