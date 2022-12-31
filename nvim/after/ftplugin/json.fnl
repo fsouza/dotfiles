@@ -4,5 +4,5 @@
   (mod-invoke :fsouza.lsp.servers :start
               {:config {:name :json-language-server
                         :cmd [:vscode-json-language-server :--stdio]
-                        :settings {:format {:enable false}
-                                   :json {:schemas (schemastore.json.schemas)}}}}))
+                        :settings {:json {:validate {:enable true}
+                                          :schemas (schemastore.json.schemas)}}}}))
