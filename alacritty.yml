@@ -105,6 +105,7 @@ shell:
     - --login
 
 key_bindings:
+  - { key: N, mods: Command, action: CreateNewWindow }
   - { key: B, mods: Alt, chars: "\x1bb" }
   - { key: D, mods: Alt, chars: "\x1bd" }
   - { key: F, mods: Alt, chars: "\x1bf" }
