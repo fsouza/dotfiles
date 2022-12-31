@@ -148,6 +148,7 @@
                      :rhs #(mod-invoke :fsouza.lsp.locations
                                        :preview-type-definition)}))
     (when (not= client.server_capabilities.documentFormattingProvider nil)
+      (mod-invoke :fsouza.lsp.auto-action :setup)
       (let [formatting (require :fsouza.lsp.formatting)]
         (formatting.on-attach bufnr)
         (detach.register bufnr formatting.on-detach)))
