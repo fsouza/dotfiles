@@ -67,7 +67,7 @@ if [ -x "$NEOVIM_INSTALL_PREFIX/bin/nvim" ]; then
 	prepend_to_path "$NEOVIM_INSTALL_PREFIX/bin"
 
 	function zvim {
-		nvim +'autocmd User PluginReady ++once lua vim.schedule(function() require("fsouza.plugin.fuzzy")["find-files"]() end)' "$@"
+		nvim +'autocmd User fsouza-PluginReady ++once lua vim.schedule(function() require("fsouza.plugin.fuzzy")["find-files"]() end)' "$@"
 	}
 
 	export GIT_EDITOR=nvim MANPAGER="nvim +'Man!'"
