@@ -22,10 +22,10 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@fsouza/prettierd@^0.23.1":
-  version "0.23.1"
-  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.23.1.tgz#b783018d8c8ff74e7062d57ed9b25296a9642091"
-  integrity sha512-12DmHJT7a/EyrCk7ZxK0fg87+ZHap970X3NWFGwusQkOwZ52BkUi8K6fTbybx9+qh+ihb+3cncpP5Yd4fQTdVQ==
+"@fsouza/prettierd@^0.23.2":
+  version "0.23.2"
+  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.23.2.tgz#adc8a2bbccf0754f41bc8de4bb7c1f57f84316cd"
+  integrity sha512-0kADmwDO3/wxu71vAzer6OvtNvMQfXpUU0C+ttkMvSWXzu257jsJRZJKUzbondk1SXvD8cLQOulwAB1NoG6H5g==
   dependencies:
     core_d "^5.0.1"
     nanolru "^1.0.0"
