@@ -96,7 +96,7 @@ mouse:
 cursor:
   style:
     shape: Block
-    blinking: Off
+    blinking: Never
   unfocused_hollow: true
 
 shell:
