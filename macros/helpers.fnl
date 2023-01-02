@@ -9,4 +9,7 @@
 (fn max-col []
   2147483647)
 
-{: reload : mod-invoke : max-col}
+(fn custom-surround [ch val]
+  `(tset vim.b ,(.. :surround_ (string.byte ch)) ,val))
+
+{: reload : mod-invoke : max-col : custom-surround}

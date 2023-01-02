@@ -1,4 +1,4 @@
-(import-macros {: mod-invoke} :helpers)
+(import-macros {: mod-invoke : custom-surround} :helpers)
 
 (let [path (require :fsouza.pl.path)
       bufnr (vim.api.nvim_get_current_buf)
@@ -13,5 +13,7 @@
               :lintStdin true
               :lintSource :fennel
               :lintFormats ["%f:%l:%c %m" "%f:%l: %m"]
-              :lintIgnoreExitCode true}]]
+              :lintIgnoreExitCode true}]
+      ]
+  (custom-surround :f "(\1function: \1 \r)")
   (mod-invoke :fsouza.lsp.servers.efm :add bufnr :fennel tools))
