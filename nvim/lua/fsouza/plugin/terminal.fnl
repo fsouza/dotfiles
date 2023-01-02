@@ -7,7 +7,7 @@
 (fn create-terminal [term-id]
   (let [filetype :fsouza-terminal
         bufnr (vim.api.nvim_create_buf true false)]
-    (vim.api.nvim_set_option_value :filetype filetype {:buf bufnr})
+    (tset (. vim :bo bufnr) :filetype filetype)
     (vim.api.nvim_buf_call bufnr
                            #(let [job-id (vim.fn.termopen (string.format "%s;#fsouza_term;%s"
                                                                          vim.o.shell

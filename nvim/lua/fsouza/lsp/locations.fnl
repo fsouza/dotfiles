@@ -48,8 +48,8 @@
               (let [bufnr (vim.uri_to_bufnr loc.uri)
                     start-pos loc.range.start
                     end-pos loc.range.end]
-                (vim.api.nvim_set_option_value :buflisted true {:buf bufnr})
-                (vim.api.nvim_set_option_value :filetype filetype {:buf bufnr})
+                (tset (. vim :bo bufnr) :buflisted true)
+                (tset (. vim :bo bufnr) :filetype filetype)
                 (let [parser (vim.treesitter.get_parser bufnr lang)
                       (_ t) (next (parser:trees))]
                   (if (not t)

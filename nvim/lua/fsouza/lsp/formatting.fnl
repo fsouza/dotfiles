@@ -7,17 +7,11 @@
     (not (path.isrel file-path))))
 
 (fn formatting-params [bufnr]
-  (let [sts (vim.api.nvim_get_option_value :softtabstop {:buf bufnr})
-        sw (vim.api.nvim_get_option_value :shiftwidth {:buf bufnr})
-        ts (vim.api.nvim_get_option_value :tabstop {:buf bufnr})
-        tab-size (if (> sts 0)
-                     sts
-                     (if (< sts 0)
-                         sw
-                         ts))
-        opts {:tabSize tab-size
-              :insertSpaces (vim.api.nvim_get_option_value :expandtab
-                                                           {:buf bufnr})}]
+  (let [et (. vim :bo bufnr :expandtab)
+        tab-size (if et
+                     (. vim :bo :bufnr :softtabstop)
+                     (. vim :bo :bufnr :tabstop))
+        opts {:tabSize tab-size :insertSpaces et}]
     {:textDocument {:uri (vim.uri_from_bufnr bufnr)} :options opts}))
 
 (fn fmt [client bufnr cb]

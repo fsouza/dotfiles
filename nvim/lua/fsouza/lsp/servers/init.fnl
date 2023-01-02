@@ -27,7 +27,7 @@
 
 (macro should-start [bufnr name]
   `(and (vim.api.nvim_buf_is_valid ,bufnr)
-        (not= (vim.api.nvim_get_option_value :buftype {:buf ,bufnr}) :nofile)
+        (not= (. vim :bo bufnr :buftype) :nofile)
         (not (vim.tbl_contains (disabled-servers) ,name))))
 
 (fn with-defaults [opts]

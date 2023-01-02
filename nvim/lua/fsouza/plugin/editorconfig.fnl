@@ -69,11 +69,9 @@
         :indent_size (handle-indent-size vim-opts v)
         :trim_trailing_whitespace (vim.schedule #(handle-whitespaces bufnr v))))
     (vim.schedule #(when (and (vim.api.nvim_buf_is_valid bufnr)
-                              (vim.api.nvim_get_option_value :modifiable
-                                                             {:buf bufnr}))
+                              (. vim :bo bufnr :modifiable))
                      (each [option-name value (pairs vim-opts)]
-                       (vim.api.nvim_set_option_value option-name value
-                                                      {:buf bufnr}))))))
+                       (tset (. vim :bo bufnr) option-name value))))))
 
 (fn modify-filename-if-needed [name bufnr]
   (let [ft-map {:python :.py
@@ -86,7 +84,7 @@
         (_ ext) (mod-invoke :fsouza.pl.path :splitext name)]
     (if (not= ext "")
         name
-        (let [ft (vim.api.nvim_get_option_value :filetype {:buf bufnr})
+        (let [ft (. vim :bo bufnr :filetype)
               ext (. ft-map ft)]
           (if ext
               (.. name ext)
