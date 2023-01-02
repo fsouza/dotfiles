@@ -9,8 +9,8 @@
 (fn formatting-params [bufnr]
   (let [et (. vim :bo bufnr :expandtab)
         tab-size (if et
-                     (. vim :bo :bufnr :softtabstop)
-                     (. vim :bo :bufnr :tabstop))
+                     (. vim :bo bufnr :softtabstop)
+                     (. vim :bo bufnr :tabstop))
         opts {:tabSize tab-size :insertSpaces et}]
     {:textDocument {:uri (vim.uri_from_bufnr bufnr)} :options opts}))
 
