@@ -31,7 +31,7 @@
      (vim.keymap.set :n :<leader>gw
                      #(mod-invoke :fsouza.lib.fuzzy :grep
                                   (vim.fn.expand :<cword>)))
-     (vim.keymap.set :t :<leader>gw
+     (vim.keymap.set :x :<leader>gw
                      #(mod-invoke :fsouza.lib.fuzzy :grep-visual))
      (vim.keymap.set :n :<leader>gl #(mod-invoke :fsouza.lib.fuzzy :grep_last))
      (vim.keymap.set :n :<leader>zl #(mod-invoke :fsouza.lib.fuzzy :lines))))
