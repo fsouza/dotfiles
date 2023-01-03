@@ -14,7 +14,7 @@ you, please feel free to open an issue.
 Install, configure and signin to 1Password, then run:
 
 ```
-% curl https://fsouza.github.io/dotfiles/bootstrap.sh | zsh
+% curl https://sh.fsouza.dev/bootstrap.sh | zsh
 ```
 
 This should only really work for me, but I'm documenting this just in case
