@@ -1,0 +1,21 @@
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+name: Deploy GH Pages
+jobs:
+  build:
+    name: Deploy to GH Pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.2.0
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3.9.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
