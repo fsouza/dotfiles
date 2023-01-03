@@ -78,7 +78,7 @@ function gh_ssh_setup {
 	echo "Press any key to continue..."
 	read
 	gh auth login -h github.com -p ssh -s admin:gpg_key -s admin:public_key --web
-	ssh-keyscan github.com >> "$HOME"/.ssh/known_hosts
+	ssh-keyscan github.com >>"$HOME"/.ssh/known_hosts
 }
 
 function add_gpg_key_to_gh {
