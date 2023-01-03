@@ -8,3 +8,14 @@ nvim folder.
 This is obviously intended for personal use, but there are bits that could be
 converted into plugins. If you see anything that would be interesting/useful to
 you, please feel free to open an issue.
+
+## From scratch (macOS only)
+
+Assuming you're me, you can run:
+
+```
+% curl https://fsouza.github.io/dotfiles/bootstrap.sh | zsh
+```
+
+I'm documenting this just in case someone is looking for inspiration on how to
+do some things.
