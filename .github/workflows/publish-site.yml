@@ -6,10 +6,10 @@ on:
 permissions:
   contents: write
 
-name: Deploy GH Pages
+name: push to gh-pages
 jobs:
   build:
-    name: Deploy to GH Pages
+    name: push to gh-pages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.2.0
