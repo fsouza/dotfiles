@@ -70,7 +70,14 @@ function setup_brew {
 	export HOMEBREW_NO_AUTO_UPDATE HOMEBREW_NO_EMOJI HOMEBREW_NO_GITHUB_API
 	brew update
 	brew install gh zsh
+
+	echo
+	echo
+	echo "==================================="
+	echo "installing and configuring 1password-cli (may ask for sudo password)"
+
 	brew install --cask 1password-cli
+	/usr/local/bin/op signin
 }
 
 function gh_ssh_setup {

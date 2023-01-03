@@ -11,11 +11,11 @@ you, please feel free to open an issue.
 
 ## From scratch (macOS only)
 
-Assuming you're me, you can run:
+Install, configure and signin to 1Password, then run:
 
 ```
 % curl https://fsouza.github.io/dotfiles/bootstrap.sh | zsh
 ```
 
-I'm documenting this just in case someone is looking for inspiration on how to
-do some things.
+This should only really work for me, but I'm documenting this just in case
+someone is looking for inspiration on how to do some things.
