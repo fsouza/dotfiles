@@ -14,7 +14,7 @@ function setup_rosetta {
 function bump_maxfiles_limit {
 	set -x
 	: "Installing LaunchDaemon to bump maxfiles limit (enter sudo password if requested)"
-	tmp_file=$(mktemp -d)
+	tmp_file=$(mktemp)
 	cat >"${tmp_file}" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
@@ -70,15 +70,24 @@ function setup_brew {
 	export HOMEBREW_NO_AUTO_UPDATE HOMEBREW_NO_EMOJI HOMEBREW_NO_GITHUB_API
 	brew update
 	brew install gh zsh
+
+	echo
+	echo
+	echo "==================================="
+	echo "installing and configuring 1password-cli (may ask for sudo password)"
+
 	brew install --cask 1password-cli
+	/usr/local/bin/op signin
 }
 
 function gh_ssh_setup {
-	echo "we're now going to login to GitHub, using gh. Make sure to create or upload the SSH key in the next step."
-	echo "Press any key to continue..."
-	read
-	gh auth login -h github.com -p ssh -s admin:gpg_key -s admin:public_key --web
-	ssh-keyscan github.com >>"$HOME"/.ssh/known_hosts
+	if ! gh auth status &>/dev/null; then
+		echo "we're now going to login to GitHub, using gh. Make sure to create or upload the SSH key in the next step."
+		echo "Press any key to continue..."
+		read
+		gh auth login -h github.com -p ssh -s admin:gpg_key -s admin:public_key --web
+		ssh-keyscan github.com >>"$HOME"/.ssh/known_hosts
+	fi
 }
 
 function add_gpg_key_to_gh {
@@ -113,8 +122,10 @@ function setup_rclone {
 	sudo mkdir -p /usr/local/bin /usr/local/share
 	sudo chown ${USER}:wheel /usr/local/bin /usr/local/share
 	mkdir -p "$HOME"/.config/rclone
-	op document get rclone-conf --output "$HOME"/.config/rclone/rclone.conf
-	chmod 600 "$HOME"/.config/rclone/rclone.conf
+	conf_file=$(mktemp)
+	chmod 600 "${conf_file}"
+	op document get rclone-conf --output "${conf_file}"
+	mv "${conf_file}" "$HOME"/.config/rclone/rclone.conf
 }
 
 function install_node {
