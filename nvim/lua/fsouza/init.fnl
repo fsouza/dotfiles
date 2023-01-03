@@ -57,7 +57,8 @@
               :loaded_2html_plugin 1
               :loaded_tutor_mode_plugin 1
               :loaded_zipPlugin 1
-              :no_plugin_maps 1}]
+              :no_plugin_maps 1
+              :editorconfig_enable false}]
     (icollect [name value (pairs vars)]
       `(tset vim.g ,name ,value))))
 
