@@ -96,8 +96,7 @@ function gh_ssh_setup {
 
 function add_gpg_key_to_gh {
 	local keyemail=${1}
-	local keyname=gpg-$(hostname -s)-${RANDOM}
-	gh api /user/gpg_keys -X POST -F "name=${keyname}" -F "armored_public_key=$(gpg -a --export "${keyemail}")"
+	gpg -a --export "${keyemail}" | gh gpg-key add - &>/dev/null
 }
 
 function setup_gpg {
