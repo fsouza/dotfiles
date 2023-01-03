@@ -156,3 +156,5 @@ function main {
 	install_node
 	setup_nvim
 }
+
+main
