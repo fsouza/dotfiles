@@ -12,17 +12,20 @@ function setup_rosetta {
 }
 
 function bump_maxfiles_limit {
-	set -x
-	: "Installing LaunchDaemon to bump maxfiles limit (enter sudo password if requested)"
-	tmp_file=$(mktemp)
-	cat >"${tmp_file}" <<EOF
+	local target_file=/Library/LaunchDaemons/dev.fsouza.limit-maxfiles.plist
+
+	if ! [ -f "${target_file}" ]; then
+		set -x
+		: "Installing LaunchDaemon to bump maxfiles limit (enter sudo password if requested)"
+		local tmp_file=$(mktemp)
+		cat >"${tmp_file}" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
         "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
     <key>Label</key>
-    <string>limit-maxfiles</string>
+    <string>dev.fsouza.limit-maxfiles</string>
     <key>ProgramArguments</key>
     <array>
       <string>launchctl</string>
@@ -38,13 +41,14 @@ function bump_maxfiles_limit {
   </dict>
 </plist>
 EOF
-	sudo cp "${tmp_file}" /Library/LaunchDaemon
-	sudo launchctl load -w /Library/LaunchDaemons/dev.fsouza.limit-maxfiles.plist
-	set +x
+		sudo cp "${tmp_file}" "${target_file}"
+		sudo launchctl load -w "${target_file}"
+		set +x
+	fi
 }
 
 function find_brew {
-	candidates=(/opt/homebrew/bin/brew /usr/local/bin/brew)
+	local candidates=(/opt/homebrew/bin/brew /usr/local/bin/brew)
 	for path in ${candidates}; do
 		if [ -x "${path}" ]; then
 			echo "${path}"
@@ -122,7 +126,7 @@ function setup_rclone {
 	sudo mkdir -p /usr/local/bin /usr/local/share
 	sudo chown ${USER}:wheel /usr/local/bin /usr/local/share
 	mkdir -p "$HOME"/.config/rclone
-	conf_file=$(mktemp)
+	local conf_file=$(mktemp)
 	chmod 600 "${conf_file}"
 	op document get rclone-conf --output "${conf_file}"
 	mv "${conf_file}" "$HOME"/.config/rclone/rclone.conf
