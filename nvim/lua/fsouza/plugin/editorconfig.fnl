@@ -26,13 +26,14 @@
                                _ :unix)))
 
 (fn handle-indent-style [vim-opts v]
-  (tset vim-opts :expandtab (or (= v :space) (= v :spaces))))
+  (tset vim-opts :expandtab (= v :space)))
 
 (fn handle-insert-final-line [vim-opts v]
-  (tset vim-opts :fixendofline (= v :true)))
+  (tset vim-opts :fixendofline (= v :true))
+  (tset vim-opts :endofline (= v :true)))
 
-(fn handle-indent-size [vim-opts v]
-  (let [indent-size (tonumber v)]
+(fn handle-indent-size [vim-opts v opts]
+  (let [indent-size (if (= opts.indent_style :space) (tonumber v) 0)]
     (tset vim-opts :shiftwidth indent-size)
     (tset vim-opts :softtabstop indent-size)))
 
@@ -66,7 +67,7 @@
         :indent_style (handle-indent-style vim-opts v)
         :insert_final_line (handle-insert-final-line vim-opts v)
         :insert_final_newline (handle-insert-final-line vim-opts v)
-        :indent_size (handle-indent-size vim-opts v)
+        :indent_size (handle-indent-size vim-opts v opts)
         :trim_trailing_whitespace (vim.schedule #(handle-whitespaces bufnr v))))
     (vim.schedule #(when (and (vim.api.nvim_buf_is_valid bufnr)
                               (. vim :bo bufnr :modifiable))
