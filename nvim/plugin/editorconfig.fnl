@@ -5,8 +5,8 @@
   (tset (. vim :bo bufnr) :expandtab (= val :space)))
 
 (lambda indent-size [bufnr val opts]
-  (let [indent-size (if (= val :tab) (tabstop)
-                        (. opts.indent_style :space) (tonumber val)
+  (let [indent-size (if (= val :tab) 0
+                        (= (. opts.indent_style) :space) (tonumber val)
                         0)]
     (tset (. vim :bo bufnr) :shiftwidth indent-size)
     (tset (. vim :bo bufnr) :softtabstop indent-size)

@@ -75,7 +75,8 @@
                  :shortmess :filnxtToOFIc
                  :number true
                  :relativenumber true
-                 :isfname "@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@"}]
+                 :isfname "@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@"
+                 :tabstop 8}]
     (list (sym :do) (icollect [name value (pairs options)]
                       `(tset vim.o ,name ,value))
           `(vim.cmd.color :none))))
