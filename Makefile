@@ -91,7 +91,7 @@ scripts/compile.lua: scripts/compile.fnl
 
 .PHONY: nvim-tests
 nvim-tests:
-	nvim --headless -c 'autocmd User fsouza-PluginReady ++once lua require("fsouza.plugin.plenary-tests")["run-tests"]()'
+	nvim --headless -c 'lua require("fsouza.lib.plenary-tests")["run-tests"]()'
 
 .PHONY: nvim-lint
 nvim-lint: nvim-selene nvim-stylua

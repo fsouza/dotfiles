@@ -104,15 +104,10 @@
                           (vim.notify (string.format "failed to run editorconfig: %s"
                                                      (vim.inspect result))))))))))
 
-(fn set-enabled [v]
-  (let [commands []]
-    (when v
-      (table.insert commands
-                    {:events [:BufNewFile :BufReadPost :BufFilePost :FileType]
-                     :targets ["*"]
-                     :callback #(set-config $1.buf)})
-      (vim.schedule #(each [_ bufnr (ipairs (vim.api.nvim_list_bufs))]
-                       (set-config bufnr))))
-    (mod-invoke :fsouza.lib.nvim-helpers :augroup :editorconfig commands)))
+(fn setup []
+  (mod-invoke :fsouza.lib.nvim-helpers :augroup :editorconfig
+              [{:events [:BufNewFile :BufReadPost :BufFilePost :FileType]
+                :targets ["*"]
+                :callback #(set-config $1.buf)}]))
 
-{:enable #(set-enabled true) :disable #(set-enabled false)}
+{: setup}

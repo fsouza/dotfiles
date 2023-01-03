@@ -13,12 +13,10 @@
                     :once true
                     :callback #(run bufname)}]))))
 
-(fn setup []
+(do
   (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__mkdir
               [{:events [:BufNew]
                 :targets ["*"]
                 :callback #(register-for-buffer $1.buf)}])
   (each [_ bufnr (ipairs (vim.api.nvim_list_bufs))]
     (register-for-buffer bufnr)))
-
-{: setup}

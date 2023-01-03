@@ -71,7 +71,7 @@ def send_to_nvim(contents: bytes) -> NoReturn:
     os.write(fd, contents)
     os.close(fd)
 
-    nvim_command = f"lua require('fsouza.plugin.tmux-selection').handle('{path}')"
+    nvim_command = f"lua require('fsouza.lib.tmux-selection').handle('{path}')"
     return os.execlp(
         "tmux",
         "tmux",

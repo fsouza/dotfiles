@@ -131,22 +131,29 @@
     exprs))
 
 (macro override-builtin-functions []
-  `(do
+  `(let [orig-uri-to-fname# vim.uri_to_fname]
+     (fn uri-to-fname# [uri#]
+       (-> uri#
+           (orig-uri-to-fname#)
+           (vim.fn.fnamemodify ":.")))
+
+     (tset vim :uri_to_fname uri-to-fname#)
+     (tset vim :uri_to_bufnr
+           (fn [uri#]
+             (-> uri#
+                 (uri-to-fname#)
+                 (vim.fn.bufadd))))
      (tset vim.ui :select
            (fn [...]
              (mod-invoke :fsouza.lib.popup-picker :ui-select ...)))
-     (let [orig-uri-to-fname# vim.uri_to_fname]
-       (fn uri-to-fname# [uri#]
-         (-> uri#
-             (orig-uri-to-fname#)
-             (vim.fn.fnamemodify ":.")))
+     (let [tablex# (require :fsouza.pl.tablex)
+           patterns# ["message with no corresponding"]
+           orig-notify# vim.notify]
+       (fn notify# [msg# level# opts#]
+         (when (tablex#.for-all patterns# #(= (string.find msg# $1) nil))
+           (orig-notify# msg# level# opts#)))
 
-       (tset vim :uri_to_fname uri-to-fname#)
-       (tset vim :uri_to_bufnr
-             (fn [uri#]
-               (-> uri#
-                   (uri-to-fname#)
-                   (vim.fn.bufadd)))))))
+       (tset vim :notify notify#))))
 
 (if vim.env.FSOUZA_DOTFILES_DIR
     (do
@@ -164,5 +171,5 @@
       (set-neovim-global-vars)
       (if vim.env.BOOTSTRAP_PACKER
           (mod-invoke :fsouza.packed :setup)
-          (require :fsouza.plugin)))
+          (mod-invoke :fsouza.plugin :setup)))
     (error "missing FSOUZA_DOTFILES_DIR\n"))

@@ -33,7 +33,5 @@
                            (vim.fn.complete compl-pos)))))))
   "")
 
-(fn setup [keybind]
+(let [keybind :<c-x><c-o>]
   (vim.keymap.set :i keybind complete {:remap false}))
-
-{: setup}

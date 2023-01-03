@@ -87,7 +87,7 @@
                        :rhs #(mod-invoke :fsouza.lsp.diagnostics
                                          :list-workspace-diagnostics)}
                       {:lhs :<leader>dd
-                       :rhs #(mod-invoke :fsouza.plugin.fuzzy
+                       :rhs #(mod-invoke :fsouza.lib.fuzzy
                                          :lsp_workspace_diagnostics)}
                       {:lhs :<leader>cl
                        :rhs #(mod-invoke :fsouza.lsp.buf-diagnostic
@@ -160,8 +160,7 @@
     (when (not= client.server_capabilities.documentSymbolProvider nil)
       (table.insert mappings.n
                     {:lhs :<leader>t
-                     :rhs #(mod-invoke :fsouza.plugin.fuzzy
-                                       :lsp_document_symbols)})
+                     :rhs #(mod-invoke :fsouza.lib.fuzzy :lsp_document_symbols)})
       (table.insert mappings.n
                     {:lhs :<leader>v
                      :rhs #(let [symbols-outline (setup-symbols-outline)]
@@ -177,7 +176,7 @@
                     {:lhs :<leader>T
                      :rhs #(let [query (vim.fn.input "query：")]
                              (when (not= query "")
-                               (mod-invoke :fsouza.plugin.fuzzy
+                               (mod-invoke :fsouza.lib.fuzzy
                                            :lsp_workspace_symbols
                                            {:lsp_query query})))}))
     (when (not= client.server_capabilities.codeLensProvider nil)

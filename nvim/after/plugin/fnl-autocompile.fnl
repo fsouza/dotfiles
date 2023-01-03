@@ -1,8 +1,7 @@
 (import-macros {: mod-invoke} :helpers)
 
-(fn setup []
+(do
   (var should-clear-qf false)
-
   (fn handle-result [next result]
     (if (= result.exit-status 0)
         (do
@@ -34,5 +33,3 @@
                           (.. dotfiles-dir :/nvim/*.scm)
                           (.. dotfiles-dir :/nvim/*.vim)]
                 :callback make}]))
-
-{: setup}

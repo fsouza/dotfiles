@@ -1,5 +1,5 @@
 (fn fzf-dir [directory cd]
-  (let [fuzzy (require :fsouza.plugin.fuzzy)]
+  (let [fuzzy (require :fsouza.lib.fuzzy)]
     (if cd
         (do
           (vim.api.nvim_set_current_dir directory)

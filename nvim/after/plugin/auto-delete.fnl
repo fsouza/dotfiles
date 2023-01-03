@@ -6,10 +6,8 @@
       (not= vim.v.fcs_reason :conflict)
       (tset vim.v :fcs_choice :reload)))
 
-(fn setup []
+(do
   (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__auto_delete
               [{:events [:FileChangedShell]
                 :targets ["*"]
                 :callback on-FileChangedShell}]))
-
-{: setup}

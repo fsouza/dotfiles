@@ -61,7 +61,7 @@
                           :files [:src/parser.c]}
            :filetype :thrift})))
 
-(fn setup []
+(do
   (add-parsers)
   (mod-invoke :nvim-treesitter.configs :setup
               {:highlight {:enable true}
@@ -85,5 +85,3 @@
                :ensure_installed :all
                :ignore_install ignore-install})
   (setup-autocmds))
-
-{: setup}
