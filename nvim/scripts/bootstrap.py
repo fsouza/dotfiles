@@ -393,7 +393,6 @@ async def setup_fnlfmt(cache_dir: Path, hr_dir: Path) -> None:
         cache_dir / "fnlfmt",
     )
 
-    print(hr_dir)
     await run_cmd(
         "make",
         [],
