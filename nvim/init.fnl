@@ -132,7 +132,7 @@
 
 (if vim.env.FSOUZA_DOTFILES_DIR
     (do
-      (mod-invoke :fsouza :setup-packages)
+      (mod-invoke :fsouza :setup vim.env.FSOUZA_DOTFILES_DIR)
       (initial-mappings)
       (set-global-options)
       (set-global-mappings)

@@ -15,7 +15,7 @@ bootstrap-nvim:
 
 .PHONY: update-packer
 update-packer: scripts/update-packer.lua install-nvim-bootstrap-files
-	nvim --headless -E +'autocmd User PackerComplete quit' +'source scripts/update-packer.lua' || true
+	env FSOUZA_DOTFILES_DIR=$(PWD) nvim --headless -E +'autocmd User PackerComplete quit' +'source scripts/update-packer.lua'
 
 .PHONY: update-treesitter
 update-treesitter:

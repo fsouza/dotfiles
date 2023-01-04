@@ -24,12 +24,12 @@
                                 (path#.join paq-dir# :lua "?" :init.lua)]
                                ";")))))))
 
-(fn setup-packages []
-  (global dotfiles-dir vim.env.FSOUZA_DOTFILES_DIR)
+(fn setup [dir]
+  (global dotfiles-dir dir)
   (global config-dir (.. dotfiles-dir :/nvim))
   (global cache-dir (vim.fn.stdpath :cache))
   (global data-dir (vim.fn.stdpath :data))
   (hererocks)
   (add-pkgs-opt-to-path))
 
-{: setup-packages}
+{: setup}
