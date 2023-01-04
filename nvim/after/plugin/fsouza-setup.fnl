@@ -1,6 +1,6 @@
-(import-macros {: mod-invoke} :helpers)
+;; this is just a catch all that I didn't know where to put.
 
-(local helpers (require :fsouza.lib.nvim-helpers))
+(import-macros {: mod-invoke} :helpers)
 
 (macro setup-fuzzy-mappings []
   `(do
@@ -52,23 +52,14 @@
                       (vim.api.nvim_input (.. ":%s/\\v<lt>" word#
                                               :>//g<left><left>)))))
 
-(macro setup-spell []
-  `(helpers.augroup :fsouza__auto_spell
-                    [{:events [:FileType]
-                      :targets [:changelog :gitcommit :help :markdown :text]
-                      :command "setlocal spell"}]))
-
 (macro setup-notif []
   `(vim.api.nvim_create_user_command :Notifications
                                      #(mod-invoke :fsouza.lib.notif
                                                   :log-messages)
                                      {:force true}))
 
-(fn setup []
+(do
   (setup-autofmt-commands)
   (setup-word-replace)
-  (setup-spell)
   (setup-notif)
   (setup-fuzzy-mappings))
-
-{: setup}
