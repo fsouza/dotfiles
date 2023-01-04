@@ -82,7 +82,7 @@
                :context_commentstring {:enable true :enable_autocmd false}
                :refactor {:navigation {:enable [:proto :thrift]
                                        :keymaps {:goto_definition :gd}}}
-               :ensure_installed []
+               :ensure_installed [:fennel :go :lua :python :ruby :typescript]
                :auto_install true
                :ignore_install ignore-install})
   (setup-autocmds))
