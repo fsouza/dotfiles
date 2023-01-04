@@ -14,8 +14,8 @@ bootstrap-nvim:
 	$(PYTHON) nvim/scripts/bootstrap.py
 
 .PHONY: update-packer
-update-packer: scripts/update-packer.lua install-nvim-bootstrap-files
-	env FSOUZA_DOTFILES_DIR=$(PWD) nvim --headless -E +'autocmd User PackerComplete quit' +'source scripts/update-packer.lua'
+update-packer: nvim/scripts/update-packer.lua install-nvim-bootstrap-files
+	env FSOUZA_DOTFILES_DIR=$(PWD) nvim --headless -E +'autocmd User PackerComplete quit' +'source nvim/scripts/update-packer.lua'
 
 .PHONY: update-treesitter
 update-treesitter:
@@ -94,6 +94,11 @@ build/%.scm: %.scm
 	cp $< $@
 
 scripts/%.lua: scripts/%.fnl
+	$(eval TMP_FILE := $(shell mktemp))
+	$(FENNEL) -c $< >$(TMP_FILE)
+	mv $(TMP_FILE) $@
+
+nvim/scripts/%.lua: nvim/scripts/%.fnl
 	$(eval TMP_FILE := $(shell mktemp))
 	$(FENNEL) -c $< >$(TMP_FILE)
 	mv $(TMP_FILE) $@
