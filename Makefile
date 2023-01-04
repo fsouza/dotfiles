@@ -66,7 +66,7 @@ clean:
 	rm -rf build
 
 .PHONY: uninstall
-uninstall: clean-site clean-hammerspoon uninstall-nvim-init.lua
+uninstall: clean-site clean-hammerspoon uninstall-nvim-config
 
 .PHONY: clean-site
 clean-site: clean
@@ -76,9 +76,9 @@ clean-site: clean
 clean-hammerspoon:
 	rm -rf ~/.hammerspoon
 
-.PHONY: uninstall-nvim-init.lua
-uninstall-nvim-init.lua:
-	rm -f $(NVIM_CONFIG_DIR)/init.lua
+.PHONY: uninstall-nvim-config
+uninstall-nvim-config:
+	rm -rf $(NVIM_CONFIG_DIR)
 
 build: scripts/compile.lua $(LUA_FILES) $(TARGET_NON_LUA_FILES)
 
