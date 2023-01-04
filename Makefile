@@ -14,8 +14,8 @@ bootstrap-nvim:
 	$(PYTHON) nvim/scripts/bootstrap.py
 
 .PHONY: update-packer
-update-packer: install-nvim-bootstrap-files
-	nvim --headless -E +'autocmd User PackerComplete quit' +'lua require("fsouza.packed").setup()' || true
+update-packer: scripts/update-packer.lua install-nvim-bootstrap-files
+	nvim --headless -E +'autocmd User PackerComplete quit' +'source scripts/update-packer.lua' || true
 
 .PHONY: update-treesitter
 update-treesitter:
@@ -93,7 +93,7 @@ build/%.scm: %.scm
 	@ mkdir -p $(dir $@)
 	cp $< $@
 
-scripts/compile.lua: scripts/compile.fnl
+scripts/%.lua: scripts/%.fnl
 	$(eval TMP_FILE := $(shell mktemp))
 	$(FENNEL) -c $< >$(TMP_FILE)
 	mv $(TMP_FILE) $@
