@@ -1,6 +1,6 @@
 (import-macros {: mod-invoke} :helpers)
 
-(local ignore-install [:phpdoc :markdown])
+(local ignore-install [:phpdoc])
 
 (fn lang-to-ft [lang]
   (if (vim.tbl_contains ignore-install lang) []
@@ -82,6 +82,7 @@
                :context_commentstring {:enable true :enable_autocmd false}
                :refactor {:navigation {:enable [:proto :thrift]
                                        :keymaps {:goto_definition :gd}}}
-               :ensure_installed :all
+               :ensure_installed []
+               :auto_install true
                :ignore_install ignore-install})
   (setup-autocmds))
