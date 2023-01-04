@@ -7,15 +7,15 @@ FENNEL := $(NVIM_CACHE_DIR)/hr/bin/fennel
 PYTHON ?= python3.11
 
 .PHONY: all
-all: bootstrap-nvim update-packer update-treesitter kill-daemons clear-logs
+all: bootstrap-nvim update-packer install update-treesitter kill-daemons clear-logs
 
 .PHONY: bootstrap-nvim
 bootstrap-nvim:
 	$(PYTHON) nvim/scripts/bootstrap.py
 
 .PHONY: update-packer
-update-packer: install
-	env BOOTSTRAP_PACKER=1 nvim --headless -E +'autocmd User PackerComplete quit' || true
+update-packer: install-nvim-bootstrap-files
+	nvim --headless -E +'autocmd User PackerComplete quit' +'lua require("fsouza.packed").setup()' || true
 
 .PHONY: update-treesitter
 update-treesitter:
@@ -39,9 +39,14 @@ TARGET_NON_LUA_FILES := $(patsubst %,build/%,$(NON_LUA_FILES))
 install: install-nvim-site install-nvim-init.lua install-hammerspoon
 
 .PHONY: install-site
-install-nvim-site: build
+install-nvim-site: build install-nvim-bootstrap-files
 	@ mkdir -p $(NVIM_DATA_DIR)/site
 	cp -prv build/nvim/* $(NVIM_DATA_DIR)/site
+
+.PHONY: install-nvim-bootstrap-files
+install-nvim-bootstrap-files: build
+	@ mkdir -p $(NVIM_DATA_DIR)/site
+	cp -prv build/nvim/lua $(NVIM_DATA_DIR)/site
 
 .PHONY: install-nvim-init.lua
 install-nvim-init.lua: build/nvim/init.lua
@@ -61,7 +66,7 @@ clean:
 	rm -rf build
 
 .PHONY: uninstall
-uninstall: clean-site clean-hammerspoon
+uninstall: clean-site clean-hammerspoon uninstall-nvim-init.lua
 
 .PHONY: clean-site
 clean-site: clean
@@ -70,6 +75,10 @@ clean-site: clean
 .PHONY: clean-hammerspoon
 clean-hammerspoon:
 	rm -rf ~/.hammerspoon
+
+.PHONY: uninstall-nvim-init.lua
+uninstall-nvim-init.lua:
+	rm -f $(NVIM_CONFIG_DIR)/init.lua
 
 build: scripts/compile.lua $(LUA_FILES) $(TARGET_NON_LUA_FILES)
 

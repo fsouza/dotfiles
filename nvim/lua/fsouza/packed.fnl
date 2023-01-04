@@ -21,6 +21,7 @@
         (download-packer packer-dir cb))))
 
 (let [path (require :fsouza.pl.path)
+      data-dir (vim.fn.stdpath :data)
       package-root (path.join data-dir :site :pack)
       plugin-package :packer
       packer-dir (path.join package-root plugin-package)
@@ -85,7 +86,8 @@
                                            :config {:package_root package-root
                                                     :plugin_package plugin-package
                                                     :disable_commands true
-                                                    :autoremove true}})
+                                                    :autoremove true
+                                                    :compile_on_sync false}})
                           (packer.sync)))
    :repack (fn []
              (let [packed (reload :fsouza.packed)]
