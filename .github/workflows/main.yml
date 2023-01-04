@@ -49,7 +49,7 @@ jobs:
       - name: install early dependencies
         run: |
           brew update
-          brew install jq
+          brew install jq coreutils
 
       - uses: actions/checkout@v3.2.0
 
