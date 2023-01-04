@@ -21,7 +21,6 @@
         (download-packer packer-dir cb))))
 
 (let [path (require :fsouza.pl.path)
-      data-dir (vim.fn.stdpath :data)
       package-root (path.join data-dir :site :pack)
       plugin-package :packer
       packer-dir (path.join package-root plugin-package)

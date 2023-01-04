@@ -7,15 +7,15 @@ FENNEL := $(NVIM_CACHE_DIR)/hr/bin/fennel
 PYTHON ?= python3.11
 
 .PHONY: all
-all: bootstrap-nvim update-packer install update-treesitter kill-daemons clear-logs
+all: bootstrap-nvim update-packer update-treesitter kill-daemons clear-logs
 
 .PHONY: bootstrap-nvim
 bootstrap-nvim:
 	$(PYTHON) nvim/scripts/bootstrap.py
 
 .PHONY: update-packer
-update-packer: scripts/update-packer.lua install-nvim-bootstrap-files
-	env FSOUZA_DOTFILES_DIR=$(PWD) nvim --headless -E +'autocmd User PackerComplete quit' +'source scripts/update-packer.lua'
+update-packer: install
+	env BOOTSTRAP_PACKER=1 nvim --headless -E +'autocmd User PackerComplete quit' || true
 
 .PHONY: update-treesitter
 update-treesitter:
@@ -39,14 +39,9 @@ TARGET_NON_LUA_FILES := $(patsubst %,build/%,$(NON_LUA_FILES))
 install: install-nvim-site install-nvim-init.lua install-hammerspoon
 
 .PHONY: install-site
-install-nvim-site: build install-nvim-bootstrap-files
+install-nvim-site: build
 	@ mkdir -p $(NVIM_DATA_DIR)/site
 	cp -prv build/nvim/* $(NVIM_DATA_DIR)/site
-
-.PHONY: install-nvim-bootstrap-files
-install-nvim-bootstrap-files: build
-	@ mkdir -p $(NVIM_DATA_DIR)/site
-	cp -prv build/nvim/lua $(NVIM_DATA_DIR)/site
 
 .PHONY: install-nvim-init.lua
 install-nvim-init.lua: build/nvim/init.lua
@@ -93,7 +88,7 @@ build/%.scm: %.scm
 	@ mkdir -p $(dir $@)
 	cp $< $@
 
-scripts/%.lua: scripts/%.fnl
+scripts/compile.lua: scripts/compile.fnl
 	$(eval TMP_FILE := $(shell mktemp))
 	$(FENNEL) -c $< >$(TMP_FILE)
 	mv $(TMP_FILE) $@
