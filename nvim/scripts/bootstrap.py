@@ -1,5 +1,4 @@
 import asyncio
-import contextlib
 import os
 import shutil
 import sys
@@ -364,12 +363,11 @@ async def install_kotlin_language_server(langservers_cache_dir: Path) -> None:
         langservers_cache_dir / "kotlin-language-server",
     )
 
-    with contextlib.suppress(CommandError):
-        await run_cmd(
-            cmd="./gradlew",
-            args=[":server:installDist"],
-            cwd=repo_dir,
-        )
+    await run_cmd(
+        cmd="./gradlew",
+        args=[":server:installDist"],
+        cwd=repo_dir,
+    )
 
 
 async def setup_langservers(cache_dir: Path) -> None:
