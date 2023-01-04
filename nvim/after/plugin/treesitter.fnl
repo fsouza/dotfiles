@@ -61,7 +61,7 @@
                           :files [:src/parser.c]}
            :filetype :thrift})))
 
-(when (not vim.env.NVIM_SKIP_TREESITTER)
+(do
   (add-parsers)
   (mod-invoke :nvim-treesitter.configs :setup
               {:highlight {:enable true}

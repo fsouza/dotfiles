@@ -4,7 +4,7 @@
   (cb (os.getenv :VIRTUAL_ENV)))
 
 (fn set-from-cmd [exec args cb]
-  (mod-invoke :fsouza.lib.cmd :run exec {: args} nil
+  (mod-invoke :fsouza.lib.cmd :run exec {: args}
               #(if (= $1.exit-status 0)
                    (cb (vim.trim $1.stdout))
                    (cb nil))))

@@ -6,7 +6,7 @@
       (cb (vim.trim result.stdout))))
 
   (mod-invoke :fsouza.lib.cmd :run :/usr/libexec/java_home
-              {:args [:-v java-version]} nil on-finished))
+              {:args [:-v java-version]} on-finished))
 
 (lambda detect-runtime-name [java-home cb]
   (fn name-from-output [line]
@@ -34,7 +34,6 @@
 
   (let [path (require :fsouza.pl.path)
         java-bin (path.join java-home :bin :java)]
-    (mod-invoke :fsouza.lib.cmd :run java-bin {:args [:-version]} nil
-                on-finished)))
+    (mod-invoke :fsouza.lib.cmd :run java-bin {:args [:-version]} on-finished)))
 
 {: find-java-home : detect-runtime-name}

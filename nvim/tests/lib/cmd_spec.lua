@@ -1,10 +1,10 @@
 local cmd = require("fsouza.lib.cmd")
 
-local function run_cmd(prg, opts, input_data, timeout)
+local function run_cmd(prg, opts, timeout)
   timeout = tonumber(timeout or os.getenv("NVIM_TEST_TIMEOUT") or 500)
   local result = nil
 
-  cmd.run(prg, opts, input_data, function(r)
+  cmd.run(prg, opts, function(r)
     result = r
   end)
   local ok, _ = vim.wait(timeout, function()
@@ -23,12 +23,5 @@ describe("fsouza.lib.cmd", function()
     assert.are.same(0, result["exit-status"])
     assert.are.same("hi from stdout\n", result.stdout)
     assert.are.same("hi from stderr\n", result.stderr)
-  end)
-
-  it("can send data to the command", function()
-    local result = run_cmd("cat", { args = {} }, "hello there")
-
-    assert.are.same(0, result["exit-status"])
-    assert.are.same("hello there", result.stdout)
   end)
 end)

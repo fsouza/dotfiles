@@ -25,7 +25,7 @@
                           :--hidden
                           "--"
                           current-line
-                          "."]} nil
+                          "."]}
                   (fn [result]
                     (when (= result.exit-status 0)
                       (->> result.stdout

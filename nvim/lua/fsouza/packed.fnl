@@ -6,7 +6,7 @@
     (mod-invoke :fsouza.lib.cmd :run :git
                 {:args [:clone
                         "https://github.com/wbthomason/packer.nvim.git"
-                        packer-repo-dir]} nil
+                        packer-repo-dir]}
                 #(if (= $1.exit-status 0)
                      (do
                        (vim.cmd.packadd {:args [:packer.nvim] :bang true})

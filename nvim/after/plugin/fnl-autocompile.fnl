@@ -24,7 +24,7 @@
                      #(mod-invoke :fsouza.packed :repack)
                      nil)]
         (mod-invoke :fsouza.lib.cmd :run :make
-                    {:args [:-C dotfiles-dir :install]} nil
+                    {:args [:-C dotfiles-dir :install]}
                     (partial handle-result next)))))
 
   (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__autocompile-fennel

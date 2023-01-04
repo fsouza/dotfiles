@@ -34,7 +34,7 @@
 ;;   signal: number;
 ;;   errors: string table;
 ;; }
-(lambda run [cmd opts ?input-data on-finished ?debug-fn]
+(lambda run [cmd opts on-finished ?debug-fn]
   (var cmd-handle nil)
   (let [loop vim.loop
         stdout (loop.new_pipe false)
@@ -72,40 +72,7 @@
           (set cmd-handle spawn-handle)
           (loop.read_start stdout stdout-handler.callback)
           (loop.read_start stderr stderr-handler.callback)
-          (when ?input-data
-            (loop.write stdin ?input-data))
           (loop.shutdown stdin))
         (vim.schedule #(on-finished {:exit-status -1 :stderr pid-or-err})))))
 
-(lambda start [cmd opts output-handler exit-handler]
-  (fn make-handler [type]
-    (fn [err chunk]
-      (output-handler {: type : err : chunk})))
-
-  (var cmd-handle nil)
-  (let [loop vim.loop
-        stdout (loop.new_pipe false)
-        stderr (loop.new_pipe false)
-        stdin (loop.new_pipe false)
-        close (fn []
-                (loop.read_stop stdout)
-                (loop.read_stop stderr)
-                (safe-close stdout)
-                (safe-close stderr)
-                (safe-close stdin)
-                (safe-close cmd-handle))
-        stdout-handler (make-handler :STDOUT)
-        stderr-handler (make-handler :STDERR)
-        opts (vim.tbl_extend :error opts
-                             {:stdio [stdin stdout stderr] :detached false})
-        (spawn-handle pid-or-err) (loop.spawn cmd opts exit-handler)]
-    (if spawn-handle
-        (do
-          (set cmd-handle spawn-handle)
-          (loop.read_start stdout stdout-handler)
-          (loop.read_start stderr stderr-handler)
-          (loop.shutdown stdin)
-          pid-or-err)
-        (vim.schedule #(exit-handler {:exit-status -1 :stderr pid-or-err})))))
-
-{: run : start}
+{: run}
