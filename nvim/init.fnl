@@ -169,5 +169,7 @@
       (set-global-mappings)
       (override-builtin-functions)
       (set-ui-options)
-      (set-neovim-global-vars))
+      (set-neovim-global-vars)
+      (when vim.env.BOOTSTRAP_PACKER
+        (mod-invoke :fsouza.packed :setup)))
     (error "missing FSOUZA_DOTFILES_DIR\n"))
