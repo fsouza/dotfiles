@@ -7,7 +7,6 @@ brew "fd"
 brew "fnm"
 brew "fzf"
 brew "git", args: ["overwrite"]
-brew "lua"
 brew "pcre"
 brew "python@3.11", args: ["overwrite"]
 brew "ripgrep"

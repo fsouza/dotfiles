@@ -393,11 +393,12 @@ async def setup_fnlfmt(cache_dir: Path, hr_dir: Path) -> None:
         cache_dir / "fnlfmt",
     )
 
+    print(hr_dir)
     await run_cmd(
         "make",
         [],
         cwd=repo_dir,
-        env={"PATH": f"{hr_dir}:{os.environ.get('PATH')}"},
+        env={"PATH": f"{hr_dir}/bin:{os.environ.get('PATH')}"},
     )
 
 

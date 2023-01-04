@@ -15,6 +15,10 @@ def main(args: Sequence[str]) -> int:
             *args,
         ],
         capture_output=True,
+        env={
+            **os.environ,
+            "PATH": f"{cache_dir}/hr/bin:{os.getenv('PATH')}",
+        },
     )
 
     if cmd.returncode != 0:
