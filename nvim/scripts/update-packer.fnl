@@ -2,4 +2,5 @@
       {:setup setup-packer} (require :fsouza.packed)]
   (print (vim.inspect package))
   (setup-packages (os.getenv :FSOUZA_DOTFILES_DIR))
+  (print (vim.inspect package))
   (setup-packer))
