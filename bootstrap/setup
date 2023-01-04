@@ -37,11 +37,11 @@ def main() -> int:
 
     (home / ".zsh_sessions_disable").touch(exist_ok=True)
 
-    if shutil.which("brew") != "":
-        subprocess.check_call(["brew", "update"])
+    if brew := shutil.which("brew"):
+        subprocess.check_call([brew, "update"])
         subprocess.check_call(
             [
-                "brew",
+                brew,
                 "bundle",
                 "--no-lock",
                 "--no-upgrade",
@@ -50,7 +50,7 @@ def main() -> int:
             ],
         )
 
-    if shutil.which("nvim") != "":
+    if shutil.which("nvim"):
         subprocess.check_call(
             ["make", "-C", BASEDIR],
             env={
