@@ -54,12 +54,12 @@ install-dirs: build
 .PHONY: install-nvim-init.lua
 install-nvim-init.lua: build/nvim/init.lua
 	@ mkdir -p $(NVIM_CONFIG_DIR)
-	cp -p build/nvim/init.lua $(NVIM_CONFIG_DIR)
+	install -v -C build/nvim/init.lua $(NVIM_CONFIG_DIR)/init.lua
 
 .PHONY: install-hammerspoon
 install-hammerspoon: build
-	@ mkdir -p ~/.hammerspoon
-	cp -p build/hammerspoon/init.lua ~/.hammerspoon/init.lua
+	fd --type d . build | grep ^build/hammerspoon/ | sd 'build/hammerspoon/(.*)' '$$0 $(HOME)/.hammerspoon/$$1' | xargs -n 2 install -v -d
+	fd --type f . build/hammerspoon | sd 'build/hammerspoon/(.*)' '$$0 $(HOME)/.hammerspoon/$$1' | xargs -n 2 install -v -C
 
 .PHONY: rebuild
 rebuild: clean build
@@ -90,11 +90,11 @@ build/%.lua: %.fnl
 
 build/%.vim: %.vim
 	@ mkdir -p $(dir $@)
-	cp $< $@
+	install -C $< $@
 
 build/%.scm: %.scm
 	@ mkdir -p $(dir $@)
-	cp $< $@
+	install -C $< $@
 
 scripts/compile.lua: scripts/compile.fnl
 	$(eval TMP_FILE := $(shell mktemp))
