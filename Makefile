@@ -39,11 +39,11 @@ TARGET_NON_LUA_FILES := $(patsubst %,build/%,$(NON_LUA_FILES))
 install: install-nvim-site install-nvim-init.lua install-hammerspoon
 
 .PHONY: install-site
-install-nvim-site:
+install-nvim-site: build
 	rsync -avr build/nvim/ $(NVIM_DATA_DIR)/site/
 
 .PHONY: minimum-install
-minimum-install: install-nvim-init.lua
+minimum-install: build install-nvim-init.lua
 	rsync -avr --exclude=plugin build/nvim/ $(NVIM_DATA_DIR)/site/
 
 .PHONY: install-nvim-init.lua
