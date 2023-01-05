@@ -1,13 +1,30 @@
 NEOVIM_INSTALL_PREFIX=$HOME/opt/neovim
 NEOVIM_SRC_DIR=$HOME/Projects/os/3/neovim
 
-function _ensure_neovim_src {
+function __use_nvim {
+	local executable=${NEOVIM_INSTALL_PREFIX}/bin/nvim
+	if [ -x "${executable}" ]; then
+		if [[ $(which nvim) != "${executable}" ]]; then
+			prepend_to_path "$NEOVIM_INSTALL_PREFIX/bin"
+		fi
+
+		function zvim {
+			nvim +'lua require("fsouza.lib.fuzzy")["find-files"]()' "$@"
+		}
+
+		export GIT_EDITOR=nvim MANPAGER="nvim +'Man!'"
+	else
+		unset GIT_EDITOR MANPAGER
+	fi
+}
+
+function __ensure_neovim_src {
 	if ! [ -d "${NEOVIM_SRC_DIR}" ]; then
 		git clone https://github.com/neovim/neovim.git "${NEOVIM_SRC_DIR}"
 	fi
 }
 
-function _rebuild_neovim {
+function __rebuild_neovim {
 	(
 		cd "${NEOVIM_SRC_DIR}" &&
 			make \
@@ -19,23 +36,23 @@ function _rebuild_neovim {
 	)
 }
 
-function _update_neovim {
-	_ensure_neovim_src
-	git -C "${NEOVIM_SRC_DIR}" pull && _rebuild_neovim
+function __update_neovim {
+	__ensure_neovim_src
+	git -C "${NEOVIM_SRC_DIR}" pull && __rebuild_neovim
 }
 
 function rebootstrap_neovim {
-	_ensure_neovim_src
+	__ensure_neovim_src
 	pushd "${NEOVIM_SRC_DIR}" &&
 		make distclean &&
 		git clean -dfx &&
 		rm -rf "${NEOVIM_INSTALL_PREFIX}" &&
-		_update_neovim &&
+		__update_neovim &&
 		popd
 }
 
 function update_neovim {
-	_update_neovim || rebootstrap_neovim
+	(__update_neovim || rebootstrap_neovim) && __use_nvim
 }
 
 function enter_demo_mode {
@@ -63,14 +80,4 @@ function leave_demo_mode {
 	)
 }
 
-if [ -x "$NEOVIM_INSTALL_PREFIX/bin/nvim" ]; then
-	prepend_to_path "$NEOVIM_INSTALL_PREFIX/bin"
-
-	function zvim {
-		nvim +'lua require("fsouza.lib.fuzzy")["find-files"]()' "$@"
-	}
-
-	export GIT_EDITOR=nvim MANPAGER="nvim +'Man!'"
-else
-	unset EDITOR GIT_EDITOR MANPAGER
-fi
+__use_nvim
