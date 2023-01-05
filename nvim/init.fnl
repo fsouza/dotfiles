@@ -146,8 +146,7 @@
                  (uri-to-fname#)
                  (vim.fn.bufadd))))
      (tset vim.ui :select
-           (fn [...]
-             (mod-invoke :fsouza.lib.popup-picker :ui-select ...)))
+           #(mod-invoke :fsouza.lib.popup-picker :ui-select $...))
      (let [tablex# (require :fsouza.pl.tablex)
            patterns# ["message with no corresponding"]
            orig-notify# vim.notify]

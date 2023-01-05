@@ -81,9 +81,8 @@
                                                                               client.offset_encoding))))
  :textDocument/hover popup-callback
  :textDocument/signatureHelp popup-callback
- :textDocument/publishDiagnostics (fn [...]
-                                    (let [buf-diagnostics (require :fsouza.lsp.buf-diagnostic)]
-                                      (buf-diagnostics.publish-diagnostics ...)))
+ :textDocument/publishDiagnostics #(mod-invoke :fsouza.lsp.buf-diagnostic
+                                               :publish-diagnostics $...)
  :client/registerCapability register-capability
  :client/unregisterCapability unregister-capability
  :window/logMessage log-message}
