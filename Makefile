@@ -39,17 +39,12 @@ TARGET_NON_LUA_FILES := $(patsubst %,build/%,$(NON_LUA_FILES))
 install: install-nvim-site install-nvim-init.lua install-hammerspoon
 
 .PHONY: install-site
-install-nvim-site: install-dirs
-	fd --type f . build/nvim | sd 'build/nvim/(.+)' '$$0 $(HOME)/.local/share/nvim/site/$$1' | xargs -n 2 install -v -C
+install-nvim-site:
+	rsync -avr build/nvim/ $(NVIM_DATA_DIR)/site/
 
 .PHONY: minimum-install
-minimum-install: install-dirs install-nvim-init.lua
-	fd --type f . build/nvim | grep -v /plugin/ | sd 'build/nvim/(.+)' '$$0 $(HOME)/.local/share/nvim/site/$$1' | xargs -n 2 install -v -C
-
-.PHONY: install-dirs
-install-dirs: build
-	@ mkdir -p $(NVIM_DATA_DIR)/site
-	fd --type d . build/nvim | sd 'build/nvim/(.+)' '$$0 $(HOME)/.local/share/nvim/site/$$1' | xargs -n 2 install -v -d
+minimum-install: install-nvim-init.lua
+	rsync -avr --exclude=plugin build/nvim/ $(NVIM_DATA_DIR)/site/
 
 .PHONY: install-nvim-init.lua
 install-nvim-init.lua: build/nvim/init.lua
@@ -58,8 +53,7 @@ install-nvim-init.lua: build/nvim/init.lua
 
 .PHONY: install-hammerspoon
 install-hammerspoon: build
-	fd --type d . build | grep ^build/hammerspoon/ | sd 'build/hammerspoon/(.*)' '$$0 $(HOME)/.hammerspoon/$$1' | xargs -n 2 install -v -d
-	fd --type f . build/hammerspoon | sd 'build/hammerspoon/(.*)' '$$0 $(HOME)/.hammerspoon/$$1' | xargs -n 2 install -v -C
+	rsync -avr build/hammerspoon/ $(HOME)/.hammerspoon/
 
 .PHONY: rebuild
 rebuild: clean build
