@@ -159,10 +159,10 @@ ajv@^8.11.0:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-angular-html-parser@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/angular-html-parser/-/angular-html-parser-3.0.0.tgz#00b245940a86a74e05d83f8455862914798de82b"
-  integrity sha512-2UVNx5UmO2wj2JzwIIb0927/jr3d8vYv4cMIFsh4a8dLUIhf2YpMU7UgRMXJJo19jAihTW/MO2whnl/0xvAfqg==
+angular-html-parser@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/angular-html-parser/-/angular-html-parser-4.0.0.tgz#4dd4fe58521a5ac747e83c654e351a0b00c7c46a"
+  integrity sha512-J82X3oKt5fB40rTpcHyCJ5c12YySSI97L5u2DvbDS8eGVSsnh7MhEkWgu72jAE/VZuf7JzlWFDsL01jtudTwNA==
   dependencies:
     tslib "2.4.1"
 
