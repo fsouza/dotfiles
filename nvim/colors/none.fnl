@@ -80,7 +80,8 @@
                 :htmlBold
                 :Title
                 :ModeMsg
-                :FloatBorder]]
+                :FloatBorder
+                :editorconfigInvalidProperty]]
     (icollect [_ group-name (ipairs groups)]
       `(vim.api.nvim_set_hl 0 ,group-name {}))))
 
