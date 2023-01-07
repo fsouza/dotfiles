@@ -38,6 +38,7 @@ async def run_cmd(
     env: dict[str, str] | None = None,
     ignore_errors: bool = False,
     capture_output: Literal[False] = False,
+    stdin: bytes | None = None,
 ) -> None:
     ...
 
@@ -50,6 +51,7 @@ async def run_cmd(
     env: dict[str, str] | None = None,
     ignore_errors: bool = False,
     capture_output: Literal[True] = True,
+    stdin: bytes | None = None,
 ) -> tuple[bytes, bytes]:
     ...
 
@@ -61,6 +63,7 @@ async def run_cmd(
     env: dict[str, str] | None = None,
     ignore_errors: bool = False,
     capture_output: bool = False,
+    stdin: bytes | None = None,
 ) -> tuple[bytes, bytes] | None:
     stdout, stderr = sys.stdout, sys.stderr
 
@@ -74,6 +77,7 @@ async def run_cmd(
         *str_args,
         stdout=stdout,
         stderr=stderr,
+        stdin=asyncio.subprocess.PIPE,
         cwd=cwd,
         env={
             **os.environ,
@@ -81,7 +85,7 @@ async def run_cmd(
         },
     )
 
-    stdout, stderr = await proc.communicate()
+    stdout, stderr = await proc.communicate(stdin)
     assert proc.returncode is not None
 
     returncode = proc.returncode
@@ -149,7 +153,7 @@ async def download_hererocks_py(cache_dir: Path) -> Path:
     return filename
 
 
-async def _neovim_command(cmd: str) -> str:
+async def _neovim_lua_command(cmd: bytes) -> str:
     # in an ideal world, we'd start neovim's tcp server and communicate using
     # the API, but that depends on msgpack, and this script should work with
     # stuff that's defined in Python's standard library.
@@ -159,24 +163,19 @@ async def _neovim_command(cmd: str) -> str:
         [
             "--clean",
             "--headless",
-            "-E",
-            "-u",
-            "NORC",
-            "-R",
-            "-c",
-            cmd,
-            "-c",
-            "qa",
+            "-l",
+            "-",
         ],
         capture_output=True,
+        stdin=cmd,
     )
 
     return stderr.decode()
 
 
 async def _find_luajit_version() -> str:
-    return await _neovim_command(
-        r"lua v = string.gsub(jit.version, 'LuaJIT ', ''); print(v)",
+    return await _neovim_lua_command(
+        rb"print(string.gsub(jit.version, 'LuaJIT ', ''))",
     )
 
 
@@ -400,7 +399,7 @@ async def setup_fnlfmt(cache_dir: Path, hr_dir: Path) -> None:
 
 
 async def _find_cache_dir() -> Path:
-    cache_dir = await _neovim_command("echo stdpath('cache')")
+    cache_dir = await _neovim_lua_command(rb"print(vim.fn.stdpath('cache'))")
     return Path(cache_dir)
 
 
