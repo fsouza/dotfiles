@@ -68,7 +68,7 @@ jobs:
       - name: get luajit version
         id: get-luajit-version
         run: |
-          echo "version=$(nvim -l - <<<'print(jit.version)')" >>${GITHUB_OUTPUT}
+          nvim -l - <<<'print("version=" .. jit.version)' 2>>${GITHUB_OUTPUT}
 
       - name: get pcre version
         id: get-pcre-version
