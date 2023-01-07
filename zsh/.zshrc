@@ -1,6 +1,5 @@
 autoload -U add-zsh-hook
 
-FSOUZA_DOTFILES_DIR=${FSOUZA_DOTFILES_DIR:-$(dirname "$(readlink "${(%):-%N}")")}
 source "${FSOUZA_DOTFILES_DIR}"/extra/init-functions
 
 mkdir -p ~/.cache/{go,node,zsh}
@@ -76,6 +75,5 @@ source "${FSOUZA_DOTFILES_DIR}"/extra/fzf
 PROMPT="％ " PROMPT2="\\ " RPROMPT="%F{242}%T%f"
 
 ulimit -n 8192
-(rm -f ~/.zshenv &) &>/dev/null
 
 export FSOUZA_DOTFILES_DIR

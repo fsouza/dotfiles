@@ -23,7 +23,7 @@ def main() -> int:
     config_dir = home / ".config"
     config_dir.mkdir(exist_ok=True)
 
-    home_files = [".zshrc", ".editorconfig"]
+    home_files = [".zshenv", ".editorconfig"]
     for file in home_files:
         create_symlink(file, BASEDIR / file, home / file)
 
@@ -34,8 +34,6 @@ def main() -> int:
     os_setup_script = BASEDIR / "bootstrap" / f"{sys.platform}-setup"
     if os_setup_script.exists():
         subprocess.check_call([os_setup_script])
-
-    (home / ".zsh_sessions_disable").touch(exist_ok=True)
 
     if shutil.which("brew"):
         subprocess.check_call(["brew", "update"])
