@@ -1674,10 +1674,10 @@ yallist@^4.0.0:
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
 
-yaml-language-server@^1.10.0:
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/yaml-language-server/-/yaml-language-server-1.10.0.tgz#0c288874bb2caa20dadc55fc5fd1e349babdf08a"
-  integrity sha512-bGE5lObc8PBXDQ8QKEWUVFw85/g1R3TVbtLPswNY+YXR2fLb1RF6PW3CKNI0gshXTSKleywhAyORrXi7fjwpzg==
+yaml-language-server@^1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/yaml-language-server/-/yaml-language-server-1.11.0.tgz#08dd32c616e8bab0a0234d8afc3b345de5bcf49a"
+  integrity sha512-1TBlhK1nMSpDiq3iZfAyDOg4xwagozZAnqr0AOrZG5UteMt3zbfhOVqhRuAunRIZ8kktfGMjsKxDjO+utGAJaA==
   dependencies:
     ajv "^8.11.0"
     request-light "^0.5.7"
