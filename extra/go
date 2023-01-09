@@ -61,7 +61,7 @@ function use_go {
 		_install_go "${name}"
 	fi
 
-	export GOBIN="${HOME}/bin" GOPATH="${GO_HOME}/path"
+	export GOBIN="${HOME}/bin" GOPATH="${GO_HOME}/path" GOPRIVATE=git.sr.ht
 	prepend_to_path "${dir}" "${GOBIN}"
 }
 
