@@ -1,0 +1,225 @@
+#!/usr/bin/env python3
+import argparse
+import shutil
+import sys
+from collections.abc import Sequence
+from pathlib import Path
+
+HERE = Path(__file__).parent.absolute()
+
+
+def main(args: Sequence[str]) -> int:
+    colorschemes = {
+        "default": DEFAULT_COLORS,
+        "rose-pine": ROSE_PINE_COLORS,
+    }
+    parser = argparse.ArgumentParser("install-alacritty-config")
+    parser.add_argument("-c", "--colors", default="default", dest="colorscheme")
+    parser.add_argument(
+        "-s",
+        "--font-size",
+        default=12.0,
+        dest="font_size",
+        type=float,
+    )
+    opts = parser.parse_args(args)
+
+    config = CONFIG.format(
+        colorscheme=colorschemes[opts.colorscheme],
+        shell=shutil.which("zsh"),
+        dotfiles_dir=HERE.parent,
+        font_size=opts.font_size,
+    )
+
+    config_file = Path.home() / ".config" / "alacritty.yml"
+    config_file.parent.mkdir(parents=True, exist_ok=True)
+
+    if config_file.is_symlink():
+        config_file.unlink()
+
+    config_file.write_text(config)
+
+    return 0
+
+
+# note: this doesn't use dictionaries and YAML marshaling because YAML
+# marshaling isn't available in the Python standard library and this is a
+# bootstrapping script.
+DEFAULT_COLORS = """
+  primary:
+    background: "#ececec"
+    foreground: "#000000"
+
+  normal:
+    black: "#000000"
+    red: "#c91b00"
+    green: "#00c200"
+    yellow: "#606000"
+    blue: "#0225c7"
+    magenta: "#c930c6"
+    cyan: "#00c5c7"
+    white: "#c7c7c7"
+
+  bright:
+    black: "#000000"
+    red: "#f2201f"
+    green: "#23aa00"
+    yellow: "#efef00"
+    blue: "#1a8fff"
+    magenta: "#fd28ff"
+    cyan: "#00c5c7"
+    white: "#c7c7c7"
+"""
+
+ROSE_PINE_COLORS = """
+  primary:
+    background: "#faf4ed"
+    foreground: "#575279"
+  cursor:
+    text: "#575279"
+    cursor: "#cecacd"
+  vi_mode_cursor:
+    text: "#575279"
+    cursor: "#cecacd"
+  line_indicator:
+    foreground: None
+    background: None
+  selection:
+    text: "#575279"
+    background: "#dfdad9"
+  normal:
+    black: "#f2e9e1"
+    red: "#b4637a"
+    green: "#286983"
+    yellow: "#ea9d34"
+    blue: "#56949f"
+    magenta: "#907aa9"
+    cyan: "#d7827e"
+    white: "#575279"
+  bright:
+    black: "#9893a5"
+    red: "#b4637a"
+    green: "#286983"
+    yellow: "#ea9d34"
+    blue: "#56949f"
+    magenta: "#907aa9"
+    cyan: "#d7827e"
+    white: "#575279"
+  hints:
+    start:
+      foreground: "#797593"
+      background: "#fffaf3"
+    end:
+      foreground: "#9893a5"
+      background: "#fffaf3"
+"""
+
+CONFIG = r"""
+window:
+  padding:
+    x: 2
+    y: 2
+
+  dynamic_padding: true
+
+scrolling:
+  history: 50000
+  multiplier: 3
+
+font:
+  normal:
+    family: SauceCodePro Nerd Font Mono
+    style: Regular
+
+  bold:
+    style: Semibold
+
+  size: {font_size:.1f}
+
+colors:
+{colorscheme}
+
+env:
+  FSOUZA_DOTFILES_DIR: {dotfiles_dir}
+  ZDOTDIR: {dotfiles_dir}/zsh
+
+mouse:
+  double_click:
+    threshold: 100
+  triple_click:
+    threshold: 100
+
+cursor:
+  style:
+    shape: Block
+    blinking: Never
+  unfocused_hollow: true
+
+shell:
+  program: {shell}
+  args:
+    - --login
+
+key_bindings:
+  - key: N
+    mods: Command
+    action: CreateNewWindow
+  - key: B
+    mods: Alt
+    chars: "\x1bb"
+  - key: D
+    mods: Alt
+    chars: "\x1bd"
+  - key: F
+    mods: Alt
+    chars: "\x1bf"
+  - key: H
+    mods: Alt
+    chars: "\x1bh"
+  - key: J
+    mods: Alt
+    chars: "\x1bj"
+  - key: K
+    mods: Alt
+    chars: "\x1bk"
+  - key: L
+    mods: Alt
+    chars: "\x1bl"
+  - key: A
+    mods: Alt
+    chars: "\x1ba"
+  - key: T
+    mods: Alt
+    chars: "\x1bt"
+  - key: T
+    mods: Command
+    chars: "\x1bt"
+  - key: A
+    mods: Command
+    chars: "\x1ba"
+  - key: J
+    mods: Command
+    chars: "\x1bj"
+  - key: K
+    mods: Command
+    chars: "\x1bk"
+  - key: Q
+    mods: Alt
+    chars: "\x1bq"
+  - key: Space
+    mods: Control
+    chars: "\x00"
+  - key: Space
+    mods: Shift|Control
+    action: None
+  - key: Key6
+    mods: Control
+    chars: "\x1e"
+  - key: Key7
+    mods: Control
+    chars: "\x1e"
+"""
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

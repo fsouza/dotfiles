@@ -6,16 +6,14 @@ import sys
 from pathlib import Path
 
 BASEDIR = Path(__file__).parent.parent.absolute()
-SYMLINK_SKIP = set(os.getenv("FSOUZA_BOOTSTRAP_LINK_SKIP", "").split())
 
 
 def create_symlink(name: str, source: Path, target: Path) -> None:
-    if name not in SYMLINK_SKIP:
-        if target.exists() and not target.is_symlink():
-            target.unlink()
+    if target.exists() and not target.is_symlink():
+        target.unlink()
 
-        if not target.is_symlink():
-            target.symlink_to(source)
+    if not target.is_symlink():
+        target.symlink_to(source)
 
 
 def main() -> int:
@@ -23,11 +21,11 @@ def main() -> int:
     config_dir = home / ".config"
     config_dir.mkdir(exist_ok=True)
 
-    home_files = [".zshenv", ".editorconfig"]
+    home_files = [".editorconfig"]
     for file in home_files:
         create_symlink(file, BASEDIR / file, home / file)
 
-    xdg_items = ["alacritty.yml", "rgrc", "git", "fd", "utop", "tmux"]
+    xdg_items = ["rgrc", "git", "fd", "utop"]
     for file in xdg_items:
         create_symlink(file, BASEDIR / file, config_dir / file)
 

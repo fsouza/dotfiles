@@ -63,21 +63,12 @@ function enter_demo_mode {
 require('fsouza.lib.demo-mode').enable()
 EOF
 	fi
-	(
-		cd "${FSOUZA_DOTFILES_DIR}"
-		cp alacritty.yml{,.old}
-		if [[ $1 != "--no-color" ]]; then
-			sd '^colors:.+' 'colors: *rose-pine-dawn' alacritty.yml
-		fi
-		sd 'size: .+$' 'size: 24.0' alacritty.yml
-	)
+	"${FSOUZA_DOTFILES_DIR}"/bootstrap/install-alacritty-config --colors rose-pine --font-size 24
 }
 
 function leave_demo_mode {
 	rm -f ~/.local/share/nvim/site/after/plugin/demo.lua
-	(
-		cd "${FSOUZA_DOTFILES_DIR}" && test -f alacritty.yml.old && mv alacritty.yml.old alacritty.yml
-	)
+	"${FSOUZA_DOTFILES_DIR}"/bootstrap/install-alacritty-config
 }
 
 __use_nvim

@@ -163,3 +163,6 @@ defaults write com.apple.Spotlight orderedItems -array \
 	'{ enabled = 0; name = FONTS; }' \
 	'{ enabled = 0; name = "MENU_OTHER"; }' \
 	'{ enabled = 0; name = SOURCE; }'
+
+my_dir=$(cd "$(dirname "${0}")" && pwd -P)
+"${my_dir}"/install-alacritty-config
