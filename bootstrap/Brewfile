@@ -20,4 +20,4 @@ brew "taplo"
 brew "tmux"
 brew "zoxide"
 
-cask "font-sauce-code-pro-nerd-font"
+cask "font-office-code-pro"
