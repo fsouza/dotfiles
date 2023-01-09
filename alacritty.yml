@@ -11,11 +11,11 @@ scrolling:
 
 font:
   normal:
-    family: Office Code Pro
+    family: SauceCodePro Nerd Font Mono
     style: Regular
 
   bold:
-    style: Bold
+    style: Semibold
 
   size: 12.0
 
