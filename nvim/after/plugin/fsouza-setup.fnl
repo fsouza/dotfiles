@@ -30,7 +30,7 @@
      (vim.keymap.set :n :<leader>gg #(mod-invoke :fsouza.lib.fuzzy :live-grep))
      (vim.keymap.set :n :<leader>gw
                      #(mod-invoke :fsouza.lib.fuzzy :grep
-                                  (vim.fn.expand :<cword>)))
+                                  (vim.fn.expand :<cword>) :-F))
      (vim.keymap.set :x :<leader>gw
                      #(mod-invoke :fsouza.lib.fuzzy :grep-visual))
      (vim.keymap.set :n :<leader>gl #(mod-invoke :fsouza.lib.fuzzy :grep_last))

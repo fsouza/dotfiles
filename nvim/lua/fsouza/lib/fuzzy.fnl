@@ -119,12 +119,14 @@
                      (make-entry.file item opts)))]
     (core.fzf_exec contents opts)))
 
-(fn grep [rg-opts search]
+(fn grep [rg-opts search extra-opts]
   (let [search (or search (vim.fn.input "rg："))
+        extra-opts (or extra-opts "")
         fzf-lua (fzf-lua)]
     (when (not= search "")
       (fzf-lua.grep {: search
-                     :raw_cmd (string.format "rg %s -- %s" rg-opts
+                     :raw_cmd (string.format "rg %s %s -- %s" rg-opts
+                                             extra-opts
                                              (vim.fn.shellescape search))}))))
 
 (fn live-grep [rg-opts]
@@ -171,7 +173,7 @@
            :grep-visual #(grep rg-opts
                                (. (mod-invoke :fsouza.lib.nvim-helpers
                                               :get-visual-selection-contents)
-                                  1))
+                                  1) :-F)
            : git-repos
            : send-items}]
   (setmetatable mod {:__index (fn [table key]
