@@ -10,7 +10,6 @@ export LESSHISTFILE=${HOME}/.cache/lesshst
 export NODE_REPL_HISTORY=${HOME}/.cache/node/history
 
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
-source "${FSOUZA_DOTFILES_DIR}"/extra/brew
 
 prepend_to_path \
 	"${HOME}"/.cargo/bin \
@@ -24,9 +23,7 @@ if command -v fnm &>/dev/null; then
 	eval "$(fnm env)"
 fi
 
-cond_source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
-
-local extras=(virtualenv z git gh go java mail ocaml neovim rclone ruby)
+local extras=(brew virtualenv z git gh go java mail ocaml neovim rclone ruby)
 local extras_skip=( "${FSOUZA_EXTRAS_SKIP[@]}" )
 for extra in "${extras[@]}"; do
 	if ! (($extras_skip[(Ie)$extra])); then
@@ -41,7 +38,6 @@ cond_source "${FSOUZA_DOTFILES_DIR}/extra/$(uname -s)-functions"
 
 source "${FSOUZA_DOTFILES_DIR}"/extra/tmux
 
-fpath=(${HOMEBREW_PREFIX}/share/zsh-completions ~/.cache/zsh/zfunc $fpath)
 export ZLE_SPACE_SUFFIX_CHARS=$'|&'
 
 autoload -Uz compinit && compinit -d "${HOME}/.cache/zsh/zcompdump" -u
