@@ -1,5 +1,5 @@
 function tmux {
-	command tmux -L -u -f "${FSOUZA_DOTFILES_DIR}"/tmux/tmux.conf $@
+	"${HOMEBREW_PREFIX}"/bin/tmux -L -u -f "${FSOUZA_DOTFILES_DIR}"/tmux/tmux.conf $@
 }
 
 function _tmux_ensure_pane {
