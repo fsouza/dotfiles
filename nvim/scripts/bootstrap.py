@@ -162,7 +162,6 @@ async def _neovim_lua_command(cmd: bytes) -> str:
         "nvim",
         [
             "--clean",
-            "--headless",
             "-l",
             "-",
         ],

@@ -1,7 +1,7 @@
-NVIM_CACHE_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("cache")' +q 2>&1)
-NVIM_CONFIG_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("config")' +q 2>&1)
-NVIM_DATA_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("data")' +q 2>&1)
-NVIM_STATE_DIR := $(shell nvim --clean --headless -E -u NORC -R +'echo stdpath("state")' +q 2>&1)
+NVIM_CACHE_DIR := $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("cache"))' 2>&1)
+NVIM_CONFIG_DIR := $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("config"))' 2>&1)
+NVIM_DATA_DIR := $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("data"))' 2>&1)
+NVIM_STATE_DIR := $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("state"))' 2>&1)
 LUA := $(NVIM_CACHE_DIR)/hr/bin/lua
 FENNEL := $(NVIM_CACHE_DIR)/hr/bin/fennel
 PYTHON ?= python3.11
