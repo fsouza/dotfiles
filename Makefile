@@ -1,3 +1,4 @@
+SHELL := zsh
 NVIM_CACHE_DIR := $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("cache"))' 2>&1)
 NVIM_CONFIG_DIR := $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("config"))' 2>&1)
 NVIM_DATA_DIR := $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("data"))' 2>&1)
