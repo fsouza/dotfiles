@@ -23,7 +23,7 @@ if command -v fnm &>/dev/null; then
 	eval "$(fnm env)"
 fi
 
-local extras=(brew virtualenv z git gh go java mail ocaml neovim rclone ruby)
+local extras=(brew virtualenv z git gh go java mail ocaml neovim rclone ruby tmux)
 local extras_skip=( "${FSOUZA_EXTRAS_SKIP[@]}" )
 for extra in "${extras[@]}"; do
 	if ! (($extras_skip[(Ie)$extra])); then
@@ -35,8 +35,6 @@ unset extras_skip
 
 cond_source "${FSOUZA_DOTFILES_DIR}/extra/local-functions"
 cond_source "${FSOUZA_DOTFILES_DIR}/extra/$(uname -s)-functions"
-
-source "${FSOUZA_DOTFILES_DIR}"/extra/tmux
 
 export ZLE_SPACE_SUFFIX_CHARS=$'|&'
 
