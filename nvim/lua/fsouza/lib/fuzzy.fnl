@@ -164,9 +164,10 @@
     (core.fzf_exec contents opts)))
 
 (fn zvim []
-  (let [fzf-lua (fzf-lua)]
-    (if (vim.loop.fs_stat :.git)
-        (fzf-lua.git_files)
+  (let [fzf-lua (fzf-lua)
+        [git-dir] (vim.fs.find :.git {:upward true :stop (vim.loop.os_homedir)})]
+    (if git-dir
+        (fzf-lua.git_files {:cwd (vim.loop.cwd)})
         (fzf-lua.files))))
 
 (let [rg-opts "--column -n --hidden --no-heading --color=always --colors 'match:fg:0x99,0x00,0x00' --colors line:none --colors path:none --colors column:none -S --glob '!.git' --glob '!.hg'"
