@@ -6,7 +6,9 @@
   `(do
      (vim.keymap.set :n :<leader>zb #(mod-invoke :fsouza.lib.fuzzy :buffers)
                      {:silent true})
-     (vim.keymap.set :n :<leader>zz #(mod-invoke :fsouza.lib.fuzzy :find-files)
+     (vim.keymap.set :n :<leader>zz #(mod-invoke :fsouza.lib.fuzzy :git_files)
+                     {:silent true})
+     (vim.keymap.set :n :<leader>zf #(mod-invoke :fsouza.lib.fuzzy :files)
                      {:silent true})
      (vim.keymap.set :n :<leader>zt #(mod-invoke :fsouza.lib.fuzzy :tagstack)
                      {:silent true})
@@ -25,7 +27,7 @@
      (vim.keymap.set :n :<leader>zj
                      #(let [dir-path# (vim.fn.expand "%:p:h")]
                         (when (vim.startswith dir-path# "/")
-                          (mod-invoke :fsouza.lib.fuzzy :find-files dir-path#)))
+                          (mod-invoke :fsouza.lib.fuzzy :files {:cwd dir-path#})))
                      {:silent true})
      (vim.keymap.set :n :<leader>gg #(mod-invoke :fsouza.lib.fuzzy :live-grep))
      (vim.keymap.set :n :<leader>gw

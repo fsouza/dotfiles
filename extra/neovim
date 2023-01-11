@@ -9,7 +9,7 @@ function __use_nvim {
 		fi
 
 		function zvim {
-			nvim +'lua require("fsouza.lib.fuzzy")["find-files"]()' ${@}
+			nvim +'lua require("fsouza.lib.fuzzy").zvim()' ${@}
 		}
 
 		export GIT_EDITOR=nvim MANPAGER="nvim +'Man!'"

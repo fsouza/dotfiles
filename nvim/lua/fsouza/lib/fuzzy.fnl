@@ -73,10 +73,10 @@
                                                         :git_icons false
                                                         :color_icons false
                                                         : actions}
-                                                :git {:file_icons false
-                                                      :git_icons false
-                                                      :color_icons false
-                                                      : actions}
+                                                :git {:files {:file_icons false
+                                                              :git_icons false
+                                                              :color_icons false
+                                                              : actions}}
                                                 :grep {:file_icons false
                                                        :git_icons false
                                                        :color_icons false
@@ -133,10 +133,6 @@
   (let [fzf-lua (fzf-lua)]
     (fzf-lua.live_grep_native {:rg_opts rg-opts :multiprocess true})))
 
-(fn find-files [cwd]
-  (let [fzf-lua (fzf-lua)]
-    (fzf-lua.files {: cwd})))
-
 (fn handle-repo [run-fzf cd selected]
   (when (= (length selected) 1)
     (let [[sel] selected
@@ -144,8 +140,9 @@
       (when cd
         (vim.api.nvim_set_current_dir sel))
       (when run-fzf
-        (find-files sel)
-        (mod-invoke :fzf-lua.actions :ensure_insert_mode)))))
+        (let [fzf-lua (fzf-lua)]
+          (fzf-lua.files sel)
+          (mod-invoke :fzf-lua.actions :ensure_insert_mode))))))
 
 (fn git-repos [cwd cd run-fzf]
   (let [run-fzf (or run-fzf true)
@@ -166,8 +163,14 @@
     (tset opts :previewer nil)
     (core.fzf_exec contents opts)))
 
+(fn zvim []
+  (let [fzf-lua (fzf-lua)]
+    (if (vim.loop.fs_stat :.git)
+        (fzf-lua.git_files)
+        (fzf-lua.files))))
+
 (let [rg-opts "--column -n --hidden --no-heading --color=always --colors 'match:fg:0x99,0x00,0x00' --colors line:none --colors path:none --colors column:none -S --glob '!.git' --glob '!.hg'"
-      mod {: find-files
+      mod {: zvim
            :live-grep #(live-grep rg-opts)
            :grep (partial grep rg-opts)
            :grep-visual #(grep rg-opts

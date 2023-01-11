@@ -3,8 +3,8 @@
     (if cd
         (do
           (vim.api.nvim_set_current_dir directory)
-          (fuzzy.find-files))
-        (fuzzy.find-files directory))))
+          (fuzzy.files))
+        (fuzzy.files {:cwd directory}))))
 
 (fn make-callback [path]
   (fn [args]
