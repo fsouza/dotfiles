@@ -40,9 +40,3 @@ repos:
     rev: v2.0.0
     hooks:
       - id: autoflake
-
-  - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.9.0.2
-    hooks:
-      - id: shellcheck
-        files: "bin/.+"
