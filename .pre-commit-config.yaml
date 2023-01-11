@@ -31,12 +31,8 @@ repos:
     hooks:
       - id: add-trailing-comma
 
-  - repo: https://github.com/pycqa/flake8
-    rev: 6.0.0
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: "v0.0.217"
     hooks:
-      - id: flake8
-
-  - repo: https://github.com/pycqa/autoflake
-    rev: v2.0.0
-    hooks:
-      - id: autoflake
+      - id: ruff
+        args: ["--force-exclude"]
