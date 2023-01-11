@@ -26,8 +26,8 @@ function __auto_git_config {
 		for key in ${(k)_GIT_HOST_EMAIL}; do
 			if [[ $remote =~ $key ]]; then
 				local email=$_GIT_HOST_EMAIL[$key]
-				git config --local user.email "${email}"
-				git config --local user.signingkey "${email}"
+				git config --local user.email ${email}
+				git config --local user.signingkey ${email}
 				break
 			fi
 		done
@@ -35,7 +35,7 @@ function __auto_git_config {
 }
 
 if [[ -v HOMEBREW_PREFIX ]]; then
-	export PERLLIB=${HOMEBREW_PREFIX}/opt/git/share/perl5:${PERLLIB+:$PERLLIB}
+	export PERLLIB=${HOMEBREW_PREFIX}/opt/git/share/perl5:${PERLLIB+:${PERLLIB}}
 fi
 
 if command -v difft &>/dev/null; then

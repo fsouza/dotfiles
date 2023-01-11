@@ -1,11 +1,11 @@
 function cond_source {
-	[ -s "${1}" ] && source "${1}"
+	[ -s ${1} ] && source ${1}
 }
 
 function prepend_to_path {
 	for dir in $@; do
-		if [ -d "$dir" ]; then
-			PATH=$dir:$PATH
+		if [ -d ${dir} ]; then
+			PATH=${dir}:${PATH}
 		fi
 	done
 	export PATH
@@ -13,18 +13,18 @@ function prepend_to_path {
 
 function append_to_path {
 	for dir in $@; do
-		if [ -d "$dir" ]; then
-			PATH=$PATH:${dir}
+		if [ -d ${dir} ]; then
+			PATH=${PATH}:${dir}
 		fi
 	done
 	export PATH
 }
 
 function realpath {
-	local resolved=$(readlink "${1}")
+	local resolved=$(readlink ${1})
 	if [ -n "${resolved}" ]; then
-		realpath "${resolved}"
+		realpath ${resolved}
 	else
-		echo "${1}"
+		echo ${1}
 	fi
 }

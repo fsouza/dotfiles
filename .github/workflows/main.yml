@@ -41,7 +41,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          echo "PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH" >>${GITHUB_ENV}
+          echo "PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}" >>${GITHUB_ENV}
         env:
           NONINTERACTIVE: 1
 

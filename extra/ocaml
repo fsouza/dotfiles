@@ -1,5 +1,5 @@
-if command -v opam &>/dev/null && [ -f "$HOME/.opam/opam-init/init.zsh" ]; then
-	source "$HOME/.opam/opam-init/init.zsh"
+if command -v opam &>/dev/null && [ -f ${HOME}/.opam/opam-init/init.zsh ]; then
+	source ${HOME}/.opam/opam-init/init.zsh
 
 	function dune_tmux {
 		_tmux_toggle_pane dune 15 opam exec -- dune build @all --watch

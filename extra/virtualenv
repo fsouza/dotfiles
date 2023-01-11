@@ -3,33 +3,33 @@ export VIRTUALENVS=${HOME}/.cache/virtualenvs
 VIRTUALENV_PYZ_LOCATION=${VIRTUALENVS}/virtualenv.pyz
 
 function _download_virtualenv() {
-	mkdir -p "${VIRTUALENVS}"
-	curl -sLo "${VIRTUALENV_PYZ_LOCATION}" https://bootstrap.pypa.io/virtualenv.pyz
+	mkdir -p ${VIRTUALENVS}
+	curl -sLo ${VIRTUALENV_PYZ_LOCATION} https://bootstrap.pypa.io/virtualenv.pyz
 }
 
 function _global_python() {
 	local brew=${BREW:-brew}
-	echo $("${brew}" --prefix)/bin/python3
+	echo "$(${brew} --prefix)"/bin/python3
 }
 
 function virtualenv() {
-	if ! [ -f "${VIRTUALENV_PYZ_LOCATION}" ]; then
+	if ! [ -f ${VIRTUALENV_PYZ_LOCATION} ]; then
 		_download_virtualenv
 	fi
-	"$(_global_python)" "${VIRTUALENV_PYZ_LOCATION}" "${@}"
+	"$(_global_python)" ${VIRTUALENV_PYZ_LOCATION} ${@}
 }
 
 function upgrade_virtualenv() {
-	rm -f "${VIRTUALENV_PYZ_LOCATION}"
+	rm -f ${VIRTUALENV_PYZ_LOCATION}
 	_download_virtualenv
 }
 
 function _activate_virtualenv() {
 	local virtualenvpath=${1}
 	if [ -z "${oldpath}" ]; then
-		export oldpath=$PATH
+		export oldpath=${PATH}
 	fi
-	export PATH=${virtualenvpath}/bin:$PATH
+	export PATH=${virtualenvpath}/bin:${PATH}
 	alias cdvirtualenv='cd ${virtualenvpath}'
 	alias cdsitepackages='cd ${virtualenvpath}/lib/python*/site-packages'
 	export VIRTUAL_ENV=${virtualenvpath}
@@ -44,9 +44,9 @@ function v() {
 		virtualenvpath=${VIRTUALENVS}/${name}
 	fi
 	if [ -z "${name}" ]; then
-		ls -F "${VIRTUALENVS}" | grep '/$' | sed -e 's,/$,,'
-	elif [ -d "${virtualenvpath}" ]; then
-		_activate_virtualenv "${virtualenvpath}"
+		ls -F ${VIRTUALENVS} | grep '/$' | sed -e 's,/$,,'
+	elif [ -d ${virtualenvpath} ]; then
+		_activate_virtualenv ${virtualenvpath}
 	else
 		echo >&2 "virtualenv ${name} not found"
 		return 1
@@ -68,18 +68,18 @@ function d() {
 function _find_python() {
 	local brew=${BREW:-brew}
 	local python=${PYTHON:-python3.11}
-	local homebrew_prefix=$("${brew}" --prefix)
-	if ! command -v "${python}" &>/dev/null || [ -n "${BREW}" ]; then
-		local path=$(fd -L "${python}"$ --type f "${homebrew_prefix}"/opt/python*/bin | head -1)
-		if [ -n "$path" ]; then
+	local homebrew_prefix=$(${brew} --prefix)
+	if ! command -v ${python} &>/dev/null || [ -n "${BREW}" ]; then
+		local path=$(fd -L ${python}$ --type f ${homebrew_prefix}/opt/python*/bin | head -1)
+		if [ -n "${path}" ]; then
 			python=$path
 		fi
 	fi
-	echo "${python}"
+	echo ${python}
 }
 
 function mkv() {
-	test -d "${VIRTUALENVS}" || mkdir -p "${VIRTUALENVS}"
+	mkdir -p ${VIRTUALENVS}
 	local name=${1}
 	if [ -n "${name}" ]; then
 		virtualenvpath=${VIRTUALENVS}/${name}
@@ -88,12 +88,12 @@ function mkv() {
 	fi
 
 	# create the env only if it doesn't exist yet
-	if ! [ -d "${virtualenvpath}" ]; then
-		virtualenv -p "$(_find_python)" "${virtualenvpath}" &&
-			"${virtualenvpath}/bin/pip" install --upgrade pip
+	if ! [ -d ${virtualenvpath} ]; then
+		virtualenv -p "$(_find_python)" ${virtualenvpath} &&
+			${virtualenvpath}/bin/pip install --upgrade pip
 	fi
 
-	_activate_virtualenv "${virtualenvpath}"
+	_activate_virtualenv ${virtualenvpath}
 }
 
 function rmv() {
@@ -101,15 +101,15 @@ function rmv() {
 		echo >&2 "Please specify at least one virtualenv to remove"
 		return 2
 	fi
-	for venv in "${@}"; do
+	for venv in ${@}; do
 		local venv_dir=${VIRTUALENVS}/${venv}
-		rm -rf "${venv_dir}"
+		rm -rf ${venv_dir}
 	done
 }
 
 function upgrade_pip() {
-	for env in $(v); do
-		"${VIRTUALENVS}"/"${env}"/bin/pip install -U pip
+	for env in "$(v)"; do
+		${VIRTUALENVS}/${env}/bin/pip install -U pip
 	done
 }
 
@@ -122,7 +122,7 @@ function cv() {
 }
 
 if [ -n "${VIRTUAL_ENV}" ]; then
-	_activate_virtualenv "${VIRTUAL_ENV}"
+	_activate_virtualenv ${VIRTUAL_ENV}
 fi
 export PIP_REQUIRE_VIRTUALENV=1
 export VIRTUAL_ENV_DISABLE_PROMPT=1

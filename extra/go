@@ -1,11 +1,11 @@
-GO_HOME="${HOME}/.cache/go"
+GO_HOME=${HOME}/.cache/go
 
 function _normalize_name_version {
 	local name_or_version=${1}
-	if grep -q '^go' <<<"${name_or_version}"; then
-		echo "${name_or_version}"
+	if grep -q '^go' <<<${name_or_version}; then
+		echo ${name_or_version}
 	else
-		echo "go${name_or_version}"
+		echo go${name_or_version}
 	fi
 }
 
@@ -18,51 +18,51 @@ function _goarch {
 	if [[ ${hw_name} == "x86_64" ]]; then
 		echo amd64
 	else
-		echo "${hw_name}"
+		echo ${hw_name}
 	fi
 }
 
 function _gc_bootstrap {
-	local BOOTSTRAP_GO=$1
+	local BOOTSTRAP_GO=${1}
 	local base_dir=${GO_HOME}/bootstrap
-	fd --exact-depth 1 --type d --print0 --exclude "${BOOTSTRAP_GO}" .+ "${base_dir}" | xargs -0 -n 1 rm -rf
+	fd --exact-depth 1 --type d --print0 --exclude ${BOOTSTRAP_GO} .+ ${base_dir} | xargs -0 -n 1 rm -rf
 }
 
 function _bootstrap_go {
 	local BOOTSTRAP_GO="go1.19.5"
 	local dest_dir=${GO_HOME}/bootstrap/${BOOTSTRAP_GO}
 	local go_binary=${dest_dir}/go/bin/go
-	if ! [ -x "${go_binary}" ]; then
-		mkdir -p "${dest_dir}"
-		curl -sL "https://golang.org/dl/${BOOTSTRAP_GO}.$(uname -s | tr '[:upper:]' '[:lower:]')-$(_goarch).tar.gz" | tar -C "${dest_dir}" -xzf -
+	if ! [ -x ${go_binary} ]; then
+		mkdir -p ${dest_dir}
+		curl -sL "https://golang.org/dl/${BOOTSTRAP_GO}."$(uname -s | tr '[:upper:]' '[:lower:]')"-"$(_goarch)".tar.gz" | tar -C ${dest_dir} -xzf -
 	fi
-	_gc_bootstrap "${BOOTSTRAP_GO}"
-	dirname "${go_binary}"
+	_gc_bootstrap ${BOOTSTRAP_GO}
+	dirname ${go_binary}
 }
 
 function _install_go {
 	(
-		local name=$(_normalize_name_version "${1}")
+		local name=$(_normalize_name_version ${1})
 		local temp_gobin=$(mktemp -d)
 		prepend_to_path "$(_bootstrap_go)"
 		export GOPROXY=https://proxy.golang.org
 
-		env GOBIN="${temp_gobin}" GOPATH="${GO_HOME}/selfpath" go install "golang.org/dl/${name}@latest" &&
-			env HOME="${GO_HOME}" GOROOT_BOOTSTRAP="$(go env GOROOT)" "${temp_gobin}/${name}" download &&
-			rm -rf "${temp_gobin}"
+		env GOBIN=${temp_gobin} GOPATH=${GO_HOME}/selfpath go install golang.org/dl/${name}@latest &&
+			env HOME=${GO_HOME} GOROOT_BOOTSTRAP=$(go env GOROOT) ${temp_gobin}/${name} download &&
+			rm -rf ${temp_gobin}
 	)
 }
 
 function use_go {
-	local name=$(_normalize_name_version "${1:-gotip}")
+	local name=$(_normalize_name_version ${1:-gotip})
 
-	local dir="${GO_HOME}/sdk/${name}/bin"
-	if ! [ -d "${dir}" ]; then
-		_install_go "${name}"
+	local dir=${GO_HOME}/sdk/${name}/bin
+	if ! [ -d ${dir} ]; then
+		_install_go ${name}
 	fi
 
-	export GOBIN="${HOME}/bin" GOPATH="${GO_HOME}/path" GOPRIVATE=git.sr.ht
-	prepend_to_path "${dir}" "${GOBIN}"
+	export GOBIN=${HOME}/bin GOPATH=${GO_HOME}/path GOPRIVATE=git.sr.ht
+	prepend_to_path ${dir} ${GOBIN}
 }
 
 function update_go_tip {

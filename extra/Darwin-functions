@@ -1,2 +1,1 @@
-MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)
-export MACOSX_DEPLOYMENT_TARGET
+export MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)

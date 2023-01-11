@@ -1,7 +1,7 @@
 function _latest_rclone_version {
 	local version_url=https://downloads.rclone.org/version.txt
 
-	curl -sL "${version_url}" | awk '{print $NF}'
+	curl -sL ${version_url} | awk '{print $NF}'
 }
 
 function install_rclone {
@@ -19,30 +19,30 @@ function install_rclone {
 	local download_url=https://downloads.rclone.org/${version}/rclone-${version}-${os_name}-${arch}.zip
 	local dst=$(mktemp -d)
 
-	curl -sLo "${dst}/rclone.zip" "${download_url}"
-	pushd "${dst}"
+	curl -sLo ${dst}/rclone.zip ${download_url}
+	pushd ${dst}
 	unzip -j rclone.zip
 	mkdir -p ~/.local/bin ~/.local/share/man
 	mv rclone ~/.local/bin/rclone
 	mv rclone.1 ~/.local/share/man
 	popd
 
-	rm -rf "${dst}"
+	rm -rf ${dst}
 }
 
 function rclone_mount {
-	if [ -z "$1" ]; then
+	if [ -z "${1}" ]; then
 		echo >&2 please specify the remote
 		return 2
 	fi
 
-	if [ -z "$2" ]; then
+	if [ -z "${2}" ]; then
 		echo >&2 please specify the path
 		return 2
 	fi
 
 	:>~/.cache/rclone.log
-	rclone mount "${1}" "${2}" \
+	rclone mount ${1} ${2} \
 		--daemon \
 		--dir-cache-time 60s \
 		--dir-perms 0755 \
@@ -55,22 +55,22 @@ function rclone_mount {
 }
 
 function ensure_rclone_mount {
-	local remote=$1
-	local local_path=$2
+	local remote=${1}
+	local local_path=${2}
 
 	if ! command -v rclone &>/dev/null; then
 		install_rclone 2>&1
 	fi
 
-	if ! rclone lsd "${remote}" &>/dev/null; then
+	if ! rclone lsd ${remote} &>/dev/null; then
 		echo "remote ${remote} not defined in rclone"
 		return 2
 	fi
 
-	mkdir -p "${local_path}"
+	mkdir -p ${local_path}
 	if ! (mount | grep -q ^"${remote} on ${local_path} "); then
-		rclone_mount "${remote}" "${local_path}" 2>&1
+		rclone_mount ${remote} ${local_path} 2>&1
 	fi
 }
 
-(ensure_rclone_mount gd: "${HOME}"/gd &) 2>/dev/null
+(ensure_rclone_mount gd: ${HOME}/gd &) 2>/dev/null
