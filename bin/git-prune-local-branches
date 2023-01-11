@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-set -euo pipefail
+set -euo PIPEFAIL
 
 git branch -v | rg '([a-fA-F0-9])+\s\[gone\]' | awk '{print $1}' | xargs git branch -D
