@@ -66,9 +66,16 @@ class PrecommitHook(TypedDict):
 
 
 async def main() -> int:
-    precommit_config = Path(".pre-commit-config.yaml")
+    file = Path(__file__)
+    precommit_config: Path | None = None
+
+    for folder in file.parents:
+        precommit_config = folder / ".pre-commit-config.yaml"
+        if precommit_config.exists():
+            break
+
     coros: Iterable[Awaitable[Formatter | tuple[Linter, Formatter]]] = []
-    if precommit_config.exists():
+    if precommit_config is not None:
         coros = from_precommit(precommit_config)
     else:
         coros = [
@@ -155,6 +162,7 @@ async def get_ruff_fix(args: Sequence[str]) -> Formatter:
     ruff = _venv_tool("ruff")
     return Formatter(
         formatCommand=f"{ruff} --silent --exit-zero --fix -",
+        rootMarkers=["pyproject.toml", "ruff.toml", *DEFAULT_ROOT_MARKERS],
     )
 
 
@@ -203,6 +211,7 @@ async def get_ruff(args: Sequence[str]) -> tuple[Linter, Formatter]:
         lintCommand=f"{ruff} --stdin-filename ${{INPUT}} -",
         lintSource="ruff",
         lintFormats=["%f:%l:%c: %m"],
+        rootMarkers=["pyproject.toml", "ruff.toml", *DEFAULT_ROOT_MARKERS],
     ), await get_ruff_fix([])
 
 
