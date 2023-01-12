@@ -23,7 +23,6 @@ function __setup_brew {
 			${HOMEBREW_PREFIX}/opt/python@3.11/libexec/bin
 
 		cond_source ${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh
-		fpath=(${HOMEBREW_PREFIX}/share/zsh-completions ~/.cache/zsh/zfunc $fpath)
 	fi
 }
 
