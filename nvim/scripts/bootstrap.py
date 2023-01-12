@@ -266,7 +266,7 @@ async def install_gopls(langservers_cache_dir: Path) -> None:
             "GOBIN": str(langservers_cache_dir / "bin"),
             "GOPROXY": "https://proxy.golang.org",
         },
-        cwd=repo_dir,
+        cwd=repo_dir / "gopls",
     )
 
 
