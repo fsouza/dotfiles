@@ -4,9 +4,7 @@
 (import-macros {: mod-invoke} :helpers)
 
 (fn get-shfmt [cb]
-  (let [path (require :fsouza.pl.path)
-        shfmt-path (path.join cache-dir :langservers :bin :shfmt)]
-    (cb {:formatCommand (string.format "%s -" shfmt-path) :formatStdin true})))
+  (cb {:formatCommand "shfmt -" :formatStdin true}))
 
 (fn get-node-bin [bin-name cb]
   (let [path (require :fsouza.pl.path)

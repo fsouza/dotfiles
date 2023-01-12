@@ -2,15 +2,21 @@
 (import-macros {: get-cache-cmd} :lsp-helpers)
 
 (fn start-efm [bufnr cb]
-  (mod-invoke :fsouza.lsp.servers :start
-              {: bufnr
-               : cb
-               :config {:name :efm
-                        :cmd [(get-cache-cmd :efm-langserver)]
-                        :init_options {:documentFormatting true}
-                        :settings {:lintDebounce :250ms
-                                   :rootMarkers [:.git]
-                                   :languages {}}}}))
+  (let [mod-dir (mod-invoke :fsouza.pl.path :join dotfiles-dir :nvim
+                            :langservers)]
+    (mod-invoke :fsouza.lsp.servers :start
+                {: bufnr
+                 : cb
+                 :config {:name :efm
+                          :cmd [:go
+                                :run
+                                :-C
+                                mod-dir
+                                :github.com/mattn/efm-langserver]
+                          :init_options {:documentFormatting true}
+                          :settings {:lintDebounce :250ms
+                                     :rootMarkers [:.git]
+                                     :languages {}}}})))
 
 (fn should-add [current-tools tool]
   (if (or tool.formatCommand tool.lintCommand)

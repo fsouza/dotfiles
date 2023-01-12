@@ -1,8 +1,11 @@
 (import-macros {: mod-invoke} :helpers)
 
-(mod-invoke :fsouza.lsp.servers :start
-            {:config {:name :terraform-ls
-                      :cmd [:go
-                            :run
-                            "github.com/hashicorp/terraform-ls@main"
-                            :serve]}})
+(let [mod-dir (mod-invoke :fsouza.pl.path :join dotfiles-dir :nvim :langservers)]
+  (mod-invoke :fsouza.lsp.servers :start
+              {:config {:name :terraform-ls
+                        :cmd [:go
+                              :run
+                              :-C
+                              mod-dir
+                              :github.com/hashicorp/terraform-ls
+                              :serve]}}))

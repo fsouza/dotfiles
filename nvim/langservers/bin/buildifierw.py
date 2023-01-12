@@ -1,19 +1,21 @@
 import os
 import sys
 from collections.abc import Sequence
+from pathlib import Path
 from typing import NoReturn
 
 
 def main(args: Sequence[str]) -> NoReturn:
     file_type = get_type(args)
+    mod_dir = Path(os.environ["FSOUZA_DOTFILES_DIR"]) / "nvim" / "langservers"
 
-    cache_dir = os.getenv("NVIM_CACHE_DIR")
-    if cache_dir is None:
-        raise ValueError("missing NVIM_CACHE_DIR")
-
-    os.execl(
-        f"{cache_dir}/langservers/bin/buildifier",
-        f"{cache_dir}/langservers/bin/buildifier",
+    os.execlp(
+        "go",
+        "go",
+        "run",
+        "-C",
+        mod_dir,
+        "github.com/bazelbuild/buildtools/buildifier",
         "--lint=fix",
         "--warnings=all",
         f"--type={file_type}",

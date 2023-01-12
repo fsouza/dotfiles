@@ -6,6 +6,5 @@
       py3 (path.join :cache-dir :venv :bin :python3)
       buildifier {:formatCommand (string.format "%s %s ${INPUT}" py3
                                                 buildifierw)
-                  :formatStdin true
-                  :env [(.. :NVIM_CACHE_DIR= cache-dir)]}]
+                  :formatStdin true}]
   (mod-invoke :fsouza.lsp.servers.efm :add bufnr :bzl [buildifier]))

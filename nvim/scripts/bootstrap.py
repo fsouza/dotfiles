@@ -286,21 +286,6 @@ async def install_gopls(langservers_cache_dir: Path) -> None:
     )
 
 
-async def install_shfmt(langservers_cache_dir: Path) -> None:
-    await _go_install(langservers_cache_dir, "mvdan.cc/sh/v3/cmd/shfmt@latest")
-
-
-async def install_efm(langservers_cache_dir: Path) -> None:
-    await _go_install(langservers_cache_dir, "github.com/mattn/efm-langserver@master")
-
-
-async def install_buildifier(langservers_cache_dir: Path) -> None:
-    await _go_install(
-        langservers_cache_dir,
-        "github.com/bazelbuild/buildtools/buildifier@master",
-    )
-
-
 async def install_rust_analyzer(langservers_cache_dir: Path) -> None:
     if not await has_command("rustup"):
         print("skipping rust-analyzer")
@@ -374,9 +359,6 @@ async def setup_langservers(cache_dir: Path) -> None:
         install_servers_from_npm(),
         install_ocaml_lsp(),
         install_gopls(langservers_cache_dir),
-        install_shfmt(langservers_cache_dir),
-        install_efm(langservers_cache_dir),
-        install_buildifier(langservers_cache_dir),
         install_rust_analyzer(langservers_cache_dir),
         install_jdtls(langservers_cache_dir),
         install_kotlin_language_server(langservers_cache_dir),
