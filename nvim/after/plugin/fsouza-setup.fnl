@@ -6,9 +6,9 @@
   `(do
      (vim.keymap.set :n :<leader>zb #(mod-invoke :fsouza.lib.fuzzy :buffers)
                      {:silent true})
-     (vim.keymap.set :n :<leader>zz #(mod-invoke :fsouza.lib.fuzzy :git-files)
+     (vim.keymap.set :n :<leader>zz #(mod-invoke :fsouza.lib.fuzzy :files)
                      {:silent true})
-     (vim.keymap.set :n :<leader>zf #(mod-invoke :fsouza.lib.fuzzy :files)
+     (vim.keymap.set :n :<leader>zg #(mod-invoke :fsouza.lib.fuzzy :git-files)
                      {:silent true})
      (vim.keymap.set :n :<leader>zt #(mod-invoke :fsouza.lib.fuzzy :tagstack)
                      {:silent true})
