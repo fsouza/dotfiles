@@ -1,5 +1,7 @@
 (import-macros {: mod-invoke} :helpers)
 
+(local disabled-servers {})
+
 (fn with-executable [exec cb]
   (when exec
     (let [node-bin (mod-invoke :fsouza.pl.path :join config-dir :langservers
@@ -21,14 +23,9 @@
         (mod-invoke :fsouza.pl.path :dirname file)
         (cwd-if-not-home))))
 
-(fn disabled-servers []
-  (-> :DISABLED_LSPS (vim.loop.os_getenv) (or "")
-      (vim.split "\n" {:plain true :trimempty true})))
-
 (macro should-start [bufnr name]
-  `(and (vim.api.nvim_buf_is_valid ,bufnr)
-        (not= (. vim :bo bufnr :buftype) :nofile)
-        (not (vim.tbl_contains (disabled-servers) ,name))))
+  `(and (= (. disabled-servers ,name) nil) (vim.api.nvim_buf_is_valid ,bufnr)
+        (not= (. vim :bo bufnr :buftype) :nofile)))
 
 (fn with-defaults [opts]
   (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
@@ -56,4 +53,10 @@
                                               (vim.lsp.start config)
                                               (cb))))))))
 
-{: start : patterns-with-fallback}
+(fn enable-server [name]
+  (tset disabled-servers :name true))
+
+(fn disable-server [name]
+  (tset disabled-servers :name nil))
+
+{: start : patterns-with-fallback : disable-server : enable-server}
