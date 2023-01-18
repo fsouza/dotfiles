@@ -173,9 +173,11 @@ async def _neovim_lua_command(cmd: bytes) -> str:
 
 
 async def _find_luajit_version() -> str:
-    return await _neovim_lua_command(
-        rb"print(string.gsub(jit.version, 'LuaJIT ', ''))",
-    )
+    command = rb"""local luajit_version = string.gsub(jit.version, "LuaJIT ", "")
+print(luajit_version)
+"""
+
+    return await _neovim_lua_command( command)
 
 
 async def ensure_hererocks(cache_dir: Path) -> Path:
