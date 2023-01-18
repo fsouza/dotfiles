@@ -177,7 +177,7 @@ async def _find_luajit_version() -> str:
 print(luajit_version)
 """
 
-    return await _neovim_lua_command( command)
+    return await _neovim_lua_command(command)
 
 
 async def ensure_hererocks(cache_dir: Path) -> Path:
