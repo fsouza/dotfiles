@@ -10,3 +10,6 @@
 
 (function_declaration
   (parameter) @parameter.inner)
+
+(value_arguments
+  (value_argument) @parameter.inner)
