@@ -40,9 +40,10 @@
              :after :nvim-treesitter}
             {1 :nvim-treesitter/nvim-treesitter-textobjects
              :after :nvim-treesitter}
-            {1 :nvim-treesitter/playground}
+            {1 :nvim-treesitter/playground :after :nvim-treesitter}
             {1 :numToStr/Comment.nvim}
-            {1 :JoosepAlviste/nvim-ts-context-commentstring}
+            {1 :JoosepAlviste/nvim-ts-context-commentstring
+             :after :nvim-treesitter}
             {1 :fsouza/nvim-lsp-compl :as :nvim-lsp-compl :opt true}
             {1 :l3mon4d3/luasnip :as :luasnip :opt true}
             {1 :ibhagwan/fzf-lua :as :fzf-lua :opt true}
