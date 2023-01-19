@@ -1,5 +1,3 @@
-tap "homebrew/cask-fonts"
-
 brew "bash"
 brew "cmake"
 brew "coreutils"
@@ -20,4 +18,5 @@ brew "taplo"
 brew "tmux"
 brew "zoxide"
 
-cask "font-sauce-code-pro-nerd-font"
+tap "homebrew/cask-fonts" if OS.mac?
+cask "font-sauce-code-pro-nerd-font" if OS.mac?
