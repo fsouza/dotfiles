@@ -38,7 +38,7 @@
             {1 :nvim-treesitter/nvim-treesitter}
             {1 :nvim-treesitter/nvim-treesitter-refactor}
             {1 :nvim-treesitter/nvim-treesitter-textobjects}
-            {1 :nvim-treesitter/playground :after :nvim-treesitter}
+            {1 :nvim-treesitter/playground}
             {1 :numToStr/Comment.nvim}
             {1 :JoosepAlviste/nvim-ts-context-commentstring}
             {1 :fsouza/nvim-lsp-compl :as :nvim-lsp-compl :opt true}
