@@ -52,17 +52,7 @@
     (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__treesitter_autocmd
                 [{:events [:FileType] : targets :callback on-FileType}])))
 
-(fn add-parsers []
-  (let [parsers (require :nvim-treesitter.parsers)
-        parser-configs (parsers.get_parser_configs)]
-    (tset parser-configs :thrift
-          {:install_info {:url "https://github.com/duskmoon314/tree-sitter-thrift"
-                          :branch :main
-                          :files [:src/parser.c]}
-           :filetype :thrift})))
-
 (do
-  (add-parsers)
   (mod-invoke :nvim-treesitter.configs :setup
               {:highlight {:enable true}
                :playground {:enable true :updatetime 10}
