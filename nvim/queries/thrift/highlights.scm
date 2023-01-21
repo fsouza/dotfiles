@@ -1,3 +1,3 @@
 (comment) @comment
 
-(literal) @string
+(string_literal) @string
