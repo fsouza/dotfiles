@@ -68,7 +68,7 @@ alias bump_dotfiles="git -C ${FSOUZA_DOTFILES_DIR} pull && ${FSOUZA_DOTFILES_DIR
 
 source ${FSOUZA_DOTFILES_DIR}/extra/fzf
 
-PROMPT="％ " PROMPT2="\\ " RPROMPT="%F{242}%T%f"
+PROMPT="％ " PROMPT2="\\ "
 
 ulimit -n 8192
 
