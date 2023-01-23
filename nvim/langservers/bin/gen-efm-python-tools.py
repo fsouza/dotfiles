@@ -66,10 +66,10 @@ class PrecommitHook(TypedDict):
 
 
 async def main() -> int:
-    file = Path(__file__)
+    cur_dir = Path.cwd()
     precommit_config: Path | None = None
 
-    for folder in file.parents:
+    for folder in (cur_dir, *cur_dir.parents):
         precommit_config = folder / ".pre-commit-config.yaml"
         if precommit_config.exists():
             break
