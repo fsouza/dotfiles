@@ -198,16 +198,15 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-bash-language-server@^4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/bash-language-server/-/bash-language-server-4.4.0.tgz#b25f0625cea4cbdb9a1639d4919616e6ab5edf19"
-  integrity sha512-Pp01OeSJ/ex+XvM/UokF54A1M+u8YoGYugVU3hMiE1PsfOFkKZqFXKBFhUAFprWxKcp5yHJdU5jfAzf2meZ9XQ==
+bash-language-server@^4.5.2:
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/bash-language-server/-/bash-language-server-4.5.2.tgz#c4169de271f717960735d858fa4fc6e8a233bdf8"
+  integrity sha512-5G3rQHcDm3Zs5F5LOkCmpWCgEQsynpzIAoEQxo81w2XzA1l6qovRWuEIIqJstsO5khXaFpTJ2yGdSBBUPxBctw==
   dependencies:
     fast-glob "3.2.12"
     fuzzy-search "3.2.1"
-    node-fetch "2.6.7"
+    node-fetch "2.6.8"
     turndown "7.1.1"
-    urijs "1.19.11"
     vscode-languageserver "8.0.2"
     vscode-languageserver-textdocument "1.0.8"
     web-tree-sitter "0.20.7"
@@ -978,10 +977,10 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
-node-fetch@2.6.7:
-  version "2.6.7"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
-  integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
+node-fetch@2.6.8:
+  version "2.6.8"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.8.tgz#a68d30b162bc1d8fd71a367e81b997e1f4d4937e"
+  integrity sha512-RZ6dBYuj8dRSfxpUSu+NsdF1dpPpluJxwOp+6IoDp/sH2QNDSvurYsAa+F1WxY2RjA1iP93xhcsUoYbF2XBqVg==
   dependencies:
     whatwg-url "^5.0.0"
 
@@ -1289,11 +1288,6 @@ uri-js@^4.2.2:
   integrity sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==
   dependencies:
     punycode "^2.1.0"
-
-urijs@1.19.11:
-  version "1.19.11"
-  resolved "https://registry.yarnpkg.com/urijs/-/urijs-1.19.11.tgz#204b0d6b605ae80bea54bea39280cdb7c9f923cc"
-  integrity sha512-HXgFDgDommxn5/bIv0cnQZsPhHDA90NPHD6+c/v21U5+Sx5hoP8+dP9IZXBU1gIfvdRfhG8cel9QNPeionfcCQ==
 
 uvu@^0.5.0:
   version "0.5.6"
