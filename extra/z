@@ -1,5 +1,4 @@
 if command -v zoxide &>/dev/null; then
-	export _ZO_DATA=${HOME}/.cache/zoxide
 	export _ZO_ECHO=1
 	export _ZO_EXCLUDE_DIRS=(${HOME}/gd)
 
