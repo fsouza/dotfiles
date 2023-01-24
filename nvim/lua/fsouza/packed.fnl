@@ -46,9 +46,6 @@
             {1 :ibhagwan/fzf-lua :as :fzf-lua :opt true}
             {1 :norcalli/nvim-colorizer.lua :as :nvim-colorizer.lua :opt true}
             {1 :rhysd/git-messenger.vim :opt true}
-            {1 :simrat39/symbols-outline.nvim
-             :opt true
-             :as :symbols-outline.nvim}
             {1 :vijaymarupudi/nvim-fzf :opt true}
             {1 :b0o/SchemaStore.nvim :as :SchemaStore.nvim :opt true}
             {1 :j-hui/fidget.nvim :as :fidget.nvim :opt true}

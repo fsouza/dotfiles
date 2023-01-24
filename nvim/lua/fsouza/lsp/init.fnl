@@ -1,66 +1,5 @@
 (import-macros {: mod-invoke} :helpers)
 
-(local setup-symbols-outline
-       (mod-invoke :fsouza.lib.nvim-helpers :once
-                   #(let [symbols-outline (require :symbols-outline)]
-                      (symbols-outline.setup {:highlight_hovered_item false
-                                              :auto_preview false
-                                              :keymaps {:toggle_preview [:<leader>i]
-                                                        :close [:<leader>v]}
-                                              :symbols {:File {:icon ">"
-                                                               :hl :TSURI}
-                                                        :Module {:icon "Ｍ"
-                                                                 :hl :TSNamespace}
-                                                        :Namespace {:icon ">"
-                                                                    :hl :TSNamespace}
-                                                        :Package {:icon ">"
-                                                                  :hl :TSNamespace}
-                                                        :Class {:icon "𝓒"
-                                                                :hl :TSType}
-                                                        :Method {:icon "ƒ"
-                                                                 :hl :TSMethod}
-                                                        :Property {:icon "ƒ"
-                                                                   :hl :TSMethod}
-                                                        :Field {:icon ">"
-                                                                :hl :TSField}
-                                                        :Constructor {:icon "ƒ"
-                                                                      :hl :TSConstructor}
-                                                        :Enum {:icon "ℰ"
-                                                               :hl :TSType}
-                                                        :Interface {:icon "ﰮ"
-                                                                    :hl :TSType}
-                                                        :Function {:icon "ƒ"
-                                                                   :hl :TSFunction}
-                                                        :Variable {:icon ">"
-                                                                   :hl :TSConstant}
-                                                        :Constant {:icon ">"
-                                                                   :hl :TSConstant}
-                                                        :String {:icon "𝓐"
-                                                                 :hl :TSString}
-                                                        :Number {:icon "#"
-                                                                 :hl :TSNumber}
-                                                        :Boolean {:icon "⊨"
-                                                                  :hl :TSBoolean}
-                                                        :Array {:icon "Ａ"
-                                                                :hl :TSConstant}
-                                                        :Object {:icon "⦿"
-                                                                 :hl :TSType}
-                                                        :Key {:icon "🔐"
-                                                              :hl :TSType}
-                                                        :Null {:icon :NULL
-                                                               :hl :TSType}
-                                                        :EnumMember {:icon ">"
-                                                                     :hl :TSField}
-                                                        :Struct {:icon "𝓢"
-                                                                 :hl :TSType}
-                                                        :Event {:icon ">"
-                                                                :hl :TSType}
-                                                        :Operator {:icon "+"
-                                                                   :hl :TSOperator}
-                                                        :TypeParameter {:icon "𝙏"
-                                                                        :hl :TSParameter}}})
-                      symbols-outline)))
-
 (fn mutate-server-capabilities [client]
   (let [per-server-caps {:jdtls [:codeLensProvider]
                          :ocaml-lsp [:semanticTokensProvider]
@@ -160,11 +99,7 @@
     (when (not= client.server_capabilities.documentSymbolProvider nil)
       (table.insert mappings.n
                     {:lhs :<leader>t
-                     :rhs #(mod-invoke :fsouza.lib.fuzzy :lsp_document_symbols)})
-      (table.insert mappings.n
-                    {:lhs :<leader>v
-                     :rhs #(let [symbols-outline (setup-symbols-outline)]
-                             (symbols-outline.toggle_outline))}))
+                     :rhs #(mod-invoke :fsouza.lib.fuzzy :lsp_document_symbols)}))
     (when (not= client.server_capabilities.referencesProvider nil)
       (table.insert mappings.n {:lhs :<leader>q :rhs #(vim.lsp.buf.references)}))
     (when (not= client.server_capabilities.hoverProvider nil)
