@@ -54,9 +54,9 @@
                                               (cb))))))))
 
 (fn enable-server [name]
-  (tset disabled-servers :name nil))
+  (tset disabled-servers name nil))
 
 (fn disable-server [name]
-  (tset disabled-servers :name true))
+  (tset disabled-servers name true))
 
 {: start : patterns-with-fallback : disable-server : enable-server}
