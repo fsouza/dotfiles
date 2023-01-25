@@ -70,8 +70,9 @@ async def main() -> int:
     precommit_config: Path | None = None
 
     for folder in (cur_dir, *cur_dir.parents):
-        precommit_config = folder / ".pre-commit-config.yaml"
-        if precommit_config.exists():
+        candidate = folder / ".pre-commit-config.yaml"
+        if candidate.exists():
+            precommit_config = candidate
             break
 
     coros: Iterable[Awaitable[Formatter | tuple[Linter, Formatter]]] = []
