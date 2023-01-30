@@ -49,6 +49,10 @@
             {1 :vijaymarupudi/nvim-fzf :opt true}
             {1 :b0o/SchemaStore.nvim :as :SchemaStore.nvim :opt true}
             {1 :j-hui/fidget.nvim :as :fidget.nvim :opt true}
+            {1 :tjdevries/sg.nvim
+             :as :sg.nvim
+             :opt true
+             :run "cargo build --workspace"}
             {1 :nvim-lua/plenary.nvim :as :plenary.nvim :opt true}
             {1 :ziontee113/syntax-tree-surfer
              :as :syntax-tree-surfer
