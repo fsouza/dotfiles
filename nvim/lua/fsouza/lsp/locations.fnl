@@ -1,7 +1,8 @@
 (import-macros {: mod-invoke} :helpers)
 
 (fn should-use-ts [node]
-  (if (= node nil) false
+  (if (= node nil)
+      false
       (let [node-type (node:type)
             node-types [; generic
                         :local_function

@@ -6,7 +6,7 @@
   (let [method context.method
         handler (or (. non-focusable-handlers method)
                     (vim.lsp.with (. vim.lsp.handlers method)
-                                  {:focusable false}))]
+                      {:focusable false}))]
     (tset non-focusable-handlers method handler)
     (handler err result context ...)))
 

@@ -4,8 +4,7 @@
 
 (var timer nil)
 
-(macro max-width []
-  13)
+(macro max-width [] 13)
 
 (fn trim [msg]
   (let [width (- (max-width) 3)]

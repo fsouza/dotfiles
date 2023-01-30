@@ -9,9 +9,11 @@
 (var doc-bufnr nil)
 
 (fn cr-key-for-comp-info [comp-info]
-  (if (= comp-info.mode "") :<cr>
+  (if (= comp-info.mode "")
+      :<cr>
       (if (and (= comp-info.pum_visible 1) (= comp-info.selected -1))
-          :<c-e><cr> :<cr>)))
+          :<c-e><cr>
+          :<cr>)))
 
 (fn item-documentation [item]
   (match (type item.documentation)

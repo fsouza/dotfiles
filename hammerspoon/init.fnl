@@ -12,18 +12,21 @@
 
 (fn set-readline-shortcuts [terminal-apps]
   (fn is-terminal [window]
-    (if (not window) false (let [application (window:application)
-                                 app-name (if application
-                                              (application:name)
-                                              "")
-                                 app-name (string.lower app-name)]
-                             (fn check-app [idx]
-                               (if (> idx (length terminal-apps)) false
-                                   (let [app (. terminal-apps idx)]
-                                     (if (= app app-name) true
-                                         (check-app (+ idx 1))))))
+    (if (not window)
+        false
+        (let [application (window:application)
+              app-name (if application
+                           (application:name)
+                           "")
+              app-name (string.lower app-name)]
+          (fn check-app [idx]
+            (if (> idx (length terminal-apps))
+                false
+                (let [app (. terminal-apps idx)]
+                  (if (= app app-name) true
+                      (check-app (+ idx 1))))))
 
-                             (check-app 1))))
+          (check-app 1))))
 
   (let [hks [(make-hotkey :ctrl :n [] :down)
              (make-hotkey :ctrl :p [] :up)

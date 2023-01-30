@@ -41,10 +41,10 @@
 
 (fn make-handler []
   (let [handler (vim.lsp.with vim.lsp.diagnostic.on_publish_diagnostics
-                              {:underline true
-                               :virtual_text false
-                               :signs true
-                               :update_in_insert false})]
+                  {:underline true
+                   :virtual_text false
+                   :signs true
+                   :update_in_insert false})]
     (fn [err result context ...]
       (vim.schedule exec-hooks)
       (vim.diagnostic.reset context.client_id context.bufnr)

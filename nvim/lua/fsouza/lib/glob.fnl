@@ -27,7 +27,8 @@
       (error (string.format "not a node: %s" v))))
 
 (fn is-group [v]
-  (if (not= (get-node-type v) :tree) false
+  (if (not= (get-node-type v) :tree)
+      false
       (let [first-node (. v 1)]
         (and (= first-node.type :special) (= first-node.value "{")))))
 

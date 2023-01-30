@@ -2,7 +2,8 @@
 
 (fn should-qf [selected]
   (let [n-selected (length selected)]
-    (if (<= (length selected) 1) false
+    (if (<= (length selected) 1)
+        false
         (mod-invoke :fsouza.pl.tablex :exists selected
                     #(if (string.match $1 "^.+:%d+:%d+:") true false)))))
 

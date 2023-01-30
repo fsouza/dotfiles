@@ -47,11 +47,11 @@
     (when (should-start bufnr name)
       (tset config :root_dir (find-root-dir))
       (with-executable exec
-                       #(do
-                          (tset config.cmd 1 $1)
-                          (vim.schedule #(->> {: bufnr}
-                                              (vim.lsp.start config)
-                                              (cb))))))))
+        #(do
+           (tset config.cmd 1 $1)
+           (vim.schedule #(->> {: bufnr}
+                               (vim.lsp.start config)
+                               (cb))))))))
 
 (fn enable-server [name]
   (tset disabled-servers name nil))

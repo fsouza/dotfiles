@@ -75,16 +75,16 @@
   {: packer-dir
    : pkgs
    :setup #(with-packer packer-dir
-                        (fn [packer]
-                          (packer.startup {1 #(let [use $1]
-                                                (each [_ pkg (ipairs pkgs)]
-                                                  (use pkg)))
-                                           :config {:package_root package-root
-                                                    :plugin_package plugin-package
-                                                    :disable_commands true
-                                                    :autoremove true
-                                                    :compile_on_sync false}})
-                          (packer.sync)))
+             (fn [packer]
+               (packer.startup {1 #(let [use $1]
+                                     (each [_ pkg (ipairs pkgs)]
+                                       (use pkg)))
+                                :config {:package_root package-root
+                                         :plugin_package plugin-package
+                                         :disable_commands true
+                                         :autoremove true
+                                         :compile_on_sync false}})
+               (packer.sync)))
    :repack (fn []
              (let [packed (reload :fsouza.packed)]
                (packed.setup)))})
