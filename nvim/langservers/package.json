@@ -10,7 +10,7 @@
 		"bash-language-server": "^4.5.2",
 		"eslint_d": "^12.2.1",
 		"postcss-scss": "^4.0.6",
-		"pyright": "^1.1.290",
+		"pyright": "^1.1.291",
 		"remark-parse": "^10.0.1",
 		"typescript": "^4.9.4",
 		"typescript-language-server": "^3.0.2",
