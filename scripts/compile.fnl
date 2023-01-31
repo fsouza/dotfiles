@@ -22,18 +22,28 @@
 (fn isrel [p start]
   (not (startswith (path.relpath p start) "../")))
 
+(fn get-profile [dotfiles-dir filename opts]
+  (match opts.profile
+    :nvim :nvim
+    :hammerspoon :hammerspoon
+    :auto (if (isrel filename (path.join dotfiles-dir "nvim:")) :nvim
+              (isrel filename (path.join dotfiles-dir :hammerspoon)) :hammerspoon
+              :unknown)
+    _ :unknown))
+
 (fn compile-opts [opts]
   (let [{: filename} opts
         filename (path.abspath filename)
         dotfiles-dir (dotfiles-dir)
-        is-nvim (isrel filename (path.join dotfiles-dir :nvim))
-        is-hammerspoon (isrel filename (path.join dotfiles-dir :hammerspoon))
-        globals (if is-hammerspoon [:hs] is-nvim
-                    [:vim :dotfiles-dir :config-dir :cache-dir :data-dir] [])
+        profile (get-profile dotfiles-dir filename opts)
+        globals (match profile
+                  :hammerspoon [:hs]
+                  :nvim [:vim :dotfiles-dir :config-dir :cache-dir :data-dir]
+                  _ [])
         compile-opts {: filename
                       :allowedGlobals globals
                       :unfriendly true
-                      :useBitLib is-nvim}]
+                      :useBitLib (= profile :nvim)}]
     (each [global-name _ (pairs _G)]
       (table.insert compile-opts.allowedGlobals global-name))
     compile-opts))
@@ -46,12 +56,13 @@
         (values 0 output ""))))
 
 (fn parse-args [args]
-  (let [opts {:src nil :filename nil :output nil}]
+  (let [opts {:src nil :filename nil :output nil :profile :auto}]
     (while (> (length args) 0)
       (let [arg (table.remove args 1)]
         (match arg
           :--stdin-filename (tset opts :filename (table.remove args 1))
           "-" (tset opts :src (io.read :*all))
+          :--profile (tset opts :profile (table.remove args 1))
           :--output (tset opts :output (table.remove args 1))
           _ (let [file (io.open arg :r)]
               (tset opts :filename arg)
