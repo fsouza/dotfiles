@@ -26,7 +26,7 @@
   (match opts.profile
     :nvim :nvim
     :hammerspoon :hammerspoon
-    :auto (if (isrel filename (path.join dotfiles-dir "nvim:")) :nvim
+    :auto (if (isrel filename (path.join dotfiles-dir :nvim)) :nvim
               (isrel filename (path.join dotfiles-dir :hammerspoon)) :hammerspoon
               :unknown)
     _ :unknown))
