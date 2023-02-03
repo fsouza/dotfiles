@@ -7,7 +7,7 @@ from typing import NoReturn
 
 def main(args: Sequence[str]) -> NoReturn:
     file_type = get_type(args)
-    mod_dir = Path(os.environ["FSOUZA_DOTFILES_DIR"]) / "nvim" / "langservers"
+    mod_dir = Path(__file__).parent.parent.absolute()
 
     os.execlp(
         "go",
