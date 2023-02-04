@@ -72,7 +72,7 @@
         seq (require :fsouza.pl.seq)
         s (-> (vim.api.nvim_list_bufs)
               (seq.list)
-              (seq.filter vim.api.nvim_buf_is_loaded)
+              (seq.filter #(vim.api.nvim_buf_is_loaded $1))
               (seq.map #(let [bufname (vim.api.nvim_buf_get_name $1)]
                           (path.abspath bufname)))
               (seq.filter #(= $1 filepath))
@@ -96,13 +96,17 @@
                                    (try-notify-server client-id reg-id uri
                                                       file-change-type.Deleted
                                                       watch-kind.Delete)
-                                   (if (is-file-open filepath)
-                                       (try-notify-server client-id reg-id uri
-                                                          file-change-type.Changed
-                                                          watch-kind.Change)
-                                       (try-notify-server client-id reg-id uri
-                                                          file-change-type.Created
-                                                          watch-kind.Create))))
+                                   (vim.schedule #(if (is-file-open filepath)
+                                                      (try-notify-server client-id
+                                                                         reg-id
+                                                                         uri
+                                                                         file-change-type.Changed
+                                                                         watch-kind.Change)
+                                                      (try-notify-server client-id
+                                                                         reg-id
+                                                                         uri
+                                                                         file-change-type.Created
+                                                                         watch-kind.Create)))))
             (try-notify-server client-id reg-id uri file-change-type.Changed
                                watch-kind.Change))))
 
