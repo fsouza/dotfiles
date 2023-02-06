@@ -12,7 +12,7 @@ autoflake==2.0.0
     # via -r requirements.in
 autopep8==2.0.1
     # via -r requirements.in
-black==22.12.0
+black==23.1.0
     # via -r requirements.in
 classify-imports==4.2.0
     # via reorder-python-imports
@@ -38,6 +38,8 @@ isort==5.12.0
 mccabe==0.7.0
     # via flake8
 mypy-extensions==0.4.3
+    # via black
+packaging==23.0
     # via black
 pathspec==0.10.2
     # via black
