@@ -203,14 +203,14 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-bash-language-server@^4.6.1:
-  version "4.6.1"
-  resolved "https://registry.yarnpkg.com/bash-language-server/-/bash-language-server-4.6.1.tgz#a2189dda076dd25103bef348aec6fe19c8a17c6d"
-  integrity sha512-3pzB92+0/+rrR4TdONFhOtczPLQBgobu+27/X2icnS32YzgdMJd7GMzM4V6nBZsrl5jMUY4W/0ExSVGIV3o4aw==
+bash-language-server@^4.6.2:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/bash-language-server/-/bash-language-server-4.6.2.tgz#3dca8d8fe6caf4f0f3d0c80cd34a4f2edf8a74af"
+  integrity sha512-71mfSt3Q+EMkMCsTRB+26ysRXVxDEyhB0B9gDarxqeUHSc0GAr5CpIql/xeOo0cK5NiNgpOc/xzSj/3wBwc+bg==
   dependencies:
     fast-glob "3.2.12"
     fuzzy-search "3.2.1"
-    node-fetch "2.6.8"
+    node-fetch "2.6.9"
     turndown "7.1.1"
     vscode-languageserver "8.0.2"
     vscode-languageserver-textdocument "1.0.8"
@@ -982,10 +982,10 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
-node-fetch@2.6.8:
-  version "2.6.8"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.8.tgz#a68d30b162bc1d8fd71a367e81b997e1f4d4937e"
-  integrity sha512-RZ6dBYuj8dRSfxpUSu+NsdF1dpPpluJxwOp+6IoDp/sH2QNDSvurYsAa+F1WxY2RjA1iP93xhcsUoYbF2XBqVg==
+node-fetch@2.6.9:
+  version "2.6.9"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.9.tgz#7c7f744b5cc6eb5fd404e0c7a9fec630a55657e6"
+  integrity sha512-DJm/CJkZkRjKKj4Zi4BsKVZh3ValV5IR5s7LVZnW+6YMh0W1BfNA8XSs6DLMGYlId5F3KnA70uu2qepcR08Qqg==
   dependencies:
     whatwg-url "^5.0.0"
 
