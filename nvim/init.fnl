@@ -132,6 +132,11 @@
       (table.insert exprs `(vim.keymap.set :i ,lhs ,rhs {:remap false})))
     exprs))
 
+(macro set-global-abbrev []
+  (let [cabbrevs {:W :w :W! :w! :Q :q :Q! :q! :Qa :qa :Qa! :qa!}]
+    (icollect [lhs rhs (pairs cabbrevs)]
+      `(vim.cmd.cnoreabbrev ,lhs ,rhs))))
+
 (macro override-builtin-functions []
   `(let [orig-uri-to-fname# vim.uri_to_fname]
      (fn uri-to-fname# [uri#]
@@ -167,6 +172,7 @@
       (initial-mappings)
       (set-global-options)
       (set-global-mappings)
+      (set-global-abbrev)
       (override-builtin-functions)
       (set-ui-options)
       (set-neovim-global-vars)
