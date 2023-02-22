@@ -80,10 +80,11 @@ async def main() -> int:
         coros = from_precommit(precommit_config)
     else:
         coros = [
-            get_flake8([]),
+            get_ruff([]),
             get_black([]),
             get_add_trailing_comma([]),
             get_reorder_python_imports([]),
+            get_ruff_fix([]),
         ]
 
     result: Sequence[Formatter | tuple[Linter, Formatter]] = await asyncio.gather(
