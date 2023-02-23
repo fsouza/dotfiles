@@ -35,7 +35,7 @@
                                   (vim.fn.expand :<cword>) :-F))
      (vim.keymap.set :x :<leader>gw
                      #(mod-invoke :fsouza.lib.fuzzy :grep-visual))
-     (vim.keymap.set :n :<leader>gl #(mod-invoke :fsouza.lib.fuzzy :grep_last))
+     (vim.keymap.set :n :<leader>gl #(mod-invoke :fsouza.lib.fuzzy :grep-last))
      (vim.keymap.set :n :<leader>zl #(mod-invoke :fsouza.lib.fuzzy :lines))))
 
 (macro setup-autofmt-commands []

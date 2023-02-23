@@ -146,6 +146,10 @@
           (fzf-lua.files sel)
           (mod-invoke :fzf-lua.actions :ensure_insert_mode))))))
 
+(fn grep-last [rg-opts]
+  (let [fzf-lua (fzf-lua)]
+    (fzf-lua.grep_last {:rg_opts rg-opts})))
+
 (fn git-repos [cwd cd run-fzf]
   (let [run-fzf (or run-fzf true)
         cd (or cd true)
@@ -173,6 +177,7 @@
       mod {: git-files
            :live-grep #(live-grep rg-opts)
            :grep (partial grep rg-opts)
+           :grep-last #(grep-last rg-opts)
            :grep-visual #(grep rg-opts
                                (. (mod-invoke :fsouza.lib.nvim-helpers
                                               :get-visual-selection-contents)
