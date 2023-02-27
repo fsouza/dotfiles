@@ -9,6 +9,8 @@
 		"angular-html-parser": "^4.0.1",
 		"bash-language-server": "^4.7.0",
 		"eslint_d": "^12.2.1",
+		"graphql": "^16.6.0",
+		"graphql-language-service-cli": "^3.3.15",
 		"postcss-scss": "^4.0.6",
 		"pyright": "^1.1.295",
 		"remark-parse": "^10.0.1",
