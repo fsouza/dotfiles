@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/bazelbuild/buildtools v0.0.0-20230111132423-06e8e2436a75
-	github.com/hashicorp/terraform-ls v0.30.2
+	github.com/hashicorp/terraform-ls v0.30.3
 	github.com/mattn/efm-langserver v0.0.44
 )
 
@@ -13,13 +13,13 @@ require (
 	github.com/Masterminds/semver/v3 v3.1.1 // indirect
 	github.com/Masterminds/sprig/v3 v3.2.1 // indirect
 	github.com/agext/levenshtein v1.2.2 // indirect
-	github.com/algolia/algoliasearch-client-go/v3 v3.26.1 // indirect
+	github.com/algolia/algoliasearch-client-go/v3 v3.26.3 // indirect
 	github.com/antonmedv/expr v1.10.5 // indirect
 	github.com/apparentlymart/go-textseg v1.0.0 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/armon/go-radix v0.0.0-20180808171621-7fddfc383310 // indirect
 	github.com/bgentry/speakeasy v0.1.0 // indirect
-	github.com/creachadair/jrpc2 v0.43.0 // indirect
+	github.com/creachadair/jrpc2 v0.44.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/djherbis/buffer v1.2.0 // indirect
 	github.com/djherbis/nio/v3 v3.0.1 // indirect
@@ -38,7 +38,7 @@ require (
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/hashicorp/hcl-lang v0.0.0-20230213134107-bb2205f5b041 // indirect
 	github.com/hashicorp/hcl/v2 v2.16.1 // indirect
-	github.com/hashicorp/terraform-exec v0.17.3 // indirect
+	github.com/hashicorp/terraform-exec v0.18.0 // indirect
 	github.com/hashicorp/terraform-json v0.15.0 // indirect
 	github.com/hashicorp/terraform-registry-address v0.0.0-20220623143253-7d51757b572c // indirect
 	github.com/hashicorp/terraform-schema v0.0.0-20230215154105-62b19298872f // indirect
