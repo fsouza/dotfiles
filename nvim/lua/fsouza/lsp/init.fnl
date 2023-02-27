@@ -118,6 +118,13 @@
       (let [codelens (require :fsouza.lsp.codelens)]
         (codelens.on-attach {: bufnr :mapping :<leader><cr>})
         (detach.register bufnr codelens.on-detach)))
+    (when (not= client.server_capabilities.callHierarchyProvider nil)
+      (table.insert mappings.n
+                    {:lhs :<leader>lc
+                     :rhs #(mod-invoke :fsouza.lib.fuzzy :lsp_incoming_calls)})
+      (table.insert mappings.n
+                    {:lhs :<leader>lC
+                     :rhs #(mod-invoke :fsouza.lib.fuzzy :lsp_outgoing_calls)}))
     (mod-invoke :fsouza.lsp.diagnostics :on-attach)
     (each [mode keymaps (pairs mappings)]
       (each [_ {: lhs : rhs} (ipairs keymaps)]
