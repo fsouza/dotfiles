@@ -23,7 +23,7 @@
 	autoStash = true
 [fetch]
 	prune = true
-	showForcedUpdates = false
+	showForcedUpdates = true
 [protocol]
 	version = 2
 [alias]
