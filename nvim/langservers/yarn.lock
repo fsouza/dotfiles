@@ -35,7 +35,7 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@babel/parser@^7.16.4", "@babel/parser@^7.17.3":
+"@babel/parser@^7.16.4", "@babel/parser@^7.21.2":
   version "7.21.2"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.21.2.tgz#dacafadfc6d7654c3051a66d6fe55b6cb2f2a0b3"
   integrity sha512-URpaIJQwEkEC2T9Kn+Ai6Xe/02iNaVCuT/PtoRz3GPVJVDpPd7mLo+VddTbhCRU9TXqW5mSrQfXZyi8kDKOVpQ==
@@ -45,7 +45,7 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.20.7.tgz#66fe23b3c8569220817d5feb8b9dcdc95bb4f71b"
   integrity sha512-T3Z9oHybU+0vZlY9CiDSJQTD5ZapcW18ZctFMi0MOAl/4BjFF4ul7NVSARLdbGO5vDqy9eQiGTV0LtKfvCYvcg==
 
-"@babel/polyfill@^7.8.7":
+"@babel/polyfill@^7.12.1":
   version "7.12.1"
   resolved "https://registry.yarnpkg.com/@babel/polyfill/-/polyfill-7.12.1.tgz#1f2d6371d1261bbd961f3c5d5909150e12d0bd96"
   integrity sha512-X0pi0V6gxLi6lFZpGmeNa4zxtwEmCs42isWLNjZZDE0Y8yVfgu0T2OAHlzBbdYlqbW/YXVvoBHpATEM+goCj8g==
@@ -53,7 +53,7 @@
     core-js "^2.6.5"
     regenerator-runtime "^0.13.4"
 
-"@babel/types@^7.17.0":
+"@babel/types@^7.21.2":
   version "7.21.2"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.21.2.tgz#92246f6e00f91755893c2876ad653db70c8310d1"
   integrity sha512-3wRZSs7jiFaB8AjxiiD+VqN5DTG2iRvJGQ+qYFrs/654lg6kGTQWIOFjlBo5RaXuAZjBmP3+OQH4dmhqiiyYxw==
@@ -1155,30 +1155,30 @@ graphql-config@4.3.0:
     minimatch "4.2.1"
     string-env-interpolation "1.0.1"
 
-graphql-language-service-cli@^3.3.15:
-  version "3.3.15"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-cli/-/graphql-language-service-cli-3.3.15.tgz#6b008023e0fc8b2501f348408c0d4accf9946855"
-  integrity sha512-YIWyxOxvrvcXb+IzkmMEtH22Uor4SKGl6E27xaMS2IkVpZtaEgwXeN7kEPFVeSn6I3fCahdMVtfz70IL4tWGxw==
+graphql-language-service-cli@^3.3.16:
+  version "3.3.16"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-cli/-/graphql-language-service-cli-3.3.16.tgz#4bf6757f2b6eae354154637995e0ed490b80633b"
+  integrity sha512-0oZzCte2gpP53+8kuQcRXkPK8gAzvmXTd/kE+6imyJUIvwezZIge2S1L55W0nMeTowov4iMRoE41ncp9ioK83w==
   dependencies:
-    "@babel/polyfill" "^7.8.7"
-    graphql-language-service "^5.1.1"
-    graphql-language-service-server "^2.9.5"
+    "@babel/polyfill" "^7.12.1"
+    graphql-language-service "^5.1.2"
+    graphql-language-service-server "^2.9.6"
     yargs "^16.2.0"
 
-graphql-language-service-server@^2.9.5:
-  version "2.9.5"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-server/-/graphql-language-service-server-2.9.5.tgz#3607871062234fb230bf08fe4cf4e24c05f05618"
-  integrity sha512-u4X6mgoB5ufp64h9vT5UsFgQZ8GsbIIGLHfr/vndujlVpY+iHml9ea1o8on2c9i1LpB/ILa2zF90pJkBQgASfg==
+graphql-language-service-server@^2.9.6:
+  version "2.9.6"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-server/-/graphql-language-service-server-2.9.6.tgz#bf92987913e314c82a36a19e67eb679f221007a6"
+  integrity sha512-a+kwNEPX+ZvEUNxE8u8K/haxsfVfk1rn8AjzHWsXUhLfhl06vhCiU0kgdls1d/DiMJ3HbcNFjeKqV9OZcLNhdg==
   dependencies:
-    "@babel/parser" "^7.17.3"
-    "@babel/types" "^7.17.0"
+    "@babel/parser" "^7.21.2"
+    "@babel/types" "^7.21.2"
     "@graphql-tools/load" "^7.5.3"
     "@vue/compiler-sfc" "^3.2.41"
     dotenv "8.2.0"
     fast-glob "^3.2.7"
     glob "^7.2.0"
     graphql-config "4.3.0"
-    graphql-language-service "^5.1.1"
+    graphql-language-service "^5.1.2"
     mkdirp "^1.0.4"
     node-abort-controller "^3.0.1"
     node-fetch "^2.6.1"
@@ -1188,10 +1188,10 @@ graphql-language-service-server@^2.9.5:
     vscode-languageserver-types "^3.17.2"
     vscode-uri "^3.0.2"
 
-graphql-language-service@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/graphql-language-service/-/graphql-language-service-5.1.1.tgz#d7b46d46adad3b192489960cc939da7ad8dbf21a"
-  integrity sha512-gpaDT9E3+3eWhoqO4C81CGhkzr7Vp2jH/eq+ykoUbgfvMEpqhGTfCeNmrf+S4K/+4WTkAAJBsYT0/ZPZkqe/Hg==
+graphql-language-service@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/graphql-language-service/-/graphql-language-service-5.1.2.tgz#f76dbe5f6c9bd8266bad26d64eb8e309c147a801"
+  integrity sha512-oeuztbvd7fwKWZ/GCp0voqgctdIL4BDjTkd/phz1jEyH+pfj6inJWKKIkUJPW5ebWHx+mFsZ00wdE6tiCvW2fA==
   dependencies:
     nullthrows "^1.0.0"
     vscode-languageserver-types "^3.17.1"
