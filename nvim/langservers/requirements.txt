@@ -10,7 +10,7 @@ attrs==22.1.0
     # via flake8-bugbear
 autoflake==2.0.1
     # via -r requirements.in
-autopep8==2.0.1
+autopep8==2.0.2
     # via -r requirements.in
 black==23.1.0
     # via -r requirements.in
