@@ -34,7 +34,7 @@
           {:dynamicRegistration true})
     (let [defaults {:handlers (require :fsouza.lsp.handlers)
                     : capabilities
-                    :flags {:debounce_text_changes 0}}]
+                    :flags {:debounce_text_changes 150}}]
       (vim.tbl_extend :force defaults opts))))
 
 (fn start [{: config : find-root-dir : bufnr : cb}]
