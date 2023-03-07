@@ -30,7 +30,6 @@
             {1 :justinmk/vim-dirvish}
             {1 :justinmk/vim-sneak}
             {1 :mattn/emmet-vim}
-            {1 :michaeljsmith/vim-indent-object}
             {1 :tpope/vim-fugitive}
             {1 :tpope/vim-repeat}
             {1 :tpope/vim-rhubarb}
@@ -57,6 +56,9 @@
             {1 :nvim-lua/plenary.nvim :as :plenary.nvim :opt true}
             {1 :ziontee113/syntax-tree-surfer
              :as :syntax-tree-surfer
+             :opt true}
+            {1 :chrisgrieser/nvim-various-textobjs
+             :as :nvim-various-textobjs
              :opt true}
             {1 :guns/vim-sexp}
             {1 :tpope/vim-sexp-mappings-for-regular-people}
