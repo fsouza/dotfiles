@@ -1,7 +1,7 @@
 (import-macros {: mod-invoke} :helpers)
 
 (let [path (require :fsouza.pl.path)
-      luacheck-bin (path.join cache-dir :hr :bin :luacheck)
+      luacheck-bin (path.join _G.cache-dir :hr :bin :luacheck)
       bufnr (vim.api.nvim_get_current_buf)
       luacheck {:lintCommand (string.format "%s --formatter plain --filename ${INPUT} -"
                                             luacheck-bin)

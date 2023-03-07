@@ -21,7 +21,7 @@
         (download-packer packer-dir cb))))
 
 (let [path (require :fsouza.pl.path)
-      package-root (path.join data-dir :site :pack)
+      package-root (path.join _G.data-dir :site :pack)
       plugin-package :packer
       packer-dir (path.join package-root plugin-package)
       pkgs [{1 :wbthomason/packer.nvim :opt true :as :packer.nvim}

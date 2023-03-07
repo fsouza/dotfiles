@@ -9,7 +9,7 @@
 (fn get-node-bin [bin-name cb]
   (let [path (require :fsouza.pl.path)
         local-bin (path.join :node_modules :.bin bin-name)
-        default-bin (path.join config-dir :langservers :node_modules :.bin
+        default-bin (path.join _G.config-dir :langservers :node_modules :.bin
                                bin-name)]
     (vim.loop.fs_stat local-bin
                       (fn [err# stat#]
@@ -19,7 +19,7 @@
 
 (fn with-runtime-dir [tool cb]
   (let [path (require :fsouza.pl.path)
-        xdg-runtime-dir (path.join cache-dir :prettierd)]
+        xdg-runtime-dir (path.join _G.cache-dir :prettierd)]
     (path.async-mkdir xdg-runtime-dir 493 true #(cb xdg-runtime-dir))))
 
 (fn get-prettierd [cb]

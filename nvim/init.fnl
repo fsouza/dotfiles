@@ -2,7 +2,7 @@
 
 (macro hererocks []
   `(let [lua-version# (string.gsub _G._VERSION "Lua " "")
-         hererocks-path# (.. cache-dir :/hr)
+         hererocks-path# (.. _G.cache-dir :/hr)
          share-path# (.. hererocks-path# :/share/lua/ lua-version#)
          lib-path# (.. hererocks-path# :/lib/lua/ lua-version#)]
      (tset package :path (table.concat [(.. share-path# :/?.lua)
@@ -33,7 +33,7 @@
      (tset vim.g :mapleader " ")))
 
 (macro set-neovim-global-vars []
-  (let [vars {:netrw_home `data-dir
+  (let [vars {:netrw_home `_G.data-dir
               :netrw_banner 0
               :netrw_liststyle 3
               :surround_no_insert_mappings true
@@ -161,21 +161,20 @@
 
        (tset vim :notify notify#))))
 
-(if vim.env.FSOUZA_DOTFILES_DIR
-    (do
-      (global dotfiles-dir vim.env.FSOUZA_DOTFILES_DIR)
-      (global config-dir (.. dotfiles-dir :/nvim))
-      (global cache-dir (vim.fn.stdpath :cache))
-      (global data-dir (vim.fn.stdpath :data))
-      (hererocks)
-      (add-pkgs-opt-to-path)
-      (initial-mappings)
-      (set-global-options)
-      (set-global-mappings)
-      (set-global-abbrev)
-      (override-builtin-functions)
-      (set-ui-options)
-      (set-neovim-global-vars)
-      (when vim.env.BOOTSTRAP_PACKER
-        (mod-invoke :fsouza.packed :setup)))
-    (error "missing FSOUZA_DOTFILES_DIR\n"))
+(let [dotfiles-dir (or vim.env.FSOUZA_DOTFILES_DIR
+                       (vim.fn.expand "~/.dotfiles"))]
+  (tset _G :dotfiles-dir dotfiles-dir)
+  (tset _G :config-dir (.. dotfiles-dir :/nvim))
+  (tset _G :cache-dir (vim.fn.stdpath :cache))
+  (tset _G :data-dir (vim.fn.stdpath :data))
+  (hererocks)
+  (add-pkgs-opt-to-path)
+  (initial-mappings)
+  (set-global-options)
+  (set-global-mappings)
+  (set-global-abbrev)
+  (override-builtin-functions)
+  (set-ui-options)
+  (set-neovim-global-vars)
+  (when vim.env.BOOTSTRAP_PACKER
+    (mod-invoke :fsouza.packed :setup)))

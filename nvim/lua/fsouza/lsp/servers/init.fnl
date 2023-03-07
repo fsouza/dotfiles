@@ -4,7 +4,7 @@
 
 (fn with-executable [exec cb]
   (when exec
-    (let [node-bin (mod-invoke :fsouza.pl.path :join config-dir :langservers
+    (let [node-bin (mod-invoke :fsouza.pl.path :join _G.config-dir :langservers
                                :node_modules :.bin)
           PATH (.. node-bin ":" (vim.loop.os_getenv :PATH 2048))]
       (mod-invoke :fsouza.pl.path :async-which exec

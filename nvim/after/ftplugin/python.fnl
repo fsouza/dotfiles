@@ -3,7 +3,7 @@
 (fn start-pyright [bufnr python-interpreter]
   (let [path (require :fsouza.pl.path)
         python-interpreter (or python-interpreter
-                               (path.join cache-dir :venv :bin :python3))]
+                               (path.join _G.cache-dir :venv :bin :python3))]
     (mod-invoke :fsouza.lsp.servers :start
                 {: bufnr
                  :config {:name :pyright
@@ -19,8 +19,8 @@
 
 (fn get-python-tools [cb]
   (let [path (require :fsouza.pl.path)
-        py3 (path.join cache-dir :venv :bin :python3)
-        gen-python-tools (path.join config-dir :langservers :bin
+        py3 (path.join _G.cache-dir :venv :bin :python3)
+        gen-python-tools (path.join _G.config-dir :langservers :bin
                                     :gen-efm-python-tools.py)]
     (fn on-finished [result]
       (if (not= result.exit-status 0)

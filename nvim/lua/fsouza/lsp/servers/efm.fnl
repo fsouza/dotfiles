@@ -2,7 +2,7 @@
 (import-macros {: get-cache-cmd} :lsp-helpers)
 
 (fn start-efm [bufnr cb]
-  (let [mod-dir (mod-invoke :fsouza.pl.path :join dotfiles-dir :nvim
+  (let [mod-dir (mod-invoke :fsouza.pl.path :join _G.dotfiles-dir :nvim
                             :langservers)]
     (mod-invoke :fsouza.lsp.servers :start
                 {: bufnr

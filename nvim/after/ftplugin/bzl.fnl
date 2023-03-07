@@ -2,8 +2,8 @@
 
 (let [path (require :fsouza.pl.path)
       bufnr (vim.api.nvim_get_current_buf)
-      buildifierw (path.join config-dir :langservers :bin :buildifierw.py)
-      py3 (path.join :cache-dir :venv :bin :python3)
+      buildifierw (path.join _G.config-dir :langservers :bin :buildifierw.py)
+      py3 (path.join _G.cache-dir :venv :bin :python3)
       buildifier {:formatCommand (string.format "%s %s ${INPUT}" py3
                                                 buildifierw)
                   :formatStdin true}]

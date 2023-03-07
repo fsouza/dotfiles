@@ -2,7 +2,7 @@
 
 (fn start-kotlin-language-server [bufnr java-home]
   (let [path (require :fsouza.pl.path)
-        server-bin (path.join cache-dir :langservers :kotlin-language-server
+        server-bin (path.join _G.cache-dir :langservers :kotlin-language-server
                               :server :build :install :server :bin
                               :kotlin-language-server)]
     (mod-invoke :fsouza.lsp.servers :start

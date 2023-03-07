@@ -24,9 +24,9 @@
 
 (fn start-jdtls [bufnr settings]
   (let [path (require :fsouza.pl.path)
-        jdtls-dir (path.join cache-dir :langservers :jdtls)
+        jdtls-dir (path.join _G.cache-dir :langservers :jdtls)
         shared-config-dir (path.join jdtls-dir :config_mac)
-        data-dir (path.join data-dir :jdtls)
+        data-dir (path.join _G.data-dir :jdtls)
         cmd [:java
              :-Declipse.application=org.eclipse.jdt.ls.core.id1
              :-Dosgi.bundles.defaultStartLevel=4

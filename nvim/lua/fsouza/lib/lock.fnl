@@ -3,7 +3,7 @@
 (fn lock-file-path [name]
   (let [path (require :fsouza.pl.path)
         cwd (vim.loop.cwd)]
-    (path.join cache-dir :fsouza-locks (string.sub cwd 2) name)))
+    (path.join _G.cache-dir :fsouza-locks (string.sub cwd 2) name)))
 
 (macro remove-autocmd [name]
   `(mod-invoke :fsouza.lib.nvim-helpers :reset-augroup

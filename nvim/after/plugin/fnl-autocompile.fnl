@@ -24,12 +24,12 @@
                      #(mod-invoke :fsouza.packed :repack)
                      nil)]
         (mod-invoke :fsouza.lib.cmd :run :make
-                    {:args [:-C dotfiles-dir :install]}
+                    {:args [:-C _G.dotfiles-dir :install]}
                     (partial handle-result next)))))
 
   (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__autocompile-fennel
               [{:events [:BufWritePost]
-                :targets [(.. dotfiles-dir :/*.fnl)
-                          (.. dotfiles-dir :/nvim/*.scm)
-                          (.. dotfiles-dir :/nvim/*.vim)]
+                :targets [(.. _G.dotfiles-dir :/*.fnl)
+                          (.. _G.dotfiles-dir :/nvim/*.scm)
+                          (.. _G.dotfiles-dir :/nvim/*.vim)]
                 :callback make}]))

@@ -38,7 +38,7 @@
         profile (get-profile dotfiles-dir filename opts)
         globals (match profile
                   :hammerspoon [:hs]
-                  :nvim [:vim :dotfiles-dir :config-dir :cache-dir :data-dir]
+                  :nvim [:vim]
                   _ [])
         compile-opts {: filename
                       :allowedGlobals globals

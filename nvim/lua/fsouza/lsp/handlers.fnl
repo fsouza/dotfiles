@@ -48,7 +48,7 @@
         log-file
         (do
           (let [path (require :fsouza.pl.path)
-                log-filename (path.join cache-dir :langservers
+                log-filename (path.join _G.cache-dir :langservers
                                         (string.format "%s.log" client-name))
                 (log-file err) (io.open log-filename :a)]
             (when err
