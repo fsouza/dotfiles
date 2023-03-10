@@ -2,11 +2,7 @@
 
 (fn mutate-server-capabilities [client]
   (let [per-server-caps {:jdtls [:codeLensProvider]
-                         :ocaml-lsp [:semanticTokensProvider]
-                         :sorbet [:definitionProvider
-                                  :referencesProvider
-                                  :hoverProvider
-                                  :typeDefinitionProvider]}
+                         :ocaml-lsp [:semanticTokensProvider]}
         caps (or (. per-server-caps client.name) [])]
     (each [_ cap (ipairs caps)]
       (tset client.server_capabilities cap nil))))
