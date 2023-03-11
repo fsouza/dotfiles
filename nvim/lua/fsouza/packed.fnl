@@ -60,6 +60,7 @@
             {1 :chrisgrieser/nvim-various-textobjs
              :as :nvim-various-textobjs
              :opt true}
+            {1 :liuchengxu/vista.vim :as :vista.vim :opt true}
             {1 :guns/vim-sexp}
             {1 :tpope/vim-sexp-mappings-for-regular-people}
             ; filetypes stuff

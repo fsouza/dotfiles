@@ -58,7 +58,8 @@
               :loaded_tutor_mode_plugin 1
               :loaded_zipPlugin 1
               :no_plugin_maps 1
-              :editorconfig_enable false}]
+              :editorconfig_enable false
+              :vista_default_executive :nvim_lsp}]
     (icollect [name value (pairs vars)]
       `(tset vim.g ,name ,value))))
 

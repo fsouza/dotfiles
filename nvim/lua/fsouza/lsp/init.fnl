@@ -94,6 +94,13 @@
                     {:lhs :<leader>S :rhs #(vim.lsp.buf.clear_references)}))
     (when (not= client.server_capabilities.documentSymbolProvider nil)
       (table.insert mappings.n
+                    {:lhs :<leader>v
+                     :rhs #(let [load-vista-vim (mod-invoke :fsouza.lib.nvim-helpers
+                                                            :once
+                                                            #(vim.cmd.packadd :vista.vim))]
+                             (load-vista-vim)
+                             (vim.cmd.Vista {:args ["!"] :bang true}))})
+      (table.insert mappings.n
                     {:lhs :<leader>t
                      :rhs #(mod-invoke :fsouza.lib.fuzzy :lsp_document_symbols)}))
     (when (not= client.server_capabilities.referencesProvider nil)
