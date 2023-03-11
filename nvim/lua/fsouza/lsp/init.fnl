@@ -11,7 +11,7 @@
   (let [client (vim.lsp.get_client_by_id client-id)
         detach (require :fsouza.lsp.detach)
         shell-post (require :fsouza.lsp.shell-post)
-        mappings {:n [{:lhs :<leader>l
+        mappings {:n [{:lhs :<leader>ll
                        :rhs #(vim.diagnostic.open_float {: bufnr
                                                          :scope :line
                                                          :source :if_many})}
