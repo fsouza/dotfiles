@@ -40,11 +40,6 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.21.2.tgz#dacafadfc6d7654c3051a66d6fe55b6cb2f2a0b3"
   integrity sha512-URpaIJQwEkEC2T9Kn+Ai6Xe/02iNaVCuT/PtoRz3GPVJVDpPd7mLo+VddTbhCRU9TXqW5mSrQfXZyi8kDKOVpQ==
 
-"@babel/parser@^7.20.7":
-  version "7.20.7"
-  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.20.7.tgz#66fe23b3c8569220817d5feb8b9dcdc95bb4f71b"
-  integrity sha512-T3Z9oHybU+0vZlY9CiDSJQTD5ZapcW18ZctFMi0MOAl/4BjFF4ul7NVSARLdbGO5vDqy9eQiGTV0LtKfvCYvcg==
-
 "@babel/polyfill@^7.12.1":
   version "7.12.1"
   resolved "https://registry.yarnpkg.com/@babel/polyfill/-/polyfill-7.12.1.tgz#1f2d6371d1261bbd961f3c5d5909150e12d0bd96"
@@ -87,17 +82,17 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@fsouza/prettierd@^0.23.2":
-  version "0.23.2"
-  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.23.2.tgz#adc8a2bbccf0754f41bc8de4bb7c1f57f84316cd"
-  integrity sha512-0kADmwDO3/wxu71vAzer6OvtNvMQfXpUU0C+ttkMvSWXzu257jsJRZJKUzbondk1SXvD8cLQOulwAB1NoG6H5g==
+"@fsouza/prettierd@^0.23.3":
+  version "0.23.3"
+  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.23.3.tgz#836911839a348f877a04c00a289bef60cab5491b"
+  integrity sha512-O253Z26eX0u2mwVkLQVIOO8+ll69kHGLdzw9P/LWd9OUIs8v4GnL5av4vfahpqYiFdVXnVGBcJwhFSyUJ3eFLg==
   dependencies:
     core_d "^5.0.1"
     nanolru "^1.0.0"
-    prettier "^2.8.1"
+    prettier "^2.8.4"
   optionalDependencies:
-    "@babel/parser" "^7.20.7"
-    "@typescript-eslint/typescript-estree" "^5.47.1"
+    "@babel/parser" "^7.21.2"
+    "@typescript-eslint/typescript-estree" "^5.54.0"
 
 "@graphql-tools/batch-execute@^8.5.18":
   version "8.5.18"
@@ -402,7 +397,7 @@
   resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-5.54.0.tgz#7d519df01f50739254d89378e0dcac504cab2740"
   integrity sha512-nExy+fDCBEgqblasfeE3aQ3NuafBUxZxgxXcYfzYRZFHdVvk5q60KhCSkG0noHgHRo/xQ/BOzURLZAafFpTkmQ==
 
-"@typescript-eslint/typescript-estree@^5.47.1", "@typescript-eslint/typescript-estree@^5.54.0":
+"@typescript-eslint/typescript-estree@^5.54.0":
   version "5.54.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-5.54.0.tgz#f6f3440cabee8a43a0b25fa498213ebb61fdfe99"
   integrity sha512-X2rJG97Wj/VRo5YxJ8Qx26Zqf0RRKsVHd4sav8NElhbZzhpBI8jU54i6hfo9eheumj4oO4dcRN1B/zIVEqR/MQ==
@@ -1803,10 +1798,10 @@ prettier@2.0.5:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.0.5.tgz#d6d56282455243f2f92cc1716692c08aa31522d4"
   integrity sha512-7PtVymN48hGcO4fGjybyBSIWDsLU4H4XlvOHfq91pz9kkGlonzwTfYkaIEwiRg/dAJF9YlbsduBAgtYLi+8cFg==
 
-prettier@^2.8.1:
-  version "2.8.1"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.1.tgz#4e1fd11c34e2421bc1da9aea9bd8127cd0a35efc"
-  integrity sha512-lqGoSJBQNJidqCHE80vqZJHWHRFoNYsSpP9AjFhlhi9ODCJA541svILes/+/1GM3VaL/abZi7cpFzOpdR9UPKg==
+prettier@^2.8.4:
+  version "2.8.4"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.4.tgz#34dd2595629bfbb79d344ac4a91ff948694463c3"
+  integrity sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==
 
 punycode@^1.3.2:
   version "1.4.1"
