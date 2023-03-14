@@ -1,7 +1,7 @@
-(namespace_definition) @definition.namespace
+(struct_definition (identifier) @definition.type)
 
-(type_identifier) @definition.type
+(enum_definition (identifier) @definition.enum)
 
-(enum_identifier) @definition.enum
+(field (identifier) @definition.field)
 
-(field_identifier) @definition.field
+(const_definition) @definition.const
