@@ -8,7 +8,10 @@
                     (vim.lsp.with (. vim.lsp.handlers method)
                       {:focusable false}))]
     (tset non-focusable-handlers method handler)
-    (handler err result context ...)))
+    (let [(_ winid) (handler err result context ...)]
+      (when winid
+        (vim.api.nvim_win_set_option winid :winhighlight
+                                     "Normal:PopupNormal,MatchParen:PopupNormal")))))
 
 (fn fzf-location-callback [_ result ctx]
   (when (and result (not (vim.tbl_isempty result)))
