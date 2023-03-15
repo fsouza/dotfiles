@@ -129,6 +129,7 @@
                     {:lhs :<leader>lC
                      :rhs #(mod-invoke :fsouza.lib.fuzzy :lsp_outgoing_calls)}))
     (mod-invoke :fsouza.lsp.diagnostics :on-attach)
+    (tset (. vim.bo bufnr) :formatexpr nil)
     (each [mode keymaps (pairs mappings)]
       (each [_ {: lhs : rhs} (ipairs keymaps)]
         (vim.keymap.set mode lhs rhs {:silent true :buffer bufnr}))
