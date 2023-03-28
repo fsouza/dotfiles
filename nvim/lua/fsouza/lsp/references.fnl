@@ -1,8 +1,8 @@
 (import-macros {: mod-invoke} :helpers)
 
-(fn is-test [fname]
+(macro is-test [fname]
   ;; Starting with Go, but I can add more stuff later.
-  (vim.endswith fname :_test.go))
+  `(vim.endswith ,fname :_test.go))
 
 (fn do-filter [refs]
   (let [tablex (require :fsouza.pl.tablex)
