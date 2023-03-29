@@ -1,6 +1,9 @@
 (import-macros {: mod-invoke} :helpers)
 (import-macros {: get-cache-cmd} :lsp-helpers)
 
+(fn is-go-test [fname]
+  (vim.endswith fname :_test.go))
+
 (fn setup []
   (mod-invoke :fsouza.lsp.servers :start
               {:config {:name :gopls
@@ -19,6 +22,8 @@
                                        :codelenses {:vendor false}
                                        :gofumpt true}}
                :find-root-dir #(mod-invoke :fsouza.lsp.servers
-                                           :patterns-with-fallback [:go.mod])}))
+                                           :patterns-with-fallback [:go.mod])
+               :cb #(mod-invoke :fsouza.lsp.references :register-test-checker
+                                :go is-go-test)}))
 
 {: setup}

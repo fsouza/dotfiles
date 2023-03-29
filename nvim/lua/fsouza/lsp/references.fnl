@@ -1,8 +1,10 @@
 (import-macros {: mod-invoke} :helpers)
 
-(macro is-test [fname]
-  ;; Starting with Go, but I can add more stuff later.
-  `(vim.endswith ,fname :_test.go))
+(local test-checkers {})
+
+(fn is-test [fname]
+  (let [ext (mod-invoke :fsouza.pl.path :extension fname)]
+    (mod-invoke :fsouza.pl.tablex :exists test-checkers #($1 fname))))
 
 (fn do-filter [refs]
   (let [tablex (require :fsouza.pl.tablex)
@@ -20,4 +22,7 @@
           refs)
       refs))
 
-{: filter-references}
+(fn register-test-checker [name checker]
+  (tset test-checkers name checker))
+
+{: filter-references : register-test-checker}
