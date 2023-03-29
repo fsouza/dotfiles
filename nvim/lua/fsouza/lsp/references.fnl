@@ -3,8 +3,9 @@
 (local test-checkers {})
 
 (fn is-test [fname]
-  (let [ext (mod-invoke :fsouza.pl.path :extension fname)]
-    (mod-invoke :fsouza.pl.tablex :exists test-checkers #($1 fname))))
+  (let [ext (mod-invoke :fsouza.pl.path :extension fname)
+        ext-checkers (or (. test-checkers ext) {})]
+    (mod-invoke :fsouza.pl.tablex :exists ext-checkers #($1 fname))))
 
 (fn do-filter [refs]
   (let [tablex (require :fsouza.pl.tablex)
@@ -22,7 +23,9 @@
           refs)
       refs))
 
-(fn register-test-checker [name checker]
-  (tset test-checkers name checker))
+(fn register-test-checker [ext name checker]
+  (let [ext-checkers (or (. test-checkers ext) {})]
+    (tset ext-checkers name checker)
+    (tset test-checkers ext ext-checkers)))
 
 {: filter-references : register-test-checker}

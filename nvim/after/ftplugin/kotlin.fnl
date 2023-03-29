@@ -14,7 +14,7 @@
                           :cmd [server-bin]
                           :cmd_env {:JAVA_HOME java-home}}
                  :cb #(mod-invoke :fsouza.lsp.references :register-test-checker
-                                  :kotlin is-kt-test)})))
+                                  :.kt :kotlin is-kt-test)})))
 
 (let [bufnr (vim.api.nvim_get_current_buf)]
   (mod-invoke :fsouza.lib.java :find-java-home :17

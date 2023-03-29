@@ -24,6 +24,6 @@
                :find-root-dir #(mod-invoke :fsouza.lsp.servers
                                            :patterns-with-fallback [:go.mod])
                :cb #(mod-invoke :fsouza.lsp.references :register-test-checker
-                                :go is-go-test)}))
+                                :.go :go is-go-test)}))
 
 {: setup}
