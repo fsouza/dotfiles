@@ -19,5 +19,7 @@ brew "taplo"
 brew "tmux"
 brew "zoxide"
 
-tap "homebrew/cask-fonts" if OS.mac?
-cask "font-sauce-code-pro-nerd-font" if OS.mac?
+if OS.mac?
+  tap "homebrew/cask-fonts"
+  cask "font-sauce-code-pro-nerd-font"
+end
