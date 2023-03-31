@@ -13,11 +13,12 @@
                                                                                                tools))))))))
 
 (fn make-tss-test-check [ext]
-  (let [spec-pat (.. "%.spec%." ext)
-        test-pat (.. "%.test%." ext)]
+  (let [pats [(.. "%.spec%." ext) (.. "%.test%." ext) (.. :/__tests__/)]]
     (fn [fname]
-      (and (not= (string.find fname spec-pat) nil)
-           (not= (string.fidn fname test-pat) nil)))))
+      (each [_ pat (ipairs pats)]
+        (when (not= (string.find fname pat) nil)
+          (lua "return true")))
+      false)))
 
 (fn start-typescript-language-server [bufnr]
   (mod-invoke :fsouza.lsp.servers :start
@@ -25,7 +26,7 @@
                :config {:name :typescript-language-server
                         :cmd [:typescript-language-server :--stdio]}
                :cb #(let [{: register-test-checker} (require :fsouza.lsp.references)
-                          exts [:ts :js]]
+                          exts [:js :jsx :ts :tsx]]
                       (each [_ ext (ipairs exts)]
                         (register-test-checker (.. "." ext) ext
                                                (make-tss-test-check ext))))}))
