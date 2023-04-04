@@ -1,7 +1,7 @@
 (import-macros {: mod-invoke} :helpers)
 
 (fn is-kt-test [fname]
-  (not= (string.find fname ".*/src/test/.*%.kt$") nil))
+  (not= (string.find fname "src/test/.*%.kt$") nil))
 
 (fn start-kotlin-language-server [bufnr java-home]
   (let [path (require :fsouza.pl.path)
