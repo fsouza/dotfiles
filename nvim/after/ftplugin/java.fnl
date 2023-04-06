@@ -35,7 +35,7 @@
              (.. :-Dosgi.sharedConfiguration.area= shared-config-dir)
              :-Dosgi.sharedConfiguration.area.readOnly=true
              :-Dosgi.configuration.cascaded=true
-             :-Xmx4G
+             "-XX:MaxRAMPercentage=80"
              :--add-modules=ALL-SYSTEM
              :--add-opens
              :java.base/java.util=ALL-UNNAMED
