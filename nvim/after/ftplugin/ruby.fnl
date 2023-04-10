@@ -1,5 +1,8 @@
 (import-macros {: mod-invoke} :helpers)
 
+(fn is-rspec-file [fname]
+  (not= (string.find fname "spec/.*_spec%.rb$") nil))
+
 (fn start-sorbet [bufnr]
   (mod-invoke :fsouza.lsp.servers :start
               {: bufnr
@@ -7,7 +10,10 @@
 
 (fn start-solargraph [bufnr]
   (mod-invoke :fsouza.lsp.servers :start
-              {: bufnr :config {:name :solargraph :cmd [:solargraph :stdio]}}))
+              {: bufnr
+               :config {:name :solargraph :cmd [:solargraph :stdio]}
+               :cb #(mod-invoke :fsouza.lsp.references :register-test-checker
+                                :.rb is-rspec-file)}))
 
 (fn start-efm [bufnr]
   (let [rubocop {:lintCommand "bundle exec rubocop --stdin ${INPUT}"
