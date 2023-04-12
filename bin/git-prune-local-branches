@@ -1,5 +1,0 @@
-#!/usr/bin/env zsh
-
-set -euo PIPEFAIL
-
-git branch -v --format '%(refname:short) %(upstream:track,nobracket)' | awk '{if ($2 == "gone") print $1 end}' | xargs git branch -D
