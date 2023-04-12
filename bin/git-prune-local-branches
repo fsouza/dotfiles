@@ -2,4 +2,4 @@
 
 set -euo PIPEFAIL
 
-git branch -v | rg '([a-fA-F0-9])+\s\[gone\]' | awk '{print $1}' | xargs git branch -D
+git branch -v --format '%(refname:short) %(upstream:track,nobracket)' | awk '{if ($2 == "gone") print $1 end}' | xargs git branch -D
