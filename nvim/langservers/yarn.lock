@@ -603,10 +603,10 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-bash-language-server@^4.9.0:
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/bash-language-server/-/bash-language-server-4.9.0.tgz#175538045696455d3677e9104ea3684684b0a039"
-  integrity sha512-rMb/d5NeFWviMzuW5DSJSWQ6eHlGPnt0ArfKP0Ayk00bUQzd5GlATJ1BUQ8UACYG/nn7pU6+JWiLgYAw32GL3Q==
+bash-language-server@^4.9.1:
+  version "4.9.1"
+  resolved "https://registry.yarnpkg.com/bash-language-server/-/bash-language-server-4.9.1.tgz#3285c456659b5ab3ee5f20ff8d54fc6a9af9d534"
+  integrity sha512-2W09QiXguGH5i9yvW6tYd28DnLlLIpf0FeUfN8yrYD0O0DDm6qwvqu7bfOmxkO2AnWeCJ/EY3lv6b+Zc7FQc1w==
   dependencies:
     fast-glob "3.2.12"
     fuzzy-search "3.2.1"
@@ -614,7 +614,7 @@ bash-language-server@^4.9.0:
     turndown "7.1.2"
     vscode-languageserver "8.0.2"
     vscode-languageserver-textdocument "1.0.8"
-    web-tree-sitter "0.20.7"
+    web-tree-sitter "0.20.8"
     zod "3.21.4"
 
 brace-expansion@^1.1.7:
@@ -2356,10 +2356,10 @@ web-streams-polyfill@^3.2.1:
   resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-3.2.1.tgz#71c2718c52b45fd49dbeee88634b3a60ceab42a6"
   integrity sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q==
 
-web-tree-sitter@0.20.7:
-  version "0.20.7"
-  resolved "https://registry.yarnpkg.com/web-tree-sitter/-/web-tree-sitter-0.20.7.tgz#b0ddb78e8244221a3100f432c7e162516cd9cd09"
-  integrity sha512-flC9JJmTII9uAeeYpWF8hxDJ7bfY+leldQryetll8Nv4WgI+MXc6h7TiyAZASWl9uC9TvmfdgOjZn1DAQecb3A==
+web-tree-sitter@0.20.8:
+  version "0.20.8"
+  resolved "https://registry.yarnpkg.com/web-tree-sitter/-/web-tree-sitter-0.20.8.tgz#1e371cb577584789cadd75cb49c7ddfbc99d04c8"
+  integrity sha512-weOVgZ3aAARgdnb220GqYuh7+rZU0Ka9k9yfKtGAzEYMa6GgiCzW9JjQRJyCJakvibQW+dfjJdihjInKuuCAUQ==
 
 webcrypto-core@^1.7.4:
   version "1.7.6"
