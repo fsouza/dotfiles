@@ -5,11 +5,11 @@
 (class_declaration) @class.outer
 
 (function_declaration
-  (function_body
-    (statements) @function.inner))
+  (function_body) @function.inner)
 
 (function_declaration
-  (parameter) @parameter.inner)
+  (function_value_parameters
+    (parameter) @parameter.inner))
 
 (value_arguments
   (value_argument) @parameter.inner)
