@@ -38,6 +38,7 @@
      :ctrl-x (partial edit-or-qf (partial edit :split))
      :ctrl-v (partial edit-or-qf (partial edit :vsplit))
      :ctrl-t (partial edit-or-qf (partial edit :tabedit))
+     :alt-q actions.file_sel_to_qf
      :ctrl-q actions.file_sel_to_qf}))
 
 (fn save-stack-and-edit [selected]
