@@ -1829,10 +1829,10 @@ pvutils@^1.1.3:
   resolved "https://registry.yarnpkg.com/pvutils/-/pvutils-1.1.3.tgz#f35fc1d27e7cd3dfbd39c0826d173e806a03f5a3"
   integrity sha512-pMpnA0qRdFp32b1sJl1wOJNxZLQ2cbQx+k6tjNtZ8CpvVhNqEPRgivZ2WOUev2YMajecdH7ctUPDvEe87nariQ==
 
-pyright@^1.1.304:
-  version "1.1.304"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.304.tgz#4871c52120313220a9106ffbe79ff50bfb9f4372"
-  integrity sha512-b7q53RytKcu/JIzBDfT4po1Uj1eyjXP4wHcWEOXNkWt8+fS8X6lZhRjPe5yzfPvh/2heTKcIEwY+J/VuMobuyw==
+pyright@^1.1.305:
+  version "1.1.305"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.305.tgz#91b49872ab0bb441b592a0f184496767bd395860"
+  integrity sha512-mDLZutboqrfyEXaN8GxJPqUK7KeJlO0/POU/icy8rM56Zl3iHWNeSymBf/zFCiVz1kqNc7yy/RgqxOHX0HHHrw==
 
 queue-microtask@^1.2.2:
   version "1.2.3"
