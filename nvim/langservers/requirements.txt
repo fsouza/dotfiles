@@ -53,7 +53,7 @@ pyflakes==3.0.1
     # via
     #   autoflake
     #   flake8
-pyupgrade==3.3.1
+pyupgrade==3.3.2
     # via -r requirements.in
 pyyaml==6.0
     # via -r requirements.in
