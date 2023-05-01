@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/bazelbuild/buildtools v0.0.0-20230111132423-06e8e2436a75
-	github.com/hashicorp/terraform-ls v0.31.0
+	github.com/hashicorp/terraform-ls v0.31.1
 	github.com/mattn/efm-langserver v0.0.44
 )
 
@@ -13,7 +13,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.2.1 // indirect
 	github.com/Masterminds/sprig/v3 v3.2.1 // indirect
 	github.com/agext/levenshtein v1.2.2 // indirect
-	github.com/algolia/algoliasearch-client-go/v3 v3.28.0 // indirect
+	github.com/algolia/algoliasearch-client-go/v3 v3.28.1 // indirect
 	github.com/antonmedv/expr v1.10.5 // indirect
 	github.com/apparentlymart/go-textseg v1.0.0 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
@@ -46,7 +46,6 @@ require (
 	github.com/hashicorp/terraform-svchost v0.0.1 // indirect
 	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect
-	github.com/kr/pretty v0.3.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
