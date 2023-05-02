@@ -29,7 +29,7 @@ function _gc_bootstrap {
 }
 
 function _bootstrap_go {
-	local BOOTSTRAP_GO="go1.20.3"
+	local BOOTSTRAP_GO="go1.20.4"
 	local dest_dir=${GO_HOME}/bootstrap/${BOOTSTRAP_GO}
 	local go_binary=${dest_dir}/go/bin/go
 	if ! [ -x ${go_binary} ]; then
