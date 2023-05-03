@@ -1837,10 +1837,10 @@ pvutils@^1.1.3:
   resolved "https://registry.yarnpkg.com/pvutils/-/pvutils-1.1.3.tgz#f35fc1d27e7cd3dfbd39c0826d173e806a03f5a3"
   integrity sha512-pMpnA0qRdFp32b1sJl1wOJNxZLQ2cbQx+k6tjNtZ8CpvVhNqEPRgivZ2WOUev2YMajecdH7ctUPDvEe87nariQ==
 
-pyright@^1.1.305:
-  version "1.1.305"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.305.tgz#91b49872ab0bb441b592a0f184496767bd395860"
-  integrity sha512-mDLZutboqrfyEXaN8GxJPqUK7KeJlO0/POU/icy8rM56Zl3iHWNeSymBf/zFCiVz1kqNc7yy/RgqxOHX0HHHrw==
+pyright@^1.1.306:
+  version "1.1.306"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.306.tgz#6e1d661c960e83eb3ee6caea4cf11ed9bf998e33"
+  integrity sha512-2OdV1XyYZMTjGY5deOBZGaHkBuAqTR13DvwlIXFQUTx1ZSxOkCsfibOlIy1ydpDnUY2aaweaXe39clthIipnrg==
 
 queue-microtask@^1.2.2:
   version "1.2.3"
