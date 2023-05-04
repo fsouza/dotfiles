@@ -75,12 +75,20 @@ jobs:
           default: true
           components: clippy, rustfmt, rust-src
 
+      - name: get repo versions
+        id: get-repo-versions
+        run: |
+          git ls-remote https://github.com/golang/tools.git master | awk '{print "golang-tools-version=" $1}' >>${GITHUB_OUTPUT}
+          git ls-remote https://git.sr.ht/~technomancy/fnlfmt master | awk '{print "fnlfmt-version=" $1}' >>${GITHUB_OUTPUT}
+          git ls-remote https://github.com/fwcd/kotlin-language-server.git main | awk '{print "kotlin-ls-version=" $1}' >>${GITHUB_OUTPUT}
+
       - name: langservers cache
         id: nvim-langservers-cache
         uses: actions/cache@v3.3.1
         with:
           path: ~/.cache/nvim/langservers
-          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-${{ steps.setup-python.outputs.python-version }}"
+          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-${{ steps.setup-python.outputs.python-version }}-${{ steps.get-repo-versions.outputs.golang-tools-version }}-${{ steps.get-repo-versions.outputs.fnlfmt-version }}-${{ steps.get-repo-versions.outputs.kotlin-ls-version }}"
+          restore-keys: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-${{ steps.setup-python.outputs.python-version }}"
 
       - name: get luajit version
         id: get-luajit-version
@@ -110,7 +118,8 @@ jobs:
         uses: actions/cache@v3.3.1
         with:
           path: ~/.cache/nvim/venv
-          key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.setup-python.outputs.python-version }}"
+          key: "${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('nvim/langservers/requirements.txt') }}"
+          restore-keys: "${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-"
 
       - name: run setup
         run: |
