@@ -44,4 +44,4 @@
 [rerere]
 	enabled = true
 [url "https://github"]
-  insteadOf = git://github
+	insteadOf = git://github
