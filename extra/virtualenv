@@ -37,9 +37,13 @@ function _activate_virtualenv() {
 }
 
 function v() {
+	local virtualenvpath
 	local name=${1}
+
 	if [[ ${name} == "@" ]]; then
 		virtualenvpath=${PWD}/venv
+	elif [[ ${name} == /* ]]; then
+		virtualenvpath=${name}
 	else
 		virtualenvpath=${VIRTUALENVS}/${name}
 	fi
