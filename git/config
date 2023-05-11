@@ -43,3 +43,5 @@
 	manyFiles = true
 [rerere]
 	enabled = true
+[url "https://github"]
+  insteadOf = git://github
