@@ -49,10 +49,6 @@
             {1 :b0o/SchemaStore.nvim :as :SchemaStore.nvim :opt true}
             {1 :j-hui/fidget.nvim :as :fidget.nvim :opt true}
             {1 :ojroques/nvim-osc52 :as :nvim-osc52 :opt true}
-            {1 :sourcegraph/sg.nvim
-             :as :sg.nvim
-             :opt true
-             :run "cargo build --workspace"}
             {1 :nvim-lua/plenary.nvim :as :plenary.nvim :opt true}
             {1 :ziontee113/syntax-tree-surfer
              :as :syntax-tree-surfer
@@ -63,6 +59,15 @@
             {1 :liuchengxu/vista.vim :as :vista.vim :opt true}
             {1 :guns/vim-sexp}
             {1 :tpope/vim-sexp-mappings-for-regular-people}
+            ;; things that I use only at work.
+            ;;
+            ;; I should really build a way to inject packages from a plugin, or
+            ;; migrate to lazy.nvim and leverage that capability.
+            {1 :sourcegraph/sg.nvim
+             :as :sg.nvim
+             :opt true
+             :run "cargo build --workspace"}
+            {1 :github/copilot.vim :opt true}
             ; filetypes stuff
             ;
             ; Note: I used to use vim-polyglot, but it loads too much garbage and
