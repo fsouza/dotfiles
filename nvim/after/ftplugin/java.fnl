@@ -1,5 +1,8 @@
 (import-macros {: mod-invoke} :helpers)
 
+(fn is-java-test [fname]
+  (not= (string.find fname "src/test/.*%.java$") nil))
+
 (fn find-java-executable [java-version cb]
   (mod-invoke :fsouza.lib.java :find-java-home java-version
               #(let [path (require :fsouza.pl.path)
@@ -53,7 +56,12 @@
                                                     {: bufnr
                                                      :config {:name :jdtls
                                                               : cmd
-                                                              : settings}})))))
+                                                              : settings}
+                                                     :cb #(mod-invoke :fsouza.lsp.references
+                                                                      :register-test-checker
+                                                                      :.java
+                                                                      :java
+                                                                      is-java-test)})))))
 
     (find-java-executable :17 with-executable)))
 
