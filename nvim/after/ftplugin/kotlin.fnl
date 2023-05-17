@@ -12,7 +12,8 @@
                 {: bufnr
                  :config {:name :kotlin-language-server
                           :cmd [server-bin]
-                          :cmd_env {:JAVA_HOME java-home}}
+                          :cmd_env {:JAVA_HOME java-home
+                                    :JAVA_OPTS "-XX:MaxRAMPercentage=80"}}
                  :cb #(mod-invoke :fsouza.lsp.references :register-test-checker
                                   :.kt :kotlin is-kt-test)})))
 
