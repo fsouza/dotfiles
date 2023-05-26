@@ -53,6 +53,7 @@
             {1 :ziontee113/syntax-tree-surfer
              :as :syntax-tree-surfer
              :opt true}
+            {1 :drybalka/tree-climber.nvim :as :tree-climber.nvim :opt true}
             {1 :chrisgrieser/nvim-various-textobjs
              :as :nvim-various-textobjs
              :opt true}

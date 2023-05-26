@@ -15,11 +15,9 @@
 
 (fn setup-keymaps [buffer]
   (let [{: keymap-repeat} (require :fsouza.lib.nvim-helpers)]
-    (keymap-repeat :>e #(mod-invoke :syntax-tree-surfer :surf :next :normal
-                                    true)
+    (keymap-repeat :>e #(mod-invoke :tree-climber :swap_next)
                    {: buffer :silent true})
-    (keymap-repeat :<e #(mod-invoke :syntax-tree-surfer :surf :prev :normal
-                                    true)
+    (keymap-repeat :<e #(mod-invoke :tree-climber :swap_prev)
                    {: buffer :silent true})
     (keymap-repeat :>f #(mod-invoke :syntax-tree-surfer :move :n false)
                    {: buffer :silent true})
@@ -42,6 +40,11 @@
                     {: buffer :silent true})
     (vim.keymap.set :x :<leader>A
                     #(mod-invoke :syntax-tree-surfer :surf :prev :visual true)
+                    {: buffer :silent true})
+    (vim.keymap.set :n :<c-k>
+                    #(do
+                       (vim.cmd.normal "m'")
+                       (mod-invoke :tree-climber :goto_parent))
                     {: buffer :silent true})))
 
 (fn on-FileType [{: buf}]
