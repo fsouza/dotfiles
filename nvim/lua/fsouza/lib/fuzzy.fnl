@@ -132,9 +132,12 @@
                                              extra-opts
                                              (vim.fn.shellescape search))}))))
 
-(fn live-grep [rg-opts]
-  (let [fzf-lua (fzf-lua)]
-    (fzf-lua.live_grep_native {:rg_opts rg-opts :multiprocess true})))
+(fn live-grep [rg-opts opts]
+  (let [opts (or opts {})
+        fzf-lua (fzf-lua)]
+    (tset opts :rg_opts rg-opts)
+    (tset opts :multiprocess true)
+    (fzf-lua.live_grep_native opts)))
 
 (fn handle-repo [run-fzf cd selected]
   (when (= (length selected) 1)
@@ -176,7 +179,7 @@
 
 (let [rg-opts "--column -n --hidden --no-heading --color=always --colors 'match:fg:0x99,0x00,0x00' --colors line:none --colors path:none --colors column:none -S --glob '!.git' --glob '!.hg'"
       mod {: git-files
-           :live-grep #(live-grep rg-opts)
+           :live-grep (partial live-grep rg-opts)
            :grep (partial grep rg-opts)
            :grep-last #(grep-last rg-opts)
            :grep-visual #(grep rg-opts

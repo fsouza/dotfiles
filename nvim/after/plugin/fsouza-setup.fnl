@@ -2,6 +2,11 @@
 
 (import-macros {: mod-invoke} :helpers)
 
+(macro invoke-here [op]
+  `(let [dir-path# (vim.fn.expand "%:p:h")]
+     (when (vim.startswith dir-path# "/")
+       (mod-invoke :fsouza.lib.fuzzy ,op {:cwd dir-path#}))))
+
 (macro setup-fuzzy-mappings []
   `(do
      (vim.keymap.set :n :<leader>zb #(mod-invoke :fsouza.lib.fuzzy :buffers)
@@ -24,12 +29,9 @@
                      {:silent true})
      (vim.keymap.set :n :<leader>zr #(mod-invoke :fsouza.lib.fuzzy :resume)
                      {:silent true})
-     (vim.keymap.set :n :<leader>zj
-                     #(let [dir-path# (vim.fn.expand "%:p:h")]
-                        (when (vim.startswith dir-path# "/")
-                          (mod-invoke :fsouza.lib.fuzzy :files {:cwd dir-path#})))
-                     {:silent true})
+     (vim.keymap.set :n :<leader>zj #(invoke-here :files) {:silent true})
      (vim.keymap.set :n :<leader>gg #(mod-invoke :fsouza.lib.fuzzy :live-grep))
+     (vim.keymap.set :n :<leader>gj #(invoke-here :live-grep))
      (vim.keymap.set :n :<leader>gw
                      #(mod-invoke :fsouza.lib.fuzzy :grep
                                   (vim.fn.expand :<cword>) :-F))
