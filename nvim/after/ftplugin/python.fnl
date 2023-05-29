@@ -1,5 +1,9 @@
 (import-macros {: mod-invoke} :helpers)
 
+(fn is-python-test [fname]
+  (or (not= (string.find fname "test_.*%.py$") nil)
+      (not= (string.find fname ".*_test%.py$") nil)))
+
 (fn start-pyright [bufnr python-interpreter]
   (let [path (require :fsouza.pl.path)
         python-interpreter (or python-interpreter
@@ -15,7 +19,9 @@
                                                          :diagnosticMode :workspace
                                                          :typeCheckingMode (or vim.g.pyright_type_checking_mode
                                                                                :basic)
-                                                         :useLibraryCodeForTypes true}}}}})))
+                                                         :useLibraryCodeForTypes true}}}}
+                 :cb #(mod-invoke :fsouza.lsp.references :register-test-checker
+                                  :.py :python is-python-test)})))
 
 (fn get-python-tools [cb]
   (let [path (require :fsouza.pl.path)
