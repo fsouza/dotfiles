@@ -109,6 +109,7 @@ def from_precommit(
         "https://github.com/psf/black": get_black,
         "https://github.com/ambv/black": get_black,
         "https://github.com/asottile/add-trailing-comma": get_add_trailing_comma,
+        "https://github.com/asottile/reorder-python-imports": get_reorder_python_imports,
         "https://github.com/asottile/reorder_python_imports": get_reorder_python_imports,
         "https://github.com/asottile/pyupgrade": get_pyupgrade,
         "https://github.com/pre-commit/mirrors-autopep8": get_autopep8,
