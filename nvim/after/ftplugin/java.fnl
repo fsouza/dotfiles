@@ -39,6 +39,7 @@
              :-Dosgi.sharedConfiguration.area.readOnly=true
              :-Dosgi.configuration.cascaded=true
              "-XX:MaxRAMPercentage=80"
+             (.. "-javaagent:" (path.join jdtls-dir :lombok.jar))
              :--add-modules=ALL-SYSTEM
              :--add-opens
              :java.base/java.util=ALL-UNNAMED

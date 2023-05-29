@@ -313,12 +313,19 @@ async def install_jdtls(langservers_cache_dir: Path) -> None:
     target_dir = langservers_cache_dir / "jdtls"
     await asyncio.to_thread(target_dir.mkdir, parents=True, exist_ok=True)
 
-    url = (
+    jdtls_url = (
         "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz"
     )
-    await run_cmd(
-        cmd="bash",
-        args=["-c", f"curl -sL {url} | tar -C {target_dir} -xzf -"],
+    lombok_url = "https://projectlombok.org/downloads/lombok.jar"
+    await asyncio.gather(
+        run_cmd(
+            cmd="bash",
+            args=["-c", f"curl -sL {jdtls_url} | tar -C {target_dir} -xzf -"],
+        ),
+        run_cmd(
+            cmd="bash",
+            args=["-c", f"curl -sLo {target_dir}/lombok.jar {lombok_url}"],
+        ),
     )
 
 
