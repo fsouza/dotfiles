@@ -31,14 +31,14 @@
       (vim.cmd.cfirst))
     (> (length list) 0)))
 
-(lambda set-from-contents [content opts]
+(lambda set-from-contents [content ?opts]
   (-> content
       (vim.split "\n" {:plain true :trimempty true})
-      (set-from-lines opts)))
+      (set-from-lines ?opts)))
 
-(lambda set-from-visual-selection [opts]
+(lambda set-from-visual-selection [?opts]
   (let [lines (mod-invoke :fsouza.lib.nvim-helpers
                           :get-visual-selection-contents)]
-    (set-from-lines lines opts)))
+    (set-from-lines lines ?opts)))
 
 {: set-from-visual-selection : set-from-contents}
