@@ -34,6 +34,8 @@
              :-Declipse.application=org.eclipse.jdt.ls.core.id1
              :-Dosgi.bundles.defaultStartLevel=4
              :-Declipse.product=org.eclipse.jdt.ls.core.product
+             :-Dlog.level=ALL
+             :-Dlog.protocol=true
              :-Dosgi.checkConfiguration=true
              (.. :-Dosgi.sharedConfiguration.area= shared-config-dir)
              :-Dosgi.sharedConfiguration.area.readOnly=true
@@ -44,7 +46,10 @@
              :--add-opens
              :java.base/java.util=ALL-UNNAMED
              :--add-opens
-             :java.base/java.lang=ALL-UNNAMED]]
+             :java.base/java.lang=ALL-UNNAMED]
+        bundles (-> (path.join jdtls-dir :vscode-java-decompiler :server :*.jar)
+                    (vim.fn.glob)
+                    (vim.split "\n"))]
     (fn with-executable [java-bin]
       (tset cmd 1 java-bin)
       (find-jdtls-jar jdtls-dir
@@ -56,6 +61,7 @@
                          (vim.schedule #(mod-invoke :fsouza.lsp.servers :start
                                                     {: bufnr
                                                      :config {:name :jdtls
+                                                              :init_options {: bundles}
                                                               : cmd
                                                               : settings}
                                                      :cb #(mod-invoke :fsouza.lsp.references
@@ -71,7 +77,8 @@
   (if java-home
       (mod-invoke :fsouza.lib.java :detect-runtime-name java-home
                   #(let [name $1
-                         settings {:java {:configuration {:runtimes [{: name
+                         settings {:java {:contentProvider {:preferred :fernflower}
+                                          :configuration {:runtimes [{: name
                                                                       :path java-home
                                                                       :default true}]}}}]
                      (start-jdtls bufnr settings)))

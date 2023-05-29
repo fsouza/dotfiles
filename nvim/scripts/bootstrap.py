@@ -326,6 +326,10 @@ async def install_jdtls(langservers_cache_dir: Path) -> None:
             cmd="bash",
             args=["-c", f"curl -sLo {target_dir}/lombok.jar {lombok_url}"],
         ),
+        _clone_or_update(
+            "https://github.com/dgileadi/vscode-java-decompiler.git",
+            target_dir / "vscode-java-decompiler",
+        ),
     )
 
 
