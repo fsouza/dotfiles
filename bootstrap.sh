@@ -136,8 +136,8 @@ source ${HOME}/.zshrc
 
 set -e
 export PATH=${HOME}/.dotfiles/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:${PATH}
-fnm install v18
-fnm default v18
+fnm install v20
+fnm default v20
 EOF
 }
 
