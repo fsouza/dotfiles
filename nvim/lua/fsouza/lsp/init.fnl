@@ -172,11 +172,10 @@
     (mod-invoke :fsouza.lsp.diagnostics :on-attach)
     (tset (. vim.bo bufnr) :formatexpr nil)
     (each [_ {: lhs : rhs} (ipairs mappings)]
-      (vim.keymap.set :n lhs rhs {:silent true :buffer bufnr})
-      (detach.register bufnr
-                       #(each [mode keymaps (pairs mappings)]
-                          (each [_ {: lhs} (ipairs keymaps)]
-                            (vim.keymap.del :n lhs {:buffer bufnr})))))))
+      (vim.keymap.set :n lhs rhs {:silent true :buffer bufnr}))
+    (detach.register bufnr
+                     #(each [{: lhs} (pairs mappings)]
+                        (vim.keymap.del :n lhs {:buffer bufnr})))))
 
 (macro config-log []
   `(let [level# (if vim.env.NVIM_DEBUG :trace :off)
