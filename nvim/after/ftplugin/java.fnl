@@ -49,9 +49,15 @@
         bundles (-> (path.join jdtls-dir :vscode-java-decompiler :server :*.jar)
                     (vim.fn.glob)
                     (vim.split "\n"))
-        ;; TODO: what are some other extendedClientCapabilities that I care
-        ;; about?
-        extended-client-capabilities {:classFileContentsSupport true}]
+        extended-client-capabilities {:classFileContentsSupport true
+                                      :generateConstructorsPromptSupport true
+                                      :generateToStringPromptSupport true
+                                      :hashCodeEqualsPromptSupport true
+                                      :inferSelectionSupport [:extractConstant
+                                                              :extractMethod
+                                                              :extractVariable]
+                                      :moveRefactoringSupport true
+                                      :overrideMethodsPromptSupport true}]
     (fn with-executable [java-bin]
       (tset cmd 1 java-bin)
       (find-jdtls-jar jdtls-dir
