@@ -28,7 +28,8 @@
   (let [path (require :fsouza.pl.path)
         jdtls-dir (path.join _G.cache-dir :langservers :jdtls)
         shared-config-dir (path.join jdtls-dir :config_mac)
-        data-dir (path.join _G.data-dir :jdtls)
+        data-dir-basename (string.gsub (vim.loop.cwd) "/" "@")
+        data-dir (path.join _G.data-dir :jdtls data-dir-basename)
         cmd [:java
              :-Declipse.application=org.eclipse.jdt.ls.core.id1
              :-Dosgi.bundles.defaultStartLevel=4
