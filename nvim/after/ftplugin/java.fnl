@@ -6,8 +6,7 @@
 (fn find-java-executable [java-version cb]
   (mod-invoke :fsouza.lib.java :find-java-home java-version
               #(let [path (require :fsouza.pl.path)
-                     java-home $1
-                     java-bin (path.join java-home :bin :java)]
+                     java-bin (path.join $1 :bin :java)]
                  (cb java-bin))))
 
 (fn find-jdtls-jar [jdtls-dir cb]
@@ -25,7 +24,7 @@
 
     (vim.loop.fs_opendir plugins-dir #(process-dir $2) 512)))
 
-(fn start-jdtls [bufnr settings]
+(lambda start-jdtls [bufnr settings is-jdt-uri]
   (let [path (require :fsouza.pl.path)
         jdtls-dir (path.join _G.cache-dir :langservers :jdtls)
         shared-config-dir (path.join jdtls-dir :config_mac)
@@ -49,7 +48,10 @@
              :java.base/java.lang=ALL-UNNAMED]
         bundles (-> (path.join jdtls-dir :vscode-java-decompiler :server :*.jar)
                     (vim.fn.glob)
-                    (vim.split "\n"))]
+                    (vim.split "\n"))
+        ;; TODO: what are some other extendedClientCapabilities that I care
+        ;; about?
+        extended-client-capabilities {:classFileContentsSupport true}]
     (fn with-executable [java-bin]
       (tset cmd 1 java-bin)
       (find-jdtls-jar jdtls-dir
@@ -61,25 +63,30 @@
                          (vim.schedule #(mod-invoke :fsouza.lsp.servers :start
                                                     {: bufnr
                                                      :config {:name :jdtls
-                                                              :init_options {: bundles}
+                                                              :init_options {: bundles
+                                                                             : settings
+                                                                             :extendedClientCapabilities extended-client-capabilities}
                                                               : cmd
                                                               : settings}
                                                      :cb #(mod-invoke :fsouza.lsp.references
                                                                       :register-test-checker
                                                                       :.java
                                                                       :java
-                                                                      is-java-test)})))))
+                                                                      is-java-test)
+                                                     :force is-jdt-uri})))))
 
     (find-java-executable :17 with-executable)))
 
 (let [bufnr (vim.api.nvim_get_current_buf)
-      java-home (vim.loop.os_getenv :JAVA_HOME)]
+      is-jdt-uri (-> bufnr
+                     (vim.api.nvim_buf_get_name)
+                     (vim.startswith "jdt://"))
+      java-home (vim.loop.os_getenv :JAVA_HOME)
+      settings {:java {:contentProvider {:preferred :fernflower}}}]
   (if java-home
       (mod-invoke :fsouza.lib.java :detect-runtime-name java-home
-                  #(let [name $1
-                         settings {:java {:contentProvider {:preferred :fernflower}
-                                          :configuration {:runtimes [{: name
-                                                                      :path java-home
-                                                                      :default true}]}}}]
-                     (start-jdtls bufnr settings)))
-      (start-jdtls bufnr nil)))
+                  #(let [name $1]
+                     (tset settings.java :configuration
+                           {:runtimes [{: name :path java-home :default true}]})
+                     (start-jdtls bufnr settings is-jdt-uri)))
+      (start-jdtls bufnr settings is-jdt-uri)))
