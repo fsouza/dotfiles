@@ -40,7 +40,7 @@
                 :callback #(let [{: bufnr} (. $1 :data)
                                  client (mod-invoke :fsouza.lsp.clients
                                                     :get-client bufnr
-                                                    :codeActionProvider)]
+                                                    :textDocument/codeAction)]
                              (when (should-organize-imports (?. client :name))
                                (organize-imports-and-write client bufnr)))}]))
 

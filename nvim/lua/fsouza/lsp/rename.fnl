@@ -3,7 +3,7 @@
 (fn rename []
   (let [bufnr (vim.api.nvim_get_current_buf)
         client (mod-invoke :fsouza.lsp.clients :get-client bufnr
-                           :renameProvider)]
+                           :textDocument/rename)]
     (fn rename [placeholder]
       (let [placeholder (or placeholder (vim.fn.expand :<cword>))
             new-name (vim.fn.input "New name: " placeholder)
@@ -27,13 +27,9 @@
                              true {})))
 
     (when client
-      (let [provider client.server_capabilities.renameProvider
-            supports-prepare (if (= (type provider) :table)
-                                 provider.prepareProvider
-                                 false)]
-        (if supports-prepare
-            (client.request :textDocument/prepareRename
-                            (vim.lsp.util.make_position_params)
+      (let [method :textDocument/prepareRename]
+        (if (client.supports_method method)
+            (client.request method (vim.lsp.util.make_position_params)
                             prepare-rename-cb bufnr)
             (rename))))))
 

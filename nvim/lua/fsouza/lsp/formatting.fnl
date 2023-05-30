@@ -17,7 +17,7 @@
 (fn fmt [client bufnr cb]
   (let [client (or client
                    (mod-invoke :fsouza.lsp.clients :get-client bufnr
-                               :documentFormattingProvider))]
+                               :textDocument/formatting))]
     (when client
       (let [(_ req-id) (client.request :textDocument/formatting
                                        (formatting-params bufnr) cb bufnr)]
@@ -31,7 +31,7 @@
   (let [enabled (mod-invoke :fsouza.lib.autofmt :is-enabled bufnr)]
     (if enabled
         (let [client (mod-invoke :fsouza.lsp.clients :get-client bufnr
-                                 :documentFormattingProvider)]
+                                 :textDocument/formatting)]
           (if (not client)
               (error (string.format "couldn't find client for buffer %d" bufnr))
               (pcall #(let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)]
