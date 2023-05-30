@@ -37,14 +37,14 @@
                     :flags {:debounce_text_changes 150}}]
       (vim.tbl_extend :force defaults opts))))
 
-(fn start [{: config : find-root-dir : bufnr : cb : force}]
+(fn start [{: config : find-root-dir : bufnr : cb}]
   (let [find-root-dir (or find-root-dir cwd-if-not-home)
         bufnr (or bufnr (vim.api.nvim_get_current_buf))
         exec (?. config :cmd 1)
         name config.name
         config (with-defaults config)
         cb (or cb #nil)]
-    (when (or force (should-start bufnr name))
+    (when (should-start bufnr name)
       (tset config :root_dir (find-root-dir))
       (with-executable exec
         #(do

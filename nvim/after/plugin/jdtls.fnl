@@ -4,7 +4,6 @@
 (fn open-jdt-file [{:buf bufnr :match uri}]
   (let [timeout-ms 2000]
     (tset (. vim :bo bufnr) :modifiable true)
-    (tset (. vim :bo bufnr) :buftype :nofile)
     ;; set filetype and wait for client to attach to the buffer. the name
     ;; "jdtls" must be kept in sync with ftplugin/java.fnl
     (tset (. vim :bo bufnr) :filetype :java)
@@ -15,6 +14,7 @@
                             (> (length clients) 0)))
     (when client
       (var received-cb false)
+      (tset (. vim :bo bufnr) :buftype :nofile)
 
       (fn handler [err result]
         (if err

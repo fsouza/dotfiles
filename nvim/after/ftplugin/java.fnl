@@ -24,7 +24,7 @@
 
     (vim.loop.fs_opendir plugins-dir #(process-dir $2) 512)))
 
-(lambda start-jdtls [bufnr settings is-jdt-uri]
+(lambda start-jdtls [bufnr settings]
   (let [path (require :fsouza.pl.path)
         jdtls-dir (path.join _G.cache-dir :langservers :jdtls)
         shared-config-dir (path.join jdtls-dir :config_mac)
@@ -72,21 +72,16 @@
                                                               :init_options {: bundles
                                                                              : settings
                                                                              :extendedClientCapabilities extended-client-capabilities}
-                                                              : cmd
-                                                              : settings}
+                                                              : cmd}
                                                      :cb #(mod-invoke :fsouza.lsp.references
                                                                       :register-test-checker
                                                                       :.java
                                                                       :java
-                                                                      is-java-test)
-                                                     :force is-jdt-uri})))))
+                                                                      is-java-test)})))))
 
     (find-java-executable :17 with-executable)))
 
 (let [bufnr (vim.api.nvim_get_current_buf)
-      is-jdt-uri (-> bufnr
-                     (vim.api.nvim_buf_get_name)
-                     (vim.startswith "jdt://"))
       java-home (vim.loop.os_getenv :JAVA_HOME)
       settings {:java {:contentProvider {:preferred :fernflower}}}]
   (if java-home
@@ -94,5 +89,5 @@
                   #(let [name $1]
                      (tset settings.java :configuration
                            {:runtimes [{: name :path java-home :default true}]})
-                     (start-jdtls bufnr settings is-jdt-uri)))
-      (start-jdtls bufnr settings is-jdt-uri)))
+                     (start-jdtls bufnr settings)))
+      (start-jdtls bufnr settings)))
