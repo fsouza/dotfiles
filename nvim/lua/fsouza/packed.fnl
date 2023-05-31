@@ -60,15 +60,6 @@
             {1 :liuchengxu/vista.vim :as :vista.vim :opt true}
             {1 :guns/vim-sexp}
             {1 :tpope/vim-sexp-mappings-for-regular-people}
-            ;; things that I use only at work.
-            ;;
-            ;; I should really build a way to inject packages from a plugin, or
-            ;; migrate to lazy.nvim and leverage that capability.
-            {1 :sourcegraph/sg.nvim
-             :as :sg.nvim
-             :opt true
-             :run "cargo build --workspace"}
-            {1 :github/copilot.vim :opt true}
             ; filetypes stuff
             ;
             ; Note: I used to use vim-polyglot, but it loads too much garbage and
