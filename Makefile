@@ -117,4 +117,4 @@ nvim-stylua:
 
 .PHONY: fnlfmt
 fnlfmt:
-	git ls-files -- '*.fnl' | xargs -n 1 $(NVIM_CACHE_DIR)/fnlfmt/fnlfmt --fix
+	git ls-files -z -- '*.fnl' | xargs -0 -n 1 $(NVIM_CACHE_DIR)/fnlfmt/fnlfmt --fix
