@@ -95,6 +95,8 @@ function __auto_use_ruby {
 		if [ -n "${ruby_version}" ]; then
 			use_ruby ${ruby_version}
 		fi
+	else
+		use_ruby 3.2
 	fi
 
 	if [ -d ${PWD}/.gems ]; then
