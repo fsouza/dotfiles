@@ -11,7 +11,6 @@ brew "pcre"
 brew "python@3.11", args: ["overwrite"]
 brew "ripgrep"
 brew "ruby"
-brew "ruby@3.1"
 brew "sd"
 brew "selene"
 brew "shellcheck"
