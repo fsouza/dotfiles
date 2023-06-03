@@ -31,7 +31,7 @@
       (let [{: msg : age} last-notification]
         (if (= timer nil)
             (do
-              (set timer (vim.loop.new_timer))
+              (set timer (vim.uv.new_timer))
               (timer:start age 0
                            #(do
                               (timer:stop)

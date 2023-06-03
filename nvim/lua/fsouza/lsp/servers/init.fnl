@@ -6,14 +6,14 @@
   (when exec
     (let [node-bin (mod-invoke :fsouza.pl.path :join _G.config-dir :langservers
                                :node_modules :.bin)
-          PATH (.. node-bin ":" (vim.loop.os_getenv :PATH 2048))]
+          PATH (.. node-bin ":" (vim.uv.os_getenv :PATH 2048))]
       (mod-invoke :fsouza.pl.path :async-which exec
                   #(when (not= $1 "")
                      (cb $1)) PATH))))
 
 (fn cwd-if-not-home []
-  (let [cwd (vim.loop.cwd)
-        home (vim.loop.os_homedir)]
+  (let [cwd (vim.uv.cwd)
+        home (vim.uv.os_homedir)]
     (when (not= cwd home)
       cwd)))
 

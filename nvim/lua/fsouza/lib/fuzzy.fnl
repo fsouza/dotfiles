@@ -115,7 +115,7 @@
         config (require :fzf-lua.config)
         core (require :fzf-lua.core)
         make-entry (require :fzf-lua.make_entry)
-        opts (config.normalize_opts {: prompt :cwd (vim.loop.cwd)}
+        opts (config.normalize_opts {: prompt :cwd (vim.uv.cwd)}
                                     config.globals.lsp)
         contents (icollect [_ item (ipairs items)]
                    (let [item (make-entry.lcol item opts)]
@@ -158,7 +158,7 @@
   (let [run-fzf (or run-fzf true)
         cd (or cd true)
         prompt "Git repos："
-        cwd (or cwd (vim.loop.cwd))
+        cwd (or cwd (vim.uv.cwd))
         fzf-lua (fzf-lua)
         config (require :fzf-lua.config)
         core (require :fzf-lua.core)
@@ -175,7 +175,7 @@
 
 (fn git-files []
   (let [fzf-lua (fzf-lua)]
-    (fzf-lua.git_files {:cwd (vim.loop.cwd)})))
+    (fzf-lua.git_files {:cwd (vim.uv.cwd)})))
 
 (let [rg-opts "--column -n --hidden --no-heading --color=always --colors 'match:fg:0x99,0x00,0x00' --colors line:none --colors path:none --colors column:none -S --glob '!.git' --glob '!.hg'"
       mod {: git-files

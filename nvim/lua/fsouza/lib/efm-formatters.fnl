@@ -11,11 +11,11 @@
         local-bin (path.join :node_modules :.bin bin-name)
         default-bin (path.join _G.config-dir :langservers :node_modules :.bin
                                bin-name)]
-    (vim.loop.fs_stat local-bin
-                      (fn [err# stat#]
-                        (if (and (= err# nil) (= stat#.type :file))
-                            (cb local-bin)
-                            (cb default-bin))))))
+    (vim.uv.fs_stat local-bin
+                    (fn [err# stat#]
+                      (if (and (= err# nil) (= stat#.type :file))
+                          (cb local-bin)
+                          (cb default-bin))))))
 
 (fn with-runtime-dir [tool cb]
   (let [path (require :fsouza.pl.path)

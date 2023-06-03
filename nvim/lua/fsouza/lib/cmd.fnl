@@ -18,8 +18,8 @@
     result))
 
 (fn safe-close [h cb]
-  (when (not (vim.loop.is_closing h))
-    (vim.loop.close h cb)))
+  (when (not (vim.uv.is_closing h))
+    (vim.uv.close h cb)))
 
 ;; run takes the given command, args and input_data (used as stdin for the
 ;; child process).
@@ -36,7 +36,7 @@
 ;; }
 (lambda run [cmd opts on-finished ?debug-fn]
   (var cmd-handle nil)
-  (let [loop vim.loop
+  (let [loop vim.uv
         stdout (loop.new_pipe false)
         stderr (loop.new_pipe false)
         stdin (loop.new_pipe false)

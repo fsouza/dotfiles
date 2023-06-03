@@ -2,7 +2,7 @@
 
 (fn lock-file-path [name]
   (let [path (require :fsouza.pl.path)
-        cwd (vim.loop.cwd)]
+        cwd (vim.uv.cwd)]
     (path.join _G.cache-dir :fsouza-locks (string.sub cwd 2) name)))
 
 (macro remove-autocmd [name]
@@ -11,7 +11,7 @@
 
 (fn delete-lock-file [name]
   (let [lock-file (lock-file-path name)]
-    (vim.loop.fs_unlink lock-file)))
+    (vim.uv.fs_unlink lock-file)))
 
 (lambda unlock [name]
   (remove-autocmd name)
@@ -31,14 +31,14 @@
         file-perm 384 ;; 0o600
         lock-file (lock-file-path name)]
     (path.async-mkdir (path.dirname lock-file) dir-perm true
-                      #(vim.loop.fs_open lock-file
-                                         (bor vim.loop.constants.O_CREAT
-                                              vim.loop.constants.O_EXCL)
-                                         file-perm
-                                         #(when (= $1 nil)
-                                            (vim.loop.fs_close $2
-                                                               #(do
-                                                                  (vim.schedule #(setup-autocmd name))
-                                                                  (cb))))))))
+                      #(vim.uv.fs_open lock-file
+                                       (bor vim.uv.constants.O_CREAT
+                                            vim.uv.constants.O_EXCL)
+                                       file-perm
+                                       #(when (= $1 nil)
+                                          (vim.uv.fs_close $2
+                                                           #(do
+                                                              (vim.schedule #(setup-autocmd name))
+                                                              (cb))))))))
 
 {: with-lock : unlock}

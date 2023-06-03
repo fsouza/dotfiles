@@ -24,7 +24,7 @@
 (fn restart []
   (let [seq (require :pl.seq)
         original-client-ids (get-lsp-client-ids)
-        timer (vim.loop.new_timer)]
+        timer (vim.uv.new_timer)]
     (fn check-new-clients []
       (let [current-client-ids (get-lsp-client-ids)
             s (-> current-client-ids

@@ -14,21 +14,21 @@
         plugins-dir (path.join jdtls-dir :plugins)]
     (fn process-dir [dir]
       (when dir
-        (vim.loop.fs_readdir dir
-                             #(let [entries (or $2 [])]
-                                (each [_ entry (ipairs entries)]
-                                  (when (vim.startswith entry.name
-                                                        :org.eclipse.equinox.launcher_)
-                                    (cb (path.join plugins-dir entry.name))))
-                                (vim.loop.fs_closedir dir #nil)))))
+        (vim.uv.fs_readdir dir
+                           #(let [entries (or $2 [])]
+                              (each [_ entry (ipairs entries)]
+                                (when (vim.startswith entry.name
+                                                      :org.eclipse.equinox.launcher_)
+                                  (cb (path.join plugins-dir entry.name))))
+                              (vim.uv.fs_closedir dir #nil)))))
 
-    (vim.loop.fs_opendir plugins-dir #(process-dir $2) 512)))
+    (vim.uv.fs_opendir plugins-dir #(process-dir $2) 512)))
 
 (lambda start-jdtls [bufnr settings]
   (let [path (require :fsouza.pl.path)
         jdtls-dir (path.join _G.cache-dir :langservers :jdtls)
         shared-config-dir (path.join jdtls-dir :config_mac)
-        data-dir-basename (string.gsub (vim.loop.cwd) "/" "@")
+        data-dir-basename (string.gsub (vim.uv.cwd) "/" "@")
         data-dir (path.join _G.data-dir :jdtls data-dir-basename)
         cmd [:java
              :-Declipse.application=org.eclipse.jdt.ls.core.id1
@@ -83,7 +83,7 @@
     (find-java-executable :17 with-executable)))
 
 (let [bufnr (vim.api.nvim_get_current_buf)
-      java-home (vim.loop.os_getenv :JAVA_HOME)
+      java-home (vim.uv.os_getenv :JAVA_HOME)
       settings {:java {:contentProvider {:preferred :fernflower}}}]
   (if java-home
       (mod-invoke :fsouza.lib.java :detect-runtime-name java-home

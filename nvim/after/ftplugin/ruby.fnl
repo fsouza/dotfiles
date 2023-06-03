@@ -28,6 +28,6 @@
 (let [bufnr (vim.api.nvim_get_current_buf)]
   (start-solargraph bufnr)
   (start-efm bufnr)
-  (vim.loop.fs_stat :sorbet
-                    #(when (not $1)
-                       (vim.schedule #(start-sorbet bufnr)))))
+  (vim.uv.fs_stat :sorbet
+                  #(when (not $1)
+                     (vim.schedule #(start-sorbet bufnr)))))
