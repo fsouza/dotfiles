@@ -36,13 +36,12 @@
 ;; }
 (lambda run [cmd opts on-finished ?debug-fn]
   (var cmd-handle nil)
-  (let [loop vim.uv
-        stdout (loop.new_pipe false)
-        stderr (loop.new_pipe false)
-        stdin (loop.new_pipe false)
+  (let [stdout (vim.uv.new_pipe false)
+        stderr (vim.uv.new_pipe false)
+        stdin (vim.uv.new_pipe false)
         close (fn []
-                (loop.read_stop stdout)
-                (loop.read_stop stderr)
+                (vim.uv.read_stop stdout)
+                (vim.uv.read_stop stderr)
                 (safe-close stdout)
                 (safe-close stderr)
                 (safe-close stdin)
@@ -66,13 +65,13 @@
                                      (tset r :finished true)
                                      (close)))))
         opts (vim.tbl_extend :error opts {:stdio [stdin stdout stderr]})
-        (spawn-handle pid-or-err) (loop.spawn cmd opts on-exit)]
+        (spawn-handle pid-or-err) (vim.uv.spawn cmd opts on-exit)]
     (if spawn-handle
         (do
           (set cmd-handle spawn-handle)
-          (loop.read_start stdout stdout-handler.callback)
-          (loop.read_start stderr stderr-handler.callback)
-          (loop.shutdown stdin))
+          (vim.uv.read_start stdout stdout-handler.callback)
+          (vim.uv.read_start stderr stderr-handler.callback)
+          (vim.uv.shutdown stdin))
         (vim.schedule #(on-finished {:exit-status -1 :stderr pid-or-err})))))
 
 {: run}
