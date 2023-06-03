@@ -9,8 +9,9 @@ brew "fzf"
 brew "git", args: ["overwrite"]
 brew "pcre"
 brew "python@3.11", args: ["overwrite"]
-brew "rbenv"
 brew "ripgrep"
+brew "ruby"
+brew "ruby@3.1"
 brew "sd"
 brew "selene"
 brew "shellcheck"

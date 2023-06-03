@@ -1,4 +1,110 @@
-if command -v rbenv &>/dev/null; then
-	export RBENV_ROOT=${HOME}/.rbenv
-	eval "$(rbenv init - zsh)"
+# this is an adaptation of what I've done for virtualenvs, but with Ruby.
+#
+# I'm not a Ruby person, there's probably a lot of wrong things here, I'll
+# iterate on it :)
+
+export GEMSETS=${HOME}/.cache/gemsets
+
+function use_ruby {
+	local version=${1}
+
+	local prefix=$(brew --prefix ruby@${version} 2>/dev/null)
+	if [ -z "${prefix}" ] || ! [ -d "${prefix}" ]; then
+		if ! brew install ruby@${version}; then
+			echo >&2 "couldn't find or install ruby@${version}"
+			return 1
+		fi
+		prefix=$(brew --prefix ruby@${version} 2>/dev/null)
+	fi
+
+	prepend_to_path "${prefix}/bin"
+}
+
+function _gemset_path {
+	local name=${1}
+
+	if [ -z "${name}" ] || [[ ${name} == "@" ]]; then
+		echo "${PWD}/.gems"
+	else
+		echo "${GEMSETS}/${name}"
+	fi
+}
+
+function _mk_gemset {
+	local _p=$(_gemset_path ${1})
+
+	mkdir -p ${_p}
+	echo ${_p}
+}
+
+function _activate_gemset {
+	local _p=${1}
+
+	if [ -z "${old_gem_path}" ] && [ -n "${GEM_PATH}" ]; then
+		old_gem_path=${GEM_PATH}
+	fi
+
+	if [ -z "${r_oldpath}" ]; then
+		r_oldpath=${PATH}
+	fi
+
+	export GEM_HOME=$_p
+	if [ -n "${old_gem_path}" ]; then
+		export GEM_PATH=${GEM_HOME}:${old_gem_path}
+	else
+		export GEM_PATH=${GEM_HOME}${GEM_PATH+:$GEM_PATH}
+	fi
+
+	prepend_to_path ${GEM_HOME}/bin
+}
+
+function gemset {
+	local _p=$(_mk_gemset ${1})
+	_activate_gemset $_p
+}
+
+# lol need a better name
+function gemunset {
+	if ! [[ -v GEM_HOME ]]; then
+		echo >&2 "no gemset active"
+		return 1
+	fi
+
+	if [ -n "${old_gem_path}" ]; then
+		export GEM_PATH=${old_gem_path}
+		unset old_gem_path
+	else
+		unset GEM_PATH
+	fi
+
+	unset GEM_HOME
+	export PATH=${r_oldpath}
+}
+
+function rmgemset {
+	rm -rf $(_gemset_path ${1})
+}
+
+function cg {
+	echo ${GEM_HOME:-"no gemset active"}
+}
+
+function __auto_use_ruby {
+	if [ -f .ruby-version ]; then
+		local ruby_version=$(cat .ruby-version | grep -Eo '^[0-9]+\.[0-9]')
+		if [ -n "${ruby_version}" ]; then
+			use_ruby ${ruby_version}
+		fi
+	fi
+
+	if [ -d ${PWD}/.gems ]; then
+		_activate_gemset ${PWD}/.gems
+	fi
+}
+
+if [ -n "${GEM_HOME}" ]; then
+	_activate_gemset "${GEM_HOME}"
 fi
+
+__auto_use_ruby
+add-zsh-hook chpwd __auto_use_ruby

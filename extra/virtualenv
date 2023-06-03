@@ -27,7 +27,7 @@ function upgrade_virtualenv() {
 function _activate_virtualenv() {
 	local virtualenvpath=${1}
 	if [ -z "${oldpath}" ]; then
-		export oldpath=${PATH}
+		oldpath=${PATH}
 	fi
 	export PATH=${virtualenvpath}/bin:${PATH}
 	alias cdvirtualenv='cd ${virtualenvpath}'
