@@ -15,6 +15,7 @@ function use_ruby {
 			return 1
 		fi
 		prefix=$(brew --prefix ruby@${version} 2>/dev/null)
+		env -u GEM_HOME ${prefix}/bin/gem install solargraph
 	fi
 
 	prepend_to_path "${prefix}/bin"
