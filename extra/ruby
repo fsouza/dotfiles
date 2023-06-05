@@ -101,7 +101,11 @@ function __auto_use_ruby {
 	fi
 
 	if [ -d ${PWD}/.gems ]; then
+		__auto_activated_gemset=true
 		_activate_gemset ${PWD}/.gems
+	elif [[ ${__auto_activated_gemset} == true ]]; then
+		unset __auto_activated_gemset
+		gemunset
 	fi
 }
 
