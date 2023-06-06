@@ -53,7 +53,7 @@ function _activate_gemset {
 	if [ -n "${old_gem_path}" ]; then
 		export GEM_PATH=${GEM_HOME}:${old_gem_path}
 	else
-		export GEM_PATH=${GEM_HOME}${GEM_PATH+:$GEM_PATH}
+		export GEM_PATH=${GEM_HOME}${GEM_PATH:-$(gem environment path)}
 	fi
 
 	prepend_to_path "$(gem environment home)/bin"
