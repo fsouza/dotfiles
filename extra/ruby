@@ -56,7 +56,7 @@ function _activate_gemset {
 		export GEM_PATH=${GEM_HOME}${GEM_PATH+:$GEM_PATH}
 	fi
 
-	prepend_to_path ${GEM_HOME}/bin
+	prepend_to_path "$(gem environment home)/bin"
 }
 
 function gemset {
@@ -98,6 +98,7 @@ function __auto_use_ruby {
 		fi
 	else
 		use_ruby 3.2
+		prepend_to_path "$(gem environment home)/bin"
 	fi
 
 	if [ -d ${PWD}/.gems ]; then
