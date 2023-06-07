@@ -37,6 +37,6 @@ repos:
       - id: ruff
 
   - repo: https://github.com/fsouza/mirrors-pyright
-    rev: v1.1.275
+    rev: v1.1.313
     hooks:
       - id: pyright
