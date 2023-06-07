@@ -41,22 +41,29 @@ function _mk_gemset {
 function _activate_gemset {
 	local _p=${1}
 
-	if [ -z "${old_gem_path}" ] && [ -n "${GEM_PATH}" ]; then
-		old_gem_path=${GEM_PATH}
-	fi
-
 	if [ -z "${r_oldpath}" ]; then
 		r_oldpath=${PATH}
 	fi
 
 	export GEM_HOME=$_p
-	if [ -n "${old_gem_path}" ]; then
-		export GEM_PATH=${GEM_HOME}:${old_gem_path}
-	else
-		export GEM_PATH=${GEM_HOME}${GEM_PATH:-$(gem environment path)}
-	fi
 
-	prepend_to_path "$(gem environment home)/bin"
+	# add things to the path in the reverse order
+	local -a path_entries
+	while read -d : path_component; do
+		if [[ ${path_component} == ${GEM_HOME} ]]; then
+			continue
+		fi
+
+		if [ -z "${reversed_path}" ]; then
+			path_entries+=(${path_component}/bin)
+		else
+			path_entries+=(${path_component}/bin)
+		fi
+	done <<<"$(gem environment path):"
+
+	for ((i = ${#path_entries}; i > 0; i--)); do
+		prepend_to_path ${path_entries[${i}]}
+	done
 }
 
 function gemset {
@@ -69,13 +76,6 @@ function gemunset {
 	if ! [[ -v GEM_HOME ]]; then
 		echo >&2 "no gemset active"
 		return 1
-	fi
-
-	if [ -n "${old_gem_path}" ]; then
-		export GEM_PATH=${old_gem_path}
-		unset old_gem_path
-	else
-		unset GEM_PATH
 	fi
 
 	unset GEM_HOME
