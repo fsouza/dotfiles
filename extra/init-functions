@@ -20,6 +20,27 @@ function append_to_path {
 	export PATH
 }
 
+function remove_from_path {
+	if [ -z "${1}" ]; then
+		echo >&2 missing dir to remove
+		return 1
+	fi
+
+	local new_path=""
+
+	while read -d : path_component; do
+		if [[ ${path_component} != ${1} ]]; then
+			if [ -z "${new_path}" ]; then
+				new_path=${path_component}
+			else
+				new_path=${new_path}:${path_component}
+			fi
+		fi
+	done <<<"${PATH}:"
+
+	export PATH=${new_path}
+}
+
 function realpath {
 	local resolved=$(readlink ${1})
 	if [ -n "${resolved}" ]; then
