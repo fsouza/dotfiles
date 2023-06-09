@@ -73,3 +73,5 @@ PROMPT="％ " PROMPT2="\\ "
 ulimit -n 8192
 
 export FSOUZA_DOTFILES_DIR
+
+source ${FSOUZA_DOTFILES_DIR}/extra/__cdhooks

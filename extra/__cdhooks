@@ -1,0 +1,8 @@
+__auto_use_ruby
+
+if [ -n "${GEM_HOME}" ]; then
+	_activate_gemset "${GEM_HOME}"
+fi
+
+add-zsh-hook chpwd __auto_use_ruby
+add-zsh-hook chpwd __auto_git_config

@@ -41,5 +41,3 @@ fi
 if command -v difft &>/dev/null; then
 	_git_enable_difftastic
 fi
-
-add-zsh-hook chpwd __auto_git_config

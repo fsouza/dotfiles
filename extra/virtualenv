@@ -26,10 +26,7 @@ function upgrade_virtualenv() {
 
 function _activate_virtualenv() {
 	local virtualenvpath=${1}
-	if [ -z "${oldpath}" ]; then
-		oldpath=${PATH}
-	fi
-	export PATH=${virtualenvpath}/bin:${PATH}
+	prepend_to_path ${virtualenvpath}/bin
 	alias cdvirtualenv='cd ${virtualenvpath}'
 	alias cdsitepackages='cd ${virtualenvpath}/lib/python*/site-packages'
 	export VIRTUAL_ENV=${virtualenvpath}
@@ -62,9 +59,8 @@ function d() {
 		echo >&2 "no virtualenv active"
 		return 1
 	fi
-	export PATH=${oldpath}
+	remove_from_path ${VIRTUAL_ENV}/bin
 	unalias cdvirtualenv cdsitepackages
-	unset oldpath
 	unset VIRTUAL_ENV
 	hash -r
 }

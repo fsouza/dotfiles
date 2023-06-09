@@ -38,15 +38,7 @@ function _mk_gemset {
 	echo ${_p}
 }
 
-function _activate_gemset {
-	local _p=${1}
-
-	if [ -z "${r_oldpath}" ]; then
-		r_oldpath=${PATH}
-	fi
-
-	export GEM_HOME=$_p
-
+function _set_path_from_gem_path {
 	# add things to the path in the reverse order
 	local -a path_entries
 	while read -d : path_component; do
@@ -66,6 +58,13 @@ function _activate_gemset {
 	done
 }
 
+function _activate_gemset {
+	local _p=${1}
+
+	export GEM_HOME=$_p
+	prepend_to_path ${GEM_HOME}/bin
+}
+
 function gemset {
 	local _p=$(_mk_gemset ${1})
 	_activate_gemset $_p
@@ -78,8 +77,8 @@ function gemunset {
 		return 1
 	fi
 
+	remove_from_path ${GEM_HOME}/bin
 	unset GEM_HOME
-	export PATH=${r_oldpath}
 }
 
 function rmgemset {
@@ -90,16 +89,27 @@ function cg {
 	echo ${GEM_HOME:-"no gemset active"}
 }
 
+function find_ruby_version {
+	local dir=${1:-${PWD}}
+	local candidate=${dir}/.ruby-version
+
+	if [ -f ${candidate} ]; then
+		cat ${candidate}
+	fi
+
+	if [[ ${dir} != "/" ]]; then
+		find_ruby_version "$(dirname ${dir})"
+	fi
+}
+
 function __auto_use_ruby {
-	if [ -f .ruby-version ]; then
-		local ruby_version=$(cat .ruby-version | grep -Eo '^[0-9]+\.[0-9]')
-		if [ -n "${ruby_version}" ]; then
-			use_ruby ${ruby_version}
-		fi
+	local ruby_version=$(find_ruby_version)
+	if [ -n "${ruby_version}" ]; then
+		use_ruby ${ruby_version}
 	else
 		use_ruby 3.2
-		prepend_to_path "$(gem environment home)/bin"
 	fi
+	_set_path_from_gem_path
 
 	if [ -d ${PWD}/.gems ]; then
 		__auto_activated_gemset=true
@@ -109,10 +119,3 @@ function __auto_use_ruby {
 		gemunset
 	fi
 }
-
-if [ -n "${GEM_HOME}" ]; then
-	_activate_gemset "${GEM_HOME}"
-fi
-
-__auto_use_ruby
-add-zsh-hook chpwd __auto_use_ruby
