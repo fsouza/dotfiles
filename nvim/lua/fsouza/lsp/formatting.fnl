@@ -24,10 +24,10 @@
         (values req-id #(client.cancel_request req-id))))))
 
 (fn autofmt-and-write [bufnr]
-  (macro do-autocmd []
+  (macro do-autocmd [client-id]
     `(vim.api.nvim_exec_autocmds [:User]
                                  {:pattern :fsouza-LSP-autoformatted
-                                  :data {: bufnr}}))
+                                  :data {: bufnr :client-id ,client-id}}))
   (let [enabled (mod-invoke :fsouza.lib.autofmt :is-enabled bufnr)]
     (if enabled
         (let [client (mod-invoke :fsouza.lsp.clients :get-client bufnr
@@ -53,8 +53,8 @@
                                                                        noautocmd (= new-hash
                                                                                     hash)]
                                                                    (vim.cmd.update {:mods {: noautocmd}})))))))
-                                 (do-autocmd))))))))
-        (do-autocmd))))
+                                 (do-autocmd client.id))))))))
+        (do-autocmd nil))))
 
 (fn augroup-name [bufnr]
   (.. :lsp_autofmt_ bufnr))

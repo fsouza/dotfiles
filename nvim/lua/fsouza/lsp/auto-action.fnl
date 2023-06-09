@@ -37,10 +37,11 @@
   (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__autoorganizeimports
               [{:events [:User]
                 :targets [:fsouza-LSP-autoformatted]
-                :callback #(let [{: bufnr} (. $1 :data)
-                                 client (mod-invoke :fsouza.lsp.clients
-                                                    :get-client bufnr
-                                                    :textDocument/codeAction)]
+                :callback #(let [{: bufnr : client-id} (. $1 :data)
+                                 client (or (vim.lsp.get_client_by_id client-id)
+                                            (mod-invoke :fsouza.lsp.clients
+                                                        :get-client bufnr
+                                                        :textDocument/codeAction))]
                              (when (should-organize-imports (?. client :name))
                                (organize-imports-and-write client bufnr)))}]))
 
