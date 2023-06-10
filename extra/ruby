@@ -5,6 +5,24 @@
 
 export GEMSETS=${HOME}/.cache/gemsets
 
+function _set_path_from_gem_path {
+	# add things to the path in the reverse order
+	local -a path_entries
+	while read -d : path_component; do
+		if [[ ${path_component} == ${GEM_HOME} ]]; then
+			continue
+		fi
+
+		if [ -z "${reversed_path}" ]; then
+			path_entries+=(${path_component}/bin)
+		else
+			path_entries+=(${path_component}/bin)
+		fi
+	done <<<"$(gem environment path):"
+
+	prepend_to_path ${path_entries[@]}
+}
+
 function use_ruby {
 	local version=${1}
 
@@ -19,6 +37,8 @@ function use_ruby {
 	fi
 
 	prepend_to_path "${prefix}/bin"
+	_set_path_from_gem_path
+	_prev_ruby=${1}
 }
 
 function _gemset_path {
@@ -36,26 +56,6 @@ function _mk_gemset {
 
 	mkdir -p ${_p}
 	echo ${_p}
-}
-
-function _set_path_from_gem_path {
-	# add things to the path in the reverse order
-	local -a path_entries
-	while read -d : path_component; do
-		if [[ ${path_component} == ${GEM_HOME} ]]; then
-			continue
-		fi
-
-		if [ -z "${reversed_path}" ]; then
-			path_entries+=(${path_component}/bin)
-		else
-			path_entries+=(${path_component}/bin)
-		fi
-	done <<<"$(gem environment path):"
-
-	for ((i = ${#path_entries}; i > 0; i--)); do
-		prepend_to_path ${path_entries[${i}]}
-	done
 }
 
 function _activate_gemset {
@@ -109,7 +109,6 @@ function __auto_use_ruby {
 	else
 		use_ruby 3.2
 	fi
-	_set_path_from_gem_path
 
 	if [ -d ${PWD}/.gems ]; then
 		__auto_activated_gemset=true
