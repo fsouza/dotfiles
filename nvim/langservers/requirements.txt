@@ -4,7 +4,7 @@
 #
 #    pip-compile
 #
-add-trailing-comma==2.4.0
+add-trailing-comma==2.5.1
     # via -r requirements.in
 attrs==22.2.0
     # via flake8-bugbear
