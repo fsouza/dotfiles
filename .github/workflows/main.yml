@@ -51,7 +51,7 @@ jobs:
           brew update
           brew install jq coreutils
 
-      - uses: actions/checkout@v3.5.2
+      - uses: actions/checkout@v3.5.3
 
       - uses: actions/setup-python@v4.6.1
         id: setup-python
@@ -135,7 +135,7 @@ jobs:
     name: pre-commit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.5.2
+      - uses: actions/checkout@v3.5.3
 
       - uses: actions/setup-python@v4.6.1
         with:
