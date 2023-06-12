@@ -10,7 +10,7 @@ brew "git", args: ["overwrite"]
 brew "pcre"
 brew "python@3.11", args: ["overwrite"]
 brew "ripgrep"
-brew "ruby@3.2"
+brew "ruby", args: ["overwrite"]
 brew "sd"
 brew "selene"
 brew "shellcheck"
