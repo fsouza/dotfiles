@@ -28,7 +28,6 @@
 	version = 2
 [alias]
 	git = !git
-	prune-local-branches = !"git branch -v --format '%(refname:short) %(upstream:track,nobracket)' | awk '{if ($NF == \"gone\") print $1 end}' | xargs git branch -D"
 [init]
 	defaultBranch = main
 [advice]
