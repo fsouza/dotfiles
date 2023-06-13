@@ -16,7 +16,7 @@
                                 :.rb is-rspec-file)}))
 
 (fn start-efm [bufnr]
-  (let [rubocop {:lintCommand "bundle exec rubocop --stdin ${INPUT}"
+  (let [rubocop {:lintCommand "bundle exec rubocop --stdin ${INPUT} --server"
                  :lintStdin true
                  :lintSource :rubocop
                  :lintFormats ["%f:%l:%c: %m"]
