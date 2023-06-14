@@ -47,7 +47,7 @@
             {1 :rhysd/git-messenger.vim :opt true}
             {1 :vijaymarupudi/nvim-fzf :opt true}
             {1 :b0o/SchemaStore.nvim :as :SchemaStore.nvim :opt true}
-            {1 :j-hui/fidget.nvim :as :fidget.nvim :opt true :branch :legacy}
+            {1 :j-hui/fidget.nvim :as :fidget.nvim :opt true :tag :legacy}
             {1 :ojroques/nvim-osc52 :as :nvim-osc52 :opt true}
             {1 :nvim-lua/plenary.nvim :as :plenary.nvim :opt true}
             {1 :ziontee113/syntax-tree-surfer
