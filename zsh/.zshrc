@@ -24,8 +24,8 @@ if command -v fnm &>/dev/null; then
 	eval "$(fnm env)"
 fi
 
-local extras=(virtualenv z git gh go java mail ocaml neovim rclone ruby tmux)
-local extras_skip=( ${FSOUZA_EXTRAS_SKIP[@]} )
+extras=(virtualenv z git gh go java mail ocaml neovim rclone ruby tmux)
+extras_skip=( ${FSOUZA_EXTRAS_SKIP[@]} )
 for extra in ${extras[@]}; do
 	if ! (($extras_skip[(Ie)$extra])); then
 		source ${FSOUZA_DOTFILES_DIR}/extra/${extra}
