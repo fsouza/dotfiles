@@ -335,8 +335,16 @@ async def install_jdtls(langservers_cache_dir: Path) -> None:
     )
 
 
+async def _get_java_home(version: str) -> str:
+    tool = f"java@{version}"
+    await run_cmd("rtx", ["install", tool])
+
+    stdout, _ = await run_cmd("rtx", ["where", tool], capture_output=True)
+    return stdout.decode().strip()
+
+
 async def install_kotlin_language_server(langservers_cache_dir: Path) -> None:
-    if not await has_command("java"):
+    if not await has_command("rtx"):
         print("skipping kotlin-language-server")
         return
 
@@ -345,15 +353,19 @@ async def install_kotlin_language_server(langservers_cache_dir: Path) -> None:
         langservers_cache_dir / "kotlin-language-server",
     )
 
+    java_home = await _get_java_home("corretto-17")
     await run_cmd(
         cmd="./gradlew",
         args=[":server:installDist"],
         cwd=repo_dir,
+        env={
+            "JAVA_HOME": java_home,
+        },
     )
 
 
 async def install_groovy_language_server(langservers_cache_dir: Path) -> None:
-    if not await has_command("java"):
+    if not await has_command("rtx"):
         print("skipping groovy-language-server")
         return
 
@@ -362,10 +374,15 @@ async def install_groovy_language_server(langservers_cache_dir: Path) -> None:
         langservers_cache_dir / "groovy-language-server",
     )
 
+    java_home = await _get_java_home("corretto-11")
+    print(java_home)
     await run_cmd(
         cmd="./gradlew",
         args=["build"],
         cwd=repo_dir,
+        env={
+            "JAVA_HOME": java_home,
+        },
     )
 
 
@@ -392,7 +409,7 @@ async def setup_fnlfmt(cache_dir: Path, hr_dir: Path) -> None:
         "make",
         [],
         cwd=repo_dir,
-        env={"PATH": f"{hr_dir}/bin:{os.environ.get('PATH')}"},
+        env={"PATH": f"{hr_dir}/bin:{os.environ['PATH']}"},
     )
 
 
