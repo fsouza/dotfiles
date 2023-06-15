@@ -22,9 +22,9 @@ function __setup_rtx {
 
 		# some aliasing to make my life easier :)
 		if [[ ${plugin} == "java" ]]; then
-			if grep -Eq '^1\.\d' <<<${version_prefix}; then
+			if grep -Eq '^1\.[0-9]' <<<${version_prefix}; then
 				version_prefix=$(sd '^1\.(.+)' 'corretto-$1' <<<${version_prefix})
-			elif grep -Eq '^\d' <<<${version_prefix}; then
+			elif grep -Eq '^[0-9]' <<<${version_prefix}; then
 				version_prefix="corretto-${version_prefix}"
 			fi
 		fi
