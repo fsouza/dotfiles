@@ -52,10 +52,10 @@ jobs:
           brew update
           brew install jq coreutils
 
-      - name: upgrade early deps (macos workaround)
+      - name: overwrite links (macos hack)
         if: runner.os == 'macOS'
         run: |
-          brew upgrade --force python@3.10 python@3.11
+          brew link --overwrite python@3.11
 
       - uses: actions/checkout@v3.5.3
 
