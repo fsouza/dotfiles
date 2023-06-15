@@ -50,7 +50,7 @@ jobs:
       - name: brew upgrade
         run: |
           brew update
-          brew upgrade ruby
+          brew upgrade
 
       - name: install bootstrapping dependencies
         run: |
