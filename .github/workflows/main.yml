@@ -47,13 +47,9 @@ jobs:
           echo "HOMEBREW_PREFIX=$(brew --prefix)" >>${GITHUB_ENV}
           echo "HOMEBREW_NO_INSTALL_CLEANUP=1" >>${GITHUB_ENV}
 
-      - name: brew upgrade
+      - name: install early dependencies
         run: |
           brew update
-          brew upgrade
-
-      - name: install bootstrapping dependencies
-        run: |
           brew install jq coreutils
 
       - uses: actions/checkout@v3.5.3
