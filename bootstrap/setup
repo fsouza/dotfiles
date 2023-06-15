@@ -40,7 +40,6 @@ def main() -> int:
                 "brew",
                 "bundle",
                 "--no-lock",
-                "--no-upgrade",
                 "--file",
                 BASEDIR / "bootstrap" / "Brewfile",
             ],
