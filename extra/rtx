@@ -8,6 +8,7 @@ function __setup_rtx {
 	export RTX_CACHE_DIR=${HOME}/.cache/rtx
 	export RTX_CONFIRM=yes
 	export RTX_DEFAULT_CONFIG_FILENAME=.rtx.fsouza.toml
+	export RTX_DEFAULT_TOOL_VERSIONS_FILENAME=.tool-versions.fsouza.not-really
 
 	eval "$(rtx activate zsh)"
 
