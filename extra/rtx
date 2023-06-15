@@ -1,0 +1,49 @@
+# Note: right now I only use rtx to manage the versions of Java and node.
+#
+# One day I may use it to manage Ruby and Python too, but I don't like the idea
+# of compiling Python and Ruby to be able to use it.
+
+function __setup_rtx {
+	export RTX_DATA_DIR=${HOME}/.local/share/rtx
+	export RTX_CACHE_DIR=${HOME}/.cache/rtx
+	export RTX_CONFIRM=yes
+	export RTX_DEFAULT_CONFIG_FILENAME=.rtx.fsouza.toml
+
+	eval "$(rtx activate zsh)"
+
+	function __rtx_autoselect {
+		local plugin=${1}
+		local version_prefix=${2}
+
+		if [ -z "${plugin}" ] || [ -z "${version_prefix}" ]; then
+			echo >&2 "please specify plugin and prefix, for example '$0 java 1.8'"
+			return 1
+		fi
+
+		# some aliasing to make my life easier :)
+		if [[ ${plugin} == "java" ]]; then
+			if grep -Eq '^1\.\d' <<<${version_prefix}; then
+				version_prefix=$(sd '^1\.(.+)' 'corretto-$1' <<<${version_prefix})
+			elif grep -Eq '^\d' <<<${version_prefix}; then
+				version_prefix="corretto-${version_prefix}"
+			fi
+		fi
+
+		rtx use ${plugin}@${version_prefix}
+	}
+
+	function rtx-select {
+		local plugin=$1
+		if [ -z "${plugin}" ]; then
+			echo >&2 "please specify the plugin (example: 'java' or 'node')"
+			return 1
+		fi
+
+		local version=$(rtx ls-remote ${plugin} | fzf)
+		rtx use ${plugin}@${version}
+	}
+}
+
+if command -v rtx &>/dev/null; then
+	__setup_rtx
+fi

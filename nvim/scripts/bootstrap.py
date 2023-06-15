@@ -216,15 +216,17 @@ async def _clone_or_update(repo_url: str, repo_dir: Path) -> Path:
 
 
 async def install_servers_from_npm() -> None:
-    if not await has_command("fnm"):
+    if not await has_command("rtx"):
         print("skipping servers from npm")
         return
 
-    await run_cmd("fnm", ["install"], cwd=base_dir / "langservers")
+    await run_cmd("rtx", ["install", "node"], cwd=base_dir / "langservers")
+    await run_cmd("rtx", ["where", "node"], cwd=base_dir / "langservers")
     await run_cmd(
-        "fnm",
+        "rtx",
         [
-            "exec",
+            "x",
+            "--",
             "npx",
             "--yes",
             "yarn",

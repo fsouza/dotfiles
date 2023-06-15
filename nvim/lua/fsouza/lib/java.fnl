@@ -5,8 +5,8 @@
     (when (= result.exit-status 0)
       (cb (vim.trim result.stdout))))
 
-  (mod-invoke :fsouza.lib.cmd :run :/usr/libexec/java_home
-              {:args [:-v java-version]} on-finished))
+  (mod-invoke :fsouza.lib.cmd :run :rtx
+              {:args [:where (.. "java@corretto-" java-version)]} on-finished))
 
 (lambda detect-runtime-name [java-home cb]
   (fn name-from-output [line]
