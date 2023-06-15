@@ -3,6 +3,7 @@ import os
 import shutil
 import sys
 import venv
+from asyncio.tasks import Task
 from pathlib import Path
 from typing import Literal
 from typing import overload
@@ -307,8 +308,34 @@ async def install_rust_analyzer(langservers_cache_dir: Path) -> None:
     await asyncio.to_thread(target_bin.chmod, 0o700)
 
 
+rtx_java_plugin_task: Task[None] | None = None
+
+
+async def _ensure_java_rtx() -> None:
+    async def _add_and_update_java() -> None:
+        await run_cmd("rtx", ["plugin", "add", "java"])
+        await run_cmd("rtx", ["plugin", "update", "java"])
+
+    # this is ugly
+    global rtx_java_plugin_task
+    if rtx_java_plugin_task is None:
+        rtx_java_plugin_task = asyncio.create_task(_add_and_update_java())
+
+    await rtx_java_plugin_task
+
+
+async def _get_java_home(version: str) -> str:
+    await _ensure_java_rtx()
+
+    tool = f"java@{version}"
+    await run_cmd("rtx", ["install", tool])
+
+    stdout, _ = await run_cmd("rtx", ["where", tool], capture_output=True)
+    return stdout.decode().strip()
+
+
 async def install_jdtls(langservers_cache_dir: Path) -> None:
-    if not await has_command("java"):
+    if not await has_command("rtx"):
         print("skipping jdtls")
         return
 
@@ -333,14 +360,6 @@ async def install_jdtls(langservers_cache_dir: Path) -> None:
             target_dir / "vscode-java-decompiler",
         ),
     )
-
-
-async def _get_java_home(version: str) -> str:
-    tool = f"java@{version}"
-    await run_cmd("rtx", ["install", tool])
-
-    stdout, _ = await run_cmd("rtx", ["where", tool], capture_output=True)
-    return stdout.decode().strip()
 
 
 async def install_kotlin_language_server(langservers_cache_dir: Path) -> None:
