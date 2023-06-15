@@ -2182,6 +2182,11 @@ vfile@^5.0.0:
     unist-util-stringify-position "^3.0.0"
     vfile-message "^3.0.0"
 
+vim-language-server@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/vim-language-server/-/vim-language-server-2.3.0.tgz#dc360550536c49ed44585fa2fcb90c9960f3af95"
+  integrity sha512-8RdW7F4rQDR9FNZqgFRFFsoMdiI9YlszCCPeaU3pPkPJI4Hyx4pXCk6BGy7Fi0ACM7p4RID64dd064snCBZQrw==
+
 vscode-css-languageservice@^6.2.4:
   version "6.2.6"
   resolved "https://registry.yarnpkg.com/vscode-css-languageservice/-/vscode-css-languageservice-6.2.6.tgz#bc26c2abaaa2eb117b143fdb9387ee1701d9661a"
