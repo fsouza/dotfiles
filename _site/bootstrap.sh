@@ -130,6 +130,17 @@ function setup_rclone {
 	mv ${conf_file} ${HOME}/.config/rclone/rclone.conf
 }
 
+function install_node {
+	${HOMEBREW_PREFIX}/bin/zsh -l <<'EOF'
+source ${HOME}/.zshrc
+
+set -e
+export PATH=${HOME}/.dotfiles/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:${PATH}
+fnm install v20
+fnm default v20
+EOF
+}
+
 function setup_nvim {
 	${HOMEBREW_PREFIX}/bin/zsh -l <<'EOF'
 source ${HOME}/.zshrc
@@ -150,6 +161,7 @@ function main {
 
 	setup_rclone
 	setup_dotfiles
+	install_node
 	setup_nvim
 }
 

@@ -20,6 +20,10 @@ prepend_to_path \
 
 export MANPATH=${HOME}/.local/share/man${MANPATH+:${MANPATH}}
 
+if command -v fnm &>/dev/null; then
+	eval "$(fnm env)"
+fi
+
 extras=(virtualenv ruby rtx z git gh go java mail ocaml neovim rclone tmux)
 extras_skip=( ${FSOUZA_EXTRAS_SKIP[@]} )
 for extra in ${extras[@]}; do
