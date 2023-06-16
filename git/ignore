@@ -21,7 +21,6 @@ __pycache__
 .cpcache
 dump.rdb
 .gems
-.rtx.fsouza.toml
 
 # jdtls
 .settings

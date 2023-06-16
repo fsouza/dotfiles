@@ -1,3 +1,27 @@
 function use_java {
-	__rtx_autoselect java ${1}
+	local version_spec=${1:-17}
+	if grep -Eq '^1\.[0-9]' <<<${version_spec}; then
+		version_spec=$(sd '^1\.(.+)' '$1' <<<${version_spec})
+	fi
+
+	version_spec="corretto-${version_spec}"
+	local java_home=$(rtx where java@"${version_spec}" 2>/dev/null)
+
+	if [ -z "${java_home}" ]; then
+		rtx install java@"${version_spec}"
+		java_home=$(rtx where java@"${version_spec}" 2>/dev/null)
+	fi
+
+	if [ -z "${java_home}" ]; then
+		return 2
+	fi
+
+	if [ -n "${JAVA_HOME}" ]; then
+		remove_from_path "${JAVA_HOME}"/bin
+	fi
+
+	export JAVA_HOME=${java_home}
+	prepend_to_path "${JAVA_HOME}"/bin
 }
+
+use_java 17
