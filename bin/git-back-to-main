@@ -3,7 +3,11 @@
 set -euo PIPEFAIL
 
 main_branch_name=$(git symbolic-ref refs/remotes/origin/HEAD| awk -F / '{print $NF}')
-current_branch=$(git branch)
+current_branch=$(git branch --show-current)
+
+if [[ ${current_branch} == ${main_branch_name} ]]; then
+	exec git pull
+fi
 
 if [[ ${current_branch} != ${main_branch_name} ]] && [ -z "$(git status --porcelain)" ]; then
 	git switch ${main_branch_name}
