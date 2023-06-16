@@ -1,0 +1,23 @@
+" This is never gonna grow as complex as my main config, it's just some basic
+" shit.
+
+" Initial mappings
+nmap Q <Nop>
+nmap <Space> <Nop>
+let mapleader = " "
+
+" basic UI options
+set number
+set relativenumber
+
+" plugins
+set commentary
+set highlightedyank
+set matchit
+set surround
+set sneak
+set textobj-indent
+
+" mappings
+nmap <Leader>f <Action>(ReformatCode)
+nmap <Leader>zz <Action>(GotoFile)
