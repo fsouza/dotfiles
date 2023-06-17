@@ -366,7 +366,7 @@ async def install_kotlin_language_server(langservers_cache_dir: Path) -> None:
         return
 
     repo_dir = await _clone_or_update(
-        "https://github.com/fwcd/kotlin-language-server.git",
+        "https://github.com/fsouza/kotlin-language-server.git",
         langservers_cache_dir / "kotlin-language-server",
     )
 
