@@ -1,0 +1,31 @@
+allprojects { project ->
+    task nvimProjectDeps { task ->
+        doLast {
+            if (project.hasProperty('sourceSets')) {
+                sourceSets.forEach {
+                    it.compileClasspath.forEach {
+                        System.out.println it
+                    }
+                }
+            }
+
+            // handle kotlin multiplatform style dependencies if any
+            def kotlinExtension = project.extensions.findByName("kotlin")
+            if(kotlinExtension && kotlinExtension.hasProperty("targets")) {
+                def kotlinSourceSets = kotlinExtension.sourceSets
+
+                // Print the list of all dependencies jar files.
+                kotlinExtension.targets.names.each {
+                    def classpath = configurations["${it}CompileClasspath"]
+                    classpath.files.each {
+                        System.out.println it
+                    }
+                }
+            }
+
+            fileTree("$gradle.gradleHomeDir/lib")
+                .findAll { it.toString().endsWith '.jar' }
+                .forEach { System.out.println it }
+        }
+    }
+}
