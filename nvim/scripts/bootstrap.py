@@ -373,7 +373,7 @@ async def install_kotlin_language_server(langservers_cache_dir: Path) -> None:
     java_home = await _get_java_home("corretto-17")
     await run_cmd(
         cmd="./gradlew",
-        args=[":server:installDist"],
+        args=["-PjavaVersion=17", ":server:installDist"],
         cwd=repo_dir,
         env={
             "JAVA_HOME": java_home,
