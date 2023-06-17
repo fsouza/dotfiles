@@ -7,7 +7,8 @@
   (let [path (require :fsouza.pl.path)
         server-bin (path.join _G.cache-dir :langservers :kotlin-language-server
                               :server :build :install :server :bin
-                              :kotlin-language-server)]
+                              :kotlin-language-server)
+        settings {:kotlin {:externalSources {:useKlsScheme true}}}]
     (mod-invoke :fsouza.lsp.servers :start
                 {: bufnr
                  :config {:name :kotlin-language-server
