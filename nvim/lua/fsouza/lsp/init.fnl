@@ -178,7 +178,7 @@
                         (vim.keymap.del :n lhs {:buffer bufnr})))))
 
 (macro config-log []
-  `(let [level# (if vim.env.NVIM_DEBUG :trace :off)
+  `(let [level# (if vim.env.NVIM_DEBUG :trace :error)
          lsp-log# (require :vim.lsp.log)]
      (lsp-log#.set_level level#)
      (lsp-log#.set_format_func vim.inspect)))
