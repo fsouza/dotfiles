@@ -4,7 +4,7 @@ allprojects { project ->
             if (project.hasProperty('sourceSets')) {
                 sourceSets.forEach {
                     it.compileClasspath.forEach {
-                        System.out.println it
+                        System.out.println "cp-entry ${it}"
                     }
                 }
             }
@@ -18,14 +18,14 @@ allprojects { project ->
                 kotlinExtension.targets.names.each {
                     def classpath = configurations["${it}CompileClasspath"]
                     classpath.files.each {
-                        System.out.println it
+                        System.out.println "cp-entry ${it}"
                     }
                 }
             }
 
             fileTree("$gradle.gradleHomeDir/lib")
                 .findAll { it.toString().endsWith '.jar' }
-                .forEach { System.out.println it }
+                .forEach { System.out.println "cp-entry ${it}" }
         }
     }
 }

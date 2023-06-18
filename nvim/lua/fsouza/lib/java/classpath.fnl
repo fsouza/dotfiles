@@ -9,9 +9,15 @@
   (fn on-finished [result]
     (if (not= result.exit-status 0)
         (cb [])
-        (-> result.stdout
-            (vim.split "\n" {:plain true :trimempty true})
-            (cb))))
+        (let [prefix "cp-entry "
+              lines (-> result.stdout
+                        (vim.split "\n" {:plain true :trimempty true}))]
+          (->> lines
+               (mod-invoke :fsouza.pl.tablex :filter-map
+                           #(if (vim.startswith $1 prefix)
+                                (string.sub $1 (+ (length prefix) 1))
+                                nil))
+               (cb)))))
 
   (let [path (require :fsouza.pl.path)
         cwd (path.dirname gradlew)]
