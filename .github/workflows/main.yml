@@ -70,12 +70,6 @@ jobs:
           go-version: "1.x"
           cache-dependency-path: nvim/langservers/go.sum
 
-      - uses: fsouza/rs-toolchain@v1.1.0
-        with:
-          toolchain: stable
-          default: true
-          components: clippy, rustfmt, rust-src
-
       - name: get repo versions
         id: get-repo-versions
         run: |
