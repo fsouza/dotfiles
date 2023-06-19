@@ -166,7 +166,8 @@ jobs:
         uses: actions/cache@v3.3.1
         with:
           path: ~/.cache/pre-commit
-          key: "${{ hashFiles('.pre-commit-config.yaml') }}"
+          key: "pc-${{ hashFiles('.pre-commit-config.yaml') }}"
+          restore-keys: "pc-"
 
       - run: pre-commit run --all-files --show-diff-on-failure
 
