@@ -40,21 +40,31 @@
       (when (= err nil)
         (vim.schedule #(auto-delete-on-exit tempdir))
         (let [path (require :fsouza.pl.path)
-              content (string.format "echo %s" (table.concat cp-entries ":"))
-              script-path (path.join tempdir :kotlin-language-server :classpath)]
+              cp-path (path.join tempdir :kotlin-language-server :cp-entries)
+              cp-content (table.concat cp-entries ":")
+              script-path (path.join tempdir :kotlin-language-server :classpath)
+              script-content (string.format "cat %s" cp-path)]
           (path.async-mkdir (path.dirname script-path) 448 true
-                            #(vim.uv.fs_open script-path :w 493
-                                             #(when (= $1 nil)
-                                                (let [fd $2]
-                                                  (vim.uv.fs_write fd content
-                                                                   nil
-                                                                   #(do
-                                                                      (vim.uv.fs_close fd)
-                                                                      (when (= $1
-                                                                               nil)
-                                                                        (set xdg-config-home
-                                                                             tempdir)
-                                                                        (cb tempdir)))))))))))
+                            #(do
+                               ;; I love callbacks
+                               (var done 0)
+                               (path.async-write-file cp-path 420 cp-content
+                                                      #(set done (+ done 1)))
+                               (path.async-write-file script-path 493
+                                                      script-content
+                                                      #(set done (+ done 1)))
+                               ;; note: this timer runs forever if the files
+                               ;; don't get created. Creating a file is pretty
+                               ;; reliable, so I don't care too much.
+                               (let [timer (vim.uv.new_timer)]
+                                 (fn check-for-files []
+                                   (when (= done 2)
+                                     (timer:stop)
+                                     (timer:close)
+                                     (set xdg-config-home tempdir)
+                                     (cb tempdir)))
+
+                                 (timer:start 50 50 check-for-files)))))))
 
     (let [tmpdir (or (vim.uv.os_getenv :TMPDIR) :/tmp)]
       (vim.uv.fs_mkdtemp (mod-invoke :fsouza.pl.path :join tmpdir :kls.XXXXXX)
