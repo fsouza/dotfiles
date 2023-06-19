@@ -82,14 +82,30 @@ jobs:
           git ls-remote https://github.com/golang/tools.git master | awk '{print "golang-tools-version=" $1}' >>${GITHUB_OUTPUT}
           git ls-remote https://git.sr.ht/~technomancy/fnlfmt master | awk '{print "fnlfmt-version=" $1}' >>${GITHUB_OUTPUT}
           git ls-remote https://github.com/fwcd/kotlin-language-server.git main | awk '{print "kotlin-ls-version=" $1}' >>${GITHUB_OUTPUT}
+          git ls-remote https://github.com/GroovyLanguageServer/groovy-language-server.git main | awk '{print "groovy-ls-version=" $1}' >>${GITHUB_OUTPUT}
 
       - name: langservers cache
         id: nvim-langservers-cache
         uses: actions/cache@v3.3.1
         with:
           path: ~/.cache/nvim/langservers
-          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-${{ steps.setup-python.outputs.python-version }}-${{ steps.get-repo-versions.outputs.golang-tools-version }}-${{ steps.get-repo-versions.outputs.fnlfmt-version }}-${{ steps.get-repo-versions.outputs.kotlin-ls-version }}"
+          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-${{ steps.setup-python.outputs.python-version }}-${{ steps.get-repo-versions.outputs.golang-tools-version }}-${{ steps.get-repo-versions.outputs.fnlfmt-version }}-${{ steps.get-repo-versions.outputs.kotlin-ls-version }}-${{ steps.get-repo-versions.outputs.groovy-ls-version }}"
           restore-keys: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-${{ steps.setup-python.outputs.python-version }}-"
+
+      - name: gradle cache
+        id: gradle-cache
+        uses: actions/cache@v3.3.1
+        with:
+          path: ~/.gradle
+          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-${{ steps.get-repo-versions.outputs.kotlin-ls-version }}-${{ steps.get-repo-versions.outputs.groovy-ls-version }}"
+          restore-keys: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-"
+
+      - name: rtx cache
+        id: rtx-cache
+        uses: actions/cache@v3.3.1
+        with:
+          path: ~/.local/share/rtx
+          key: "${{ runner.os }}-${{ hashFiles('bootstrap/Brewfile') }}"
 
       - name: get luajit version
         id: get-luajit-version
