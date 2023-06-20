@@ -19,7 +19,7 @@
 
 (fn from-current-shell []
   (let [path (require :fsouza.pl.path)
-        shell (vim.uv.os_getenv :SHELL)]
+        shell (os.getenv :SHELL)]
     (when shell
       (path.basename shell))))
 

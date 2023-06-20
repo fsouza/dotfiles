@@ -83,7 +83,7 @@
     (find-java-executable :17 with-executable)))
 
 (let [bufnr (vim.api.nvim_get_current_buf)
-      java-home (vim.uv.os_getenv :JAVA_HOME)
+      java-home (os.getenv :JAVA_HOME)
       settings {:java {:contentProvider {:preferred :fernflower}}}]
   (if java-home
       (mod-invoke :fsouza.lib.java :detect-runtime-name java-home

@@ -66,7 +66,7 @@
 
                                  (timer:start 50 50 check-for-files)))))))
 
-    (let [tmpdir (or (vim.uv.os_getenv :TMPDIR) :/tmp)]
+    (let [tmpdir (or (os.getenv :TMPDIR) :/tmp)]
       (vim.uv.fs_mkdtemp (mod-invoke :fsouza.pl.path :join tmpdir :kls.XXXXXX)
                          with-temp-dir)))
 
@@ -81,7 +81,7 @@
     (mod-invoke :fsouza.lsp.servers.efm :add bufnr :kotlin tools)))
 
 (let [bufnr (vim.api.nvim_get_current_buf)
-      user-java-home (vim.uv.os_getenv :JAVA_HOME)]
+      user-java-home (os.getenv :JAVA_HOME)]
   (add-kotlin-tools-to-efm bufnr)
   (mod-invoke :fsouza.lib.java :detect-runtime-name user-java-home
               #(let [name $1

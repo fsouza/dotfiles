@@ -39,7 +39,7 @@
                                              (cb))))))))
 
 (fn path-entries [path]
-  (let [path (or path (vim.uv.os_getenv :PATH))]
+  (let [path (or path (os.getenv :PATH))]
     (vim.split path ":" {:trimempty true :plain true})))
 
 (fn async-which [exec cb path]
