@@ -196,6 +196,9 @@
               [{:events [:LspAttach] :callback lsp-attach}])
   (mod-invoke :fsouza.lsp.buf-diagnostic :register-filter :pyright
               #(mod-invoke :fsouza.lsp.servers.pyright :valid-diagnostic $1))
+  (mod-invoke :fsouza.lsp.buf-diagnostic :register-filter
+              :groovy-language-server
+              #(mod-invoke :fsouza.lsp.servers.groovy-ls :valid-diagnostic $1))
   (mod-invoke :fsouza.lsp.buf-diagnostic :register-filter :rust_analyzer
               #(mod-invoke :fsouza.lsp.servers.rust-analyzer :valid-diagnostic
                            $1)))
