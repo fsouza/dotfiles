@@ -19,8 +19,7 @@
                                 nil))
                (cb)))))
 
-  (let [path (require :fsouza.pl.path)
-        cwd (path.dirname gradlew)]
+  (let [path (require :fsouza.pl.path)]
     ;; TODO: don't hardcode -Xmx
     (mod-invoke :fsouza.lib.cmd :run gradlew
                 {:args [:-Porg.gradle.jvmargs=-Xmx8192M
@@ -28,8 +27,7 @@
                         (path.join _G.dotfiles-dir :nvim :etc
                                    :projectClassPathFinder.gradle)
                         :nvimProjectDeps
-                        :--quiet]
-                 : cwd} on-finished)))
+                        :--quiet]} on-finished)))
 
 ;; TODO: this can take some time, we need some progress reporting. I wanna use
 ;; fidget.nvim for this, but that would require the new API.
