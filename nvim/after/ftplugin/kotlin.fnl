@@ -8,7 +8,7 @@
 (lambda start-kotlin-language-server [bufnr
                                       java-home
                                       jvm-target
-                                      xdg-config-home]
+                                      ?xdg-config-home]
   (let [path (require :fsouza.pl.path)
         server-bin (path.join _G.cache-dir :langservers :kotlin-language-server
                               :server :build :install :server :bin
@@ -21,7 +21,7 @@
                           :cmd [server-bin]
                           :cmd_env {:JAVA_HOME java-home
                                     :JAVA_OPTS "-XX:MaxRAMPercentage=80"
-                                    :XDG_CONFIG_HOME xdg-config-home}
+                                    :XDG_CONFIG_HOME ?xdg-config-home}
                           : settings}
                  :cb #(mod-invoke :fsouza.lsp.references :register-test-checker
                                   :.kt :kotlin is-kt-test)})))
@@ -66,16 +66,19 @@
 
                                  (timer:start 50 50 check-for-files)))))))
 
-    (let [tmpdir (or (os.getenv :TMPDIR) :/tmp)]
-      (vim.uv.fs_mkdtemp (mod-invoke :fsouza.pl.path :join tmpdir :kls.XXXXXX)
-                         with-temp-dir)))
+    (if cp-entries
+        (let [tmpdir (or (os.getenv :TMPDIR) :/tmp)]
+          (vim.uv.fs_mkdtemp (mod-invoke :fsouza.pl.path :join tmpdir
+                                         :kls.XXXXXX)
+                             with-temp-dir))
+        (cb nil)))
 
   (if xdg-config-home
       (cb xdg-config-home)
       (if (mod-invoke :fsouza.lib.ff :is-enabled :kls-classpath)
           (mod-invoke :fsouza.lib.java.classpath :gradle-classpath-items
                       with-classpath)
-          (with-classpath []))))
+          (with-classpath nil))))
 
 (fn add-kotlin-tools-to-efm [bufnr]
   (let [tools [{:formatCommand "ktlint --log-level=none --stdin --format"
