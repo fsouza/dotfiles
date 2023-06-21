@@ -21,3 +21,7 @@ set textobj-indent
 " mappings
 nmap <Leader>f <Action>(ReformatCode)
 nmap <Leader>zz <Action>(GotoFile)
+nmap <Leader>r <Action>(RenameElement)
+nmap <c-n> <Action>(GotoNextError)
+nmap <c-p> <Action>(GotoPreviousError)
+nmap <Leader>ll <Action>(ShowErrorDescription)
