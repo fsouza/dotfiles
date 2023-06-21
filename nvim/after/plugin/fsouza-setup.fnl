@@ -38,7 +38,16 @@
      (vim.keymap.set :x :<leader>gw
                      #(mod-invoke :fsouza.lib.fuzzy :grep-visual))
      (vim.keymap.set :n :<leader>gl #(mod-invoke :fsouza.lib.fuzzy :grep-last))
-     (vim.keymap.set :n :<leader>zl #(mod-invoke :fsouza.lib.fuzzy :lines))))
+     (vim.keymap.set :n :<leader>zl #(mod-invoke :fsouza.lib.fuzzy :lines))
+     (vim.keymap.set :n :<leader>zc
+                     #(mod-invoke :fsouza.lib.fuzzy :set-virtual-cwd)
+                     {:silent true})
+     (vim.api.nvim_create_user_command :Fcd
+                                       #(let [{:fargs fargs#} $1]
+                                          (mod-invoke :fsouza.lib.fuzzy
+                                                      :set-virtual-cwd
+                                                      (. fargs# 1)))
+                                       {:force true :complete :dir :nargs "?"})))
 
 (macro setup-autofmt-commands []
   `(do

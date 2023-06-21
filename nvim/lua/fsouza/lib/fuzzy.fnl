@@ -1,5 +1,7 @@
 (import-macros {: mod-invoke} :helpers)
 
+(var virtual-cwd nil)
+
 (fn should-qf [selected]
   (let [n-selected (length selected)]
     (if (<= (length selected) 1)
@@ -128,6 +130,7 @@
         fzf-lua (fzf-lua)]
     (when (not= search "")
       (fzf-lua.grep {: search
+                     :cwd virtual-cwd
                      :raw_cmd (string.format "rg %s %s -- %s" rg-opts
                                              extra-opts
                                              (vim.fn.shellescape search))}))))
@@ -137,7 +140,18 @@
         fzf-lua (fzf-lua)]
     (tset opts :rg_opts rg-opts)
     (tset opts :multiprocess true)
+    (tset opts :cwd (or opts.cwd virtual-cwd))
     (fzf-lua.live_grep_native opts)))
+
+(fn grep-last [rg-opts]
+  (let [fzf-lua (fzf-lua)]
+    (fzf-lua.grep_last {:rg_opts rg-opts})))
+
+(fn files [opts]
+  (let [opts (or opts {})]
+    (tset opts :cwd (or opts.cwd virtual-cwd))
+    (let [fzf-lua (fzf-lua)]
+      (fzf-lua.files opts))))
 
 (fn handle-repo [run-fzf cd selected]
   (when (= (length selected) 1)
@@ -147,18 +161,14 @@
         (vim.api.nvim_set_current_dir sel))
       (when run-fzf
         (let [fzf-lua (fzf-lua)]
-          (fzf-lua.files sel)
+          (files {:cwd sel})
           (mod-invoke :fzf-lua.actions :ensure_insert_mode))))))
-
-(fn grep-last [rg-opts]
-  (let [fzf-lua (fzf-lua)]
-    (fzf-lua.grep_last {:rg_opts rg-opts})))
 
 (fn git-repos [cwd cd run-fzf]
   (let [run-fzf (or run-fzf true)
         cd (or cd true)
         prompt "Git repos："
-        cwd (or cwd (vim.uv.cwd))
+        cwd (or cwd virtual-cwd (vim.uv.cwd))
         fzf-lua (fzf-lua)
         config (require :fzf-lua.config)
         core (require :fzf-lua.core)
@@ -175,10 +185,35 @@
 
 (fn git-files []
   (let [fzf-lua (fzf-lua)]
-    (fzf-lua.git_files {:cwd (vim.uv.cwd)})))
+    (fzf-lua.git_files {:cwd (or virtual-cwd (vim.uv.cwd))})))
+
+(fn set-virtual-cwd- [cwd]
+  (set virtual-cwd (mod-invoke :fsouza.pl.path :abspath cwd)))
+
+(fn pick-cwd []
+  (let [fzf-lua (fzf-lua)
+        config (require :fzf-lua.config)
+        core (require :fzf-lua.core)
+        opts (config.normalize_opts {:actions {:default #(set-virtual-cwd- (. $1
+                                                                              1))}}
+                                    config.globals.files)
+        contents (core.mt_cmd_wrapper {:cmd "fd --type d"})
+        opts (core.set_fzf_field_index opts)]
+    (tset opts.fzf_opts :--no-multi "")
+    (tset opts :previewer nil)
+    (core.fzf_exec contents opts)))
+
+(fn set-virtual-cwd [cwd]
+  (if (= cwd nil)
+      (pick-cwd)
+      (set-virtual-cwd- cwd)))
+
+(fn unset-virtual-cwd []
+  (set virtual-cwd nil))
 
 (let [rg-opts "--column -n --hidden --no-heading --color=always --colors 'match:fg:0x99,0x00,0x00' --colors line:none --colors path:none --colors column:none -S --glob '!.git' --glob '!.hg'"
-      mod {: git-files
+      mod {: files
+           : git-files
            :live-grep (partial live-grep rg-opts)
            :grep (partial grep rg-opts)
            :grep-last #(grep-last rg-opts)
@@ -186,6 +221,8 @@
                                (. (mod-invoke :fsouza.lib.nvim-helpers
                                               :get-visual-selection-contents)
                                   1) :-F)
+           : set-virtual-cwd
+           : unset-virtual-cwd
            : git-repos
            : send-items}]
   (setmetatable mod {:__index (fn [table key]
