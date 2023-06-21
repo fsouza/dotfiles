@@ -2,6 +2,9 @@
 
 (local disabled-servers {})
 
+(macro ff [server-name]
+  `(.. :lsp-server- ,server-name))
+
 (fn with-executable [exec cb]
   (when exec
     (let [node-bin (mod-invoke :fsouza.pl.path :join _G.config-dir :langservers
@@ -24,7 +27,8 @@
         (cwd-if-not-home))))
 
 (macro should-start [bufnr name]
-  `(and (= (. disabled-servers ,name) nil) (vim.api.nvim_buf_is_valid ,bufnr)
+  `(and (mod-invoke :fsouza.lib.ff :is-enabled (ff ,name) true)
+        (vim.api.nvim_buf_is_valid ,bufnr)
         (not= (. vim :bo bufnr :buftype) :nofile)))
 
 (fn with-defaults [opts]
@@ -54,9 +58,9 @@
                                (cb))))))))
 
 (fn enable-server [name]
-  (tset disabled-servers name nil))
+  (mod-invoke :fsouza.lib.ff :enable (ff name)))
 
 (fn disable-server [name]
-  (tset disabled-servers name true))
+  (mod-invoke :fsouza.lib.ff :disable (ff name)))
 
 {: start : patterns-with-fallback : disable-server : enable-server}
