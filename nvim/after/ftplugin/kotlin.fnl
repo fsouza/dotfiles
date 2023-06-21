@@ -72,8 +72,10 @@
 
   (if xdg-config-home
       (cb xdg-config-home)
-      (mod-invoke :fsouza.lib.java.classpath :gradle-classpath-items
-                  with-classpath)))
+      (if (mod-invoke :fsouza.lib.ff :is-enabled :kls-classpath)
+          (mod-invoke :fsouza.lib.java.classpath :gradle-classpath-items
+                      with-classpath)
+          (with-classpath []))))
 
 (fn add-kotlin-tools-to-efm [bufnr]
   (let [tools [{:formatCommand "ktlint --log-level=none --stdin --format"
