@@ -26,3 +26,6 @@ dump.rdb
 .settings
 .project
 .classpath
+
+# random stuff
+.factorypath
