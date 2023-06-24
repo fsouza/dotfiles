@@ -37,7 +37,7 @@ def handle_current_line() -> NoReturn:
         "send-keys",
         "-X",
         "copy-pipe-and-cancel",
-        sys.argv[0],
+        *sys.argv,
     )
 
 
@@ -50,7 +50,7 @@ def _valid_diagnostic(line: bytes) -> bool:
     if not m:
         return False
 
-    file_path = Path(m.group(1).decode())
+    file_path = m.group(1).decode()
     return (_panel_cwd() / file_path).exists()
 
 
@@ -87,4 +87,4 @@ def send_to_nvim(contents: bytes) -> NoReturn:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
