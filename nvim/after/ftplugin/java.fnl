@@ -84,7 +84,8 @@
 
 (let [bufnr (vim.api.nvim_get_current_buf)
       java-home (os.getenv :JAVA_HOME)
-      settings {:java {:contentProvider {:preferred :fernflower}}}]
+      settings {:java {:contentProvider {:preferred :fernflower}
+                       :referencesCodeLens {:enabled false}}}]
   (if java-home
       (mod-invoke :fsouza.lib.java :detect-runtime-name java-home
                   #(let [name $1]
