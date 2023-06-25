@@ -6,6 +6,7 @@
 ;;
 ;;  - [ATTACH [attach-fn detach-fn]]
 ;;  - [MAPPINGS [{: mode : lhs : rhs}]]
+;;  - [BOTH [[attach-fn detach-fn] [{: mode : lhs : rhs}]]]
 (local method-handlers
        {:callHierarchy/incomingCalls #[:MAPPINGS
                                        [{:mode :n
@@ -17,7 +18,9 @@
                                          :lhs :<leader>lC
                                          :rhs #(mod-invoke :fsouza.lib.fuzzy
                                                            :lsp_outgoing_calls)}]]
-        :textDocument/codeAction #[:MAPPINGS
+        :textDocument/codeAction #[:BOTH
+                                   [#(mod-invoke :fsouza.lsp.auto-action :setup)
+                                    #nil]
                                    [{:mode :n
                                      :lhs :<leader>cc
                                      :rhs #(mod-invoke :fsouza.lsp.code-action
@@ -120,21 +123,26 @@
                                                     {:lsp_query query})))}]]})
 
 (lambda register-method [name client bufnr]
+  (fn handle-attach [attach-fn detach-fn]
+    (attach-fn bufnr)
+    (mod-invoke :fsouza.lsp.detach :register bufnr detach-fn))
+
+  (fn handle-mappings [mappings]
+    (each [_ {: mode : lhs : rhs} (ipairs mappings)]
+      (vim.keymap.set mode lhs rhs {:silent true :buffer bufnr})
+      (mod-invoke :fsouza.lsp.detach :register bufnr
+                  #(vim.keymap.del mode lhs {:buffer bufnr}))))
+
   (let [handler (. method-handlers name)]
     (when (and handler (client.supports_method name {: bufnr}))
       (let [result (handler)]
         (match result
-          [:ATTACH [attach-fn detach-fn]] (do
-                                            (attach-fn bufnr)
-                                            (mod-invoke :fsouza.lsp.detach
-                                                        :register bufnr
-                                                        detach-fn))
-          [:MAPPINGS mappings] (each [_ {: mode : lhs : rhs} (ipairs mappings)]
-                                 (vim.keymap.set mode lhs rhs
-                                                 {:silent true :buffer bufnr})
-                                 (mod-invoke :fsouza.lsp.detach :register bufnr
-                                             #(vim.keymap.del mode lhs
-                                                              {:buffer bufnr}))))))))
+          [:ATTACH [attach-fn detach-fn]] (handle-attach attach-fn detach-fn)
+          [:MAPPINGS mappings] (handle-mappings mappings)
+          [:BOTH [attach-fn detach-fn] mappings] (do
+                                                   (handle-attach attach-fn
+                                                                  detach-fn)
+                                                   (handle-mappings mappings)))))))
 
 (fn lsp-attach [{:buf bufnr :data {:client_id client-id}}]
   (let [client (vim.lsp.get_client_by_id client-id)
