@@ -43,7 +43,8 @@
           (when changed
             (tset settings.languages language current-tools)
             (tset client.config :settings settings)
-            (client.notify :workspace/didChangeConfiguration {: settings}))))))
+            (client.notify :workspace/didChangeConfiguration {: settings}))
+          (mod-invoke :fsouza.lsp.formatting :attach bufnr client)))))
 
   (start-efm bufnr update-config))
 
