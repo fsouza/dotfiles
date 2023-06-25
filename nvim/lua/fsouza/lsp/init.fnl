@@ -18,9 +18,7 @@
                                          :lhs :<leader>lC
                                          :rhs #(mod-invoke :fsouza.lib.fuzzy
                                                            :lsp_outgoing_calls)}]]
-        :textDocument/codeAction #[:BOTH
-                                   [#(mod-invoke :fsouza.lsp.auto-action :setup)
-                                    #nil]
+        :textDocument/codeAction #[:MAPPINGS
                                    [{:mode :n
                                      :lhs :<leader>cc
                                      :rhs #(mod-invoke :fsouza.lsp.code-action
@@ -138,11 +136,7 @@
       (let [result (handler)]
         (match result
           [:ATTACH [attach-fn detach-fn]] (handle-attach attach-fn detach-fn)
-          [:MAPPINGS mappings] (handle-mappings mappings)
-          [:BOTH [attach-fn detach-fn] mappings] (do
-                                                   (handle-attach attach-fn
-                                                                  detach-fn)
-                                                   (handle-mappings mappings)))))))
+          [:MAPPINGS mappings] (handle-mappings mappings))))))
 
 (fn lsp-attach [{:buf bufnr :data {:client_id client-id}}]
   (let [client (vim.lsp.get_client_by_id client-id)

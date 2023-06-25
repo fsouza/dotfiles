@@ -41,21 +41,28 @@
                     :flags {:debounce_text_changes 150}}]
       (vim.tbl_extend :force defaults opts))))
 
-(fn start [{: config : find-root-dir : bufnr : cb}]
+(fn start [{: config : find-root-dir : bufnr : cb : opts}]
   (let [find-root-dir (or find-root-dir cwd-if-not-home)
         bufnr (or bufnr (vim.api.nvim_get_current_buf))
         exec (?. config :cmd 1)
         name config.name
         config (with-defaults config)
-        cb (or cb #nil)]
+        cb (or cb #nil)
+        opts (or opts {})]
     (when (should-start bufnr name)
       (tset config :root_dir (find-root-dir))
       (with-executable exec
         #(do
            (tset config.cmd 1 $1)
-           (vim.schedule #(->> {: bufnr}
-                               (vim.lsp.start config)
-                               (cb))))))))
+           (vim.schedule #(let [client-id (->> {: bufnr}
+                                               (vim.lsp.start config))
+                                client (vim.lsp.get_client_by_id client-id)]
+                            (when (and client opts.autofmt)
+                              (mod-invoke :fsouza.lsp.formatting :attach bufnr
+                                          client))
+                            (when (and client opts.auto-action)
+                              (mod-invoke :fsouza.lsp.auto-action :setup))
+                            (cb client-id))))))))
 
 (fn enable-server [name]
   (mod-invoke :fsouza.lib.ff :enable (ff name)))
