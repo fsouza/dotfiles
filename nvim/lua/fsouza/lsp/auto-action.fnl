@@ -1,5 +1,8 @@
 (import-macros {: mod-invoke} :helpers)
 
+;; maps bufnr to client
+(local buffer-clients {})
+
 (local langservers-org-imports-set {:gopls true :jdtls true})
 
 (fn should-organize-imports [client-name]
@@ -33,16 +36,24 @@
                                                                  code-action)
                                                      (vim.cmd.update))))))))))
 
-(fn setup []
-  (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__autoorganizeimports
-              [{:events [:User]
-                :targets [:fsouza-LSP-autoformatted]
-                :callback #(let [{: bufnr : client-id} (. $1 :data)
-                                 client (or (vim.lsp.get_client_by_id client-id)
-                                            (mod-invoke :fsouza.lsp.clients
-                                                        :get-client bufnr
-                                                        :textDocument/codeAction))]
-                             (when (should-organize-imports (?. client :name))
-                               (organize-imports-and-write client bufnr)))}]))
+(lambda handle [bufnr]
+  (let [client-id (. buffer-clients bufnr)
+        client (vim.lsp.get_client_by_id client-id)]
+    (if client
+        (organize-imports-and-write client bufnr)
+        (tset buffer-clients bufnr nil))))
 
-{:setup (mod-invoke :fsouza.lib.nvim-helpers :once setup)}
+(local setup
+       (mod-invoke :fsouza.lib.nvim-helpers :once
+                   #(mod-invoke :fsouza.lib.nvim-helpers :augroup
+                                :fsouza__autoorganizeimports
+                                [{:events [:User]
+                                  :targets [:fsouza-LSP-autoformatted]
+                                  :callback #(let [{: bufnr} (. $1 :data)]
+                                               (handle bufnr))}])))
+
+(fn attach [bufnr client-id]
+  (setup)
+  (tset buffer-clients bufnr client-id))
+
+{: attach}

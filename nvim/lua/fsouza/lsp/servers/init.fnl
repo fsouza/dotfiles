@@ -54,14 +54,13 @@
       (with-executable exec
         #(do
            (tset config.cmd 1 $1)
-           (vim.schedule #(let [client-id (->> {: bufnr}
-                                               (vim.lsp.start config))
-                                client (vim.lsp.get_client_by_id client-id)]
-                            (when (and client opts.autofmt)
+           (vim.schedule #(let [client-id (vim.lsp.start config {: bufnr})]
+                            (when opts.autofmt
                               (mod-invoke :fsouza.lsp.formatting :attach bufnr
-                                          client))
-                            (when (and client opts.auto-action)
-                              (mod-invoke :fsouza.lsp.auto-action :setup))
+                                          client-id))
+                            (when opts.auto-action
+                              (mod-invoke :fsouza.lsp.auto-action :attach bufnr
+                                          client-id))
                             (cb client-id))))))))
 
 (fn enable-server [name]
