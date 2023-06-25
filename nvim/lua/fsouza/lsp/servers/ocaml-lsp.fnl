@@ -5,6 +5,7 @@
   (mod-invoke :fsouza.lsp.servers :start
               {:config {:name :ocaml-lsp :cmd [:ocamllsp]}
                :find-root-dir #(mod-invoke :fsouza.lsp.servers
-                                           :patterns-with-fallback [:.merlin])}))
+                                           :patterns-with-fallback [:.merlin])
+               :opts {:autofmt true}}))
 
 {: setup}

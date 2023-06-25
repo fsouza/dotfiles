@@ -9,4 +9,5 @@
                               :-C
                               mod-dir
                               :github.com/hashicorp/terraform-ls
-                              :serve]}}))
+                              :serve]}
+               :opts {:autofmt true}}))

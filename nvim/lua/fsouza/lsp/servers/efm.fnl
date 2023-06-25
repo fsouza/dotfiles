@@ -7,6 +7,7 @@
     (mod-invoke :fsouza.lsp.servers :start
                 {: bufnr
                  : cb
+                 :opts {:autofmt true}
                  :config {:name :efm
                           :cmd [:go
                                 :run
@@ -43,8 +44,7 @@
           (when changed
             (tset settings.languages language current-tools)
             (tset client.config :settings settings)
-            (client.notify :workspace/didChangeConfiguration {: settings}))
-          (mod-invoke :fsouza.lsp.formatting :attach bufnr client)))))
+            (client.notify :workspace/didChangeConfiguration {: settings}))))))
 
   (start-efm bufnr update-config))
 

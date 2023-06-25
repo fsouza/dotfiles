@@ -4,4 +4,5 @@
 (mod-invoke :fsouza.lsp.servers :start
             {:config {:name :rust-analyzer
                       :cmd [(get-cache-cmd :rust-analyzer)]
-                      :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}}})
+                      :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}}
+             :opts {:autofmt true}})

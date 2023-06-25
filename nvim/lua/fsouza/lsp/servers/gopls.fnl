@@ -25,11 +25,6 @@
                  :find-root-dir #(mod-invoke :fsouza.lsp.servers
                                              :patterns-with-fallback [:go.mod])
                  : bufnr
-                 :cb #(let [client (vim.lsp.get_client_by_id $1)]
-                        (when client
-                          (mod-invoke :fsouza.lsp.references
-                                      :register-test-checker :.go :go is-go-test)
-                          (mod-invoke :fsouza.lsp.formatting :attach bufnr
-                                      client)))})))
+                 :opts {:autofmt true :auto-action true}})))
 
 {: setup}
