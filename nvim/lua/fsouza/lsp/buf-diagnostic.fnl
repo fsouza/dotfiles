@@ -22,10 +22,13 @@
           {: diagnostics} result]
       (when (and diagnostics client)
         (tset result :diagnostics (icollect [_ d (ipairs diagnostics)]
-                                    (when (mod-invoke :fsouza.pl.tablex
-                                                      :for-all client-filters
-                                                      #($1 d))
-                                      d))))
+                                    (let [severity (or d.severity 1)]
+                                      (when (and (< severity 2)
+                                                 (mod-invoke :fsouza.pl.tablex
+                                                             :for-all
+                                                             client-filters
+                                                             #($1 d)))
+                                        d)))))
       result)))
 
 (fn buf-clear-all-diagnostics []
