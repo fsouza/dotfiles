@@ -14,62 +14,53 @@
         opts {:tabSize tab-size :insertSpaces et}]
     {:textDocument {:uri (vim.uri_from_bufnr bufnr)} :options opts}))
 
-(fn fmt [client bufnr cb]
-  (let [client (or client
+(lambda fmt [?client ?bufnr ?cb]
+  (let [bufnr (or ?bufnr (vim.api.nvim_get_current_buf))
+        client (or ?client
                    (mod-invoke :fsouza.lsp.clients :get-client bufnr
                                :textDocument/formatting))]
     (when client
       (let [(_ req-id) (client.request :textDocument/formatting
-                                       (formatting-params bufnr) cb bufnr)]
+                                       (formatting-params bufnr) ?cb bufnr)]
         (values req-id #(client.cancel_request req-id))))))
 
-(fn autofmt-and-write [bufnr]
+(fn autofmt-and-write [bufnr client]
   (macro do-autocmd [client-id]
     `(vim.api.nvim_exec_autocmds [:User]
                                  {:pattern :fsouza-LSP-autoformatted
                                   :data {: bufnr :client-id ,client-id}}))
   (let [enabled (mod-invoke :fsouza.lib.autofmt :is-enabled bufnr)]
     (if enabled
-        (let [client (mod-invoke :fsouza.lsp.clients :get-client bufnr
-                                 :textDocument/formatting)]
-          (if (not client)
-              (error (string.format "couldn't find client for buffer %d" bufnr))
-              (pcall #(let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)]
-                        (fmt client bufnr
-                             (fn [_ result]
-                               (when (= changed-tick
-                                        (vim.api.nvim_buf_get_changedtick bufnr))
-                                 (when result
-                                   (vim.api.nvim_buf_call bufnr
-                                                          #(do
-                                                             (let [helpers (require :fsouza.lib.nvim-helpers)
-                                                                   hash (helpers.hash-buffer bufnr)]
-                                                               (helpers.rewrite-wrap #(vim.lsp.util.apply_text_edits result
-                                                                                                                     bufnr
-                                                                                                                     client.offset_encoding))
-                                                               (when (not= changed-tick
-                                                                           (vim.api.nvim_buf_get_changedtick bufnr))
-                                                                 (let [new-hash (helpers.hash-buffer bufnr)
-                                                                       noautocmd (= new-hash
-                                                                                    hash)]
-                                                                   (vim.cmd.update {:mods {: noautocmd}})))))))
-                                 (do-autocmd client.id))))))))
+        (pcall #(let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)]
+                  (fmt client bufnr
+                       (fn [_ result]
+                         (when (= changed-tick
+                                  (vim.api.nvim_buf_get_changedtick bufnr))
+                           (when result
+                             (vim.api.nvim_buf_call bufnr
+                                                    #(do
+                                                       (let [helpers (require :fsouza.lib.nvim-helpers)
+                                                             hash (helpers.hash-buffer bufnr)]
+                                                         (helpers.rewrite-wrap #(vim.lsp.util.apply_text_edits result
+                                                                                                               bufnr
+                                                                                                               client.offset_encoding))
+                                                         (when (not= changed-tick
+                                                                     (vim.api.nvim_buf_get_changedtick bufnr))
+                                                           (let [new-hash (helpers.hash-buffer bufnr)
+                                                                 noautocmd (= new-hash
+                                                                              hash)]
+                                                             (vim.cmd.update {:mods {: noautocmd}})))))))
+                           (do-autocmd client.id))))))
         (do-autocmd nil))))
 
 (fn augroup-name [bufnr]
   (.. :lsp_autofmt_ bufnr))
 
-(fn on-attach [bufnr]
+(lambda attach [bufnr client]
   (when (not (should-skip-buffer bufnr))
     (mod-invoke :fsouza.lib.nvim-helpers :augroup (augroup-name bufnr)
                 [{:events [:BufWritePost]
                   :targets [(string.format "<buffer=%d>" bufnr)]
-                  :callback #(autofmt-and-write bufnr)}]))
-  (vim.keymap.set :n :<leader>f #(fmt nil bufnr) {:silent true :buffer bufnr}))
+                  :callback #(autofmt-and-write bufnr client)}])))
 
-(fn on-detach [bufnr]
-  (when (vim.api.nvim_buf_is_valid bufnr)
-    (pcall vim.keymap.del :n :<leader>f {:buffer bufnr}))
-  (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup (augroup-name bufnr)))
-
-{: on-attach : on-detach}
+{: attach : fmt}

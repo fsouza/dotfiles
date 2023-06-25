@@ -73,14 +73,11 @@
                                          :lhs :<leader>t
                                          :rhs #(mod-invoke :fsouza.lib.fuzzy
                                                            :lsp_document_symbols)}]]
-        :textDocument/formatting #[:ATTACH
-                                   [#(do
-                                       (mod-invoke :fsouza.lsp.auto-action
-                                                   :setup)
-                                       (mod-invoke :fsouza.lsp.formatting
-                                                   :on-attach $1))
-                                    #(mod-invoke :fsouza.lsp.formatting
-                                                 :on-detach $1)]]
+        :textDocument/formatting #[:MAPPINGS
+                                   [{:mode :n
+                                     :lhs :<leader>f
+                                     :rhs #(mod-invoke :fsouza.lsp.formatting
+                                                       :fmt)}]]
         :textDocument/hover #[:MAPPINGS
                               [{:mode :n
                                 :lhs :<leader>i
