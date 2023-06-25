@@ -76,7 +76,6 @@
             {1 :pangloss/vim-javascript}
             {1 :tbastos/vim-lua}
             {1 :Vimjas/vim-python-pep8-indent}
-            {1 :ziglang/zig.vim}
             ;; themes, for demos/presentations.
             {1 :rose-pine/neovim}]]
   {: packer-dir
