@@ -2,5 +2,13 @@ if command -v zoxide &>/dev/null; then
 	export _ZO_ECHO=1
 	export _ZO_EXCLUDE_DIRS=(${HOME}/gd)
 
-	eval "$(zoxide init zsh)"
+	eval "$(zoxide init zsh --no-cmd)"
+
+	function z {
+		if [ -z "$1" ]; then
+			__zoxide_zi
+		else
+			__zoxide_z ${1}
+		fi
+	}
 fi
