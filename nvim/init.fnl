@@ -43,7 +43,6 @@
                                  "\\([0-9]\\+[a-f]\\+\\([0-9]\\|[a-f]\\)*\\)\\+"
                                  "\\([A-F]\\+[0-9]\\+\\([A-F]\\|[0-9]\\)*\\)\\+"
                                  "\\([0-9]\\+[A-F]\\+\\([0-9]\\|[A-F]\\)*\\)\\+"]
-              :wordmotion_uppercase_spaces ["(" ")" "[" "]" "{" "}"]
               :sexp_filetypes "clojure,dune,fennel,scheme,lisp,timl"
               :sexp_enable_insert_mode_mappings 0
               :sexp_no_word_maps 1
