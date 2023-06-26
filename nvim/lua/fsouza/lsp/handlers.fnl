@@ -50,31 +50,6 @@
                       ctx.client_id)))))
   vim.NIL)
 
-(local log-files {})
-
-(fn get-log-file [client-name]
-  (let [log-file (. log-files client-name)]
-    (if log-file
-        log-file
-        (do
-          (let [path (require :fsouza.pl.path)
-                log-filename (path.join _G.cache-dir :langservers
-                                        (string.format "%s.log" client-name))
-                (log-file err) (io.open log-filename :a)]
-            (when err
-              (error err))
-            (tset log-files :client-name log-file)
-            log-file)))))
-
-(fn log-message [err result ctx]
-  (let [{:client_id client-id} ctx
-        client (vim.lsp.get_client_by_id client-id)
-        client-name (?. client :name)]
-    (when client-name
-      (let [log-file (get-log-file client-name)]
-        (log-file:write (string.format "%s\n" result.message))
-        (log-file:flush)))))
-
 {:textDocument/declaration fzf-location-callback
  :textDocument/definition fzf-location-callback
  :textDocument/typeDefinition fzf-location-callback
@@ -97,4 +72,4 @@
                                                :publish-diagnostics $...)
  :client/registerCapability register-capability
  :client/unregisterCapability unregister-capability
- :window/logMessage log-message}
+ :window/logMessage #(mod-invoke :fsouza.lsp.log-message :handle $...)}
