@@ -20,7 +20,7 @@
           (if (> (length result) 1)
               (let [items (vim.lsp.util.locations_to_items result
                                                            client.offset_encoding)]
-                (mod-invoke :fsouza.lib.fuzzy :send-items items :Locations))
+                (mod-invoke :fsouza.lib.fuzzy :send-lsp-items items :Locations))
               (vim.lsp.util.jump_to_location (. result 1)
                                              client.offset_encoding))
           (vim.lsp.util.jump_to_location result client.offset_encoding)))))

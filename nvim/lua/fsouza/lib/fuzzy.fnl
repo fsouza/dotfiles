@@ -111,7 +111,7 @@
                                  (tset f-utils.ansi_codes name id))
                                fzf-lua-))))
 
-(fn send-items [items prompt]
+(lambda send-lsp-items [items prompt]
   (let [prompt (.. prompt "：")
         fzf-lua (fzf-lua)
         config (require :fzf-lua.config)
@@ -123,6 +123,21 @@
                    (let [item (make-entry.lcol item opts)]
                      (make-entry.file item opts)))]
     (core.fzf_exec contents opts)))
+
+(lambda send-items [items prompt cb]
+  (match (length items)
+    0 nil
+    1 (cb (. items 1))
+    _ (let [prompt (.. prompt "：")
+            fzf-lua (fzf-lua)
+            config (require :fzf-lua.config)
+            core (require :fzf-lua.core)
+            make-entry (require :fzf-lua.make_entry)
+            opts (config.normalize_opts {: prompt :actions {:default cb}}
+                                        config.globals.files)]
+        (tset opts.fzf_opts :--no-multi "")
+        (tset opts :previewer nil)
+        (core.fzf_exec items opts))))
 
 (fn grep [rg-opts search extra-opts]
   (let [search (or search (vim.fn.input "rg："))
@@ -224,6 +239,7 @@
            : set-virtual-cwd
            : unset-virtual-cwd
            : git-repos
+           : send-lsp-items
            : send-items}]
   (setmetatable mod {:__index (fn [table key]
                                 (let [fzf-lua (fzf-lua)
