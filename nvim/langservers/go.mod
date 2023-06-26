@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/bazelbuild/buildtools v0.0.0-20230111132423-06e8e2436a75
-	github.com/hashicorp/terraform-ls v0.31.2
+	github.com/hashicorp/terraform-ls v0.31.3
 	github.com/mattn/efm-langserver v0.0.44
 )
 
@@ -13,7 +13,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.2.1 // indirect
 	github.com/Masterminds/sprig/v3 v3.2.1 // indirect
 	github.com/agext/levenshtein v1.2.2 // indirect
-	github.com/algolia/algoliasearch-client-go/v3 v3.29.1 // indirect
+	github.com/algolia/algoliasearch-client-go/v3 v3.30.0 // indirect
 	github.com/antonmedv/expr v1.10.5 // indirect
 	github.com/apparentlymart/go-textseg v1.0.0 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
@@ -37,13 +37,13 @@ require (
 	github.com/hashicorp/go-uuid v1.0.3 // indirect
 	github.com/hashicorp/go-version v1.6.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
-	github.com/hashicorp/hcl-lang v0.0.0-20230511105806-6430b42047b5 // indirect
-	github.com/hashicorp/hcl/v2 v2.16.2 // indirect
+	github.com/hashicorp/hcl-lang v0.0.0-20230616080040-23442190b6b7 // indirect
+	github.com/hashicorp/hcl/v2 v2.17.0 // indirect
 	github.com/hashicorp/terraform-exec v0.18.1 // indirect
-	github.com/hashicorp/terraform-json v0.16.0 // indirect
-	github.com/hashicorp/terraform-registry-address v0.2.0 // indirect
-	github.com/hashicorp/terraform-schema v0.0.0-20230406173618-2060cc71a386 // indirect
-	github.com/hashicorp/terraform-svchost v0.0.1 // indirect
+	github.com/hashicorp/terraform-json v0.17.0 // indirect
+	github.com/hashicorp/terraform-registry-address v0.2.1 // indirect
+	github.com/hashicorp/terraform-schema v0.0.0-20230620150221-29a5273da5f1 // indirect
+	github.com/hashicorp/terraform-svchost v0.1.1 // indirect
 	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
@@ -67,15 +67,15 @@ require (
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/objx v0.5.0 // indirect
-	github.com/stretchr/testify v1.8.2 // indirect
-	github.com/zclconf/go-cty v1.13.1 // indirect
+	github.com/stretchr/testify v1.8.4 // indirect
+	github.com/zclconf/go-cty v1.13.2 // indirect
 	go.bobheadxi.dev/gobenchdata v1.3.1 // indirect
 	go.bobheadxi.dev/streamline v1.2.1 // indirect
-	golang.org/x/crypto v0.7.0 // indirect
-	golang.org/x/net v0.10.0 // indirect
-	golang.org/x/sync v0.2.0 // indirect
-	golang.org/x/sys v0.8.0 // indirect
-	golang.org/x/text v0.9.0 // indirect
+	golang.org/x/crypto v0.10.0 // indirect
+	golang.org/x/net v0.11.0 // indirect
+	golang.org/x/sync v0.3.0 // indirect
+	golang.org/x/sys v0.9.0 // indirect
+	golang.org/x/text v0.10.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
