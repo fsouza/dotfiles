@@ -10,7 +10,7 @@
                                                                    ,target true)]
                      (key-event#:post))))
 
-(fn set-readline-shortcuts [terminal-apps]
+(fn set-readline-shortcuts [exception-apps]
   (fn is-terminal [window]
     (if (not window)
         false
@@ -20,9 +20,9 @@
                            "")
               app-name (string.lower app-name)]
           (fn check-app [idx]
-            (if (> idx (length terminal-apps))
+            (if (> idx (length exception-apps))
                 false
-                (let [app (. terminal-apps idx)]
+                (let [app (. exception-apps idx)]
                   (if (= app app-name) true
                       (check-app (+ idx 1))))))
 
@@ -54,4 +54,4 @@
   (hs.hotkey.bind prefix :V
                   #(hs.eventtap.keyStrokes (hs.pasteboard.getContents))))
 
-(set-readline-shortcuts [:alacritty :terminal])
+(set-readline-shortcuts [:alacritty :terminal "intellij idea"])
