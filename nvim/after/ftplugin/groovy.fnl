@@ -21,7 +21,7 @@
                  (if classpath
                      (start-groovy-language-server bufnr java-home classpath)
                      (if (mod-invoke :fsouza.lib.ff :is-enabled
-                                     :groovyls-classpath)
+                                     :groovyls-classpath true)
                          (mod-invoke :fsouza.lib.java.classpath
                                      :gradle-classpath-items
                                      #(start-groovy-language-server bufnr

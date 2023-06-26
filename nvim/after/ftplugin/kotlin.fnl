@@ -75,7 +75,7 @@
 
   (if xdg-config-home
       (cb xdg-config-home)
-      (if (mod-invoke :fsouza.lib.ff :is-enabled :kls-classpath)
+      (if (mod-invoke :fsouza.lib.ff :is-enabled :kls-classpath true)
           (mod-invoke :fsouza.lib.java.classpath :gradle-classpath-items
                       with-classpath)
           (with-classpath nil))))
