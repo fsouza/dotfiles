@@ -2049,10 +2049,10 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.3.0.tgz#f67fa67c94da8f4d0cfff981aee4118064199b8f"
   integrity sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==
 
-pyright@^1.1.314:
-  version "1.1.314"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.314.tgz#a36db0f62fb2f3cbe746c25b059d5ee84c1d1015"
-  integrity sha512-7VItKhNjPGdYFTBqNWyOiwDXUPIs/KdWmLkQ4o93yDSC+qr4CNoJM0pLl9AQbD0scGfsnvqJWAQgRYmDsKsMqQ==
+pyright@^1.1.316:
+  version "1.1.316"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.316.tgz#a3351e32ddc943a61f565f07c8dffc26fc5cdbf3"
+  integrity sha512-Pdb9AwOO07uNOuEVtwCThyDpB0wigWmLjeCw5vdPG7gVbVYYgY2iw64kBdwTu78NrO0igVKzmoRuApMoL6ZE0w==
 
 queue-microtask@^1.2.2:
   version "1.2.3"
