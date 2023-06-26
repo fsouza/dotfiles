@@ -6,7 +6,6 @@
 ;;
 ;;  - [ATTACH [attach-fn detach-fn]]
 ;;  - [MAPPINGS [{: mode : lhs : rhs}]]
-;;  - [BOTH [[attach-fn detach-fn] [{: mode : lhs : rhs}]]]
 (local method-handlers
        {:callHierarchy/incomingCalls #[:MAPPINGS
                                        [{:mode :n
@@ -64,21 +63,24 @@
         :textDocument/documentSymbol #[:MAPPINGS
                                        [{:mode :n
                                          :lhs :<leader>v
-                                         :rhs #(let [load-vista-vim (mod-invoke :fsouza.lib.nvim-helpers
-                                                                                :once
-                                                                                #(vim.cmd.packadd :vista.vim))]
-                                                 (load-vista-vim)
-                                                 (vim.cmd.Vista {:args ["!"]
-                                                                 :bang true}))}
+                                         :rhs (#(let [load-vista-vim (mod-invoke :fsouza.lib.nvim-helpers
+                                                                                 :once
+                                                                                 #(vim.cmd.packadd :vista.vim))]
+                                                  (fn []
+                                                    (load-vista-vim)
+                                                    (vim.cmd.Vista {:args ["!"]
+                                                                    :bang true}))))}
                                         {:mode :n
                                          :lhs :<leader>t
                                          :rhs #(mod-invoke :fsouza.lib.fuzzy
                                                            :lsp_document_symbols)}]]
-        :textDocument/formatting #[:MAPPINGS
-                                   [{:mode :n
-                                     :lhs :<leader>f
-                                     :rhs #(mod-invoke :fsouza.lsp.formatting
-                                                       :fmt)}]]
+        :textDocument/formatting #(let [client $1
+                                        bufnr $2]
+                                    [:MAPPINGS
+                                     [{:mode :n
+                                       :lhs :<leader>f
+                                       :rhs #(mod-invoke :fsouza.lsp.formatting
+                                                         :fmt client bufnr)}]])
         :textDocument/hover #[:MAPPINGS
                               [{:mode :n
                                 :lhs :<leader>i
@@ -95,10 +97,13 @@
                                    [{:mode :n
                                      :lhs :<leader>q
                                      :rhs vim.lsp.buf.references}]]
-        :textDocument/rename #[:MAPPINGS
-                               [{:mode :n
-                                 :lhs :<leader>r
-                                 :rhs #(mod-invoke :fsouza.lsp.rename :rename)}]]
+        :textDocument/rename #(let [client $1
+                                    bufnr $2]
+                                [:MAPPINGS
+                                 [{:mode :n
+                                   :lhs :<leader>r
+                                   :rhs #(mod-invoke :fsouza.lsp.rename :rename
+                                                     client bufnr)}]])
         :textDocument/signatureHelp #[:MAPPINGS
                                       [{:mode :i
                                         :lhs :<c-k>
@@ -133,7 +138,7 @@
 
   (let [handler (. method-handlers name)]
     (when (and handler (client.supports_method name {: bufnr}))
-      (let [result (handler)]
+      (let [result (handler client bufnr)]
         (match result
           [:ATTACH [attach-fn detach-fn]] (handle-attach attach-fn detach-fn)
           [:MAPPINGS mappings] (handle-mappings mappings))))))

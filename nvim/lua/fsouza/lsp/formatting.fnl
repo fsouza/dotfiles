@@ -14,15 +14,11 @@
         opts {:tabSize tab-size :insertSpaces et}]
     {:textDocument {:uri (vim.uri_from_bufnr bufnr)} :options opts}))
 
-(lambda fmt [?client ?bufnr ?cb]
-  (let [bufnr (or ?bufnr (vim.api.nvim_get_current_buf))
-        client (or ?client
-                   (mod-invoke :fsouza.lsp.clients :get-client bufnr
-                               :textDocument/formatting))]
-    (when client
-      (let [(_ req-id) (client.request :textDocument/formatting
-                                       (formatting-params bufnr) ?cb bufnr)]
-        (values req-id #(client.cancel_request req-id))))))
+(lambda fmt [client bufnr ?cb]
+  (when client
+    (let [(_ req-id) (client.request :textDocument/formatting
+                                     (formatting-params bufnr) ?cb bufnr)]
+      (values req-id #(client.cancel_request req-id)))))
 
 (fn augroup-name [bufnr]
   (.. :lsp_autofmt_ bufnr))
