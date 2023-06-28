@@ -26,7 +26,9 @@
                         ; ocaml
                         :let_binding
                         :value_definition
-                        :type_definition]]
+                        :type_definition
+                        ; java
+                        :class_declaration]]
         (mod-invoke :fsouza.pl.tablex :exists node-types #(= $1 node-type)))))
 
 (fn normalize-loc [loc]
