@@ -67,14 +67,17 @@
                                    fzf-lua- (require :fzf-lua)
                                    f-utils (require :fzf-lua.utils)
                                    f-config (require :fzf-lua.config)
-                                   id #$1]
+                                   id #$1
+                                   previewer :bat]
                                (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
                                                 :fzf_layout :default
-                                                :previewers {:builtin {:syntax false}}
+                                                :previewers {:builtin {:syntax false}
+                                                             :bat {:args "--color always --number --theme none"}}
                                                 :buffers {:file_icons false
                                                           :git_icons false
                                                           :color_icons false}
-                                                :files {:file_icons false
+                                                :files {: previewer
+                                                        :file_icons false
                                                         :git_icons false
                                                         :color_icons false
                                                         : actions}
@@ -82,11 +85,13 @@
                                                               :git_icons false
                                                               :color_icons false
                                                               : actions}}
-                                                :grep {:file_icons false
+                                                :grep {: previewer
+                                                       :file_icons false
                                                        :git_icons false
                                                        :color_icons false
                                                        : actions}
-                                                :oldfiles {:file_icons false
+                                                :oldfiles {: previewer
+                                                           :file_icons false
                                                            :git_icons false
                                                            :color_icons false
                                                            : actions}
@@ -99,12 +104,12 @@
                                                 :keymap {:builtin {:<c-h> :toggle-preview
                                                                    :<c-u> :preview-page-up
                                                                    :<c-d> :preview-page-down
-                                                                   :<c-r> :preview-page-reset}}
-                                                :fzf {:alt-a :toggle-all
-                                                      :ctrl-l :clear-query
-                                                      :ctrl-d :preview-half-page-down
-                                                      :ctrl-u :preview-half-page-up
-                                                      :ctrl-h :toggle-preview}})
+                                                                   :<c-r> :preview-page-reset}
+                                                         :fzf {:alt-a :toggle-all
+                                                               :ctrl-l :clear-query
+                                                               :ctrl-d :preview-page-down
+                                                               :ctrl-u :preview-page-up
+                                                               :ctrl-h :toggle-preview}}})
                                (tset f-config.globals.keymap.fzf :ctrl-f nil)
                                (tset f-config.globals.keymap.fzf :ctrl-b nil)
                                (each [name _ (pairs f-utils.ansi_codes)]

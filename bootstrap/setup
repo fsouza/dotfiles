@@ -25,7 +25,7 @@ def main() -> int:
     for file in home_files:
         create_symlink(file, BASEDIR / file, home / file)
 
-    xdg_items = ["rgrc", "git", "fd", "utop", "ideavim"]
+    xdg_items = ["bat", "rgrc", "git", "fd", "utop", "ideavim"]
     for file in xdg_items:
         create_symlink(file, BASEDIR / file, config_dir / file)
 
@@ -53,6 +53,11 @@ def main() -> int:
                 "NVIM_DEBUG": "1",
                 "FSOUZA_DOTFILES_DIR": os.getenv("FSOUZA_DOTFILES_DIR", str(BASEDIR)),
             },
+        )
+
+    if shutil.which("bat"):
+        subprocess.check_call(
+            ["bat", "cache", "--build"],
         )
 
     return 0
