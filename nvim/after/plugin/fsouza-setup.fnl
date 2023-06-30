@@ -38,6 +38,14 @@
      (vim.keymap.set :x :<leader>gw
                      #(mod-invoke :fsouza.lib.fuzzy :grep-visual))
      (vim.keymap.set :n :<leader>gl #(mod-invoke :fsouza.lib.fuzzy :grep-last))
+     (vim.keymap.set :n :<leader><leader>gg
+                     #(mod-invoke :fsouza.lib.fuzzy :live-grep
+                                  {:cwd (vim.uv.cwd)}))
+     (vim.keymap.set :n :<leader><leader>gw
+                     #(mod-invoke :fsouza.lib.fuzzy :grep
+                                  (vim.fn.expand :<cword>) :-F (vim.uv.cwd)))
+     (vim.keymap.set :x :<leader><leader>gw
+                     #(mod-invoke :fsouza.lib.fuzzy :grep-visual (vim.uv.cwd)))
      (vim.keymap.set :n :<leader>zl #(mod-invoke :fsouza.lib.fuzzy :lines))
      (vim.keymap.set :n :<leader>zc
                      #(mod-invoke :fsouza.lib.fuzzy :set-virtual-cwd)

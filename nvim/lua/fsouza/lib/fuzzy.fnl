@@ -139,13 +139,13 @@
         (tset opts :previewer nil)
         (core.fzf_exec items opts))))
 
-(fn grep [rg-opts search extra-opts]
+(fn grep [rg-opts search extra-opts cwd]
   (let [search (or search (vim.fn.input "rg："))
         extra-opts (or extra-opts "")
         fzf-lua (fzf-lua)]
     (when (not= search "")
       (fzf-lua.grep {: search
-                     :cwd virtual-cwd
+                     :cwd (or cwd virtual-cwd)
                      :raw_cmd (string.format "rg %s %s -- %s" rg-opts
                                              extra-opts
                                              (vim.fn.shellescape search))}))))
@@ -158,9 +158,9 @@
     (tset opts :cwd (or opts.cwd virtual-cwd))
     (fzf-lua.live_grep_native opts)))
 
-(fn grep-last [rg-opts]
+(fn grep-last [rg-opts cwd]
   (let [fzf-lua (fzf-lua)]
-    (fzf-lua.grep_last {:rg_opts rg-opts})))
+    (fzf-lua.grep_last {:rg_opts rg-opts :cwd (or cwd virtual-cwd)})))
 
 (fn files [opts]
   (let [opts (or opts {})]
@@ -183,7 +183,7 @@
   (let [run-fzf (or run-fzf true)
         cd (or cd true)
         prompt "Git repos："
-        cwd (or cwd virtual-cwd (vim.uv.cwd))
+        cwd (or cwd virtual-cwd)
         fzf-lua (fzf-lua)
         config (require :fzf-lua.config)
         core (require :fzf-lua.core)
@@ -198,9 +198,11 @@
     (tset opts :previewer nil)
     (core.fzf_exec contents opts)))
 
-(fn git-files []
-  (let [fzf-lua (fzf-lua)]
-    (fzf-lua.git_files {:cwd (or virtual-cwd (vim.uv.cwd))})))
+(fn git-files [opts]
+  (let [opts (or opts {})
+        fzf-lua (fzf-lua)]
+    (tset opts :cwd (or opts.cwd virtual-cwd))
+    (fzf-lua.git_files opts)))
 
 (fn set-virtual-cwd- [cwd]
   (set virtual-cwd (mod-invoke :fsouza.pl.path :abspath cwd)))
@@ -229,13 +231,13 @@
 (let [rg-opts "--column -n --hidden --no-heading --color=always --colors 'match:fg:0x99,0x00,0x00' --colors line:none --colors path:none --colors column:none -S --glob '!.git' --glob '!.hg'"
       mod {: files
            : git-files
-           :live-grep (partial live-grep rg-opts)
-           :grep (partial grep rg-opts)
-           :grep-last #(grep-last rg-opts)
+           :live-grep #(live-grep rg-opts $...)
+           :grep #(grep rg-opts $...)
+           :grep-last #(grep-last rg-opts $...)
            :grep-visual #(grep rg-opts
                                (. (mod-invoke :fsouza.lib.nvim-helpers
                                               :get-visual-selection-contents)
-                                  1) :-F)
+                                  1) :-F $...)
            : set-virtual-cwd
            : unset-virtual-cwd
            : git-repos
