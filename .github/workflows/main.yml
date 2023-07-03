@@ -18,15 +18,9 @@ jobs:
     name: bootstrap
     runs-on: ${{ matrix.os }}
     steps:
-      - name: install neovim (macos)
-        if: runner.os == 'macOS'
+      - name: install neovim
         run: |
-          curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-macos.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
-
-      - name: install neovim (linux)
-        if: runner.os == 'Linux'
-        run: |
-          curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
+          curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-$(awk '{print tolower($0)}' <<<${{ runner.os }}).tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
 
       - name: install zsh & linuxbrew on Linux
         if: runner.os == 'Linux'
@@ -44,16 +38,18 @@ jobs:
           echo "HOMEBREW_NO_INSTALL_CLEANUP=1" >>${GITHUB_ENV}
           echo "HOMEBREW_NO_INSTALL_FROM_API=" >>${GITHUB_ENV}
 
-      - name: install early dependencies
-        run: |
-          brew update
-          brew install jq coreutils
-
-      - name: overwrite links (macos hack)
+      - name: brew hax (macos hack)
         if: runner.os == 'macOS'
         run: |
           brew unlink python@3.11
           brew link --overwrite python@3.11
+          brew untap homebrew/core
+          brew untap homebrew/cask
+
+      - name: install early dependencies
+        run: |
+          brew update
+          brew install jq coreutils
 
       - uses: actions/checkout@v3.5.3
 
