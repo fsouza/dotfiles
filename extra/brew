@@ -15,7 +15,6 @@ function __setup_brew {
 
 		export HOMEBREW_NO_ENV_HINTS=1
 		export HOMEBREW_NO_EMOJI=1
-		export HOMEBREW_NO_GITHUB_API=1
 
 		prepend_to_path \
 			${HOMEBREW_PREFIX}/opt/coreutils/libexec/gnubin \
