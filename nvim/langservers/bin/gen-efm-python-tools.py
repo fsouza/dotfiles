@@ -88,7 +88,7 @@ async def main() -> int:
         ]
 
     result: Sequence[Formatter | tuple[Linter, Formatter]] = await asyncio.gather(
-        *coros
+        *coros,
     )
     tools = itertools.chain.from_iterable(
         [tool] if isinstance(tool, Formatter) else tool for tool in result
