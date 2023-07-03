@@ -170,7 +170,7 @@ async def _neovim_lua_command(cmd: bytes) -> str:
         stdin=cmd,
     )
 
-    return stderr.decode()
+    return stderr.decode().strip()
 
 
 async def _find_luajit_version() -> str:
@@ -178,7 +178,7 @@ async def _find_luajit_version() -> str:
 print(luajit_version)
 """
 
-    return (await _neovim_lua_command(command)).strip()
+    return await _neovim_lua_command(command)
 
 
 async def ensure_hererocks(cache_dir: Path) -> Path:
@@ -433,7 +433,7 @@ async def setup_fnlfmt(cache_dir: Path, hr_dir: Path) -> None:
 
 async def _find_cache_dir() -> Path:
     cache_dir = await _neovim_lua_command(rb"print(vim.fn.stdpath('cache'))")
-    return Path(cache_dir.strip())
+    return Path(cache_dir)
 
 
 async def main() -> int:
