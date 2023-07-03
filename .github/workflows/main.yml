@@ -28,15 +28,11 @@ jobs:
         run: |
           curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
 
-      - name: install zsh on Linux
+      - name: install zsh & linuxbrew on Linux
         if: runner.os == 'Linux'
         run: |
           sudo apt update
           sudo apt install -y zsh
-
-      - name: install linuxbrew
-        if: runner.os == 'Linux'
-        run: |
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           echo "PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}" >>${GITHUB_ENV}
         env:
@@ -46,6 +42,7 @@ jobs:
         run: |
           echo "HOMEBREW_PREFIX=$(brew --prefix)" >>${GITHUB_ENV}
           echo "HOMEBREW_NO_INSTALL_CLEANUP=1" >>${GITHUB_ENV}
+          echo "HOMEBREW_NO_INSTALL_FROM_API=" >>${GITHUB_ENV}
 
       - name: install early dependencies
         run: |
