@@ -178,7 +178,7 @@ async def _find_luajit_version() -> str:
 print(luajit_version)
 """
 
-    return await _neovim_lua_command(command)
+    return (await _neovim_lua_command(command)).strip()
 
 
 async def ensure_hererocks(cache_dir: Path) -> Path:
@@ -344,6 +344,7 @@ async def install_jdtls(langservers_cache_dir: Path) -> None:
         "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz"
     )
     lombok_url = "https://projectlombok.org/downloads/lombok.jar"
+    print(f"#{target_dir}#")
     await asyncio.gather(
         run_cmd(
             cmd="bash",
@@ -432,7 +433,7 @@ async def setup_fnlfmt(cache_dir: Path, hr_dir: Path) -> None:
 
 async def _find_cache_dir() -> Path:
     cache_dir = await _neovim_lua_command(rb"print(vim.fn.stdpath('cache'))")
-    return Path(cache_dir)
+    return Path(cache_dir.strip())
 
 
 async def main() -> int:
