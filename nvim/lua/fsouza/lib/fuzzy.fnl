@@ -66,7 +66,6 @@
                              (let [actions (file-actions)
                                    fzf-lua- (require :fzf-lua)
                                    f-config (require :fzf-lua.config)
-                                   id #$1
                                    previewer :bat]
                                (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
                                                 :fzf_layout :default
