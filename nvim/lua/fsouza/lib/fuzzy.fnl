@@ -65,7 +65,6 @@
                              (vim.cmd.packadd :nvim-fzf)
                              (let [actions (file-actions)
                                    fzf-lua- (require :fzf-lua)
-                                   f-utils (require :fzf-lua.utils)
                                    f-config (require :fzf-lua.config)
                                    id #$1
                                    previewer :bat]
@@ -100,7 +99,8 @@
                                                       :color_icons false
                                                       :actions (lsp-actions)}
                                                 :winopts {:win_height 0.85
-                                                          :win_width 0.9}
+                                                          :win_width 0.9
+                                                          :hl {:header_bind :Gray10}}
                                                 :keymap {:builtin {:<c-h> :toggle-preview
                                                                    :<c-u> :preview-page-up
                                                                    :<c-d> :preview-page-down
@@ -112,8 +112,6 @@
                                                                :ctrl-h :toggle-preview}}})
                                (tset f-config.globals.keymap.fzf :ctrl-f nil)
                                (tset f-config.globals.keymap.fzf :ctrl-b nil)
-                               (each [name _ (pairs f-utils.ansi_codes)]
-                                 (tset f-utils.ansi_codes name id))
                                fzf-lua-))))
 
 (lambda send-lsp-items [items prompt]
