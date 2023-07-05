@@ -49,6 +49,8 @@
                 :Exception
                 :Float
                 :Function
+                :FzfLuaHeaderBind
+                :FzfLuaHeaderText
                 :Identifier
                 :Ignore
                 :Include

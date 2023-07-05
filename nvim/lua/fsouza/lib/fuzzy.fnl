@@ -99,7 +99,15 @@
                                                       :actions (lsp-actions)}
                                                 :winopts {:win_height 0.85
                                                           :win_width 0.9
-                                                          :hl {:header_bind :Gray10}}
+                                                          :hl {:header_bind :Black
+                                                               :header_text :Black
+                                                               :buf_name :Black
+                                                               :buf_nr :Black
+                                                               :buf_linenr :Black
+                                                               :buf_flag_cur :Black
+                                                               :buf_flag_alt :Black
+                                                               :tab_title :Black
+                                                               :tab_marker :Black}}
                                                 :keymap {:builtin {:<c-h> :toggle-preview
                                                                    :<c-u> :preview-page-up
                                                                    :<c-d> :preview-page-down
