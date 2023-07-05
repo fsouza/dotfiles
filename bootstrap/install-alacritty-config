@@ -9,7 +9,6 @@ from pathlib import Path
 def main(args: Sequence[str]) -> int:
     colorschemes = {
         "default": DEFAULT_COLORS,
-        "rose-pine": ROSE_PINE_COLORS,
     }
     parser = argparse.ArgumentParser("install-alacritty-config")
     parser.add_argument("-c", "--colors", default="default", dest="colorscheme")
@@ -67,49 +66,6 @@ DEFAULT_COLORS = """
     magenta: "#fd28ff"
     cyan: "#00c5c7"
     white: "#c7c7c7"
-"""
-
-ROSE_PINE_COLORS = """
-  primary:
-    background: "#faf4ed"
-    foreground: "#575279"
-  cursor:
-    text: "#575279"
-    cursor: "#cecacd"
-  vi_mode_cursor:
-    text: "#575279"
-    cursor: "#cecacd"
-  line_indicator:
-    foreground: None
-    background: None
-  selection:
-    text: "#575279"
-    background: "#dfdad9"
-  normal:
-    black: "#f2e9e1"
-    red: "#b4637a"
-    green: "#286983"
-    yellow: "#ea9d34"
-    blue: "#56949f"
-    magenta: "#907aa9"
-    cyan: "#d7827e"
-    white: "#575279"
-  bright:
-    black: "#9893a5"
-    red: "#b4637a"
-    green: "#286983"
-    yellow: "#ea9d34"
-    blue: "#56949f"
-    magenta: "#907aa9"
-    cyan: "#d7827e"
-    white: "#575279"
-  hints:
-    start:
-      foreground: "#797593"
-      background: "#fffaf3"
-    end:
-      foreground: "#9893a5"
-      background: "#fffaf3"
 """
 
 CONFIG = r"""

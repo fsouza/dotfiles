@@ -30,6 +30,7 @@
             {1 :justinmk/vim-dirvish}
             {1 :justinmk/vim-sneak}
             {1 :mattn/emmet-vim}
+            {1 :tpope/vim-commentary}
             {1 :tpope/vim-fugitive}
             {1 :tpope/vim-repeat}
             {1 :tpope/vim-rhubarb}
@@ -38,15 +39,8 @@
             {1 :nvim-treesitter/nvim-treesitter-refactor}
             {1 :nvim-treesitter/nvim-treesitter-textobjects}
             {1 :nvim-treesitter/playground}
-            {1 :numToStr/Comment.nvim}
-            {1 :JoosepAlviste/nvim-ts-context-commentstring
-             :opt true
-             :as :nvim-ts-context-commentstring}
             {1 :fsouza/nvim-lsp-compl :as :nvim-lsp-compl :opt true}
-            {1 :l3mon4d3/luasnip :as :luasnip :opt true}
             {1 :ibhagwan/fzf-lua :as :fzf-lua :opt true}
-            {1 :norcalli/nvim-colorizer.lua :as :nvim-colorizer.lua :opt true}
-            {1 :rhysd/git-messenger.vim :opt true}
             {1 :vijaymarupudi/nvim-fzf :opt true}
             {1 :b0o/SchemaStore.nvim :as :SchemaStore.nvim :opt true}
             {1 :j-hui/fidget.nvim :as :fidget.nvim :opt true :tag :legacy}
@@ -75,9 +69,7 @@
             {1 :ocaml/vim-ocaml}
             {1 :pangloss/vim-javascript}
             {1 :tbastos/vim-lua}
-            {1 :Vimjas/vim-python-pep8-indent}
-            ;; themes, for demos/presentations.
-            {1 :rose-pine/neovim}]]
+            {1 :Vimjas/vim-python-pep8-indent}]]
   {: packer-dir
    : pkgs
    :setup #(with-packer packer-dir
