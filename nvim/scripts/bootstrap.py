@@ -446,6 +446,7 @@ async def update_neovim_plugins() -> None:
     pack_dir = data_dir / "site" / "pack" / "mr"
     mrconfig = base_dir / "scripts" / "mrconfig"
 
+    await asyncio.to_thread(pack_dir.parent.mkdir, parents=True, exist_ok=True)
     if not await exists(pack_dir):
         await run_cmd(
             "mr",
