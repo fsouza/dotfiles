@@ -1,0 +1,108 @@
+[start/emmet-vim]
+checkout = git clone https://github.com/mattn/emmet-vim.git
+
+[start/fennel.vim]
+checkout = git clone https://github.com/fsouza/fennel.vim.git
+
+[start/nvim-treesitter]
+checkout = git clone https://github.com/nvim-treesitter/nvim-treesitter.git
+
+[start/nvim-treesitter-refactor]
+checkout = git clone https://github.com/nvim-treesitter/nvim-treesitter-refactor.git
+
+[start/nvim-treesitter-textobjects]
+checkout = git clone https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
+
+[start/playground]
+checkout = git clone https://github.com/nvim-treesitter/playground.git
+
+[start/tabular]
+checkout = git clone https://github.com/godlygeek/tabular.git
+
+[start/vim-commentary]
+checkout = git clone https://github.com/tpope/vim-commentary.git
+
+[start/vim-dirvish]
+checkout = git clone https://github.com/justinmk/vim-dirvish.git
+
+[start/vim-fugitive]
+checkout = git clone https://github.com/tpope/vim-fugitive.git
+
+[start/vim-javascript]
+checkout = git clone https://github.com/pangloss/vim-javascript.git
+
+[start/vim-lua]
+checkout = git clone https://github.com/tbastos/vim-lua.git
+
+[start/vim-ocaml]
+checkout = git clone https://github.com/ocaml/vim-ocaml.git
+
+[start/vim-pony]
+checkout = git clone https://github.com/jakwings/vim-pony.git
+
+[start/vim-python-pep8-indent]
+checkout = git clone https://github.com/Vimjas/vim-python-pep8-indent.git
+
+[start/vim-repeat]
+checkout = git clone https://github.com/tpope/vim-repeat.git
+
+[start/vim-rhubarb]
+checkout = git clone https://github.com/tpope/vim-rhubarb.git
+
+[start/vim-sexp]
+checkout = git clone https://github.com/guns/vim-sexp.git
+
+[start/vim-sexp-mappings-for-regular-people]
+checkout = git clone https://github.com/tpope/vim-sexp-mappings-for-regular-people.git
+
+[start/vim-sneak]
+checkout = git clone https://github.com/justinmk/vim-sneak.git
+
+[start/vim-surround]
+checkout = git clone https://github.com/tpope/vim-surround.git
+
+[start/vim-wordmotion]
+checkout = git clone https://github.com/chaoren/vim-wordmotion.git
+
+[start/yats.vim]
+checkout = git clone https://github.com/HerringtonDarkholme/yats.vim.git
+
+[opt/fidget.nvim]
+checkout =
+	git clone https://github.com/j-hui/fidget.nvim.git
+	git -C fidget.nvim fetch --tags
+	git -C fidget.nvim checkout legacy
+update = true
+
+[opt/fzf-lua]
+checkout = git clone https://github.com/ibhagwan/fzf-lua.git
+
+[opt/nvim-fzf]
+checkout = git clone https://github.com/vijaymarupudi/nvim-fzf.git
+
+[opt/nvim-lsp-compl]
+checkout = git clone https://github.com/fsouza/nvim-lsp-compl.git
+
+[opt/nvim-osc52]
+checkout = git clone https://github.com/ojroques/nvim-osc52.git
+
+[opt/nvim-various-textobjs]
+checkout = git clone https://github.com/chrisgrieser/nvim-various-textobjs.git
+
+[opt/packer.nvim]
+checkout = git clone https://github.com/wbthomason/packer.nvim.git
+
+[opt/plenary.nvim]
+checkout = git clone https://github.com/nvim-lua/plenary.nvim.git
+
+[opt/SchemaStore.nvim]
+checkout = git clone https://github.com/b0o/SchemaStore.nvim.git
+
+[opt/syntax-tree-surfer]
+checkout = git clone https://github.com/ziontee113/syntax-tree-surfer.git
+
+[opt/tree-climber.nvim]
+checkout = git clone https://github.com/drybalka/tree-climber.nvim.git
+
+[opt/vista.vim]
+checkout = git clone https://github.com/liuchengxu/vista.vim.git

@@ -8,15 +8,11 @@ FENNEL := $(NVIM_CACHE_DIR)/hr/bin/fennel
 PYTHON ?= python3.11
 
 .PHONY: all
-all: bootstrap-nvim update-packer install update-treesitter kill-daemons clear-logs
+all: bootstrap-nvim install update-treesitter kill-daemons clear-logs
 
 .PHONY: bootstrap-nvim
 bootstrap-nvim:
 	$(PYTHON) nvim/scripts/bootstrap.py
-
-.PHONY: update-packer
-update-packer: minimum-install
-	env BOOTSTRAP_PACKER=1 nvim --headless -E +'autocmd User PackerComplete quit'
 
 .PHONY: update-treesitter
 update-treesitter:

@@ -436,6 +436,40 @@ async def _find_cache_dir() -> Path:
     return Path(cache_dir)
 
 
+async def _find_data_dir() -> Path:
+    cache_dir = await _neovim_lua_command(rb"print(vim.fn.stdpath('data'))")
+    return Path(cache_dir)
+
+
+async def update_neovim_plugins() -> None:
+    data_dir = await _find_data_dir()
+    pack_dir = data_dir / "site" / "pack" / "mr"
+    mrconfig = base_dir / "scripts" / "mrconfig"
+
+    if not await exists(pack_dir):
+        await run_cmd(
+            "mr",
+            [
+                "-t",
+                "-j",
+                "bootstrap",
+                mrconfig.absolute(),
+                pack_dir,
+            ],
+            cwd=pack_dir.parent,
+        )
+    else:
+        await run_cmd(
+            "mr",
+            [
+                "-t",
+                "-j",
+                "update",
+            ],
+            cwd=pack_dir,
+        )
+
+
 async def main() -> int:
     cache_dir = await _find_cache_dir()
 
@@ -446,6 +480,7 @@ async def main() -> int:
     )
 
     await setup_fnlfmt(cache_dir, hr_dir)
+    await update_neovim_plugins()
 
     return 0
 

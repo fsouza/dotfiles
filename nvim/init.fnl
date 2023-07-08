@@ -12,19 +12,17 @@
      (tset package :cpath (table.concat [(.. lib-path# :/?.so) package.cpath]
                                         ";"))))
 
-(macro add-pkgs-opt-to-path []
+(macro add-opt-packs-to-path []
   `(let [path# (require :fsouza.pl.path)
-         packed# (require :fsouza.packed)
-         opt-dir# (path#.join packed#.packer-dir :opt)]
-     (each [_# pkg# (ipairs packed#.pkgs)]
-       (when (and pkg#.opt pkg#.as)
-         (let [paq-dir# (path#.join opt-dir# pkg#.as)]
-           (tset package :path
-                 (table.concat [package.path
-                                (path#.join paq-dir# :lua :?.lua)
-                                (path#.join paq-dir# :lua "?" :?.lua)
-                                (path#.join paq-dir# :lua "?" :init.lua)]
-                               ";")))))))
+         dir# (require :pl.dir)
+         opt-dir# (path#.join _G.data-dir :site :pack :mr :opt)]
+     (each [_# paq-dir# (ipairs (dir#.getdirectories opt-dir#))]
+       (tset package :path (table.concat [package.path
+                                          (path#.join paq-dir# :lua :?.lua)
+                                          (path#.join paq-dir# :lua "?" :?.lua)
+                                          (path#.join paq-dir# :lua "?"
+                                                      :init.lua)]
+                                         ";")))))
 
 (macro initial-mappings []
   `(do
@@ -167,13 +165,11 @@
   (tset _G :cache-dir (vim.fn.stdpath :cache))
   (tset _G :data-dir (vim.fn.stdpath :data))
   (hererocks)
-  (add-pkgs-opt-to-path)
+  (add-opt-packs-to-path)
   (initial-mappings)
   (set-global-options)
   (set-global-mappings)
   (set-global-abbrev)
   (override-builtin-functions)
   (set-ui-options)
-  (set-neovim-global-vars)
-  (when vim.env.BOOTSTRAP_PACKER
-    (mod-invoke :fsouza.packed :setup)))
+  (set-neovim-global-vars))
