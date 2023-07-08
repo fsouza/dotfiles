@@ -66,7 +66,9 @@
                              (let [actions (file-actions)
                                    fzf-lua- (require :fzf-lua)
                                    f-config (require :fzf-lua.config)
-                                   previewer :bat]
+                                   f-utils (require :fzf-lua.utils)
+                                   previewer :bat
+                                   id #$1]
                                (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
                                                 :fzf_layout :default
                                                 :previewers {:builtin {:syntax false}
@@ -119,6 +121,8 @@
                                                                :ctrl-h :toggle-preview}}})
                                (tset f-config.globals.keymap.fzf :ctrl-f nil)
                                (tset f-config.globals.keymap.fzf :ctrl-b nil)
+                               (each [name _ (pairs f-utils.ansi_codes)]
+                                 (tset f-utils.ansi_codes name id))
                                fzf-lua-))))
 
 (lambda send-lsp-items [items prompt]
