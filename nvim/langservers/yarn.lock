@@ -90,10 +90,15 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@babel/parser@^7.16.8", "@babel/parser@^7.20.15", "@babel/parser@^7.21.2", "@babel/parser@^7.21.3", "@babel/parser@^7.22.3", "@babel/parser@^7.22.5":
+"@babel/parser@^7.16.8", "@babel/parser@^7.20.15", "@babel/parser@^7.21.2", "@babel/parser@^7.21.3", "@babel/parser@^7.22.5":
   version "7.22.5"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.22.5.tgz#721fd042f3ce1896238cf1b341c77eb7dee7dbea"
   integrity sha512-DFZMC9LJUG9PLOclRC32G63UXwzqS2koQC8dkx+PLdmt1xSePYpbT/NbsrJy8Q/muXz7o/h/d4A7Fuyixm559Q==
+
+"@babel/parser@^7.22.7":
+  version "7.22.7"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.22.7.tgz#df8cf085ce92ddbdbf668a7f186ce848c9036cae"
+  integrity sha512-7NF8pOkHP5o2vpmGgNGcfAeCvOYhGLyA3Z4eBQkT1RJlWu47n63bCs93QfJ2hIAFCil7L5P2IWhs1oToVgrL0Q==
 
 "@babel/plugin-syntax-import-assertions@^7.20.0":
   version "7.22.5"
@@ -176,17 +181,16 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.44.0.tgz#961a5903c74139390478bdc808bcde3fc45ab7af"
   integrity sha512-Ag+9YM4ocKQx9AarydN0KY2j0ErMHNIocPDrVo8zAE44xLTjEtz81OdR68/cydGtk6m6jDb5Za3r2useMzYmSw==
 
-"@fsouza/prettierd@^0.23.4":
-  version "0.23.4"
-  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.23.4.tgz#da1f85c9e52b8e90d64b9a7ef0974da74c8d1e2a"
-  integrity sha512-Kl1udnEO6Pz2teme/bhmW8PuaQrJI4q+b3YckYNL8EShGSo/cK3KpIIkx0OMS+vv/M5G2J/vNK6GD92cITp9fw==
+"@fsouza/prettierd@^0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@fsouza/prettierd/-/prettierd-0.24.0.tgz#2b00ee6c7406f071000c60b509e1721e4c49cf72"
+  integrity sha512-/n0CMPKhfXlUlmwPJ7h6oi/cfslRy+9xxOjm+gL+5fKU4ww4AKAq/Jf5ZfiFgxtdFvtKyDRiipXGocAVptZM1w==
   dependencies:
     core_d "^5.0.1"
-    nanolru "^1.0.0"
     prettier "^2.8.8"
   optionalDependencies:
-    "@babel/parser" "^7.22.3"
-    "@typescript-eslint/typescript-estree" "^5.59.7"
+    "@babel/parser" "^7.22.7"
+    "@typescript-eslint/typescript-estree" "^5.61.0"
 
 "@graphql-tools/batch-execute@^9.0.0":
   version "9.0.0"
@@ -528,7 +532,7 @@
   resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-5.61.0.tgz#e99ff11b5792d791554abab0f0370936d8ca50c0"
   integrity sha512-ldyueo58KjngXpzloHUog/h9REmHl59G1b3a5Sng1GfBo14BkS3ZbMEb3693gnP1k//97lh7bKsp6/V/0v1veQ==
 
-"@typescript-eslint/typescript-estree@^5.59.7", "@typescript-eslint/typescript-estree@^5.61.0":
+"@typescript-eslint/typescript-estree@^5.61.0":
   version "5.61.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-5.61.0.tgz#4c7caca84ce95bb41aa585d46a764bcc050b92f3"
   integrity sha512-Fud90PxONnnLZ36oR5ClJBLTLfU4pIWBmnvGwTbEa2cXIqj70AEDEmOmpkFComjBZ/037ueKrOdHuYmSFVD7Rw==
