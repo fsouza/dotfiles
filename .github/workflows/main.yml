@@ -131,6 +131,16 @@ jobs:
           key: "${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('nvim/langservers/requirements.txt') }}"
           restore-keys: "${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-"
 
+      # this will always cache miss, but the idea is to reuse work between
+      # pushes by leveraging restore-keys.
+      - name: mr cache
+        id: mr-cache
+        uses: actions/cache@v3.3.1
+        with:
+          path: ~/.local/share/nvim/site/pack/mr
+          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/mrconfig') }}-${{ github.sha }}"
+          restore-keys: "${{ runner.os }}-${{ hashFiles('nvim/scripts/mrconfig') }}-"
+
       - name: run setup
         run: |
           timeout -k 10s 30m ./bootstrap/setup
