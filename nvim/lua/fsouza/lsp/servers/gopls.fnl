@@ -25,6 +25,8 @@
                  :find-root-dir #(mod-invoke :fsouza.lsp.servers
                                              :patterns-with-fallback [:go.mod])
                  : bufnr
-                 :opts {:autofmt true :auto-action true}})))
+                 :opts {:autofmt true :auto-action true}
+                 :cb #(mod-invoke :fsouza.lsp.references :register-test-checker
+                                  :.go :go is-go-test)})))
 
 {: setup}
