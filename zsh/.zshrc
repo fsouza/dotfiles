@@ -1,3 +1,8 @@
+export HISTFILE=${HOME}/.cache/zsh/history
+export HISTSIZE=1234567890
+export SAVEHIST=${HISTSIZE}
+export NO_COLOR=1
+
 autoload -U add-zsh-hook
 
 source ${FSOUZA_DOTFILES_DIR}/extra/init-functions
@@ -41,11 +46,6 @@ fpath=(${HOMEBREW_PREFIX}/share/zsh-completions ~/.cache/zsh/zfunc $fpath)
 export ZLE_SPACE_SUFFIX_CHARS=$'|&'
 
 autoload -Uz compinit && compinit -d ${HOME}/.cache/zsh/zcompdump -u
-
-export HISTFILE=${HOME}/.cache/zsh/history
-export HISTSIZE=1234567890
-export SAVEHIST=${HISTSIZE}
-export NO_COLOR=1
 
 setopt noautomenu
 setopt nomenucomplete
