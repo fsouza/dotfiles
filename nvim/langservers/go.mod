@@ -79,5 +79,3 @@ require (
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace github.com/mattn/efm-langserver v0.0.44 => github.com/fsouza/efm-langserver v0.0.0-20230709011138-8eacd5cb30bb
