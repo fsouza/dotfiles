@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/bazelbuild/buildtools v0.0.0-20230111132423-06e8e2436a75
 	github.com/hashicorp/terraform-ls v0.31.3
-	github.com/mattn/efm-langserver v0.0.44
+	github.com/mattn/efm-langserver v0.0.45-0.20230504105542-c7ef2b16238a
 )
 
 require (
