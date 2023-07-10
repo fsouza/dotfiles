@@ -55,7 +55,7 @@ jobs:
       - name: install early dependencies
         run: |
           brew update
-          brew install jq coreutils
+          brew install coreutils jq
 
       - uses: actions/checkout@v3.5.3
 
@@ -93,22 +93,16 @@ jobs:
           key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-${{ steps.get-repo-versions.outputs.kotlin-ls-version }}-${{ steps.get-repo-versions.outputs.groovy-ls-version }}"
           restore-keys: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-"
 
-      - name: rtx cache
-        id: rtx-cache
-        uses: actions/cache@v3.3.1
-        with:
-          path: ~/.local/share/rtx
-          key: "${{ runner.os }}-${{ hashFiles('bootstrap/Brewfile') }}"
-
       - name: get luajit version
         id: get-luajit-version
         run: |
           nvim -l - <<<'print("version=" .. jit.version)' 2>>${GITHUB_OUTPUT}
 
-      - name: get pcre version
-        id: get-pcre-version
+      - name: get versions from brew
+        id: brew-versions
         run: |
-          echo "version=$(brew info pcre --json | jq -r '.[0].versions.stable')" >>${GITHUB_OUTPUT}
+          echo "pcre-version=$(brew info pcre --json | jq -r '.[0].versions.stable')" >>${GITHUB_OUTPUT}
+          echo "rtx-version=$(brew info rtx --json | jq -r '.[0].versions.stable')" >>${GITHUB_OUTPUT}
 
       - name: set MACOSX_DEPLOYMENT_TARGET
         id: macosx-deployment-target
@@ -116,12 +110,19 @@ jobs:
           echo "MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)" >>${GITHUB_ENV}
           echo "product-version=$(sw_vers -productVersion)" >>${GITHUB_OUTPUT}
 
+      - name: rtx cache
+        id: rtx-cache
+        uses: actions/cache@v3.3.1
+        with:
+          path: ~/.local/share/rtx
+          key: "${{ runner.os }}-${{ steps.brew-versions.outputs.rtx-version }}"
+
       - name: hererocks cache
         id: nvim-hererocks-cache
         uses: actions/cache@v3.3.1
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ runner.os }}-${{ steps.get-pcre-version.outputs.version }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
+          key: "${{ runner.os }}-${{ steps.brew-versions.outputs.pcre-version }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       - name: virtualenv cache
         id: nvim-virtualenv-cache

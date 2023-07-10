@@ -7,19 +7,7 @@ function __setup_rtx {
 	export RTX_DATA_DIR=${HOME}/.local/share/rtx
 	export RTX_CACHE_DIR=${HOME}/.cache/rtx
 	export RTX_CONFIRM=yes
-	export RTX_DEFAULT_CONFIG_FILENAME=.rtx.fsouza.toml
-	export RTX_DEFAULT_TOOL_VERSIONS_FILENAME=.tool-versions.fsouza.not-really
-
-	function rtx-install {
-		local plugin=$1
-		if [ -z "${plugin}" ]; then
-			echo >&2 "please specify the plugin (example: 'java')"
-			return 1
-		fi
-
-		local version=$(rtx ls-remote ${plugin} | fzf)
-		rtx install ${plugin}@${version}
-	}
+	export RTX_EXPERIMENTAL=1
 }
 
 if command -v rtx &>/dev/null; then
