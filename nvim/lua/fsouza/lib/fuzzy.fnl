@@ -126,16 +126,23 @@
                                fzf-lua-))))
 
 (lambda send-lsp-items [items prompt]
-  (let [prompt (.. prompt "：")
+  (let [pl-path (require :fsouza.pl.path)
+        prompt (.. prompt "：")
         fzf-lua (fzf-lua)
         config (require :fzf-lua.config)
         core (require :fzf-lua.core)
         make-entry (require :fzf-lua.make_entry)
-        opts (config.normalize_opts {: prompt :cwd (vim.uv.cwd)}
+        opts (config.normalize_opts {: prompt :cwd virtual-cwd}
                                     config.globals.lsp)
         contents (icollect [_ item (ipairs items)]
-                   (let [item (make-entry.lcol item opts)]
-                     (make-entry.file item opts)))]
+                   (do
+                     (when virtual-cwd
+                       (tset item :filename
+                             (-> item.filename
+                                 (pl-path.abspath)
+                                 (pl-path.relpath virtual-cwd))))
+                     (let [item (make-entry.lcol item opts)]
+                       (make-entry.file item opts))))]
     (core.fzf_exec contents opts)))
 
 (lambda send-items [items prompt cb]
