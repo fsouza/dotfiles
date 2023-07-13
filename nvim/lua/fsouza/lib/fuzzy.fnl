@@ -43,7 +43,7 @@
      :alt-q actions.file_sel_to_qf
      :ctrl-q actions.file_sel_to_qf}))
 
-(fn save-stack-and-edit [selected]
+(fn save-stack-and-edit [selected opts]
   (let [winid (vim.api.nvim_get_current_win)
         [lnum col] (vim.api.nvim_win_get_cursor winid)
         col (+ col 1)]
@@ -53,7 +53,7 @@
                                          lnum
                                          col
                                          0]}]} :a)
-    (edit :edit selected)))
+    (edit :edit selected opts)))
 
 (macro lsp-actions []
   `(let [actions# (file-actions)]
@@ -137,12 +137,9 @@
         contents (icollect [_ item (ipairs items)]
                    (do
                      (when virtual-cwd
-                       (tset item :filename
-                             (-> item.filename
-                                 (pl-path.abspath)
-                                 (pl-path.relpath virtual-cwd))))
-                     (let [item (make-entry.lcol item opts)]
-                       (make-entry.file item opts))))]
+                       (tset item :filename (pl-path.abspath item.filename)))
+                     (let [item (make-entry.lcol item {:cwd virtual-cwd})]
+                       (make-entry.file item {:cwd virtual-cwd}))))]
     (core.fzf_exec contents opts)))
 
 (lambda send-items [items prompt cb]
