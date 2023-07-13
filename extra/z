@@ -1,6 +1,6 @@
 if command -v zoxide &>/dev/null; then
 	export _ZO_ECHO=1
-	export _ZO_EXCLUDE_DIRS=(${HOME}/gd)
+	export _ZO_EXCLUDE_DIRS=${HOME}/gd:${HOME}/gd/*:${HOME}/.cache/*:${HOME}/.local/*
 
 	eval "$(zoxide init zsh --no-cmd)"
 
