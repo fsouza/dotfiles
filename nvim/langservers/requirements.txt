@@ -12,7 +12,7 @@ autoflake==2.2.0
     # via -r requirements.in
 autopep8==2.0.2
     # via -r requirements.in
-black==23.3.0
+black==23.7.0
     # via -r requirements.in
 classify-imports==4.2.0
     # via reorder-python-imports
