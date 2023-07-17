@@ -7,7 +7,7 @@
 		"@fsouza/prettierd": "^0.24.0",
 		"@typescript-eslint/typescript-estree": "^5.61.0",
 		"angular-html-parser": "^4.0.1",
-		"bash-language-server": "^4.10.1",
+		"bash-language-server": "^5.0.0",
 		"eslint_d": "^12.2.1",
 		"graphql": "^16.7.1",
 		"graphql-language-service-cli": "^3.3.24",
