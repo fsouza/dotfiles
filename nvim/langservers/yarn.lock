@@ -90,12 +90,12 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@babel/parser@^7.16.8", "@babel/parser@^7.20.15", "@babel/parser@^7.21.2", "@babel/parser@^7.21.3", "@babel/parser@^7.22.5":
+"@babel/parser@^7.16.8", "@babel/parser@^7.20.15", "@babel/parser@^7.21.3", "@babel/parser@^7.22.5":
   version "7.22.5"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.22.5.tgz#721fd042f3ce1896238cf1b341c77eb7dee7dbea"
   integrity sha512-DFZMC9LJUG9PLOclRC32G63UXwzqS2koQC8dkx+PLdmt1xSePYpbT/NbsrJy8Q/muXz7o/h/d4A7Fuyixm559Q==
 
-"@babel/parser@^7.22.7":
+"@babel/parser@^7.22.6", "@babel/parser@^7.22.7":
   version "7.22.7"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.22.7.tgz#df8cf085ce92ddbdbf668a7f186ce848c9036cae"
   integrity sha512-7NF8pOkHP5o2vpmGgNGcfAeCvOYhGLyA3Z4eBQkT1RJlWu47n63bCs93QfJ2hIAFCil7L5P2IWhs1oToVgrL0Q==
@@ -140,7 +140,7 @@
     debug "^4.1.0"
     globals "^11.1.0"
 
-"@babel/types@^7.16.8", "@babel/types@^7.21.2", "@babel/types@^7.22.5":
+"@babel/types@^7.16.8", "@babel/types@^7.22.5":
   version "7.22.5"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.22.5.tgz#cd93eeaab025880a3a47ec881f4b096a5b786fbe"
   integrity sha512-zo3MIHGOkPOfoRXitsgHLjEXmlDaD/5KU1Uzuc9GNiZPhSqVxVRtxuPaSBZDsYZ9qV88AjtMtWW7ww98loJ9KA==
@@ -1321,24 +1321,24 @@ graphql-config@5.0.2:
     string-env-interpolation "^1.0.1"
     tslib "^2.4.0"
 
-graphql-language-service-cli@^3.3.24:
-  version "3.3.24"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-cli/-/graphql-language-service-cli-3.3.24.tgz#3361363b2432ef94d6af55af64c98a5bc3404549"
-  integrity sha512-Nysc3rTNQZa0KREI9JwStAljDl0yl+5Py7MVWg0ZD4aXOmgPmN63IemiWBNFgWcPx7kv51A4Xmm4wKX+MWlZog==
+graphql-language-service-cli@^3.3.25:
+  version "3.3.25"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-cli/-/graphql-language-service-cli-3.3.25.tgz#7d165029e0d6785414133a99d2955070c7f7d70d"
+  integrity sha512-Zqqs0m+qrUySidmuSCcB/p/qkbPe7PQAv0p8Ar20xo/Oz0YWfloXVVvlgSsJ/g386+p7NlC+FMImrOyG0HGM5w==
   dependencies:
     "@babel/polyfill" "^7.12.1"
     "@types/yargs" "^16.0.5"
     graphql-language-service "^5.1.7"
-    graphql-language-service-server "^2.11.2"
+    graphql-language-service-server "^2.11.3"
     yargs "^16.2.0"
 
-graphql-language-service-server@^2.11.2:
-  version "2.11.2"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-server/-/graphql-language-service-server-2.11.2.tgz#7b4c5d2b302ceb2f5ab78d59ef87efb07769ec6f"
-  integrity sha512-oq++JbYDXml2gJkXNXnuNzH+KZeDPKBbrIleEKzqQkWjMTBLAYWpB24tAtAXqkJFB9p0t56SpVsojgGIf7XbRA==
+graphql-language-service-server@^2.11.3:
+  version "2.11.3"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-server/-/graphql-language-service-server-2.11.3.tgz#c2ab70a7da4e0b1f3dd346ac8b0f97c3a5913655"
+  integrity sha512-pkH29NNjbus/lmlzGW5SOlL6iVvtj46ImG+UgXdv8uOLfv6wQHOX6aOFeCx7NpGVlCZYDxyPp220NQIyO5RucA==
   dependencies:
-    "@babel/parser" "^7.21.2"
-    "@babel/types" "^7.21.2"
+    "@babel/parser" "^7.22.6"
+    "@babel/types" "^7.22.5"
     "@graphql-tools/code-file-loader" "8.0.1"
     "@vue/compiler-sfc" "^3.2.41"
     cosmiconfig-toml-loader "^1.0.0"
