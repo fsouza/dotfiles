@@ -237,7 +237,7 @@ async def exists(p: Path) -> bool:
 
 
 def process_args(args: Sequence[str]) -> str:
-    return " ".join(shlex.quote(arg) for arg in args)
+    return shlex.join(args)
 
 
 if __name__ == "__main__":
