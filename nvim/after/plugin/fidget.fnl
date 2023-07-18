@@ -9,4 +9,22 @@
                    "")]
     (.. message mid suffix)))
 
-(mod-invoke :fidget :setup {:window {:blend 0} :fmt {:task fmt-task}})
+(do
+  (mod-invoke :fidget :setup {:window {:blend 0} :fmt {:task fmt-task}})
+  (var enabled true)
+  (let [progress-handler (. vim.lsp.handlers :$/progress)]
+    (fn enable []
+      (set enabled true))
+
+    (fn disable []
+      (set enabled false))
+
+    (fn handle-progress [...]
+      (when enabled
+        (progress-handler ...)))
+
+    (tset vim.lsp.handlers :$/progress handle-progress)
+    (mod-invoke :fsouza.lib.nvim-helpers :augroup
+                :fsouza__auto_disable_progress
+                [{:events [:InsertLeave] :targets ["*"] :callback enable}
+                 {:events [:InsertEnter] :targets ["*"] :callback disable}])))
