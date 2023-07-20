@@ -117,6 +117,7 @@ def from_precommit(
         "https://github.com/pycqa/isort": get_isort,
         "https://github.com/timothycrosley/isort": get_isort,
         "https://github.com/charliermarsh/ruff-pre-commit": get_ruff,
+        "https://github.com/omnilib/ufmt": get_ufmt,
     }
 
     output: list[Awaitable[Formatter | tuple[Linter, Formatter]]] = []
@@ -143,6 +144,13 @@ async def get_black(args: Sequence[str]) -> Formatter:
     black = await _get_python_bin("black")
     return Formatter(
         formatCommand=f"{black} --fast --quiet {process_args(args)} -",
+    )
+
+
+async def get_ufmt(args: Sequence[str]) -> Formatter:
+    ufmt = await _get_python_bin("ufmt")
+    return Formatter(
+        formatCommand=f"{ufmt} --quiet format {process_args(args)} -",
     )
 
 

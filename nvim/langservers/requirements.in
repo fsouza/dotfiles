@@ -12,3 +12,4 @@ pyupgrade
 PyYAML
 reorder-python-imports
 ruff
+ufmt

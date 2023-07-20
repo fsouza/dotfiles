@@ -7,17 +7,25 @@
 add-trailing-comma==3.0.0
     # via -r requirements.in
 attrs==22.2.0
-    # via flake8-bugbear
+    # via
+    #   flake8-bugbear
+    #   usort
 autoflake==2.2.0
     # via -r requirements.in
 autopep8==2.0.2
     # via -r requirements.in
 black==23.7.0
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   ufmt
 classify-imports==4.2.0
     # via reorder-python-imports
 click==8.1.3
-    # via black
+    # via
+    #   black
+    #   moreorless
+    #   ufmt
+    #   usort
 flake8==6.0.0
     # via
     #   -r requirements.in
@@ -35,14 +43,26 @@ flake8-tidy-imports==4.10.0
     # via -r requirements.in
 isort==5.12.0
     # via -r requirements.in
+libcst==1.0.1
+    # via
+    #   ufmt
+    #   usort
 mccabe==0.7.0
     # via flake8
+moreorless==0.4.0
+    # via
+    #   ufmt
+    #   usort
 mypy-extensions==1.0.0
-    # via black
+    # via
+    #   black
+    #   typing-inspect
 packaging==23.0
     # via black
 pathspec==0.11.1
-    # via black
+    # via
+    #   black
+    #   trailrunner
 platformdirs==3.2.0
     # via black
 pycodestyle==2.10.0
@@ -56,12 +76,35 @@ pyflakes==3.0.1
 pyupgrade==3.9.0
     # via -r requirements.in
 pyyaml==6.0
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   libcst
 reorder-python-imports==3.10.0
     # via -r requirements.in
 ruff==0.0.278
     # via -r requirements.in
+stdlibs==2022.10.9
+    # via usort
 tokenize-rt==5.0.0
     # via
     #   add-trailing-comma
     #   pyupgrade
+toml==0.10.2
+    # via usort
+tomlkit==0.11.8
+    # via ufmt
+trailrunner==1.4.0
+    # via
+    #   ufmt
+    #   usort
+typing-extensions==4.7.1
+    # via
+    #   libcst
+    #   typing-inspect
+    #   ufmt
+typing-inspect==0.9.0
+    # via libcst
+ufmt==2.1.0
+    # via -r requirements.in
+usort==1.0.7
+    # via ufmt
