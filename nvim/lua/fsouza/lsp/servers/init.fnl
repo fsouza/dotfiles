@@ -2,17 +2,28 @@
 
 (local disabled-servers {})
 
+(macro fnm-exec [command]
+  `[:fnm
+    :exec
+    :--using
+    (mod-invoke :fsouza.pl.path :join _G.dotfiles-dir :nvim :langservers
+                :.node-version)
+    "--"
+    (table.unpack ,command)])
+
 (macro ff [server-name]
   `(.. :lsp-server- ,server-name))
 
 (fn with-executable [exec cb]
   (when exec
-    (let [node-bin (mod-invoke :fsouza.pl.path :join _G.config-dir :langservers
+    (let [path (require :fsouza.pl.path)
+          node-bin (mod-invoke :fsouza.pl.path :join _G.config-dir :langservers
                                :node_modules :.bin)
           PATH (.. node-bin ":" (os.getenv :PATH))]
-      (mod-invoke :fsouza.pl.path :async-which exec
-                  #(when (not= $1 "")
-                     (cb $1)) PATH))))
+      (path.async-which exec
+                        #(when (not= $1 "")
+                           (cb $1 (path.isrel $1 node-bin)))
+                        PATH))))
 
 (fn cwd-if-not-home []
   (let [cwd (vim.uv.cwd)
@@ -52,8 +63,10 @@
     (when (should-start bufnr name)
       (tset config :root_dir (find-root-dir))
       (with-executable exec
-        #(do
+        #(let [is-node-bin $2]
            (tset config.cmd 1 $1)
+           (when is-node-bin
+             (tset config :cmd (fnm-exec config.cmd)))
            (vim.schedule #(let [client-id (vim.lsp.start config {: bufnr})]
                             (when opts.autofmt
                               (mod-invoke :fsouza.lsp.formatting :attach bufnr
