@@ -6,8 +6,7 @@
   `[:fnm
     :exec
     :--using
-    (mod-invoke :fsouza.pl.path :join _G.dotfiles-dir :nvim :langservers
-                :.node-version)
+    (mod-invoke :fsouza.pl.path :join _G.config-dir :langservers :.node-version)
     "--"
     (table.unpack ,command)])
 

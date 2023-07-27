@@ -9,8 +9,11 @@
 (fn get-node-bin [bin-name cb]
   (let [path (require :fsouza.pl.path)
         local-bin (path.join :node_modules :.bin bin-name)
-        default-bin (path.join _G.config-dir :langservers :node_modules :.bin
-                               bin-name)]
+        default-bin (string.format "fnm exec --using %s -- %s"
+                                   (path.join _G.config-dir :langservers
+                                              :.node-version)
+                                   (path.join _G.config-dir :langservers
+                                              :node_modules :.bin bin-name))]
     (vim.uv.fs_stat local-bin
                     (fn [err# stat#]
                       (if (and (= err# nil) (= stat#.type :file))
