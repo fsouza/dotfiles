@@ -75,6 +75,7 @@ window:
     y: 2
 
   dynamic_padding: true
+  option_as_alt: OnlyLeft
 
 scrolling:
   history: 50000
@@ -113,65 +114,6 @@ shell:
   program: {shell}
   args:
     - --login
-
-key_bindings:
-  - key: N
-    mods: Command
-    action: CreateNewWindow
-  - key: B
-    mods: Alt
-    chars: "\x1bb"
-  - key: D
-    mods: Alt
-    chars: "\x1bd"
-  - key: F
-    mods: Alt
-    chars: "\x1bf"
-  - key: H
-    mods: Alt
-    chars: "\x1bh"
-  - key: J
-    mods: Alt
-    chars: "\x1bj"
-  - key: K
-    mods: Alt
-    chars: "\x1bk"
-  - key: L
-    mods: Alt
-    chars: "\x1bl"
-  - key: A
-    mods: Alt
-    chars: "\x1ba"
-  - key: T
-    mods: Alt
-    chars: "\x1bt"
-  - key: T
-    mods: Command
-    chars: "\x1bt"
-  - key: A
-    mods: Command
-    chars: "\x1ba"
-  - key: J
-    mods: Command
-    chars: "\x1bj"
-  - key: K
-    mods: Command
-    chars: "\x1bk"
-  - key: Q
-    mods: Alt
-    chars: "\x1bq"
-  - key: Space
-    mods: Control
-    chars: "\x00"
-  - key: Space
-    mods: Shift|Control
-    action: None
-  - key: Key6
-    mods: Control
-    chars: "\x1e"
-  - key: Key7
-    mods: Control
-    chars: "\x1e"
 """
 
 
