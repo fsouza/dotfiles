@@ -114,6 +114,35 @@ shell:
   program: {shell}
   args:
     - --login
+
+key_bindings:
+  - key: N
+    mods: Command
+    action: CreateNewWindow
+  - key: T
+    mods: Command
+    chars: "\x1bt"
+  - key: A
+    mods: Command
+    chars: "\x1ba"
+  - key: J
+    mods: Command
+    chars: "\x1bj"
+  - key: K
+    mods: Command
+    chars: "\x1bk"
+  - key: Space
+    mods: Control
+    chars: "\x00"
+  - key: Space
+    mods: Shift|Control
+    action: None
+  - key: Key6
+    mods: Control
+    chars: "\x1e"
+  - key: Key7
+    mods: Control
+    chars: "\x1e"
 """
 
 
