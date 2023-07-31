@@ -73,7 +73,7 @@ pyflakes==3.0.1
     # via
     #   autoflake
     #   flake8
-pyupgrade==3.9.0
+pyupgrade==3.10.1
     # via -r requirements.in
 pyyaml==6.0.1
     # via
@@ -85,7 +85,7 @@ ruff==0.0.280
     # via -r requirements.in
 stdlibs==2022.10.9
     # via usort
-tokenize-rt==5.0.0
+tokenize-rt==5.2.0
     # via
     #   add-trailing-comma
     #   pyupgrade
