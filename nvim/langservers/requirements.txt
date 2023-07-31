@@ -26,7 +26,7 @@ click==8.1.3
     #   moreorless
     #   ufmt
     #   usort
-flake8==6.0.0
+flake8==6.1.0
     # via
     #   -r requirements.in
     #   flake8-bugbear
@@ -65,11 +65,11 @@ pathspec==0.11.1
     #   trailrunner
 platformdirs==3.2.0
     # via black
-pycodestyle==2.10.0
+pycodestyle==2.11.0
     # via
     #   autopep8
     #   flake8
-pyflakes==3.0.1
+pyflakes==3.1.0
     # via
     #   autoflake
     #   flake8
