@@ -24,6 +24,12 @@
 
     (vim.uv.fs_opendir plugins-dir #(process-dir $2) 512)))
 
+(lambda jdtls-config-update [client ?uris]
+  (let [uris (or ?uris [])
+        params {:identifiers (icollect [_ uri (ipairs uris)]
+                               {: uri})}]
+    (client.request :java/projectConfigurationsUpdate params #nil)))
+
 (lambda start-jdtls [bufnr settings]
   (let [path (require :fsouza.pl.path)
         jdtls-dir (path.join _G.cache-dir :langservers :jdtls)
@@ -74,11 +80,25 @@
                                                                              : settings
                                                                              :extendedClientCapabilities extended-client-capabilities}
                                                               : cmd}
-                                                     :cb #(mod-invoke :fsouza.lsp.references
-                                                                      :register-test-checker
-                                                                      :.java
-                                                                      :java
-                                                                      is-java-test)})))))
+                                                     :cb #(let [client (vim.lsp.get_client_by_id $1)]
+                                                            (when client
+                                                              (let [uri (vim.uri_from_bufnr bufnr)]
+                                                                (vim.api.nvim_buf_create_user_command bufnr
+                                                                                                      :JdtConfigUpdate
+                                                                                                      #(jdtls-config-update client
+                                                                                                                            [uri])
+                                                                                                      {}))
+                                                              (vim.api.nvim_create_user_command :JdtAllConfigsUpdate
+                                                                                                #(client.request :workspace/executeCommand
+                                                                                                                 {:command :java.project.getAll}
+                                                                                                                 #(jdtls-config-update client
+                                                                                                                                       $2))
+                                                                                                {}))
+                                                            (mod-invoke :fsouza.lsp.references
+                                                                        :register-test-checker
+                                                                        :.java
+                                                                        :java
+                                                                        is-java-test))})))))
 
     (find-java-executable :17 with-executable)))
 
