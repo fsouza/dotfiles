@@ -74,13 +74,12 @@
                                          :lhs :<leader>t
                                          :rhs #(mod-invoke :fsouza.lib.fuzzy
                                                            :lsp_document_symbols)}]]
-        :textDocument/formatting #(let [client $1
-                                        bufnr $2]
+        :textDocument/formatting #(let [bufnr $2]
                                     [:MAPPINGS
                                      [{:mode :n
                                        :lhs :<leader>f
                                        :rhs #(mod-invoke :fsouza.lsp.formatting
-                                                         :fmt client bufnr)}]])
+                                                         :fmt bufnr)}]])
         :textDocument/hover #[:MAPPINGS
                               [{:mode :n
                                 :lhs :<leader>i

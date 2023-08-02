@@ -14,11 +14,18 @@
         opts {:tabSize tab-size :insertSpaces et}]
     {:textDocument {:uri (vim.uri_from_bufnr bufnr)} :options opts}))
 
-(lambda fmt [client bufnr ?cb]
-  (when client
-    (let [(_ req-id) (client.request :textDocument/formatting
-                                     (formatting-params bufnr) ?cb bufnr)]
-      (values req-id #(client.cancel_request req-id)))))
+(fn find-client [bufnr]
+  (let [efm-client (. (vim.lsp.get_clients {: bufnr :name :efm}) 1)]
+    (or efm-client (. (vim.lsp.get_clients {: bufnr
+                                            :method :textDocument/formatting})
+                      1))))
+
+(lambda fmt [bufnr ?client ?cb]
+  (let [client (or ?client (find-client bufnr))]
+    (when client
+      (let [(_ req-id) (client.request :textDocument/formatting
+                                       (formatting-params bufnr) ?cb bufnr)]
+        (values req-id #(client.cancel_request req-id))))))
 
 (fn augroup-name [bufnr]
   (.. :lsp_autofmt_ bufnr))
@@ -36,7 +43,7 @@
     (if client
         (when enabled
           (pcall #(let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)]
-                    (fmt client bufnr
+                    (fmt bufnr client
                          (fn [_ result]
                            (when (= changed-tick
                                     (vim.api.nvim_buf_get_changedtick bufnr))
