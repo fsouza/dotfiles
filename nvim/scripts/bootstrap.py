@@ -424,9 +424,29 @@ async def _find_data_dir() -> Path:
 
 async def update_neovim_plugins() -> None:
     data_dir = await _find_data_dir()
-    pack_dir = data_dir / "site" / "pack" / "mr"
-    mrconfig = base_dir / "scripts" / "mrconfig"
+    base_pack_dir = data_dir / "site" / "pack"
 
+    mrconfig_files: list[tuple[str, Path]] = [("mr", base_dir / "scripts" / "mrconfig")]
+    extra_mrconfig = os.getenv("FSOUZA_NVIM_EXTRA_MRCONFIG")
+    if extra_mrconfig is not None:
+        mrconfig_files.extend(
+            _parse_mrconfig_entry(entry) for entry in extra_mrconfig.split(":")
+        )
+
+    await asyncio.gather(
+        *(
+            _update_neovim_plugins(base_pack_dir / basename, mrconfig)
+            for basename, mrconfig in mrconfig_files
+        ),
+    )
+
+
+def _parse_mrconfig_entry(entry: str) -> tuple[str, Path]:
+    pack_basename, mrconfig = entry.split("=", maxsplit=2)
+    return pack_basename, Path(mrconfig)
+
+
+async def _update_neovim_plugins(pack_dir: Path, mrconfig: Path) -> None:
     await asyncio.to_thread(pack_dir.mkdir, parents=True, exist_ok=True)
     await asyncio.to_thread(shutil.copy, mrconfig, pack_dir / ".mrconfig")
     await run_cmd(
