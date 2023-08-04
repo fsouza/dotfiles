@@ -12,7 +12,7 @@
 		"graphql": "^16.7.1",
 		"graphql-language-service-cli": "^3.3.25",
 		"postcss-scss": "^4.0.6",
-		"pyright": "^1.1.319",
+		"pyright": "^1.1.320",
 		"remark-parse": "^10.0.2",
 		"typescript": "^5.1.6",
 		"typescript-language-server": "^3.3.2",
