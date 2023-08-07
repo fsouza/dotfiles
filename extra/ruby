@@ -1,8 +1,3 @@
-# this is an adaptation of what I've done for virtualenvs, but with Ruby.
-#
-# I'm not a Ruby person, there's probably a lot of wrong things here, I'll
-# iterate on it :)
-
 export GEMSETS=${HOME}/.cache/gemsets
 
 function _set_path_from_gem_path {
@@ -26,13 +21,13 @@ function _set_path_from_gem_path {
 function use_ruby {
 	local version=${1}
 
-	local prefix=$(brew --prefix ruby@${version} 2>/dev/null)
+	local prefix=$(rtx where ruby@${version} 2>/dev/null)
 	if [ -z "${prefix}" ] || ! [ -d "${prefix}" ]; then
-		if ! brew install ruby@${version}; then
+		if ! rtx install ruby@${version}; then
 			echo >&2 "couldn't find or install ruby@${version}"
 			return 1
 		fi
-		prefix=$(brew --prefix ruby@${version} 2>/dev/null)
+		prefix=$(rtx where ruby@${version} 2>/dev/null)
 		env -u GEM_HOME ${prefix}/bin/gem install solargraph
 	fi
 
@@ -106,8 +101,6 @@ function __auto_use_ruby {
 	local ruby_version=$(find_ruby_version)
 	if [ -n "${ruby_version}" ]; then
 		use_ruby ${ruby_version}
-	else
-		use_ruby 3.2
 	fi
 
 	if [ -d ${PWD}/.gems ]; then
@@ -118,3 +111,5 @@ function __auto_use_ruby {
 		gemunset
 	fi
 }
+
+use_ruby 3.2
