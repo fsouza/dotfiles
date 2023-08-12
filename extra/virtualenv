@@ -70,7 +70,7 @@ function _find_python() {
 	local version=$(echo ${python} | sed -e 's/python//')
 	local rtx_python=$(rtx where python@${version} 2>/dev/null)
 	if [ -n "${rtx_python}" ]; then
-		echo ${rtx_python}
+		echo ${rtx_python}/bin/python3
 	else
 		echo ${python}
 	fi
