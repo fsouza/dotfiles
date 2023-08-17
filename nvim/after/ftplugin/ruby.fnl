@@ -3,11 +3,6 @@
 (fn is-rspec-file [fname]
   (not= (string.find fname "spec/.*_spec%.rb$") nil))
 
-(fn start-sorbet [bufnr]
-  (mod-invoke :fsouza.lsp.servers :start
-              {: bufnr
-               :config {:name :sorbet :cmd [:bundle :exec :srb :tc :--lsp]}}))
-
 (fn start-solargraph [bufnr]
   (mod-invoke :fsouza.lsp.servers :start
               {: bufnr
@@ -27,7 +22,4 @@
 
 (let [bufnr (vim.api.nvim_get_current_buf)]
   (start-solargraph bufnr)
-  (start-efm bufnr)
-  (vim.uv.fs_stat :sorbet
-                  #(when (not $1)
-                     (vim.schedule #(start-sorbet bufnr)))))
+  (start-efm bufnr))
