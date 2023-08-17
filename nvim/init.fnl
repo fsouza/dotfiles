@@ -48,6 +48,7 @@
               :loaded_ruby_provider 0
               :loaded_perl_provider 0
               :loaded_node_provider 0
+              :loaded_matchit 1
               :loaded_remote_plugins 1
               :loaded_tarPlugin 1
               :loaded_2html_plugin 1

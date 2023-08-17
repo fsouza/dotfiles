@@ -34,6 +34,9 @@ checkout = git clone https://github.com/pangloss/vim-javascript.git
 [start/vim-lua]
 checkout = git clone https://github.com/tbastos/vim-lua.git
 
+[start/vim-matchup]
+checkout = git clone https://github.com/andymass/vim-matchup.git
+
 [start/vim-ocaml]
 checkout = git clone https://github.com/ocaml/vim-ocaml.git
 
