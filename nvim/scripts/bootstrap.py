@@ -1,4 +1,5 @@
 import asyncio
+import http.client
 import os
 import shutil
 import sys
@@ -318,27 +319,48 @@ async def install_jdtls(langservers_cache_dir: Path) -> None:
         print("skipping jdtls")
         return
 
-    target_dir = langservers_cache_dir / "jdtls"
-    await asyncio.to_thread(target_dir.mkdir, parents=True, exist_ok=True)
+    current_snapshot: str | None = None
+    snapshot_file = langservers_cache_dir / "jdtls.latest-snapshot"
+    if await exists(snapshot_file):
+        current_snapshot = await asyncio.to_thread(snapshot_file.read_text)
 
-    jdtls_url = (
-        "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz"
+    target_dir = langservers_cache_dir / "jdtls"
+    latest_snapshot = await asyncio.to_thread(_latest_jdtls_snapshot)
+    if current_snapshot != latest_snapshot:
+        if await exists(target_dir):
+            await asyncio.to_thread(shutil.rmtree, target_dir)
+        await asyncio.to_thread(target_dir.mkdir, parents=True, exist_ok=True)
+
+        jdtls_url = f"https://download.eclipse.org/jdtls/snapshots/{latest_snapshot}"
+        lombok_url = "https://projectlombok.org/downloads/lombok.jar"
+        await asyncio.gather(
+            run_cmd(
+                cmd="bash",
+                args=["-c", f"curl -sL {jdtls_url} | tar -C {target_dir} -xzf -"],
+            ),
+            run_cmd(
+                cmd="bash",
+                args=["-c", f"curl -sLo {target_dir}/lombok.jar {lombok_url}"],
+            ),
+            asyncio.to_thread(snapshot_file.write_text, latest_snapshot),
+        )
+
+    await _clone_or_update(
+        "https://github.com/dgileadi/vscode-java-decompiler.git",
+        target_dir / "vscode-java-decompiler",
     )
-    lombok_url = "https://projectlombok.org/downloads/lombok.jar"
-    await asyncio.gather(
-        run_cmd(
-            cmd="bash",
-            args=["-c", f"curl -sL {jdtls_url} | tar -C {target_dir} -xzf -"],
-        ),
-        run_cmd(
-            cmd="bash",
-            args=["-c", f"curl -sLo {target_dir}/lombok.jar {lombok_url}"],
-        ),
-        _clone_or_update(
-            "https://github.com/dgileadi/vscode-java-decompiler.git",
-            target_dir / "vscode-java-decompiler",
-        ),
-    )
+
+
+def _latest_jdtls_snapshot() -> str:
+    conn = http.client.HTTPSConnection("download.eclipse.org")
+    conn.request("GET", "/jdtls/snapshots/latest.txt")
+    resp = conn.getresponse()
+    if resp.status > 299:
+        raise Exception(
+            f"failed to get latest jdtls snapshot: {resp.status} {resp.reason}",
+        )
+
+    return resp.read().decode().strip()
 
 
 async def install_kotlin_language_server(langservers_cache_dir: Path) -> None:
