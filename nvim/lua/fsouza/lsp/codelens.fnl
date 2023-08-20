@@ -33,4 +33,4 @@
       (vim.keymap.set :n opts.mapping vim.lsp.codelens.run
                       {:silent true :buffer bufnr}))))
 
-{: on-attach : on-detach}
+{: on-attach}

@@ -136,11 +136,4 @@
     (vim.keymap.set :i :<cr> #(cr-key-for-comp-info (vim.fn.complete_info))
                     {:remap false :buffer bufnr :expr true})))
 
-(fn on-detach [bufnr]
-  (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup (augroup-name bufnr))
-  (when (vim.api.nvim_buf_is_valid bufnr)
-    (pcall vim.keymap.del :i :<cr> {:buffer bufnr})
-    (pcall vim.keymap.del :i :<c-x><c-o> {:buffer bufnr}))
-  (mod-invoke :lsp_compl :detach bufnr))
-
-{: on-attach : on-detach}
+{: on-attach}
