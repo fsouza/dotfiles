@@ -122,6 +122,12 @@
                `(vim.keymap.set [:x :v] "*"
                                 "\"my/\\V<C-R>=escape(getreg(\"m\"), \"/\")<CR><CR>"
                                 {:remap false})
+               `(vim.keymap.set [:n] "%" " <Plug>(MatchitNormalForward)")
+               `(vim.keymap.set [:n] "g%" "<Plug>(MatchitNormalBackward)")
+               `(vim.keymap.set [:x] "%" " <Plug>(MatchitVisualForward)")
+               `(vim.keymap.set [:x] "g%" "<Plug>(MatchitVisualBackward)")
+               `(vim.keymap.set [:o] "%" " <Plug>(MatchitOperationForward)")
+               `(vim.keymap.set [:o] "g%" "<Plug>(MatchitOperationBackward)")
                `(vim.keymap.set [:x :v] :p "\"_dP" {:remap false})]]
     (each [_ {: lhs : rhs} (ipairs rl-bindings)]
       (table.insert exprs `(vim.keymap.set [:c :o] ,lhs ,rhs {:remap false})))
