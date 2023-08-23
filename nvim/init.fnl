@@ -56,7 +56,8 @@
               :loaded_zipPlugin 1
               :no_plugin_maps 1
               :editorconfig_enable false
-              :vista_default_executive :nvim_lsp}]
+              :vista_default_executive :nvim_lsp
+              :matchup_matchparen_offscreen `(vim.empty_dict)}]
     (icollect [name value (pairs vars)]
       `(tset vim.g ,name ,value))))
 
