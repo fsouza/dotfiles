@@ -10,7 +10,8 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
-	"syscall"
+
+	"github.com/fsouza/dotfiles/tools"
 )
 
 var diagnosticRegexp = regexp.MustCompile(`\s*([^:]+):\d+:(\d+:)?.+`)
@@ -37,7 +38,7 @@ func main() {
 		}
 		sendToNvim(paneCwd, rawInput)
 	} else {
-		Exec([]string{"tmux", "send-keys", "-X", "copy-selection-and-cancel"})
+		tools.Exec([]string{"tmux", "send-keys", "-X", "copy-selection-and-cancel"})
 	}
 }
 
@@ -51,7 +52,7 @@ func getPaneCwd() (string, error) {
 }
 
 func handleCurrentLine() {
-	Exec(append([]string{"tmux", "send-keys", "-X", "select-line", ";", "send-keys", "-X", "copy-pipe-and-cancel"}, os.Args...))
+	tools.Exec(append([]string{"tmux", "send-keys", "-X", "select-line", ";", "send-keys", "-X", "copy-pipe-and-cancel"}, os.Args...))
 }
 
 func shouldSendToNvim(paneCwd string, rawInput []byte) bool {
@@ -87,17 +88,5 @@ func sendToNvim(paneCwd string, rawInput []byte) {
 	file.Write(rawInput)
 
 	nvimCommand := fmt.Sprintf("lua require('fsouza.lib.tmux-selection').handle('%s')", file.Name())
-	Exec([]string{"tmux", "split-window", "-b", "-c", paneCwd, "-Z", "nvim", "-c", nvimCommand})
-}
-
-func Exec(argv []string) {
-	executable, err := exec.LookPath(argv[0])
-	if err != nil {
-		log.Fatal(err)
-	}
-	argv[0] = executable
-	err = syscall.Exec(executable, argv, os.Environ())
-	if err != nil {
-		log.Fatal(err)
-	}
+	tools.Exec([]string{"tmux", "split-window", "-b", "-c", paneCwd, "-Z", "nvim", "-c", nvimCommand})
 }
