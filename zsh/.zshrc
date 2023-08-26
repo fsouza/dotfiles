@@ -21,7 +21,8 @@ prepend_to_path \
 	${HOME}/.cargo/bin \
 	${HOME}/.local/bin \
 	${HOME}/.dotnet/tools \
-	${FSOUZA_DOTFILES_DIR}/bin
+	${FSOUZA_DOTFILES_DIR}/bin \
+	${FSOUZA_DOTFILES_DIR}/tools/bin
 
 export MANPATH=${HOME}/.local/share/man${MANPATH+:${MANPATH}}
 

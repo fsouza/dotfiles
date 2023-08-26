@@ -45,6 +45,16 @@ def main() -> int:
             ],
         )
 
+    if shutil.which("go"):
+        subprocess.check_call(
+            ["go", "install", "./..."],
+            env={
+                **os.environ,
+                "GOBIN": BASEDIR / "tools" / "bin",
+            },
+            cwd=BASEDIR / "tools",
+        )
+
     if shutil.which("nvim"):
         subprocess.check_call(
             ["make", "-C", BASEDIR],
