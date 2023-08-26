@@ -2,10 +2,9 @@
 
 (let [path (require :fsouza.pl.path)
       bufnr (vim.api.nvim_get_current_buf)
-      fnlfmt (path.join _G.config-dir :langservers :bin :fnlfmt.py)
-      py3 (path.join _G.cache-dir :venv :bin :python3)
+      fnlfmt (path.join _G.dotfiles-dir :tools :bin :fnlfmt)
       lua-bin (path.join _G.cache-dir :hr :bin :lua)
-      tools [{:formatCommand (string.format "%s %s -" py3 fnlfmt)
+      tools [{:formatCommand (string.format "%s -" fnlfmt)
               :formatStdin true
               :env [(.. :NVIM_CACHE_DIR= _G.cache-dir)]}
              {:lintCommand (string.format "%s %s/scripts/compile.lua --stdin-filename ${INPUT} -"
