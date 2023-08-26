@@ -173,20 +173,12 @@ async def _neovim_lua_command(cmd: bytes) -> str:
     return stderr.decode().strip()
 
 
-async def _find_luajit_version() -> str:
-    command = rb"""local luajit_version = string.gsub(jit.version, "LuaJIT ", "")
-print(luajit_version)
-"""
-
-    return await _neovim_lua_command(command)
-
-
 async def ensure_hererocks(cache_dir: Path) -> Path:
     hr_dir = cache_dir / "hr"
 
     if not await exists(hr_dir):
         hererocks_py = await download_hererocks_py(cache_dir)
-        luajit_version = await _find_luajit_version()
+        luajit_version = "2.1.0-beta3"
         await run_cmd(
             sys.executable,
             [hererocks_py, "-j", luajit_version, "-r", "latest", hr_dir],
