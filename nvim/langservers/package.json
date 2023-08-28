@@ -14,7 +14,7 @@
 		"postcss-scss": "^4.0.7",
 		"pyright": "^1.1.324",
 		"remark-parse": "^10.0.2",
-		"typescript": "^5.1.6",
+		"typescript": "^5.2.2",
 		"typescript-language-server": "^3.3.2",
 		"vim-language-server": "^2.3.1",
 		"vscode-langservers-extracted": "^4.7.0",
