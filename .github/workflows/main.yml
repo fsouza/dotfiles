@@ -139,8 +139,8 @@ jobs:
         uses: actions/cache@v3.3.1
         with:
           path: ~/.local/share/nvim/site/pack/mr
-          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/mrconfig') }}-${{ github.sha }}"
-          restore-keys: "${{ runner.os }}-${{ hashFiles('nvim/scripts/mrconfig') }}-"
+          key: "${{ runner.os }}-${{ hashFiles('nvim/mrconfig') }}-${{ github.sha }}"
+          restore-keys: "${{ runner.os }}-${{ hashFiles('nvim/mrconfig') }}-"
 
       - name: run setup
         run: |
