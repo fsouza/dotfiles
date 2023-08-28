@@ -17,6 +17,16 @@ def create_symlink(name: str, source: Path, target: Path) -> None:
 
 
 def main() -> int:
+    if shutil.which("go"):
+        subprocess.check_call(
+            ["go", "install", "./..."],
+            env={
+                **os.environ,
+                "GOBIN": BASEDIR / "tools" / "bin",
+            },
+            cwd=BASEDIR / "tools",
+        )
+
     home = Path.home()
     config_dir = home / ".config"
     config_dir.mkdir(exist_ok=True)
@@ -43,16 +53,6 @@ def main() -> int:
                 "--file",
                 BASEDIR / "bootstrap" / "Brewfile",
             ],
-        )
-
-    if shutil.which("go"):
-        subprocess.check_call(
-            ["go", "install", "./..."],
-            env={
-                **os.environ,
-                "GOBIN": BASEDIR / "tools" / "bin",
-            },
-            cwd=BASEDIR / "tools",
         )
 
     if shutil.which("nvim"):
