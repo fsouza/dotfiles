@@ -23,7 +23,8 @@
                                          :codelenses {:vendor false}
                                          :gofumpt true}}
                  :find-root-dir #(mod-invoke :fsouza.lsp.servers
-                                             :patterns-with-fallback [:go.mod])
+                                             :patterns-with-fallback [:go.mod]
+                                             $1)
                  : bufnr
                  :opts {:autofmt true :auto-action true}
                  :cb #(mod-invoke :fsouza.lsp.references :register-test-checker

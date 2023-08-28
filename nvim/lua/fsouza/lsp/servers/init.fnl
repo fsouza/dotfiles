@@ -30,10 +30,13 @@
     (when (not= cwd home)
       cwd)))
 
-(fn patterns-with-fallback [patterns]
-  (let [file (. (vim.fs.find patterns {:upward true}) 1)]
+(fn patterns-with-fallback [patterns bufname]
+  (let [path (require :fsouza.pl.path)
+        file (. (vim.fs.find patterns
+                             {:upward true :path (path.dirname bufname)})
+                1)]
     (if file
-        (mod-invoke :fsouza.pl.path :dirname file)
+        (path.dirname file)
         (cwd-if-not-home))))
 
 (macro should-start [bufnr name]
@@ -60,7 +63,7 @@
         cb (or cb #nil)
         opts (or opts {})]
     (when (should-start bufnr name)
-      (tset config :root_dir (find-root-dir))
+      (tset config :root_dir (find-root-dir (vim.api.nvim_buf_get_name bufnr)))
       (with-executable exec
         #(let [is-node-bin $2]
            (tset config.cmd 1 $1)
