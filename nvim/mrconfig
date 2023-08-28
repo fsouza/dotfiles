@@ -92,9 +92,6 @@ checkout = git clone https://github.com/ojroques/nvim-osc52.git
 [opt/nvim-various-textobjs]
 checkout = git clone https://github.com/chrisgrieser/nvim-various-textobjs.git
 
-[opt/packer.nvim]
-checkout = git clone https://github.com/wbthomason/packer.nvim.git
-
 [opt/plenary.nvim]
 checkout = git clone https://github.com/nvim-lua/plenary.nvim.git
 
