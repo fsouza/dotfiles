@@ -130,7 +130,7 @@ func installKLS(langserversDir string) error {
 	}
 
 	return tools.Run(&tools.RunOptions{
-		Cmd:  "./gradlew",
+		Cmd:  filepath.Join(repoDir, "gradlew"),
 		Args: []string{":server:installDist"},
 		Cwd:  repoDir,
 		Env:  map[string]string{"JAVA_HOME": javaHome},
@@ -152,7 +152,7 @@ func installGroovyLS(langserversDir string) error {
 	}
 
 	return tools.Run(&tools.RunOptions{
-		Cmd:  "./gradlew",
+		Cmd:  filepath.Join(repoDir, "gradlew"),
 		Args: []string{"build"},
 		Cwd:  repoDir,
 		Env:  map[string]string{"JAVA_HOME": javaHome},
@@ -255,8 +255,8 @@ func setupFnlfmt(nv *Neovim, hererocksDir string) error {
 	}
 
 	return tools.Run(&tools.RunOptions{
-		Cmd: "make",
-		Cwd: repoDir,
+		Cmd:  "make",
+		Args: []string{"-C", repoDir},
 		Env: map[string]string{
 			"PATH": fmt.Sprintf("%s/bin:%s", hererocksDir, os.Getenv("PATH")),
 		},
