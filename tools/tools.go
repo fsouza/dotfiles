@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"slices"
 	"strings"
 	"syscall"
 )
@@ -35,10 +36,10 @@ type RunOptions struct {
 func Run(opts *RunOptions) error {
 	var env []string
 	if len(opts.Env) > 0 {
+		env = slices.Clone(os.Environ())
 		for k, v := range opts.Env {
 			env = append(env, fmt.Sprintf("%s=%s", k, v))
 		}
-		env = append(env, os.Environ()...)
 	}
 
 	c := exec.Command(opts.Cmd, opts.Args...)
