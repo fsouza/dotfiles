@@ -116,7 +116,7 @@ func installRustAnalyzer(langserversDir string) error {
 }
 
 func installKLS(langserversDir string) error {
-	const javaVersion = "corretto-17"
+	const javaVersion = "corretto-11"
 	javaHome, err := getJavaHome(javaVersion)
 	if err != nil {
 		log.Printf("skipping kotlin-language-server. cannot find JAVA_HOME for %q: %v", javaVersion, err)
@@ -131,7 +131,7 @@ func installKLS(langserversDir string) error {
 
 	return tools.Run(&tools.RunOptions{
 		Cmd:  "./gradlew",
-		Args: []string{"-PjavaVersion=17", ":server:installDist"},
+		Args: []string{":server:installDist"},
 		Cwd:  repoDir,
 		Env:  map[string]string{"JAVA_HOME": javaHome},
 	})

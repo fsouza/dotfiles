@@ -92,7 +92,7 @@
               #(let [name $1
                      end (length :JavaSE-)
                      target (string.sub name (+ end 1))]
-                 (mod-invoke :fsouza.lib.java :find-java-home :17
+                 (mod-invoke :fsouza.lib.java :find-java-home :11
                              #(let [java-home $1]
                                 (make-xdg-config-home #(let [xdg-config-home $1]
                                                          (vim.schedule #(start-kotlin-language-server bufnr
