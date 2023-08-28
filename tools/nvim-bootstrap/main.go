@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"log"
 	"os"
 
@@ -11,14 +10,12 @@ import (
 var dotfilesDir string
 
 func init() {
-	flag.StringVar(&dotfilesDir, "dotfiles-dir", "", "path to the dotfiles config")
+	dotfilesDir = os.Getenv("FSOUZA_DOTFILES_DIR")
 }
 
 func main() {
-	flag.Parse()
 	if dotfilesDir == "" {
-		flag.Usage()
-		os.Exit(2)
+		log.Fatal("missing FSOUZA_DOTFILES_DIR")
 	}
 
 	nv, err := loadNeovimSettings()

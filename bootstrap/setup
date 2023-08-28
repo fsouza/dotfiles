@@ -57,14 +57,11 @@ def main() -> int:
 
     if shutil.which("nvim"):
         subprocess.check_call(
-            [
-                BASEDIR / "tools" / "bin" / "nvim-bootstrap",
-                "-dotfiles-dir",
-                str(BASEDIR),
-            ],
+            [BASEDIR / "tools" / "bin" / "nvim-bootstrap"],
             env={
                 **os.environ,
                 "NVIM_DEBUG": "1",
+                "FSOUZA_DOTFILES_DIR": os.getenv("FSOUZA_DOTFILES_DIR", str(BASEDIR)),
                 "RTX_EXPERIMENTAL": "1",
             },
         )
