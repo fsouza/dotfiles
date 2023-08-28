@@ -57,7 +57,7 @@ def main() -> int:
 
     if shutil.which("nvim"):
         subprocess.check_call(
-            [BASEDIR / "tools" / "bin" / "nvim-bootstrap"],
+            ["make", "-C", BASEDIR],
             env={
                 **os.environ,
                 "NVIM_DEBUG": "1",

@@ -82,16 +82,16 @@ jobs:
         uses: actions/cache@v3.3.1
         with:
           path: ~/.cache/nvim/langservers
-          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-${{ steps.setup-python.outputs.python-version }}-${{ steps.get-repo-versions.outputs.golang-tools-version }}-${{ steps.get-repo-versions.outputs.fnlfmt-version }}-${{ steps.get-repo-versions.outputs.kotlin-ls-version }}-${{ steps.get-repo-versions.outputs.groovy-ls-version }}"
-          restore-keys: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-${{ steps.setup-python.outputs.python-version }}-"
+          key: "${{ runner.os }}-${{ hashFiles('tools/nvim-boostrap/*.go') }}-${{ steps.get-repo-versions.outputs.golang-tools-version }}-${{ steps.get-repo-versions.outputs.fnlfmt-version }}-${{ steps.get-repo-versions.outputs.kotlin-ls-version }}-${{ steps.get-repo-versions.outputs.groovy-ls-version }}"
+          restore-keys: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-${{ steps.setup-python.outputs.python-version }}-"
 
       - name: gradle cache
         id: gradle-cache
         uses: actions/cache@v3.3.1
         with:
           path: ~/.gradle
-          key: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-${{ steps.get-repo-versions.outputs.kotlin-ls-version }}-${{ steps.get-repo-versions.outputs.groovy-ls-version }}"
-          restore-keys: "${{ runner.os }}-${{ hashFiles('nvim/scripts/bootstrap.py') }}-"
+          key: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-${{ steps.get-repo-versions.outputs.kotlin-ls-version }}-${{ steps.get-repo-versions.outputs.groovy-ls-version }}"
+          restore-keys: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-"
 
       - name: get luajit version
         id: get-luajit-version
