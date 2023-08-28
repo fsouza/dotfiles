@@ -61,7 +61,7 @@ def main() -> int:
             env={
                 **os.environ,
                 "NVIM_DEBUG": "1",
-                "FSOUZA_DOTFILES_DIR": os.getenv("FSOUZA_DOTFILES_DIR", str(BASEDIR)),
+                "FSOUZA_DOTFILES_DIR": str(BASEDIR),
                 "RTX_EXPERIMENTAL": "1",
             },
         )
