@@ -55,7 +55,6 @@
               :loaded_tutor_mode_plugin 1
               :loaded_zipPlugin 1
               :no_plugin_maps 1
-              :dispatch_no_maps 1
               :editorconfig_enable false
               :vista_default_executive :nvim_lsp
               :matchup_matchparen_offscreen `(vim.empty_dict)}]
