@@ -25,9 +25,8 @@
 
 (fn get-python-tools [cb]
   (let [path (require :fsouza.pl.path)
-        py3 (path.join _G.cache-dir :venv :bin :python3)
-        gen-python-tools (path.join _G.config-dir :langservers :bin
-                                    :gen-efm-python-tools.py)]
+        gen-python-tools (path.join _G.dotfiles-dir :tools :bin
+                                    :gen-efm-python-tools)]
     (fn on-finished [result]
       (if (not= result.exit-status 0)
           (error result.stderr)
@@ -35,7 +34,7 @@
                (vim.json.decode)
                (cb))))
 
-    (mod-invoke :fsouza.lib.cmd :run py3 {:args [gen-python-tools]} on-finished)))
+    (mod-invoke :fsouza.lib.cmd :run gen-python-tools {:args [:-venv (path.join _G.cache-dir :venv)]} on-finished)))
 
 (let [bufnr (vim.api.nvim_get_current_buf)]
   (get-python-tools #(let [tools $1]
