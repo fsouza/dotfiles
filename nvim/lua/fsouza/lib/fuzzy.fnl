@@ -219,7 +219,7 @@
 (fn git-files [opts]
   (let [opts (or opts {})
         fzf-lua (fzf-lua)]
-    (tset opts :cwd (or opts.cwd virtual-cwd))
+    (tset opts :cwd (or opts.cwd virtual-cwd (vim.uv.cwd)))
     (fzf-lua.git_files opts)))
 
 (fn set-virtual-cwd- [cwd]
