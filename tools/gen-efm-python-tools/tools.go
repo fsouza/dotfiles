@@ -6,15 +6,14 @@ import (
 	"path/filepath"
 
 	"github.com/alessio/shellescape"
-	"github.com/mattn/efm-langserver/langserver"
 )
 
 var defaultRootmarkers = []string{".git", ""}
 
-func flake8(args []string) []langserver.Language {
+func flake8(args []string) []Language {
 	const outputFormat = `%(path)s:%(row)d:%(col)d: %(code)s %(text)s`
 	flake8 := getPythonBin("flake8")
-	return []langserver.Language{
+	return []Language{
 		{
 			LintCommand: fmt.Sprintf(
 				`%s --stdin-display-name ${INPUT} --format %q %s`,
@@ -31,46 +30,46 @@ func flake8(args []string) []langserver.Language {
 	}
 }
 
-func autoflake(_ []string) []langserver.Language {
+func autoflake(_ []string) []Language {
 	return stdinFormatter("autoflake", []string{
 		"--expand-star-imports",
 		"--remove-all-unused-imports",
 	})
 }
 
-func black(args []string) []langserver.Language {
+func black(args []string) []Language {
 	args = append([]string{"--fast", "--quiet"}, args...)
 	return stdinFormatter("black", args)
 }
 
-func addTrailingComma(args []string) []langserver.Language {
+func addTrailingComma(args []string) []Language {
 	args = append([]string{"--exit-zero-even-if-changed"}, args...)
 	return stdinFormatter("add-trailing-comma", args)
 }
 
-func reorderPythonImports(args []string) []langserver.Language {
+func reorderPythonImports(args []string) []Language {
 	args = append([]string{"--exit-zero-even-if-changed"}, args...)
 	return stdinFormatter("reorder-python-imports", args)
 }
 
-func pyupgrade(args []string) []langserver.Language {
+func pyupgrade(args []string) []Language {
 	args = append([]string{"--exit-zero-even-if-changed"}, args...)
 	return stdinFormatter("pyupgrade", args)
 }
 
-func autopep8(args []string) []langserver.Language {
+func autopep8(args []string) []Language {
 	return stdinFormatter("autopep8", args)
 }
 
-func isort(args []string) []langserver.Language {
+func isort(args []string) []Language {
 	return stdinFormatter("isort", args)
 }
 
-func ruff(_ []string) []langserver.Language {
+func ruff(_ []string) []Language {
 	ruff := getPythonBin("ruff")
 	ruffRootmarkers := append([]string{"pyproject.toml", "ruff.toml"}, defaultRootmarkers...)
 
-	return []langserver.Language{
+	return []Language{
 		{
 			LintCommand:        fmt.Sprintf("%s --stdin-filename ${INPUT} -", ruff),
 			LintSource:         "ruff",
@@ -87,14 +86,14 @@ func ruff(_ []string) []langserver.Language {
 	}
 }
 
-func ufmt(args []string) []langserver.Language {
+func ufmt(args []string) []Language {
 	args = append([]string{"--quiet", "format"}, args...)
 	return stdinFormatter("ufmt", args)
 }
 
-func stdinFormatter(tool string, args []string) []langserver.Language {
+func stdinFormatter(tool string, args []string) []Language {
 	tool = getPythonBin(tool)
-	return []langserver.Language{
+	return []Language{
 		{
 			FormatCommand: fmt.Sprintf("%s %s -", tool, processArgs(args)),
 			FormatStdin:   true,

@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/mattn/efm-langserver/langserver"
 	"golang.org/x/exp/maps"
 )
 
@@ -27,7 +26,7 @@ func main() {
 		log.Fatalf("invalid value for -venv: %v", err)
 	}
 
-	var languages []langserver.Language
+	var languages []Language
 	if precommitConfig, err := FindPrecommitConfig(); err == nil {
 		languages, err = EFMConfigFromPrecommit(precommitConfig)
 		if err != nil {
@@ -46,8 +45,8 @@ func main() {
 	}
 }
 
-func removeDuplicates(langs []langserver.Language) []langserver.Language {
-	m := map[string]langserver.Language{}
+func removeDuplicates(langs []Language) []Language {
+	m := map[string]Language{}
 	for _, lang := range langs {
 		if lang.FormatCommand != "" {
 			m["format#"+lang.FormatCommand] = lang

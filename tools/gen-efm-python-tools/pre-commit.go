@@ -8,7 +8,6 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/mattn/efm-langserver/langserver"
 	"gopkg.in/yaml.v3"
 )
 
@@ -40,7 +39,7 @@ func FindPrecommitConfig() (string, error) {
 	return "", errors.New("couldn't find a pre-commit config")
 }
 
-func EFMConfigFromPrecommit(filename string) ([]langserver.Language, error) {
+func EFMConfigFromPrecommit(filename string) ([]Language, error) {
 	repos, err := readPrecommitConfig(filename)
 	if err != nil {
 		return nil, err
@@ -63,7 +62,7 @@ func EFMConfigFromPrecommit(filename string) ([]langserver.Language, error) {
 		"https://github.com/charliermarsh/ruff-pre-commit":   ruff,
 		"https://github.com/omnilib/ufmt":                    ufmt,
 	}
-	var output []langserver.Language
+	var output []Language
 	for _, repo := range repos {
 		if factory, ok := repoMapping[strings.ToLower(repo.Name)]; ok {
 			var args []string
