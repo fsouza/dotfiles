@@ -25,6 +25,9 @@ checkout = git clone https://github.com/tpope/vim-commentary.git
 [start/vim-dirvish]
 checkout = git clone https://github.com/justinmk/vim-dirvish.git
 
+[start/vim-dispatch]
+checkout = git clone https://github.com/tpope/vim-dispatch.git
+
 [start/vim-fugitive]
 checkout = git clone https://github.com/tpope/vim-fugitive.git
 
