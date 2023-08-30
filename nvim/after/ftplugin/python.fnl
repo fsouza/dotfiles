@@ -34,7 +34,8 @@
                (vim.json.decode)
                (cb))))
 
-    (mod-invoke :fsouza.lib.cmd :run gen-python-tools {:args [:-venv (path.join _G.cache-dir :venv)]} on-finished)))
+    (mod-invoke :fsouza.lib.cmd :run gen-python-tools
+                {:args [:-venv (path.join _G.cache-dir :venv)]} on-finished)))
 
 (let [bufnr (vim.api.nvim_get_current_buf)]
   (get-python-tools #(let [tools $1]
