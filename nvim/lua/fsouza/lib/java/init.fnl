@@ -16,6 +16,7 @@
         (string.format "JavaSE-%s" version)))
 
     (let [pattern-to-name {"\"%d+%.%d+%.%d+\"" name-from-version-string
+                           "\"%d+%.%d+%.%d+.%d+\"" name-from-version-string
                            "\"1%.8%." :JavaSE-1.8}]
       (each [pattern result (pairs pattern-to-name)]
         (let [(start end) (string.find line pattern)]
