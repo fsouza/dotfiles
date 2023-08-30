@@ -16,7 +16,7 @@ function _goarch {
 function _gc_bootstrap {
 	local BOOTSTRAP_GO=${1}
 	local base_dir=${GO_HOME}/bootstrap
-	fd --exact-depth 1 --type d --print0 --exclude ${BOOTSTRAP_GO} .+ ${base_dir} | xargs -0 -n 1 rm -rf
+	find ${base_dir} -type d -maxdepth 1 -mindepth 1 -not -name ${BOOTSTRAP_GO} -print0 | xargs -0 -n 1 rm -rf
 }
 
 function _bootstrap {
