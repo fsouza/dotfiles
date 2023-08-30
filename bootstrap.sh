@@ -107,12 +107,14 @@ function setup_gpg {
 }
 
 function setup_dotfiles {
-	if [ ! -d ${HOME}/.dotfiles ]; then
-		git clone git@github.com:fsouza/dotfiles.git ${HOME}/.dotfiles
+	local target_dir=${HOME}/Projects/os/p/dotfiles
+	if [ ! -d ${target_dir} ]; then
+		mkdir -p $(dirname ${target_dir})
+		git clone git@github.com:fsouza/dotfiles.git ${target_dir}
 
-		${HOME}/.dotfiles/bootstrap/setup
-		${HOMEBREW_PREFIX}/bin/zsh -l <<'EOF'
-source ${HOME}/.zshrc
+		${target_dir}/bootstrap/setup
+		${HOMEBREW_PREFIX}/bin/zsh -l <<EOF
+source ${target_dir}/zsh/.zshrc
 
 set -e
 update_go_tip
