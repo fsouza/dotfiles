@@ -246,6 +246,9 @@
 (fn unset-virtual-cwd []
   (set virtual-cwd nil))
 
+(fn get-virtual-cwd []
+  virtual-cwd)
+
 (let [rg-opts "--column -n --hidden --no-heading --color=always --colors 'match:fg:0x99,0x00,0x00' --colors line:none --colors path:none --colors column:none -S --glob '!.git' --glob '!.hg'"
       mod {: files
            : git-files
@@ -258,6 +261,7 @@
                                   1) :-F $...)
            : set-virtual-cwd
            : unset-virtual-cwd
+           : get-virtual-cwd
            : git-repos
            : send-lsp-items
            : send-items}]
