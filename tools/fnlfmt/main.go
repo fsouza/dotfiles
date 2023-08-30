@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 )
 
 func main() {
@@ -16,8 +17,8 @@ func main() {
 	cmd.Stderr = &stderr
 	cmd.Stdout = &stdout
 	cmd.Env = append(
-		[]string{"PATH=" + filepath.Join(cacheDir, "hr", "bin")},
-		os.Environ()...,
+		slices.Clone(os.Environ()),
+		"PATH="+filepath.Join(cacheDir, "hr", "bin"),
 	)
 	err := cmd.Run()
 	if err != nil {
