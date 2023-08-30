@@ -16,16 +16,21 @@ def create_symlink(name: str, source: Path, target: Path) -> None:
         target.symlink_to(source)
 
 
+def get_go() -> str:
+    bootstrap_go = BASEDIR / "bin" / "__bootstrap_go"
+    return subprocess.check_output([bootstrap_go], text=True).strip()
+
+
 def main() -> int:
-    if shutil.which("go"):
-        subprocess.check_call(
-            ["go", "install", "./..."],
-            env={
-                **os.environ,
-                "GOBIN": BASEDIR / "tools" / "bin",
-            },
-            cwd=BASEDIR / "tools",
-        )
+    go = get_go()
+    subprocess.check_call(
+        [go, "install", "./..."],
+        env={
+            **os.environ,
+            "GOBIN": BASEDIR / "tools" / "bin",
+        },
+        cwd=BASEDIR / "tools",
+    )
 
     home = Path.home()
     config_dir = home / ".config"

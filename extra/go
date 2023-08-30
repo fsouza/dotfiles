@@ -1,4 +1,4 @@
-GO_HOME=${HOME}/.cache/go
+GO_HOME=$(${FSOUZA_DOTFILES_DIR}/bin/__bootstrap_go print-home)
 
 function _normalize_name_version {
 	local name_or_version=${1}
@@ -13,38 +13,11 @@ function refresh_go_tools {
 	env GOPROXY=https://proxy.golang.org go install honnef.co/go/tools/cmd/staticcheck@latest
 }
 
-function _goarch {
-	local hw_name=$(uname -m)
-	if [[ ${hw_name} == "x86_64" ]]; then
-		echo amd64
-	else
-		echo ${hw_name}
-	fi
-}
-
-function _gc_bootstrap {
-	local BOOTSTRAP_GO=${1}
-	local base_dir=${GO_HOME}/bootstrap
-	fd --exact-depth 1 --type d --print0 --exclude ${BOOTSTRAP_GO} .+ ${base_dir} | xargs -0 -n 1 rm -rf
-}
-
-function _bootstrap_go {
-	local BOOTSTRAP_GO="go1.21.0"
-	local dest_dir=${GO_HOME}/bootstrap/${BOOTSTRAP_GO}
-	local go_binary=${dest_dir}/go/bin/go
-	if ! [ -x ${go_binary} ]; then
-		mkdir -p ${dest_dir}
-		curl -sL "https://golang.org/dl/${BOOTSTRAP_GO}."$(uname -s | tr '[:upper:]' '[:lower:]')"-"$(_goarch)".tar.gz" | tar -C ${dest_dir} -xzf -
-	fi
-	_gc_bootstrap ${BOOTSTRAP_GO}
-	dirname ${go_binary}
-}
-
 function _install_go {
 	(
 		local name=$(_normalize_name_version ${1})
 		local temp_gobin=$(mktemp -d)
-		prepend_to_path "$(_bootstrap_go)"
+		prepend_to_path "$(dirname $(${FSOUZA_DOTFILES_DIR}/bin/__bootstrap_go))"
 		export GOPROXY=https://proxy.golang.org
 
 		env GOBIN=${temp_gobin} GOPATH=${GO_HOME}/selfpath go install golang.org/dl/${name}@latest &&
