@@ -1,6 +1,6 @@
 module github.com/fsouza/dotfiles/nvim/langservers
 
-go 1.21
+go 1.21.0
 
 require (
 	github.com/bazelbuild/buildtools v0.0.0-20230111132423-06e8e2436a75
