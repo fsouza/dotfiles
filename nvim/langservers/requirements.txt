@@ -10,7 +10,7 @@ attrs==22.2.0
     # via
     #   flake8-bugbear
     #   usort
-autoflake==2.2.0
+autoflake==2.2.1
     # via -r requirements.in
 autopep8==2.0.4
     # via -r requirements.in
