@@ -4,7 +4,7 @@
 #
 #    pip-compile
 #
-add-trailing-comma==3.0.1
+add-trailing-comma==3.1.0
     # via -r requirements.in
 attrs==22.2.0
     # via
