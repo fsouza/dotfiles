@@ -1,5 +1,16 @@
 (import-macros {: mod-invoke} :helpers)
 
+(local disabled-methods
+       {:jdtls {:textDocument/codeLens true}
+        :efm {:textDocument/definition true}})
+
+(fn patch-supports-method [client]
+  (let [supports-method client.supports_method]
+    (tset client :supports_method
+          #(let [method $1
+                 disabled (or (?. disabled-methods client.name method) false)]
+             (and (not disabled) (supports-method method))))))
+
 ;; for each method, have a function that returns [ACTION args]
 ;;
 ;; where [ACTION args] can be either:
@@ -160,6 +171,7 @@
                   {:lhs :<c-p>
                    :rhs #(vim.diagnostic.goto_prev {:focusable false
                                                     :float {:source :if_many}})}]]
+    (patch-supports-method client)
     (shell-post.on-attach bufnr)
     (each [method _ (pairs method-handlers)]
       (register-method method client bufnr))
