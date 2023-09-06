@@ -142,20 +142,31 @@
                        (make-entry.file item {:cwd virtual-cwd}))))]
     (core.fzf_exec contents opts)))
 
-(lambda send-items [items prompt cb]
-  (match (length items)
-    0 nil
-    1 (cb (. items 1))
-    _ (let [prompt (.. prompt "：")
+(lambda send-items [items-or-fzf-cb prompt opts]
+  (let [{: cb : use-lsp-actions : enable-preview} opts
+        actions (if cb
+                    {:default cb}
+                    (if use-lsp-actions
+                        (lsp-actions)
+                        (file-actions)))]
+    (fn send-to-fzf []
+      (let [prompt (.. prompt "：")
             fzf-lua (fzf-lua)
             config (require :fzf-lua.config)
             core (require :fzf-lua.core)
-            make-entry (require :fzf-lua.make_entry)
-            opts (config.normalize_opts {: prompt :actions {:default cb}}
+            opts (config.normalize_opts {: prompt : actions}
                                         config.globals.files)]
         (tset opts.fzf_opts :--no-multi "")
-        (tset opts :previewer nil)
-        (core.fzf_exec items opts))))
+        (when (not enable-preview)
+          (tset opts :previewer nil))
+        (core.fzf_exec items-or-fzf-cb opts)))
+
+    (match (type items-or-fzf-cb)
+      :function (send-to-fzf)
+      :table (match (length items-or-fzf-cb)
+               0 nil
+               1 (actions.default (. items-or-fzf-cb 1))
+               _ (send-to-fzf)))))
 
 (fn grep [rg-opts search extra-opts cwd]
   (let [search (or search (vim.fn.input "rg："))

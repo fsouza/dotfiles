@@ -30,8 +30,8 @@
     (let [tablex (require :fsouza.pl.tablex)
           client-names (->> (vim.lsp.get_active_clients) (tablex.map #$1.name))]
       (mod-invoke :fsouza.lib.fuzzy :send-items client-names "LSP Client"
-                  #(let [[client-name] $1]
-                     (vim.schedule #(show-logs- client-name))))))
+                  {:cb #(let [[client-name] $1]
+                          (vim.schedule #(show-logs- client-name)))})))
 
   (lambda show-logs [?client-name]
     (if ?client-name
