@@ -154,8 +154,7 @@
             fzf-lua (fzf-lua)
             config (require :fzf-lua.config)
             core (require :fzf-lua.core)
-            opts (config.normalize_opts {: prompt : actions}
-                                        config.globals.files)]
+            opts (config.normalize_opts {: prompt : actions} config.globals.lsp)]
         (tset opts.fzf_opts :--no-multi "")
         (when (not enable-preview)
           (tset opts :previewer nil))

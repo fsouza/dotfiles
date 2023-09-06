@@ -20,12 +20,8 @@
                 (seq.enum)
                 (seq.filter #(= $2 line)))
           (lnum text) (s)
-          col (or (string.find text tag.name) 1)
-          make-entry (require :fzf-lua.make_entry)
-          item {: col : lnum : filename : text}
-          item (make-entry.lcol item)
-          item (make-entry.file item)]
-      item)))
+          col (or (string.find text tag.name) 1)]
+      (string.format "%s:%d:%d: %s" filename lnum col text))))
 
 (fn jump-to-tag []
   (let [cword (vim.fn.expand :<cword>)
