@@ -60,6 +60,13 @@
      (tset actions# :default (partial edit-or-qf save-stack-and-edit))
      actions#))
 
+(fn ansi-codes []
+  (let [id #$1]
+    (setmetatable {} {:__index #(let [table $1
+                                      key $2]
+                                  (rawset table key id)
+                                  id)})))
+
 (local fzf-lua (mod-invoke :fsouza.lib.nvim-helpers :once
                            (fn []
                              (vim.cmd.packadd :nvim-fzf)
@@ -121,8 +128,7 @@
                                                                :ctrl-h :toggle-preview}}})
                                (tset f-config.globals.keymap.fzf :ctrl-f nil)
                                (tset f-config.globals.keymap.fzf :ctrl-b nil)
-                               (each [name _ (pairs f-utils.ansi_codes)]
-                                 (tset f-utils.ansi_codes name id))
+                               (tset f-utils :ansi_codes (ansi-codes))
                                fzf-lua-))))
 
 (lambda send-lsp-items [items prompt]
