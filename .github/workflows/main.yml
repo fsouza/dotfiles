@@ -48,6 +48,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew unlink python@3.11
+          brew link --overwrite python@3.11
           brew untap homebrew/core
           brew untap homebrew/cask
           brew update
