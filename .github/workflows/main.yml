@@ -44,15 +44,17 @@ jobs:
           echo "HOMEBREW_NO_INSTALL_CLEANUP=1" >>${GITHUB_ENV}
           echo "HOMEBREW_NO_INSTALL_FROM_API=" >>${GITHUB_ENV}
 
-      - name: brew h4x (macos hack)
+      - name: brew hax (macos hack)
         if: runner.os == 'macOS'
         run: |
           brew unlink python@3.11
           brew link --overwrite python@3.11
           brew untap homebrew/core
           brew untap homebrew/cask
-          brew update
-          brew upgrade --force python@3.11
+
+          # when trying to upgrade python, brew fails to upgrade php. I know it
+          # doesn't make sense. I don't want to fight it.
+          brew remove --ignore-dependencies php
 
       - name: install early dependencies
         run: |
