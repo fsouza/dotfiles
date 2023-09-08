@@ -43,6 +43,7 @@ jobs:
           echo "HOMEBREW_PREFIX=$(brew --prefix)" >>${GITHUB_ENV}
           echo "HOMEBREW_NO_INSTALL_CLEANUP=1" >>${GITHUB_ENV}
           echo "HOMEBREW_NO_INSTALL_FROM_API=" >>${GITHUB_ENV}
+          echo "HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1" >>${GITHUB_ENV}
 
       - name: brew hax (macos hack)
         if: runner.os == 'macOS'
@@ -51,10 +52,6 @@ jobs:
           brew link --overwrite python@3.11
           brew untap homebrew/core
           brew untap homebrew/cask
-
-          brew update
-          brew upgrade libavif
-          brew upgrade python@3.11
 
       - name: install early dependencies
         run: |
