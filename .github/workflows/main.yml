@@ -52,9 +52,9 @@ jobs:
           brew untap homebrew/core
           brew untap homebrew/cask
 
-          # when trying to upgrade python, brew fails to upgrade php. I know it
-          # doesn't make sense. I don't want to fight it.
-          brew remove --ignore-dependencies php
+          brew update
+          brew upgrade libavif
+          brew upgrade python@3.11
 
       - name: install early dependencies
         run: |
