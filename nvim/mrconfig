@@ -73,6 +73,9 @@ checkout = git clone https://github.com/chaoren/vim-wordmotion.git
 [start/yats.vim]
 checkout = git clone https://github.com/HerringtonDarkholme/yats.vim.git
 
+[start/zig.vim]
+checkout = git clone https://github.com/ziglang/zig.vim.git
+
 [opt/fidget.nvim]
 checkout =
 	git clone https://github.com/j-hui/fidget.nvim.git

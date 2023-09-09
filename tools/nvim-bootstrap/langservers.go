@@ -2,6 +2,7 @@ package main
 
 import (
 	"compress/gzip"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -23,6 +24,7 @@ func setupLangervers(nv *Neovim) error {
 		installKLS,
 		installGroovyLS,
 		installJDTLS,
+		installZLS,
 	}
 
 	var g errgroup.Group
@@ -203,6 +205,43 @@ func installJDTLS(langserversDir string) error {
 		"https://github.com/dgileadi/vscode-java-decompiler.git",
 		filepath.Join(targetDir, "vscode-java-decompiler"),
 	)
+}
+
+func installZLS(langserversDir string) error {
+	if _, err := exec.LookPath("zig"); err != nil {
+		log.Print("cannot find zig, skipping zls")
+		return nil
+	}
+
+	repoDir := filepath.Join(langserversDir, "zls")
+	err := gitCloneOrUpdate("https://github.com/zigtools/zls.git", repoDir)
+	if err != nil {
+		return err
+	}
+
+	err = tools.Run(&tools.RunOptions{
+		Cmd:  "zig",
+		Args: []string{"build", "-Doptimize=ReleaseSafe"},
+		Cwd:  repoDir,
+	})
+	if err != nil {
+		return err
+	}
+
+	zlsOpts := map[string]bool{
+		"enable_snippets":        false,
+		"warn_style":             true,
+		"operator_completions":   true,
+		"include_at_in_builtins": true,
+	}
+	configPath := filepath.Join(langserversDir, "zls.json")
+	configFile, err := os.Create(configPath)
+	if err != nil {
+		return err
+	}
+	defer configFile.Close()
+
+	return json.NewEncoder(configFile).Encode(zlsOpts)
 }
 
 func installServersFromNpm() error {

@@ -57,7 +57,8 @@
               :no_plugin_maps 1
               :editorconfig_enable false
               :vista_default_executive :nvim_lsp
-              :matchup_matchparen_offscreen `(vim.empty_dict)}]
+              :matchup_matchparen_offscreen `(vim.empty_dict)
+              :zig_fmt_autosave 0}]
     (icollect [name value (pairs vars)]
       `(tset vim.g ,name ,value))))
 
