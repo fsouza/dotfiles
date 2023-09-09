@@ -1,5 +1,10 @@
 ZIG_INSTALL_PREFIX=$HOME/opt/zig
 
+function __zig_gc_old_versions {
+	local current_version=${1}
+	find ${ZIG_INSTALL_PREFIX} -maxdepth 1 -mindepth 1 -type d -not -name ${current_version} -print0 | xargs -0 -t -n 1 rm -rf
+}
+
 function update_zig {
 	local arch=$(uname -m)
 	if [[ $arch == "arm64" ]]; then
@@ -10,13 +15,22 @@ function update_zig {
 		os=macos
 	fi
 
-	mkdir -p "${ZIG_INSTALL_PREFIX}"
-	curl -s https://ziglang.org/download/index.json \
-		| jq -r '.master["'${arch}'-'${os}'"]'.tarball \
-		| xargs curl -sL \
-		| tar --lzma -C "${ZIG_INSTALL_PREFIX}" --strip 1 -xf -
+	local latest_version=$(curl -s https://ziglang.org/download/index.json | jq -r .master.version)
+	local dir=${ZIG_INSTALL_PREFIX}/${latest_version}
+	if ! [ -d ${dir} ]; then
+		mkdir -p "${dir}"
+		curl -s https://ziglang.org/download/index.json \
+			| jq -r '.master["'${arch}'-'${os}'"]'.tarball \
+			| xargs curl -sL \
+			| tar --lzma -C "${dir}" --strip 1 -xf -
+
+		ln -sf ${dir} ${ZIG_INSTALL_PREFIX}/new-current
+		mv -f ${ZIG_INSTALL_PREFIX}/new-current ${ZIG_INSTALL_PREFIX}/current
+
+		__zig_gc_old_versions ${latest_version}
+	fi
 }
 
-if [ -x "${ZIG_INSTALL_PREFIX}/zig" ]; then
-	prepend_to_path "${ZIG_INSTALL_PREFIX}"
+if [ -x "${ZIG_INSTALL_PREFIX}/current/zig" ]; then
+	prepend_to_path "${ZIG_INSTALL_PREFIX}/current"
 fi
