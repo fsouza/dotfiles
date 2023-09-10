@@ -23,7 +23,7 @@ function mklink {
 
 function main {
 	local go=$(${FSOUZA_DOTFILES_DIR}/bin/__bootstrap_go)
-	${go} -C ${FSOUZA_DOTFILES_DIR}/tools install ./...
+	env GOBIN=${FSOUZA_DOTFILES_DIR}/tools/bin ${go} -C ${FSOUZA_DOTFILES_DIR}/tools install ./...
 
 	mkdir -p ${HOME}/.config
 
