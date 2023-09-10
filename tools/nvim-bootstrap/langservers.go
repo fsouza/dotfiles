@@ -229,10 +229,11 @@ func installZLS(langserversDir string) error {
 	}
 
 	zlsOpts := map[string]bool{
+		"enable_autofix":         false,
 		"enable_snippets":        false,
-		"warn_style":             true,
-		"operator_completions":   true,
 		"include_at_in_builtins": true,
+		"operator_completions":   true,
+		"warn_style":             true,
 	}
 	configPath := filepath.Join(langserversDir, "zls.json")
 	configFile, err := os.Create(configPath)
