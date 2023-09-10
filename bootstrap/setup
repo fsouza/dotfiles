@@ -1,86 +1,60 @@
-#!/usr/bin/env python3
-import os
-import shutil
-import subprocess
-import sys
-from pathlib import Path
+#!/usr/bin/env zsh
 
-BASEDIR = Path(__file__).parent.parent.absolute()
+set -eo pipefail
 
+FSOUZA_DOTFILES_DIR=$(cd "$(dirname $0)/.." && pwd -P)
+export FSOUZA_DOTFILES_DIR
 
-def create_symlink(name: str, source: Path, target: Path) -> None:
-    if target.exists() and not target.is_symlink():
-        target.unlink()
+function mklink {
+	local source=$1
+	local target=$2
+	local temp_target=${target}.tmp
 
-    if not target.is_symlink():
-        target.symlink_to(source)
+	if [ -d ${target} ]; then
+		rm -rf ${target}
+	elif [ -f ${target} ] && ! [ -L ${target} ]; then
+		rm -f ${target}
+	fi
 
+	rm -f ${temp_target}
+	ln -s ${source} ${temp_target}
+	mv -f ${temp_target} ${target}
+}
 
-def get_go() -> str:
-    bootstrap_go = BASEDIR / "bin" / "__bootstrap_go"
-    return subprocess.check_output([bootstrap_go], text=True).strip()
+function main {
+	local go=$(${FSOUZA_DOTFILES_DIR}/bin/__bootstrap_go)
+	${go} -C ${FSOUZA_DOTFILES_DIR}/tools install ./...
 
+	mkdir -p ${HOME}/.config
 
-def main() -> int:
-    go = get_go()
-    subprocess.check_call(
-        [go, "install", "./..."],
-        env={
-            **os.environ,
-            "GOBIN": BASEDIR / "tools" / "bin",
-        },
-        cwd=BASEDIR / "tools",
-    )
+	local home_files=(.editorconfig)
+	for file in ${home_files}; do
+		mklink ${FSOUZA_DOTFILES_DIR}/${file} ${HOME}/${file}
+	done
 
-    home = Path.home()
-    config_dir = home / ".config"
-    config_dir.mkdir(exist_ok=True)
+	local xdg_items=(bat rgrc git fd utop ideavim)
+	for item in ${xdg_items}; do
+		mklink ${FSOUZA_DOTFILES_DIR}/${item} ${HOME}/.config/${item}
+	done
 
-    home_files = [".editorconfig"]
-    for file in home_files:
-        create_symlink(file, BASEDIR / file, home / file)
+	local os_prefix=$(uname -s | tr '[:upper:]' '[:lower:]')
+	local os_setup_script=${FSOUZA_DOTFILES_DIR}/bootstrap/${os_prefix}-setup
+	if [ -x ${os_setup_script} ]; then
+		${os_setup_script}
+	fi
 
-    xdg_items = ["bat", "rgrc", "git", "fd", "utop", "ideavim"]
-    for file in xdg_items:
-        create_symlink(file, BASEDIR / file, config_dir / file)
+	if command -v brew &>/dev/null; then
+		brew update
+		brew bundle --no-lock --file ${FSOUZA_DOTFILES_DIR}/bootstrap/Brewfile
+	fi
 
-    os_setup_script = BASEDIR / "bootstrap" / f"{sys.platform}-setup"
-    if os_setup_script.exists():
-        subprocess.check_call(
-            [os_setup_script],
-            env={**os.environ, "FSOUZA_DOTFILES_DIR": str(BASEDIR)},
-        )
+	if command -v nvim &>/dev/null; then
+		env NVIM_DEBUG=1 RTX_EXPERIMENTAL=1 make -C ${FSOUZA_DOTFILES_DIR}
+	fi
 
-    if shutil.which("brew"):
-        subprocess.check_call(["brew", "update"])
-        subprocess.check_call(
-            [
-                "brew",
-                "bundle",
-                "--no-lock",
-                "--file",
-                BASEDIR / "bootstrap" / "Brewfile",
-            ],
-        )
+	if command -v bat &>/dev/null; then
+		bat cache --build
+	fi
+}
 
-    if shutil.which("nvim"):
-        subprocess.check_call(
-            ["make", "-C", BASEDIR],
-            env={
-                **os.environ,
-                "NVIM_DEBUG": "1",
-                "FSOUZA_DOTFILES_DIR": str(BASEDIR),
-                "RTX_EXPERIMENTAL": "1",
-            },
-        )
-
-    if shutil.which("bat"):
-        subprocess.check_call(
-            ["bat", "cache", "--build"],
-        )
-
-    return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+main
