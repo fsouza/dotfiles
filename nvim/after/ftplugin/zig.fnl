@@ -10,6 +10,7 @@
               :lintWorkspace true
               :lintOnSave true
               :lintFormats ["%f:%l:%c: error: %m"]
+              :lintSource :zig-build
               :rootMarkers [:build.zig]
               :requireMarker true}
              {:formatStdin true :formatCommand "zig fmt --stdin"}]]
