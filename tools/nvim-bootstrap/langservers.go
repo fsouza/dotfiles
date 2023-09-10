@@ -2,7 +2,6 @@ package main
 
 import (
 	"compress/gzip"
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -219,30 +218,11 @@ func installZLS(langserversDir string) error {
 		return err
 	}
 
-	err = tools.Run(&tools.RunOptions{
+	return tools.Run(&tools.RunOptions{
 		Cmd:  "zig",
 		Args: []string{"build", "-Doptimize=ReleaseSafe"},
 		Cwd:  repoDir,
 	})
-	if err != nil {
-		return err
-	}
-
-	zlsOpts := map[string]bool{
-		"enable_autofix":         false,
-		"enable_snippets":        false,
-		"include_at_in_builtins": true,
-		"operator_completions":   true,
-		"warn_style":             true,
-	}
-	configPath := filepath.Join(langserversDir, "zls.json")
-	configFile, err := os.Create(configPath)
-	if err != nil {
-		return err
-	}
-	defer configFile.Close()
-
-	return json.NewEncoder(configFile).Encode(zlsOpts)
 }
 
 func installServersFromNpm() error {

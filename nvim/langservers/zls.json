@@ -1,0 +1,7 @@
+{
+	"enable_autofix":         false,
+	"enable_snippets":        false,
+	"include_at_in_builtins": true,
+	"operator_completions":   true,
+	"warn_style":             true
+}
