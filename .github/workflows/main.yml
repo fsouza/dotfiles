@@ -80,7 +80,7 @@ jobs:
 
       - name: langservers cache
         id: nvim-langservers-cache
-        uses: actions/cache@v3.3.1
+        uses: actions/cache@v3.3.2
         with:
           path: ~/.cache/nvim/langservers
           key: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-${{ steps.get-repo-versions.outputs.golang-tools-version }}-${{ steps.get-repo-versions.outputs.fnlfmt-version }}-${{ steps.get-repo-versions.outputs.kotlin-ls-version }}-${{ steps.get-repo-versions.outputs.groovy-ls-version }}"
@@ -88,7 +88,7 @@ jobs:
 
       - name: gradle cache
         id: gradle-cache
-        uses: actions/cache@v3.3.1
+        uses: actions/cache@v3.3.2
         with:
           path: ~/.gradle
           key: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-${{ steps.get-repo-versions.outputs.kotlin-ls-version }}-${{ steps.get-repo-versions.outputs.groovy-ls-version }}"
@@ -113,21 +113,21 @@ jobs:
 
       - name: rtx cache
         id: rtx-cache
-        uses: actions/cache@v3.3.1
+        uses: actions/cache@v3.3.2
         with:
           path: ~/.local/share/rtx
           key: "${{ runner.os }}-${{ steps.brew-versions.outputs.rtx-version }}"
 
       - name: hererocks cache
         id: nvim-hererocks-cache
-        uses: actions/cache@v3.3.1
+        uses: actions/cache@v3.3.2
         with:
           path: ~/.cache/nvim/hr
           key: "${{ runner.os }}-${{ steps.brew-versions.outputs.pcre-version }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       - name: virtualenv cache
         id: nvim-virtualenv-cache
-        uses: actions/cache@v3.3.1
+        uses: actions/cache@v3.3.2
         with:
           path: ~/.cache/nvim/venv
           key: "${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('nvim/langservers/requirements.txt') }}"
@@ -137,7 +137,7 @@ jobs:
       # pushes by leveraging restore-keys.
       - name: mr cache
         id: mr-cache
-        uses: actions/cache@v3.3.1
+        uses: actions/cache@v3.3.2
         with:
           path: ~/.local/share/nvim/site/pack/mr
           key: "${{ runner.os }}-${{ hashFiles('nvim/mrconfig') }}-${{ github.sha }}"
