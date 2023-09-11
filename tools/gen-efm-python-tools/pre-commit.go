@@ -50,6 +50,7 @@ func EFMConfigFromPrecommit(filename string) ([]Language, error) {
 		"https://github.com/pycqa/autoflake":                 autoflake,
 		"https://github.com/myint/autoflake":                 autoflake,
 		"https://github.com/psf/black":                       black,
+		"https://github.com/psf/black-pre-commit-mirror":     black,
 		"https://github.com/ambv/black":                      black,
 		"https://github.com/asottile/add-trailing-comma":     addTrailingComma,
 		"https://github.com/asottile/reorder-python-imports": reorderPythonImports,
