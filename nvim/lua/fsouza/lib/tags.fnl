@@ -1,16 +1,15 @@
 (import-macros {: mod-invoke} :helpers)
 
-(fn get-line-from-command [command]
-  ;; note: according to the docs, the command may be something else, but I
-  ;; haven't seen it, so let's crash to make sure if I ever run into it, I
-  ;; handle it correctly.
-  (if (or (not (vim.startswith command "/^")) (not (vim.endswith command "$/")))
-      (error (string.format "unexpected command: %s" command))
-      (string.sub command 3 -3)))
+(fn get-regex-from-command [command]
+  (let [first (if (vim.startswith command "/") 2 1)
+        last (if (vim.endswith command "/") -2 -1)]
+    (-> command
+        (string.sub first last)
+        (vim.regex))))
 
 ;; note: this is done in a stupid way, but at least it's async :P
 (fn serialize [tag]
-  (let [line (get-line-from-command tag.cmd)
+  (let [regex (get-regex-from-command tag.cmd)
         filename (mod-invoke :fsouza.pl.path :relpath tag.filename)
         bufnr (vim.fn.bufadd filename)]
     (vim.fn.bufload bufnr)
@@ -18,7 +17,7 @@
           s (-> bufnr
                 (vim.api.nvim_buf_get_lines 0 -1 false)
                 (seq.enum)
-                (seq.filter #(= $2 line)))
+                (seq.filter #(regex:match_str $2)))
           (lnum text) (s)
           col (or (string.find text tag.name) 1)]
       (string.format "%s:%d:%d: %s" filename lnum col text))))
