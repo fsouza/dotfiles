@@ -45,8 +45,9 @@
           (pcall #(let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)]
                     (fmt bufnr client
                          (fn [_ result]
-                           (when (= changed-tick
-                                    (vim.api.nvim_buf_get_changedtick bufnr))
+                           (when (and (vim.api.nvim_buf_is_valid bufnr)
+                                      (= changed-tick
+                                         (vim.api.nvim_buf_get_changedtick bufnr)))
                              (when result
                                (vim.api.nvim_buf_call bufnr
                                                       #(do
