@@ -87,14 +87,15 @@
       (file-exists bufnr
                    #(if $1
                         (start-)
-                        (mod-invoke :fsouza.lib.nvim-helpers :augroup
-                                    (string.format "fsouza__lsp_start_after_save_%s_%d"
-                                                   name bufnr)
-                                    [{:events [:BufWritePost]
-                                      :targets [(string.format "<buffer=%d>"
-                                                               bufnr)]
-                                      :once true
-                                      :callback start-}]))))))
+                        (vim.schedule #(mod-invoke :fsouza.lib.nvim-helpers
+                                                   :augroup
+                                                   (string.format "fsouza__lsp_start_after_save_%s_%d"
+                                                                  name bufnr)
+                                                   [{:events [:BufWritePost]
+                                                     :targets [(string.format "<buffer=%d>"
+                                                                              bufnr)]
+                                                     :once true
+                                                     :callback start-}])))))))
 
 (fn enable-server [name]
   (mod-invoke :fsouza.lib.ff :enable (ff name)))
