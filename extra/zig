@@ -2,7 +2,7 @@ ZIG_INSTALL_PREFIX=$HOME/opt/zig
 
 function __zig_gc_old_versions {
 	local current_version=${1}
-	find ${ZIG_INSTALL_PREFIX} -maxdepth 1 -mindepth 1 -type d -not -name ${current_version} -print0 | xargs -0 -t -n 1 rm -rf
+	find ${ZIG_INSTALL_PREFIX} -maxdepth 1 -mindepth 1 -type d -not -name ${current_version} -print0 | xargs -0 -n 1 rm -rf
 }
 
 function update_zig {
