@@ -54,6 +54,10 @@
                     :flags {:debounce_text_changes 150}}]
       (vim.tbl_extend :force defaults opts))))
 
+(fn file-exists [bufnr cb]
+  (let [fname (vim.api.nvim_buf_get_name bufnr)]
+    (vim.uv.fs_stat fname #(cb (= $1 nil)))))
+
 (fn start [{: config : find-root-dir : bufnr : cb : opts}]
   (let [find-root-dir (or find-root-dir cwd-if-not-home)
         bufnr (or bufnr (vim.api.nvim_get_current_buf))
@@ -64,19 +68,33 @@
         opts (or opts {})]
     (when (should-start bufnr name)
       (tset config :root_dir (find-root-dir (vim.api.nvim_buf_get_name bufnr)))
-      (with-executable exec
-        #(let [is-node-bin $2]
-           (tset config.cmd 1 $1)
-           (when is-node-bin
-             (tset config :cmd (fnm-exec config.cmd)))
-           (vim.schedule #(let [client-id (vim.lsp.start config {: bufnr})]
-                            (when opts.autofmt
-                              (mod-invoke :fsouza.lsp.formatting :attach bufnr
-                                          client-id))
-                            (when opts.auto-action
-                              (mod-invoke :fsouza.lsp.auto-action :attach bufnr
-                                          client-id))
-                            (cb client-id))))))))
+
+      (fn start- []
+        (with-executable exec
+          #(let [is-node-bin $2]
+             (tset config.cmd 1 $1)
+             (when is-node-bin
+               (tset config :cmd (fnm-exec config.cmd)))
+             (vim.schedule #(let [client-id (vim.lsp.start config {: bufnr})]
+                              (when opts.autofmt
+                                (mod-invoke :fsouza.lsp.formatting :attach
+                                            bufnr client-id))
+                              (when opts.auto-action
+                                (mod-invoke :fsouza.lsp.auto-action :attach
+                                            bufnr client-id))
+                              (cb client-id))))))
+
+      (file-exists bufnr
+                   #(if $1
+                        (start-)
+                        (mod-invoke :fsouza.lib.nvim-helpers :augroup
+                                    (string.format "fsouza__lsp_start_after_save_%s_%d"
+                                                   name bufnr)
+                                    [{:events [:BufWritePost]
+                                      :targets [(string.format "<buffer=%d>"
+                                                               bufnr)]
+                                      :once true
+                                      :callback start-}]))))))
 
 (fn enable-server [name]
   (mod-invoke :fsouza.lib.ff :enable (ff name)))
