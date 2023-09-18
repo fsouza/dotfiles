@@ -14,7 +14,7 @@
 		"postcss-scss": "^4.0.8",
 		"prettier": "^3.0.3",
 		"pyright": "^1.1.327",
-		"remark-parse": "^10.0.2",
+		"remark-parse": "^11.0.0",
 		"typescript": "^5.2.2",
 		"typescript-language-server": "^3.3.2",
 		"vim-language-server": "^2.3.1",
