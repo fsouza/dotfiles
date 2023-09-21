@@ -44,7 +44,7 @@ checkout = git clone https://github.com/andymass/vim-matchup.git
 checkout = git clone https://github.com/ocaml/vim-ocaml.git
 
 [start/vim-pony]
-checkout = git clone https://github.com/jakwings/vim-pony.git
+checkout = git clone https://github.com/fsouza/vim-pony.git
 
 [start/vim-python-pep8-indent]
 checkout = git clone https://github.com/Vimjas/vim-python-pep8-indent.git
