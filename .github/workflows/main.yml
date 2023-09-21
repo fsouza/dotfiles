@@ -77,6 +77,7 @@ jobs:
           git ls-remote https://git.sr.ht/~technomancy/fnlfmt master | awk '{print "fnlfmt-version=" $1}' >>${GITHUB_OUTPUT}
           git ls-remote https://github.com/fwcd/kotlin-language-server.git main | awk '{print "kotlin-ls-version=" $1}' >>${GITHUB_OUTPUT}
           git ls-remote https://github.com/GroovyLanguageServer/groovy-language-server.git main | awk '{print "groovy-ls-version=" $1}' >>${GITHUB_OUTPUT}
+          git ls-remote https://github.com/luajit/luajit.git v2.1 | awk '{print "luajit-version=" $1}' >>${GITHUB_OUTPUT}
 
       - name: langservers cache
         id: nvim-langservers-cache
@@ -93,11 +94,6 @@ jobs:
           path: ~/.gradle
           key: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-${{ steps.get-repo-versions.outputs.kotlin-ls-version }}-${{ steps.get-repo-versions.outputs.groovy-ls-version }}"
           restore-keys: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-"
-
-      - name: get luajit version
-        id: get-luajit-version
-        run: |
-          nvim -l - <<<'print("version=" .. jit.version)' 2>>${GITHUB_OUTPUT}
 
       - name: get versions from brew
         id: brew-versions
@@ -123,7 +119,7 @@ jobs:
         uses: actions/cache@v3.3.2
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ runner.os }}-${{ steps.brew-versions.outputs.pcre-version }}-${{ steps.get-luajit-version.outputs.version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
+          key: "${{ runner.os }}-${{ steps.brew-versions.outputs.pcre-version }}-${{ steps.get-repo-versions.outputs.luajit-version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       - name: virtualenv cache
         id: nvim-virtualenv-cache

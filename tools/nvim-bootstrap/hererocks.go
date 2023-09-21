@@ -15,7 +15,7 @@ func ensureHererocks(nv *Neovim) (string, error) {
 			return "", err
 		}
 
-		const luajitVersion = "2.1.0-beta3"
+		const luajitVersion = "@v2.1"
 		err = tools.Run(&tools.RunOptions{
 			Cmd:  python(),
 			Args: []string{hererocksPy, "-j", luajitVersion, "-r", "latest", hrDir},
