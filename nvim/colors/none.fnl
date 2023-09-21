@@ -29,6 +29,7 @@
                 {:name :StatusLine
                  :opts {:bg `colors.light-gray :fg `colors.black}}
                 {:name :LspCodeLens :opts {:fg `colors.gray}}
+                {:name :LspInlayHint :opts {:fg `colors.gray}}
                 {:name :LspCodeLensSeparator :opts {:fg `colors.gray}}
                 {:name :StatusLineNC
                  :opts {:bg `colors.light-gray :fg `colors.black}}
