@@ -81,7 +81,7 @@ pyyaml==6.0.1
     #   libcst
 reorder-python-imports==3.11.0
     # via -r requirements.in
-ruff==0.0.290
+ruff==0.0.291
     # via -r requirements.in
 stdlibs==2022.10.9
     # via usort
