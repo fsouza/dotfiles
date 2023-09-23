@@ -84,7 +84,9 @@
                 :Title
                 :ModeMsg
                 :FloatBorder
-                :editorconfigInvalidProperty]]
+                :editorconfigInvalidProperty
+                "@text.literal"
+                "@text.literal.block"]]
     (icollect [_ group-name (ipairs groups)]
       `(vim.api.nvim_set_hl 0 ,group-name {}))))
 
