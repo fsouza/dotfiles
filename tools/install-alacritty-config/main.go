@@ -83,7 +83,7 @@ font:
     style: Regular
 
   bold:
-    style: Semibold
+    style: SemiBold
 
   size: {{.FontSize}}
 
