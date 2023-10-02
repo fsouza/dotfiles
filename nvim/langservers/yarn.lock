@@ -1309,21 +1309,21 @@ graphql-config@5.0.2:
     string-env-interpolation "^1.0.1"
     tslib "^2.4.0"
 
-graphql-language-service-cli@^3.3.26:
-  version "3.3.26"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-cli/-/graphql-language-service-cli-3.3.26.tgz#4b5467955aa01ab93a488f2db775b2a0dc85c1ef"
-  integrity sha512-eZnjrtFDXaTfWuuGCKk3RNp8oeh9uZxJCuWEt/MT/BHzqzYZduMsml22dhVdM+eW94qu1VQFbseDb/OjyHno1A==
+graphql-language-service-cli@^3.3.27:
+  version "3.3.27"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-cli/-/graphql-language-service-cli-3.3.27.tgz#6bb5807aa02331265218bb756c5d876c5b9dbe78"
+  integrity sha512-g/fF4ZuoBz2VB5TqEn73rXbPTNSpYTDPNvU+9NtXLFWwvnUyRd0ma9E8JMIcv61/poEd8rW5wxUEREaN9P6BCQ==
   dependencies:
     "@babel/polyfill" "^7.12.1"
     "@types/yargs" "16.0.5"
     graphql-language-service "^5.2.0"
-    graphql-language-service-server "^2.11.4"
+    graphql-language-service-server "^2.11.5"
     yargs "^16.2.0"
 
-graphql-language-service-server@^2.11.4:
-  version "2.11.4"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-server/-/graphql-language-service-server-2.11.4.tgz#7e9fa056fde16312c5998b9c07ab092f6a5033d6"
-  integrity sha512-6MeMjIUPc7196jNKDeyczjW5ZSTdT4JoXDm+oImmG7FJl15HuiveXMVmfmwZ+FOu1OtZX2NFDwLFui5Ft+dTag==
+graphql-language-service-server@^2.11.5:
+  version "2.11.5"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-server/-/graphql-language-service-server-2.11.5.tgz#50cc1a6b4da1f861da38e493873b676103669dc5"
+  integrity sha512-qDGS0h6t0RyTdpV0lqSrMcB1IXeQK4NhkrjYeltTJhRCnqmXXYeF0QzOGx//EizQaXphbha9+vO2xviYhOTamA==
   dependencies:
     "@babel/parser" "^7.22.6"
     "@babel/types" "^7.22.5"
