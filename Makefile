@@ -5,7 +5,7 @@ NVIM_DATA_DIR := $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("data"))' 2>
 NVIM_STATE_DIR := $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("state"))' 2>&1)
 LUA := $(NVIM_CACHE_DIR)/hr/bin/lua
 FENNEL := $(NVIM_CACHE_DIR)/hr/bin/fennel
-PYTHON ?= python3.11
+PYTHON ?= python3.12
 
 .PHONY: all
 all: bootstrap-nvim install update-treesitter kill-daemons clear-logs
