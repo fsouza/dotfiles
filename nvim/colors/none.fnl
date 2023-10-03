@@ -8,13 +8,14 @@
                 {:name :Normal :opts {:fg `colors.black}}
                 {:name :Floating
                  :opts {:bg `colors.light-gray :fg `colors.black}}
-                {:name :Pmenu :opts {:bg `colors.gray}}
+                {:name :Pmenu :opts {:bg `colors.darker-white}}
                 {:name :SignColumn
                  :opts {:bg `colors.lighter-gray :fg `colors.black}}
                 {:name :SpecialKey :opts {:fg `colors.dark-gray}}
                 {:name :SpellBad :opts {:fg `colors.red}}
-                {:name :TabLine :opts {:bg `colors.gray :fg `colors.dark-gray}}
-                {:name :TabLineFill :opts {:bg `colors.gray}}
+                {:name :TabLine
+                 :opts {:bg `colors.darker-white :fg `colors.dark-gray}}
+                {:name :TabLineFill :opts {:bg `colors.darker-white}}
                 {:name :TabLineSel :opts {:fg `colors.dark-gray}}
                 {:name :ErrorMsg :opts {:bg `colors.red :fg `colors.white}}
                 {:name :WarningMsg :opts {:fg `colors.brown}}
@@ -133,7 +134,8 @@
                 :black "#262626"
                 :red "#990000"
                 :brown "#5f0000"
-                :white "#ececec"
+                :white "#f0f0eb"
+                :darker-white "#dcdcc8"
                 :pink "#ffd7ff"
                 :orange "#ffd787"
                 :blue "#000066"}]

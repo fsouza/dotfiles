@@ -89,7 +89,7 @@ font:
 
 colors:
   primary:
-    background: "#ececec"
+    background: "#f0f0eb"
     foreground: "#000000"
 
   normal:
