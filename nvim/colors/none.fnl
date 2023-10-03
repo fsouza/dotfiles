@@ -106,7 +106,7 @@
   (let [ref-types [:Text :Read :Write]]
     (icollect [_ ref-type (ipairs ref-types)]
       `(vim.api.nvim_set_hl 0 ,(.. :LspReference ref-type)
-                            {:bg colors.light-gray}))))
+                            {:bg colors.gray-white}))))
 
 (macro lsp-diagnostics []
   (let [diagnostics-sign `{:fg colors.red :bold true}
@@ -135,7 +135,8 @@
                 :red "#990000"
                 :brown "#5f0000"
                 :white "#f0f0eb"
-                :darker-white "#dcdcc8"
+                :darker-white "#bdbda6"
+                :gray-white "#dcdcc8"
                 :pink "#ffd7ff"
                 :orange "#ffd787"
                 :blue "#000066"}]
