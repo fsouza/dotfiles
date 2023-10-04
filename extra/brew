@@ -17,9 +17,8 @@ function __setup_brew {
 		export HOMEBREW_NO_EMOJI=1
 
 		prepend_to_path \
-			${HOMEBREW_PREFIX}/opt/coreutils/libexec/gnubin \
-			${HOMEBREW_PREFIX}/opt/curl/bin \
-			${HOMEBREW_PREFIX}/opt/python@3.11/bin
+			$(brew --prefix coreutils)/libexec/gnubin \
+			$(brew --prefix curl)/bin
 
 		cond_source ${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh
 	fi
