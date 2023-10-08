@@ -55,6 +55,8 @@ function main {
 	if command -v bat &>/dev/null; then
 		bat cache --build
 	fi
+
+	tic -x ${FSOUZA_DOTFILES_DIR}/tmux/tmux-256color
 }
 
 main

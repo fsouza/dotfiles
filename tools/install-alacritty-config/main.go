@@ -115,6 +115,7 @@ colors:
 env:
   FSOUZA_DOTFILES_DIR: {{.DotfilesDir}}
   ZDOTDIR: {{.DotfilesDir}}/zsh
+  TERM: alacritty-direct
 
 mouse:
   double_click:
