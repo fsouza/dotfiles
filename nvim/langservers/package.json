@@ -10,7 +10,6 @@
 		"bash-language-server": "^5.0.0",
 		"eslint_d": "^13.0.0",
 		"graphql": "^16.8.1",
-		"graphql-language-service-cli": "^3.3.27",
 		"postcss-scss": "^4.0.9",
 		"prettier": "^3.0.3",
 		"pyright": "^1.1.330",
