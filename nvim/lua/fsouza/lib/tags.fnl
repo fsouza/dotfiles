@@ -28,6 +28,7 @@
         tags (vim.fn.taglist expr)]
     (if (= (length tags) 1)
         (vim.cmd.tag [cword])
+        (> (length tags) 1)
         (do
           (fn fzf-items [fzf-cb]
             ((coroutine.wrap #(let [co (coroutine.running)]
@@ -37,6 +38,7 @@
                                   (coroutine.yield))
                                 (fzf-cb)))))
           (mod-invoke :fsouza.lib.fuzzy :send-items fzf-items :Tags
-                      {:use-lsp-actions true :enable-preview true})))))
+                      {:use-lsp-actions true :enable-preview true}))
+        nil)))
 
 {: jump-to-tag}
