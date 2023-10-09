@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os:
-          - macos-latest
+          - macos-13
           - ubuntu-latest
 
     name: bootstrap
@@ -44,14 +44,6 @@ jobs:
           echo "HOMEBREW_NO_INSTALL_CLEANUP=1" >>${GITHUB_ENV}
           echo "HOMEBREW_NO_INSTALL_FROM_API=" >>${GITHUB_ENV}
           echo "HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1" >>${GITHUB_ENV}
-
-      - name: brew hax (macos hack)
-        if: runner.os == 'macOS'
-        run: |
-          brew unlink python@3.11
-          brew link --overwrite python@3.11
-          brew untap homebrew/core
-          brew untap homebrew/cask
 
       - name: install early dependencies
         run: |
