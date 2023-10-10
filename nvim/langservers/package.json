@@ -9,16 +9,12 @@
 		"angular-html-parser": "^4.0.1",
 		"bash-language-server": "^5.0.0",
 		"eslint_d": "^13.0.0",
-		"graphql": "^16.8.1",
 		"postcss-scss": "^4.0.9",
 		"prettier": "^3.0.3",
 		"pyright": "^1.1.330",
-		"remark-parse": "^11.0.0",
 		"typescript": "^5.2.2",
 		"typescript-language-server": "^3.3.2",
-		"vim-language-server": "^2.3.1",
 		"vscode-langservers-extracted": "^4.7.0",
-		"yaml": "^2.3.2",
 		"yaml-language-server": "^1.14.0"
 	}
 }

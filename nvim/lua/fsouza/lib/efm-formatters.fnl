@@ -3,9 +3,6 @@
 
 (import-macros {: mod-invoke} :helpers)
 
-(fn get-shfmt [cb]
-  (cb {:formatCommand "shfmt -" :formatStdin true}))
-
 (fn get-node-bin [bin-name cb]
   (let [path (require :fsouza.pl.path)
         local-bin (path.join :node_modules :.bin bin-name)
@@ -61,4 +58,4 @@
                               :requireMarker true
                               :env [(.. :XDG_RUNTIME_DIR= xdg-runtime-dir)]}]))))))
 
-{: get-shfmt : get-eslintd : get-prettierd}
+{: get-eslintd : get-prettierd}
