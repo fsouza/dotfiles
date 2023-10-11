@@ -32,7 +32,7 @@ function main {
 		mklink ${FSOUZA_DOTFILES_DIR}/${file} ${HOME}/${file}
 	done
 
-	local xdg_items=(bat rgrc git fd utop ideavim)
+	local xdg_items=(bat rgrc git fd utop)
 	for item in ${xdg_items}; do
 		mklink ${FSOUZA_DOTFILES_DIR}/${item} ${HOME}/.config/${item}
 	done
