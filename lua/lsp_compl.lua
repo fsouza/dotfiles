@@ -42,8 +42,18 @@ local function get_detail(item)
   return string.format("%s...", string.sub(item.detail, 1, max_width))
 end
 
+local function extract_completion_items(result)
+  if type(result) == 'table' and result.items then
+    return result.items
+  elseif result ~= nil then
+    return result
+  else
+    return {}
+  end
+end
+
 function M.text_document_completion_list_to_complete_items(result, prefix, client_id)
-  local items = lsp.util.extract_completion_items(result)
+  local items = extract_completion_items(result)
   if #items == 0 then
     return {}
   end
@@ -170,7 +180,7 @@ function M.trigger_completion(bufnr)
       return
     end
     local client = vim.lsp.get_client_by_id(client_id)
-    local items = lsp.util.extract_completion_items(result)
+    local items = extract_completion_items(result)
     local encoding = client and client.offset_encoding or 'utf-16'
     local startbyte = adjust_start_col(lnum, line, items, encoding) or col
     local prefix = line:sub(startbyte, cursor_pos)
