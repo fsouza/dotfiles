@@ -11,7 +11,7 @@
 		"eslint_d": "^13.0.0",
 		"postcss-scss": "^4.0.9",
 		"prettier": "^3.0.3",
-		"pyright": "^1.1.332",
+		"pyright": "^1.1.333",
 		"typescript": "^5.2.2",
 		"typescript-language-server": "^4.0.0",
 		"vscode-langservers-extracted": "^4.8.0",
