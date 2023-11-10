@@ -83,6 +83,11 @@ func ruff(_ []string) []Language {
 			FormatStdin:   true,
 			RootMarkers:   ruffRootmarkers,
 		},
+		{
+			FormatCommand: fmt.Sprintf("%s format -", ruff),
+			FormatStdin:   true,
+			RootMarkers:   ruffRootmarkers,
+		},
 	}
 }
 

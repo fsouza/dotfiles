@@ -33,7 +33,7 @@ func main() {
 			log.Fatalf("failed to load languages from %q: %v", precommitConfig, err)
 		}
 	} else {
-		for _, factory := range []Factory{ruff, black, addTrailingComma, reorderPythonImports} {
+		for _, factory := range []Factory{ruff, addTrailingComma, reorderPythonImports} {
 			languages = append(languages, factory(nil)...)
 		}
 	}
