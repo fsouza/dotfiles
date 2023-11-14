@@ -1,10 +1,12 @@
 module github.com/fsouza/dotfiles/nvim/langservers
 
 go 1.21
+toolchain go1.21.4
+
 require (
 	github.com/bazelbuild/buildtools v0.0.0-20230111132423-06e8e2436a75
 	github.com/hashicorp/terraform-ls v0.32.3
-	github.com/mattn/efm-langserver v0.0.48
+	github.com/mattn/efm-langserver v0.0.49
 )
 
 require (
@@ -51,7 +53,7 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
-	github.com/mattn/go-unicodeclass v0.0.1 // indirect
+	github.com/mattn/go-unicodeclass v0.0.2 // indirect
 	github.com/mcuadros/go-defaults v1.2.0 // indirect
 	github.com/mh-cbon/go-fmt-fail v0.0.0-20160815164508-67765b3fbcb5 // indirect
 	github.com/mitchellh/cli v1.1.5 // indirect
@@ -63,10 +65,10 @@ require (
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/posener/complete v1.1.1 // indirect
-	github.com/reviewdog/errorformat v0.0.0-20220309155058-b075c45b6d9a // indirect
+	github.com/reviewdog/errorformat v0.0.0-20230917110423-33358de5bbea // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/shopspring/decimal v1.2.0 // indirect
-	github.com/sourcegraph/jsonrpc2 v0.1.0 // indirect
+	github.com/sourcegraph/jsonrpc2 v0.2.0 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/objx v0.5.0 // indirect
