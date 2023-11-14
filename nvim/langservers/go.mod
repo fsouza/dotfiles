@@ -3,7 +3,7 @@ module github.com/fsouza/dotfiles/nvim/langservers
 go 1.21
 require (
 	github.com/bazelbuild/buildtools v0.0.0-20230111132423-06e8e2436a75
-	github.com/hashicorp/terraform-ls v0.32.2
+	github.com/hashicorp/terraform-ls v0.32.3
 	github.com/mattn/efm-langserver v0.0.48
 )
 
@@ -39,12 +39,12 @@ require (
 	github.com/hashicorp/go-uuid v1.0.3 // indirect
 	github.com/hashicorp/go-version v1.6.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
-	github.com/hashicorp/hcl-lang v0.0.0-20231011161300-6ec57d47fbbb // indirect
-	github.com/hashicorp/hcl/v2 v2.18.1 // indirect
+	github.com/hashicorp/hcl-lang v0.0.0-20231107133629-c89603e93360 // indirect
+	github.com/hashicorp/hcl/v2 v2.19.1 // indirect
 	github.com/hashicorp/terraform-exec v0.19.0 // indirect
 	github.com/hashicorp/terraform-json v0.17.1 // indirect
-	github.com/hashicorp/terraform-registry-address v0.2.2 // indirect
-	github.com/hashicorp/terraform-schema v0.0.0-20231012073551-3c628dc54764 // indirect
+	github.com/hashicorp/terraform-registry-address v0.2.3 // indirect
+	github.com/hashicorp/terraform-schema v0.0.0-20231103135256-8af5a0749d10 // indirect
 	github.com/hashicorp/terraform-svchost v0.1.1 // indirect
 	github.com/huandu/xstrings v1.4.0 // indirect
 	github.com/imdario/mergo v0.3.15 // indirect
