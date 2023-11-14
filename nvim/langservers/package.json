@@ -8,7 +8,7 @@
 		"@typescript-eslint/typescript-estree": "^6.10.0",
 		"angular-html-parser": "^5.0.2",
 		"bash-language-server": "^5.0.0",
-		"eslint_d": "^13.0.0",
+		"eslint_d": "^13.1.0",
 		"postcss-scss": "^4.0.9",
 		"prettier": "^3.0.3",
 		"pyright": "^1.1.335",
