@@ -1049,10 +1049,10 @@ type-fest@^0.20.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.20.2.tgz#1bf207f4b28f91583666cb5fbd327887301cd5f4"
   integrity sha512-Ne+eE4r0/iWnpAxD852z3A+N0Bt5RN//NjJwRd2VFHEmrywxf5vsZlh4R6lixl6B+wz/8d+maTSAkN1FIkI3LQ==
 
-typescript-language-server@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-4.1.1.tgz#e298ed1d3db7e2330ed21e6c75a7d550dff0265e"
-  integrity sha512-xxlU7z5NqgYuOvArWMSCWpPibvG8KUb4rIeGDjHD+adXgQglXeORqCFEU8hP/L6NTUGCd1HcPMPEwdJQ00MqeA==
+typescript-language-server@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/typescript-language-server/-/typescript-language-server-4.1.2.tgz#aee5107d19c9c05798105965935d1cbfe807d772"
+  integrity sha512-RmTQUvlWmQ2y0x7DbOQuxEHtozKlWuhw8NhuLT7zL90rBjmeqjAMD/DlkcoQbkt3CEMMuBwZC+1OYQelw16cFA==
 
 typescript@^4.0.5:
   version "4.9.5"
