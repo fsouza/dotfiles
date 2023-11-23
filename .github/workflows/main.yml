@@ -77,14 +77,6 @@ jobs:
           key: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-${{ steps.get-repo-versions.outputs.golang-tools-version }}-${{ steps.get-repo-versions.outputs.fnlfmt-version }}"
           restore-keys: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-${{ steps.setup-python.outputs.python-version }}-"
 
-      - name: gradle cache
-        id: gradle-cache
-        uses: actions/cache@v3.3.2
-        with:
-          path: ~/.gradle
-          key: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}"
-          restore-keys: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-"
-
       - name: get versions from brew
         id: brew-versions
         run: |
