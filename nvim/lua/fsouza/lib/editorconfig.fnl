@@ -81,8 +81,7 @@
                 :query :.scm
                 :bash :.sh
                 :zsh :.zsh
-                :javascript :.js
-                :groovy :.groovy}
+                :javascript :.js}
         (_ ext) (mod-invoke :fsouza.pl.path :splitext name)]
     (if (not= ext "")
         name

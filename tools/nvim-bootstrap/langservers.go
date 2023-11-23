@@ -20,8 +20,6 @@ func setupLangervers(nv *Neovim) error {
 	dirServers := []func(string) error{
 		installGopls,
 		installRustAnalyzer,
-		installKLS,
-		installGroovyLS,
 		installJDTLS,
 		installZLS,
 	}
@@ -114,50 +112,6 @@ func installRustAnalyzer(langserversDir string) error {
 		return fmt.Errorf("[rust-analyzer] failed to write binary: %v", err)
 	}
 	return nil
-}
-
-func installKLS(langserversDir string) error {
-	const javaVersion = "corretto-17"
-	javaHome, err := getJavaHome(javaVersion)
-	if err != nil {
-		log.Printf("skipping kotlin-language-server. cannot find JAVA_HOME for %q: %v", javaVersion, err)
-		return nil
-	}
-
-	repoDir := filepath.Join(langserversDir, "kotlin-language-server")
-	err = gitCloneOrUpdate("https://github.com/fwcd/kotlin-language-server.git", repoDir)
-	if err != nil {
-		return fmt.Errorf("[kotlin-language-server] failed to update Git repo: %v", err)
-	}
-
-	return tools.Run(&tools.RunOptions{
-		Cmd:  filepath.Join(repoDir, "gradlew"),
-		Args: []string{"-PjavaVersion=17", ":server:installDist"},
-		Cwd:  repoDir,
-		Env:  map[string]string{"JAVA_HOME": javaHome},
-	})
-}
-
-func installGroovyLS(langserversDir string) error {
-	const javaVersion = "corretto-11"
-	javaHome, err := getJavaHome(javaVersion)
-	if err != nil {
-		log.Printf("skipping groovy-language-server. cannot find JAVA_HOME for %q: %v", javaVersion, err)
-		return nil
-	}
-
-	repoDir := filepath.Join(langserversDir, "groovy-language-server")
-	err = gitCloneOrUpdate("https://github.com/GroovyLanguageServer/groovy-language-server.git", repoDir)
-	if err != nil {
-		return fmt.Errorf("[groovy-language-server] failed to update Git repo: %v", err)
-	}
-
-	return tools.Run(&tools.RunOptions{
-		Cmd:  filepath.Join(repoDir, "gradlew"),
-		Args: []string{"build"},
-		Cwd:  repoDir,
-		Env:  map[string]string{"JAVA_HOME": javaHome},
-	})
 }
 
 func installJDTLS(langserversDir string) error {
