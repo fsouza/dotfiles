@@ -91,6 +91,10 @@ jobs:
           echo "pcre-version=$(brew info pcre --json | jq -r '.[0].versions.stable')" >>${GITHUB_OUTPUT}
           echo "rtx-version=$(brew info rtx --json | jq -r '.[0].versions.stable')" >>${GITHUB_OUTPUT}
 
+      - name: set RTX_DATA_DIR
+        run: |
+          echo "RTX_DATA_DIR=${HOME}/.local/share/rtx" >>${GITHUB_ENV}
+
       - name: set MACOSX_DEPLOYMENT_TARGET
         id: macosx-deployment-target
         run: |
