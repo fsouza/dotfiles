@@ -20,7 +20,6 @@ func setupLangervers(nv *Neovim) error {
 	dirServers := []func(string) error{
 		installGopls,
 		installRustAnalyzer,
-		installJDTLS,
 		installZLS,
 	}
 
@@ -112,52 +111,6 @@ func installRustAnalyzer(langserversDir string) error {
 		return fmt.Errorf("[rust-analyzer] failed to write binary: %v", err)
 	}
 	return nil
-}
-
-func installJDTLS(langserversDir string) error {
-	if _, err := exec.LookPath("rtx"); err != nil {
-		log.Print("cannot find rtx, skipping jdtls")
-		return nil
-	}
-
-	currentSnapshot := currentJDTLSSnapshot(langserversDir)
-	latestSnapshot, err := latestJDTLSSnapshot()
-	if err != nil {
-		log.Printf("cannot determine latest snapshot of jdtls, skipping. error: %v", err)
-		return nil
-	}
-
-	targetDir := filepath.Join(langserversDir, "jdtls")
-	if currentSnapshot != latestSnapshot {
-		if _, err := os.Stat(targetDir); err == nil {
-			err = os.RemoveAll(targetDir)
-			if err != nil {
-				return fmt.Errorf("[jdtls] %v", err)
-			}
-		}
-
-		err = os.MkdirAll(targetDir, 0o755)
-		if err != nil {
-			return fmt.Errorf("[jdtls] %v", err)
-		}
-
-		const lombokURL = "https://projectlombok.org/downloads/lombok.jar"
-
-		var g errgroup.Group
-
-		g.Go(func() error { return tools.DownloadFile(lombokURL, filepath.Join(targetDir, "lombok.jar"), 0o644) })
-		g.Go(func() error { return downloadJDTLS(targetDir, latestSnapshot) })
-
-		err = g.Wait()
-		if err != nil {
-			return fmt.Errorf("[jdtls] %v", err)
-		}
-	}
-
-	return gitCloneOrUpdate(
-		"https://github.com/dgileadi/vscode-java-decompiler.git",
-		filepath.Join(targetDir, "vscode-java-decompiler"),
-	)
 }
 
 func installZLS(langserversDir string) error {

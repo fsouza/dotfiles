@@ -3,7 +3,7 @@
 ;; maps bufnr to client
 (local buffer-clients {})
 
-(local langservers-org-imports-set {:gopls true :jdtls true})
+(local langservers-org-imports-set {:gopls true})
 
 (fn should-organize-imports [client-name]
   (and client-name (. langservers-org-imports-set client-name)))

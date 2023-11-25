@@ -1,8 +1,6 @@
 (import-macros {: mod-invoke} :helpers)
 
-(local disabled-methods
-       {:jdtls {:textDocument/codeLens true}
-        :efm {:textDocument/definition true}})
+(local disabled-methods {:efm {:textDocument/definition true}})
 
 (fn patch-supports-method [client]
   (let [supports-method client.supports_method]
