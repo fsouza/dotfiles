@@ -20,7 +20,6 @@ func setupLangervers(nv *Neovim) error {
 	dirServers := []func(string) error{
 		installGopls,
 		installRustAnalyzer,
-		installZLS,
 	}
 
 	var g errgroup.Group
@@ -111,25 +110,6 @@ func installRustAnalyzer(langserversDir string) error {
 		return fmt.Errorf("[rust-analyzer] failed to write binary: %v", err)
 	}
 	return nil
-}
-
-func installZLS(langserversDir string) error {
-	if _, err := exec.LookPath("zig"); err != nil {
-		log.Print("cannot find zig, skipping zls")
-		return nil
-	}
-
-	repoDir := filepath.Join(langserversDir, "zls")
-	err := gitCloneOrUpdate("https://github.com/zigtools/zls.git", repoDir)
-	if err != nil {
-		return err
-	}
-
-	return tools.Run(&tools.RunOptions{
-		Cmd:  "zig",
-		Args: []string{"build", "-Doptimize=ReleaseSafe"},
-		Cwd:  repoDir,
-	})
 }
 
 func installServersFromNpm() error {

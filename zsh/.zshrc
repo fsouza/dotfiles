@@ -30,7 +30,7 @@ if command -v fnm &>/dev/null; then
 	eval "$(fnm env)"
 fi
 
-extras=(virtualenv ruby rtx z git gh go mail ocaml neovim rclone tmux zig)
+extras=(virtualenv ruby rtx z git gh go mail ocaml neovim rclone tmux)
 extras_skip=( ${FSOUZA_EXTRAS_SKIP[@]} )
 for extra in ${extras[@]}; do
 	if ! (($extras_skip[(Ie)$extra])); then
