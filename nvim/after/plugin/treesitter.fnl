@@ -74,9 +74,6 @@
                              :swap {:enable true
                                     :swap_next {:<leader>a "@parameter.inner"}
                                     :swap_previous {:<leader>A "@parameter.inner"}}}
-               :context_commentstring {:enable true :enable_autocmd false}
-               :refactor {:navigation {:enable [:graphql :proto :thrift]
-                                       :keymaps {:goto_definition :gd}}}
                :ensure_installed []
                :auto_install true
                :ignore_install ignore-install})

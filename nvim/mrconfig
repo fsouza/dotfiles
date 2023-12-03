@@ -7,9 +7,6 @@ checkout = git clone https://github.com/fsouza/fennel.vim.git
 [start/nvim-treesitter]
 checkout = git clone https://github.com/nvim-treesitter/nvim-treesitter.git
 
-[start/nvim-treesitter-refactor]
-checkout = git clone https://github.com/nvim-treesitter/nvim-treesitter-refactor.git
-
 [start/nvim-treesitter-textobjects]
 checkout = git clone https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
 
