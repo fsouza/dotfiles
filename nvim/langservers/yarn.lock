@@ -423,10 +423,10 @@ eslint@^8.50.0:
     strip-ansi "^6.0.1"
     text-table "^0.2.0"
 
-eslint_d@^13.1.0:
-  version "13.1.0"
-  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-13.1.0.tgz#bf9fa65a22dd08e09d93d85302bc2c7aec66371b"
-  integrity sha512-OdKYE7BVeXjXd9D2Q67/6F9xP5OxxmTTbMgRlFWU9DGzB8VeQF5H8l+QpVJQTxyM8hweoFomBj0aHbIFE26DOw==
+eslint_d@^13.1.1:
+  version "13.1.1"
+  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-13.1.1.tgz#a9db5f0e746ab6418075f0807d973c3001ea32e8"
+  integrity sha512-xI5RssZEIiGyHjC9w4u+2dIqcXAD3mwBDxQ88Z5lpIH8dOvijLhcgsHYD8SmctftNKiC0k6gmJrdv8y+eio3vg==
   dependencies:
     core_d "^6.0.0"
     eslint "^8.50.0"
