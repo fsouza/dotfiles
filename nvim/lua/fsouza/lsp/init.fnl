@@ -144,6 +144,15 @@
           [:ATTACH attach-fn] (handle-attach attach-fn)
           [:MAPPINGS mappings] (handle-mappings mappings))))))
 
+(fn diag-jump [jump-fn]
+  (jump-fn {:float false})
+  (vim.schedule #(let [(_ winid) (vim.diagnostic.open_float {:source :if_many
+                                                             :scope :cursor
+                                                             :focusable false
+                                                             :border :solid})]
+                   (vim.api.nvim_win_set_option winid :winhighlight
+                                                "Normal:PopupNormal,MatchParen:PopupNormal,FloatBorder:PopupNormal"))))
+
 (fn lsp-attach [{:buf bufnr :data {:client_id client-id}}]
   (let [client (vim.lsp.get_client_by_id client-id)
         shell-post (require :fsouza.lsp.shell-post)
@@ -163,12 +172,8 @@
                   {:lhs :<leader>cl
                    :rhs #(mod-invoke :fsouza.lsp.buf-diagnostic
                                      :buf-clear-all-diagnostics)}
-                  {:lhs :<c-n>
-                   :rhs #(vim.diagnostic.goto_next {:focusable false
-                                                    :float {:source :if_many}})}
-                  {:lhs :<c-p>
-                   :rhs #(vim.diagnostic.goto_prev {:focusable false
-                                                    :float {:source :if_many}})}]]
+                  {:lhs :<c-n> :rhs #(diag-jump vim.diagnostic.goto_next)}
+                  {:lhs :<c-p> :rhs #(diag-jump vim.diagnostic.goto_prev)}]]
     (patch-supports-method client)
     (shell-post.on-attach bufnr)
     (each [method _ (pairs method-handlers)]
