@@ -35,7 +35,7 @@
                 {:name :StatusLineNC
                  :opts {:bg `colors.light-gray :fg `colors.black}}
                 {:name :HlYank :opts {:bg `colors.orange}}
-                {:name :IncSearch :opts {:bg `colors.darker-white}}
+                {:name :IncSearch :opts {:link :Visual}}
                 {:name :FidgetTask :opts {:link :Normal}}]]
     (icollect [_ group (ipairs groups)]
       `(vim.api.nvim_set_hl 0 ,group.name ,group.opts))))
