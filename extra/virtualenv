@@ -39,7 +39,9 @@ function v() {
 
 	if [[ ${name} == "@" ]]; then
 		virtualenvpath=${PWD}/venv
-	elif [[ ${name} == /* ]]; then
+	elif [[ ${name} == /* ]] && [ -d "${name}" ; then
+		virtualenvpath=${name}
+	elif [[ ${name} == .* ]] && [ -d "${name}" ]; then
 		virtualenvpath=${name}
 	else
 		virtualenvpath=${VIRTUALENVS}/${name}
