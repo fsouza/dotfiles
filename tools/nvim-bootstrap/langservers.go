@@ -24,7 +24,6 @@ func setupLangervers(nv *Neovim) error {
 
 	var g errgroup.Group
 	g.Go(installServersFromNpm)
-	g.Go(installOcamlLSP)
 
 	for _, dirServer := range dirServers {
 		dirServer := dirServer
@@ -134,23 +133,6 @@ func installServersFromNpm() error {
 			"--frozen-lockfile",
 		},
 		Cwd: fnmDir,
-	})
-}
-
-func installOcamlLSP() error {
-	if _, err := exec.LookPath("opam"); err != nil {
-		log.Print("skipping ocaml-lsp")
-		return nil
-	}
-
-	return tools.Run(&tools.RunOptions{
-		Cmd: "opam",
-		Args: []string{
-			"install",
-			"-y",
-			"ocaml-lsp-server",
-			"ocamlformat",
-		},
 	})
 }
 
