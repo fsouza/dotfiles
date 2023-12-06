@@ -150,8 +150,9 @@
                                                              :scope :cursor
                                                              :focusable false
                                                              :border :solid})]
-                   (vim.api.nvim_win_set_option winid :winhighlight
-                                                "Normal:PopupNormal,MatchParen:PopupNormal,FloatBorder:PopupNormal"))))
+                   (when winid
+                     (vim.api.nvim_win_set_option winid :winhighlight
+                                                  "Normal:PopupNormal,MatchParen:PopupNormal,FloatBorder:PopupNormal")))))
 
 (fn lsp-attach [{:buf bufnr :data {:client_id client-id}}]
   (let [client (vim.lsp.get_client_by_id client-id)
