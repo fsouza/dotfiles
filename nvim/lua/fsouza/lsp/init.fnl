@@ -144,23 +144,23 @@
           [:ATTACH attach-fn] (handle-attach attach-fn)
           [:MAPPINGS mappings] (handle-mappings mappings))))))
 
-(fn diag-jump [jump-fn]
-  (jump-fn {:float false})
+(fn diag-open-float [scope]
   (vim.schedule #(let [(_ winid) (vim.diagnostic.open_float {:source :if_many
-                                                             :scope :cursor
-                                                             :focusable false
+                                                             : scope
+                                                             :focusable true
                                                              :border :solid})]
                    (when winid
                      (vim.api.nvim_win_set_option winid :winhighlight
-                                                  "Normal:PopupNormal,MatchParen:PopupNormal,FloatBorder:PopupNormal")))))
+                                                  "Normal:PopupNormal,NormalFloat:PopupNormal,MatchParen:PopupNormal,FloatBorder:PopupNormal")))))
+
+(fn diag-jump [jump-fn]
+  (jump-fn {:float false})
+  (diag-open-float :cursor))
 
 (fn lsp-attach [{:buf bufnr :data {:client_id client-id}}]
   (let [client (vim.lsp.get_client_by_id client-id)
         shell-post (require :fsouza.lsp.shell-post)
-        mappings [{:lhs :<leader>ll
-                   :rhs #(vim.diagnostic.open_float {: bufnr
-                                                     :scope :line
-                                                     :source :if_many})}
+        mappings [{:lhs :<leader>ll :rhs #(diag-open-float :line)}
                   {:lhs :<leader>df
                    :rhs #(mod-invoke :fsouza.lsp.diagnostics
                                      :list-file-diagnostics)}
