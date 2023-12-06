@@ -1,10 +1,10 @@
 module github.com/fsouza/dotfiles/nvim/langservers
 
-go 1.21
+go 1.21.3
+
 toolchain go1.21.4
 
 require (
-	github.com/bazelbuild/buildtools v0.0.0-20230111132423-06e8e2436a75
 	github.com/hashicorp/terraform-ls v0.32.3
 	github.com/mattn/efm-langserver v0.0.49
 )
@@ -30,7 +30,6 @@ require (
 	github.com/frankban/quicktest v1.14.4 // indirect
 	github.com/go-logr/logr v1.2.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
@@ -86,6 +85,5 @@ require (
 	golang.org/x/sync v0.4.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
-	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
