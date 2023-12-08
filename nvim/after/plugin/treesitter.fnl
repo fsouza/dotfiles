@@ -60,7 +60,6 @@
               {:highlight {:enable true
                            :disable #(and (= $1 :json)
                                           (= (vim.api.nvim_buf_line_count $2) 1))}
-               :playground {:enable true :updatetime 10}
                :textobjects {:select {:enable true
                                       :lookahead true
                                       :keymaps {:af "@function.outer"

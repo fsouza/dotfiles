@@ -10,9 +10,6 @@ checkout = git clone https://github.com/nvim-treesitter/nvim-treesitter.git
 [start/nvim-treesitter-textobjects]
 checkout = git clone https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
 
-[start/playground]
-checkout = git clone https://github.com/nvim-treesitter/playground.git
-
 [start/tabular]
 checkout = git clone https://github.com/godlygeek/tabular.git
 
