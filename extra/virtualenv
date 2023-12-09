@@ -42,7 +42,7 @@ function v() {
 	elif [[ ${name} == /* ]] && [ -d "${name}" ; then
 		virtualenvpath=${name}
 	elif [[ ${name} == .* ]] && [ -d "${name}" ]; then
-		virtualenvpath=${name}
+		virtualenvpath=$(cd ${name} && pwd -P)
 	else
 		virtualenvpath=${VIRTUALENVS}/${name}
 	fi
