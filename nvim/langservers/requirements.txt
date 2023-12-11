@@ -6,6 +6,8 @@
 #
 add-trailing-comma==3.1.0
     # via -r requirements.in
+annotated-types==0.6.0
+    # via pydantic
 attrs==22.2.0
     # via
     #   flake8-bugbear
@@ -18,6 +20,12 @@ black==23.11.0
     # via
     #   -r requirements.in
     #   ufmt
+cerberus==1.3.5
+    # via plette
+certifi==2023.11.17
+    # via requests
+charset-normalizer==3.3.2
+    # via requests
 classify-imports==4.2.0
     # via reorder-python-imports
 click==8.1.3
@@ -26,6 +34,10 @@ click==8.1.3
     #   moreorless
     #   ufmt
     #   usort
+distlib==0.3.7
+    # via requirementslib
+docopt==0.6.2
+    # via pipreqs
 flake8==6.1.0
     # via
     #   -r requirements.in
@@ -41,7 +53,9 @@ flake8-comprehensions==3.14.0
     # via -r requirements.in
 flake8-tidy-imports==4.10.0
     # via -r requirements.in
-isort==5.12.0
+idna==3.6
+    # via requests
+isort==5.13.0
     # via -r requirements.in
 libcst==1.0.1
     # via
@@ -63,12 +77,26 @@ pathspec==0.11.1
     # via
     #   black
     #   trailrunner
+pep517==0.13.1
+    # via requirementslib
+pip-api==0.0.30
+    # via isort
+pipreqs==0.4.13
+    # via isort
 platformdirs==3.2.0
-    # via black
+    # via
+    #   black
+    #   requirementslib
+plette[validation]==0.4.4
+    # via requirementslib
 pycodestyle==2.11.0
     # via
     #   autopep8
     #   flake8
+pydantic==2.5.2
+    # via requirementslib
+pydantic-core==2.14.5
+    # via pydantic
 pyflakes==3.1.0
     # via
     #   autoflake
@@ -81,6 +109,12 @@ pyyaml==6.0.1
     #   libcst
 reorder-python-imports==3.12.0
     # via -r requirements.in
+requests==2.31.0
+    # via
+    #   requirementslib
+    #   yarg
+requirementslib==3.0.0
+    # via isort
 ruff==0.1.6
     # via -r requirements.in
 stdlibs==2022.10.9
@@ -92,7 +126,10 @@ tokenize-rt==5.2.0
 toml==0.10.2
     # via usort
 tomlkit==0.11.8
-    # via ufmt
+    # via
+    #   plette
+    #   requirementslib
+    #   ufmt
 trailrunner==1.4.0
     # via
     #   ufmt
@@ -100,11 +137,17 @@ trailrunner==1.4.0
 typing-extensions==4.7.1
     # via
     #   libcst
+    #   pydantic
+    #   pydantic-core
     #   typing-inspect
     #   ufmt
 typing-inspect==0.9.0
     # via libcst
 ufmt==2.3.0
     # via -r requirements.in
+urllib3==2.1.0
+    # via requests
 usort==1.0.7
     # via ufmt
+yarg==0.1.9
+    # via pipreqs
