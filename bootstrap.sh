@@ -81,7 +81,7 @@ function setup_brew {
 	export HOMEBREW_NO_EMOJI=1
 	export HOMEBREW_NO_GITHUB_API=1
 	brew update
-	brew install gh zsh
+	brew install gh zsh gnupg
 
 	echo
 	echo
@@ -95,8 +95,6 @@ function setup_brew {
 function gh_ssh_setup {
 	if ! gh auth status &>/dev/null; then
 		echo "we're now going to login to GitHub, using gh. Make sure to create or upload the SSH key in the next step."
-		echo "Press any key to continue..."
-		read
 		gh auth login -h github.com -p ssh -s admin:gpg_key -s admin:public_key --web
 		ssh-keyscan github.com >>${HOME}/.ssh/known_hosts
 	fi
