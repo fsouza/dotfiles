@@ -47,14 +47,23 @@ EOF
 	fi
 }
 
-function find_brew {
-	local candidates=(/opt/homebrew/bin/brew /usr/local/bin/brew)
+function _find_bin {
+	local bin_name=${1}
+ 	local candidates=(/opt/homebrew/bin/${bin_name} /usr/local/bin/${bin_name})
 	for path in ${candidates}; do
 		if [ -x ${path} ]; then
 			echo ${path}
 			return 0
 		fi
 	done
+}
+
+function find_brew {
+	_find_bin brew
+}
+
+function find_op {
+	_find_bin op
 }
 
 function install_brew {
@@ -80,7 +89,7 @@ function setup_brew {
 	echo "installing and configuring 1password-cli (may ask for sudo password)"
 
 	brew install --cask 1password-cli
-	/usr/local/bin/op signin
+	$(find_op) signin
 }
 
 function gh_ssh_setup {
