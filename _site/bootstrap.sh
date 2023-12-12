@@ -114,14 +114,14 @@ function setup_gpg {
 }
 
 function setup_dotfiles {
-	local target_dir=${HOME}/Projects/os/p/dotfiles
+	local target_dir=${1}
 	if [ ! -d ${target_dir} ]; then
 		mkdir -p $(dirname ${target_dir})
 		git clone git@github.com:fsouza/dotfiles.git ${target_dir}
 
 		${target_dir}/bootstrap/setup
-		${HOMEBREW_PREFIX}/bin/zsh -l <<EOF
-source ${target_dir}/zsh/.zshrc
+		env FSOUZA_DOTFILES_DIR=${target_dir} ${HOMEBREW_PREFIX}/bin/zsh -l <<EOF
+source ${FSOUZA_DOTFILES_DIR}/zsh/.zshrc
 
 set -e
 update_go_tip
@@ -132,16 +132,18 @@ EOF
 function setup_rclone {
 	sudo mkdir -p /usr/local/bin /usr/local/share
 	sudo chown ${USER}:wheel /usr/local/bin /usr/local/share
-	mkdir -p ${HOME}/.config/rclone
-	local conf_file=$(mktemp)
-	chmod 600 ${conf_file}
-	op document get rclone-conf --output ${conf_file}
-	mv ${conf_file} ${HOME}/.config/rclone/rclone.conf
+	if ! [ -f ${HOME}/.config/rclone/rclone.conf ]; then
+		mkdir -p ${HOME}/.config/rclone
+		local conf_file=$(mktemp)
+		chmod 600 ${conf_file}
+		op document get rclone-conf --output ${conf_file}
+		mv ${conf_file} ${HOME}/.config/rclone/rclone.conf
+	fi
 }
 
 function install_node {
-	${HOMEBREW_PREFIX}/bin/zsh -l <<'EOF'
-source ${HOME}/.zshrc
+	env FSOUZA_DOTFILES_DIR=${1} ${HOMEBREW_PREFIX}/bin/zsh -l <<'EOF'
+source ${FSOUZA_DOTFILES_DIR}/zsh/.zshrc
 
 set -e
 export PATH=${HOME}/.dotfiles/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:${PATH}
@@ -151,8 +153,8 @@ EOF
 }
 
 function setup_nvim {
-	${HOMEBREW_PREFIX}/bin/zsh -l <<'EOF'
-source ${HOME}/.zshrc
+	env FSOUZA_DOTFILES_DIR=${1} ${HOMEBREW_PREFIX}/bin/zsh -l <<'EOF'
+source ${FSOUZA_DOTFILES_DIR}/zsh/.zshrc
 
 set -e
 update_neovim
@@ -162,6 +164,8 @@ EOF
 }
 
 function main {
+	local dotfiles_dir=${HOME}/Projects/os/p/dotfiles
+
 	setup_rosetta
 	bump_maxfiles_limit
 	setup_brew
@@ -169,9 +173,9 @@ function main {
 	setup_gpg
 
 	setup_rclone
-	setup_dotfiles
-	install_node
-	setup_nvim
+	setup_dotfiles ${dotfiles_dir}
+	install_node ${dotfiles_dir}
+	setup_nvim ${dotfiles_dir}
 }
 
 main
