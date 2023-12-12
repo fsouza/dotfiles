@@ -89,7 +89,7 @@ function setup_brew {
 	echo "installing and configuring 1password-cli (may ask for sudo password)"
 
 	brew install --cask 1password-cli
-	$(find_op) signin
+	$(find_op) signin -f
 }
 
 function gh_ssh_setup {
