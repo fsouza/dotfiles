@@ -6,7 +6,7 @@
 	"dependencies": {
 		"@fsouza/prettierd": "^0.25.1",
 		"@typescript-eslint/typescript-estree": "^6.13.1",
-		"angular-html-parser": "^5.0.2",
+		"angular-html-parser": "^5.2.0",
 		"bash-language-server": "^5.0.0",
 		"eslint_d": "^13.1.1",
 		"postcss-scss": "^4.0.9",
