@@ -115,7 +115,7 @@ requests==2.31.0
     #   yarg
 requirementslib==3.0.0
     # via isort
-ruff==0.1.6
+ruff==0.1.7
     # via -r requirements.in
 stdlibs==2022.10.9
     # via usort
