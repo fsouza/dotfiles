@@ -38,8 +38,6 @@
 	program = gpg
 [commit]
 	gpgsign = true
-[feature]
-	manyFiles = true
 [rerere]
 	enabled = true
 [url "https://github"]
