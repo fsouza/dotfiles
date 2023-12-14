@@ -189,13 +189,16 @@
      (lsp-log#.set_level level#)
      (lsp-log#.set_format_func vim.inspect)))
 
-(macro define-signs []
-  (icollect [_ level (ipairs [:Error :Warn :Info :Hint])]
-    (let [sign-name (.. :DiagnosticSign level)]
-      `(vim.fn.sign_define ,sign-name {:text "" :numhl ,sign-name}))))
+(fn config-diagnostics []
+  (let [empty-s (setmetatable {} {:__index #""})]
+    (vim.diagnostic.config {:signs {:text empty-s
+                                    :numhl {vim.diagnostic.severity.ERROR :DiagnosticSignError
+                                            vim.diagnostic.severity.WARN :DiagnosticSignWarn
+                                            vim.diagnostic.severity.INFO :DiagnosticSignInfo
+                                            vim.diagnostic.severity.HINT :DiagnosticSignHint}}})))
 
 (fn setup []
-  (define-signs)
+  (config-diagnostics)
   (config-log)
   (tset vim.lsp :_set_defaults #nil)
   (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__LspAttach
