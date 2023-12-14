@@ -147,7 +147,7 @@
 (fn diag-open-float [scope]
   (vim.schedule #(let [(_ winid) (vim.diagnostic.open_float {:source :if_many
                                                              : scope
-                                                             :focusable true
+                                                             :focusable false
                                                              :border :solid})]
                    (when winid
                      (mod-invoke :fsouza.lib.popup :stylize winid)))))
