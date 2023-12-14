@@ -150,8 +150,7 @@
                                                              :focusable true
                                                              :border :solid})]
                    (when winid
-                     (vim.api.nvim_win_set_option winid :winhighlight
-                                                  "Normal:PopupNormal,NormalFloat:PopupNormal,MatchParen:PopupNormal,FloatBorder:PopupNormal")))))
+                     (mod-invoke :fsouza.lib.popup :stylize winid)))))
 
 (fn diag-jump [jump-fn]
   (jump-fn {:float false})

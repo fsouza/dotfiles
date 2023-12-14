@@ -72,4 +72,8 @@
                                 : markdown})))
           (do-open lines {: win-opts : wrap : win-var-identifier : markdown})))))
 
-{: open}
+(lambda stylize [winid]
+  (vim.api.nvim_win_set_option winid :winhighlight
+                               "Normal:PopupNormal,NormalFloat:PopupNormal,MatchParen:PopupNormal,FloatBorder:PopupNormal"))
+
+{: open : stylize}

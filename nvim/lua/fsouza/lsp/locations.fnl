@@ -75,8 +75,9 @@
 
 (fn peek-location-callback [_ result context]
   (when (and result (not (vim.tbl_isempty result)))
-    (let [loc (ts-range context.bufnr (. result 1))]
-      (vim.lsp.util.preview_location loc))))
+    (let [loc (ts-range context.bufnr (. result 1))
+          (_ winid) (vim.lsp.util.preview_location loc)]
+      (mod-invoke :fsouza.lib.popup :stylize winid))))
 
 (macro make-lsp-loc-action [method]
   `(fn []
