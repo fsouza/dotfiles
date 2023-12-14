@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/fsouza/dotfiles/tools"
@@ -58,7 +60,28 @@ func ensureVirtualenvPyz(nv *Neovim) (string, error) {
 func python() string {
 	python := os.Getenv("PYTHON")
 	if python == "" {
-		return "python3"
+		return getPythonFromRtx()
 	}
 	return python
+}
+
+func getPythonFromRtx() string {
+	const py = "python@3.12"
+	output, err := exec.Command("rtx", "where", py).CombinedOutput()
+	if err != nil {
+		err = tools.Run(&tools.RunOptions{
+			Cmd:  "rtx",
+			Args: []string{"install", py},
+		})
+		if err != nil {
+			panic(err)
+		}
+
+		output, err = exec.Command("rtx", "where", py).CombinedOutput()
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	return filepath.Join(string(bytes.TrimSpace(output)), "bin", "python3")
 }
