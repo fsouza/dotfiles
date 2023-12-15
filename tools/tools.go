@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"slices"
 	"strings"
 	"syscall"
@@ -68,5 +69,11 @@ func DownloadFile(url, path string, perm fs.FileMode) error {
 	if resp.StatusCode > 299 {
 		return fmt.Errorf("failed to download %q: server returned %d - %s", url, resp.StatusCode, data)
 	}
+
+	err = os.MkdirAll(filepath.Dir(path), 0o755)
+	if err != nil {
+		return err
+	}
+
 	return os.WriteFile(path, data, perm)
 }
