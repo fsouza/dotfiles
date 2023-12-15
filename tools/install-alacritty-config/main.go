@@ -106,7 +106,7 @@ colors:
     black: "#000000"
     red: "#f2201f"
     green: "#23aa00"
-    yellow: "#d09b26"
+    yellow: "#999902"
     blue: "#2c8ef8"
     magenta: "#cc4685"
     cyan: "#07a689"
