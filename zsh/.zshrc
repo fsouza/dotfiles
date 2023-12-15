@@ -20,9 +20,7 @@ source "${FSOUZA_DOTFILES_DIR}"/extra/brew
 prepend_to_path \
 	${HOME}/.cargo/bin \
 	${HOME}/.local/bin \
-	${HOME}/.dotnet/tools \
-	${FSOUZA_DOTFILES_DIR}/bin \
-	${FSOUZA_DOTFILES_DIR}/tools/bin
+	${FSOUZA_DOTFILES_DIR}/bin
 
 export MANPATH=${HOME}/.local/share/man${MANPATH+:${MANPATH}}
 
