@@ -106,10 +106,10 @@ colors:
     black: "#000000"
     red: "#f2201f"
     green: "#23aa00"
-    yellow: "#efef00"
-    blue: "#1a8fff"
-    magenta: "#fd28ff"
-    cyan: "#00c5c7"
+    yellow: "#d09b26"
+    blue: "#2c8ef8"
+    magenta: "#cc4685"
+    cyan: "#07a689"
     white: "#c7c7c7"
 
 env:
