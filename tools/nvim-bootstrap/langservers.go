@@ -36,6 +36,11 @@ func setupLangervers(nv *Neovim) error {
 }
 
 func installGopls(langserversDir string) error {
+	if _, err := exec.LookPath("go"); err != nil {
+		log.Print("skipping gopls")
+		return nil
+	}
+
 	repoDir := filepath.Join(langserversDir, "tools")
 	err := gitCloneOrUpdate("https://github.com/golang/tools.git", repoDir)
 	if err != nil {
