@@ -1,5 +1,5 @@
 NEOVIM_INSTALL_PREFIX=${HOME}/opt/neovim
-NEOVIM_SRC_DIR=${HOME}/Projects/os/3/neovim
+NEOVIM_SRC_DIR=${NEOVIM_SRC_DIR:-${HOME}/Projects/os/3/neovim}
 
 function __use_nvim {
 	local executable=${NEOVIM_INSTALL_PREFIX}/bin/nvim
