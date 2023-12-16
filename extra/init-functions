@@ -1,3 +1,5 @@
+declare -U path
+
 function cond_source {
 	[ -s ${1} ] && source ${1}
 }
@@ -5,19 +7,17 @@ function cond_source {
 function prepend_to_path {
 	for dir in $@; do
 		if [ -d ${dir} ]; then
-			PATH=${dir}:${PATH}
+			path=(${dir} ${path})
 		fi
 	done
-	export PATH
 }
 
 function append_to_path {
 	for dir in $@; do
 		if [ -d ${dir} ]; then
-			PATH=${PATH}:${dir}
+			path+=(${dir})
 		fi
 	done
-	export PATH
 }
 
 function remove_from_path {
@@ -26,19 +26,8 @@ function remove_from_path {
 		return 1
 	fi
 
-	local new_path=""
-
-	while read -d : path_component; do
-		if [[ ${path_component} != ${1} ]]; then
-			if [ -z "${new_path}" ]; then
-				new_path=${path_component}
-			else
-				new_path=${new_path}:${path_component}
-			fi
-		fi
-	done <<<"${PATH}:"
-
-	export PATH=${new_path}
+	local index=${path[(i)${1}]}
+	path[${index}]=()
 }
 
 function realpath {

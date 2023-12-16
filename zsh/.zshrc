@@ -14,9 +14,6 @@ export RIPGREP_CONFIG_PATH=${HOME}/.config/rgrc
 export LESSHISTFILE=${HOME}/.cache/lesshst
 export NODE_REPL_HISTORY=${HOME}/.cache/node/history
 
-if ! [[ -v FSOUZA_KEEP_PATH ]]; then
-	export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
-fi
 source "${FSOUZA_DOTFILES_DIR}"/extra/brew
 
 prepend_to_path \
