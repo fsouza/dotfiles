@@ -1,6 +1,3 @@
-[start/emmet-vim]
-checkout = git clone https://github.com/mattn/emmet-vim.git
-
 [start/fennel.vim]
 checkout = git clone https://github.com/fsouza/fennel.vim.git
 
@@ -19,23 +16,11 @@ checkout = git clone https://github.com/tpope/vim-commentary.git
 [start/vim-dirvish]
 checkout = git clone https://github.com/justinmk/vim-dirvish.git
 
-[start/vim-dispatch]
-checkout = git clone https://github.com/tpope/vim-dispatch.git
-
 [start/vim-fugitive]
 checkout = git clone https://github.com/tpope/vim-fugitive.git
 
-[start/vim-javascript]
-checkout = git clone https://github.com/pangloss/vim-javascript.git
-
-[start/vim-lua]
-checkout = git clone https://github.com/tbastos/vim-lua.git
-
 [start/vim-matchup]
 checkout = git clone https://github.com/andymass/vim-matchup.git
-
-[start/vim-python-pep8-indent]
-checkout = git clone https://github.com/Vimjas/vim-python-pep8-indent.git
 
 [start/vim-repeat]
 checkout = git clone https://github.com/tpope/vim-repeat.git
@@ -58,8 +43,8 @@ checkout = git clone https://github.com/tpope/vim-surround.git
 [start/vim-wordmotion]
 checkout = git clone https://github.com/chaoren/vim-wordmotion.git
 
-[start/yats.vim]
-checkout = git clone https://github.com/HerringtonDarkholme/yats.vim.git
+[opt/emmet-vim]
+checkout = git clone https://github.com/mattn/emmet-vim.git
 
 [opt/fidget.nvim]
 checkout =
@@ -76,9 +61,6 @@ checkout = git clone https://github.com/vijaymarupudi/nvim-fzf.git
 
 [opt/nvim-lsp-compl]
 checkout = git clone https://github.com/fsouza/nvim-lsp-compl.git
-
-[opt/nvim-osc52]
-checkout = git clone https://github.com/ojroques/nvim-osc52.git
 
 [opt/nvim-various-textobjs]
 checkout = git clone https://github.com/chrisgrieser/nvim-various-textobjs.git
