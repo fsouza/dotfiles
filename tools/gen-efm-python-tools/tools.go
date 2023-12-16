@@ -91,11 +91,6 @@ func ruff(_ []string) []Language {
 	}
 }
 
-func ufmt(args []string) []Language {
-	args = append([]string{"--quiet", "format"}, args...)
-	return stdinFormatter("ufmt", args)
-}
-
 func stdinFormatter(tool string, args []string) []Language {
 	tool = getPythonBin(tool)
 	return []Language{
