@@ -7,7 +7,7 @@ function cond_source {
 function prepend_to_path {
 	for dir in $@; do
 		if [ -d ${dir} ]; then
-			path=(${dir} ${path})
+			path=(${dir} ${path[@]})
 		fi
 	done
 }
