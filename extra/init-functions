@@ -1,4 +1,4 @@
-declare -U path PATH
+declare -U path
 
 function cond_source {
 	[ -s ${1} ] && source ${1}
