@@ -61,7 +61,7 @@ func EFMConfigFromPrecommit(filename string) ([]Language, error) {
 		"https://github.com/pycqa/isort":                     isort,
 		"https://github.com/timothycrosley/isort":            isort,
 		"https://github.com/charliermarsh/ruff-pre-commit":   ruff,
-		"https://github.com/zac-hd/shed":                     ruff,
+		"https://github.com/zac-hd/shed":                     black,
 	}
 	var output []Language
 	for _, repo := range repos {
