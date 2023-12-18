@@ -20,6 +20,9 @@
                                                          :typeCheckingMode (or vim.g.pyright_type_checking_mode
                                                                                :basic)
                                                          :useLibraryCodeForTypes true}}}}
+                 :find-root-dir #(mod-invoke :fsouza.lsp.servers
+                                             :patterns-with-fallback
+                                             [:setup.cfg :setup.py] $1)
                  :cb #(mod-invoke :fsouza.lsp.references :register-test-checker
                                   :.py :python is-python-test)})))
 
