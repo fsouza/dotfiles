@@ -6,8 +6,7 @@
 
 (fn start-pyright [bufnr python-interpreter]
   (let [path (require :fsouza.pl.path)
-        python-interpreter (or python-interpreter
-                               (path.join _G.cache-dir :venv :bin :python3))]
+        python-interpreter (or python-interpreter (vim.fn.exepath :python3))]
     (mod-invoke :fsouza.lsp.servers :start
                 {: bufnr
                  :config {:name :pyright
