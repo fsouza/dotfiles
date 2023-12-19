@@ -33,7 +33,7 @@ function main {
 		mklink ${FSOUZA_DOTFILES_DIR}/${file} ${HOME}/${file}
 	done
 
-	local xdg_items=(bat rgrc git fd)
+	local xdg_items=(rgrc git fd)
 	for item in ${xdg_items}; do
 		mklink ${FSOUZA_DOTFILES_DIR}/${item} ${HOME}/.config/${item}
 	done
@@ -51,10 +51,6 @@ function main {
 
 	if command -v nvim &>/dev/null; then
 		env NVIM_DEBUG=1 RTX_EXPERIMENTAL=1 make -C ${FSOUZA_DOTFILES_DIR}
-	fi
-
-	if command -v bat &>/dev/null; then
-		bat cache --build
 	fi
 
 	tic -x ${FSOUZA_DOTFILES_DIR}/tmux/tmux-256color

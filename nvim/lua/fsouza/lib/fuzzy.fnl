@@ -74,12 +74,11 @@
                                    fzf-lua- (require :fzf-lua)
                                    f-config (require :fzf-lua.config)
                                    f-utils (require :fzf-lua.utils)
-                                   previewer :bat
+                                   previewer :builtin
                                    id #$1]
                                (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
                                                 :fzf_layout :default
-                                                :previewers {:builtin {:syntax false}
-                                                             :bat {:args "--color always --number --theme none"}}
+                                                :previewers {:builtin {:syntax false}}
                                                 :buffers {:file_icons false
                                                           :git_icons false
                                                           :color_icons false}
