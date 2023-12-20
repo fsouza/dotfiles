@@ -7,7 +7,7 @@ import (
 	"github.com/fsouza/dotfiles/tools"
 )
 
-func ensureHererocks(nv *Neovim) (string, error) {
+func ensureHererocks(nv *Neovim, venvDir string) (string, error) {
 	hrDir := filepath.Join(nv.CacheDir, "hr")
 	if _, err := os.Stat(hrDir); os.IsNotExist(err) {
 		hererocksPy, err := downloadHererocksPy(nv)
@@ -17,7 +17,7 @@ func ensureHererocks(nv *Neovim) (string, error) {
 
 		const luajitVersion = "@v2.1"
 		err = tools.Run(&tools.RunOptions{
-			Cmd:  python(),
+			Cmd:  filepath.Join(venvDir, "bin", "python3"),
 			Args: []string{hererocksPy, "-j", luajitVersion, "-r", "latest", hrDir},
 		})
 		if err != nil {

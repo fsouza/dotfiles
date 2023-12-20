@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"path/filepath"
 
 	"golang.org/x/sync/errgroup"
 )
@@ -23,15 +24,16 @@ func main() {
 		log.Fatal(err)
 	}
 
+	venvDir := filepath.Join(nv.CacheDir, "venv")
 	var g errgroup.Group
 	g.Go(func() error { return setupLangervers(nv) })
-	g.Go(func() error { return ensureVirtualenv(nv) })
+	g.Go(func() error { return ensureVirtualenv(nv, venvDir) })
 	g.Go(func() error { return updateNeovimPlugins(nv) })
 
 	var hererocksDir string
 	g.Go(func() error {
 		var err error
-		hererocksDir, err = ensureHererocks(nv)
+		hererocksDir, err = ensureHererocks(nv, venvDir)
 		return err
 	})
 

@@ -11,8 +11,7 @@ import (
 
 const virtualenvURL = "https://bootstrap.pypa.io/virtualenv.pyz"
 
-func ensureVirtualenv(nv *Neovim) error {
-	venvDir := filepath.Join(nv.CacheDir, "venv")
+func ensureVirtualenv(nv *Neovim, venvDir string) error {
 	if _, err := os.Stat(venvDir); err != nil {
 		venvPyz, err := ensureVirtualenvPyz(nv)
 		if err != nil {
