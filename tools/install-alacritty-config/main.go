@@ -116,6 +116,7 @@ env:
   FSOUZA_DOTFILES_DIR: {{.DotfilesDir}}
   ZDOTDIR: {{.DotfilesDir}}/zsh
   TERM: alacritty-direct
+  SHELL: {{.Shell}}
 
 mouse:
   double_click:
