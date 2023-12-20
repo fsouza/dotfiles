@@ -37,7 +37,8 @@
                  :opts {:bg `colors.light-gray :fg `colors.black}}
                 {:name :HlYank :opts {:bg `colors.orange}}
                 {:name :IncSearch :opts {:link :Visual}}
-                {:name :FidgetTask :opts {:link :Normal}}]]
+                {:name :FidgetTask :opts {:link :Normal}}
+                {:name :QuickFixLine :opts {:fg `colors.black :bold true}}]]
     (icollect [_ group (ipairs groups)]
       `(vim.api.nvim_set_hl 0 ,group.name ,group.opts))))
 
