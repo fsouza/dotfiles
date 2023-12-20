@@ -2,15 +2,6 @@
 
 set -eu
 
-function setup_rosetta {
-	if [[ $(uname -m) == "arm64" ]]; then
-		set -x
-		: "Installing rosetta (enter sudo password if requested)"
-		sudo softwareupdate --install-rosetta --agree-to-license
-		set +x
-	fi
-}
-
 function bump_maxfiles_limit {
 	local target_file=/Library/LaunchDaemons/dev.fsouza.limit-maxfiles.plist
 
@@ -166,7 +157,6 @@ EOF
 function main {
 	local dotfiles_dir=${HOME}/Projects/os/p/dotfiles
 
-	setup_rosetta
 	bump_maxfiles_limit
 	setup_brew
 	gh_ssh_setup
