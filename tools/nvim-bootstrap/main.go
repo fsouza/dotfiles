@@ -30,14 +30,12 @@ func main() {
 	g.Go(func() error { return ensureVirtualenv(nv, venvDir) })
 	g.Go(func() error { return updateNeovimPlugins(nv) })
 
-	var hererocksDir string
-	g.Go(func() error {
-		var err error
-		hererocksDir, err = ensureHererocks(nv, venvDir)
-		return err
-	})
-
 	err = g.Wait()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	hererocksDir, err := ensureHererocks(nv, venvDir)
 	if err != nil {
 		log.Fatal(err)
 	}
