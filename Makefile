@@ -27,9 +27,9 @@ kill-daemons:
 clear-logs:
 	:> $(NVIM_STATE_DIR)/lsp.log
 
-FNL_FILES := $(shell git ls-files -- '*.fnl' | grep -Ev 'scripts/.+\.fnl' | grep -Ev 'macros/.+\.fnl')
+FNL_FILES := $(shell git ls-files --cached --others -- '*.fnl' | grep -Ev 'scripts/.+\.fnl' | grep -Ev 'macros/.+\.fnl')
 LUA_FILES := $(patsubst %.fnl,build/%.lua,$(FNL_FILES))
-NON_LUA_FILES := $(shell git ls-files -- '*.vim' '*.scm')
+NON_LUA_FILES := $(shell git ls-files --cached --others -- '*.vim' '*.scm')
 TARGET_NON_LUA_FILES := $(patsubst %,build/%,$(NON_LUA_FILES))
 
 .PHONY: install
@@ -113,4 +113,4 @@ nvim-stylua:
 
 .PHONY: fnlfmt
 fnlfmt:
-	git ls-files -z -- '*.fnl' | env PATH=$(NVIM_CACHE_DIR)/hr/bin:${PATH} xargs -0 -n 1 $(NVIM_CACHE_DIR)/fnlfmt/fnlfmt --fix
+	git ls-files -z --cached --others -- '*.fnl' | env PATH=$(NVIM_CACHE_DIR)/hr/bin:${PATH} xargs -0 -n 1 $(NVIM_CACHE_DIR)/fnlfmt/fnlfmt --fix
