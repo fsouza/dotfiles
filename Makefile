@@ -29,7 +29,7 @@ clear-logs:
 
 FNL_FILES := $(shell git ls-files --cached --others -- '*.fnl' | grep -Ev 'scripts/.+\.fnl' | grep -Ev 'macros/.+\.fnl')
 LUA_FILES := $(patsubst %.fnl,build/%.lua,$(FNL_FILES))
-NON_LUA_FILES := $(shell git ls-files --cached --others -- '*.vim' '*.scm')
+NON_LUA_FILES := $(shell git ls-files --cached --others -- '*.vim' '*.scm' | grep -Ev '^build/')
 TARGET_NON_LUA_FILES := $(patsubst %,build/%,$(NON_LUA_FILES))
 
 .PHONY: install
