@@ -12,12 +12,14 @@ import (
 const virtualenvURL = "https://bootstrap.pypa.io/virtualenv.pyz"
 
 func ensureVirtualenv(nv *Neovim, venvDir string) error {
+	pip := filepath.Join(venvDir, "bin", "pip")
 	if _, err := os.Stat(venvDir); err != nil {
 		venvPyz, err := ensureVirtualenvPyz(nv)
 		if err != nil {
 			return err
 		}
 
+		os.RemoveAll(venvDir)
 		err = tools.Run(&tools.RunOptions{
 			Cmd:  python(),
 			Args: []string{venvPyz, venvDir},
@@ -27,7 +29,6 @@ func ensureVirtualenv(nv *Neovim, venvDir string) error {
 		}
 	}
 
-	pip := filepath.Join(venvDir, "bin", "pip")
 	err := tools.Run(&tools.RunOptions{
 		Cmd:  pip,
 		Args: []string{"install", "--upgrade", "pip", "pip-tools"},
