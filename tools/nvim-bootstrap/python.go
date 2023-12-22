@@ -12,7 +12,7 @@ import (
 const virtualenvURL = "https://bootstrap.pypa.io/virtualenv.pyz"
 
 func ensureVirtualenv(nv *Neovim, venvDir string) error {
-	pip := filepath.Join(venvDir, "bin", "pip")
+	pip := filepath.Join(venvDir, "bin", "pip3")
 	if _, err := os.Stat(venvDir); err != nil {
 		venvPyz, err := ensureVirtualenvPyz(nv)
 		if err != nil {
