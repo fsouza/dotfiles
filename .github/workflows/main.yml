@@ -60,11 +60,6 @@ jobs:
 
       - uses: actions/checkout@v4.1.1
 
-      - uses: actions/setup-python@v5.0.0
-        id: setup-python
-        with:
-          python-version: "3.x"
-
       - uses: actions/setup-go@v5.0.0
         with:
           go-version: "1.x"
@@ -83,7 +78,7 @@ jobs:
         with:
           path: ~/.cache/nvim/langservers
           key: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-${{ steps.get-repo-versions.outputs.golang-tools-version }}-${{ steps.get-repo-versions.outputs.fnlfmt-version }}"
-          restore-keys: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-${{ steps.setup-python.outputs.python-version }}-"
+          restore-keys: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-"
 
       - name: get versions from brew
         id: brew-versions
@@ -113,15 +108,14 @@ jobs:
         uses: actions/cache@v3.3.2
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ runner.os }}-${{ steps.brew-versions.outputs.pcre-version }}-${{ steps.get-repo-versions.outputs.luajit-version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
+          key: "${{ runner.os }}-${{ steps.brew-versions.outputs.pcre-version }}-${{ steps.get-repo-versions.outputs.luajit-version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       - name: virtualenv cache
         id: nvim-virtualenv-cache
         uses: actions/cache@v3.3.2
         with:
           path: ~/.cache/nvim/venv
-          key: "${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('nvim/langservers/requirements.txt') }}"
-          restore-keys: "${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-"
+          key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}"
 
       # this will always cache miss, but the idea is to reuse work between
       # pushes by leveraging restore-keys.
