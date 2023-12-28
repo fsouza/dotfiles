@@ -30,7 +30,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("couldn't find zsh: %v", err)
 	}
-	configFile := os.ExpandEnv("${HOME}/.config/alacritty.yml")
+	configFile := os.ExpandEnv("${HOME}/.config/alacritty.toml")
 	stat, err := os.Lstat(configFile)
 	if err == nil && stat.Mode()&os.ModeSymlink != 0 {
 		err = os.Remove(configFile)
@@ -65,102 +65,111 @@ func findZsh() (string, error) {
 }
 
 var config = template.Must(template.New("config").Parse(`
-window:
-  padding:
-    x: 2
-    y: 2
+[colors.bright]
+black = "#000000"
+blue = "#2c8ef8"
+cyan = "#07a689"
+green = "#23aa00"
+magenta = "#cc4685"
+red = "#f2201f"
+white = "#c7c7c7"
+yellow = "#999902"
 
-  dynamic_padding: true
-  option_as_alt: OnlyLeft
+[colors.normal]
+black = "#000000"
+blue = "#0225c7"
+cyan = "#00c5c7"
+green = "#00c200"
+magenta = "#c930c6"
+red = "#c91b00"
+white = "#c7c7c7"
+yellow = "#606000"
 
-scrolling:
-  history: 50000
-  multiplier: 3
+[colors.primary]
+background = "#f0f0eb"
+foreground = "#000000"
 
-font:
-  normal:
-    family: SauceCodePro Nerd Font Mono
-    style: Regular
+[cursor]
+unfocused_hollow = true
 
-  bold:
-    style: Medium
+[cursor.style]
+blinking = "Never"
+shape = "Block"
 
-  size: {{.FontSize}}
+[env]
+FSOUZA_DOTFILES_DIR = "{{.DotfilesDir}}"
+SHELL = "{{.Shell}}"
+TERM = "alacritty-direct"
+ZDOTDIR = "{{.DotfilesDir}}/zsh"
 
-colors:
-  primary:
-    background: "#f0f0eb"
-    foreground: "#000000"
+[font]
+size = {{.FontSize}}
 
-  normal:
-    black: "#000000"
-    red: "#c91b00"
-    green: "#00c200"
-    yellow: "#606000"
-    blue: "#0225c7"
-    magenta: "#c930c6"
-    cyan: "#00c5c7"
-    white: "#c7c7c7"
+[font.bold]
+style = "Medium"
 
-  bright:
-    black: "#000000"
-    red: "#f2201f"
-    green: "#23aa00"
-    yellow: "#999902"
-    blue: "#2c8ef8"
-    magenta: "#cc4685"
-    cyan: "#07a689"
-    white: "#c7c7c7"
+[font.normal]
+family = "SauceCodePro Nerd Font Mono"
+style = "Regular"
 
-env:
-  FSOUZA_DOTFILES_DIR: {{.DotfilesDir}}
-  ZDOTDIR: {{.DotfilesDir}}/zsh
-  TERM: alacritty-direct
-  SHELL: {{.Shell}}
+[[keyboard.bindings]]
+action = "CreateNewWindow"
+key = "N"
+mods = "Command"
 
-mouse:
-  double_click:
-    threshold: 100
-  triple_click:
-    threshold: 100
+[[keyboard.bindings]]
+chars = "\u001Bt"
+key = "T"
+mods = "Command"
 
-cursor:
-  style:
-    shape: Block
-    blinking: Never
-  unfocused_hollow: true
+[[keyboard.bindings]]
+chars = "\u001Ba"
+key = "A"
+mods = "Command"
 
-shell:
-  program: {{.Shell}}
-  args:
-    - --login
+[[keyboard.bindings]]
+chars = "\u001Bj"
+key = "J"
+mods = "Command"
 
-key_bindings:
-  - key: N
-    mods: Command
-    action: CreateNewWindow
-  - key: T
-    mods: Command
-    chars: "\x1bt"
-  - key: A
-    mods: Command
-    chars: "\x1ba"
-  - key: J
-    mods: Command
-    chars: "\x1bj"
-  - key: K
-    mods: Command
-    chars: "\x1bk"
-  - key: Space
-    mods: Control
-    chars: "\x00"
-  - key: Space
-    mods: Shift|Control
-    action: None
-  - key: Key6
-    mods: Control
-    chars: "\x1e"
-  - key: Key7
-    mods: Control
-    chars: "\x1e"
+[[keyboard.bindings]]
+chars = "\u001Bk"
+key = "K"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0000"
+key = "Space"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "None"
+key = "Space"
+mods = "Shift|Control"
+
+[[keyboard.bindings]]
+chars = "\u001E"
+key = "Key6"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u001E"
+key = "Key7"
+mods = "Control"
+
+[scrolling]
+history = 50000
+multiplier = 3
+
+[shell]
+program = "{{.Shell}}"
+args = ["--login"]
+
+[window]
+dynamic_padding = true
+option_as_alt = "OnlyLeft"
+
+[window.padding]
+x = 2
+y = 2
 `))
