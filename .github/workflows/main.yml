@@ -115,7 +115,7 @@ jobs:
         uses: actions/cache@v3.3.2
         with:
           path: ~/.cache/nvim/venv
-          key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}"
+          key: "${{ runner.os }}-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ steps.brew-versions.outputs.rtx-version }}"
 
       # this will always cache miss, but the idea is to reuse work between
       # pushes by leveraging restore-keys.
