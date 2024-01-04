@@ -68,40 +68,37 @@
         bufname (vim.api.nvim_buf_get_name bufnr)
         uri-pattern "^%a+://"]
     (when (should-start bufnr name)
-      (let [root-dir (find-root-dir bufname)]
-        (when (not= root-dir false)
-          (tset config :root_dir root-dir)
+      (tset config :root_dir (find-root-dir bufname))
 
-          (fn start- []
-            (with-executable exec
-              #(let [is-node-bin $2]
-                 (tset config.cmd 1 $1)
-                 (when is-node-bin
-                   (tset config :cmd (fnm-exec config.cmd)))
-                 (vim.schedule #(let [client-id (vim.lsp.start config {: bufnr})]
-                                  (when opts.autofmt
-                                    (mod-invoke :fsouza.lsp.formatting :attach
-                                                bufnr client-id))
-                                  (when opts.auto-action
-                                    (mod-invoke :fsouza.lsp.auto-action :attach
-                                                bufnr client-id))
-                                  (cb client-id))))))
+      (fn start- []
+        (with-executable exec
+          #(let [is-node-bin $2]
+             (tset config.cmd 1 $1)
+             (when is-node-bin
+               (tset config :cmd (fnm-exec config.cmd)))
+             (vim.schedule #(let [client-id (vim.lsp.start config {: bufnr})]
+                              (when opts.autofmt
+                                (mod-invoke :fsouza.lsp.formatting :attach
+                                            bufnr client-id))
+                              (when opts.auto-action
+                                (mod-invoke :fsouza.lsp.auto-action :attach
+                                            bufnr client-id))
+                              (cb client-id))))))
 
-          (if (string.find bufname uri-pattern)
-              (start-)
-              (file-exists bufname
-                           #(if $1
-                                (start-)
-                                (vim.schedule #(mod-invoke :fsouza.lib.nvim-helpers
-                                                           :augroup
-                                                           (string.format "fsouza__lsp_start_after_save_%s_%d"
-                                                                          name
-                                                                          bufnr)
-                                                           [{:events [:BufWritePost]
-                                                             :targets [(string.format "<buffer=%d>"
-                                                                                      bufnr)]
-                                                             :once true
-                                                             :callback start-}]))))))))))
+      (if (string.find bufname uri-pattern)
+          (start-)
+          (file-exists bufname
+                       #(if $1
+                            (start-)
+                            (vim.schedule #(mod-invoke :fsouza.lib.nvim-helpers
+                                                       :augroup
+                                                       (string.format "fsouza__lsp_start_after_save_%s_%d"
+                                                                      name bufnr)
+                                                       [{:events [:BufWritePost]
+                                                         :targets [(string.format "<buffer=%d>"
+                                                                                  bufnr)]
+                                                         :once true
+                                                         :callback start-}]))))))))
 
 (fn enable-server [name]
   (mod-invoke :fsouza.lib.ff :enable (ff name)))
