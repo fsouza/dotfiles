@@ -56,7 +56,7 @@ jobs:
       - name: install early dependencies
         run: |
           brew update
-          brew install coreutils jq
+          brew install coreutils jq rtx
 
       - uses: actions/checkout@v4.1.1
 
