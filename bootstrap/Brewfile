@@ -7,11 +7,11 @@ brew "fd"
 brew "fnm"
 brew "fzf"
 brew "git", args: ["overwrite"]
+brew "mise"
 brew "mr"
 brew "pcre"
 brew "python@3.12", args: ["overwrite"]
 brew "ripgrep"
-brew "rtx"
 brew "sd"
 brew "selene"
 brew "shellcheck"

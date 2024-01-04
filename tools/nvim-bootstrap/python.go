@@ -60,24 +60,24 @@ func ensureVirtualenvPyz(nv *Neovim) (string, error) {
 func python() string {
 	python := os.Getenv("PYTHON")
 	if python == "" {
-		return getPythonFromRtx()
+		return getPythonFromMise()
 	}
 	return python
 }
 
-func getPythonFromRtx() string {
+func getPythonFromMise() string {
 	const py = "python@3.12"
-	output, err := exec.Command("rtx", "where", py).CombinedOutput()
+	output, err := exec.Command("mise", "where", py).CombinedOutput()
 	if err != nil {
 		err = tools.Run(&tools.RunOptions{
-			Cmd:  "rtx",
+			Cmd:  "mise",
 			Args: []string{"install", py},
 		})
 		if err != nil {
 			panic(err)
 		}
 
-		output, err = exec.Command("rtx", "where", py).CombinedOutput()
+		output, err = exec.Command("mise", "where", py).CombinedOutput()
 		if err != nil {
 			panic(err)
 		}

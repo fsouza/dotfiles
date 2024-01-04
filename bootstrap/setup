@@ -50,7 +50,7 @@ function main {
 	fi
 
 	if command -v nvim &>/dev/null; then
-		env NVIM_DEBUG=1 RTX_EXPERIMENTAL=1 make -C ${FSOUZA_DOTFILES_DIR}
+		env NVIM_DEBUG=1 MISE_EXPERIMENTAL=1 make -C ${FSOUZA_DOTFILES_DIR}
 	fi
 
 	tic -x ${FSOUZA_DOTFILES_DIR}/tmux/tmux-256color
