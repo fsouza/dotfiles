@@ -5,7 +5,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"@fsouza/prettierd": "^0.25.2",
-		"@typescript-eslint/typescript-estree": "^6.16.0",
+		"@typescript-eslint/typescript-estree": "^6.18.1",
 		"eslint_d": "^13.1.2",
 		"postcss-scss": "^4.0.9",
 		"pyright": "^1.1.344",
