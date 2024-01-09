@@ -10,7 +10,6 @@ brew "git", args: ["overwrite"]
 brew "mise"
 brew "mr"
 brew "pcre"
-brew "python@3.12", args: ["overwrite"]
 brew "ripgrep"
 brew "sd"
 brew "selene"
