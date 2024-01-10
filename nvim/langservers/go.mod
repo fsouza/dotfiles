@@ -1,7 +1,6 @@
 module github.com/fsouza/dotfiles/nvim/langservers
 
-go 1.21.3
-toolchain go1.21.5
+go 1.21.6
 
 require (
 	github.com/hashicorp/terraform-ls v0.32.4
