@@ -1,7 +1,7 @@
 NEOVIM_INSTALL_PREFIX=${HOME}/opt/neovim
 NEOVIM_SRC_DIR=${NEOVIM_SRC_DIR:-${HOME}/Projects/os/3/neovim}
 
-function __use_nvim {
+function __try_use_nvim {
 	local executable=${NEOVIM_INSTALL_PREFIX}/bin/nvim
 	if [ -x ${executable} ]; then
 		if [[ $(which nvim) != ${executable} ]]; then
@@ -12,9 +12,10 @@ function __use_nvim {
 			nvim +'lua require("fsouza.lib.fuzzy").files()' ${@}
 		}
 
-		export GIT_EDITOR=nvim MANPAGER="nvim +'Man!'"
+		export EDITOR=nvim GIT_EDITOR=nvim MANPAGER="nvim +'Man!'"
 	else
 		unset GIT_EDITOR MANPAGER
+		export EDITOR=vim
 	fi
 }
 
@@ -42,16 +43,17 @@ function __update_neovim {
 
 function rebootstrap_neovim {
 	__ensure_neovim_src
-	pushd ${NEOVIM_SRC_DIR} &&
-		make distclean &&
-		git clean -dfx &&
-		rm -rf ${NEOVIM_INSTALL_PREFIX} &&
-		__update_neovim &&
-		popd
+	(
+		cd ${NEOVIM_SRC_DIR} &&
+			make distclean &&
+			git clean -dfx &&
+			rm -rf ${NEOVIM_INSTALL_PREFIX} &&
+			__update_neovim
+	)
 }
 
 function update_neovim {
-	(__update_neovim || rebootstrap_neovim) && __use_nvim
+	(__update_neovim || rebootstrap_neovim) && __try_use_nvim
 }
 
-__use_nvim
+__try_use_nvim
