@@ -143,7 +143,7 @@ func installServersFromNpm() error {
 
 func setupFnlfmt(nv *Neovim, hererocksDir string) error {
 	repoDir := filepath.Join(nv.CacheDir, "fnlfmt")
-	err := gitCloneOrUpdate("https://git.sr.ht/~technomancy/fnlfmt", repoDir)
+	err := gitCloneOrUpdate("https://github.com/fsouza/fnlfmt.git", repoDir)
 	if err != nil {
 		return err
 	}
