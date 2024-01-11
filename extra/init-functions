@@ -27,12 +27,3 @@ function remove_from_path {
 	local index=${path[(i)${1}]}
 	path[${index}]=()
 }
-
-function realpath {
-	local resolved=$(readlink ${1})
-	if [ -n "${resolved}" ]; then
-		realpath ${resolved}
-	else
-		echo ${1}
-	fi
-}
