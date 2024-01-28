@@ -32,6 +32,7 @@
 	defaultBranch = main
 [advice]
 	detachedHead = false
+	skippedCherryPicks = false
 [merge]
 	conflictStyle = zdiff3
 [gpg]
