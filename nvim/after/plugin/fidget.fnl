@@ -12,10 +12,11 @@
 (do
   (mod-invoke :fidget :setup {:window {:blend 0} :fmt {:task fmt-task}})
   (var enabled true)
-  (let [progress-handler (. vim.lsp.handlers :$/progress)]
+  (let [handler (mod-invoke :fsouza.lib.debounce :debounce 500
+                            (vim.schedule_wrap (. vim.lsp.handlers :$/progress)))]
     (tset vim.lsp.handlers :$/progress
           #(when enabled
-             (progress-handler $...)))
+             (handler.call $...)))
     (mod-invoke :fsouza.lib.nvim-helpers :augroup
                 :fsouza__auto_disable_progress
                 [{:events [:InsertLeave]
@@ -23,4 +24,6 @@
                   :callback #(set enabled true)}
                  {:events [:InsertEnter]
                   :targets ["*"]
-                  :callback #(set enabled false)}])))
+                  :callback #(do
+                               (set enabled false)
+                               (vim.cmd.FidgetClose))}])))
