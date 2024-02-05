@@ -4,7 +4,7 @@ go 1.21.6
 
 require (
 	github.com/hashicorp/terraform-ls v0.32.6
-	github.com/mattn/efm-langserver v0.0.49
+	github.com/mattn/efm-langserver v0.0.50
 )
 
 require (
