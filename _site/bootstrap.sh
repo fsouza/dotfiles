@@ -91,19 +91,6 @@ function gh_ssh_setup {
 	fi
 }
 
-function add_gpg_key_to_gh {
-	local keyemail=${1}
-	gpg -a --export ${keyemail} | gh gpg-key add - &>/dev/null
-}
-
-function setup_gpg {
-	local email="108725+fsouza@users.noreply.github.com"
-	if ! gpg --list-keys ${email} &>/dev/null; then
-		gpg --batch --passphrase '' --quick-gen-key "francisco souza <${email}>" rsa4096
-		add_gpg_key_to_gh ${email}
-	fi
-}
-
 function setup_dotfiles {
 	local target_dir=${1}
 	if [ ! -d ${target_dir} ]; then
@@ -160,7 +147,6 @@ function main {
 	bump_maxfiles_limit
 	setup_brew
 	gh_ssh_setup
-	setup_gpg
 
 	setup_rclone
 	setup_dotfiles ${dotfiles_dir}
