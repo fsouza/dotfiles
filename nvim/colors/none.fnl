@@ -90,7 +90,8 @@
                 :FloatBorder
                 :editorconfigInvalidProperty
                 "@text.literal"
-                "@text.literal.block"]]
+                "@text.literal.block"
+                "@markup.italic"]]
     (icollect [_ group-name (ipairs groups)]
       `(vim.api.nvim_set_hl 0 ,group-name {}))))
 
