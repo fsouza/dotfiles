@@ -27,7 +27,7 @@ function __auto_git_config {
 			if [[ $remote =~ $key ]]; then
 				local email=$_GIT_HOST_EMAIL[$key]
 				git config --local user.email ${email}
-				git config --local user.signingkey ${email}
+				git config --local user.signingkey "key::$(ssh-add -L)"
 				break
 			fi
 		done

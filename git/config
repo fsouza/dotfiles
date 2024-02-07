@@ -36,7 +36,9 @@
 [merge]
 	conflictStyle = zdiff3
 [gpg]
-	program = gpg
+	format = ssh
+[gpg "ssh"]
+	defaultKeyCommand = ssh-add -L
 [commit]
 	gpgsign = true
 [rerere]

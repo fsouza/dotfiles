@@ -1,1 +1,6 @@
 export MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)
+
+_secretive_sock=${HOME}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+if [ -e ${_secretive_sock} ]; then
+	export SSH_AUTH_SOCK=${_secretive_sock}
+fi
