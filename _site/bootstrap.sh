@@ -79,7 +79,7 @@ function setup_brew {
 	echo "==================================="
 	echo "installing and configuring 1password-cli (may ask for sudo password)"
 
-	brew install --cask 1password-cli
+	brew install --cask 1password-cli secretive
 	$(find_op) signin -f
 }
 
