@@ -79,7 +79,7 @@ function setup_brew {
 	echo "==================================="
 	echo "installing and configuring 1password-cli (may ask for sudo password)"
 
-	brew install --cask 1password-cli
+	brew install --cask 1password-cli secretive
 	$(find_op) signin -f
 }
 
@@ -88,19 +88,6 @@ function gh_ssh_setup {
 		echo "we're now going to login to GitHub, using gh. Make sure to create or upload the SSH key in the next step."
 		gh auth login -h github.com -p ssh -s admin:gpg_key -s admin:public_key --web
 		ssh-keyscan github.com >>${HOME}/.ssh/known_hosts
-	fi
-}
-
-function add_gpg_key_to_gh {
-	local keyemail=${1}
-	gpg -a --export ${keyemail} | gh gpg-key add - &>/dev/null
-}
-
-function setup_gpg {
-	local email="108725+fsouza@users.noreply.github.com"
-	if ! gpg --list-keys ${email} &>/dev/null; then
-		gpg --batch --passphrase '' --quick-gen-key "francisco souza <${email}>" rsa4096
-		add_gpg_key_to_gh ${email}
 	fi
 }
 
@@ -160,7 +147,6 @@ function main {
 	bump_maxfiles_limit
 	setup_brew
 	gh_ssh_setup
-	setup_gpg
 
 	setup_rclone
 	setup_dotfiles ${dotfiles_dir}
