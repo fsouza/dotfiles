@@ -50,7 +50,7 @@
                    :update_in_insert false})]
     (fn [err result context ...]
       (vim.schedule exec-hooks)
-      (vim.diagnostic.reset context.client_id context.bufnr)
+      (pcall vim.diagnostic.reset context.client_id context.bufnr)
       (let [result (filter result context)]
         (handler err result context ...)))))
 
