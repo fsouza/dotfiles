@@ -37,8 +37,6 @@ func main() {
 			log.Fatal(err)
 		}
 		sendToNvim(paneCwd, rawInput)
-	} else {
-		tools.Exec([]string{"tmux", "send-keys", "-X", "copy-selection-and-cancel"})
 	}
 }
 
