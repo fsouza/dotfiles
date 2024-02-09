@@ -76,7 +76,7 @@ jobs:
         id: brew-versions
         run: |
           echo "pcre-version=$(brew info pcre --json | jq -r '.[0].versions.stable')" >>${GITHUB_OUTPUT}
-          echo "mise-version=$(brew info mise --json | jq -r '.[0].versions.stable')" >>${GITHUB_OUTPUT}
+          echo "mise-version=$(brew info mise --json | jq -r '.[0].versions.stable')-2024-02-08" >>${GITHUB_OUTPUT}
 
       - name: set MISE_DATA_DIR
         run: |
