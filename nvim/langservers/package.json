@@ -10,7 +10,7 @@
 		"postcss-scss": "^4.0.9",
 		"pyright": "^1.1.349",
 		"typescript": "^5.3.3",
-		"typescript-language-server": "^4.3.2",
+		"typescript-language-server": "^4.3.3",
 		"vscode-langservers-extracted": "^4.8.0",
 		"yaml-language-server": "^1.14.0"
 	}
