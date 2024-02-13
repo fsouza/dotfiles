@@ -32,6 +32,10 @@ function __auto_git_config {
 			fi
 		done
 	fi
+
+	if [ -d .git ] && [ -f .git-blame-ignore-revs ] && ! git config --local blame.ignoreRevsFile; then
+		git config --local blame.ignoreRevsFile .git-blame-ignore-revs
+	fi
 }
 
 if [[ -v HOMEBREW_PREFIX ]]; then
