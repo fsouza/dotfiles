@@ -45,5 +45,3 @@
 	enabled = true
 [url "https://github"]
 	insteadOf = git://github
-[blame]
-	ignoreRevsFile = .git-blame-ignore-revs
