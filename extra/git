@@ -33,7 +33,7 @@ function __auto_git_config {
 		done
 	fi
 
-	if [ -d .git ] && [ -f .git-blame-ignore-revs ] && ! git config --local blame.ignoreRevsFile; then
+	if [ -d .git ] && [ -f .git-blame-ignore-revs ] && ! git config --local blame.ignoreRevsFile &>/dev/null; then
 		git config --local blame.ignoreRevsFile .git-blame-ignore-revs
 	fi
 }
