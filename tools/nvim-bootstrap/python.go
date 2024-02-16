@@ -38,11 +38,8 @@ func ensureVirtualenv(nv *Neovim, venvDir string) error {
 	}
 
 	return tools.Run(&tools.RunOptions{
-		Cmd: pip,
+		Cmd: filepath.Join(venvDir, "bin", "pip-sync"),
 		Args: []string{
-			"install",
-			"--upgrade",
-			"-r",
 			filepath.Join(dotfilesDir, "nvim", "langservers", "requirements.txt"),
 		},
 	})
