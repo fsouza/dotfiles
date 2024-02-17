@@ -102,14 +102,6 @@ jobs:
           path: ~/.cache/nvim/hr
           key: "${{ runner.os }}-${{ steps.brew-versions.outputs.pcre-version }}-${{ steps.get-repo-versions.outputs.luajit-version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
-      - name: virtualenv cache
-        id: nvim-virtualenv-cache
-        uses: actions/cache@v4.0.0
-        with:
-          path: ~/.cache/nvim/venv
-          key: "${{ runner.os }}-venv-${{ hashFiles('nvim/langservers/requirements.txt') }}-${{ github.sha }}"
-          restore-keys: "${{ runner.os }}-venv-${{ hashFiles('nvim/langservers/requirements.txt') }}-"
-
       # this will always cache miss, but the idea is to reuse work between
       # pushes by leveraging restore-keys.
       - name: mr cache
