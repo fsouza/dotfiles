@@ -9,49 +9,28 @@ import (
 	"github.com/fsouza/dotfiles/tools"
 )
 
-const virtualenvURL = "https://bootstrap.pypa.io/virtualenv.pyz"
-
 func ensureVirtualenv(nv *Neovim, venvDir string) error {
-	pip := filepath.Join(venvDir, "bin", "pip3")
-	if _, err := os.Stat(pip); err != nil {
-		venvPyz, err := ensureVirtualenvPyz(nv)
-		if err != nil {
-			return err
-		}
-
+	py3 := filepath.Join(venvDir, "bin", "python3")
+	if _, err := os.Stat(py3); err != nil {
 		os.RemoveAll(venvDir)
 		err = tools.Run(&tools.RunOptions{
-			Cmd:  python(),
-			Args: []string{venvPyz, venvDir},
+			Cmd:  "uv",
+			Args: []string{"venv", "--python", python(), venvDir},
 		})
 		if err != nil {
 			return err
 		}
 	}
 
-	err := tools.Run(&tools.RunOptions{
-		Cmd:  pip,
-		Args: []string{"install", "--upgrade", "pip", "pip-tools"},
-	})
-	if err != nil {
-		return err
-	}
-
 	return tools.Run(&tools.RunOptions{
-		Cmd: filepath.Join(venvDir, "bin", "pip-sync"),
+		Cmd: "uv",
 		Args: []string{
+			"pip",
+			"sync",
 			filepath.Join(dotfilesDir, "nvim", "langservers", "requirements.txt"),
 		},
+		Env: map[string]string{"VIRTUAL_ENV": venvDir},
 	})
-}
-
-func ensureVirtualenvPyz(nv *Neovim) (string, error) {
-	outputFile := filepath.Join(nv.CacheDir, "virtualenv.pyz")
-	if _, err := os.Stat(outputFile); os.IsNotExist(err) {
-		err = tools.DownloadFile(virtualenvURL, outputFile, 0o644)
-		return outputFile, err
-	}
-	return outputFile, nil
 }
 
 func python() string {

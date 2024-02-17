@@ -17,6 +17,7 @@ brew "shellcheck"
 brew "stylua"
 brew "taplo"
 brew "tmux"
+brew "uv"
 brew "zoxide"
 
 if OS.mac?
