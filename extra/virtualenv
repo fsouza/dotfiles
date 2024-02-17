@@ -30,6 +30,12 @@ function _activate_virtualenv() {
 	alias cdvirtualenv="cd ${virtualenvpath}"
 	alias cdsitepackages='cd '"${virtualenvpath}"'/lib/python*/site-packages'
 	export VIRTUAL_ENV=${virtualenvpath}
+
+	if [[ -v CONDA_PREFIX ]]; then
+		old_conda_prefix=${CONDA_PREFIX}
+		unset CONDA_PREFIX
+	fi
+
 	hash -r
 }
 
@@ -64,6 +70,12 @@ function d() {
 	remove_from_path ${VIRTUAL_ENV}/bin
 	unalias cdvirtualenv cdsitepackages
 	unset VIRTUAL_ENV
+
+	if [[ -v old_conda_prefix ]]; then
+		export CONDA_PREFIX=${old_conda_prefix}
+		unset old_conda_prefix
+	fi
+
 	hash -r
 }
 
