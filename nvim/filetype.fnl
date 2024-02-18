@@ -23,17 +23,8 @@
     (when shell
       (path.basename shell))))
 
-(let [fts {:extension {:tilt :bzl
-                       :fs :fsharp
-                       :fsx :fsharp
-                       :fsi :fsharp
-                       :fnl :fennel
-                       :thrift :thrift
-                       :fsproj :fsharp_project
+(let [fts {:extension {:fnl :fennel
                        :sh #(or (from-shebang $...) (from-current-shell))
                        "" from-shebang}
-           :filename {:Tiltfile :bzl
-                      :go.mod :gomod
-                      :setup.cfg :pysetupcfg
-                      :Brewfile :ruby}}]
+           :filename {:go.mod :gomod :setup.cfg :pysetupcfg :Brewfile :ruby}}]
   (vim.filetype.add fts))

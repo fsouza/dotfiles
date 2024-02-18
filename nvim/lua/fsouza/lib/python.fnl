@@ -1,7 +1,7 @@
 (import-macros {: mod-invoke} :helpers)
 
 (fn set-from-env-var [cb]
-  (cb (os.getenv :VIRTUAL_ENV)))
+  (cb (or (os.getenv :VIRTUAL_ENV) (os.getenv :CONDA_PREFIX))))
 
 (fn set-from-cmd [exec args cb]
   (mod-invoke :fsouza.lib.cmd :run exec {: args}

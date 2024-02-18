@@ -9,5 +9,4 @@
       (tset ns :autoformat true)
       (tset ns :autoformat false)))
 
-(let [mod {: is-enabled :toggle #(toggle vim.b) :toggle_g #(toggle vim.g)}]
-  mod)
+{: is-enabled :toggle #(toggle vim.b) :toggle_g #(toggle vim.g)}
