@@ -1,3 +1,0 @@
-ignore = []
-line-length = 120
-select = ["E", "F", "W"]
