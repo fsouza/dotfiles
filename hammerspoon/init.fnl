@@ -54,4 +54,4 @@
   (hs.hotkey.bind prefix :V
                   #(hs.eventtap.keyStrokes (hs.pasteboard.getContents))))
 
-(set-readline-shortcuts [:alacritty :terminal "intellij idea"])
+(set-readline-shortcuts [:alacritty :terminal :code])
