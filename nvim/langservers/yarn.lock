@@ -555,7 +555,7 @@ fs.realpath@^1.0.0:
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
 
-fsevents@~2.3.2:
+fsevents@~2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.3.tgz#cac6407785d03675a2a5e1a5305c697b347d90d6"
   integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
@@ -896,12 +896,12 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.3.1.tgz#027422e2faec0b25e1549c3e1bd8309b9133b6e5"
   integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
 
-pyright@^1.1.350:
-  version "1.1.350"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.350.tgz#2cf74b3df1a3ecc270d3de6a62bd53a23a34e065"
-  integrity sha512-9AMEsPGFzyYzwYCU3QuTUk/AEfVO3hlKtvF0kybBnwGiFuYsmwx02/Hlra7ROX+jtmDStL8qiHCPoYy0rCz/uA==
+pyright@^1.1.351:
+  version "1.1.351"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.351.tgz#566b9191374aeb9e8282f6b2aac809f4f8b2a560"
+  integrity sha512-z+E1II+8H6GRweHf06gRpvjEu1HQtQWZxTs8Zr9pATe79YOFByn8nSBc+iY/EAW+oXPtZEr7NU/9Fxa4fzXv6g==
   optionalDependencies:
-    fsevents "~2.3.2"
+    fsevents "~2.3.3"
 
 queue-microtask@^1.2.2:
   version "1.2.3"
