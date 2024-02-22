@@ -77,7 +77,6 @@
                                    previewer :builtin
                                    id #$1]
                                (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
-                                                :fzf_layout :default
                                                 :previewers {:builtin {:syntax false}}
                                                 :buffers {:file_icons false
                                                           :git_icons false
