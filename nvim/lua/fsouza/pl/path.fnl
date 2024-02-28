@@ -28,16 +28,6 @@
                                                   (cb $1))
                                       _ (cb $1))))))
 
-(fn async-write-file [path mode content cb]
-  (vim.uv.fs_open path :w mode
-                  #(when (= $1 nil)
-                     (let [fd $2]
-                       (vim.uv.fs_write fd content nil
-                                        #(do
-                                           (vim.uv.fs_close fd)
-                                           (when (= $1 nil)
-                                             (cb))))))))
-
 (fn path-entries [path]
   (let [path (or path (os.getenv :PATH))]
     (vim.split path ":" {:trimempty true :plain true})))
@@ -68,7 +58,7 @@
 
         (try-dir 1))))
 
-(let [mod {: isrel : async-mkdir : async-which : async-write-file}]
+(let [mod {: isrel : async-mkdir : async-which}]
   (setmetatable mod {:__index (fn [table key]
                                 (let [value (. pl-path key)]
                                   (rawset table key value)
