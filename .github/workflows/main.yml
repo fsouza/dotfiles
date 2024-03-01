@@ -77,25 +77,31 @@ jobs:
         run: |
           echo "MISE_DATA_DIR=${HOME}/.local/share/mise" >>${GITHUB_ENV}
 
-      - name: set MACOSX_DEPLOYMENT_TARGET
-        id: macosx-deployment-target
+      - name: set product-version
+        id: os-deployment-target
         run: |
-          echo "MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)" >>${GITHUB_ENV}
-          echo "product-version=$(sw_vers -productVersion)" >>${GITHUB_OUTPUT}
+          if [[ ${RUNNER} == "macOS" ]]; then
+            echo "MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)" >>${GITHUB_ENV}
+            echo "product-version=$(sw_vers -productVersion)" >>${GITHUB_OUTPUT}
+          else
+            echo "product-version=$(lsb_release -ds)" >>${GITHUB_OUTPUT}
+          fi
+        env:
+          RUNNER: ${{ runner.os }}
 
       - name: mise cache
         id: mise-cache
         uses: actions/cache@v4.0.0
         with:
           path: ~/.local/share/mise
-          key: "${{ runner.os }}-${{ steps.brew-versions.outputs.mise-version }}"
+          key: "${{ runner.os }}-${{ steps.os-deployment-target.outputs.product-version }}-${{ steps.brew-versions.outputs.mise-version }}"
 
       - name: hererocks cache
         id: nvim-hererocks-cache
         uses: actions/cache@v4.0.0
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ runner.os }}-${{ steps.brew-versions.outputs.pcre-version }}-${{ steps.get-repo-versions.outputs.luajit-version }}-${{ steps.macosx-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
+          key: "${{ runner.os }}-${{ steps.brew-versions.outputs.pcre-version }}-${{ steps.get-repo-versions.outputs.luajit-version }}-${{ steps.os-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       # this will always cache miss, but the idea is to reuse work between
       # pushes by leveraging restore-keys.
