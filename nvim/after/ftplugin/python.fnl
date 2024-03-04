@@ -12,6 +12,7 @@
                 {: bufnr
                  :config {:name :pyright
                           :cmd [:pyright-langserver :--stdio]
+                          :cmd_env {:NODE_OPTIONS :--max-old-space-size=16384}
                           :settings {:pyright {}
                                      :python {:pythonPath python-interpreter
                                               :analysis {:autoImportCompletions true
