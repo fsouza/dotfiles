@@ -42,13 +42,6 @@ func black(args []string) []Language {
 	return stdinFormatter("black", args)
 }
 
-func shed(args []string) []Language {
-	langs := black(args)
-	langs = append(langs, isort([]string{"--ca", "--profile=black"})...)
-	langs = append(langs, autoflake(nil)...)
-	return langs
-}
-
 func addTrailingComma(args []string) []Language {
 	args = append([]string{"--exit-zero-even-if-changed"}, args...)
 	return stdinFormatter("add-trailing-comma", args)
