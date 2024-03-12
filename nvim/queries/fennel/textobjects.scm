@@ -9,7 +9,7 @@
   (symbol) @_fn
   (symbol)? @_fn_name
   (sequence
-    (_) @parameter.inner)
+    (_)? @parameter.inner)
   (_)* @function.inner
   (#any-of? @_fn "fn" "lambda" "λ")) @function.outer
 
