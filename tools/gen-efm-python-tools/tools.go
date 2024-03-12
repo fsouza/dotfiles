@@ -16,7 +16,7 @@ func flake8(args []string) []Language {
 	return []Language{
 		{
 			LintCommand: fmt.Sprintf(
-				`%s --stdin-display-name ${INPUT} --format %q %s`,
+				`%s --stdin-display-name ${INPUT} --format %q %s -`,
 				flake8,
 				outputFormat,
 				processArgs(args),
