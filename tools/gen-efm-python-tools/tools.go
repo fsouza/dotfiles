@@ -78,7 +78,7 @@ func ruff(_ []string) []Language {
 
 	return []Language{
 		{
-			LintCommand:        fmt.Sprintf("%s --stdin-filename ${INPUT} -", ruff),
+			LintCommand:        fmt.Sprintf("%s check --stdin-filename ${INPUT} -", ruff),
 			LintSource:         "ruff",
 			LintFormats:        []string{"%f:%l:%c: %m"},
 			LintStdin:          true,
@@ -86,7 +86,7 @@ func ruff(_ []string) []Language {
 			RootMarkers:        ruffRootmarkers,
 		},
 		{
-			FormatCommand: fmt.Sprintf("%s --silent --exit-zero --fix -", ruff),
+			FormatCommand: fmt.Sprintf("%s check --silent --exit-zero --fix-only -", ruff),
 			FormatStdin:   true,
 			RootMarkers:   ruffRootmarkers,
 		},
