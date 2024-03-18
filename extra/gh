@@ -16,3 +16,10 @@ function gh_dependabot_rebase {
 			| xargs -tI {} gh api --silent -F body='\@dependabot rebase' "{}/comments"
 	)
 }
+
+function gh_dependabot_list {
+	(
+		gh api 'search/issues?q=is%3Aopen+is%3Apr+user%3Afsouza+author%3Aapp%2Fdependabot+archived%3Afalse' \
+			| jq -r '.items[].html_url' \
+	)
+}
