@@ -24,6 +24,7 @@
 [fetch]
 	prune = true
 	showForcedUpdates = true
+	writeCommitGraph = true
 [protocol]
 	version = 2
 [alias]
