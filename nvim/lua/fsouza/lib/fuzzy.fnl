@@ -159,7 +159,7 @@
             config (require :fzf-lua.config)
             core (require :fzf-lua.core)
             opts (config.normalize_opts {: prompt : actions} config.globals.lsp)]
-        (tset opts.fzf_opts :--no-multi "")
+        (tset opts.fzf_opts :--multi false)
         (when (not enable-preview)
           (tset opts :previewer nil))
         (core.fzf_exec items-or-fzf-cb opts)))
@@ -226,7 +226,7 @@
                                     config.globals.files)
         contents (core.mt_cmd_wrapper {:cmd "fd --hidden --type d --exec dirname {} ';' -- '^.git$'"})
         opts (core.set_fzf_field_index opts)]
-    (tset opts.fzf_opts :--no-multi "")
+    (tset opts.fzf_opts :--multi false)
     (tset opts :previewer nil)
     (core.fzf_exec contents opts)))
 
@@ -248,7 +248,7 @@
                                     config.globals.files)
         contents (core.mt_cmd_wrapper {:cmd "fd --type d"})
         opts (core.set_fzf_field_index opts)]
-    (tset opts.fzf_opts :--no-multi "")
+    (tset opts.fzf_opts :--multi false)
     (tset opts :previewer nil)
     (core.fzf_exec contents opts)))
 
