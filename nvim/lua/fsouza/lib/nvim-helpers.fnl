@@ -48,32 +48,19 @@
                                                            col-offset))
                                               (max-col))]))))
 
+(fn visual-mode [])
+
 (lambda get-visual-selection-range []
-  (fn from-markers []
-    (let [[_ srow scol _] (vim.fn.getpos "'<")
-          [_ erow ecol _] (vim.fn.getpos "'>")]
-      [srow scol erow ecol]))
-
-  (fn from-current [mode]
-    (let [[_ srow scol _] (vim.fn.getpos ".")
-          [_ erow ecol _] (vim.fn.getpos :v)]
-      (-> :<esc> (vim.api.nvim_replace_termcodes true false true)
-          (vim.api.nvim_feedkeys :map true))
-      (if (= mode :V) [srow 0 erow (max-col)] [srow scol erow ecol])))
-
   (let [{: mode} (vim.api.nvim_get_mode)
-        [srow scol erow ecol] (if (or (= mode :v) (= mode :V))
-                                  (from-current mode)
-                                  (from-markers))]
+        [_ srow scol _] (vim.fn.getpos ".")
+        [_ erow ecol _] (vim.fn.getpos :v)]
     (if (< srow erow) [srow scol erow ecol]
         (if (> srow erow) [erow ecol srow scol]
             (if (<= scol ecol) [srow scol erow ecol] [erow ecol srow scol])))))
 
 (lambda get-visual-selection-contents []
-  (let [[srow scol erow ecol] (get-visual-selection-range)
-        lines (vim.api.nvim_buf_get_text 0 (- srow 1) (- scol 1) (- erow 1)
-                                         ecol {})]
-    lines))
+  (let [{: mode} (vim.api.nvim_get_mode)]
+    (vim.fn.getregion (vim.fn.getpos :v) (vim.fn.getpos ".") {:type mode})))
 
 (lambda extract-luv-error [?err]
   (if (= ?err nil)

@@ -182,6 +182,12 @@
                                              extra-opts
                                              (vim.fn.shellescape search))}))))
 
+(fn grep-visual [rg-opts ...]
+  (let [search (. (mod-invoke :fsouza.lib.nvim-helpers
+                              :get-visual-selection-contents)
+                  1)]
+    (grep rg-opts search ...)))
+
 (fn live-grep [rg-opts opts]
   (let [opts (or opts {})
         fzf-lua (fzf-lua)]
@@ -269,10 +275,7 @@
            :live-grep #(live-grep rg-opts $...)
            :grep #(grep rg-opts $...)
            :grep-last #(grep-last rg-opts $...)
-           :grep-visual #(grep rg-opts
-                               (. (mod-invoke :fsouza.lib.nvim-helpers
-                                              :get-visual-selection-contents)
-                                  1) :-F $...)
+           :grep-visual #(grep-visual rg-opts $...)
            : set-virtual-cwd
            : unset-virtual-cwd
            : get-virtual-cwd
