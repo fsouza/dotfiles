@@ -48,8 +48,6 @@
                                                            col-offset))
                                               (max-col))]))))
 
-(fn visual-mode [])
-
 (lambda get-visual-selection-range []
   (let [{: mode} (vim.api.nvim_get_mode)
         [_ srow scol _] (vim.fn.getpos ".")
