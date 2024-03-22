@@ -1,0 +1,44 @@
+# this is too similar to extra/neovim. If I ever generate a third copy of it,
+# I'll think of an abstraction.
+
+CHAPEL_INSTALL_PREFIX=${HOME}/opt/chapel
+CHAPEL_SRC_DIR=${CHAPEL_SRC_DIR:-${HOME}/Projects/os/3/chapel}
+
+function __try_use_chapel {
+	if [ -x ${CHAPEL_INSTALL_PREFIX}/bin/chpl ]; then
+		prepend_to_path ${CHAPEL_INSTALL_PREFIX}/bin
+		export CHPL_HOME=${CHAPEL_SRC_DIR}
+	fi
+}
+
+function __ensure_chapel_src {
+	if ! [ -d ${CHAPEL_SRC_DIR} ]; then
+		git clone https://github.com/chapel-lang/chapel.git ${CHAPEL_SRC_DIR}
+	fi
+}
+
+function __rebuild_chapel_tools {
+	make -j -C ${CHPL_HOME} chplcheck chpl-language-server
+}
+
+function __rebuild_chapel {
+	(
+		cd ${CHAPEL_SRC_DIR} &&
+			./configure --prefix=${CHAPEL_INSTALL_PREFIX} &&
+			make -j &&
+			make install &&
+			__try_use_chapel &&
+			__rebuild_chapel_tools
+	)
+}
+
+function __update_chapel {
+	__ensure_chapel_src
+	git -C ${CHAPEL_SRC_DIR} pull && __rebuild_chapel
+}
+
+function update_chapel {
+	__update_chapel && __try_use_chapel
+}
+
+__try_use_chapel
