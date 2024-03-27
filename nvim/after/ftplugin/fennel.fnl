@@ -14,6 +14,7 @@
                          :lintStdin true
                          :lintSource :fennel
                          :lintFormats ["%f:%l:%c %m" "%f:%l: %m"]
-                         :lintIgnoreExitCode true}))
+                         :lintIgnoreExitCode true
+                         :lintAfterOpen true}))
   (custom-surround :f "(\001function: \001 \r)")
   (mod-invoke :fsouza.lsp.servers.efm :add bufnr :fennel tools))

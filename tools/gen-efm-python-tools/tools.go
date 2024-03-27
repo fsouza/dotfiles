@@ -25,6 +25,7 @@ func flake8(args []string) []Language {
 			LintFormats:        []string{"%f:%l:%c: %m"},
 			LintIgnoreExitCode: true,
 			LintStdin:          true,
+			LintAfterOpen:      true,
 			RootMarkers:        append([]string{".flake8"}, defaultRootmarkers...),
 		},
 	}
@@ -76,6 +77,7 @@ func ruff(_ []string) []Language {
 			LintFormats:        []string{"%f:%l:%c: %m"},
 			LintStdin:          true,
 			LintIgnoreExitCode: true,
+			LintAfterOpen:      true,
 			RootMarkers:        ruffRootmarkers,
 		},
 		{

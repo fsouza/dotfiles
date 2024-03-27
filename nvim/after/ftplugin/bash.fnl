@@ -5,4 +5,5 @@
               [{:formatCommand "shfmt -" :formatStdin true}
                {:lintCommand "shellcheck -f gcc -x ${INPUT}"
                 :lintFormats ["%f:%l:%c: %m"]
-                :lintSource :shellcheck}]))
+                :lintSource :shellcheck
+                :lintAfterOpen true}]))

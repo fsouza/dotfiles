@@ -14,6 +14,7 @@ type Language struct {
 	LintSource         string   `json:"lintSource,omitempty"`
 	LintWorkspace      bool     `json:"lintWorkspace,omitempty"`
 	LintOnSave         bool     `json:"lintOnSave,omitempty"`
+	LintAfterOpen      bool     `json:"lintAfterOpen,omitempty"`
 	FormatCommand      string   `json:"formatCommand,omitempty"`
 	FormatStdin        bool     `json:"formatStdin,omitempty"`
 	Env                []string `json:"env,omitempty"`

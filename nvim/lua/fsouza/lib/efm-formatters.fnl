@@ -54,6 +54,7 @@
                               :lintSource :eslint
                               :lintIgnoreExitCode true
                               :lintFormats ["%f:%l:%c: %m"]
+                              :lintAfterOpen true
                               :rootMarkers root-markers
                               :requireMarker true
                               :env [(.. :XDG_RUNTIME_DIR= xdg-runtime-dir)]}]))))))
