@@ -55,7 +55,7 @@ pyyaml==6.0.1
     # via -r requirements.in
 reorder-python-imports==3.12.0
     # via -r requirements.in
-ruff==0.3.3
+ruff==0.3.4
     # via -r requirements.in
 tokenize-rt==5.2.0
     # via
