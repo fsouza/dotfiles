@@ -21,7 +21,7 @@ jobs:
       - name: install neovim (macos)
         if: runner.os == 'macOS'
         run: |
-          curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-macos.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
+          curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-macos-$(uname -m).tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
 
       - name: install neovim (linux)
         if: runner.os == 'Linux'
@@ -86,6 +86,7 @@ jobs:
           else
             echo "product-version=$(lsb_release -ds)" >>${GITHUB_OUTPUT}
           fi
+          echo "arch=$(uname -m)" >>${GITHUB_OUTPUT}
         env:
           RUNNER: ${{ runner.os }}
 
@@ -94,14 +95,14 @@ jobs:
         uses: actions/cache@v4.0.1
         with:
           path: ~/.local/share/mise
-          key: "${{ runner.os }}-${{ steps.os-deployment-target.outputs.product-version }}-${{ steps.brew-versions.outputs.mise-version }}"
+          key: "${{ runner.os }}-${{ steps.os-deployment-target.outputs.arch }}-${{ steps.os-deployment-target.outputs.product-version }}-${{ steps.brew-versions.outputs.mise-version }}"
 
       - name: hererocks cache
         id: nvim-hererocks-cache
         uses: actions/cache@v4.0.1
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ runner.os }}-${{ steps.brew-versions.outputs.pcre-version }}-${{ steps.get-repo-versions.outputs.luajit-version }}-${{ steps.os-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
+          key: "${{ runner.os }}-${{ steps.os-deployment-target.outputs.arch }}-${{ steps.brew-versions.outputs.pcre-version }}-${{ steps.get-repo-versions.outputs.luajit-version }}-${{ steps.os-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       # this will always cache miss, but the idea is to reuse work between
       # pushes by leveraging restore-keys.
