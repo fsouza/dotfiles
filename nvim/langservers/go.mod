@@ -5,7 +5,7 @@ toolchain go1.22.1
 
 require (
 	github.com/hashicorp/terraform-ls v0.32.8
-	github.com/mattn/efm-langserver v0.0.50
+	github.com/mattn/efm-langserver v0.0.53
 )
 
 require (
@@ -63,7 +63,7 @@ require (
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/posener/complete v1.2.3 // indirect
-	github.com/reviewdog/errorformat v0.0.0-20230917110423-33358de5bbea // indirect
+	github.com/reviewdog/errorformat v0.0.0-20240311054359-739e471a49b3 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/shopspring/decimal v1.2.0 // indirect
 	github.com/sourcegraph/jsonrpc2 v0.2.0 // indirect
