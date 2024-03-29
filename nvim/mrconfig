@@ -51,7 +51,7 @@ checkout =
 update = true
 
 [opt/fzf-lua]
-checkout = git clone https://github.com/ibhagwan/fzf-lua.git
+checkout = git clone https://gitlab.com/ibhagwan/fzf-lua.git
 
 [opt/nvim-fzf]
 checkout = git clone https://github.com/vijaymarupudi/nvim-fzf.git
