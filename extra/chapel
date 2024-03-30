@@ -25,7 +25,7 @@ function __rebuild_chapel {
 	(
 		cd ${CHAPEL_SRC_DIR} &&
 			./configure --prefix=${CHAPEL_INSTALL_PREFIX} &&
-			make -j &&
+			make -j $(nproc) &&
 			make install &&
 			__try_use_chapel &&
 			__rebuild_chapel_tools
