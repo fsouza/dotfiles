@@ -18,7 +18,7 @@ function __ensure_chapel_src {
 }
 
 function __rebuild_chapel_tools {
-	make -j -C ${CHPL_HOME} chplcheck chpl-language-server
+	make -j $(nproc) -C ${CHPL_HOME} chplcheck chpl-language-server
 }
 
 function __rebuild_chapel {
