@@ -16,9 +16,14 @@ function __setup_brew {
 		export HOMEBREW_NO_ENV_HINTS=1
 		export HOMEBREW_NO_EMOJI=1
 
+		local coreutils_prefix=$(brew --prefix coreutils)
 		prepend_to_path \
-			$(brew --prefix coreutils)/libexec/gnubin \
+			${coreutils_prefix}/libexec/gnubin \
 			$(brew --prefix curl)/bin
+
+		if [ -d ${coreutils_prefix}/libexec/man ]; then
+			export MANPATH=${coreutils_prefix}/libexec/man${MANPATH+:${MANPATH}}
+		fi
 
 		cond_source ${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh
 	fi
