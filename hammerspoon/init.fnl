@@ -52,6 +52,8 @@
 (let [prefix [:cmd :ctrl]]
   (hs.hotkey.bind prefix :R hs.reload)
   (hs.hotkey.bind prefix :V
-                  #(hs.eventtap.keyStrokes (hs.pasteboard.getContents))))
+                  #(let [pb-content (hs.pasteboard.getContents)]
+                     (when (< (length pb-content) 256)
+                       (hs.eventtap.keyStrokes pb-content)))))
 
 (set-readline-shortcuts [:alacritty :terminal :code])
