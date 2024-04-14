@@ -13,9 +13,6 @@ checkout = git clone https://github.com/godlygeek/tabular.git
 [start/vim-commentary]
 checkout = git clone https://github.com/tpope/vim-commentary.git
 
-[start/vim-dirvish]
-checkout = git clone https://github.com/justinmk/vim-dirvish.git
-
 [start/vim-fugitive]
 checkout = git clone https://github.com/tpope/vim-fugitive.git
 
@@ -73,3 +70,6 @@ checkout = git clone https://github.com/drybalka/tree-climber.nvim.git
 
 [opt/vista.vim]
 checkout = git clone https://github.com/liuchengxu/vista.vim.git
+
+[opt/oil.nvim]
+checkout = git clone https://github.com/stevearc/oil.nvim.git
