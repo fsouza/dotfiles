@@ -39,9 +39,10 @@
                 {:args [:-venv (path.join _G.cache-dir :venv)]} on-finished)))
 
 (let [bufnr (vim.api.nvim_get_current_buf)]
-  (get-python-tools #(let [tools $1]
-                       (vim.schedule #(mod-invoke :fsouza.lsp.servers.efm :add
-                                                  bufnr :python tools))))
+  (when (not vim.g.fsouza_python_skip_efm)
+    (get-python-tools #(let [tools $1]
+                         (vim.schedule #(mod-invoke :fsouza.lsp.servers.efm
+                                                    :add bufnr :python tools)))))
   (mod-invoke :fsouza.lib.python :detect-interpreter
               #(let [interpreter $1]
                  (vim.schedule #(start-pyright bufnr interpreter)))))
