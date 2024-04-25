@@ -67,6 +67,12 @@
                                                     :toggle_g)
                                        {:force true})))
 
+(macro setup-browse-command []
+  `(vim.api.nvim_create_user_command :OpenBrowser
+                                     #(let [{:fargs [url#]} $1]
+                                        (vim.ui.open url#))
+                                     {:force true :nargs 1}))
+
 (macro setup-word-replace []
   `(vim.keymap.set :n :<leader>e
                    #(let [word# (vim.fn.expand :<cword>)]
@@ -81,6 +87,7 @@
 
 (do
   (setup-autofmt-commands)
+  (setup-browse-command)
   (setup-word-replace)
   (setup-notif)
   (setup-fuzzy-mappings))
