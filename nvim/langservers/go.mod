@@ -5,7 +5,7 @@ go 1.22.0
 toolchain go1.22.2
 
 require (
-	github.com/hashicorp/terraform-ls v0.33.0
+	github.com/hashicorp/terraform-ls v0.33.1
 	github.com/mattn/efm-langserver v0.0.53
 )
 
@@ -45,7 +45,7 @@ require (
 	github.com/hashicorp/terraform-exec v0.20.0 // indirect
 	github.com/hashicorp/terraform-json v0.21.0 // indirect
 	github.com/hashicorp/terraform-registry-address v0.2.3 // indirect
-	github.com/hashicorp/terraform-schema v0.0.0-20240410082006-72025f55ec83 // indirect
+	github.com/hashicorp/terraform-schema v0.0.0-20240415154349-bc8eee862f1a // indirect
 	github.com/hashicorp/terraform-svchost v0.1.1 // indirect
 	github.com/huandu/xstrings v1.4.0 // indirect
 	github.com/imdario/mergo v0.3.15 // indirect
