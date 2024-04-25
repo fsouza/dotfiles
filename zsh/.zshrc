@@ -1,3 +1,4 @@
+export FSOUZA_DOTFILES_CACHE_DIR=${FSOUZA_DOTFILES_CACHE_DIR:-${HOME}/.cache/fsouza-dotfiles}
 export HISTFILE=${HOME}/.cache/zsh/history
 export HISTSIZE=1234567890
 export SAVEHIST=${HISTSIZE}
@@ -18,7 +19,6 @@ source "${FSOUZA_DOTFILES_DIR}"/extra/brew
 
 prepend_to_path \
 	${HOME}/.cargo/bin \
-	${HOME}/.local/bin \
 	${FSOUZA_DOTFILES_DIR}/bin
 
 export MANPATH=${HOME}/.local/share/man${MANPATH+:${MANPATH}}
