@@ -12,9 +12,10 @@ import (
 )
 
 type TemplateData struct {
-	FontSize    float64
-	DotfilesDir string
-	Shell       string
+	FontSize         float64
+	DotfilesDir      string
+	DotfilesCacheDir string
+	Shell            string
 }
 
 func main() {
@@ -24,6 +25,11 @@ func main() {
 	dotfilesDir, ok := os.LookupEnv("FSOUZA_DOTFILES_DIR")
 	if !ok {
 		log.Fatal("missing FSOUZA_DOTFILES_DIR")
+	}
+
+	dotfilesCacheDir, ok := os.LookupEnv("FSOUZA_DOTFILES_CACHE_DIR")
+	if !ok {
+		dotfilesCacheDir = os.ExpandEnv("${HOME}/.cache/fsouza-dotfiles")
 	}
 
 	zsh, err := findZsh()
@@ -46,9 +52,10 @@ func main() {
 	defer file.Close()
 
 	err = config.Execute(file, TemplateData{
-		FontSize:    *fontSize,
-		DotfilesDir: dotfilesDir,
-		Shell:       zsh,
+		FontSize:         *fontSize,
+		DotfilesDir:      dotfilesDir,
+		DotfilesCacheDir: dotfilesCacheDir,
+		Shell:            zsh,
 	})
 	if err != nil {
 		log.Fatal(err)
@@ -98,6 +105,7 @@ shape = "Block"
 
 [env]
 FSOUZA_DOTFILES_DIR = "{{.DotfilesDir}}"
+FSOUZA_DOTFILES_CACHE_DIR = "{{.DotfilesCacheDir}}"
 SHELL = "{{.Shell}}"
 TERM = "alacritty-direct"
 ZDOTDIR = "{{.DotfilesDir}}/zsh"

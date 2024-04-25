@@ -164,6 +164,9 @@
 (let [dotfiles-dir (or vim.env.FSOUZA_DOTFILES_DIR
                        (vim.fn.expand "~/.dotfiles"))]
   (tset _G :dotfiles-dir dotfiles-dir)
+  (tset _G :dotfiles-cache-dir
+        (or vim.env.FSOUZA_DOTFILES_CACHE_DIR
+            (vim.fn.expand "~/.cache/fsouza-dotfiles")))
   (tset _G :config-dir (.. dotfiles-dir :/nvim))
   (tset _G :cache-dir (vim.fn.stdpath :cache))
   (tset _G :data-dir (vim.fn.stdpath :data))

@@ -165,4 +165,4 @@ defaults write com.apple.Spotlight orderedItems -array \
 	'{ enabled = 0; name = SOURCE; }'
 
 my_dir=$(cd $(dirname ${0}) && pwd -P)
-${my_dir}/../tools/bin/install-alacritty-config
+${FSOUZA_DOTFILES_CACHE_DIR}/bin/install-alacritty-config

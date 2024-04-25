@@ -26,7 +26,7 @@
 
 (fn get-python-tools [cb]
   (let [path (require :fsouza.pl.path)
-        gen-python-tools (path.join _G.dotfiles-dir :tools :bin
+        gen-python-tools (path.join _G.dotfiles-cache-dir :bin
                                     :gen-efm-python-tools)]
     (fn on-finished [result]
       (if (not= result.exit-status 0)

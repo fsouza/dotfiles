@@ -2,8 +2,9 @@
 
 set -eo pipefail
 
+FSOUZA_DOTFILES_CACHE_DIR=${FSOUZA_DOTFILES_CACHE_DIR:-${HOME}/.cache/fsouza-dotfiles}
 FSOUZA_DOTFILES_DIR=$(cd "$(dirname $0)/.." && pwd -P)
-export FSOUZA_DOTFILES_DIR
+export FSOUZA_DOTFILES_DIR FSOUZA_DOTFILES_CACHE_DIR
 
 function mklink {
 	local source=$1
@@ -23,8 +24,7 @@ function mklink {
 
 function main {
 	local go=$(${FSOUZA_DOTFILES_DIR}/bin/__bootstrap_go)
-	env GOBIN=${FSOUZA_DOTFILES_DIR}/tools/bin ${go} -C ${FSOUZA_DOTFILES_DIR}/tools install ./...
-	env GOBIN=${HOME}/.local/bin ${go} -C ${FSOUZA_DOTFILES_DIR}/tools/handle-tmux-selection install
+	env GOBIN=${FSOUZA_DOTFILES_CACHE_DIR}/bin ${go} -C ${FSOUZA_DOTFILES_DIR}/tools install ./...
 
 	mkdir -p ${HOME}/.config
 

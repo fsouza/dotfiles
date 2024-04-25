@@ -3,7 +3,7 @@
 (let [path (require :fsouza.pl.path)
       bufnr (vim.api.nvim_get_current_buf)
       bufname (vim.api.nvim_buf_get_name bufnr)
-      fnlfmt (path.join _G.dotfiles-dir :tools :bin :fnlfmt)
+      fnlfmt (path.join _G.dotfiles-cache-dir :bin :fnlfmt)
       lua-bin (path.join _G.cache-dir :hr :bin :lua)
       tools [{:formatCommand (string.format "%s -" fnlfmt)
               :formatStdin true
