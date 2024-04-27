@@ -71,7 +71,8 @@
           (set cmd-handle spawn-handle)
           (vim.loop.read_start stdout stdout-handler.callback)
           (vim.loop.read_start stderr stderr-handler.callback)
-          (vim.loop.shutdown stdin))
+          (vim.loop.shutdown stdin)
+          pid-or-err)
         (vim.schedule #(on-finished {:exit-status -1 :stderr pid-or-err})))))
 
 {: run}
