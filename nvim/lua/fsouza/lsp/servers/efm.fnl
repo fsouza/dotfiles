@@ -20,11 +20,15 @@
                                      :languages {}}}})))
 
 (fn should-add [current-tools tool]
-  (let [iter (vim.iter current-tools)]
-    (not (iter:any #(or (and (not= tool.formatCommand nil)
-                             (= $1.formatCommand tool.formatCommand))
-                        (and (not= tool.lintCommand nil)
-                             (= $1.lintCommand tool.lintCommand)))))))
+  (if (or tool.formatCommand tool.lintCommand)
+      (let [seq (require :fsouza.pl.seq)
+            s (-> current-tools
+                  (seq.list)
+                  (seq.filter #(and (= $1.formatCommand tool.formatCommand)
+                                    (= $1.lintCommand tool.lintCommand)))
+                  (seq.take 1))]
+        (= (s) nil))
+      false))
 
 (lambda add [bufnr language tools]
   (fn update-config [client-id]
