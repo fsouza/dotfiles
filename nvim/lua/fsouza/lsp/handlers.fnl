@@ -28,7 +28,8 @@
   (let [client (vim.lsp.get_client_by_id ctx.client_id)
         bufnr (vim.api.nvim_get_current_buf)]
     (when (and client result result.registrations)
-      (client.dynamic_capabilities:register result.registrations)
+      (when client.dynamic_capabilities
+        (client.dynamic_capabilities:register result.registrations))
       (each [_ registration (pairs result.registrations)]
         (mod-invoke :fsouza.lsp :register-method registration.method client
                     bufnr)
