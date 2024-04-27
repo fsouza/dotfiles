@@ -1,13 +1,5 @@
-NEOVIM_INSTALL_PREFIX=${HOME}/opt/neovim
-NEOVIM_SRC_DIR=${NEOVIM_SRC_DIR:-${HOME}/Projects/os/3/neovim}
-
 function __try_use_nvim {
-	local executable=${NEOVIM_INSTALL_PREFIX}/bin/nvim
-	if [ -x ${executable} ]; then
-		if [[ $(which nvim) != ${executable} ]]; then
-			prepend_to_path ${NEOVIM_INSTALL_PREFIX}/bin
-		fi
-
+	if command -v nvim &>/dev/null; then
 		function zvim {
 			nvim +'lua require("fsouza.lib.fuzzy").files()' ${@}
 		}
@@ -17,43 +9,6 @@ function __try_use_nvim {
 		unset GIT_EDITOR MANPAGER
 		export EDITOR=vim
 	fi
-}
-
-function __ensure_neovim_src {
-	if ! [ -d ${NEOVIM_SRC_DIR} ]; then
-		git clone https://github.com/neovim/neovim.git ${NEOVIM_SRC_DIR}
-	fi
-}
-
-function __rebuild_neovim {
-	(
-		cd ${NEOVIM_SRC_DIR} &&
-			make \
-				CMAKE_BUILD_TYPE=RelWithDebInfo \
-				CMAKE_INSTALL_PREFIX=${NEOVIM_INSTALL_PREFIX} \
-				CMAKE_EXTRA_FLAGS="-DCMAKE_FIND_FRAMEWORK=LAST ${NVIM_CMAKE_EXTRA_FLAGS}" &&
-			make install || return
-	)
-}
-
-function __update_neovim {
-	__ensure_neovim_src
-	git -C ${NEOVIM_SRC_DIR} pull && __rebuild_neovim
-}
-
-function rebootstrap_neovim {
-	__ensure_neovim_src
-	(
-		cd ${NEOVIM_SRC_DIR} &&
-			make distclean &&
-			git clean -dfx &&
-			rm -rf ${NEOVIM_INSTALL_PREFIX} &&
-			__update_neovim
-	)
-}
-
-function update_neovim {
-	(__update_neovim || rebootstrap_neovim) && __try_use_nvim
 }
 
 __try_use_nvim

@@ -10,6 +10,7 @@ brew "fzf"
 brew "git", args: ["overwrite"]
 brew "mise"
 brew "mr"
+brew "neovim"
 brew "pcre"
 brew "ripgrep"
 brew "sd"
