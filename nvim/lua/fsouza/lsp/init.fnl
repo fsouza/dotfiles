@@ -191,7 +191,14 @@
      (lsp-log#.set_level level#)
      (lsp-log#.set_format_func vim.inspect)))
 
+(macro define-signs []
+  (icollect [_ level (ipairs [:Error :Warn :Info :Hint])]
+    (let [sign-name (.. :DiagnosticSign level)]
+      `(vim.fn.sign_define ,sign-name {:text "" :numhl ,sign-name}))))
+
 (fn config-diagnostics []
+  ;; TODO(fsouza): get rid of this on neovim 0.10+.
+  (define-signs)
   (let [empty-s (setmetatable {} {:__index #""})]
     (vim.diagnostic.config {:signs {:text empty-s
                                     :numhl {vim.diagnostic.severity.ERROR :DiagnosticSignError
