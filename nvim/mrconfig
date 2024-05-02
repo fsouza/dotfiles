@@ -10,9 +10,6 @@ checkout = git clone https://github.com/nvim-treesitter/nvim-treesitter-textobje
 [start/tabular]
 checkout = git clone https://github.com/godlygeek/tabular.git
 
-[start/vim-commentary]
-checkout = git clone https://github.com/tpope/vim-commentary.git
-
 [start/vim-fugitive]
 checkout = git clone https://github.com/tpope/vim-fugitive.git
 
