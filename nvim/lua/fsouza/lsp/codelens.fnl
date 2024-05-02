@@ -17,16 +17,16 @@
 
 (fn on-attach [opts]
   (let [bufnr opts.bufnr
-        augroup-id (augroup-name bufnr)]
+        augroup-id (augroup-name bufnr)
+        refresh #(vim.lsp.codelens.refresh {: bufnr})]
     (tset mapping-per-buf bufnr opts.mapping)
-    (vim.schedule vim.lsp.codelens.refresh)
+    (vim.schedule refresh)
     (mod-invoke :fsouza.lib.nvim-helpers :augroup augroup-id
                 [{:events [:InsertLeave :BufWritePost]
                   :targets [(string.format "<buffer=%d>" bufnr)]
-                  :callback vim.lsp.codelens.refresh}])
+                  :callback refresh}])
     (vim.schedule #(let [buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
-                     (buf-diagnostic.register-hook augroup-id
-                                                   vim.lsp.codelens.refresh)
+                     (buf-diagnostic.register-hook augroup-id refresh)
                      (vim.api.nvim_buf_attach bufnr false
                                               {:on_detach #(on-detach bufnr)})))
     (when opts.mapping
