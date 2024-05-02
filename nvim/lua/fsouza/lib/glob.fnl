@@ -69,7 +69,7 @@
       (.. regex node-str))))
 
 (let [lpeg (require :lpeg)
-      {: Ct : C : P : S : R : V} (require :lpeg)
+      {: Ct : C : P : S : R : V} vim.lpeg
       glob-parser (let [GroupLiteralChar (+ (R :AZ) (R :az) (R :09)
                                             (S "!-+@_~;:./$^"))
                         LiteralChar (+ GroupLiteralChar (S ",}"))
