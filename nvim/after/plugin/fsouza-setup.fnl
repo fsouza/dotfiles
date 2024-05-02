@@ -71,8 +71,9 @@
   ;; TODO(fsouza): use vim.ui.open when it becomes available on neovim stable.
   `(vim.api.nvim_create_user_command :OpenBrowser
                                      #(let [{:fargs [url#]} $1]
-                                        (mod-invoke :fsouza.lib.cmd :run :open
-                                                    {:args [url#]} #nil))
+                                        (->> url#
+                                             (string.format "open \"%s\"" url#)
+                                             (vim.fn.system)))
                                      {:force true :nargs 1}))
 
 (macro setup-word-replace []
