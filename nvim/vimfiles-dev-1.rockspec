@@ -8,7 +8,7 @@ dependencies = {
   "luafilesystem ~> 1.8.0",
   "luabitop",
   "lrexlib-pcre ~> 2.9.2",
-  "lsha2 ~> 0.1",
   "lua_system_constants ~> 0.1.4",
+  "sha1 ~> 0.6.0-1",
 }
 build = { type = "builtin", modules = {} }

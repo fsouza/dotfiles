@@ -69,7 +69,7 @@
   (let [lines (-> bufnr
                   (vim.api.nvim_buf_get_lines 0 -1 true)
                   (table.concat "\n"))]
-    (mod-invoke :lsha2 :hash256 lines)))
+    (mod-invoke :sha1 :sha1 lines)))
 
 (lambda keymap-repeat [lhs cb opts]
   (vim.keymap.set :n lhs
