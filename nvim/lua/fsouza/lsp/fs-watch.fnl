@@ -141,7 +141,7 @@
     entry))
 
 (fn workspace-folders [client]
-  (icollect [_ {: name} (ipairs (or (?. client :config :workspace_folders) []))]
+  (icollect [_ {: name} (ipairs (or (?. client :workspace_folders) []))]
     name))
 
 (fn map-watchers [client watchers]
