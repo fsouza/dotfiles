@@ -110,20 +110,20 @@
   (fn compile [glob]
     (let [tree (parse glob)]
       (if tree
-          (let [rex (require :rex_pcre)
-                re (compile-to-regex tree)
-                re (.. "^" re "$")
-                (ok pat-or-err) (pcall rex.new re)]
+          (let [re (compile-to-regex tree)
+                re (.. "\\v^" re "$")
+                (ok pat-or-err) (pcall vim.regex re)]
             (if ok
                 (values true pat-or-err)
                 (values false
                         (string.format "internal error compiling glob string '%s' to a regular expression:
   generated regex: %s
-  pcre error: %s" glob re pat-or-err))))
+  vim.regex error: %s" glob re
+                                       pat-or-err))))
           (values false (string.format "invalid glob string '%s'" glob)))))
 
   (fn do-match [patt str]
-    (let [m (patt:exec str)]
+    (let [m (patt:match_str str)]
       (if m true false)))
 
   (fn break-tree [tree]

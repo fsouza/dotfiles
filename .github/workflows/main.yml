@@ -70,7 +70,6 @@ jobs:
       - name: get versions from brew
         id: brew-versions
         run: |
-          echo "pcre-version=$(brew info pcre --json | jq -r '.[0].versions.stable')" >>${GITHUB_OUTPUT}
           echo "mise-version=$(brew info mise --json | jq -r '.[0].versions.stable')" >>${GITHUB_OUTPUT}
 
       - name: set MISE_DATA_DIR
@@ -102,7 +101,7 @@ jobs:
         uses: actions/cache@v4.0.2
         with:
           path: ~/.cache/nvim/hr
-          key: "${{ runner.os }}-${{ steps.os-deployment-target.outputs.arch }}-${{ steps.brew-versions.outputs.pcre-version }}-${{ steps.get-repo-versions.outputs.luajit-version }}-${{ steps.os-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
+          key: "${{ runner.os }}-${{ steps.os-deployment-target.outputs.arch }}-${{ steps.get-repo-versions.outputs.luajit-version }}-${{ steps.os-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
 
       # this will always cache miss, but the idea is to reuse work between
       # pushes by leveraging restore-keys.

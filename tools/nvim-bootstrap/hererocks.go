@@ -25,16 +25,10 @@ func ensureHererocks(nv *Neovim, venvDir string) (string, error) {
 		}
 	}
 
-	args := []string{"make", "--force"}
-	rocksDir := os.Getenv("HOMEBREW_PREFIX")
-	if rocksDir != "" {
-		args = append(args, "PCRE_DIR="+rocksDir)
-	}
-
 	luarocks := filepath.Join(hrDir, "bin", "luarocks")
 	return hrDir, tools.Run(&tools.RunOptions{
 		Cmd:  luarocks,
-		Args: args,
+		Args: []string{"make", "--force"},
 		Cwd:  filepath.Join(dotfilesDir, "nvim"),
 	})
 }
