@@ -35,14 +35,14 @@
                          watcher))]
       (if (= (length watchers) 0)
           (do
-            (vim.loop.fs_event_stop event)
+            (vim.uv.fs_event_stop event)
             (tset state folder nil))
           (tset state folder {: event : watchers})))))
 
 (fn start-notifier [interval-ms]
   (var client-notifications {})
   (let [interval-ms (or interval-ms 200)
-        timer (vim.loop.new_timer)]
+        timer (vim.uv.new_timer)]
     (fn notify [client-id reg-id changes]
       (let [client (vim.lsp.get_client_by_id client-id)]
         (if client
@@ -56,7 +56,7 @@
           (vim.schedule #(notify client-id reg-id changes))))
       (set client-notifications {}))
 
-    (vim.loop.timer_start timer interval-ms interval-ms timer-cb)
+    (vim.uv.timer_start timer interval-ms interval-ms timer-cb)
     (fn [client-id reg-id uri type]
       (let [reg-key (reg-key reg-id client-id)
             client-notification (or (. client-notifications reg-key)
@@ -91,22 +91,22 @@
 
       (let [uri (vim.uri_from_fname filepath)]
         (if events.rename
-            (vim.loop.fs_stat filepath
-                              #(if $1
-                                   (try-notify-server client-id reg-id uri
-                                                      file-change-type.Deleted
-                                                      watch-kind.Delete)
-                                   (vim.schedule #(if (is-file-open filepath)
-                                                      (try-notify-server client-id
-                                                                         reg-id
-                                                                         uri
-                                                                         file-change-type.Changed
-                                                                         watch-kind.Change)
-                                                      (try-notify-server client-id
-                                                                         reg-id
-                                                                         uri
-                                                                         file-change-type.Created
-                                                                         watch-kind.Create)))))
+            (vim.uv.fs_stat filepath
+                            #(if $1
+                                 (try-notify-server client-id reg-id uri
+                                                    file-change-type.Deleted
+                                                    watch-kind.Delete)
+                                 (vim.schedule #(if (is-file-open filepath)
+                                                    (try-notify-server client-id
+                                                                       reg-id
+                                                                       uri
+                                                                       file-change-type.Changed
+                                                                       watch-kind.Change)
+                                                    (try-notify-server client-id
+                                                                       reg-id
+                                                                       uri
+                                                                       file-change-type.Created
+                                                                       watch-kind.Create)))))
             (try-notify-server client-id reg-id uri file-change-type.Changed
                                watch-kind.Change))))
 
@@ -125,10 +125,10 @@
               (vim.schedule #(notify client-id reg-id filepath events kind)))))))))
 
 (fn make-event [root-dir notify-server]
-  (let [event (vim.loop.new_fs_event)
-        (ok err) (vim.loop.fs_event_start event root-dir {:recursive true}
-                                          (make-fs-event-handler root-dir
-                                                                 notify-server))]
+  (let [event (vim.uv.new_fs_event)
+        (ok err) (vim.uv.fs_event_start event root-dir {:recursive true}
+                                        (make-fs-event-handler root-dir
+                                                               notify-server))]
     (when (not ok)
       (error (string.format "failed to start fsevent at %s: %s" root-dir err)))
     event))
@@ -174,7 +174,7 @@
                   (seq.take 1))]
         (fn find-existing [folder]
           (let [path (require :fsouza.pl.path)
-                (_ err) (vim.loop.fs_stat folder)]
+                (_ err) (vim.uv.fs_stat folder)]
             (if err
                 (find-existing (path.dirname folder))
                 folder)))

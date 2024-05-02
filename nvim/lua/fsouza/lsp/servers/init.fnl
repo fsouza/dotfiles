@@ -25,8 +25,8 @@
                         PATH))))
 
 (fn cwd-if-not-home []
-  (let [cwd (vim.loop.cwd)
-        home (vim.loop.os_homedir)]
+  (let [cwd (vim.uv.cwd)
+        home (vim.uv.os_homedir)]
     (when (not= cwd home)
       cwd)))
 
@@ -55,7 +55,7 @@
       (vim.tbl_extend :force defaults opts))))
 
 (fn file-exists [bufname cb]
-  (vim.loop.fs_stat bufname #(cb (= $1 nil))))
+  (vim.uv.fs_stat bufname #(cb (= $1 nil))))
 
 (fn start [{: config : find-root-dir : bufnr : cb : opts}]
   (let [find-root-dir (or find-root-dir cwd-if-not-home)

@@ -18,8 +18,8 @@
     result))
 
 (fn safe-close [h cb]
-  (when (not (vim.loop.is_closing h))
-    (vim.loop.close h cb)))
+  (when (not (vim.uv.is_closing h))
+    (vim.uv.close h cb)))
 
 ;; run takes the given command, args and input_data (used as stdin for the
 ;; child process).
@@ -36,12 +36,12 @@
 ;; }
 (lambda run [cmd opts on-finished ?debug-fn]
   (var cmd-handle nil)
-  (let [stdout (vim.loop.new_pipe false)
-        stderr (vim.loop.new_pipe false)
-        stdin (vim.loop.new_pipe false)
+  (let [stdout (vim.uv.new_pipe false)
+        stderr (vim.uv.new_pipe false)
+        stdin (vim.uv.new_pipe false)
         close (fn []
-                (vim.loop.read_stop stdout)
-                (vim.loop.read_stop stderr)
+                (vim.uv.read_stop stdout)
+                (vim.uv.read_stop stderr)
                 (safe-close stdout)
                 (safe-close stderr)
                 (safe-close stdin)
@@ -65,13 +65,13 @@
                                      (tset r :finished true)
                                      (close)))))
         opts (vim.tbl_extend :error opts {:stdio [stdin stdout stderr]})
-        (spawn-handle pid-or-err) (vim.loop.spawn cmd opts on-exit)]
+        (spawn-handle pid-or-err) (vim.uv.spawn cmd opts on-exit)]
     (if spawn-handle
         (do
           (set cmd-handle spawn-handle)
-          (vim.loop.read_start stdout stdout-handler.callback)
-          (vim.loop.read_start stderr stderr-handler.callback)
-          (vim.loop.shutdown stdin)
+          (vim.uv.read_start stdout stdout-handler.callback)
+          (vim.uv.read_start stderr stderr-handler.callback)
+          (vim.uv.shutdown stdin)
           pid-or-err)
         (vim.schedule #(on-finished {:exit-status -1 :stderr pid-or-err})))))
 

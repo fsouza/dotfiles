@@ -10,16 +10,16 @@
                    (cb nil))))
 
 (fn set-from-poetry [cb]
-  (vim.loop.fs_stat :poetry.lock
-                    #(if $1
-                         (cb nil)
-                         (set-from-cmd :poetry [:env :info :-p] cb))))
+  (vim.uv.fs_stat :poetry.lock
+                  #(if $1
+                       (cb nil)
+                       (set-from-cmd :poetry [:env :info :-p] cb))))
 
 (fn set-from-pipenv [cb]
-  (vim.loop.fs_stat :Pipfile.lock
-                    #(if $1
-                         (cb nil)
-                         (set-from-cmd :pipenv [:--venv] cb))))
+  (vim.uv.fs_stat :Pipfile.lock
+                  #(if $1
+                       (cb nil)
+                       (set-from-cmd :pipenv [:--venv] cb))))
 
 (fn set-from-venv-folder [cb]
   (let [path (require :fsouza.pl.path)
@@ -27,7 +27,7 @@
     (fn test-folder [idx]
       (let [folder (. folders idx)]
         (if folder
-            (let [venv-candidate (path.join (vim.loop.cwd) folder)]
+            (let [venv-candidate (path.join (vim.uv.cwd) folder)]
               (path.async-which (path.join venv-candidate :bin :python3)
                                 #(if (not= $1 "")
                                      (cb venv-candidate)
