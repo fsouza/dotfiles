@@ -51,21 +51,14 @@
 (lambda get-visual-selection-range []
   (let [{: mode} (vim.api.nvim_get_mode)
         [_ srow scol _] (vim.fn.getpos ".")
-        [_ erow ecol _] (vim.fn.getpos :v)
-        [srow scol erow ecol] (if (< srow erow) [srow scol erow ecol]
-                                  (if (> srow erow) [erow ecol srow scol]
-                                      (if (<= scol ecol) [srow scol erow ecol]
-                                          [erow ecol srow scol])))]
-    (if (= mode :V)
-        [srow 1 erow -1]
-        [srow scol erow ecol])))
+        [_ erow ecol _] (vim.fn.getpos :v)]
+    (if (< srow erow) [srow scol erow ecol]
+        (if (> srow erow) [erow ecol srow scol]
+            (if (<= scol ecol) [srow scol erow ecol] [erow ecol srow scol])))))
 
 (lambda get-visual-selection-contents []
-  ;; TODO(fsouza): move to vim.fn.getregion on 0.10.
-  (let [[srow scol erow ecol] (get-visual-selection-range)
-        lines (vim.api.nvim_buf_get_text 0 (- srow 1) (- scol 1) (- erow 1)
-                                         ecol {})]
-    lines))
+  (let [{: mode} (vim.api.nvim_get_mode)]
+    (vim.fn.getregion (vim.fn.getpos :v) (vim.fn.getpos ".") {:type mode})))
 
 (lambda extract-luv-error [?err]
   (if (= ?err nil)
