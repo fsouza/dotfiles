@@ -8,12 +8,11 @@
         [first-line] (vim.api.nvim_buf_get_lines bufnr 0 1 true)
         (_ _ prog) (string.find first-line "^#!(.+)")]
     (when prog
-      (let [it (-> pattern-mapping
-                   (vim.tbl_keys)
-                   (vim.iter)
-                   (: :filter #(if (string.find prog $1) true false))
-                   (: :next))
-            k (it)]
+      (let [k (-> pattern-mapping
+                  (vim.tbl_keys)
+                  (vim.iter)
+                  (: :filter #(if (string.find prog $1) true false))
+                  (: :next))]
         (when k
           (. pattern-mapping k))))))
 
