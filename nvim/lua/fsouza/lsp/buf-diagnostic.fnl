@@ -8,17 +8,17 @@
 
 (fn get-filters [client-name]
   (if client-name
-      (or (. filters client-name) [])))
+      (or (. filters client-name) [])
+      []))
 
 (fn register-filter [client-name f]
   (let [client-filters (get-filters client-name)]
     (table.insert client-filters f)
     (tset filters client-name client-filters)))
 
-(fn filter [result context]
-  (when result
-    (let [client (vim.lsp.get_client_by_id context.client_id)
-          client-filters (vim.iter (get-filters (?. client :name)))
+(fn filter [result client]
+  (when (and result client)
+    (let [client-filters (vim.iter (get-filters (?. client :name)))
           {: diagnostics} result]
       (when (and diagnostics client)
         (tset result :diagnostics (icollect [_ d (ipairs diagnostics)]
@@ -48,8 +48,10 @@
     (fn [err result context ...]
       (vim.schedule exec-hooks)
       (pcall vim.diagnostic.reset context.client_id context.bufnr)
-      (let [result (filter result context)]
-        (handler err result context ...)))))
+      (let [client (vim.lsp.get_client_by_id context.client_id)
+            result (filter result client)]
+        (when client
+          (handler err result context ...))))))
 
 (fn make-debounced-handler [bufnr debouncer-key]
   (let [interval-ms (or (. vim :b bufnr :lsp_diagnostic_debouncing_ms) 200)
