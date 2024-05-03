@@ -3,10 +3,10 @@ version = "dev-1"
 description = { license = "ISC" }
 source = { url = "https://github.com/fsouza/dotfiles.git" }
 dependencies = {
-  "penlight ~> 1.13.1",
-  "fennel ~> 1.4.1",
+  "penlight ~> 1.14.0",
+  "fennel ~> 1.4.2",
   "luafilesystem ~> 1.8.0",
   "lua_system_constants ~> 0.1.4",
-  "sha1 ~> 0.6.0-1",
+  "sha1 ~> 0.6.0",
 }
 build = { type = "builtin", modules = {} }
