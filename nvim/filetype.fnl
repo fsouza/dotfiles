@@ -1,6 +1,5 @@
 (fn from-shebang [path bufnr]
-  (let [seq (require :pl.seq)
-        pattern-mapping {:python :python
+  (let [pattern-mapping {:python :python
                          :bash :bash
                          :zsh :zsh
                          :/sh :sh
@@ -9,19 +8,19 @@
         [first-line] (vim.api.nvim_buf_get_lines bufnr 0 1 true)
         (_ _ prog) (string.find first-line "^#!(.+)")]
     (when prog
-      (let [s (-> pattern-mapping
-                  (seq.keys)
-                  (seq.filter #(if (string.find prog $1) true false))
-                  (seq.take 1))
-            k (s)]
+      (let [it (-> pattern-mapping
+                   (vim.tbl_keys)
+                   (vim.iter)
+                   (: :filter #(if (string.find prog $1) true false))
+                   (: :next))
+            k (it)]
         (when k
           (. pattern-mapping k))))))
 
 (fn from-current-shell []
-  (let [path (require :fsouza.pl.path)
-        shell (os.getenv :SHELL)]
+  (let [shell (os.getenv :SHELL)]
     (when shell
-      (path.basename shell))))
+      (vim.fs.basename shell))))
 
 (let [fts {:extension {:fnl :fennel
                        :sh #(or (from-shebang $...) (from-current-shell))

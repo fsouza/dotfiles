@@ -1,4 +1,3 @@
-(let [shortcut (require :fsouza.lib.shortcut)
-      path (require :fsouza.pl.path)]
+(let [shortcut (require :fsouza.lib.shortcut)]
   (shortcut.register :Dotfiles _G.dotfiles-dir)
-  (shortcut.register :Site (path.join _G.data-dir :site)))
+  (shortcut.register :Site (vim.fs.joinpath _G.data-dir :site)))

@@ -4,13 +4,12 @@
 (import-macros {: mod-invoke} :helpers)
 
 (fn get-node-bin [bin-name cb]
-  (let [path (require :fsouza.pl.path)
-        local-bin (path.join :node_modules :.bin bin-name)
+  (let [local-bin (vim.fs.joinpath :node_modules :.bin bin-name)
         default-bin (string.format "fnm exec --using %s -- %s"
-                                   (path.join _G.config-dir :langservers
-                                              :.node-version)
-                                   (path.join _G.config-dir :langservers
-                                              :node_modules :.bin bin-name))]
+                                   (vim.fs.joinpath _G.config-dir :langservers
+                                                    :.node-version)
+                                   (vim.fs.joinpath _G.config-dir :langservers
+                                                    :node_modules :.bin bin-name))]
     (vim.uv.fs_stat local-bin
                     (fn [err# stat#]
                       (if (and (= err# nil) (= stat#.type :file))
@@ -18,9 +17,9 @@
                           (cb default-bin))))))
 
 (fn with-runtime-dir [tool cb]
-  (let [path (require :fsouza.pl.path)
-        xdg-runtime-dir (path.join _G.cache-dir :prettierd)]
-    (path.async-mkdir xdg-runtime-dir 493 true #(cb xdg-runtime-dir))))
+  (let [xdg-runtime-dir (vim.fs.joinpath _G.cache-dir :prettierd)]
+    (mod-invoke :fsouza.pl.path :async-mkdir xdg-runtime-dir 493 true
+                #(cb xdg-runtime-dir))))
 
 (fn get-prettierd [cb]
   (with-runtime-dir :prettierd

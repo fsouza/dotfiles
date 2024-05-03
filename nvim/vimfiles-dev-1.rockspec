@@ -6,7 +6,6 @@ dependencies = {
   "penlight ~> 1.13.1",
   "fennel ~> 1.4.1",
   "luafilesystem ~> 1.8.0",
-  "luabitop",
   "lua_system_constants ~> 0.1.4",
   "sha1 ~> 0.6.0-1",
 }

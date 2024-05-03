@@ -1,7 +1,6 @@
 (import-macros {: mod-invoke} :helpers)
 
-(let [mod-dir (mod-invoke :fsouza.pl.path :join _G.dotfiles-dir :nvim
-                          :langservers)]
+(let [mod-dir (vim.fs.joinpath _G.dotfiles-dir :nvim :langservers)]
   (tset vim.bo :commentstring "#%s")
   (mod-invoke :fsouza.lsp.servers :start
               {:config {:name :terraform-ls

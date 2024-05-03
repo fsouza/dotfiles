@@ -6,7 +6,7 @@
   `[:fnm
     :exec
     :--using
-    (mod-invoke :fsouza.pl.path :join _G.config-dir :langservers :.node-version)
+    (vim.fs.joinpath _G.config-dir :langservers :.node-version)
     "--"
     (table.unpack ,command)])
 
@@ -16,8 +16,8 @@
 (fn with-executable [exec cb]
   (when exec
     (let [path (require :fsouza.pl.path)
-          node-bin (mod-invoke :fsouza.pl.path :join _G.config-dir :langservers
-                               :node_modules :.bin)
+          node-bin (vim.fs.joinpath _G.config-dir :langservers :node_modules
+                                    :.bin)
           PATH (.. node-bin ":" (os.getenv :PATH))]
       (path.async-which exec
                         #(when (not= $1 "")
@@ -31,12 +31,11 @@
       cwd)))
 
 (fn patterns-with-fallback [patterns bufname]
-  (let [path (require :fsouza.pl.path)
-        file (. (vim.fs.find patterns
-                             {:upward true :path (path.dirname bufname)})
+  (let [file (. (vim.fs.find patterns
+                             {:upward true :path (vim.fs.dirname bufname)})
                 1)]
     (if file
-        (path.dirname file)
+        (vim.fs.dirname file)
         (cwd-if-not-home))))
 
 (macro should-start [bufnr name]

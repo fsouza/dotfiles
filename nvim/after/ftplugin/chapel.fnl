@@ -13,9 +13,8 @@
 
 (when vim.env.CHPL_HOME
   (let [bufnr (vim.api.nvim_get_current_buf)
-        path (require :fsouza.pl.path)
-        chpl-bin-subdir (path.join vim.env.CHPL_HOME :util :chplenv
-                                   :chpl_bin_subdir.py)]
+        chpl-bin-subdir (vim.fs.joinpath vim.env.CHPL_HOME :util :chplenv
+                                         :chpl_bin_subdir.py)]
     (mod-invoke :fsouza.lib.cmd :run :python3 {:args [chpl-bin-subdir]}
                 #(when (= $1.exit-status 0)
                    (->> $1.stdout

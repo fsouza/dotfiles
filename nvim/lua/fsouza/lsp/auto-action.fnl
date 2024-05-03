@@ -21,13 +21,13 @@
                       (when (and (= changed-tick
                                     (vim.api.nvim_buf_get_changedtick bufnr))
                                  actions (not (vim.tbl_isempty actions)))
-                        (let [(_ code-action) (mod-invoke :fsouza.pl.tablex
-                                                          :find_if actions
-                                                          (fn [action]
-                                                            (if (= action.kind
-                                                                   :source.organizeImports)
-                                                                action
-                                                                false)))]
+                        (let [code-action (-> actions
+                                              (vim.iter)
+                                              (: :filter
+                                                 (fn [action]
+                                                   (= action.kind
+                                                      :source.organizeImports)))
+                                              (: :next))]
                           (when code-action
                             (vim.api.nvim_buf_call bufnr
                                                    (fn []

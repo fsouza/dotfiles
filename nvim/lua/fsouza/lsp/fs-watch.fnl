@@ -68,20 +68,16 @@
        (mod-invoke :fsouza.lib.nvim-helpers :once start-notifier))
 
 (fn is-file-open [filepath]
-  (let [path (require :fsouza.pl.path)
-        seq (require :fsouza.pl.seq)
-        s (-> (vim.api.nvim_list_bufs)
-              (seq.list)
-              (seq.filter #(vim.api.nvim_buf_is_loaded $1))
-              (seq.map #(let [bufname (vim.api.nvim_buf_get_name $1)]
-                          (path.abspath bufname)))
-              (seq.filter #(= $1 filepath))
-              (seq.take 1))]
-    (not= (s) nil)))
+  (let [path (require :fsouza.pl.path)]
+    (-> (vim.api.nvim_list_bufs)
+        (vim.iter)
+        (: :filter vim.api.nvim_buf_is_loaded)
+        (: :map #(let [bufname (vim.api.nvim_buf_get_name $1)]
+                   (path.abspath bufname)))
+        (: :any #(= $1 filepath)))))
 
 (fn make-fs-event-handler [root-dir notify-server]
   (let [backupext vim.o.backupext
-        tablex (require :fsouza.pl.tablex)
         pl-path (require :fsouza.pl.path)
         glob (require :fsouza.lib.glob)]
     (fn notify [client-id reg-id filepath events kind]
@@ -147,7 +143,6 @@
 (fn map-watchers [client watchers]
   (let [glob (require :fsouza.lib.glob)
         path (require :fsouza.pl.path)
-        seq (require :pl.seq)
         folders (collect [_ folder (ipairs (workspace-folders client))]
                   (values folder []))
         abs-folders []]
@@ -168,18 +163,18 @@
             (table.insert abs-folders {: watcher : pats})))))
 
     (fn find-best-folder [folder]
-      (let [s (-> folders
-                  (seq.keys)
-                  (seq.filter #(path.isrel folder $1))
-                  (seq.take 1))]
+      (let [it (-> folders
+                   (vim.tbl_keys)
+                   (vim.iter)
+                   (: :filter #(path.isrel folder $1))
+                   (: :next))]
         (fn find-existing [folder]
-          (let [path (require :fsouza.pl.path)
-                (_ err) (vim.uv.fs_stat folder)]
+          (let [(_ err) (vim.uv.fs_stat folder)]
             (if err
-                (find-existing (path.dirname folder))
+                (find-existing (vim.fs.dirname folder))
                 folder)))
 
-        (or (s) (find-existing folder))))
+        (or (it) (find-existing folder))))
 
     (each [_ {: pats : watcher} (ipairs abs-folders)]
       (each [_ pat (ipairs pats)]

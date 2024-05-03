@@ -18,16 +18,13 @@
 (fn filter [result context]
   (when result
     (let [client (vim.lsp.get_client_by_id context.client_id)
-          client-filters (get-filters (?. client :name))
+          client-filters (vim.iter (get-filters (?. client :name)))
           {: diagnostics} result]
       (when (and diagnostics client)
         (tset result :diagnostics (icollect [_ d (ipairs diagnostics)]
                                     (let [severity (or d.severity 1)]
                                       (when (and (< severity 2)
-                                                 (mod-invoke :fsouza.pl.tablex
-                                                             :for-all
-                                                             client-filters
-                                                             #($1 d)))
+                                                 (client-filters:all #($1 d)))
                                         d)))))
       result)))
 

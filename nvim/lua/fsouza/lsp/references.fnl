@@ -5,16 +5,22 @@
 (fn is-test [fname]
   (let [ext (mod-invoke :fsouza.pl.path :extension fname)
         ext-checkers (or (. test-checkers ext) {})]
-    (mod-invoke :fsouza.pl.tablex :exists ext-checkers #($1 fname))))
+    (-> ext-checkers
+        (vim.tbl_values)
+        (vim.iter)
+        (: :any #($1 fname)))))
 
 (fn do-filter [refs]
-  (let [tablex (require :fsouza.pl.tablex)
-        [lineno _] (vim.api.nvim_win_get_cursor 0)
+  (let [[lineno _] (vim.api.nvim_win_get_cursor 0)
         lineno (- lineno 1)
-        refs (tablex.filter refs #(not= $1.range.start.line lineno))]
-    (if (is-test (vim.api.nvim_buf_get_name 0)) refs
-        (tablex.for-all refs #(is-test (vim.uri_to_fname $1.uri))) refs
-        (tablex.filter refs #(not (is-test (vim.uri_to_fname $1.uri)))))))
+        refs (-> refs
+                 (vim.iter)
+                 (: :filter #(not= $1.range.start.line lineno)))]
+    (if (is-test (vim.api.nvim_buf_get_name 0)) (refs:totable)
+        (refs:all #(is-test (vim.uri_to_fname $1.uri))) (refs:totable)
+        (-> refs
+            (: :filter #(not (is-test (vim.uri_to_fname $1.uri))))
+            (: :totable)))))
 
 (fn filter-references [refs]
   (if (vim.tbl_islist refs)

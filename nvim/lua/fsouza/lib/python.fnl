@@ -27,8 +27,8 @@
     (fn test-folder [idx]
       (let [folder (. folders idx)]
         (if folder
-            (let [venv-candidate (path.join (vim.uv.cwd) folder)]
-              (path.async-which (path.join venv-candidate :bin :python3)
+            (let [venv-candidate (vim.fs.joinpath (vim.uv.cwd) folder)]
+              (path.async-which (vim.fs.joinpath venv-candidate :bin :python3)
                                 #(if (not= $1 "")
                                      (cb venv-candidate)
                                      (test-folder (+ idx 1)))))
@@ -52,13 +52,12 @@
     (detect 1)))
 
 (lambda detect-interpreter [cb]
-  (let [path (require :fsouza.pl.path)]
-    (detect-virtualenv (fn [virtualenv]
-                         (if virtualenv
-                             (do
-                               (vim.schedule #(tset vim.env :VIRTUAL_ENV
-                                                    virtualenv))
-                               (cb (path.join virtualenv :bin :python3)))
-                             (cb nil))))))
+  (detect-virtualenv (fn [virtualenv]
+                       (if virtualenv
+                           (do
+                             (vim.schedule #(tset vim.env :VIRTUAL_ENV
+                                                  virtualenv))
+                             (cb (vim.fs.joinpath virtualenv :bin :python3)))
+                           (cb nil)))))
 
 {: detect-interpreter}

@@ -4,32 +4,32 @@
   (if (= node nil)
       false
       (let [node-type (node:type)
-            node-types [; generic
-                        :local_function
-                        :function_declaration
-                        :method_declaration
-                        :type_spec
-                        :assignment
-                        ; typescript
-                        :class
-                        :function
-                        :type_alias_declaration
-                        :interface_declaration
-                        :method_definition
-                        :variable_declarator
-                        :public_field_definition
-                        ; python
-                        :class_definition
-                        :function_definition
-                        ; go
-                        :var_spec
-                        ; ocaml
-                        :let_binding
-                        :value_definition
-                        :type_definition
-                        ; java
-                        :class_declaration]]
-        (mod-invoke :fsouza.pl.tablex :exists node-types #(= $1 node-type)))))
+            node-types (vim.iter [; generic
+                                  :local_function
+                                  :function_declaration
+                                  :method_declaration
+                                  :type_spec
+                                  :assignment
+                                  ; typescript
+                                  :class
+                                  :function
+                                  :type_alias_declaration
+                                  :interface_declaration
+                                  :method_definition
+                                  :variable_declarator
+                                  :public_field_definition
+                                  ; python
+                                  :class_definition
+                                  :function_definition
+                                  ; go
+                                  :var_spec
+                                  ; ocaml
+                                  :let_binding
+                                  :value_definition
+                                  :type_definition
+                                  ; java
+                                  :class_declaration])]
+        (node-types:any #(= $1 node-type)))))
 
 (fn normalize-loc [loc]
   (when (not loc.uri)

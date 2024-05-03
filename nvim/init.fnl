@@ -13,16 +13,17 @@
                                         ";"))))
 
 (macro add-opt-packs-to-path []
-  `(let [path# (require :fsouza.pl.path)
-         dir# (require :pl.dir)
-         opt-dir# (path#.join _G.data-dir :site :pack :mr :opt)]
-     (each [_# paq-dir# (ipairs (dir#.getdirectories opt-dir#))]
-       (tset package :path (table.concat [package.path
-                                          (path#.join paq-dir# :lua :?.lua)
-                                          (path#.join paq-dir# :lua "?" :?.lua)
-                                          (path#.join paq-dir# :lua "?"
-                                                      :init.lua)]
-                                         ";")))))
+  `(let [opt-dir# (vim.fs.joinpath _G.data-dir :site :pack :mr :opt)]
+     (each [entry# type# (vim.fs.dir opt-dir#)]
+       (when (= type# :directory)
+         (tset package :path (table.concat [package.path
+                                            (vim.fs.joinpath opt-dir# entry#
+                                                             :lua :?.lua)
+                                            (vim.fs.joinpath opt-dir# entry#
+                                                             :lua "?" :?.lua)
+                                            (vim.fs.joinpath opt-dir# entry#
+                                                             :lua "?" :init.lua)]
+                                           ";"))))))
 
 (macro initial-mappings []
   `(do
@@ -152,11 +153,12 @@
                  (vim.fn.bufadd))))
      (tset vim.ui :select
            #(mod-invoke :fsouza.lib.popup-picker :ui-select $...))
-     (let [tablex# (require :fsouza.pl.tablex)
-           patterns# ["message with no corresponding"]
+     (let [patterns# ["message with no corresponding"]
            orig-notify# vim.notify]
        (fn notify# [msg# level# opts#]
-         (when (tablex#.for-all patterns# #(= (string.find msg# $1) nil))
+         (when (-> patterns#
+                   (vim.iter)
+                   (: :all #(= (string.find msg# $1) nil)))
            (orig-notify# msg# level# opts#)))
 
        (tset vim :notify notify#))))

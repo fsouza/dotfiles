@@ -3,11 +3,11 @@
 (var virtual-cwd nil)
 
 (fn should-qf [selected]
-  (let [n-selected (length selected)]
+  (let [n-selected (length selected)
+        it (vim.iter selected)]
     (if (<= (length selected) 1)
         false
-        (mod-invoke :fsouza.pl.tablex :exists selected
-                    #(if (string.match $1 "^.+:%d+:%d+:") true false)))))
+        (it:any #(if (string.match $1 "^.+:%d+:%d+:") true false)))))
 
 (fn edit-or-qf [edit selected opts]
   (if (should-qf selected)

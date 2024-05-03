@@ -5,9 +5,9 @@
       (not= (string.find fname ".*_test%.py$") nil)))
 
 (fn start-pyright [bufnr python-interpreter]
-  (let [path (require :fsouza.pl.path)
-        python-interpreter (or python-interpreter
-                               (path.join _G.cache-dir :venv :bin :python3))]
+  (let [python-interpreter (or python-interpreter
+                               (vim.fs.joinpath _G.cache-dir :venv :bin
+                                                :python3))]
     (mod-invoke :fsouza.lsp.servers :start
                 {: bufnr
                  :config {:name :pyright
@@ -25,9 +25,8 @@
                                   :.py :python is-python-test)})))
 
 (fn get-python-tools [cb]
-  (let [path (require :fsouza.pl.path)
-        gen-python-tools (path.join _G.dotfiles-cache-dir :bin
-                                    :gen-efm-python-tools)]
+  (let [gen-python-tools (vim.fs.joinpath _G.dotfiles-cache-dir :bin
+                                          :gen-efm-python-tools)]
     (fn on-finished [result]
       (if (not= result.exit-status 0)
           (error result.stderr)
@@ -36,7 +35,8 @@
                (cb))))
 
     (mod-invoke :fsouza.lib.cmd :run gen-python-tools
-                {:args [:-venv (path.join _G.cache-dir :venv)]} on-finished)))
+                {:args [:-venv (vim.fs.joinpath _G.cache-dir :venv)]}
+                on-finished)))
 
 (let [bufnr (vim.api.nvim_get_current_buf)]
   (get-python-tools #(let [tools $1]

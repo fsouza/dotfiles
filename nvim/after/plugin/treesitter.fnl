@@ -9,9 +9,11 @@
         (vim.tbl_flatten [(or obj.filetype lang)] (or obj.used_by [])))))
 
 (fn get-file-types []
-  (let [parsers-mod (require :nvim-treesitter.parsers)
-        wanted-parsers (parsers-mod.available_parsers)]
-    (mod-invoke :fsouza.pl.tablex :flat-map lang-to-ft wanted-parsers)))
+  (-> (mod-invoke :nvim-treesitter.parsers :available_parsers)
+      (vim.iter)
+      (: :map lang-to-ft)
+      (: :flatten 1)
+      (: :totable)))
 
 (fn setup-keymaps [buffer]
   (let [{: keymap-repeat} (require :fsouza.lib.nvim-helpers)]
