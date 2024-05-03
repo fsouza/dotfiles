@@ -1,10 +1,9 @@
 (import-macros {: mod-invoke} :helpers)
 
 (fn start-chpl-lsps [bufnr chpl-home chpl-bin-subdir]
-  (let [path (require :fsouza.pl/path)
-        chplcheck (path.join chpl-home :bin chpl-bin-subdir :chplcheck)
-        chpl-language-server (path.join chpl-home :bin chpl-bin-subdir
-                                        :chpl-language-server)]
+  (let [chplcheck (vim.fs.joinpath chpl-home :bin chpl-bin-subdir :chplcheck)
+        chpl-language-server (vim.fs.joinpath chpl-home :bin chpl-bin-subdir
+                                              :chpl-language-server)]
     (mod-invoke :fsouza.lsp.servers :start
                 {:config {:name :chplcheck :cmd [chplcheck :--lsp]}})
     (mod-invoke :fsouza.lsp.servers :start
