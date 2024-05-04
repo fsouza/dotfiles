@@ -12,7 +12,7 @@
                                                      lua-bin _G.dotfiles-dir)
                          :lintStdin true
                          :lintSource :fennel
-                         :lintFormats ["%f:%l:%c %m" "%f:%l: %m"]
+                         :lintFormats ["%f:%l:%c: %m" "%f:%l: %m"]
                          :lintIgnoreExitCode true
                          :lintAfterOpen true}))
   (custom-surround :f "(\001function: \001 \r)")
