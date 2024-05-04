@@ -27,11 +27,13 @@
     (fn test-folder [idx]
       (let [folder (. folders idx)]
         (if folder
-            (let [venv-candidate (vim.fs.joinpath (vim.uv.cwd) folder)]
-              (path.async-which (vim.fs.joinpath venv-candidate :bin :python3)
-                                #(if (not= $1 "")
-                                     (cb venv-candidate)
-                                     (test-folder (+ idx 1)))))
+            (let [venv-candidate (vim.fs.joinpath (vim.uv.cwd) folder)
+                  interpreter-candidate (vim.fs.joinpath venv-candidate :bin
+                                                         :python3)]
+              (vim.uv.fs_stat interpreter-candidate
+                              #(if (and (= $1 nil) (= $2.type :file))
+                                   (cb venv-candidate)
+                                   (test-folder (+ idx 1)))))
             (cb nil))))
 
     (test-folder 1)))
