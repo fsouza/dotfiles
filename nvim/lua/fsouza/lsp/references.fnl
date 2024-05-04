@@ -3,7 +3,7 @@
 (local test-checkers {})
 
 (fn is-test [fname]
-  (let [ext (mod-invoke :fsouza.pl.path :extension fname)
+  (let [ext (mod-invoke :fsouza.lib.path :extension fname)
         ext-checkers (or (. test-checkers ext) {})]
     (-> ext-checkers
         (vim.tbl_values)

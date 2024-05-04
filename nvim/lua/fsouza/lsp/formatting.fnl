@@ -1,7 +1,7 @@
 (import-macros {: mod-invoke : max-col} :helpers)
 
 (fn should-skip-buffer [bufnr]
-  (let [path (require :fsouza.pl.path)
+  (let [path (require :fsouza.lib.path)
         file-path (vim.api.nvim_buf_get_name bufnr)
         file-path (path.abspath file-path)]
     (not (path.isrel file-path))))

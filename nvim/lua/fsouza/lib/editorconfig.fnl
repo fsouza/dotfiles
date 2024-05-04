@@ -82,7 +82,7 @@
                 :bash :.sh
                 :zsh :.zsh
                 :javascript :.js}
-        (_ ext) (mod-invoke :fsouza.pl.path :splitext name)]
+        (_ ext) (mod-invoke :fsouza.lib.path :splitext name)]
     (if (not= ext "")
         name
         (let [ft (. vim :bo bufnr :filetype)
@@ -95,7 +95,7 @@
   (let [filename (vim.api.nvim_buf_get_name bufnr)]
     (when (and (?. vim :bo bufnr :modifiable)
                (not (?. vim :bo bufnr :readonly)) (not= filename ""))
-      (let [filename (mod-invoke :fsouza.pl.path :abspath filename)
+      (let [filename (mod-invoke :fsouza.lib.path :abspath filename)
             filename (modify-filename-if-needed filename bufnr)]
         (mod-invoke :fsouza.lib.cmd :run :editorconfig {:args [filename]}
                     (fn [result]

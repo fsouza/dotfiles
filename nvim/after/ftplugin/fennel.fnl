@@ -7,7 +7,7 @@
       tools [{:formatCommand (string.format "%s -" fnlfmt)
               :formatStdin true
               :env [(.. :NVIM_CACHE_DIR= _G.cache-dir)]}]]
-  (when (mod-invoke :fsouza.pl.path :isrel bufname _G.dotfiles-dir)
+  (when (mod-invoke :fsouza.lib.path :isrel bufname _G.dotfiles-dir)
     (table.insert tools {:lintCommand (string.format "%s %s/scripts/compile.lua --stdin-filename ${INPUT} -"
                                                      lua-bin _G.dotfiles-dir)
                          :lintStdin true

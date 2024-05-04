@@ -22,7 +22,7 @@
                        (set-from-cmd :pipenv [:--venv] cb))))
 
 (fn set-from-venv-folder [cb]
-  (let [path (require :fsouza.pl.path)
+  (let [path (require :fsouza.lib.path)
         folders [:venv :.venv]]
     (fn test-folder [idx]
       (let [folder (. folders idx)]

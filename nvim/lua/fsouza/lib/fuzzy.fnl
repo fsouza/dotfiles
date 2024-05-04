@@ -18,7 +18,7 @@
 
 (fn edit [command selected opts]
   (let [fzf-path (require :fzf-lua.path)
-        pl-path (require :fsouza.pl.path)]
+        pl-path (require :fsouza.lib.path)]
     (each [_ sel (ipairs selected)]
       (let [{: path : line : col} (fzf-path.entry_to_file sel opts)
             path (pl-path.relpath path)
@@ -131,7 +131,7 @@
                                fzf-lua-))))
 
 (lambda send-lsp-items [items prompt]
-  (let [pl-path (require :fsouza.pl.path)
+  (let [pl-path (require :fsouza.lib.path)
         prompt (.. prompt "：")
         fzf-lua (fzf-lua)
         config (require :fzf-lua.config)
@@ -210,7 +210,7 @@
 (fn handle-repo [run-fzf cd selected]
   (when (= (length selected) 1)
     (let [[sel] selected
-          sel (mod-invoke :fsouza.pl.path :abspath sel)]
+          sel (mod-invoke :fsouza.lib.path :abspath sel)]
       (when cd
         (vim.api.nvim_set_current_dir sel))
       (when run-fzf
@@ -244,7 +244,7 @@
     (fzf-lua.git_files opts)))
 
 (fn set-virtual-cwd- [cwd]
-  (set virtual-cwd (mod-invoke :fsouza.pl.path :abspath cwd)))
+  (set virtual-cwd (mod-invoke :fsouza.lib.path :abspath cwd)))
 
 (fn pick-cwd []
   (let [fzf-lua (fzf-lua)

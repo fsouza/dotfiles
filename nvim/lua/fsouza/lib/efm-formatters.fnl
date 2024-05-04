@@ -18,13 +18,13 @@
 
 (fn with-runtime-dir [tool cb]
   (let [xdg-runtime-dir (vim.fs.joinpath _G.cache-dir :prettierd)]
-    (mod-invoke :fsouza.pl.path :async-mkdir xdg-runtime-dir 493 true
+    (mod-invoke :fsouza.lib.path :mkdir xdg-runtime-dir true
                 #(cb xdg-runtime-dir))))
 
 (fn get-prettierd [cb]
   (with-runtime-dir :prettierd
     #(let [xdg-runtime-dir $1]
-       (mod-invoke :fsouza.pl.path :async-mkdir xdg-runtime-dir 493 true
+       (mod-invoke :fsouza.lib.path :mkdir xdg-runtime-dir true
                    #(get-node-bin :prettierd
                                   #(cb {:formatCommand (string.format "%s ${INPUT}"
                                                                       $1)

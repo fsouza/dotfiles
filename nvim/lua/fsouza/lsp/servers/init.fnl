@@ -15,8 +15,7 @@
 
 (fn with-executable [exec cb]
   (when exec
-    (let [path (require :fsouza.pl.path)
-          node-bin (vim.fs.joinpath _G.config-dir :langservers :node_modules
+    (let [node-bin (vim.fs.joinpath _G.config-dir :langservers :node_modules
                                     :.bin)
           PATH (.. node-bin ":" (os.getenv :PATH))]
       (macro fallback []
