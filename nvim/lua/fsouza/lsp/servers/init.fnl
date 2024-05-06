@@ -8,7 +8,7 @@
     :--using
     (vim.fs.joinpath _G.config-dir :langservers :.node-version)
     "--"
-    (table.unpack ,command)])
+    (unpack ,command)])
 
 (macro ff [server-name]
   `(.. :lsp-server- ,server-name))
