@@ -9,7 +9,7 @@
         (_ _ prog) (string.find first-line "^#!(.+)")]
     (when prog
       (let [k (-> pattern-mapping
-                  (vim.tbl_keys)
+                  (pairs)
                   (vim.iter)
                   (: :filter #(if (string.find prog $1) true false))
                   (: :next))]

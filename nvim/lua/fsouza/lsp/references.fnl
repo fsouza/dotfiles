@@ -6,9 +6,9 @@
   (let [ext (mod-invoke :fsouza.lib.path :extension fname)
         ext-checkers (or (. test-checkers ext) {})]
     (-> ext-checkers
-        (vim.tbl_values)
+        (pairs)
         (vim.iter)
-        (: :any #($1 fname)))))
+        (: :any #($2 fname)))))
 
 (fn do-filter [refs]
   (let [[lineno _] (vim.api.nvim_win_get_cursor 0)
