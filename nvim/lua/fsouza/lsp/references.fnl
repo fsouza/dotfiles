@@ -17,10 +17,12 @@
                  (vim.iter)
                  (: :filter #(not= $1.range.start.line lineno)))]
     (if (is-test (vim.api.nvim_buf_get_name 0)) (refs:totable)
-        (refs:all #(is-test (vim.uri_to_fname $1.uri))) (refs:totable)
-        (-> refs
-            (: :filter #(not (is-test (vim.uri_to_fname $1.uri))))
-            (: :totable)))))
+        (let [refs2 (vim.deepcopy refs)]
+          (if (refs2:all #(is-test (vim.uri_to_fname $1.uri)))
+              (refs:totable)
+              (-> refs
+                  (: :filter #(not (is-test (vim.uri_to_fname $1.uri))))
+                  (: :totable)))))))
 
 (fn filter-references [refs]
   (if (vim.tbl_islist refs)

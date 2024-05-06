@@ -18,13 +18,15 @@
 
 (fn filter [result client]
   (when (and result client)
-    (let [client-filters (vim.iter (get-filters (?. client :name)))
+    (let [client-filters (get-filters (?. client :name))
           {: diagnostics} result]
       (when (and diagnostics client)
         (tset result :diagnostics (icollect [_ d (ipairs diagnostics)]
                                     (let [severity (or d.severity 1)]
                                       (when (and (< severity 2)
-                                                 (client-filters:all #($1 d)))
+                                                 (-> client-filters
+                                                     (vim.iter)
+                                                     (: :all #($1 d))))
                                         d)))))
       result)))
 

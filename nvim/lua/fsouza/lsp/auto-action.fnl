@@ -24,9 +24,8 @@
                         (let [code-action (-> actions
                                               (vim.iter)
                                               (: :filter
-                                                 (fn [action]
-                                                   (= action.kind
-                                                      :source.organizeImports)))
+                                                 #(= $1.kind
+                                                     :source.organizeImports))
                                               (: :next))]
                           (when code-action
                             (vim.api.nvim_buf_call bufnr
