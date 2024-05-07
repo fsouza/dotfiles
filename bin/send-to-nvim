@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+
+file=$(mktemp)
+cat >"${file}"
+
+tmux send-keys -X cancel
+pane_cwd=$(tmux display-message -p '#{pane_current_path}')
+exec tmux split-window -b -c ${pane_cwd} -Z nvim -l "require('fsouza.lib.tmux-selection').handle('${file}')"
