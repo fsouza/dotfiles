@@ -4,5 +4,10 @@ file=$(mktemp)
 cat >"${file}"
 
 tmux send-keys -X cancel
+
+if ! [ -s "${file}" ]; then
+	exit 0
+fi
+
 pane_cwd=$(tmux display-message -p '#{pane_current_path}')
 exec tmux split-window -b -c ${pane_cwd} -Z nvim -c "lua require('fsouza.lib.tmux-selection').handle('${file}')"
