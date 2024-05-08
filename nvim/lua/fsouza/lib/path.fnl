@@ -5,7 +5,7 @@
 (fn isrel [path start]
   (not (vim.startswith (pl-path.relpath path start) "../")))
 
-(fn mkdir [path mode recursive cb]
+(fn mkdir [path recursive cb]
   (let [args (if recursive
                  [:-p path]
                  [path])]
@@ -14,7 +14,7 @@
           (error result.stderr)
           (cb path)))
 
-    (mod-invoke :fsouza.lib.cmd :mkdir {: args} handle-result)))
+    (mod-invoke :fsouza.lib.cmd :run :mkdir {: args} handle-result)))
 
 (let [mod {: isrel : mkdir}]
   (setmetatable mod {:__index (fn [table key]
