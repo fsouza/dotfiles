@@ -79,18 +79,19 @@
 
       (fn start- []
         (with-executable exec
-          #(let [is-node-bin $2]
-             (tset config.cmd 1 $1)
-             (when is-node-bin
-               (tset config :cmd (fnm-exec config.cmd)))
-             (vim.schedule #(let [client-id (vim.lsp.start config {: bufnr})]
-                              (when opts.autofmt
-                                (mod-invoke :fsouza.lsp.formatting :attach
-                                            bufnr client-id))
-                              (when opts.auto-action
-                                (mod-invoke :fsouza.lsp.auto-action :attach
-                                            bufnr client-id))
-                              (cb client-id))))))
+          #(when (not= $1 "")
+             (let [is-node-bin $2]
+               (tset config.cmd 1 $1)
+               (when is-node-bin
+                 (tset config :cmd (fnm-exec config.cmd)))
+               (vim.schedule #(let [client-id (vim.lsp.start config {: bufnr})]
+                                (when opts.autofmt
+                                  (mod-invoke :fsouza.lsp.formatting :attach
+                                              bufnr client-id))
+                                (when opts.auto-action
+                                  (mod-invoke :fsouza.lsp.auto-action :attach
+                                              bufnr client-id))
+                                (cb client-id)))))))
 
       (if (string.find bufname uri-pattern)
           (start-)
