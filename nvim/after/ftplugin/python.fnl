@@ -17,7 +17,8 @@
                                      :python {:pythonPath python-interpreter
                                               :analysis {:autoImportCompletions true
                                                          :autoSearchPaths true
-                                                         :diagnosticMode :workspace
+                                                         :diagnosticMode (or vim.g.pyright_diagnostic_mode
+                                                                             :workspace)
                                                          :typeCheckingMode (or vim.g.pyright_type_checking_mode
                                                                                :basic)
                                                          :useLibraryCodeForTypes true}}}}
