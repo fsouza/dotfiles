@@ -55,6 +55,8 @@
                 :Function
                 :FzfLuaHeaderBind
                 :FzfLuaHeaderText
+                :FzfLuaPathLineNr
+                :FzfLuaPathColNr
                 :Identifier
                 :Ignore
                 :Include

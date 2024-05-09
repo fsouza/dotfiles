@@ -60,20 +60,12 @@
      (tset actions# :default (partial edit-or-qf save-stack-and-edit))
      actions#))
 
-(fn ansi-codes []
-  (let [id #$1]
-    (setmetatable {} {:__index #(let [table $1
-                                      key $2]
-                                  (rawset table key id)
-                                  id)})))
-
 (local fzf-lua (mod-invoke :fsouza.lib.nvim-helpers :once
                            (fn []
                              (vim.cmd.packadd :nvim-fzf)
                              (let [actions (file-actions)
                                    fzf-lua- (require :fzf-lua)
                                    f-config (require :fzf-lua.config)
-                                   f-utils (require :fzf-lua.utils)
                                    previewer :bat
                                    id #$1]
                                (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
@@ -125,9 +117,9 @@
                                                                :ctrl-d :preview-page-down
                                                                :ctrl-u :preview-page-up
                                                                :ctrl-h :toggle-preview}}})
+                               (vim.cmd.color :none)
                                (tset f-config.globals.keymap.fzf :ctrl-f nil)
                                (tset f-config.globals.keymap.fzf :ctrl-b nil)
-                               (tset f-utils :ansi_codes (ansi-codes))
                                fzf-lua-))))
 
 (lambda send-lsp-items [items prompt]
