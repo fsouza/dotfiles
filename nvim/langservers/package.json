@@ -11,7 +11,7 @@
 		"pyright": "^1.1.361",
 		"typescript": "^5.4.5",
 		"typescript-language-server": "^4.3.3",
-		"vscode-langservers-extracted": "^4.8.0",
+		"vscode-langservers-extracted": "^4.10.0",
 		"yaml-language-server": "^1.14.0"
 	}
 }
