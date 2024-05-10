@@ -6,7 +6,7 @@
 
 (fn register-for-buffer [bufnr]
   (let [bufname (vim.api.nvim_buf_get_name bufnr)]
-    (when (not= "" bufname)
+    (when (and (not= "" bufname) (= (string.find bufname "^%a+://") nil))
       (mod-invoke :fsouza.lib.nvim-helpers :augroup (.. :fsouza__mkdir_ bufnr)
                   [{:events [:BufWritePre]
                     :targets [(string.format "<buffer=%d>" bufnr)]
