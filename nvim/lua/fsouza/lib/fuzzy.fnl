@@ -135,7 +135,12 @@
                    (do
                      (when virtual-cwd
                        (tset item :filename (pl-path.abspath item.filename)))
-                     (let [item (make-entry.lcol item {:cwd virtual-cwd})]
+                     (let [item (make-entry.lcol item
+                                                 {:cwd virtual-cwd
+                                                  :_cached_hls [:path_colnr
+                                                                :path_linenr]
+                                                  :hls {:path_linenr :FzfLuaPathLineNr
+                                                        :path_colnr :FzfLuaPathColNr}})]
                        (make-entry.file item {:cwd virtual-cwd}))))]
     (core.fzf_exec contents opts)))
 
