@@ -94,7 +94,8 @@
 (fn set-config [bufnr]
   (let [filename (vim.api.nvim_buf_get_name bufnr)]
     (when (and (?. vim :bo bufnr :modifiable)
-               (not (?. vim :bo bufnr :readonly)) (not= filename ""))
+               (not (?. vim :bo bufnr :readonly)) (not= filename "")
+               (= (string.find filename "^%a+://") nil))
       (let [filename (mod-invoke :fsouza.lib.path :abspath filename)
             filename (modify-filename-if-needed filename bufnr)]
         (mod-invoke :fsouza.lib.cmd :run :editorconfig {:args [filename]}
