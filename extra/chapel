@@ -3,6 +3,7 @@
 
 CHAPEL_INSTALL_PREFIX=${HOME}/opt/chapel
 CHAPEL_SRC_DIR=${CHAPEL_SRC_DIR:-${HOME}/Projects/os/3/chapel}
+export CHPL_LLVM=bundled
 
 function __try_use_chapel {
 	if [ -x ${CHAPEL_INSTALL_PREFIX}/bin/chpl ]; then
