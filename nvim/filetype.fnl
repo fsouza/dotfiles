@@ -23,7 +23,6 @@
 
 (let [fts {:extension {:fnl :fennel
                        :sh #(or (from-shebang $...) (from-current-shell))
-                       :chpl :chapel
                        "" from-shebang}
            :filename {:go.mod :gomod :setup.cfg :pysetupcfg :Brewfile :ruby}}]
   (vim.filetype.add fts))

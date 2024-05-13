@@ -27,7 +27,7 @@ if command -v fnm &>/dev/null; then
 	eval "$(fnm env)"
 fi
 
-extras=(virtualenv mise z git gh go mail neovim rclone tmux chapel)
+extras=(virtualenv mise z git gh go mail neovim rclone tmux)
 extras_skip=( ${FSOUZA_EXTRAS_SKIP[@]} )
 for extra in ${extras[@]}; do
 	if ! (($extras_skip[(Ie)$extra])); then
