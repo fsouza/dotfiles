@@ -15,7 +15,7 @@
 (fn fzf-location-callback [_ result ctx]
   (when (and result (not (vim.tbl_isempty result)))
     (let [client (vim.lsp.get_client_by_id ctx.client_id)]
-      (if (vim.tbl_islist result)
+      (if (vim.islist result)
           (if (> (length result) 1)
               (let [items (vim.lsp.util.locations_to_items result
                                                            client.offset_encoding)]

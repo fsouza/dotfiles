@@ -6,13 +6,13 @@
   (if (vim.tbl_contains ignore-install lang) []
       (let [parsers (require :nvim-treesitter.parsers)
             obj (. parsers.list lang)]
-        (vim.tbl_flatten [(or obj.filetype lang)] (or obj.used_by [])))))
+        [(or obj.filetype lang) (or obj.used_by [])])))
 
 (fn get-file-types []
   (-> (mod-invoke :nvim-treesitter.parsers :available_parsers)
       (vim.iter)
       (: :map lang-to-ft)
-      (: :flatten 1)
+      (: :flatten math.huge)
       (: :totable)))
 
 (fn setup-keymaps [buffer]
