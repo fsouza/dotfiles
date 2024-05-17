@@ -67,15 +67,6 @@
                                             :rhs vim.lsp.buf.clear_references}]]
         :textDocument/documentSymbol #[:MAPPINGS
                                        [{:mode :n
-                                         :lhs :<leader>v
-                                         :rhs (#(let [load-vista-vim (mod-invoke :fsouza.lib.nvim-helpers
-                                                                                 :once
-                                                                                 #(vim.cmd.packadd :vista.vim))]
-                                                  (fn []
-                                                    (load-vista-vim)
-                                                    (vim.cmd.Vista {:args ["!"]
-                                                                    :bang true}))))}
-                                        {:mode :n
                                          :lhs :<leader>t
                                          :rhs #(mod-invoke :fsouza.lib.fuzzy
                                                            :lsp_document_symbols)}]]

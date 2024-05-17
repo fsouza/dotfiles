@@ -15,48 +15,6 @@
       (: :flatten math.huge)
       (: :totable)))
 
-(fn setup-keymaps [buffer]
-  (let [{: keymap-repeat} (require :fsouza.lib.nvim-helpers)]
-    (keymap-repeat :>e #(mod-invoke :tree-climber :swap_next)
-                   {: buffer :silent true})
-    (keymap-repeat :<e #(mod-invoke :tree-climber :swap_prev)
-                   {: buffer :silent true})
-    (keymap-repeat :>f #(mod-invoke :syntax-tree-surfer :move :n false)
-                   {: buffer :silent true})
-    (keymap-repeat :<f #(mod-invoke :syntax-tree-surfer :move :n true)
-                   {: buffer :silent true})
-    (keymap-repeat :vv #(mod-invoke :syntax-tree-surfer :select_current_node)
-                   {: buffer :silent true})
-    (vim.keymap.set :x :J #(mod-invoke :syntax-tree-surfer :surf :next :visual)
-                    {: buffer :silent true})
-    (vim.keymap.set :x :K #(mod-invoke :syntax-tree-surfer :surf :prev :visual)
-                    {: buffer :silent true})
-    (vim.keymap.set :x :<tab>
-                    #(mod-invoke :syntax-tree-surfer :surf :parent :visual)
-                    {: buffer :silent true})
-    (vim.keymap.set :x :<s-tab>
-                    #(mod-invoke :syntax-tree-surfer :surf :child :visual)
-                    {: buffer :silent true})
-    (vim.keymap.set :x :<leader>a
-                    #(mod-invoke :syntax-tree-surfer :surf :next :visual true)
-                    {: buffer :silent true})
-    (vim.keymap.set :x :<leader>A
-                    #(mod-invoke :syntax-tree-surfer :surf :prev :visual true)
-                    {: buffer :silent true})
-    (vim.keymap.set :n :<c-k>
-                    #(do
-                       (vim.cmd.normal "m'")
-                       (mod-invoke :tree-climber :goto_parent))
-                    {: buffer :silent true})))
-
-(fn on-FileType [{: buf}]
-  (setup-keymaps buf))
-
-(fn setup-autocmds []
-  (let [targets (get-file-types)]
-    (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__treesitter_autocmd
-                [{:events [:FileType] : targets :callback on-FileType}])))
-
 (do
   (mod-invoke :nvim-treesitter.configs :setup
               {:highlight {:enable true
@@ -77,5 +35,4 @@
                                     :swap_previous {:<leader>A "@parameter.inner"}}}
                :ensure_installed []
                :auto_install true
-               :ignore_install ignore-install})
-  (setup-autocmds))
+               :ignore_install ignore-install}))

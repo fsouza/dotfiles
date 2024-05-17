@@ -7,9 +7,6 @@ checkout = git clone https://github.com/nvim-treesitter/nvim-treesitter.git
 [start/nvim-treesitter-textobjects]
 checkout = git clone https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
 
-[start/tabular]
-checkout = git clone https://github.com/godlygeek/tabular.git
-
 [start/vim-fugitive]
 checkout = git clone https://github.com/tpope/vim-fugitive.git
 
@@ -58,15 +55,6 @@ checkout = git clone https://github.com/chrisgrieser/nvim-various-textobjs.git
 
 [opt/SchemaStore.nvim]
 checkout = git clone https://github.com/b0o/SchemaStore.nvim.git
-
-[opt/syntax-tree-surfer]
-checkout = git clone https://github.com/ziontee113/syntax-tree-surfer.git
-
-[opt/tree-climber.nvim]
-checkout = git clone https://github.com/drybalka/tree-climber.nvim.git
-
-[opt/vista.vim]
-checkout = git clone https://github.com/liuchengxu/vista.vim.git
 
 [opt/oil.nvim]
 checkout = git clone https://github.com/stevearc/oil.nvim.git
