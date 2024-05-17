@@ -153,6 +153,7 @@
                  (vim.fn.bufadd))))
      (tset vim.ui :select
            #(mod-invoke :fsouza.lib.popup-picker :ui-select $...))
+     (tset vim :deprecate #nil)
      (let [patterns# ["message with no corresponding"]
            orig-notify# vim.notify]
        (fn notify# [msg# level# opts#]
