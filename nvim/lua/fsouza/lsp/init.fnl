@@ -193,8 +193,6 @@
   (config-log)
   (tset vim.lsp :_set_defaults #nil)
   (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__LspAttach
-              [{:events [:LspAttach] :callback lsp-attach}])
-  (mod-invoke :fsouza.lsp.buf-diagnostic :register-filter :pyright
-              #(mod-invoke :fsouza.lsp.servers.pyright :valid-diagnostic $1)))
+              [{:events [:LspAttach] :callback lsp-attach}]))
 
 {: setup : register-method}

@@ -6,27 +6,18 @@
 
 (local filters {})
 
-(fn get-filters [client-name]
-  (if client-name
-      (or (. filters client-name) [])
-      []))
-
-(fn register-filter [client-name f]
-  (let [client-filters (get-filters client-name)]
-    (table.insert client-filters f)
-    (tset filters client-name client-filters)))
+(lambda register-filter [client-name f]
+  (tset filters client-name f))
 
 (fn filter [result client]
   (when (and result client)
-    (let [client-filters (get-filters (?. client :name))
+    (let [client-filter (or (. filters (?. client :name)) #true)
           {: diagnostics} result]
       (when (and diagnostics client)
         (tset result :diagnostics (icollect [_ d (ipairs diagnostics)]
                                     (let [severity (or d.severity 1)]
                                       (when (and (< severity 2)
-                                                 (-> client-filters
-                                                     (vim.iter)
-                                                     (: :all #($1 d))))
+                                                 (client-filter d))
                                         d)))))
       result)))
 

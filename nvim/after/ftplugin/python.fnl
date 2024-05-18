@@ -22,6 +22,8 @@
                                                          :typeCheckingMode (or vim.g.pyright_type_checking_mode
                                                                                :basic)
                                                          :useLibraryCodeForTypes true}}}}
+                 :opts {:diagnostic-filter #(mod-invoke :fsouza.lsp.servers.pyright
+                                                        :valid-diagnostic $1)}
                  :cb #(mod-invoke :fsouza.lsp.references :register-test-checker
                                   :.py :python is-python-test)})))
 

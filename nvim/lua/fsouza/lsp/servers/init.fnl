@@ -91,6 +91,9 @@
                                 (when opts.auto-action
                                   (mod-invoke :fsouza.lsp.auto-action :attach
                                               bufnr client-id))
+                                (when opts.diagnostic-filter
+                                  (mod-invoke :fsouza.lsp.buf-diagnostic name
+                                              opts.diagnostic-filter))
                                 (cb client-id)))))))
 
       (if (string.find bufname uri-pattern)
