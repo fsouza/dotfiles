@@ -20,6 +20,11 @@ function _install_go {
 		prepend_to_path "$(dirname $(${FSOUZA_DOTFILES_DIR}/bin/__bootstrap_go))"
 		export GOPROXY=https://proxy.golang.org
 
+		# hack for gotip
+		if [[ ${name} == "gotip" ]]; then
+			env GOPATH=${GO_HOME}/sdk/gotip/pkg/obj/gopath go clean -modcache
+		fi
+
 		env GOBIN=${temp_gobin} GOPATH=${GO_HOME}/selfpath go install golang.org/dl/${name}@latest &&
 			env HOME=${GO_HOME} GOROOT_BOOTSTRAP=$(go env GOROOT) ${temp_gobin}/${name} download &&
 			rm -rf ${temp_gobin}
