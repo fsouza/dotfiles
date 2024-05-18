@@ -4,3 +4,5 @@ _secretive_sock=${HOME}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/
 if [ -e ${_secretive_sock} ]; then
 	export SSH_AUTH_SOCK=${_secretive_sock}
 fi
+
+ulimit -n 8192

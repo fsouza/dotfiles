@@ -1,1 +1,0 @@
-add-zsh-hook chpwd __auto_git_config
