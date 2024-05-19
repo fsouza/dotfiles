@@ -188,10 +188,14 @@
                                             vim.diagnostic.severity.INFO :DiagnosticSignInfo
                                             vim.diagnostic.severity.HINT :DiagnosticSignHint}}})))
 
+(fn set-defaults [client bufnr]
+  (when (client.supports_method :textDocument/diagnostic)
+    (vim.lsp.diagnostic._enable bufnr)))
+
 (fn setup []
   (config-diagnostics)
   (config-log)
-  (tset vim.lsp :_set_defaults #nil)
+  (tset vim.lsp :_set_defaults set-defaults)
   (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__LspAttach
               [{:events [:LspAttach] :callback lsp-attach}]))
 

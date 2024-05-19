@@ -42,6 +42,8 @@
                                                                               client.offset_encoding))))
  :textDocument/hover popup-callback
  :textDocument/signatureHelp popup-callback
+ :textDocument/diagnostic #(mod-invoke :fsouza.lsp.buf-diagnostic
+                                       :handle-diagnostics $...)
  :textDocument/publishDiagnostics #(mod-invoke :fsouza.lsp.buf-diagnostic
                                                :publish-diagnostics $...)
  :window/logMessage #(mod-invoke :fsouza.lsp.log-message :handle $...)}
