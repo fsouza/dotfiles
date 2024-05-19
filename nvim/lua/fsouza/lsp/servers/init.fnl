@@ -64,6 +64,10 @@
 (fn file-exists [bufname cb]
   (vim.uv.fs_stat bufname #(cb (= $1 nil))))
 
+(fn autofmt-priority [autofmt]
+  (if (= autofmt true) 1
+      autofmt))
+
 (fn start [{: config : find-root-dir : bufnr : cb : opts}]
   (let [find-root-dir (or find-root-dir cwd-if-not-home)
         bufnr (or bufnr (vim.api.nvim_get_current_buf))
@@ -87,7 +91,8 @@
                (vim.schedule #(let [client-id (vim.lsp.start config {: bufnr})]
                                 (when opts.autofmt
                                   (mod-invoke :fsouza.lsp.formatting :attach
-                                              bufnr client-id))
+                                              bufnr client-id
+                                              (autofmt-priority opts.autofmt)))
                                 (when opts.auto-action
                                   (mod-invoke :fsouza.lsp.auto-action :attach
                                               bufnr client-id))
