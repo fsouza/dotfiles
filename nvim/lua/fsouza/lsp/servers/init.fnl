@@ -93,10 +93,10 @@
                                   (mod-invoke :fsouza.lsp.formatting :attach
                                               bufnr client-id
                                               (autofmt-priority opts.autofmt)))
-                                (when opts.auto-action
+                                (when (not= opts.auto-action nil)
                                   (mod-invoke :fsouza.lsp.auto-action :attach
-                                              bufnr client-id))
-                                (when opts.diagnostic-filter
+                                              bufnr client-id opts.auto-action))
+                                (when (not= opts.diagnostic-filter nil)
                                   (mod-invoke :fsouza.lsp.buf-diagnostic
                                               :register-filter name
                                               opts.diagnostic-filter))

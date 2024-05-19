@@ -8,7 +8,7 @@
 (fn should-organize-imports [client-name]
   (and client-name (. langservers-org-imports-set client-name)))
 
-(fn organize-imports-and-write [client bufnr]
+(fn organize-imports-and-write [client bufnr kind]
   (let [changed-tick (vim.api.nvim_buf_get_changedtick bufnr)
         params (vim.lsp.util.make_range_params)]
     (tset params :context
@@ -23,9 +23,7 @@
                                  actions (not (vim.tbl_isempty actions)))
                         (let [code-action (-> actions
                                               (vim.iter)
-                                              (: :filter
-                                                 #(= $1.kind
-                                                     :source.organizeImports))
+                                              (: :filter #(= $1.kind kind))
                                               (: :next))]
                           (when code-action
                             (vim.api.nvim_buf_call bufnr
@@ -36,10 +34,10 @@
                                                      (vim.cmd.update))))))))))
 
 (lambda handle [bufnr]
-  (let [client-id (. buffer-clients bufnr)
+  (let [{: client-id : kind} (. buffer-clients bufnr)
         client (vim.lsp.get_client_by_id client-id)]
     (if client
-        (organize-imports-and-write client bufnr)
+        (organize-imports-and-write client bufnr kind)
         (tset buffer-clients bufnr nil))))
 
 (local setup
@@ -51,8 +49,8 @@
                                   :callback #(let [{: bufnr} (. $1 :data)]
                                                (handle bufnr))}])))
 
-(fn attach [bufnr client-id]
+(lambda attach [bufnr client-id kind]
   (setup)
-  (tset buffer-clients bufnr client-id))
+  (tset buffer-clients bufnr {: client-id : kind}))
 
 {: attach}
