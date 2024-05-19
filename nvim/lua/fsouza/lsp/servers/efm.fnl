@@ -41,6 +41,7 @@
             (tset client.config :settings settings)
             (client.notify :workspace/didChangeConfiguration {: settings}))))))
 
-  (start-efm bufnr update-config))
+  (when (> (length tools) 0)
+    (start-efm bufnr update-config)))
 
 {: add}
