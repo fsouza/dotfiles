@@ -14,12 +14,12 @@
     (let [client-filter (or (. filters (?. client :name)) #true)
           {: diagnostics} result]
       (when (and diagnostics client)
-        (tset result :diagnostics (icollect [_ d (ipairs diagnostics)]
-                                    (let [severity (or d.severity 1)]
-                                      (when (and (< severity 2)
-                                                 (client-filter d))
-                                        d)))))
-      result)))
+        (tset result :diagnostics
+              (-> diagnostics
+                  (vim.iter)
+                  (: :filter client-filter)
+                  (: :totable)))))
+    result))
 
 (fn buf-clear-all-diagnostics []
   (let [all-clients (vim.lsp.get_active_clients)]
