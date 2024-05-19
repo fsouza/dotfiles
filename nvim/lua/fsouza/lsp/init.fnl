@@ -1,6 +1,8 @@
 (import-macros {: mod-invoke} :helpers)
 
-(local disabled-methods {:efm {:textDocument/definition true}})
+(local disabled-methods
+       {:efm {:textDocument/definition true}
+        :ruff-server {:textDocument/hover true}})
 
 (fn patch-supports-method [client]
   (let [supports-method client.supports_method]
