@@ -38,13 +38,10 @@
                                                    (: :filter #(= $1.kind kind))
                                                    (: :next))]
                                (when code-action
-                                 (vim.api.nvim_buf_call bufnr
-                                                        (fn []
-                                                          (mod-invoke :fsouza.lsp.code-action
-                                                                      :execute
-                                                                      client
-                                                                      code-action)
-                                                          (vim.cmd.update))))))))))))
+                                 (mod-invoke :fsouza.lsp.code-action :execute
+                                             client code-action
+                                             #(vim.api.nvim_buf_call bufnr
+                                                                     #(vim.cmd.update))))))))))))
 
 (lambda handle [bufnr]
   (let [{: client-id : kind} (. buffer-clients bufnr)
@@ -56,7 +53,7 @@
 (local setup
        (mod-invoke :fsouza.lib.nvim-helpers :once
                    #(mod-invoke :fsouza.lib.nvim-helpers :augroup
-                                :fsouza__autoorganizeimports
+                                :fsouza__autocodeaction
                                 [{:events [:User]
                                   :targets [:fsouza-LSP-autoformatted]
                                   :callback #(let [{: bufnr} (. $1 :data)]

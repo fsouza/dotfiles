@@ -1,18 +1,21 @@
 (import-macros {: mod-invoke : max-col} :helpers)
 
-(fn do-action [client action resolved]
+(lambda do-action [client action cb ?resolved]
   (if (or action.edit (= (type action.command) :table))
       (do
         (when action.edit
           (vim.lsp.util.apply_workspace_edit action.edit client.offset_encoding))
         (when (= (type action.command) :table)
-          (vim.lsp.buf.execute_command action.command)))
-      (not resolved)
+          (vim.lsp.buf.execute_command action.command))
+        (cb))
+      (not ?resolved)
       (client.request :codeAction/resolve action
                       (fn [_ resolved-action]
-                        (do-action client resolved-action true)))
+                        (do-action client resolved-action cb true)))
       (and action.command action.arguments)
-      (vim.lsp.buf.execute_command action)))
+      (do
+        (vim.lsp.buf.execute_command action)
+        (cb))))
 
 (fn handle-actions [actions client]
   (when (and actions (not (vim.tbl_isempty actions)))
