@@ -40,7 +40,7 @@
                                  :init_options {:settings {:lint {:enable true
                                                                   :ignore [:I001]}}}}
                         :find-root-dir #root-dir
-                        :opts {:autofmt 2}})))
+                        :opts {:autofmt 2 :auto-action :source.fixAll.ruff}})))
 
 (fn maybe-start-ruff-server [bufnr python-interpreter]
   (let [bufname (vim.api.nvim_buf_get_name bufnr)
