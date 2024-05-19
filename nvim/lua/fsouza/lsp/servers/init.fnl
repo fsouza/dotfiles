@@ -92,7 +92,8 @@
                                   (mod-invoke :fsouza.lsp.auto-action :attach
                                               bufnr client-id))
                                 (when opts.diagnostic-filter
-                                  (mod-invoke :fsouza.lsp.buf-diagnostic name
+                                  (mod-invoke :fsouza.lsp.buf-diagnostic
+                                              :register-filter name
                                               opts.diagnostic-filter))
                                 (cb client-id)))))))
 
