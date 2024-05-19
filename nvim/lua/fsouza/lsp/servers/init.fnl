@@ -59,7 +59,7 @@
     (let [defaults {:handlers (require :fsouza.lsp.handlers)
                     : capabilities
                     :flags {:debounce_text_changes 150}}]
-      (vim.tbl_extend :force defaults opts))))
+      (vim.tbl_deep_extend :force defaults opts))))
 
 (fn file-exists [bufname cb]
   (vim.uv.fs_stat bufname #(cb (= $1 nil))))
