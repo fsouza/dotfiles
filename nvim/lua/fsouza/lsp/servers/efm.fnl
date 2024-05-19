@@ -6,7 +6,7 @@
     (mod-invoke :fsouza.lsp.servers :start
                 {: bufnr
                  : cb
-                 :opts {:autofmt true}
+                 :opts {:autofmt 1}
                  :config {:name :efm
                           :cmd [:go
                                 :run
