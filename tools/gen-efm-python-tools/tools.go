@@ -66,33 +66,6 @@ func isort(args []string) []Language {
 	return stdinFormatter("isort", args)
 }
 
-func ruff(_ []string) []Language {
-	ruff := getPythonBin("ruff")
-	ruffRootmarkers := append([]string{"pyproject.toml", "ruff.toml"}, defaultRootmarkers...)
-
-	return []Language{
-		{
-			LintCommand:        fmt.Sprintf("%s check --stdin-filename ${INPUT} -", ruff),
-			LintSource:         "ruff",
-			LintFormats:        []string{"%f:%l:%c: %m"},
-			LintStdin:          true,
-			LintIgnoreExitCode: true,
-			LintAfterOpen:      true,
-			RootMarkers:        ruffRootmarkers,
-		},
-		{
-			FormatCommand: fmt.Sprintf("%s check --silent --exit-zero --fix-only -", ruff),
-			FormatStdin:   true,
-			RootMarkers:   ruffRootmarkers,
-		},
-		{
-			FormatCommand: fmt.Sprintf("%s format -", ruff),
-			FormatStdin:   true,
-			RootMarkers:   ruffRootmarkers,
-		},
-	}
-}
-
 func stdinFormatter(tool string, args []string) []Language {
 	tool = getPythonBin(tool)
 	return []Language{
