@@ -65,10 +65,12 @@
                                                              (let [new-hash (helpers.hash-buffer bufnr)
                                                                    noautocmd (= new-hash
                                                                                 hash)]
-                                                               (vim.cmd.update {:mods {: noautocmd}})))))))))))))
+                                                               (vim.cmd.update {:mods {: noautocmd}})))))))))
+                         (do-autocmd)))))
         ;; client is gone, let's detach
-        (detach bufnr))
-    (do-autocmd)))
+        (do
+          (detach bufnr)
+          (do-autocmd)))))
 
 (lambda attach [bufnr client-id ?priority]
   (let [client (vim.lsp.get_client_by_id client-id)
