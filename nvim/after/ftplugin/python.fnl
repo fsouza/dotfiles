@@ -37,8 +37,7 @@
                                                         :ruff)
                                        :server
                                        :--preview]
-                                 :init_options {:settings {:lint {:enable true
-                                                                  :ignore [:I001]}}}}
+                                 :init_options {:settings {:lint {:enable true}}}}
                         :find-root-dir #root-dir
                         :opts {:autofmt 2 :auto-action :source.fixAll.ruff}})))
 
