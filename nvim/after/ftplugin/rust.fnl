@@ -7,5 +7,11 @@
                       :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}
                       :find-root-dir #(mod-invoke :fsouza.lsp.servers
                                                   :patterns-with-fallback
-                                                  [:Cargo.toml])}
+                                                  [:Cargo.toml])
+                      :handlers {:client/registerCapability (. vim :lsp
+                                                               :handlers
+                                                               :client/registerCapability)
+                                 :client/unregisterCapability (. vim :lsp
+                                                                 :handlers
+                                                                 :client/unregisterCapability)}}
              :opts {:autofmt true}})
