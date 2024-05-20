@@ -73,4 +73,5 @@
                                                :publish-diagnostics $...)
  :client/registerCapability register-capability
  :client/unregisterCapability unregister-capability
- :window/logMessage #(mod-invoke :fsouza.lsp.log-message :handle $...)}
+ :window/logMessage #(mod-invoke :fsouza.lsp.log-message :handle $...)
+ :window/showMessage #(mod-invoke :fsouza.lsp.log-message :handle $...)}
