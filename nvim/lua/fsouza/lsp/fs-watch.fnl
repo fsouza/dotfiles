@@ -163,18 +163,17 @@
             (table.insert abs-folders {: watcher : pats})))))
 
     (fn find-best-folder [folder]
-      (let [it (-> folders
-                   (vim.tbl_keys)
-                   (vim.iter)
-                   (: :filter #(path.isrel folder $1))
-                   (: :next))]
+      (let [existing (-> folders
+                         (vim.iter)
+                         (: :filter #(path.isrel folder $1))
+                         (: :next))]
         (fn find-existing [folder]
           (let [(_ err) (vim.uv.fs_stat folder)]
             (if err
                 (find-existing (vim.fs.dirname folder))
                 folder)))
 
-        (or (it) (find-existing folder))))
+        (or existing (find-existing folder))))
 
     (each [_ {: pats : watcher} (ipairs abs-folders)]
       (each [_ pat (ipairs pats)]
