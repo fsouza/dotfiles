@@ -68,8 +68,7 @@
                      :literal (compile-literal node.value node.is-literal))]
       (.. regex node-str))))
 
-(let [lpeg (require :lpeg)
-      {: Ct : C : P : S : R : V} vim.lpeg
+(let [{: Ct : C : P : S : R : V} vim.lpeg
       glob-parser (let [GroupLiteralChar (+ (R :AZ) (R :az) (R :09)
                                             (S "!-+@_~;:./$^"))
                         LiteralChar (+ GroupLiteralChar (S ",}"))
@@ -105,7 +104,7 @@
                                       GroupLiteral Range)}))
       glob-parser (* glob-parser -1)]
   (fn parse [glob]
-    (lpeg.match glob-parser glob))
+    (vim.lpeg.match glob-parser glob))
 
   (fn compile [glob]
     (let [tree (parse glob)]
