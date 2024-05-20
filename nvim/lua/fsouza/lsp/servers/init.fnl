@@ -77,7 +77,7 @@
         cb (or cb #nil)
         opts (or opts {})
         bufname (vim.api.nvim_buf_get_name bufnr)
-        uri-pattern "^%a+://"]
+        uri-prefixes (vim.iter ["jdtls://" "file://"])]
     (when (should-start bufnr name)
       (tset config :root_dir (find-root-dir bufname))
 
@@ -102,7 +102,9 @@
                                               opts.diagnostic-filter))
                                 (cb client-id)))))))
 
-      (if (string.find bufname uri-pattern)
+      ;; check specific URI prefixes because some of them should not be sent to
+      ;; LSPs (e.g. fugitive://, oil://, ssh://)
+      (if (uri-prefixes:any #(vim.startswith bufname $1))
           (start-)
           (file-exists bufname
                        #(if $1
