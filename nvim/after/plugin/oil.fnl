@@ -4,4 +4,5 @@
                         :gq :actions.close}
               :skip_confirm_for_simple_edits true
               :view_options {:show_hidden true}})
-  (vim.keymap.set :n "-" oil.open))
+  (vim.keymap.set :n "-" #(when (not= vim.bo.filetype :fugitiveblame)
+                            (oil.open))))
