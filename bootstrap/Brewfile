@@ -19,6 +19,5 @@ brew "uv"
 brew "zoxide"
 
 if OS.mac?
-  tap "homebrew/cask-fonts"
   cask "font-sauce-code-pro-nerd-font"
 end
