@@ -115,10 +115,10 @@
                             (pl-path.join root-dir)
                             (pl-path.abspath))
               {: watchers} (. state root-dir)]
-          (each [_ {: pattern : client-id : kind : reg-id} (ipairs watchers)]
-            (when (or (glob.match pattern filename)
-                      (glob.match pattern filepath))
-              (vim.schedule #(notify client-id reg-id filepath events kind)))))))))
+          (vim.schedule #(each [_ {: pattern : client-id : kind : reg-id} (ipairs watchers)]
+                           (when (or (glob.match pattern filename)
+                                     (glob.match pattern filepath))
+                             (notify client-id reg-id filepath events kind)))))))))
 
 (fn make-event [root-dir notify-server]
   (let [event (vim.uv.new_fs_event)
@@ -163,17 +163,17 @@
             (table.insert abs-folders {: watcher : pats})))))
 
     (fn find-best-folder [folder]
-      (let [existing (-> folders
-                         (vim.iter)
-                         (: :filter #(path.isrel folder $1))
-                         (: :next))]
+      (let [curr (-> folders
+                     (vim.iter)
+                     (: :filter #(path.isrel folder $1))
+                     (: :next))]
         (fn find-existing [folder]
           (let [(_ err) (vim.uv.fs_stat folder)]
             (if err
                 (find-existing (vim.fs.dirname folder))
                 folder)))
 
-        (or existing (find-existing folder))))
+        (or curr (find-existing folder))))
 
     (each [_ {: pats : watcher} (ipairs abs-folders)]
       (each [_ pat (ipairs pats)]
