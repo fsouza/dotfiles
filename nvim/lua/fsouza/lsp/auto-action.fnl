@@ -57,7 +57,8 @@
                                 [{:events [:User]
                                   :targets [:fsouza-LSP-autoformatted]
                                   :callback #(let [{: bufnr} (. $1 :data)]
-                                               (handle bufnr))}])))
+                                               (when (. buffer-clients bufnr)
+                                                 (handle bufnr)))}])))
 
 (lambda attach [bufnr client-id kind]
   (setup)
