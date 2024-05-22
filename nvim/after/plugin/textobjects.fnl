@@ -1,11 +1,11 @@
 (import-macros {: mod-invoke} :helpers)
 
 (do
-  (vim.keymap.set [:o :x] :ii #(mod-invoke :various-textobjs :indentation true
-                                           true))
-  (vim.keymap.set [:o :x] :ai #(mod-invoke :various-textobjs :indentation false
-                                           true))
-  (vim.keymap.set [:o :x] :ir #(mod-invoke :various-textobjs :restOfIndentation
-                                           true))
-  (vim.keymap.set [:o :x] :ar #(mod-invoke :various-textobjs :restOfIndentation
-                                           false)))
+  (vim.keymap.set [:o :x] :ii
+                  #(mod-invoke :various-textobjs :indentation :inner :inner))
+  (vim.keymap.set [:o :x] :ai
+                  #(mod-invoke :various-textobjs :indentation :outer :inner))
+  (vim.keymap.set [:o :x] :ir
+                  #(mod-invoke :various-textobjs :restOfIndentation :inner))
+  (vim.keymap.set [:o :x] :ar
+                  #(mod-invoke :various-textobjs :restOfIndentation :outer)))
