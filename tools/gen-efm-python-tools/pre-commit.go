@@ -56,7 +56,6 @@ func EFMConfigFromPrecommit(filename string) ([]Language, error) {
 		"https://github.com/asottile/reorder-python-imports": reorderPythonImports,
 		"https://github.com/asottile/reorder_python_imports": reorderPythonImports,
 		"https://github.com/asottile/pyupgrade":              pyupgrade,
-		"https://github.com/pre-commit/mirrors-autopep8":     autopep8,
 		"https://github.com/pre-commit/mirrors-isort":        isort,
 		"https://github.com/pycqa/isort":                     isort,
 		"https://github.com/timothycrosley/isort":            isort,

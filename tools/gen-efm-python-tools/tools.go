@@ -58,10 +58,6 @@ func pyupgrade(args []string) []Language {
 	return stdinFormatter("pyupgrade", args)
 }
 
-func autopep8(args []string) []Language {
-	return stdinFormatter("autopep8", args)
-}
-
 func isort(args []string) []Language {
 	return stdinFormatter("isort", args)
 }
