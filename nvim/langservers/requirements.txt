@@ -6,8 +6,6 @@ attrs==23.2.0
     # via flake8-bugbear
 autoflake==2.3.1
     # via -r requirements.in
-autopep8==2.1.1
-    # via -r requirements.in
 black==24.4.2
     # via -r requirements.in
 classify-imports==4.2.0
@@ -39,19 +37,15 @@ packaging==24.0
     # via black
 pathspec==0.12.1
     # via black
-platformdirs==4.2.1
+platformdirs==4.2.2
     # via black
 pycodestyle==2.11.1
-    # via
-    #   autopep8
-    #   flake8
+    # via flake8
 pyflakes==3.2.0
     # via
     #   autoflake
     #   flake8
 pyupgrade==3.15.2
-    # via -r requirements.in
-pyyaml==6.0.1
     # via -r requirements.in
 reorder-python-imports==3.12.0
     # via -r requirements.in
