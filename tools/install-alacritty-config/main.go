@@ -117,7 +117,7 @@ size = {{.FontSize}}
 style = "Medium"
 
 [font.normal]
-family = "SauceCodePro Nerd Font Mono"
+family = "Office Code Pro"
 style = "Regular"
 
 [[keyboard.bindings]]
