@@ -19,5 +19,5 @@ brew "uv"
 brew "zoxide"
 
 if OS.mac?
-  cask "font-office-code-pro"
+  cask "font-sauce-code-pro-nerd-font"
 end
