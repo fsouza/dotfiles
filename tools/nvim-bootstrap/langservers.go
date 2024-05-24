@@ -20,6 +20,7 @@ func setupLangervers(nv *Neovim) error {
 	dirServers := []func(string) error{
 		installGopls,
 		installRustAnalyzer,
+		installOLS,
 	}
 
 	var g errgroup.Group
@@ -138,6 +139,24 @@ func installServersFromNpm() error {
 			"--frozen-lockfile",
 		},
 		Cwd: fnmDir,
+	})
+}
+
+func installOLS(langserversDir string) error {
+	if _, err := exec.LookPath("odin"); err != nil {
+		log.Print("skipping ols")
+		return nil
+	}
+
+	repoDir := filepath.Join(langserversDir, "ols")
+	err := gitCloneOrUpdate("https://github.com/DanielGavin/ols.git", repoDir)
+	if err != nil {
+		return err
+	}
+
+	return tools.Run(&tools.RunOptions{
+		Cmd: "./build.sh",
+		Cwd: repoDir,
 	})
 }
 
