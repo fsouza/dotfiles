@@ -17,7 +17,7 @@
     {:textDocument {:uri (vim.uri_from_bufnr bufnr)} :options opts}))
 
 (fn find-client [bufnr]
-  (let [{: client-name} (. buffer-registry bufnr)
+  (let [{: client-name} (or (. buffer-registry bufnr) {})
         client-name (or client-name "")]
     (or (. (vim.lsp.get_clients {: bufnr :name client-name}) 1)
         (. (vim.lsp.get_clients {: bufnr :name :efm}) 1)
