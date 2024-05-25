@@ -47,4 +47,11 @@
       (vim.cmd.only {:mods {:silent true}})
       (vim.cmd.wincmd :F))))
 
-{: open : cr : run}
+(fn v-cr []
+  (when (mod-invoke :fsouza.lib.qf :set-from-visual-selection)
+    (vim.cmd.only {:mods {:silent true}})
+    (vim.cmd.cfirst)
+    (vim.cmd.copen)
+    (vim.cmd.wincmd :p)))
+
+{: open : cr : run : v-cr}
