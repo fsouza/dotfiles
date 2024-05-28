@@ -24,11 +24,10 @@
                    "--"
                    current-line
                    "."] nil
-                  #(let [result $1]
-                     (vim.schedule #(when (= result.code 0)
-                                      (->> result.stdout
-                                           (process-stdout)
-                                           (vim.fn.complete compl-pos))))))))
+                  (vim.schedule_wrap #(when (= $1.code 0)
+                                        (->> $1.stdout
+                                             (process-stdout)
+                                             (vim.fn.complete compl-pos)))))))
   "")
 
 (let [keybind :<c-x><c-n>]

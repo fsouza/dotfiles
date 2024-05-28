@@ -17,8 +17,7 @@
   (fn make [{: file}]
     (when (not vim.g.fennel_ks)
       (vim.system [:make :-C _G.dotfiles-dir :install] nil
-                  #(let [result $1]
-                     (vim.schedule #(handle-result result))))))
+                  (vim.schedule_wrap handle-result))))
 
   (augroup :fsouza__autocompile-fennel
            [{:events [:BufWritePost]

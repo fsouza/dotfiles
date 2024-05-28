@@ -62,8 +62,7 @@
                (cb))))
 
     (vim.system [gen-python-tools :-venv (vim.fs.joinpath _G.cache-dir :venv)]
-                nil #(let [result $1]
-                      (vim.schedule #(on-finished result))))))
+                nil (vim.schedule_wrap on-finished))))
 
 (let [bufnr (vim.api.nvim_get_current_buf)
       efm (require :fsouza.lsp.servers.efm)

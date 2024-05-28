@@ -99,12 +99,11 @@
             filename (path.abspath filename)
             filename (modify-filename-if-needed filename bufnr)]
         (vim.system [:editorconfig filename] nil
-                    #(let [result $1]
-                       (vim.schedule #(if (= result.code 0)
-                                          (set-opts bufnr
-                                                    (parse-output result.stdout))
-                                          (vim.notify (string.format "failed to run editorconfig: %s"
-                                                                     (vim.inspect result)))))))))))
+                    (vim.schedule_wrap #(if (= $1.code 0)
+                                            (set-opts bufnr
+                                                      (parse-output $1.stdout))
+                                            (vim.notify (string.format "failed to run editorconfig: %s"
+                                                                       (vim.inspect $1))))))))))
 
 (fn setup []
   (let [{: augroup} (require :fsouza.lib.nvim-helpers)]

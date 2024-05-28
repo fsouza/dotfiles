@@ -12,9 +12,7 @@
           (error result.stderr)
           (cb path)))
 
-    (vim.system cmd nil
-                #(let [result $1]
-                   (vim.schedule #(handle-result result))))))
+    (vim.system cmd nil (vim.schedule_wrap handle-result))))
 
 (let [mod {: isrel : mkdir}]
   (setmetatable mod {:__index (fn [table key]

@@ -2,10 +2,10 @@
   (cb (or (os.getenv :VIRTUAL_ENV) (os.getenv :CONDA_PREFIX))))
 
 (fn set-from-cmd [cmd cb]
-  (vim.system cmd nil #(let [result $1]
-                         (if (= result.code 0)
-                             (vim.schedule #(cb (vim.trim result.stdout)))
-                             (vim.schedule #(cb nil))))))
+  (vim.system cmd nil
+              (vim.schedule_wrap #(if (= $1.code 0)
+                                      (vim.schedule #(cb (vim.trim $1.stdout)))
+                                      (vim.schedule #(cb nil))))))
 
 (fn set-from-poetry [cb]
   (vim.uv.fs_stat :poetry.lock

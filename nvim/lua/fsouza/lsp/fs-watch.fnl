@@ -66,7 +66,7 @@
                         (once start-notifier)))
 
 (fn is-file-open [filepath]
-  (let [path (require :fsouza.pl.path)]
+  (let [path (require :fsouza.lib.path)]
     (-> (vim.api.nvim_list_bufs)
         (vim.iter)
         (: :filter vim.api.nvim_buf_is_loaded)
@@ -76,7 +76,7 @@
 
 (fn make-fs-event-handler [root-dir notify-server]
   (let [backupext vim.o.backupext
-        pl-path (require :fsouza.pl.path)
+        pl-path (require :fsouza.lib.path)
         glob (require :fsouza.lib.glob)]
     (fn notify [client-id reg-id filepath events kind]
       (fn try-notify-server [client-id reg-id uri type ordinal]
@@ -140,7 +140,7 @@
 
 (fn map-watchers [client watchers]
   (let [glob (require :fsouza.lib.glob)
-        path (require :fsouza.pl.path)
+        path (require :fsouza.lib.path)
         folders (collect [_ folder (ipairs (workspace-folders client))]
                   (values folder []))
         abs-folders []]
