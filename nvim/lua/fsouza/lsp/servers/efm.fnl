@@ -1,5 +1,4 @@
 (import-macros {: mod-invoke} :helpers)
-(import-macros {: get-cache-cmd} :lsp-helpers)
 
 (fn start-efm [bufnr cb]
   (let [mod-dir (vim.fs.joinpath _G.dotfiles-dir :nvim :langservers)]

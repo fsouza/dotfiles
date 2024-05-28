@@ -1,4 +1,4 @@
-(import-macros {: max-col : mod-invoke} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (fn wrap-callback [cb]
   (if cb
@@ -46,7 +46,7 @@
                                     (math.min (math.max 0
                                                         (+ orig-colno
                                                            col-offset))
-                                              (max-col))]))))
+                                              vim.v.maxcol)]))))
 
 (lambda get-visual-selection-range []
   (let [{: mode} (vim.api.nvim_get_mode)

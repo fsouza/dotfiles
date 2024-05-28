@@ -1,5 +1,4 @@
 (import-macros {: mod-invoke} :helpers)
-(import-macros {: get-cache-cmd} :lsp-helpers)
 
 (fn is-go-test [fname]
   (vim.endswith fname :_test.go))
@@ -8,7 +7,8 @@
   (let [bufnr (vim.api.nvim_get_current_buf)]
     (mod-invoke :fsouza.lsp.servers :start
                 {:config {:name :gopls
-                          :cmd [(get-cache-cmd :gopls)
+                          :cmd [(vim.fs.joinpath _G.cache-dir :langservers :bin
+                                                 :gopls)
                                 :-remote=auto
                                 "-debug=:0"
                                 "-remote.debug=:0"]

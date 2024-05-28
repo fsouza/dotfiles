@@ -1,4 +1,4 @@
-(import-macros {: mod-invoke : max-col} :helpers)
+(import-macros {: mod-invoke} :helpers)
 
 (lambda do-action [client action cb ?resolved]
   (if (or action.edit (= (type action.command) :table))
@@ -42,7 +42,7 @@
         line-count (vim.api.nvim_buf_line_count bufnr)
         context {:diagnostics (vim.diagnostic.get bufnr)}
         start-pos [1 1]
-        end-pos [line-count (max-col)]]
+        end-pos [line-count vim.v.maxcol]]
     (range-code-action context start-pos end-pos cb)))
 
 (fn code-action-for-line [cb]
