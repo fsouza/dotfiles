@@ -2,7 +2,7 @@
   (var should-clear-qf false)
 
   (fn handle-result [result]
-    (if (= result.exit-status 0)
+    (if (= result.code 0)
         (do
           (when should-clear-qf
             (set should-clear-qf false)
@@ -16,8 +16,9 @@
 
   (fn make [{: file}]
     (when (not vim.g.fennel_ks)
-      (let [{: run} (require :fsouza.lib.cmd)]
-        (run :make {:args [:-C _G.dotfiles-dir :install]} handle-result))))
+      (vim.system [:make :-C _G.dotfiles-dir :install] nil
+                  #(let [result $1]
+                     (vim.schedule #(handle-result result))))))
 
   (augroup :fsouza__autocompile-fennel
            [{:events [:BufWritePost]

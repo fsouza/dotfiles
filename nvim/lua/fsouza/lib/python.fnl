@@ -1,23 +1,23 @@
 (fn set-from-env-var [cb]
   (cb (or (os.getenv :VIRTUAL_ENV) (os.getenv :CONDA_PREFIX))))
 
-(fn set-from-cmd [exec args cb]
-  (let [cmd (require :fsouza.lib.cmd)]
-    (cmd.run exec {: args} #(if (= $1.exit-status 0)
-                                (cb (vim.trim $1.stdout))
-                                (cb nil)))))
+(fn set-from-cmd [cmd cb]
+  (vim.system cmd nil #(let [result $1]
+                         (if (= result.code 0)
+                             (vim.schedule #(cb (vim.trim result.stdout)))
+                             (vim.schedule #(cb nil))))))
 
 (fn set-from-poetry [cb]
   (vim.uv.fs_stat :poetry.lock
                   #(if $1
                        (cb nil)
-                       (set-from-cmd :poetry [:env :info :-p] cb))))
+                       (set-from-cmd [:poetry :env :info :-p] cb))))
 
 (fn set-from-pipenv [cb]
   (vim.uv.fs_stat :Pipfile.lock
                   #(if $1
                        (cb nil)
-                       (set-from-cmd :pipenv [:--venv] cb))))
+                       (set-from-cmd [:pipenv :--venv] cb))))
 
 (fn set-from-venv-folder [cb]
   (let [path (require :fsouza.lib.path)

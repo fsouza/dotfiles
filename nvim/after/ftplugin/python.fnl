@@ -53,17 +53,17 @@
 
 (fn get-python-tools [cb]
   (let [gen-python-tools (vim.fs.joinpath _G.dotfiles-cache-dir :bin
-                                          :gen-efm-python-tools)
-        cmd (require :fsouza.lib.cmd)]
+                                          :gen-efm-python-tools)]
     (fn on-finished [result]
-      (if (not= result.exit-status 0)
+      (if (not= result.code 0)
           (error result.stderr)
           (->> result.stdout
                (vim.json.decode)
                (cb))))
 
-    (cmd.run gen-python-tools
-             {:args [:-venv (vim.fs.joinpath _G.cache-dir :venv)]} on-finished)))
+    (vim.system [gen-python-tools :-venv (vim.fs.joinpath _G.cache-dir :venv)]
+                nil #(let [result $1]
+                      (vim.schedule #(on-finished result))))))
 
 (let [bufnr (vim.api.nvim_get_current_buf)
       efm (require :fsouza.lsp.servers.efm)

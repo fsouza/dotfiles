@@ -97,14 +97,14 @@
                (= (string.find filename "^%a+://") nil))
       (let [path (require :fsouza.lib.path)
             filename (path.abspath filename)
-            filename (modify-filename-if-needed filename bufnr)
-            cmd (require :fsouza.lib.cmd)]
-        (cmd.run :editorconfig {:args [filename]}
-                 (fn [result]
-                   (if (= result.exit-status 0)
-                       (set-opts bufnr (parse-output result.stdout))
-                       (vim.notify (string.format "failed to run editorconfig: %s"
-                                                  (vim.inspect result))))))))))
+            filename (modify-filename-if-needed filename bufnr)]
+        (vim.system [:editorconfig filename] nil
+                    #(let [result $1]
+                       (vim.schedule #(if (= result.code 0)
+                                          (set-opts bufnr
+                                                    (parse-output result.stdout))
+                                          (vim.notify (string.format "failed to run editorconfig: %s"
+                                                                     (vim.inspect result)))))))))))
 
 (fn setup []
   (let [{: augroup} (require :fsouza.lib.nvim-helpers)]

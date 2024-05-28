@@ -14,21 +14,21 @@
         compl-pos (find-pos current-line)
         current-line (vim.trim current-line)]
     (when current-line
-      (let [cmd (require :fsouza.lib.cmd)]
-        (cmd.run :rg {:args [:--case-sensitive
-                             :--fixed-strings
-                             :--no-line-number
-                             :--no-filename
-                             :--no-heading
-                             :--hidden
-                             "--"
-                             current-line
-                             "."]}
-                 (fn [result]
-                   (when (= result.exit-status 0)
-                     (->> result.stdout
-                          (process-stdout)
-                          (vim.fn.complete compl-pos))))))))
+      (vim.system [:rg
+                   :--case-sensitive
+                   :--fixed-strings
+                   :--no-line-number
+                   :--no-filename
+                   :--no-heading
+                   :--hidden
+                   "--"
+                   current-line
+                   "."] nil
+                  #(let [result $1]
+                     (vim.schedule #(when (= result.code 0)
+                                      (->> result.stdout
+                                           (process-stdout)
+                                           (vim.fn.complete compl-pos))))))))
   "")
 
 (let [keybind :<c-x><c-n>]
