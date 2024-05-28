@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 (local mapping-per-buf {})
 
 (fn augroup-name [bufnr]
@@ -11,20 +9,21 @@
       (when mappings
         (vim.keymap.del :n mappings {:buffer bufnr})))
     (let [augroup-id (augroup-name bufnr)
-          buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
-      (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup augroup-id)
+          buf-diagnostic (require :fsouza.lsp.buf-diagnostic)
+          nvim-helpers (require :fsouza.lib.nvim-helpers)]
+      (nvim-helpers.reset-augroup augroup-id)
       (buf-diagnostic.unregister-hook augroup-id))))
 
 (fn on-attach [opts]
   (let [bufnr opts.bufnr
         augroup-id (augroup-name bufnr)
-        refresh #(vim.lsp.codelens.refresh {: bufnr})]
+        refresh #(vim.lsp.codelens.refresh {: bufnr})
+        {: augroup} (require :fsouza.lib.nvim-helpers)]
     (tset mapping-per-buf bufnr opts.mapping)
     (vim.schedule refresh)
-    (mod-invoke :fsouza.lib.nvim-helpers :augroup augroup-id
-                [{:events [:InsertLeave :BufWritePost]
-                  :targets [(string.format "<buffer=%d>" bufnr)]
-                  :callback refresh}])
+    (augroup augroup-id [{:events [:InsertLeave :BufWritePost]
+                          :targets [(string.format "<buffer=%d>" bufnr)]
+                          :callback refresh}])
     (vim.schedule #(let [buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
                      (buf-diagnostic.register-hook augroup-id refresh)
                      (vim.api.nvim_buf_attach bufnr false

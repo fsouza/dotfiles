@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 (local disabled-servers {})
 
 (macro fnm-exec [command]
@@ -47,9 +45,9 @@
         (cwd-if-not-home))))
 
 (macro should-start [bufnr name]
-  `(and (mod-invoke :fsouza.lib.ff :is-enabled (ff ,name) true)
-        (vim.api.nvim_buf_is_valid ,bufnr)
-        (not= (. vim :bo bufnr :buftype) :nofile)))
+  `(let [ff# (require :fsouza.lib.ff)]
+     (and (ff#.is-enabled (ff ,name) true) (vim.api.nvim_buf_is_valid ,bufnr)
+          (not= (. vim :bo bufnr :buftype) :nofile))))
 
 (fn with-defaults [opts]
   (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
@@ -90,16 +88,17 @@
                  (tset config :cmd (fnm-exec config.cmd)))
                (vim.schedule #(let [client-id (vim.lsp.start config {: bufnr})]
                                 (when opts.autofmt
-                                  (mod-invoke :fsouza.lsp.formatting :attach
-                                              bufnr client-id
-                                              (autofmt-priority opts.autofmt)))
+                                  (let [formatting (require :fsouza.lsp.formatting)]
+                                    (formatting.attach bufnr client-id
+                                                       (autofmt-priority opts.autofmt))))
                                 (when (not= opts.auto-action nil)
-                                  (mod-invoke :fsouza.lsp.auto-action :attach
-                                              bufnr client-id opts.auto-action))
+                                  (let [auto-action (require :fsouza.lsp.auto-action)]
+                                    (auto-action.attach bufnr client-id
+                                                        opts.auto-action)))
                                 (when (not= opts.diagnostic-filter nil)
-                                  (mod-invoke :fsouza.lsp.buf-diagnostic
-                                              :register-filter name
-                                              opts.diagnostic-filter))
+                                  (let [buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
+                                    (buf-diagnostic.register-filter name
+                                                                    opts.diagnostic-filter)))
                                 (cb client-id)))))))
 
       ;; check specific URI prefixes because some of them should not be sent to
@@ -109,20 +108,21 @@
           (file-exists bufname
                        #(if $1
                             (start-)
-                            (vim.schedule #(mod-invoke :fsouza.lib.nvim-helpers
-                                                       :augroup
-                                                       (string.format "fsouza__lsp_start_after_save_%s_%d"
-                                                                      name bufnr)
-                                                       [{:events [:BufWritePost]
-                                                         :targets [(string.format "<buffer=%d>"
-                                                                                  bufnr)]
-                                                         :once true
-                                                         :callback start-}]))))))))
+                            (vim.schedule #(let [{: augroup} (require :fsouza.lib.nvim-helpers)]
+                                             (augroup (string.format "fsouza__lsp_start_after_save_%s_%d"
+                                                                     name bufnr)
+                                                      [{:events [:BufWritePost]
+                                                        :targets [(string.format "<buffer=%d>"
+                                                                                 bufnr)]
+                                                        :once true
+                                                        :callback start-}])))))))))
 
 (fn enable-server [name]
-  (mod-invoke :fsouza.lib.ff :enable (ff name)))
+  (let [ff- (require :fsouza.lib.ff)]
+    (ff-.enable (ff name))))
 
 (fn disable-server [name]
-  (mod-invoke :fsouza.lib.ff :disable (ff name)))
+  (let [ff- (require :fsouza.lib.ff)]
+    (ff-.disable (ff name))))
 
 {: start : patterns-with-fallback : disable-server : enable-server}

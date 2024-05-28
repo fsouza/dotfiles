@@ -1,3 +1,2 @@
-(import-macros {: mod-invoke} :helpers)
-
-(mod-invoke :fsouza.lsp.servers :start {:config {:name :clangd :cmd [:clangd]}})
+(let [servers (require :fsouza.lsp.servers)]
+  (servers.start {:config {:name :clangd :cmd [:clangd]}}))

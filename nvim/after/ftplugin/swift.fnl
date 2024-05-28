@@ -1,4 +1,2 @@
-(import-macros {: mod-invoke} :helpers)
-
-(mod-invoke :fsouza.lsp.servers :start
-            {:config {:name :sourcekit-lsp :cmd [:sourcekit-lsp]}})
+(let [servers (require :fsouza.lsp.servers)]
+  (servers.start {:config {:name :sourcekit-lsp :cmd [:sourcekit-lsp]}}))

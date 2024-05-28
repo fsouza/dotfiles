@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 (fn rename [client bufnr]
   (fn rename [placeholder]
     (let [placeholder (or placeholder (vim.fn.expand :<cword>))

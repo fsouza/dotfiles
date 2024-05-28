@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 (local debouncers {})
 
 (local hooks {})
@@ -50,8 +48,9 @@
 
 (fn make-debounced-handler [bufnr debouncer-key]
   (let [interval-ms (or (. vim :b bufnr :lsp_diagnostic_debouncing_ms) 200)
-        handler (mod-invoke :fsouza.lib.debounce :debounce interval-ms
-                            (vim.schedule_wrap (make-handler)))]
+        debounce (require :fsouza.lib.debounce)
+        handler (debounce.debounce interval-ms
+                                   (vim.schedule_wrap (make-handler)))]
     (tset debouncers debouncer-key handler)
     (vim.api.nvim_buf_attach bufnr false
                              {:on_detach (fn []

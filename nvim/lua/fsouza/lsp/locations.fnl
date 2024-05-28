@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 (fn should-use-ts [node]
   (if (= node nil)
       false
@@ -79,8 +77,9 @@
                   (. result 1)
                   result)
           loc (ts-range context.bufnr loc)
-          (_ winid) (vim.lsp.util.preview_location loc)]
-      (mod-invoke :fsouza.lib.popup :stylize winid))))
+          (_ winid) (vim.lsp.util.preview_location loc)
+          popup (require :fsouza.lib.popup)]
+      (popup.stylize winid))))
 
 (macro make-lsp-loc-action [method]
   `(fn []

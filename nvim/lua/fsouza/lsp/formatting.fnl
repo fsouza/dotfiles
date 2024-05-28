@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke : max-col} :helpers)
-
 (local buffer-registry {})
 
 (fn should-skip-buffer [bufnr]
@@ -34,7 +32,8 @@
   (.. :lsp_autofmt_ bufnr))
 
 (fn detach [bufnr]
-  (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup (augroup-name bufnr))
+  (let [nvim-helpers (require :fsouza.lib.nvim-helpers)]
+    (nvim-helpers.reset-augroup (augroup-name bufnr)))
   (tset buffer-registry bufnr nil))
 
 (fn autofmt-and-write [bufnr client-id]
@@ -42,7 +41,8 @@
     `(vim.api.nvim_exec_autocmds [:User]
                                  {:pattern :fsouza-LSP-autoformatted
                                   :data {: bufnr}}))
-  (let [enabled (mod-invoke :fsouza.lib.autofmt :is-enabled bufnr)
+  (let [enabled (let [autofmt (require :fsouza.lib.autofmt)]
+                  (autofmt.is-enabled bufnr))
         client (vim.lsp.get_client_by_id client-id)]
     (if client
         (when enabled
@@ -76,13 +76,14 @@
   (let [client (vim.lsp.get_client_by_id client-id)
         {:priority current-priority} (or (. buffer-registry bufnr)
                                          {:priority 0})
-        priority (or ?priority 1)]
+        priority (or ?priority 1)
+        {: augroup} (require :fsouza.lib.nvim-helpers)]
     (when (and client (not (should-skip-buffer bufnr))
                (> priority current-priority))
-      (mod-invoke :fsouza.lib.nvim-helpers :augroup (augroup-name bufnr)
-                  [{:events [:BufWritePost]
-                    :targets [(string.format "<buffer=%d>" bufnr)]
-                    :callback #(autofmt-and-write bufnr client-id)}])
+      (augroup (augroup-name bufnr)
+               [{:events [:BufWritePost]
+                 :targets [(string.format "<buffer=%d>" bufnr)]
+                 :callback #(autofmt-and-write bufnr client-id)}])
       (tset buffer-registry bufnr {:client-name client.name : priority}))))
 
 {: attach : fmt}

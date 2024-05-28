@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 (fn process-stdout [content]
   (let [lines (vim.split content "\n" {:plain true :trimempty true})
         uniq-lines (accumulate [uniq-lines {} _ line (ipairs lines)]
@@ -16,21 +14,21 @@
         compl-pos (find-pos current-line)
         current-line (vim.trim current-line)]
     (when current-line
-      (mod-invoke :fsouza.lib.cmd :run :rg
-                  {:args [:--case-sensitive
-                          :--fixed-strings
-                          :--no-line-number
-                          :--no-filename
-                          :--no-heading
-                          :--hidden
-                          "--"
-                          current-line
-                          "."]}
-                  (fn [result]
-                    (when (= result.exit-status 0)
-                      (->> result.stdout
-                           (process-stdout)
-                           (vim.fn.complete compl-pos)))))))
+      (let [cmd (require :fsouza.lib.cmd)]
+        (cmd.run :rg {:args [:--case-sensitive
+                             :--fixed-strings
+                             :--no-line-number
+                             :--no-filename
+                             :--no-heading
+                             :--hidden
+                             "--"
+                             current-line
+                             "."]}
+                 (fn [result]
+                   (when (= result.exit-status 0)
+                     (->> result.stdout
+                          (process-stdout)
+                          (vim.fn.complete compl-pos))))))))
   "")
 
 (let [keybind :<c-x><c-n>]

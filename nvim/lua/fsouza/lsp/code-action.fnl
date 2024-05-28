@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 (lambda do-action [client action cb ?resolved]
   (if (or action.edit (= (type action.command) :table))
       (do
@@ -21,10 +19,11 @@
 (fn handle-actions [actions client]
   (when (and actions (not (vim.tbl_isempty actions)))
     (let [lines (icollect [_ action (ipairs actions)]
-                  action.title)]
-      (mod-invoke :fsouza.lib.popup-picker :open lines
-                  #(when $1
-                     (do-action client (. actions $1)))))))
+                  action.title)
+          popup-picker (require :fsouza.lib.popup-picker)]
+      (popup-picker.open lines
+                         #(when $1
+                            (do-action client (. actions $1)))))))
 
 (fn handler [_ actions context]
   (let [client (vim.lsp.get_client_by_id context.client_id)]
@@ -58,8 +57,8 @@
                               (code-action-for-buf handler)))))
 
 (fn visual-code-action []
-  (let [[srow scol erow ecol] (mod-invoke :fsouza.lib.nvim-helpers
-                                          :get-visual-selection-range)]
+  (let [nvim-helpers (require :fsouza.lib.nvim-helpers)
+        [srow scol erow ecol] (nvim-helpers.get-visual-selection-range)]
     (range-code-action nil [srow scol] [erow ecol] handler)))
 
 {: code-action : visual-code-action :execute do-action}

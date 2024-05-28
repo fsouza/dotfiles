@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 (var virtual-cwd nil)
 
 (fn should-qf [selected]
@@ -11,8 +9,8 @@
 
 (fn edit-or-qf [edit selected opts]
   (if (should-qf selected)
-      (do
-        (mod-invoke :fzf-lua.actions :file_sel_to_qf selected opts)
+      (let [actions (require :fzf-lua.actions)]
+        (actions.file_sel_to_qf selected opts)
         (vim.cmd.cc))
       (edit selected opts)))
 
@@ -60,67 +58,67 @@
      (tset actions# :default (partial edit-or-qf save-stack-and-edit))
      actions#))
 
-(local fzf-lua (mod-invoke :fsouza.lib.nvim-helpers :once
-                           (fn []
-                             (vim.cmd.packadd :nvim-fzf)
-                             (let [actions (file-actions)
-                                   fzf-lua- (require :fzf-lua)
-                                   f-config (require :fzf-lua.config)
-                                   previewer :bat
-                                   id #$1]
-                               (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
-                                                :previewers {:builtin {:syntax false}
-                                                             :bat {:args "--color always --number --theme none"}}
-                                                :buffers {:file_icons false
-                                                          :git_icons false
-                                                          :color_icons false}
-                                                :files {: previewer
+(local fzf-lua (let [{: once} (require :fsouza.lib.nvim-helpers)]
+                 (once #(do
+                          (vim.cmd.packadd :nvim-fzf)
+                          (let [actions (file-actions)
+                                fzf-lua- (require :fzf-lua)
+                                f-config (require :fzf-lua.config)
+                                previewer :bat
+                                id #$1]
+                            (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
+                                             :previewers {:builtin {:syntax false}
+                                                          :bat {:args "--color always --number --theme none"}}
+                                             :buffers {:file_icons false
+                                                       :git_icons false
+                                                       :color_icons false}
+                                             :files {: previewer
+                                                     :file_icons false
+                                                     :git_icons false
+                                                     :color_icons false
+                                                     : actions}
+                                             :git {:files {:file_icons false
+                                                           :git_icons false
+                                                           :color_icons false
+                                                           : actions}}
+                                             :grep {: previewer
+                                                    :file_icons false
+                                                    :git_icons false
+                                                    :color_icons false
+                                                    : actions}
+                                             :oldfiles {: previewer
                                                         :file_icons false
                                                         :git_icons false
                                                         :color_icons false
                                                         : actions}
-                                                :git {:files {:file_icons false
-                                                              :git_icons false
-                                                              :color_icons false
-                                                              : actions}}
-                                                :grep {: previewer
-                                                       :file_icons false
-                                                       :git_icons false
-                                                       :color_icons false
-                                                       : actions}
-                                                :oldfiles {: previewer
-                                                           :file_icons false
-                                                           :git_icons false
-                                                           :color_icons false
-                                                           : actions}
-                                                :lsp {:file_icons false
-                                                      :git_icons false
-                                                      :color_icons false
-                                                      :actions (lsp-actions)}
-                                                :winopts {:win_height 0.85
-                                                          :win_width 0.9
-                                                          :hl {:header_bind :Black
-                                                               :header_text :Black
-                                                               :buf_name :Black
-                                                               :buf_nr :Black
-                                                               :buf_linenr :Black
-                                                               :buf_flag_cur :Black
-                                                               :buf_flag_alt :Black
-                                                               :tab_title :Black
-                                                               :tab_marker :Black}}
-                                                :keymap {:builtin {:<c-h> :toggle-preview
-                                                                   :<c-u> :preview-page-up
-                                                                   :<c-d> :preview-page-down
-                                                                   :<c-r> :preview-page-reset}
-                                                         :fzf {:alt-a :toggle-all
-                                                               :ctrl-l :clear-query
-                                                               :ctrl-d :preview-page-down
-                                                               :ctrl-u :preview-page-up
-                                                               :ctrl-h :toggle-preview}}})
-                               (vim.cmd.color :none)
-                               (tset f-config.globals.keymap.fzf :ctrl-f nil)
-                               (tset f-config.globals.keymap.fzf :ctrl-b nil)
-                               fzf-lua-))))
+                                             :lsp {:file_icons false
+                                                   :git_icons false
+                                                   :color_icons false
+                                                   :actions (lsp-actions)}
+                                             :winopts {:win_height 0.85
+                                                       :win_width 0.9
+                                                       :hl {:header_bind :Black
+                                                            :header_text :Black
+                                                            :buf_name :Black
+                                                            :buf_nr :Black
+                                                            :buf_linenr :Black
+                                                            :buf_flag_cur :Black
+                                                            :buf_flag_alt :Black
+                                                            :tab_title :Black
+                                                            :tab_marker :Black}}
+                                             :keymap {:builtin {:<c-h> :toggle-preview
+                                                                :<c-u> :preview-page-up
+                                                                :<c-d> :preview-page-down
+                                                                :<c-r> :preview-page-reset}
+                                                      :fzf {:alt-a :toggle-all
+                                                            :ctrl-l :clear-query
+                                                            :ctrl-d :preview-page-down
+                                                            :ctrl-u :preview-page-up
+                                                            :ctrl-h :toggle-preview}}})
+                            (vim.cmd.color :none)
+                            (tset f-config.globals.keymap.fzf :ctrl-f nil)
+                            (tset f-config.globals.keymap.fzf :ctrl-b nil)
+                            fzf-lua-)))))
 
 (lambda send-lsp-items [items prompt]
   (let [pl-path (require :fsouza.lib.path)
@@ -181,9 +179,8 @@
                                              (vim.fn.shellescape search))}))))
 
 (fn grep-visual [rg-opts ...]
-  (let [search (. (mod-invoke :fsouza.lib.nvim-helpers
-                              :get-visual-selection-contents)
-                  1)]
+  (let [nvim-helpers (require :fsouza.lib.nvim-helpers)
+        search (. (nvim-helpers.get-visual-selection-contents) 1)]
     (grep rg-opts search ...)))
 
 (fn live-grep [rg-opts opts]
@@ -207,13 +204,15 @@
 (fn handle-repo [run-fzf cd selected]
   (when (= (length selected) 1)
     (let [[sel] selected
-          sel (mod-invoke :fsouza.lib.path :abspath sel)]
+          sel (let [path (require :fsouza.lib.path)]
+                (path.abspath sel))]
       (when cd
         (vim.api.nvim_set_current_dir sel))
       (when run-fzf
-        (let [fzf-lua (fzf-lua)]
+        (let [fzf-lua (fzf-lua)
+              actions (require :fzf-lua.actions)]
           (files {:cwd sel})
-          (mod-invoke :fzf-lua.actions :ensure_insert_mode))))))
+          (actions.ensure_insert_mode))))))
 
 (fn git-repos [cwd cd run-fzf]
   (let [run-fzf (or run-fzf true)
@@ -241,7 +240,8 @@
     (fzf-lua.git_files opts)))
 
 (fn set-virtual-cwd- [cwd]
-  (set virtual-cwd (mod-invoke :fsouza.lib.path :abspath cwd)))
+  (set virtual-cwd (let [path (require :fsouza.lib.path)]
+                     (path.abspath cwd))))
 
 (fn pick-cwd []
   (let [fzf-lua (fzf-lua)

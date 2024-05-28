@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 (var n-diag-per-buf {})
 
 (macro render-diagnostics [diagnostics]
@@ -31,9 +29,10 @@
     (if (= count 0) "    " (string.format "D:%02d" count))))
 
 (fn on-attach []
-  (mod-invoke :fsouza.lib.nvim-helpers :augroup :fsouza__lsp_diagnostic
-              [{:events [:DiagnosticChanged]
-                :targets ["*"]
-                :callback on-DiagnosticChanged}]))
+  (let [{: augroup} (require :fsouza.lib.nvim-helpers)]
+    (augroup :fsouza__lsp_diagnostic
+             [{:events [:DiagnosticChanged]
+               :targets ["*"]
+               :callback on-DiagnosticChanged}])))
 
 {: list-file-diagnostics : list-workspace-diagnostics : on-attach : ruler}

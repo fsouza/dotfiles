@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 (fn wrap-callback [cb]
   (if cb
       (fn [...]
@@ -66,10 +64,11 @@
       (. (vim.split ?err ":" {:plain true :trimempty true}) 1)))
 
 (lambda hash-buffer [bufnr]
-  (let [lines (-> bufnr
+  (let [sha1 (require :sha1)
+        lines (-> bufnr
                   (vim.api.nvim_buf_get_lines 0 -1 true)
                   (table.concat "\n"))]
-    (mod-invoke :sha1 :sha1 lines)))
+    (sha1.sha1 lines)))
 
 (lambda keymap-repeat [lhs cb opts]
   (vim.keymap.set :n lhs

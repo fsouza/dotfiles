@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 ; used to store information about ongoing completion, gets reset everytime we
 ; exit "completion mode".
 (local state {:inflight-requests {} :rendered-docs {}})
@@ -60,17 +58,17 @@
           max-width (if right max-width (calc-max-width 100 col false))
           left-col (if right end-col nil)
           right-col (if right nil col)
-          (popup-winid popup-bufnr) (mod-invoke :fsouza.lib.popup :open
-                                                {:lines contents
-                                                 :enter false
-                                                 :type-name :completion-doc
-                                                 :markdown true
-                                                 : row
-                                                 :col left-col
-                                                 : right-col
-                                                 :relative :editor
-                                                 : max-width
-                                                 :update-if-exists true})]
+          p (require :fsouza.lib.popup)
+          (popup-winid popup-bufnr) (p.open {:lines contents
+                                             :enter false
+                                             :type-name :completion-doc
+                                             :markdown true
+                                             : row
+                                             :col left-col
+                                             : right-col
+                                             :relative :editor
+                                             : max-width
+                                             :update-if-exists true})]
       (set winid popup-winid)
       (set doc-bufnr popup-bufnr))))
 
@@ -99,7 +97,8 @@
 
 (fn do-CompleteChanged [bufnr user-data]
   (if user-data.item
-      (mod-invoke :lsp_compl :resolve_item user-data render-docs)
+      (let [lsp-compl (require :lsp_compl)]
+        (lsp-compl.resolve_item user-data render-docs))
       (close)))
 
 (fn on-CompleteChanged [bufnr]
@@ -108,7 +107,8 @@
 
 (fn do-InsertLeave [bufnr]
   (reset-state)
-  (mod-invoke :fsouza.lib.nvim-helpers :reset-augroup (augroup-name bufnr)))
+  (let [nvim-helpers (require :fsouza.lib.nvim-helpers)]
+    (nvim-helpers.reset-augroup (augroup-name bufnr))))
 
 (fn on-InsertLeave [bufnr]
   (vim.schedule #(do-InsertLeave bufnr)))
@@ -116,18 +116,19 @@
 (fn on-attach [bufnr]
   (let [lsp-compl (require :lsp_compl)]
     (fn complete []
-      (mod-invoke :fsouza.lib.nvim-helpers :augroup (augroup-name bufnr)
-                  [{:events [:CompleteChanged]
-                    :targets [(string.format "<buffer=%d>" bufnr)]
-                    :callback #(on-CompleteChanged bufnr)}
-                   {:events [:CompleteDone]
-                    :targets [(string.format "<buffer=%d>" bufnr)]
-                    :once true
-                    :callback reset-state}
-                   {:events [:InsertLeave]
-                    :targets [(string.format "<buffer=%d>" bufnr)]
-                    :once true
-                    :callback #(on-InsertLeave bufnr)}])
+      (let [{: augroup} (require :fsouza.lib.nvim-helpers)]
+        (augroup (augroup-name bufnr)
+                 [{:events [:CompleteChanged]
+                   :targets [(string.format "<buffer=%d>" bufnr)]
+                   :callback #(on-CompleteChanged bufnr)}
+                  {:events [:CompleteDone]
+                   :targets [(string.format "<buffer=%d>" bufnr)]
+                   :once true
+                   :callback reset-state}
+                  {:events [:InsertLeave]
+                   :targets [(string.format "<buffer=%d>" bufnr)]
+                   :once true
+                   :callback #(on-InsertLeave bufnr)}]))
       (lsp-compl.trigger_completion bufnr)
       "")
 

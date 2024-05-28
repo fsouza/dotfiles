@@ -1,9 +1,7 @@
 (local path (require :pl.path))
 
 (fn require-fennel []
-  (let [fennel (require :fennel)
-        macro-path (.. fennel.macro-path ";macros/?.fnl")]
-    (tset fennel :macro-path macro-path)
+  (let [fennel (require :fennel)]
     fennel))
 
 (fn startswith [str prefix]

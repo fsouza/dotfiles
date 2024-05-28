@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 ;; maps number to a terminal, where a terminal is a table with the following
 ;; shape: { bufnr: ..., job-id: ... }
 (local terminals {})
@@ -48,10 +46,11 @@
       (vim.cmd.wincmd :F))))
 
 (fn v-cr []
-  (when (mod-invoke :fsouza.lib.qf :set-from-visual-selection)
-    (vim.cmd.only {:mods {:silent true}})
-    (vim.cmd.cfirst)
-    (vim.cmd.copen)
-    (vim.cmd.wincmd :p)))
+  (let [qf (require :fsouza.lib.qf)]
+    (when (qf.set-from-visual-selection)
+      (vim.cmd.only {:mods {:silent true}})
+      (vim.cmd.cfirst)
+      (vim.cmd.copen)
+      (vim.cmd.wincmd :p))))
 
 {: open : cr : run : v-cr}

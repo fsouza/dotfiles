@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 (local watch-kind {:Create 1 :Change 2 :Delete 4})
 
 (local file-change-type {:Created 1 :Changed 2 :Deleted 3})
@@ -64,8 +62,8 @@
         (tset client-notification.changes uri type)
         (tset client-notifications reg-key client-notification)))))
 
-(local start-notifier
-       (mod-invoke :fsouza.lib.nvim-helpers :once start-notifier))
+(local start-notifier (let [{: once} (require :fsouza.lib.nvim-helpers)]
+                        (once start-notifier)))
 
 (fn is-file-open [filepath]
   (let [path (require :fsouza.pl.path)]

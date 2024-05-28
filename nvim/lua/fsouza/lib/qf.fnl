@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 (fn parse-line [line map]
   (let [col-pattern "^([a-zA-Z0-9/][^:]+):(%d+):(%d+):(.+)"
         line-pattern "^([a-zA-Z0-9/][^:]+):(%d+):(.+)"
@@ -37,8 +35,8 @@
       (set-from-lines ?opts)))
 
 (lambda set-from-visual-selection [?opts]
-  (let [lines (mod-invoke :fsouza.lib.nvim-helpers
-                          :get-visual-selection-contents)]
+  (let [nvim-helpers (require :fsouza.lib.nvim-helpers)
+        lines (nvim-helpers.get-visual-selection-contents)]
     (set-from-lines lines ?opts)))
 
 {: set-from-visual-selection : set-from-contents}

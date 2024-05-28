@@ -1,9 +1,8 @@
-(import-macros {: mod-invoke} :helpers)
-
 (local test-checkers {})
 
 (fn is-test [fname]
-  (let [ext (mod-invoke :fsouza.lib.path :extension fname)
+  (let [path (require :fsouza.lib.path)
+        ext (path.extension fname)
         ext-checkers (or (. test-checkers ext) {})]
     (-> ext-checkers
         (pairs)

@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 (macro hererocks []
   `(let [lua-version# (string.gsub _G._VERSION "Lua " "")
          hererocks-path# (.. _G.cache-dir :/hr)
@@ -154,7 +152,8 @@
                  (uri-to-fname#)
                  (vim.fn.bufadd))))
      (tset vim.ui :select
-           #(mod-invoke :fsouza.lib.popup-picker :ui-select $...))
+           #(let [popup-picker# (require :fsouza.lib.popup-picker)]
+              (popup-picker#.ui-select $...)))
      (tset vim :deprecate #nil)
      (let [patterns# ["message with no corresponding"]
            orig-notify# vim.notify]

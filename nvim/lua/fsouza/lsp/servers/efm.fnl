@@ -1,21 +1,19 @@
-(import-macros {: mod-invoke} :helpers)
-
 (fn start-efm [bufnr cb]
-  (let [mod-dir (vim.fs.joinpath _G.dotfiles-dir :nvim :langservers)]
-    (mod-invoke :fsouza.lsp.servers :start
-                {: bufnr
-                 : cb
-                 :opts {:autofmt 1}
-                 :config {:name :efm
-                          :cmd [:go
-                                :run
-                                :-C
-                                mod-dir
-                                :github.com/mattn/efm-langserver]
-                          :init_options {:documentFormatting true}
-                          :settings {:lintDebounce :250ms
-                                     :rootMarkers [:.git]
-                                     :languages {}}}})))
+  (let [mod-dir (vim.fs.joinpath _G.dotfiles-dir :nvim :langservers)
+        servers (require :fsouza.lsp.servers)]
+    (servers.start {: bufnr
+                    : cb
+                    :opts {:autofmt 1}
+                    :config {:name :efm
+                             :cmd [:go
+                                   :run
+                                   :-C
+                                   mod-dir
+                                   :github.com/mattn/efm-langserver]
+                             :init_options {:documentFormatting true}
+                             :settings {:lintDebounce :250ms
+                                        :rootMarkers [:.git]
+                                        :languages {}}}})))
 
 (fn should-add [current-tools tool]
   (let [iter (vim.iter current-tools)]

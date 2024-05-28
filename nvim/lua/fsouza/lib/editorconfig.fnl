@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 (fn parse-output [data]
   (collect [_ line (ipairs (vim.split data "\n"))]
     (let [parts (vim.split line "=")]
@@ -55,8 +53,8 @@
                      :targets [(string.format "<buffer=%d>" bufnr)]
                      :callback trim-whitespace}))
     (when (vim.api.nvim_buf_is_valid bufnr)
-      (mod-invoke :fsouza.lib.nvim-helpers :augroup
-                  (.. :editorconfig_trim_trailing_whitespace_ bufnr) commands))))
+      (let [{: augroup} (require :fsouza.lib.nvim-helpers)]
+        (augroup (.. :editorconfig_trim_trailing_whitespace_ bufnr) commands)))))
 
 (fn set-opts [bufnr opts]
   (let [vim-opts {:tabstop 8}]
@@ -82,7 +80,8 @@
                 :bash :.sh
                 :zsh :.zsh
                 :javascript :.js}
-        (_ ext) (mod-invoke :fsouza.lib.path :splitext name)]
+        path (require :fsouza.lib.path)
+        (_ ext) (path.splitext name)]
     (if (not= ext "")
         name
         (let [ft (. vim :bo bufnr :filetype)
@@ -96,19 +95,22 @@
     (when (and (?. vim :bo bufnr :modifiable)
                (not (?. vim :bo bufnr :readonly)) (not= filename "")
                (= (string.find filename "^%a+://") nil))
-      (let [filename (mod-invoke :fsouza.lib.path :abspath filename)
-            filename (modify-filename-if-needed filename bufnr)]
-        (mod-invoke :fsouza.lib.cmd :run :editorconfig {:args [filename]}
-                    (fn [result]
-                      (if (= result.exit-status 0)
-                          (set-opts bufnr (parse-output result.stdout))
-                          (vim.notify (string.format "failed to run editorconfig: %s"
-                                                     (vim.inspect result))))))))))
+      (let [path (require :fsouza.lib.path)
+            filename (path.abspath filename)
+            filename (modify-filename-if-needed filename bufnr)
+            cmd (require :fsouza.lib.cmd)]
+        (cmd.run :editorconfig {:args [filename]}
+                 (fn [result]
+                   (if (= result.exit-status 0)
+                       (set-opts bufnr (parse-output result.stdout))
+                       (vim.notify (string.format "failed to run editorconfig: %s"
+                                                  (vim.inspect result))))))))))
 
 (fn setup []
-  (mod-invoke :fsouza.lib.nvim-helpers :augroup :editorconfig
-              [{:events [:BufNewFile :BufReadPost :BufFilePost :FileType]
-                :targets ["*"]
-                :callback #(set-config $1.buf)}]))
+  (let [{: augroup} (require :fsouza.lib.nvim-helpers)]
+    (augroup :editorconfig
+             [{:events [:BufNewFile :BufReadPost :BufFilePost :FileType]
+               :targets ["*"]
+               :callback #(set-config $1.buf)}])))
 
 {: setup}

@@ -1,3 +1,2 @@
-(import-macros {: mod-invoke} :helpers)
-
-(mod-invoke :fsouza.lsp.servers.efm-ts :start :javascript)
+(let [efm-ts (require :fsouza.lsp.servers.efm-ts)]
+  (efm-ts.start :javascript))

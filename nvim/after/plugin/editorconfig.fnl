@@ -1,3 +1,2 @@
-(import-macros {: mod-invoke} :helpers)
-
-(mod-invoke :fsouza.lib.editorconfig :setup)
+(let [editorconfig (require :fsouza.lib.editorconfig)]
+  (editorconfig.setup))

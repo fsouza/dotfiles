@@ -1,5 +1,3 @@
-(import-macros {: mod-invoke} :helpers)
-
 ;; maps bufnr to client
 (local buffer-clients {})
 
@@ -38,10 +36,10 @@
                                                    (: :filter #(= $1.kind kind))
                                                    (: :next))]
                                (when code-action
-                                 (mod-invoke :fsouza.lsp.code-action :execute
-                                             client code-action
-                                             #(vim.api.nvim_buf_call bufnr
-                                                                     #(vim.cmd.update))))))))))))
+                                 (let [{: execute} (require :fsouza.lsp.code-action)]
+                                   (execute client code-action
+                                            #(vim.api.nvim_buf_call bufnr
+                                                                    #(vim.cmd.update)))))))))))))
 
 (lambda handle [bufnr]
   (let [{: client-id : kind} (. buffer-clients bufnr)
@@ -51,14 +49,15 @@
         (tset buffer-clients bufnr nil))))
 
 (local setup
-       (mod-invoke :fsouza.lib.nvim-helpers :once
-                   #(mod-invoke :fsouza.lib.nvim-helpers :augroup
-                                :fsouza__autocodeaction
-                                [{:events [:User]
-                                  :targets [:fsouza-LSP-autoformatted]
-                                  :callback #(let [{: bufnr} (. $1 :data)]
-                                               (when (. buffer-clients bufnr)
-                                                 (handle bufnr)))}])))
+       (let [nvim-helpers (require :fsouza.lib.nvim-helpers)]
+         (nvim-helpers.once #(nvim-helpers.augroup :fsouza__autocodeaction
+                                                   [{:events [:User]
+                                                     :targets [:fsouza-LSP-autoformatted]
+                                                     :callback #(let [{: bufnr} (. $1
+                                                                                   :data)]
+                                                                  (when (. buffer-clients
+                                                                           bufnr)
+                                                                    (handle bufnr)))}]))))
 
 (lambda attach [bufnr client-id kind]
   (setup)

@@ -1,3 +1,2 @@
-(import-macros {: mod-invoke} :helpers)
-
-(mod-invoke :fsouza.lsp.servers.gopls :setup)
+(let [gopls (require :fsouza.lsp.servers.gopls)]
+  (gopls.setup))
