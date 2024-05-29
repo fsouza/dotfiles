@@ -13,22 +13,20 @@
 
 (fn with-executable [exec cb]
   (when exec
-    (let [node-bin (vim.fs.joinpath _G.config-dir :langservers :node_modules
-                                    :.bin)
-          PATH (.. node-bin ":" (os.getenv :PATH))]
-      (macro fallback []
-        `(vim.schedule #(-> exec
-                            (vim.fn.exepath)
-                            (cb false))))
-      (if (vim.startswith exec "/")
-          (cb exec false)
-          (let [node-exec (vim.fs.joinpath node-bin exec)]
-            (vim.uv.fs_stat node-exec
-                            #(if $1
-                                 (fallback)
-                                 (if (= $2.type :file)
-                                     (cb node-exec true)
-                                     (fallback)))))))))
+    (macro fallback []
+      `(vim.schedule #(-> exec
+                          (vim.fn.exepath)
+                          (cb false))))
+    (if (vim.startswith exec "/")
+        (cb exec false)
+        (let [node-exec (vim.fs.joinpath _G.config-dir :langservers
+                                         :node_modules :.bin exec)]
+          (vim.uv.fs_stat node-exec
+                          #(if $1
+                               (fallback)
+                               (if (= $2.type :file)
+                                   (cb node-exec true)
+                                   (fallback))))))))
 
 (fn cwd-if-not-home []
   (let [cwd (vim.uv.cwd)
