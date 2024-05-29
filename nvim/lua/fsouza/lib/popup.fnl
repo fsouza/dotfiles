@@ -30,10 +30,10 @@
         winid (vim.api.nvim_open_win bufnr false win-opts)]
     (set-content bufnr lines
                  {: markdown :width win-opts.width :height win-opts.height})
-    (vim.api.nvim_win_set_option winid :wrap (= wrap true))
-    (vim.api.nvim_win_set_option winid :winhighlight
-                                 "Normal:PopupNormal,CursorLineNr:PopupCursorLineNr,CursorLine:PopupCursorLine")
-    (vim.api.nvim_win_set_var winid win-var-identifier true)
+    (tset (. vim.wo winid) :wrap (= wrap true))
+    (tset (. vim.wo winid) :winhighlight
+          "Normal:PopupNormal,CursorLineNr:PopupCursorLineNr,CursorLine:PopupCursorLine")
+    (tset (. vim.w winid) win-var-identifier true)
     (values winid bufnr)))
 
 (lambda open [opts]
@@ -73,7 +73,7 @@
           (do-open lines {: win-opts : wrap : win-var-identifier : markdown})))))
 
 (lambda stylize [winid]
-  (vim.api.nvim_win_set_option winid :winhighlight
-                               "Normal:PopupNormal,NormalFloat:PopupNormal,MatchParen:PopupNormal,FloatBorder:PopupNormal"))
+  (tset (. vim.wo winid) :winhighlight
+        "Normal:PopupNormal,NormalFloat:PopupNormal,MatchParen:PopupNormal,FloatBorder:PopupNormal"))
 
 {: open : stylize}

@@ -12,9 +12,9 @@
         (winid bufnr) (popup.open {: lines :type-name :picker :row 1})
         mapping-opts {:buffer bufnr}
         {: augroup} (require :fsouza.lib.nvim-helpers)]
-    (vim.api.nvim_win_set_option winid :cursorline true)
-    (vim.api.nvim_win_set_option winid :cursorlineopt :both)
-    (vim.api.nvim_win_set_option winid :number true)
+    (tset (. vim.wo winid) :cursorline true)
+    (tset (. vim.wo winid) :cursorlineopt :both)
+    (tset (. vim.wo winid) :number true)
     (vim.api.nvim_set_current_win winid)
     (augroup :fsouza-popup-picker-leave
              [{:events [:WinLeave]
