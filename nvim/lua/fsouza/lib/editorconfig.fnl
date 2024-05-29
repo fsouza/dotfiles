@@ -36,14 +36,15 @@
     (tset vim-opts :softtabstop indent-size)))
 
 (fn trim-whitespace [{: buf}]
-  (vim.api.nvim_buf_call buf
-                         #(let [cursor (vim.api.nvim_win_get_cursor 0)]
-                            (pcall #(vim.cmd.substitute {:args ["/\\v\\s+$//"]
-                                                         :range [1
-                                                                 (vim.api.nvim_buf_line_count 0)]
-                                                         :mods {:silent true
-                                                                :keeppatterns true}}))
-                            (vim.api.nvim_win_set_cursor 0 cursor))))
+  (when (not (?. vim :b buf :keep_whitespace))
+    (vim.api.nvim_buf_call buf
+                           #(let [cursor (vim.api.nvim_win_get_cursor 0)]
+                              (pcall #(vim.cmd.substitute {:args ["/\\v\\s+$//"]
+                                                           :range [1
+                                                                   (vim.api.nvim_buf_line_count 0)]
+                                                           :mods {:silent true
+                                                                  :keeppatterns true}}))
+                              (vim.api.nvim_win_set_cursor 0 cursor)))))
 
 (fn handle-whitespaces [bufnr v]
   (let [commands []]
