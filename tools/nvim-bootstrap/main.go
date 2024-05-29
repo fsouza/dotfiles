@@ -26,7 +26,7 @@ func main() {
 
 	venvDir := filepath.Join(nv.CacheDir, "venv")
 	var g errgroup.Group
-	g.Go(func() error { return setupLangervers(nv) })
+	g.Go(func() error { setupLangervers(nv); return nil })
 	g.Go(func() error { return ensureVirtualenv(nv, venvDir) })
 	g.Go(func() error { return updateNeovimPlugins(nv) })
 

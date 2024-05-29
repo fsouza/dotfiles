@@ -15,7 +15,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func setupLangervers(nv *Neovim) error {
+func setupLangervers(nv *Neovim) {
 	langserversDir := filepath.Join(nv.CacheDir, "langservers")
 	dirServers := []func(string) error{
 		installGopls,
@@ -33,7 +33,10 @@ func setupLangervers(nv *Neovim) error {
 		})
 	}
 
-	return g.Wait()
+	err := g.Wait()
+	if err != nil {
+		log.Printf("failed to install language servers: %v", err)
+	}
 }
 
 func installGopls(langserversDir string) error {
