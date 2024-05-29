@@ -154,11 +154,10 @@ func installOLS(langserversDir string) error {
 		return err
 	}
 
-	tools.Run(&tools.RunOptions{
+	return tools.Run(&tools.RunOptions{
 		Cmd: "./build.sh",
 		Cwd: repoDir,
 	})
-	return nil
 }
 
 func setupFnlfmt(nv *Neovim, hererocksDir string) error {
