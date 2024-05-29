@@ -68,7 +68,8 @@
                                              : right-col
                                              :relative :editor
                                              : max-width
-                                             :update-if-exists true})]
+                                             :update-if-exists true
+                                             :wrap true})]
       (set winid popup-winid)
       (set doc-bufnr popup-bufnr))))
 
