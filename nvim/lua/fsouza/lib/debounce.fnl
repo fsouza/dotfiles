@@ -10,6 +10,7 @@
     {:call #(set last-call [$...])
      :stop #(do
               (timer:close)
-              (set last-call nil))}))
+              (set last-call nil))
+     :clear #(set last-call nil)}))
 
 {: debounce}
