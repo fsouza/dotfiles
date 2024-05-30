@@ -1,19 +1,3 @@
-(local ignore-install [:phpdoc])
-
-(fn lang-to-ft [lang]
-  (if (vim.tbl_contains ignore-install lang) []
-      (let [parsers (require :nvim-treesitter.parsers)
-            obj (. parsers.list lang)]
-        [(or obj.filetype lang) (or obj.used_by [])])))
-
-(fn get-file-types []
-  (let [nvim-treesitter-parsers (require :nvim-treesitter.parsers)]
-    (-> (nvim-treesitter-parsers.available_parsers)
-        (vim.iter)
-        (: :map lang-to-ft)
-        (: :flatten math.huge)
-        (: :totable))))
-
 (let [configs (require :nvim-treesitter.configs)]
   (configs.setup {:highlight {:enable true
                               :disable #(and (= $1 :json)
@@ -34,4 +18,4 @@
                                        :swap_previous {:<leader>A "@parameter.inner"}}}
                   :ensure_installed []
                   :auto_install true
-                  :ignore_install ignore-install}))
+                  :ignore_install [:phpdoc]}))

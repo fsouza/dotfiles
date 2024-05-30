@@ -58,11 +58,6 @@
   (let [{: mode} (vim.api.nvim_get_mode)]
     (vim.fn.getregion (vim.fn.getpos :v) (vim.fn.getpos ".") {:type mode})))
 
-(lambda extract-luv-error [?err]
-  (if (= ?err nil)
-      nil
-      (. (vim.split ?err ":" {:plain true :trimempty true}) 1)))
-
 (lambda hash-buffer [bufnr]
   (let [sha1 (require :sha1)
         lines (-> bufnr
@@ -70,19 +65,10 @@
                   (table.concat "\n"))]
     (sha1.sha1 lines)))
 
-(lambda keymap-repeat [lhs cb opts]
-  (vim.keymap.set :n lhs
-                  #(do
-                     (cb)
-                     (vim.api.nvim_call_function "repeat#set" [lhs]))
-                  opts))
-
 {:reset-augroup #(vim.api.nvim_create_augroup $1 {:clear true})
  : augroup
  : once
  : rewrite-wrap
  : get-visual-selection-contents
  : get-visual-selection-range
- : extract-luv-error
- : hash-buffer
- : keymap-repeat}
+ : hash-buffer}
