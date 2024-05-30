@@ -1,6 +1,6 @@
 (fn add-to-efm [lang-id bufnr]
   (let [efm-formatters (require :fsouza.lib.efm-formatters)
-        efm-server (require :fsouza.lib.servers.efm)]
+        efm-server (require :fsouza.lsp.servers.efm)]
     (efm-formatters.get-prettierd #(let [prettierd $1]
                                      (efm-formatters.get-eslintd #(let [tools $1]
                                                                     (table.insert tools
