@@ -121,6 +121,11 @@ func installRustAnalyzer(langserversDir string) error {
 }
 
 func installServersFromNpm() error {
+	if _, err := exec.LookPath("fnm"); err != nil {
+		log.Print("skipping servers from npm")
+		return nil
+	}
+
 	fnmDir := filepath.Join(dotfilesDir, "nvim", "langservers")
 	err := tools.Run(&tools.RunOptions{
 		Cmd:  "fnm",
