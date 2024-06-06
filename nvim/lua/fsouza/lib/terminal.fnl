@@ -45,12 +45,4 @@
       (vim.cmd.only {:mods {:silent true}})
       (vim.cmd.wincmd :F))))
 
-(fn v-cr []
-  (let [qf (require :fsouza.lib.qf)]
-    (when (qf.set-from-visual-selection)
-      (vim.cmd.only {:mods {:silent true}})
-      (vim.cmd.cfirst)
-      (vim.cmd.copen)
-      (vim.cmd.wincmd :p))))
-
-{: open : cr : run : v-cr}
+{: open : cr : run}
