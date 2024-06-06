@@ -81,7 +81,7 @@
           `(vim.cmd.color :none))))
 
 (macro set-global-options []
-  (let [options {:completeopt "menuone,noinsert,noselect"
+  (let [options {:completeopt "menuone,noinsert,noselect,fuzzy"
                  :hidden true
                  :hlsearch false
                  :incsearch true
