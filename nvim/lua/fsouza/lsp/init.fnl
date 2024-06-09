@@ -2,6 +2,12 @@
        {:efm {:textDocument/definition true}
         :ruff-server {:textDocument/hover true}})
 
+(fn patch-server-capabilities [client]
+  (let [capabilities-to-disable {:gopls [:semanticTokensProvider]}
+        caps (or (. capabilities-to-disable client.name) [])]
+    (each [_ cap (ipairs caps)]
+      (tset client.server_capabilities cap nil))))
+
 (fn patch-supports-method [client]
   (let [supports-method client.supports_method]
     (tset client :supports_method
@@ -152,6 +158,7 @@
                   {:lhs :<leader>dd :rhs fuzzy.lsp_workspace_diagnostics}
                   {:lhs :<c-n> :rhs #(diag-jump vim.diagnostic.goto_next)}
                   {:lhs :<c-p> :rhs #(diag-jump vim.diagnostic.goto_prev)}]]
+    (patch-server-capabilities client)
     (patch-supports-method client)
     (shell-post.on-attach bufnr)
     (each [method _ (pairs method-handlers)]
