@@ -5,7 +5,8 @@
                        :. true
                        :* true
                        "(" true
-                       ")" true}
+                       ")" true
+                       "@" true}
         (literal _) (string.gsub literal "."
                                  #(if (. special-chars $1)
                                       (.. "\\" $1)
