@@ -45,7 +45,7 @@ pyflakes==3.2.0
     # via
     #   autoflake
     #   flake8
-pyupgrade==3.15.2
+pyupgrade==3.16.0
     # via -r requirements.in
 reorder-python-imports==3.13.0
     # via -r requirements.in
