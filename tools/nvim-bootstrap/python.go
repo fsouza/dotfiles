@@ -22,15 +22,7 @@ func ensureVirtualenv(nv *Neovim, venvDir string) error {
 		}
 	}
 
-	return tools.Run(&tools.RunOptions{
-		Cmd: "uv",
-		Args: []string{
-			"pip",
-			"sync",
-			filepath.Join(dotfilesDir, "nvim", "langservers", "requirements.txt"),
-		},
-		Env: map[string]string{"VIRTUAL_ENV": venvDir},
-	})
+	return nil
 }
 
 func python() string {

@@ -15,7 +15,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func setupLangervers(nv *Neovim) {
+func setupLangervers(nv *Neovim, venvDir string) {
 	langserversDir := filepath.Join(nv.CacheDir, "langservers")
 	dirServers := []func(string) error{
 		installGopls,
@@ -25,6 +25,9 @@ func setupLangervers(nv *Neovim) {
 
 	var g errgroup.Group
 	g.Go(installServersFromNpm)
+	g.Go(func() error {
+		return installServersFromRequirementsTXT(venvDir)
+	})
 
 	for _, dirServer := range dirServers {
 		dirServer := dirServer
@@ -147,6 +150,23 @@ func installServersFromNpm() error {
 			"--frozen-lockfile",
 		},
 		Cwd: fnmDir,
+	})
+}
+
+func installServersFromRequirementsTXT(venvDir string) error {
+	if _, err := exec.LookPath("uv"); err != nil {
+		log.Print("skipping servers from requirements.txt")
+		return nil
+	}
+
+	return tools.Run(&tools.RunOptions{
+		Cmd: "uv",
+		Args: []string{
+			"pip",
+			"sync",
+			filepath.Join(dotfilesDir, "nvim", "langservers", "requirements.txt"),
+		},
+		Env: map[string]string{"VIRTUAL_ENV": venvDir},
 	})
 }
 

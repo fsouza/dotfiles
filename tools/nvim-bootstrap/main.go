@@ -26,7 +26,6 @@ func main() {
 
 	venvDir := filepath.Join(nv.CacheDir, "venv")
 	var g errgroup.Group
-	g.Go(func() error { setupLangervers(nv); return nil })
 	g.Go(func() error { return ensureVirtualenv(nv, venvDir) })
 	g.Go(func() error { return updateNeovimPlugins(nv) })
 
@@ -35,7 +34,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	hererocksDir, err := ensureHererocks(nv, venvDir)
+	var hererocksDir string
+	g = errgroup.Group{}
+	g.Go(func() error { setupLangervers(nv, venvDir); return nil })
+	g.Go(func() error {
+		var err error
+		hererocksDir, err = ensureHererocks(nv, venvDir)
+		return err
+	})
+	err = g.Wait()
 	if err != nil {
 		log.Fatal(err)
 	}
