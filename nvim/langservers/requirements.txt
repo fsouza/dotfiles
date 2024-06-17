@@ -12,7 +12,7 @@ classify-imports==4.2.0
     # via reorder-python-imports
 click==8.1.7
     # via black
-flake8==7.0.0
+flake8==7.1.0
     # via
     #   -r requirements.in
     #   flake8-bugbear
@@ -39,7 +39,7 @@ pathspec==0.12.1
     # via black
 platformdirs==4.2.2
     # via black
-pycodestyle==2.11.1
+pycodestyle==2.12.0
     # via flake8
 pyflakes==3.2.0
     # via
