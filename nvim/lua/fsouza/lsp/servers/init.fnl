@@ -18,7 +18,7 @@
                           (vim.fn.exepath)
                           (cb false))))
     (if (vim.startswith exec "/")
-        (cb exec false)
+        (fallback)
         (let [node-exec (vim.fs.joinpath _G.config-dir :langservers
                                          :node_modules :.bin exec)]
           (vim.uv.fs_stat node-exec
