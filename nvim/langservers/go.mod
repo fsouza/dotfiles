@@ -1,6 +1,7 @@
 module github.com/fsouza/dotfiles/nvim/langservers
 
-go 1.22.0
+go 1.22.4
+
 require (
 	github.com/grafana/jsonnet-language-server v0.13.1
 	github.com/hashicorp/terraform-ls v0.33.2
