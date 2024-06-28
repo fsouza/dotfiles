@@ -26,10 +26,8 @@
                            (references.register-test-checker :.py :python
                                                              is-python-test))})))
 
-(fn start-ruff-server [bufnr python-interpreter root-dir]
-  (let [bufname (vim.api.nvim_buf_get_name bufnr)
-        lsp-servers (require :fsouza.lsp.servers)
-        python-interpreter (vim.fn.exepath :python3)]
+(fn start-ruff-server [bufnr root-dir]
+  (let [lsp-servers (require :fsouza.lsp.servers)]
     (lsp-servers.start {: bufnr
                         :config {:name :ruff-server
                                  :cmd [(vim.fs.joinpath _G.cache-dir :venv :bin
@@ -40,7 +38,7 @@
                         :find-root-dir #root-dir
                         :opts {:autofmt 2 :auto-action :source.fixAll.ruff}})))
 
-(fn maybe-start-ruff-server [bufnr python-interpreter]
+(fn maybe-start-ruff-server [bufnr]
   (let [bufname (vim.api.nvim_buf_get_name bufnr)
         ; TODO: support pyproject.toml
         ruff-config (vim.fs.find [:ruff.toml :.ruff.toml]
@@ -49,7 +47,7 @@
                                   :path (vim.fs.dirname bufname)})
         ruff-config (. ruff-config 1)]
     (when ruff-config
-      (start-ruff-server bufnr python-interpreter (vim.fs.dirname ruff-config)))))
+      (start-ruff-server bufnr (vim.fs.dirname ruff-config)))))
 
 (fn get-python-tools [cb]
   (let [gen-python-tools (vim.fs.joinpath _G.dotfiles-cache-dir :bin
@@ -70,6 +68,5 @@
   (get-python-tools #(let [tools $1]
                        (vim.schedule #(efm.add bufnr :python tools))))
   (detect-interpreter #(let [interpreter $1]
-                         (vim.schedule #(start-pyright bufnr interpreter))
-                         (vim.schedule #(maybe-start-ruff-server bufnr
-                                                                 interpreter)))))
+                         (vim.schedule #(start-pyright bufnr interpreter))))
+  (maybe-start-ruff-server bufnr))
