@@ -4,7 +4,7 @@ go 1.22.4
 
 require (
 	github.com/grafana/jsonnet-language-server v0.13.1
-	github.com/hashicorp/terraform-ls v0.33.2
+	github.com/hashicorp/terraform-ls v0.33.3
 	github.com/mattn/efm-langserver v0.0.53
 )
 
@@ -15,7 +15,7 @@ require (
 	github.com/Masterminds/sprig/v3 v3.2.3 // indirect
 	github.com/PuerkitoBio/goquery v1.8.1 // indirect
 	github.com/agext/levenshtein v1.2.2 // indirect
-	github.com/algolia/algoliasearch-client-go/v3 v3.31.1 // indirect
+	github.com/algolia/algoliasearch-client-go/v3 v3.31.2 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/antonmedv/expr v1.10.5 // indirect
 	github.com/apparentlymart/go-textseg v1.0.0 // indirect
@@ -46,11 +46,11 @@ require (
 	github.com/hashicorp/go-version v1.7.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/hashicorp/hcl-lang v0.0.0-20240605150436-0e930f47b31b // indirect
-	github.com/hashicorp/hcl/v2 v2.20.1 // indirect
+	github.com/hashicorp/hcl/v2 v2.21.0 // indirect
 	github.com/hashicorp/terraform-exec v0.21.0 // indirect
 	github.com/hashicorp/terraform-json v0.22.1 // indirect
 	github.com/hashicorp/terraform-registry-address v0.2.3 // indirect
-	github.com/hashicorp/terraform-schema v0.0.0-20240527093557-661c6794495e // indirect
+	github.com/hashicorp/terraform-schema v0.0.0-20240624090044-d94934b4af36 // indirect
 	github.com/hashicorp/terraform-svchost v0.1.1 // indirect
 	github.com/hexops/gotextdiff v1.0.3 // indirect
 	github.com/huandu/xstrings v1.4.0 // indirect
