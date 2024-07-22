@@ -4,7 +4,7 @@ go 1.22.4
 
 require (
 	github.com/grafana/jsonnet-language-server v0.13.1
-	github.com/hashicorp/terraform-ls v0.34.0
+	github.com/hashicorp/terraform-ls v0.34.1
 	github.com/mattn/efm-langserver v0.0.53
 )
 
@@ -83,7 +83,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
-	github.com/zclconf/go-cty v1.14.4 // indirect
+	github.com/zclconf/go-cty v1.15.0 // indirect
 	go.bobheadxi.dev/gobenchdata v1.3.1 // indirect
 	go.bobheadxi.dev/streamline v1.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/httptrace/otelhttptrace v0.53.0 // indirect
