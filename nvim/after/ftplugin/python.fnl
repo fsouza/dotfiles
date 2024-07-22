@@ -32,8 +32,7 @@
                         :config {:name :ruff-server
                                  :cmd [(vim.fs.joinpath _G.cache-dir :venv :bin
                                                         :ruff)
-                                       :server
-                                       :--preview]
+                                       :server]
                                  :init_options {:settings {:lint {:enable true}}}}
                         :find-root-dir #root-dir
                         :opts {:autofmt 2 :auto-action :source.fixAll.ruff}})))
