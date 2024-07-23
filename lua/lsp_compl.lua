@@ -186,7 +186,7 @@ function M.trigger_completion(bufnr)
     local prefix = line:sub(startbyte, cursor_pos)
     local matches = M.text_document_completion_list_to_complete_items(result, prefix, client_id)
     vim.fn.complete(startbyte, matches)
-  end, bufnr)
+  end)
   if cancel_reqs then
     table.insert(completion_ctx.pending_requests, cancel_reqs)
   end
