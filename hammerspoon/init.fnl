@@ -56,4 +56,4 @@
                      (when (< (length pb-content) 256)
                        (hs.eventtap.keyStrokes pb-content)))))
 
-(set-readline-shortcuts [:alacritty :terminal :code])
+(set-readline-shortcuts [:alacritty :terminal :code :iterm2])
