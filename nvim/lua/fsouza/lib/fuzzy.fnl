@@ -19,6 +19,8 @@
         pl-path (require :fsouza.lib.path)]
     (each [_ sel (ipairs selected)]
       (let [{: path : line : col} (fzf-path.entry_to_file sel opts)
+            line (or line 1)
+            col (or col 1)
             path (pl-path.relpath path)
             path (if (vim.startswith path ".")
                      (pl-path.abspath path)
