@@ -9,7 +9,7 @@
 		"eslint_d": "^14.0.1",
 		"postcss-scss": "^4.0.9",
 		"pyright": "^1.1.373",
-		"typescript": "^5.5.3",
+		"typescript": "^5.5.4",
 		"typescript-language-server": "^4.3.3",
 		"vscode-langservers-extracted": "^4.10.0",
 		"yaml-language-server": "^1.15.0"
