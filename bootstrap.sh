@@ -107,18 +107,6 @@ EOF
 	fi
 }
 
-function setup_rclone {
-	sudo mkdir -p /usr/local/bin /usr/local/share
-	sudo chown ${USER}:wheel /usr/local/bin /usr/local/share
-	if ! [ -f ${HOME}/.config/rclone/rclone.conf ]; then
-		mkdir -p ${HOME}/.config/rclone
-		local conf_file=$(mktemp)
-		chmod 600 ${conf_file}
-		op document get rclone-conf --output ${conf_file}
-		mv ${conf_file} ${HOME}/.config/rclone/rclone.conf
-	fi
-}
-
 function install_node {
 	env FSOUZA_DOTFILES_DIR=${1} ${HOMEBREW_PREFIX}/bin/zsh -l <<'EOF'
 source ${FSOUZA_DOTFILES_DIR}/zsh/.zshrc
@@ -148,7 +136,6 @@ function main {
 	setup_brew
 	gh_ssh_setup
 
-	setup_rclone
 	setup_dotfiles ${dotfiles_dir}
 	install_node ${dotfiles_dir}
 	setup_nvim ${dotfiles_dir}
