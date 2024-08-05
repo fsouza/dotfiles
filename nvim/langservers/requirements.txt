@@ -12,7 +12,7 @@ classify-imports==4.2.0
     # via reorder-python-imports
 click==8.1.7
     # via black
-flake8==7.1.0
+flake8==7.1.1
     # via
     #   -r requirements.in
     #   flake8-bugbear
