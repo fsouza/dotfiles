@@ -20,7 +20,9 @@
     (each [_ sel (ipairs selected)]
       (let [{: path : line : col} (fzf-path.entry_to_file sel opts)
             line (or line 1)
+            line (math.max line 1)
             col (or col 1)
+            col (math.max col 1)
             path (pl-path.relpath path)
             path (if (vim.startswith path ".")
                      (pl-path.abspath path)
