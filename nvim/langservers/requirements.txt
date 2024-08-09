@@ -6,7 +6,7 @@ attrs==23.2.0
     # via flake8-bugbear
 autoflake==2.3.1
     # via -r requirements.in
-black==24.4.2
+black==24.8.0
     # via -r requirements.in
 classify-imports==4.2.0
     # via reorder-python-imports
