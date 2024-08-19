@@ -42,11 +42,7 @@ checkout =
 update = true
 
 [opt/fzf-lua]
-checkout =
-	git clone https://github.com/ibhagwan/fzf-lua.git
-	git -C fzf-lua fetch 64a305a2490e48c44be9f5a489e01b995dd58c92
-	git -C fzf-lua checkout FETCH_HEAD
-update = true
+checkout = git clone https://github.com/ibhagwan/fzf-lua.git
 
 [opt/nvim-fzf]
 checkout = git clone https://github.com/vijaymarupudi/nvim-fzf.git
