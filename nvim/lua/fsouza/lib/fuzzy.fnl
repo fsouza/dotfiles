@@ -37,7 +37,7 @@
 
 (fn file-actions []
   (let [actions (require :fzf-lua.actions)]
-    {:default (partial edit-or-qf (partial edit :edit))
+    {:enter (partial edit-or-qf (partial edit :edit))
      :ctrl-s (partial edit-or-qf (partial edit :split))
      :ctrl-x (partial edit-or-qf (partial edit :split))
      :ctrl-v (partial edit-or-qf (partial edit :vsplit))
@@ -59,7 +59,7 @@
 
 (macro lsp-actions []
   `(let [actions# (file-actions)]
-     (tset actions# :default (partial edit-or-qf save-stack-and-edit))
+     (tset actions# :enter (partial edit-or-qf save-stack-and-edit))
      actions#))
 
 (local fzf-lua (let [{: once} (require :fsouza.lib.nvim-helpers)]
@@ -149,7 +149,7 @@
 (lambda send-items [items-or-fzf-cb prompt opts]
   (let [{: cb : use-lsp-actions : enable-preview} opts
         actions (if cb
-                    {:default cb}
+                    {:enter cb}
                     (if use-lsp-actions
                         (lsp-actions)
                         (file-actions)))]
@@ -168,7 +168,7 @@
       :function (send-to-fzf)
       :table (match (length items-or-fzf-cb)
                0 nil
-               1 (actions.default (. items-or-fzf-cb 1))
+               1 (actions.enter (. items-or-fzf-cb 1))
                _ (send-to-fzf)))))
 
 (fn grep [rg-opts search extra-opts cwd]
@@ -228,8 +228,8 @@
         core (require :fzf-lua.core)
         opts (config.normalize_opts {: prompt
                                      : cwd
-                                     :actions {:default (partial handle-repo
-                                                                 run-fzf cd)}}
+                                     :actions {:enter (partial handle-repo
+                                                               run-fzf cd)}}
                                     config.globals.files)
         contents (core.mt_cmd_wrapper {:cmd "fd --hidden --type d --exec dirname {} ';' -- '^.git$'"})
         opts (core.set_fzf_field_index opts)]
@@ -251,8 +251,8 @@
   (let [fzf-lua (fzf-lua)
         config (require :fzf-lua.config)
         core (require :fzf-lua.core)
-        opts (config.normalize_opts {:actions {:default #(set-virtual-cwd- (. $1
-                                                                              1))}}
+        opts (config.normalize_opts {:actions {:enter #(set-virtual-cwd- (. $1
+                                                                            1))}}
                                     config.globals.files)
         contents (core.mt_cmd_wrapper {:cmd "fd --type d"})
         opts (core.set_fzf_field_index opts)]
