@@ -3,7 +3,7 @@ module github.com/fsouza/dotfiles/nvim/langservers
 go 1.22.4
 
 require (
-	github.com/grafana/jsonnet-language-server v0.14.0
+	github.com/grafana/jsonnet-language-server v0.14.1
 	github.com/hashicorp/terraform-ls v0.34.2
 	github.com/mattn/efm-langserver v0.0.53
 )
