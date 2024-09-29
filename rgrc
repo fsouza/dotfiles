@@ -1,9 +1,9 @@
 --type-add
 proto:*.proto
---type-add
-sls:*.sls
 --hidden
 --glob
 !.git
 --glob
 !.hg
+--glob
+!*.ipynb
