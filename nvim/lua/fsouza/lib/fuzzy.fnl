@@ -124,7 +124,7 @@
                             (tset f-config.globals.keymap.fzf :ctrl-b nil)
                             fzf-lua-)))))
 
-(lambda send-lsp-items [items prompt]
+(λ send-lsp-items [items prompt]
   (let [pl-path (require :fsouza.lib.path)
         prompt (.. prompt "：")
         fzf-lua (fzf-lua)
@@ -146,7 +146,7 @@
                        (make-entry.file item {:cwd virtual-cwd}))))]
     (core.fzf_exec contents opts)))
 
-(lambda send-items [items-or-fzf-cb prompt opts]
+(λ send-items [items-or-fzf-cb prompt opts]
   (let [{: cb : use-lsp-actions : enable-preview} opts
         actions (if cb
                     {:enter cb}
@@ -271,7 +271,7 @@
 (fn get-virtual-cwd []
   virtual-cwd)
 
-(let [rg-opts "--column -n --hidden --no-heading --color=always --colors 'match:fg:0x99,0x00,0x00' --colors line:none --colors path:none --colors column:none -S --glob '!.git' --glob '!.hg'"
+(let [rg-opts "--column -n --hidden --no-heading --color=always --colors 'match:fg:0x99,0x00,0x00' --colors line:none --colors path:none --colors column:none -S --glob '!.git' --glob '!.hg' --glob '!*.ipynb'"
       mod {: files
            : git-files
            :live-grep #(live-grep rg-opts $...)
