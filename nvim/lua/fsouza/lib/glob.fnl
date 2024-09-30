@@ -71,7 +71,7 @@
 
 (let [{: Ct : C : P : S : R : V} vim.lpeg
       glob-parser (let [GroupLiteralChar (+ (R :AZ) (R :az) (R :09)
-                                            (S "!-+@_~;:./$^"))
+                                            (S " !-+@_~;:./$^"))
                         LiteralChar (+ GroupLiteralChar (S ",}"))
                         OneStar (/ (P "*") make-special)
                         QuestionMark (/ (P "?") make-special)
