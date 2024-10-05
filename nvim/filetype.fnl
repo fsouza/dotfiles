@@ -16,13 +16,25 @@
         (when k
           (. pattern-mapping k))))))
 
+(fn from-shellcheck-annotation [path bufnr]
+  (let [; look at up to 10 lines. Can bump this if I run into cases where the
+        ; annotation is not within the first 10 lines.
+        lines (vim.api.nvim_buf_get_lines bufnr 0 10 false)
+        pat "^#%s+shellcheck%s+.*shell=([%w_]+)"]
+    (-> lines
+        (vim.iter)
+        (: :map #(string.match $1 pat))
+        (: :next))))
+
 (fn from-current-shell []
   (let [shell (os.getenv :SHELL)]
     (when shell
       (vim.fs.basename shell))))
 
 (let [fts {:extension {:fnl :fennel
-                       :sh #(or (from-shebang $...) (from-current-shell))
+                       :sh #(or (from-shebang $...)
+                                (from-shellcheck-annotation $...)
+                                (from-current-shell))
                        "" from-shebang}
            :filename {:go.mod :gomod :setup.cfg :pysetupcfg :Brewfile :ruby}}]
   (vim.filetype.add fts))
