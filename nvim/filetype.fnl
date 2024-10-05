@@ -32,9 +32,8 @@
       (vim.fs.basename shell))))
 
 (let [fts {:extension {:fnl :fennel
-                       :sh #(or (from-shebang $...)
-                                (from-shellcheck-annotation $...)
-                                (from-current-shell))
+                       :sh #(or (from-shellcheck-annotation $...)
+                                (from-shebang $...) (from-current-shell))
                        "" from-shebang}
            :filename {:go.mod :gomod :setup.cfg :pysetupcfg :Brewfile :ruby}}]
   (vim.filetype.add fts))
