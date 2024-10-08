@@ -432,10 +432,10 @@ eslint@^9.8.0:
     strip-ansi "^6.0.1"
     text-table "^0.2.0"
 
-eslint_d@^14.0.4:
-  version "14.0.4"
-  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-14.0.4.tgz#f4c3174aa87a4a09ce90510fd24c04d816a6650c"
-  integrity sha512-VZuLiR03gKOCbXptTSrjfhmL4GBfGswyq2gJWUSDqMSc37XR2ryuKUtnLe1Y3+cphI7Rn7S9sHgXAFYDno3RiQ==
+eslint_d@^14.1.1:
+  version "14.1.1"
+  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-14.1.1.tgz#57a025752de96932a582eb8be9945485ec374486"
+  integrity sha512-2+yqDrtDDc/ZTeLdezCVE7YDTQyy8BXzD7zstLMq/EhJnkTKPp98aBFuMkgU/mLaFIyDLeGPCqTyuFrYkRNrEw==
   dependencies:
     eslint "^9.8.0"
     supports-color "^9.4.0"
