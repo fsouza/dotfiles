@@ -10,6 +10,7 @@
                 {:name :Floating
                  :opts {:bg `colors.light-gray :fg `colors.black}}
                 {:name :Pmenu :opts {:bg `colors.darker-white}}
+                {:name :PmenuSel :opts {:bg `colors.white}}
                 {:name :SignColumn
                  :opts {:bg `colors.lighter-gray :fg `colors.black}}
                 {:name :SpecialKey :opts {:fg `colors.dark-gray}}
@@ -67,7 +68,6 @@
                 :Number
                 :Operator
                 :PmenuSbar
-                :PmenuSel
                 :PmenuThumb
                 :Question
                 :QuickFixLine
