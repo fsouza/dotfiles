@@ -52,6 +52,8 @@
     (tset capabilities.workspace :executeCommand {:dynamicRegistration false})
     (tset capabilities.workspace :didChangeWatchedFiles
           {:dynamicRegistration true})
+    (tset capabilities.textDocument.completion.completionItem :snippetSupport
+          false)
     (let [defaults {:handlers (require :fsouza.lsp.handlers)
                     : capabilities
                     :flags {:debounce_text_changes 150}}]
