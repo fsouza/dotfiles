@@ -6,10 +6,7 @@
         servers (require :fsouza.lsp.servers)]
     (servers.start {:config {:name :gopls
                              :cmd [(vim.fs.joinpath _G.cache-dir :langservers
-                                                    :bin :gopls)
-                                   :-remote=auto
-                                   "-debug=:0"
-                                   "-remote.debug=:0"]
+                                                    :bin :gopls)]
                              :init_options {:deepCompletion false
                                             :staticcheck true
                                             :analyses {:fillreturns true
@@ -19,7 +16,10 @@
                                                        :ST1000 false}
                                             :linksInHover false
                                             :codelenses {:vendor false}
-                                            :gofumpt true}}
+                                            :gofumpt true
+                                            :usePlaceholders false
+                                            :experimentalPostfixCompletions false
+                                            :completeFunctionCalls false}}
                     :find-root-dir #(servers.patterns-with-fallback [:go.mod]
                                                                     $1)
                     : bufnr
