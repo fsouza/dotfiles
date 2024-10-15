@@ -23,7 +23,7 @@
           popup-picker (require :fsouza.lib.popup-picker)]
       (popup-picker.open lines
                          #(when $1
-                            (do-action client (. actions $1)))))))
+                            (do-action client (. actions $1) #nil))))))
 
 (fn handler [_ actions context]
   (let [client (vim.lsp.get_client_by_id context.client_id)]
