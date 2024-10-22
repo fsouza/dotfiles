@@ -46,7 +46,8 @@
      :ctrl-q actions.file_sel_to_qf}))
 
 (macro settagstack [lnum col]
-  `(let [[lnum# col#] (vim.api.nvim_win_get_cursor 0)]
+  `(let [[lnum# col#] (vim.api.nvim_win_get_cursor 0)
+         col# (+ col# 1)]
      (vim.fn.settagstack (vim.api.nvim_get_current_win)
                          {:items [{:tagname (vim.fn.expand :<cword>)
                                    :from [(vim.api.nvim_get_current_buf)
