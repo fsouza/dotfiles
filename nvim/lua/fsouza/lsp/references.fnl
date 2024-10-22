@@ -35,9 +35,4 @@
     (tset ext-checkers name checker)
     (tset test-checkers ext ext-checkers)))
 
-(fn references [client]
-  (let [params (vim.lsp.util.make_position_params)]
-    (tset params :context {:includeDeclaration true})
-    (client.request :textDocument/references params)))
-
-{: filter-references : register-test-checker : references}
+{: filter-references : register-test-checker}
