@@ -11,19 +11,6 @@
         (let [p (require :fsouza.lib.popup)]
           (p.stylize winid))))))
 
-(fn fzf-location-callback [_ result ctx]
-  (when (and result (not (vim.tbl_isempty result)))
-    (let [client (vim.lsp.get_client_by_id ctx.client_id)]
-      (if (vim.islist result)
-          (if (> (length result) 1)
-              (let [items (vim.lsp.util.locations_to_items result
-                                                           client.offset_encoding)
-                    fuzzy (require :fsouza.lib.fuzzy)]
-                (fuzzy.send-lsp-items items :Locations))
-              (vim.lsp.util.jump_to_location (. result 1)
-                                             client.offset_encoding))
-          (vim.lsp.util.jump_to_location result client.offset_encoding)))))
-
 (fn register-capability [_ result ctx]
   (let [client (vim.lsp.get_client_by_id ctx.client_id)
         bufnr (vim.api.nvim_get_current_buf)
@@ -50,15 +37,7 @@
           (fs-watch.unregister unregistration.id ctx.client_id)))))
   vim.NIL)
 
-{:textDocument/declaration fzf-location-callback
- :textDocument/definition fzf-location-callback
- :textDocument/typeDefinition fzf-location-callback
- :textDocument/implementation fzf-location-callback
- :textDocument/references (fn [err result ...]
-                            (let [references (require :fsouza.lsp.references)
-                                  result (references.filter-references result)]
-                              (fzf-location-callback err result ...)))
- :textDocument/documentHighlight (fn [_ result context]
+{:textDocument/documentHighlight (fn [_ result context]
                                    (when result
                                      (let [bufnr (vim.api.nvim_get_current_buf)
                                            client (vim.lsp.get_client_by_id context.client_id)]

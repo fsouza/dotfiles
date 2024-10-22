@@ -9,30 +9,34 @@
         (vim.iter)
         (: :any #($2 fname)))))
 
-(fn do-filter [refs]
+(fn do-filter [items]
   (let [[lineno _] (vim.api.nvim_win_get_cursor 0)
-        lineno (- lineno 1)
-        refs (-> refs
-                 (vim.iter)
-                 (: :filter #(not= $1.range.start.line lineno)))]
-    (if (is-test (vim.api.nvim_buf_get_name 0)) (refs:totable)
-        (let [refs2 (vim.deepcopy refs)]
-          (if (refs2:all #(is-test (vim.uri_to_fname $1.uri)))
-              (refs:totable)
-              (-> refs
-                  (: :filter #(not (is-test (vim.uri_to_fname $1.uri))))
+        items (-> items
+                  (vim.iter)
+                  (: :filter #(not= $1.lnum lineno)))]
+    (if (is-test (vim.api.nvim_buf_get_name 0)) (items:totable)
+        (let [items2 (vim.deepcopy items)]
+          (if (items2:all #(is-test $1.filename))
+              (items:totable)
+              (-> items
+                  (: :filter #(not (is-test $1.filename)))
                   (: :totable)))))))
 
-(fn filter-references [refs]
-  (if (vim.islist refs)
-      (if (> (length refs) 1)
-          (do-filter refs)
-          refs)
-      refs))
+(fn filter-references [items]
+  (if (vim.islist items)
+      (if (> (length items) 1)
+          (do-filter items)
+          items)
+      items))
 
 (fn register-test-checker [ext name checker]
   (let [ext-checkers (or (. test-checkers ext) {})]
     (tset ext-checkers name checker)
     (tset test-checkers ext ext-checkers)))
 
-{: filter-references : register-test-checker}
+(fn on-list [list]
+  (let [fuzzy (require :fsouza.lib.fuzzy)]
+    (tset list :items (filter-references list.items))
+    (fuzzy.lsp-on-list list)))
+
+{: register-test-checker : on-list}

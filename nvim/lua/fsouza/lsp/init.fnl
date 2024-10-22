@@ -50,14 +50,14 @@
           :textDocument/declaration #[:MAPPINGS
                                       [{:mode :n
                                         :lhs :<leader>gy
-                                        :rhs vim.lsp.buf.declaration}
+                                        :rhs #(vim.lsp.buf.declaration {:on_list fuzzy.lsp-on-list})}
                                        {:mode :n
                                         :lhs :<leader>py
                                         :rhs locations.preview-declaration}]]
           :textDocument/definition #[:MAPPINGS
                                      [{:mode :n
                                        :lhs :<leader>gd
-                                       :rhs vim.lsp.buf.definition}
+                                       :rhs #(vim.lsp.buf.definition {:on_list fuzzy.lsp-on-list})}
                                       {:mode :n
                                        :lhs :<leader>pd
                                        :rhs locations.preview-definition}]]
@@ -85,14 +85,16 @@
           :textDocument/implementation #[:MAPPINGS
                                          [{:mode :n
                                            :lhs :<leader>gi
-                                           :rhs vim.lsp.buf.implementation}
+                                           :rhs #(vim.lsp.buf.implementation {:on_list fuzzy.lsp-on-list})}
                                           {:mode :n
                                            :lhs :<leader>pi
                                            :rhs locations.preview-implementation}]]
           :textDocument/references #[:MAPPINGS
                                      [{:mode :n
                                        :lhs :<leader>q
-                                       :rhs vim.lsp.buf.references}]]
+                                       :rhs #(vim.lsp.buf.references nil
+                                                                     {:on_list #(let [references (require :fsouza.lsp.references)]
+                                                                                  (references.on-list $...))})}]]
           :textDocument/rename #(let [client $1
                                       bufnr $2]
                                   [:MAPPINGS
@@ -107,7 +109,7 @@
           :textDocument/typeDefinition #[:MAPPINGS
                                          [{:mode :n
                                            :lhs :<leader>gt
-                                           :rhs vim.lsp.buf.type_definition}
+                                           :rhs #(vim.lsp.buf.type_definition {:on_list fuzzy.lsp-on-list})}
                                           {:mode :n
                                            :lhs :<leader>pt
                                            :rhs locations.preview-type-definition}]]

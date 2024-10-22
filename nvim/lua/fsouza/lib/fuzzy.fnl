@@ -45,17 +45,18 @@
      :alt-q actions.file_sel_to_qf
      :ctrl-q actions.file_sel_to_qf}))
 
+(macro settagstack [lnum col]
+  `(let [[lnum# col#] (vim.api.nvim_win_get_cursor 0)]
+     (vim.fn.settagstack (vim.api.nvim_get_current_win)
+                         {:items [{:tagname (vim.fn.expand :<cword>)
+                                   :from [(vim.api.nvim_get_current_buf)
+                                          lnum#
+                                          col#
+                                          0]}]} :a)))
+
 (fn save-stack-and-edit [selected opts]
-  (let [winid (vim.api.nvim_get_current_win)
-        [lnum col] (vim.api.nvim_win_get_cursor winid)
-        col (+ col 1)]
-    (vim.fn.settagstack (vim.api.nvim_get_current_win)
-                        {:items [{:tagname (vim.fn.expand :<cword>)
-                                  :from [(vim.api.nvim_get_current_buf)
-                                         lnum
-                                         col
-                                         0]}]} :a)
-    (edit :edit selected opts)))
+  (settagstack)
+  (edit :edit selected opts))
 
 (macro lsp-actions []
   `(let [actions# (file-actions)]
@@ -145,6 +146,18 @@
                                                         :path_colnr :FzfLuaPathColNr}})]
                        (make-entry.file item {:cwd virtual-cwd}))))]
     (core.fzf_exec contents opts)))
+
+(fn go-to-item [item]
+  (settagstack)
+  (let [bufnr (or item.bufnr (vim.fn.bufadd item.filename))]
+    (tset (. vim :bo bufnr) :buflisted true)
+    (vim.api.nvim_win_set_buf 0 bufnr)
+    (vim.api.nvim_win_set_cursor 0 [item.lnum (- item.col 1)])))
+
+(fn lsp-on-list [{: title : items}]
+  (if (= (length items) 1)
+      (go-to-item (. items 1))
+      (send-lsp-items items title)))
 
 (fn send-items [items-or-fzf-cb prompt opts]
   (let [{: cb : use-lsp-actions : enable-preview} opts
@@ -282,7 +295,7 @@
            : unset-virtual-cwd
            : get-virtual-cwd
            : git-repos
-           : send-lsp-items
+           : lsp-on-list
            : send-items}]
   (setmetatable mod {:__index (fn [table key]
                                 (let [fzf-lua (fzf-lua)
