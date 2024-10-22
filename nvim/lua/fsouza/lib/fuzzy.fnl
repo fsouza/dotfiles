@@ -124,7 +124,7 @@
                             (tset f-config.globals.keymap.fzf :ctrl-b nil)
                             fzf-lua-)))))
 
-(λ send-lsp-items [items prompt]
+(fn send-lsp-items [items prompt]
   (let [pl-path (require :fsouza.lib.path)
         prompt (.. prompt "：")
         fzf-lua (fzf-lua)
@@ -146,7 +146,7 @@
                        (make-entry.file item {:cwd virtual-cwd}))))]
     (core.fzf_exec contents opts)))
 
-(λ send-items [items-or-fzf-cb prompt opts]
+(fn send-items [items-or-fzf-cb prompt opts]
   (let [{: cb : use-lsp-actions : enable-preview} opts
         actions (if cb
                     {:enter cb}

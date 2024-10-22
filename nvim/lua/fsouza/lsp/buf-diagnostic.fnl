@@ -4,7 +4,7 @@
 
 (local filters {})
 
-(lambda register-filter [client-name f]
+(fn register-filter [client-name f]
   (tset filters client-name f))
 
 (fn filter [result client]

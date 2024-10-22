@@ -118,7 +118,7 @@
                                         (when (not= query "")
                                           (fuzzy.lsp_workspace_symbols {:lsp_query query})))}]]}))
 
-(lambda register-method [name client bufnr]
+(fn register-method [name client bufnr]
   (fn handle-attach [attach-fn]
     (attach-fn bufnr))
 

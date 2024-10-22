@@ -36,7 +36,7 @@
     (tset (. vim.w winid) win-var-identifier true)
     (values winid bufnr)))
 
-(lambda open [opts]
+(fn open [opts]
   (let [{: lines
          : type-name
          : markdown
@@ -72,7 +72,7 @@
                                 : markdown})))
           (do-open lines {: win-opts : wrap : win-var-identifier : markdown})))))
 
-(lambda stylize [winid]
+(fn stylize [winid]
   (tset (. vim.wo winid) :winhighlight
         "Normal:PopupNormal,NormalFloat:PopupNormal,MatchParen:PopupNormal,FloatBorder:PopupNormal"))
 

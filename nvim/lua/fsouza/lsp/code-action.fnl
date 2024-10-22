@@ -1,4 +1,4 @@
-(lambda do-action [client action cb ?resolved]
+(fn do-action [client action cb ?resolved]
   (if (or action.edit (= (type action.command) :table))
       (do
         (when action.edit

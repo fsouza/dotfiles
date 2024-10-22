@@ -5,7 +5,7 @@
         nil)
       nil))
 
-(lambda augroup [name commands]
+(fn augroup [name commands]
   (let [group (vim.api.nvim_create_augroup name {:clear true})]
     (each [_ {: targets : command : callback : once : events} (ipairs commands)]
       (vim.api.nvim_create_autocmd events
@@ -15,7 +15,7 @@
                                     : group
                                     : once}))))
 
-(lambda once [f]
+(fn once [f]
   (var result nil)
   (var called false)
   (fn [...]
@@ -27,7 +27,7 @@
 
 ;; Provides a wrapper to a function that rewrites the current buffer, and does
 ;; a best effort to restore the cursor position.
-(lambda rewrite-wrap [f]
+(fn rewrite-wrap [f]
   (let [winid (vim.api.nvim_get_current_win)
         bufnr (vim.api.nvim_get_current_buf)
         [orig-lineno orig-colno] (vim.api.nvim_win_get_cursor winid)
@@ -46,7 +46,7 @@
                                                            col-offset))
                                               vim.v.maxcol)]))))
 
-(lambda get-visual-selection-range []
+(fn get-visual-selection-range []
   (let [{: mode} (vim.api.nvim_get_mode)
         [_ srow scol _] (vim.fn.getpos ".")
         [_ erow ecol _] (vim.fn.getpos :v)]
@@ -54,11 +54,11 @@
         (if (> srow erow) [erow ecol srow scol]
             (if (<= scol ecol) [srow scol erow ecol] [erow ecol srow scol])))))
 
-(lambda get-visual-selection-contents []
+(fn get-visual-selection-contents []
   (let [{: mode} (vim.api.nvim_get_mode)]
     (vim.fn.getregion (vim.fn.getpos :v) (vim.fn.getpos ".") {:type mode})))
 
-(lambda hash-buffer [bufnr]
+(fn hash-buffer [bufnr]
   (let [sha1 (require :sha1)
         lines (-> bufnr
                   (vim.api.nvim_buf_get_lines 0 -1 true)

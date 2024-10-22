@@ -22,7 +22,7 @@
                         (and (not= tool.lintCommand nil)
                              (= $1.lintCommand tool.lintCommand)))))))
 
-(lambda add [bufnr language tools]
+(fn add [bufnr language tools]
   (fn update-config [client-id]
     (let [client (vim.lsp.get_client_by_id client-id)]
       (when client

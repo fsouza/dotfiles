@@ -1,10 +1,10 @@
-(lambda is-enabled [bufnr]
+(fn is-enabled [bufnr]
   (let [buf-autoformat (. vim :b bufnr :autoformat)]
     (if (not= buf-autoformat nil) buf-autoformat
         (not= vim.g.autoformat nil) vim.g.autoformat
         true)))
 
-(lambda toggle [ns]
+(fn toggle [ns]
   (if (= (. ns :autoformat) false)
       (tset ns :autoformat true)
       (tset ns :autoformat false)))

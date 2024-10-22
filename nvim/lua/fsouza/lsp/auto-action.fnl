@@ -41,7 +41,7 @@
                                             #(vim.api.nvim_buf_call bufnr
                                                                     #(vim.cmd.update)))))))))))))
 
-(lambda handle [bufnr]
+(fn handle [bufnr]
   (let [{: client-id : kind} (. buffer-clients bufnr)
         client (vim.lsp.get_client_by_id client-id)]
     (if client
@@ -59,7 +59,7 @@
                                                                            bufnr)
                                                                     (handle bufnr)))}]))))
 
-(lambda attach [bufnr client-id kind]
+(fn attach [bufnr client-id kind]
   (setup)
   (tset buffer-clients bufnr {: client-id : kind}))
 

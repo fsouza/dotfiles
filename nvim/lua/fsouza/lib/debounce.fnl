@@ -1,4 +1,4 @@
-(lambda debounce [interval-ms f]
+(fn debounce [interval-ms f]
   (var last-call nil)
   (let [timer (vim.uv.new_timer)]
     (fn make-call []

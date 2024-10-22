@@ -51,7 +51,7 @@
 
     (detect 1)))
 
-(lambda detect-interpreter [cb]
+(fn detect-interpreter [cb]
   (detect-virtualenv (fn [virtualenv]
                        (if virtualenv
                            (do

@@ -21,7 +21,7 @@
         (. (vim.lsp.get_clients {: bufnr :name :efm}) 1)
         (. (vim.lsp.get_clients {: bufnr :method :textDocument/formatting}) 1))))
 
-(lambda fmt [bufnr ?client ?cb]
+(fn fmt [bufnr ?client ?cb]
   (let [client (or ?client (find-client bufnr))]
     (when client
       (let [(_ req-id) (client.request :textDocument/formatting
@@ -72,7 +72,7 @@
           (detach bufnr)
           (do-autocmd)))))
 
-(lambda attach [bufnr client-id ?priority]
+(fn attach [bufnr client-id ?priority]
   (let [client (vim.lsp.get_client_by_id client-id)
         {:priority current-priority} (or (. buffer-registry bufnr)
                                          {:priority 0})

@@ -14,7 +14,7 @@
   (when (< (length messages) 100)
     (table.insert messages {: msg :date (os.date "%b %d, %H:%M:%S")})))
 
-(lambda notify [notification]
+(fn notify [notification]
   (record-message notification.msg)
   (let [msg notification.msg
         msg (if (> (length msg) (max-width))
@@ -26,7 +26,7 @@
     (timer:close)
     (set timer nil)))
 
-(lambda get-notification []
+(fn get-notification []
   (if last-notification
       (let [{: msg : age} last-notification]
         (if (= timer nil)
@@ -41,7 +41,7 @@
         msg)
       ""))
 
-(lambda log-messages []
+(fn log-messages []
   (each [_ {: msg : date} (ipairs messages)]
     (print (string.format "%s - %s" date msg)))
   (set messages []))

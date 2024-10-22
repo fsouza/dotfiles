@@ -1,12 +1,12 @@
 (local features {})
 
-(lambda disable [feature]
+(fn disable [feature]
   (tset features feature false))
 
-(lambda enable [feature]
+(fn enable [feature]
   (tset features feature true))
 
-(lambda is-enabled [feature ?default]
+(fn is-enabled [feature ?default]
   (let [v (. features feature)]
     (if (not= v nil)
         v

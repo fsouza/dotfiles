@@ -32,7 +32,7 @@
                         {:cb #(let [[client-name] $1]
                                 (vim.schedule #(show-logs- client-name)))})))
 
-  (lambda show-logs [?client-name]
+  (fn show-logs [?client-name]
     (if ?client-name
         (show-logs- ?client-name)
         (find-client)))
