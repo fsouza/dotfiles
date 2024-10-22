@@ -89,10 +89,12 @@
                                           {:mode :n
                                            :lhs :<leader>pi
                                            :rhs locations.preview-implementation}]]
-          :textDocument/references #[:MAPPINGS
-                                     [{:mode :n
-                                       :lhs :<leader>q
-                                       :rhs vim.lsp.buf.references}]]
+          :textDocument/references #(let [client $1]
+                                      [:MAPPINGS
+                                       [{:mode :n
+                                         :lhs :<leader>q
+                                         :rhs #(let [references (require :fsouza.lsp.references)]
+                                                 (references.references client))}]])
           :textDocument/rename #(let [client $1
                                       bufnr $2]
                                   [:MAPPINGS
