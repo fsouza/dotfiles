@@ -50,7 +50,7 @@ jobs:
           brew update
           brew install coreutils jq
 
-      - uses: actions/checkout@v4.2.1
+      - uses: actions/checkout@v4.2.2
 
       - name: get repo versions
         id: get-repo-versions

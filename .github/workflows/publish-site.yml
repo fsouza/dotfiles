@@ -12,7 +12,7 @@ jobs:
     name: push to gh-pages
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.2.1
+      - uses: actions/checkout@v4.2.2
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4.0.0
