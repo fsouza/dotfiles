@@ -9,7 +9,7 @@ import (
 	"github.com/fsouza/dotfiles/tools"
 )
 
-func ensureVirtualenv(nv *Neovim, venvDir string) error {
+func ensureVirtualenv(venvDir string) error {
 	py3 := filepath.Join(venvDir, "bin", "python3")
 	if _, err := os.Stat(py3); err != nil {
 		os.RemoveAll(venvDir)
