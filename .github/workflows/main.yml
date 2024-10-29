@@ -61,7 +61,7 @@ jobs:
 
       - name: langservers cache
         id: nvim-langservers-cache
-        uses: actions/cache@v4.1.1
+        uses: actions/cache@v4.1.2
         with:
           path: ~/.cache/nvim/langservers
           key: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-${{ steps.get-repo-versions.outputs.golang-tools-version }}-${{ steps.get-repo-versions.outputs.fnlfmt-version }}"
@@ -91,14 +91,14 @@ jobs:
 
       - name: mise cache
         id: mise-cache
-        uses: actions/cache@v4.1.1
+        uses: actions/cache@v4.1.2
         with:
           path: ~/.local/share/mise
           key: "${{ runner.os }}-${{ steps.os-deployment-target.outputs.arch }}-${{ steps.os-deployment-target.outputs.product-version }}-${{ steps.brew-versions.outputs.mise-version }}"
 
       - name: hererocks cache
         id: nvim-hererocks-cache
-        uses: actions/cache@v4.1.1
+        uses: actions/cache@v4.1.2
         with:
           path: ~/.cache/nvim/hr
           key: "${{ runner.os }}-${{ steps.os-deployment-target.outputs.arch }}-${{ steps.get-repo-versions.outputs.luajit-version }}-${{ steps.os-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
@@ -107,7 +107,7 @@ jobs:
       # pushes by leveraging restore-keys.
       - name: mr cache
         id: mr-cache
-        uses: actions/cache@v4.1.1
+        uses: actions/cache@v4.1.2
         with:
           path: ~/.local/share/nvim/site/pack/mr
           key: "${{ runner.os }}-${{ hashFiles('nvim/mrconfig') }}-${{ github.sha }}"
