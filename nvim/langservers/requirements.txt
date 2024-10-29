@@ -49,7 +49,7 @@ pyupgrade==3.19.0
     # via -r requirements.in
 reorder-python-imports==3.14.0
     # via -r requirements.in
-ruff==0.7.0
+ruff==0.7.1
     # via -r requirements.in
 tokenize-rt==6.1.0
     # via
