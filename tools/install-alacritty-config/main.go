@@ -169,7 +169,7 @@ mods = "Control"
 history = 50000
 multiplier = 3
 
-[shell]
+[terminal.shell]
 program = "{{.Shell}}"
 args = ["--login"]
 
