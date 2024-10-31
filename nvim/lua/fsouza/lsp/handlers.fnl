@@ -45,7 +45,6 @@
                                        (vim.lsp.util.buf_highlight_references bufnr
                                                                               result
                                                                               client.offset_encoding))))
- :textDocument/hover popup-callback
  :textDocument/signatureHelp popup-callback
  :textDocument/diagnostic (let [buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
                             buf-diagnostic.handle-diagnostics)

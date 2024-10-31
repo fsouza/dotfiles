@@ -6,7 +6,6 @@
                 {:name :LineNr :opts {:fg `colors.dark-gray}}
                 {:name :MatchParen :opts {:bg `colors.light-gray}}
                 {:name :Normal :opts {:fg `colors.black}}
-                {:name :NormalFloat :opts {:fg `colors.black}}
                 {:name :Floating
                  :opts {:bg `colors.light-gray :fg `colors.black}}
                 {:name :Pmenu :opts {:bg `colors.darker-white}}
@@ -99,6 +98,7 @@
 
 (macro popup []
   `(do
+     (vim.api.nvim_set_hl 0 :NormalFloat {:link :Pmenu})
      (vim.api.nvim_set_hl 0 :PopupNormal {:link :Pmenu})
      (vim.api.nvim_set_hl 0 :PopupCursorLine {:link :CursorLine})
      (vim.api.nvim_set_hl 0 :PopupCursorLineNr {:link :PopupCursorLine})))
