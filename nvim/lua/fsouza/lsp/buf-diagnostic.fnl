@@ -30,21 +30,14 @@
   (each [_ f (ipairs hooks)]
     (f)))
 
-(local diag-config {:underline true
-                    :virtual_text false
-                    :signs true
-                    :update_in_insert false})
-
 (fn make-handler []
-  (let [handler (vim.lsp.with vim.lsp.diagnostic.on_publish_diagnostics
-                  diag-config)]
-    (fn [err result context ...]
-      (vim.schedule exec-hooks)
-      (pcall vim.diagnostic.reset context.client_id context.bufnr)
-      (let [client (vim.lsp.get_client_by_id context.client_id)
-            result (filter result client)]
-        (when client
-          (handler err result context ...))))))
+  (fn [err result context ...]
+    (vim.schedule exec-hooks)
+    (pcall vim.diagnostic.reset context.client_id context.bufnr)
+    (let [client (vim.lsp.get_client_by_id context.client_id)
+          result (filter result client)]
+      (when client
+        (vim.lsp.diagnostic.on_publish_diagnostics err result context ...)))))
 
 (fn make-debounced-handler [bufnr debouncer-key]
   (let [interval-ms (or (. vim :b bufnr :lsp_diagnostic_debouncing_ms) 200)
@@ -73,6 +66,4 @@
  : register-filter
  :register-hook #(tset hooks $1 $2)
  :unregister-hook #(tset hooks $1 nil)
- : publish-diagnostics
- :handle-diagnostics (vim.lsp.with vim.lsp.diagnostic.on_diagnostic
-                       diag-config)}
+ : publish-diagnostics}

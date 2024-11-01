@@ -180,7 +180,10 @@
 
 (fn config-diagnostics []
   (let [empty-s (setmetatable {} {:__index #""})]
-    (vim.diagnostic.config {:signs {:text empty-s
+    (vim.diagnostic.config {:underline true
+                            :virtual_text false
+                            :update_in_insert false
+                            :signs {:text empty-s
                                     :numhl {vim.diagnostic.severity.ERROR :DiagnosticSignError
                                             vim.diagnostic.severity.WARN :DiagnosticSignWarn
                                             vim.diagnostic.severity.INFO :DiagnosticSignInfo

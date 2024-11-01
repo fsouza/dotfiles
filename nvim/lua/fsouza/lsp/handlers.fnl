@@ -26,8 +26,7 @@
           (fs-watch.unregister unregistration.id ctx.client_id)))))
   vim.NIL)
 
-{:textDocument/diagnostic (let [buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
-                            buf-diagnostic.handle-diagnostics)
+{:textDocument/diagnostic vim.lsp.diagnostic.on_diagnostic
  :textDocument/publishDiagnostics (let [buf-diagnostic (require :fsouza.lsp.buf-diagnostic)]
                                     buf-diagnostic.publish-diagnostics)
  :client/registerCapability register-capability
