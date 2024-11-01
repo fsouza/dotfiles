@@ -64,7 +64,9 @@
           :textDocument/documentHighlight #[:MAPPINGS
                                             [{:mode :n
                                               :lhs :<leader>s
-                                              :rhs vim.lsp.buf.document_highlight}
+                                              :rhs #(do
+                                                      (vim.lsp.util.buf_clear_references)
+                                                      (vim.lsp.buf.document_highlight))}
                                              {:mode :n
                                               :lhs :<leader>S
                                               :rhs vim.lsp.buf.clear_references}]]
