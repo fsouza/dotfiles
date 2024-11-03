@@ -14,6 +14,6 @@ require (
 )
 
 require (
-	github.com/alessio/shellescape v1.4.2
+	al.essio.dev/pkg/shellescape v1.5.1
 	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63
 )

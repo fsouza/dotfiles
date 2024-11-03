@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/alessio/shellescape"
+	"al.essio.dev/pkg/shellescape"
 )
 
 var defaultRootmarkers = []string{".git", ""}
