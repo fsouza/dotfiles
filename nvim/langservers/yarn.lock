@@ -432,14 +432,14 @@ eslint@^9.8.0:
     strip-ansi "^6.0.1"
     text-table "^0.2.0"
 
-eslint_d@^14.2.0:
-  version "14.2.0"
-  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-14.2.0.tgz#acbc9c43d0e005a016141dcc45f394d34252ee83"
-  integrity sha512-+/oZ9P25Sdp7LM7JxUlbQGyDRdf2wWvH4HSoLQe2O65Aimf4clo9Yte4BcClkoAWeRMk0YRxJUISRZkrfS2PDA==
+eslint_d@^14.2.2:
+  version "14.2.2"
+  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-14.2.2.tgz#10a31c138a5cfc8230d9abdb9cba1edf413bcc7d"
+  integrity sha512-9fxRCOkXuRElh8zB/WFNrV2KO7NOZyGiv+p4qORNVi40WkQSZ19zAtWQKy/vlcheP/DPcZncg5sKZu4PIoZsow==
   dependencies:
     debug "^4.3.7"
     eslint "^9.8.0"
-    supports-color "^9.4.0"
+    supports-color "^7.2.0"
 
 espree@^10.0.1, espree@^10.1.0:
   version "10.1.0"
@@ -910,7 +910,7 @@ strip-json-comments@^3.1.1:
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-3.1.1.tgz#31f1281b3832630434831c310c01cccda8cbe006"
   integrity sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==
 
-supports-color@^7.1.0:
+supports-color@^7.1.0, supports-color@^7.2.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-7.2.0.tgz#1b7dcdcb32b8138801b3e478ba6a51caa89648da"
   integrity sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==
@@ -923,11 +923,6 @@ supports-color@^8.1.0:
   integrity sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q==
   dependencies:
     has-flag "^4.0.0"
-
-supports-color@^9.4.0:
-  version "9.4.0"
-  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-9.4.0.tgz#17bfcf686288f531db3dea3215510621ccb55954"
-  integrity sha512-VL+lNrEoIXww1coLPOmiEmK/0sGigko5COxI09KzHc2VJXJsQ37UaQ+8quuxjDeA7+KnLGTWRyOXSLLR2Wb4jw==
 
 text-table@^0.2.0:
   version "0.2.0"
