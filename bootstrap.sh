@@ -113,8 +113,8 @@ source ${FSOUZA_DOTFILES_DIR}/zsh/.zshrc
 
 set -e
 export PATH=${HOME}/.dotfiles/bin:${HOME}/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:${PATH}
-fnm install v20
-fnm default v20
+fnm install v22
+fnm default v22
 EOF
 }
 
