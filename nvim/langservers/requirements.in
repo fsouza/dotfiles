@@ -1,5 +1,6 @@
 add_trailing_comma
 autoflake
+basedpyright
 black
 flake8
 flake8-bugbear

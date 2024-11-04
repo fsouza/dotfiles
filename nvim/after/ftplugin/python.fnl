@@ -9,17 +9,18 @@
                                                 :python3))]
     (servers.start {: bufnr
                     :config {:name :pyright
-                             :cmd [:pyright-langserver :--stdio]
+                             :cmd [(vim.fs.joinpath _G.cache-dir :venv :bin
+                                                    :basedpyright-langserver)
+                                   :--stdio]
                              :cmd_env {:NODE_OPTIONS :--max-old-space-size=16384}
-                             :settings {:pyright {}
-                                        :python {:pythonPath python-interpreter
-                                                 :analysis {:autoImportCompletions true
-                                                            :autoSearchPaths true
-                                                            :diagnosticMode (or vim.g.pyright_diagnostic_mode
-                                                                                :workspace)
-                                                            :typeCheckingMode (or vim.g.pyright_type_checking_mode
-                                                                                  :basic)
-                                                            :useLibraryCodeForTypes true}}}}
+                             :settings {:basedpyright {:analysis {:autoImportCompletions true
+                                                                  :autoSearchPaths true
+                                                                  :diagnosticMode (or vim.g.pyright_diagnostic_mode
+                                                                                      :workspace)
+                                                                  :typeCheckingMode (or vim.g.pyright_type_checking_mode
+                                                                                        :basic)
+                                                                  :useLibraryCodeForTypes true}}
+                                        :python {:pythonPath python-interpreter}}}
                     :opts {:diagnostic-filter (let [pyright (require :fsouza.lsp.servers.pyright)]
                                                 pyright.valid-diagnostic)}
                     :cb #(let [references (require :fsouza.lsp.references)]
