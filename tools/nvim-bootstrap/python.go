@@ -50,5 +50,5 @@ func getPythonFromUv() string {
 		}
 	}
 
-	return filepath.Join(string(bytes.TrimSpace(output)), "bin", "python3")
+	return filepath.Join(string(bytes.TrimSpace(output)))
 }
