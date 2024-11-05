@@ -28,24 +28,23 @@ func ensureVirtualenv(venvDir string) error {
 func python() string {
 	python := os.Getenv("PYTHON")
 	if python == "" {
-		return getPythonFromMise()
+		return getPythonFromUv()
 	}
 	return python
 }
 
-func getPythonFromMise() string {
-	const py = "python@3.12"
-	output, err := exec.Command("mise", "where", py).CombinedOutput()
+func getPythonFromUv() string {
+	output, err := exec.Command("uv", "python", "find", ">=3.13").CombinedOutput()
 	if err != nil {
 		err = tools.Run(&tools.RunOptions{
-			Cmd:  "mise",
-			Args: []string{"install", py},
+			Cmd:  "uv",
+			Args: []string{"python", "install", "3.13"},
 		})
 		if err != nil {
 			panic(err)
 		}
 
-		output, err = exec.Command("mise", "where", py).CombinedOutput()
+		output, err = exec.Command("uv", "python", "find", ">=3.13").CombinedOutput()
 		if err != nil {
 			panic(err)
 		}

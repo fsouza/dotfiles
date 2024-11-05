@@ -12,7 +12,7 @@ all: bootstrap-nvim install update-treesitter kill-daemons clear-logs
 
 .PHONY: bootstrap-nvim
 bootstrap-nvim:
-	env MISE_PYTHON_COMPILE=1 ${FSOUZA_DOTFILES_CACHE_DIR}/bin/nvim-bootstrap
+	${FSOUZA_DOTFILES_CACHE_DIR}/bin/nvim-bootstrap
 
 .PHONY: update-treesitter
 update-treesitter:

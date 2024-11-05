@@ -61,11 +61,11 @@ function d() {
 }
 
 function _find_python() {
-	local python=${PYTHON:-python3.12}
+	local python=${PYTHON:-python3.13}
 	local version=$(echo ${python} | sed -e 's/python//')
-	local mise_python=$(mise where python@${version} 2>/dev/null)
-	if [ -n "${mise_python}" ]; then
-		echo ${mise_python}/bin/python3
+	local uv_python=$(uv python find where "${version}" 2>/dev/null)
+	if [ -n "${uv_python}" ]; then
+		echo ${uv_python}
 	else
 		echo ${python}
 	fi

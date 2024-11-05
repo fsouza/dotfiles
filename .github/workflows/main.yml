@@ -67,15 +67,6 @@ jobs:
           key: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-${{ steps.get-repo-versions.outputs.golang-tools-version }}-${{ steps.get-repo-versions.outputs.fnlfmt-version }}"
           restore-keys: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-"
 
-      - name: get versions from brew
-        id: brew-versions
-        run: |
-          echo "mise-version=$(brew info mise --json | jq -r '.[0].versions.stable')" >>${GITHUB_OUTPUT}
-
-      - name: set MISE_DATA_DIR
-        run: |
-          echo "MISE_DATA_DIR=${HOME}/.local/share/mise" >>${GITHUB_ENV}
-
       - name: set product-version
         id: os-deployment-target
         run: |
@@ -88,13 +79,6 @@ jobs:
           echo "arch=$(uname -m)" >>${GITHUB_OUTPUT}
         env:
           RUNNER: ${{ runner.os }}
-
-      - name: mise cache
-        id: mise-cache
-        uses: actions/cache@v4.1.2
-        with:
-          path: ~/.local/share/mise
-          key: "${{ runner.os }}-${{ steps.os-deployment-target.outputs.arch }}-${{ steps.os-deployment-target.outputs.product-version }}-${{ steps.brew-versions.outputs.mise-version }}"
 
       - name: hererocks cache
         id: nvim-hererocks-cache
