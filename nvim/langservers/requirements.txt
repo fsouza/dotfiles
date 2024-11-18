@@ -6,7 +6,7 @@ attrs==24.2.0
     # via flake8-bugbear
 autoflake==2.3.1
     # via -r requirements.in
-basedpyright==1.21.0
+basedpyright==1.21.1
     # via -r requirements.in
 black==24.10.0
     # via -r requirements.in
