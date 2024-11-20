@@ -92,7 +92,7 @@
 (fn reset-state []
   (close)
   (each [req-id client (pairs state.inflight-requests)]
-    (vim.schedule #(client.cancel_request req-id)))
+    (vim.schedule #(client:cancel_request req-id)))
   (tset state :inflight-requests {})
   (tset state :rendered-docs {}))
 

@@ -7,7 +7,7 @@
           (vim.lsp.buf.execute_command action.command))
         (cb))
       (not ?resolved)
-      (client.request :codeAction/resolve action
+      (client:request :codeAction/resolve action
                       (fn [_ resolved-action]
                         (when resolved-action
                           (do-action client resolved-action cb true))))

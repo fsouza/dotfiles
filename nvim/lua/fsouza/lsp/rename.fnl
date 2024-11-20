@@ -5,7 +5,7 @@
           params (vim.lsp.util.make_position_params)]
       (when (and new-name (not= new-name ""))
         (tset params :newName new-name)
-        (client.request :textDocument/rename params))))
+        (client:request :textDocument/rename params))))
 
   (fn prepare-rename-cb [_ result]
     (if (?. result :placeholder)
@@ -22,8 +22,8 @@
                            true {})))
 
   (let [method :textDocument/prepareRename]
-    (if (client.supports_method method)
-        (client.request method (vim.lsp.util.make_position_params)
+    (if (client:supports_method method)
+        (client:request method (vim.lsp.util.make_position_params)
                         prepare-rename-cb bufnr)
         (rename))))
 

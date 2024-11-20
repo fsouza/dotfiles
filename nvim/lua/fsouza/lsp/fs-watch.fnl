@@ -44,7 +44,7 @@
     (fn notify [client-id reg-id changes]
       (let [client (vim.lsp.get_client_by_id client-id)]
         (if client
-            (client.notify :workspace/didChangeWatchedFiles {: changes})
+            (client:notify :workspace/didChangeWatchedFiles {: changes})
             (delete-registration reg-id client-id))))
 
     (fn timer-cb []

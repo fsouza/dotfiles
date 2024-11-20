@@ -36,7 +36,7 @@
           (when changed
             (tset settings.languages language current-tools)
             (tset client.config :settings settings)
-            (client.notify :workspace/didChangeConfiguration {: settings}))))))
+            (client:notify :workspace/didChangeConfiguration {: settings}))))))
 
   (when (> (length tools) 0)
     (start-efm bufnr update-config)))

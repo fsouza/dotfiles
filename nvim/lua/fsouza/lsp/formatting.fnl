@@ -24,9 +24,9 @@
 (fn fmt [bufnr ?client ?cb]
   (let [client (or ?client (find-client bufnr))]
     (when client
-      (let [(_ req-id) (client.request :textDocument/formatting
+      (let [(_ req-id) (client:request :textDocument/formatting
                                        (formatting-params bufnr) ?cb bufnr)]
-        (values req-id #(client.cancel_request req-id))))))
+        (values req-id #(client:cancel_request req-id))))))
 
 (fn augroup-name [bufnr]
   (.. :lsp_autofmt_ bufnr))

@@ -11,9 +11,10 @@
 (fn patch-supports-method [client]
   (let [supports-method client.supports_method]
     (tset client :supports_method
-          #(let [method $1
+          #(let [client $1
+                 method $2
                  disabled (or (?. disabled-methods client.name method) false)]
-             (and (not disabled) (supports-method method))))))
+             (and (not disabled) (supports-method client method))))))
 
 ;; for each method, have a function that returns [ACTION args]
 ;;
@@ -131,7 +132,7 @@
       (vim.keymap.set mode lhs rhs {:silent true :buffer bufnr})))
 
   (let [handler (. method-handlers name)]
-    (when (and handler (client.supports_method name {: bufnr}))
+    (when (and handler (client:supports_method name {: bufnr}))
       (let [result (handler client bufnr)]
         (match result
           [:ATTACH attach-fn] (handle-attach attach-fn)
@@ -190,7 +191,7 @@
                                             vim.diagnostic.severity.HINT :DiagnosticSignHint}}})))
 
 (fn set-defaults [client bufnr]
-  (when (client.supports_method :textDocument/diagnostic)
+  (when (client:supports_method :textDocument/diagnostic)
     (vim.lsp.diagnostic._enable bufnr)))
 
 (fn setup []

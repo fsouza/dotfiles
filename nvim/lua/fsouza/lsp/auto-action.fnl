@@ -11,9 +11,9 @@
     (let [diagnostics (vim.diagnostic.get bufnr {:namespace client.id})]
       (cb diagnostics)))
 
-  (if (client.supports_method :textDocument/diagnostic)
+  (if (client:supports_method :textDocument/diagnostic)
       (let [textDocument (vim.lsp.util.make_text_document_params bufnr)]
-        (client.request :textDocument/diagnostic {: textDocument} call-cb))
+        (client:request :textDocument/diagnostic {: textDocument} call-cb))
       (call-cb)))
 
 (fn organize-imports-and-write [client bufnr kind]
@@ -26,7 +26,7 @@
       bufnr
       #(let [diagnostics $1]
          (tset params :context {: diagnostics})
-         (client.request :textDocument/codeAction params
+         (client:request :textDocument/codeAction params
                          (fn [_ actions]
                            (when (and (= changed-tick
                                          (vim.api.nvim_buf_get_changedtick bufnr))

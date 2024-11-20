@@ -10,7 +10,7 @@
                                :version (vim.api.nvim_buf_get_changedtick bufnr)}
                 :contentChanges [{:text (read-buffer bufnr)}]}]
     (each [_ client (pairs (vim.lsp.get_active_clients {: bufnr}))]
-      (client.notify :textDocument/didChange params))))
+      (client:notify :textDocument/didChange params))))
 
 (fn sync-all-buffers []
   (each [_ bufnr (ipairs (vim.api.nvim_list_bufs))]
