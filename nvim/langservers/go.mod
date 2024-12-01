@@ -6,7 +6,7 @@ toolchain go1.23.3
 require (
 	github.com/grafana/jsonnet-language-server v0.14.1
 	github.com/hashicorp/terraform-ls v0.36.0
-	github.com/mattn/efm-langserver v0.0.53
+	github.com/mattn/efm-langserver v0.0.54
 )
 
 require (
@@ -72,7 +72,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/posener/complete v1.2.3 // indirect
-	github.com/reviewdog/errorformat v0.0.0-20240311054359-739e471a49b3 // indirect
+	github.com/reviewdog/errorformat v0.0.0-20240608101709-1d3280ed6bd4 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/rs/zerolog v1.33.0 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
