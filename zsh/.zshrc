@@ -2,7 +2,9 @@ export FSOUZA_DOTFILES_CACHE_DIR=${FSOUZA_DOTFILES_CACHE_DIR:-${HOME}/.cache/fso
 export HISTFILE=${HOME}/.cache/zsh/history
 export HISTSIZE=1234567890
 export SAVEHIST=${HISTSIZE}
+
 export NO_COLOR=1
+export COLORFGBG="0;15"
 
 autoload -U add-zsh-hook
 
