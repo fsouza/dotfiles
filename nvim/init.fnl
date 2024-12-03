@@ -166,6 +166,7 @@
 
 (let [dotfiles-dir (or vim.env.FSOUZA_DOTFILES_DIR
                        (vim.fn.expand "~/.dotfiles"))]
+  (vim.loader.enable)
   (tset _G :dotfiles-dir dotfiles-dir)
   (tset _G :dotfiles-cache-dir
         (or vim.env.FSOUZA_DOTFILES_CACHE_DIR
