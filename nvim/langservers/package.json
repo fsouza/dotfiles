@@ -8,6 +8,7 @@
 		"@typescript-eslint/typescript-estree": "^8.16.0",
 		"eslint_d": "^14.2.2",
 		"postcss-scss": "^4.0.9",
+		"pyright": "^1.1.387",
 		"typescript": "^5.7.2",
 		"typescript-language-server": "^4.3.3",
 		"vscode-langservers-extracted": "^4.10.0",
