@@ -24,7 +24,6 @@
 ;;  - [MAPPINGS [{: mode : lhs : rhs}]]
 (local method-handlers
        (let [fuzzy (require :fsouza.lib.fuzzy)
-             code-action (require :fsouza.lsp.code-action)
              locations (require :fsouza.lsp.locations)]
          {:callHierarchy/incomingCalls #[:MAPPINGS
                                          [{:mode :n
@@ -37,10 +36,10 @@
           :textDocument/codeAction #[:MAPPINGS
                                      [{:mode :n
                                        :lhs :<leader>cc
-                                       :rhs code-action.code-action}
+                                       :rhs vim.lsp.buf.code_action}
                                       {:mode :x
                                        :lhs :<leader>cc
-                                       :rhs code-action.visual-code-action}]]
+                                       :rhs vim.lsp.buf.code_action}]]
           :textDocument/codeLens #[:ATTACH
                                    #(let [codelens (require :fsouza.lsp.codelens)]
                                       (codelens.on-attach {:bufnr $1
