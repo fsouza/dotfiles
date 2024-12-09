@@ -5,7 +5,9 @@
         it (vim.iter selected)]
     (if (<= (length selected) 1)
         false
-        (it:any #(if (string.match $1 "^.+:%d+:%d+:") true false)))))
+        (it:any #(if (string.match $1 "^.+:%d+:%d+:")
+                     true
+                     false)))))
 
 (fn edit-or-qf [edit selected opts]
   (if (should-qf selected)
@@ -70,11 +72,10 @@
                           (let [actions (file-actions)
                                 fzf-lua- (require :fzf-lua)
                                 f-config (require :fzf-lua.config)
-                                previewer :bat
+                                previewer :builtin
                                 id #$1]
                             (fzf-lua-.setup {:fzf_args vim.env.FZF_DEFAULT_OPTS
-                                             :previewers {:builtin {:syntax false}
-                                                          :bat {:args "--color always --number --theme none"}}
+                                             :previewers {:builtin {:syntax false}}
                                              :buffers {:file_icons false
                                                        :git_icons false
                                                        :color_icons false}
