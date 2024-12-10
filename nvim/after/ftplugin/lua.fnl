@@ -1,5 +1,4 @@
-(let [path (require :fsouza.pl.path)
-      bufnr (vim.api.nvim_get_current_buf)
+(let [bufnr (vim.api.nvim_get_current_buf)
       selene {:lintCommand "selene --display-style quiet -"
               :lintStdin true
               :lintSource :selene
