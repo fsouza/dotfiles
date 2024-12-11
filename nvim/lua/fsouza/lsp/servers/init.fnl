@@ -51,7 +51,7 @@
   (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
     (tset capabilities.workspace :executeCommand {:dynamicRegistration false})
     (tset capabilities.workspace :didChangeWatchedFiles
-          {:dynamicRegistration true})
+          {:dynamicRegistration true :relativePatternSupport false})
     (tset capabilities.textDocument.completion.completionItem :snippetSupport
           false)
     (let [defaults {:handlers (require :fsouza.lsp.handlers)
@@ -63,8 +63,7 @@
   (vim.uv.fs_stat bufname #(cb (= $1 nil))))
 
 (fn autofmt-priority [autofmt]
-  (if (= autofmt true) 1
-      autofmt))
+  (if (= autofmt true) 1 autofmt))
 
 (fn start [{: config : find-root-dir : bufnr : cb : opts}]
   (let [find-root-dir (or find-root-dir cwd-if-not-home)
