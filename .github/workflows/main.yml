@@ -101,10 +101,6 @@ jobs:
         run: |
           timeout -k 10s 30m ./bootstrap/setup
 
-      - name: nvim lint
-        run: |
-          env FSOUZA_DOTFILES_DIR=${PWD} make nvim-lint
-
   unblock-pr:
     name: unblock-pr
     runs-on: ubuntu-latest

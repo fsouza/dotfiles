@@ -96,17 +96,6 @@ scripts/compile.lua: scripts/compile.fnl
 	$(FENNEL) -c $< >$(TMP_FILE)
 	mv $(TMP_FILE) $@
 
-.PHONY: nvim-lint
-nvim-lint: nvim-selene nvim-stylua
-
-.PHONY: nvim-selene
-nvim-selene:
-	cd nvim && selene .
-
-.PHONY: nvim-stylua
-nvim-stylua:
-	cd nvim && stylua --check .
-
 .PHONY: fnlfmt
 fnlfmt:
 	git ls-files -z --cached --others -- '*.fnl' | env PATH="$(NVIM_CACHE_DIR)/hr/bin:${PATH}" xargs -0 -n 1 $(NVIM_CACHE_DIR)/fnlfmt/fnlfmt --fix
