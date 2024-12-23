@@ -6,7 +6,7 @@
 	"dependencies": {
 		"@fsouza/prettierd": "^0.25.4",
 		"@typescript-eslint/typescript-estree": "^8.17.0",
-		"eslint_d": "^14.2.2",
+		"eslint_d": "^14.3.0",
 		"postcss-scss": "^4.0.9",
 		"pyright": "^1.1.390",
 		"typescript": "^5.7.2",

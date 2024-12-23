@@ -444,10 +444,10 @@ eslint@^9.8.0:
     optionator "^0.9.3"
     text-table "^0.2.0"
 
-eslint_d@^14.2.2:
-  version "14.2.2"
-  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-14.2.2.tgz#10a31c138a5cfc8230d9abdb9cba1edf413bcc7d"
-  integrity sha512-9fxRCOkXuRElh8zB/WFNrV2KO7NOZyGiv+p4qORNVi40WkQSZ19zAtWQKy/vlcheP/DPcZncg5sKZu4PIoZsow==
+eslint_d@^14.3.0:
+  version "14.3.0"
+  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-14.3.0.tgz#6bab8d56492432fa96001c909520be526929fd72"
+  integrity sha512-Y8IRgZsOlYrSipIeaHpmuFu5+TEUDNZcgNKx2ARSUJp3DZCsFW9+V2bBhXCDQmBSolqjn2jZVZ5FBuhy0s3z2w==
   dependencies:
     debug "^4.3.7"
     eslint "^9.8.0"
