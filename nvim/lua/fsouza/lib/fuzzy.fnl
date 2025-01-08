@@ -231,8 +231,7 @@
       (when run-fzf
         (let [fzf-lua (fzf-lua)
               actions (require :fzf-lua.actions)]
-          (files {:cwd sel})
-          (actions.ensure_insert_mode))))))
+          (files {:cwd sel}))))))
 
 (fn git-repos [cwd cd run-fzf]
   (let [run-fzf (or run-fzf true)
