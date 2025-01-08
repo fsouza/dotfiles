@@ -127,14 +127,14 @@
                             (tset f-config.globals.keymap.fzf :ctrl-b nil)
                             fzf-lua-)))))
 
-(fn send-lsp-items [items prompt]
+(fn send-lsp-items [items title]
   (let [pl-path (require :fsouza.lib.path)
-        prompt (.. prompt "：")
+        title (.. " " title " ")
         fzf-lua (fzf-lua)
         config (require :fzf-lua.config)
         core (require :fzf-lua.core)
         make-entry (require :fzf-lua.make_entry)
-        opts (config.normalize_opts {: prompt :cwd virtual-cwd}
+        opts (config.normalize_opts {:winopts {: title} :cwd virtual-cwd}
                                     config.globals.lsp)
         contents (icollect [_ item (ipairs items)]
                    (do
@@ -161,7 +161,7 @@
       (go-to-item (. items 1))
       (send-lsp-items items title)))
 
-(fn send-items [items-or-fzf-cb prompt opts]
+(fn send-items [items-or-fzf-cb title opts]
   (let [{: cb : use-lsp-actions : enable-preview} opts
         actions (if cb
                     {:enter cb}
@@ -169,11 +169,12 @@
                         (lsp-actions)
                         (file-actions)))]
     (fn send-to-fzf []
-      (let [prompt (.. prompt "：")
+      (let [title (.. " " title " ")
             fzf-lua (fzf-lua)
             config (require :fzf-lua.config)
             core (require :fzf-lua.core)
-            opts (config.normalize_opts {: prompt : actions} config.globals.lsp)]
+            opts (config.normalize_opts {:winopts {: title} : actions}
+                                        config.globals.lsp)]
         (tset opts.fzf_opts :--multi false)
         (when (not enable-preview)
           (tset opts :previewer nil))
@@ -236,12 +237,12 @@
 (fn git-repos [cwd cd run-fzf]
   (let [run-fzf (or run-fzf true)
         cd (or cd true)
-        prompt "Git repos："
+        title " Git repos "
         cwd (or cwd virtual-cwd)
         fzf-lua (fzf-lua)
         config (require :fzf-lua.config)
         core (require :fzf-lua.core)
-        opts (config.normalize_opts {: prompt
+        opts (config.normalize_opts {:winopts {: title}
                                      : cwd
                                      :actions {:enter (partial handle-repo
                                                                run-fzf cd)}}
