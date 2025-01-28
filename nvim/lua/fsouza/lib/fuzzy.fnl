@@ -83,7 +83,8 @@
                                                      :file_icons false
                                                      :git_icons false
                                                      :color_icons false
-                                                     : actions}
+                                                     : actions
+                                                     :hidden true}
                                              :git {:files {:file_icons false
                                                            :git_icons false
                                                            :color_icons false
