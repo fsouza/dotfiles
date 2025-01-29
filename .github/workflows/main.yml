@@ -26,7 +26,7 @@ jobs:
       - name: install neovim (linux)
         if: runner.os == 'Linux'
         run: |
-          curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
+          curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-$(uname -m).tar.gz | sudo tar -C /usr/local --strip 1 -xzf -
 
       - name: install zsh & linuxbrew on Linux
         if: runner.os == 'Linux'
