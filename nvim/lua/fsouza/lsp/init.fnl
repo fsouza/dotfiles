@@ -95,6 +95,7 @@
                                      [{:mode :n
                                        :lhs :<leader>q
                                        :rhs #(vim.lsp.buf.references nil
+                                                                     ;; TODO: reference filtering breaks renaming. I should fix it.
                                                                      {:on_list #(let [references (require :fsouza.lsp.references)]
                                                                                   (references.on-list $...))})}]]
           :textDocument/rename #(let [client $1
