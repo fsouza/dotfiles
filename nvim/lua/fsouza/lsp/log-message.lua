@@ -18,15 +18,9 @@ end
 local function handle(err, result, ctx)
   local client_id = ctx.client_id
   local bufnr = get_buffer(client_id)
-  
+
   if bufnr then
-    vim.api.nvim_buf_set_lines(
-      bufnr, 
-      -1, 
-      -1, 
-      false,
-      vim.split(result.message, "\n", {plain = true})
-    )
+    vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, vim.split(result.message, "\n", { plain = true }))
   end
 end
 
@@ -42,13 +36,15 @@ local function find_client()
   for _, client in ipairs(vim.lsp.get_active_clients()) do
     table.insert(client_names, client.name)
   end
-  
+
   local fuzzy = require("fsouza.lib.fuzzy")
   fuzzy.send_items(client_names, "LSP Client", {
     cb = function(selected)
       local client_name = selected[1]
-      vim.schedule(function() show_logs_impl(client_name) end)
-    end
+      vim.schedule(function()
+        show_logs_impl(client_name)
+      end)
+    end,
   })
 end
 
@@ -63,7 +59,7 @@ end
 local function clean_logs(client_name)
   local bufnr = log_buffers[client_name]
   if bufnr then
-    vim.api.nvim_buf_delete(bufnr, {force = true})
+    vim.api.nvim_buf_delete(bufnr, { force = true })
     log_buffers[client_name] = nil
   end
 end
@@ -71,5 +67,5 @@ end
 return {
   handle = handle,
   show_logs = show_logs,
-  clean_logs = clean_logs
+  clean_logs = clean_logs,
 }

@@ -3,19 +3,27 @@ local function set_from_env_var(cb)
 end
 
 local function set_from_cmd(cmd, cb)
-  vim.system(cmd, nil, vim.schedule_wrap(function(result)
-    if result.code == 0 then
-      vim.schedule(function() cb(vim.trim(result.stdout)) end)
-    else
-      vim.schedule(function() cb(nil) end)
-    end
-  end))
+  vim.system(
+    cmd,
+    nil,
+    vim.schedule_wrap(function(result)
+      if result.code == 0 then
+        vim.schedule(function()
+          cb(vim.trim(result.stdout))
+        end)
+      else
+        vim.schedule(function()
+          cb(nil)
+        end)
+      end
+    end)
+  )
 end
 
 local function set_from_poetry(cb)
   vim.uv.fs_stat("poetry.lock", function(err, stat)
     if not err then
-      set_from_cmd({"poetry", "env", "info", "-p"}, cb)
+      set_from_cmd({ "poetry", "env", "info", "-p" }, cb)
     else
       cb(nil)
     end
@@ -25,7 +33,7 @@ end
 local function set_from_pipenv(cb)
   vim.uv.fs_stat("Pipfile.lock", function(err, stat)
     if not err then
-      set_from_cmd({"pipenv", "--venv"}, cb)
+      set_from_cmd({ "pipenv", "--venv" }, cb)
     else
       cb(nil)
     end
@@ -34,14 +42,14 @@ end
 
 local function set_from_venv_folder(cb)
   local path = require("fsouza.lib.path")
-  local folders = {"venv", ".venv"}
-  
+  local folders = { "venv", ".venv" }
+
   local function test_folder(idx)
     local folder = folders[idx]
     if folder then
       local venv_candidate = vim.fs.joinpath(vim.uv.cwd(), folder)
       local interpreter_candidate = vim.fs.joinpath(venv_candidate, "bin", "python3")
-      
+
       vim.uv.fs_stat(interpreter_candidate, function(err, stat)
         if not err and stat.type == "file" then
           cb(venv_candidate)
@@ -53,7 +61,7 @@ local function set_from_venv_folder(cb)
       cb(nil)
     end
   end
-  
+
   test_folder(1)
 end
 
@@ -62,9 +70,9 @@ local function detect_virtualenv(cb)
     set_from_venv_folder,
     set_from_env_var,
     set_from_poetry,
-    set_from_pipenv
+    set_from_pipenv,
   }
-  
+
   local function detect(idx)
     local detector = detectors[idx]
     if detector then
@@ -79,7 +87,7 @@ local function detect_virtualenv(cb)
       cb(nil)
     end
   end
-  
+
   detect(1)
 end
 
@@ -97,5 +105,5 @@ local function detect_interpreter(cb)
 end
 
 return {
-  detect_interpreter = detect_interpreter
+  detect_interpreter = detect_interpreter,
 }

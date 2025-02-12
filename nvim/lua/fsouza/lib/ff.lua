@@ -20,5 +20,5 @@ end
 return {
   disable = disable,
   enable = enable,
-  is_enabled = is_enabled
+  is_enabled = is_enabled,
 }

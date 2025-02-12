@@ -5,7 +5,7 @@ local function from_shebang(path, bufnr)
     zsh = "zsh",
     ["/sh"] = "sh",
     ruby = "ruby",
-    ["env sh"] = "sh"
+    ["env sh"] = "sh",
   }
 
   local first_line = vim.api.nvim_buf_get_lines(bufnr, 0, 1, true)[1]
@@ -49,17 +49,15 @@ end
 local fts = {
   extension = {
     sh = function(path, bufnr)
-      return from_shellcheck_annotation(path, bufnr) or
-             from_shebang(path, bufnr) or
-             from_current_shell()
+      return from_shellcheck_annotation(path, bufnr) or from_shebang(path, bufnr) or from_current_shell()
     end,
-    [""] = from_shebang
+    [""] = from_shebang,
   },
   filename = {
     ["go.mod"] = "gomod",
     ["setup.cfg"] = "pysetupcfg",
-    ["Brewfile"] = "ruby"
-  }
+    ["Brewfile"] = "ruby",
+  },
 }
 
 vim.filetype.add(fts)

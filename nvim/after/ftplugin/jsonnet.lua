@@ -11,8 +11,8 @@ servers.start({
       mod_dir,
       "github.com/grafana/jsonnet-language-server",
       "--lint",
-      "--eval-diags"
-    }
+      "--eval-diags",
+    },
   },
-  opts = {autofmt = true}
+  opts = { autofmt = true },
 })

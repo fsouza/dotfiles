@@ -8,9 +8,11 @@ end
 
 local function filter(result, client)
   if result and client then
-    local client_filter = filters[client.name] or function() return true end
+    local client_filter = filters[client.name] or function()
+      return true
+    end
     local diagnostics = result.diagnostics
-    
+
     if diagnostics and client then
       local filtered_diagnostics = {}
       for _, diagnostic in ipairs(diagnostics) do
@@ -21,7 +23,7 @@ local function filter(result, client)
       result.diagnostics = filtered_diagnostics
     end
   end
-  
+
   return result
 end
 
@@ -44,10 +46,10 @@ local function make_handler()
   return function(err, result, context, ...)
     vim.schedule(exec_hooks)
     pcall(vim.diagnostic.reset, context.client_id, context.bufnr)
-    
+
     local client = vim.lsp.get_client_by_id(context.client_id)
     local filtered_result = filter(result, client)
-    
+
     if client then
       vim.lsp.diagnostic.on_publish_diagnostics(err, filtered_result, context, ...)
     end
@@ -58,16 +60,16 @@ local function make_debounced_handler(bufnr, debouncer_key)
   local interval_ms = vim.b[bufnr].lsp_diagnostic_debouncing_ms or 200
   local debounce = require("fsouza.lib.debounce")
   local handler = debounce.debounce(interval_ms, vim.schedule_wrap(make_handler()))
-  
+
   debouncers[debouncer_key] = handler
-  
+
   vim.api.nvim_buf_attach(bufnr, false, {
     on_detach = function()
       handler.stop()
       debouncers[debouncer_key] = nil
-    end
+    end,
   })
-  
+
   return handler
 end
 
@@ -75,13 +77,12 @@ local function publish_diagnostics(err, result, context, ...)
   if result then
     local uri = result.uri
     local bufnr = vim.uri_to_bufnr(uri)
-    
+
     if bufnr then
       context.bufnr = bufnr
       local debouncer_key = string.format("%d/%s", context.client_id, uri)
-      local handler = debouncers[debouncer_key] or 
-                     make_debounced_handler(bufnr, debouncer_key)
-      
+      local handler = debouncers[debouncer_key] or make_debounced_handler(bufnr, debouncer_key)
+
       handler.call(err, result, context, ...)
     end
   end
@@ -100,5 +101,5 @@ return {
   register_filter = register_filter,
   register_hook = register_hook,
   unregister_hook = unregister_hook,
-  publish_diagnostics = publish_diagnostics
+  publish_diagnostics = publish_diagnostics,
 }

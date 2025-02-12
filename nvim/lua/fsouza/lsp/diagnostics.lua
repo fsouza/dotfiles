@@ -3,7 +3,7 @@ local n_diag_per_buf = {}
 local function render_diagnostics(diagnostics)
   local items = vim.diagnostic.toqflist(diagnostics)
   vim.fn.setqflist(items)
-  
+
   if vim.tbl_isempty(items) then
     vim.cmd.cclose()
   else
@@ -35,7 +35,7 @@ end
 local function ruler()
   local bufnr = vim.api.nvim_get_current_buf()
   local count = n_diag_per_buf[bufnr] or 0
-  
+
   if count == 0 then
     return "    "
   else
@@ -47,10 +47,10 @@ local function on_attach()
   local augroup = require("fsouza.lib.nvim-helpers").augroup
   augroup("fsouza__lsp_diagnostic", {
     {
-      events = {"DiagnosticChanged"},
-      targets = {"*"},
-      callback = on_DiagnosticChanged
-    }
+      events = { "DiagnosticChanged" },
+      targets = { "*" },
+      callback = on_DiagnosticChanged,
+    },
   })
 end
 
@@ -58,5 +58,5 @@ return {
   list_file_diagnostics = list_file_diagnostics,
   list_workspace_diagnostics = list_workspace_diagnostics,
   on_attach = on_attach,
-  ruler = ruler
+  ruler = ruler,
 }

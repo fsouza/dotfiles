@@ -19,6 +19,10 @@ end
 
 return {
   is_enabled = is_enabled,
-  toggle = function() toggle(vim.b) end,
-  toggle_g = function() toggle(vim.g) end
+  toggle = function()
+    toggle(vim.b)
+  end,
+  toggle_g = function()
+    toggle(vim.g)
+  end,
 }

@@ -5,32 +5,32 @@ local function hererocks()
   local hererocks_path = _G.cache_dir .. "/hr"
   local share_path = hererocks_path .. "/share/lua/" .. lua_version
   local lib_path = hererocks_path .. "/lib/lua/" .. lua_version
-  
+
   package.path = table.concat({
     share_path .. "/?.lua",
     share_path .. "/?/init.lua",
-    package.path
+    package.path,
   }, ";")
-  
+
   package.cpath = table.concat({
     lib_path .. "/?.so",
-    package.cpath
+    package.cpath,
   }, ";")
 end
 
 local function configure_vendor_packages()
   local vendor_path = vim.fs.joinpath(_G.config_dir, "vendor")
   local vendor_opt_dir = vim.fs.joinpath(vendor_path, "opt")
-  
+
   vim.o.packpath = vim.o.packpath .. "," .. vendor_path
-  
+
   for entry, type in vim.fs.dir(vendor_opt_dir) do
     if type == "directory" then
       package.path = table.concat({
         package.path,
         vim.fs.joinpath(vendor_opt_dir, entry, "lua", "?.lua"),
         vim.fs.joinpath(vendor_opt_dir, entry, "lua", "?", "?.lua"),
-        vim.fs.joinpath(vendor_opt_dir, entry, "lua", "?", "init.lua")
+        vim.fs.joinpath(vendor_opt_dir, entry, "lua", "?", "init.lua"),
       }, ";")
     end
   end
@@ -54,7 +54,7 @@ local function set_neovim_global_vars()
       "\\([a-f]\\+[0-9]\\+\\([a-f]\\|[0-9]\\)*\\)\\+",
       "\\([0-9]\\+[a-f]\\+\\([0-9]\\|[a-f]\\)*\\)\\+",
       "\\([A-F]\\+[0-9]\\+\\([A-F]\\|[0-9]\\)*\\)\\+",
-      "\\([0-9]\\+[A-F]\\+\\([0-9]\\|[A-F]\\)*\\)\\+"
+      "\\([0-9]\\+[A-F]\\+\\([0-9]\\|[A-F]\\)*\\)\\+",
     },
     sexp_filetypes = "clojure,dune,fennel,scheme,lisp,timl",
     sexp_enable_insert_mode_mappings = 0,
@@ -72,9 +72,9 @@ local function set_neovim_global_vars()
     no_plugin_maps = 1,
     editorconfig_enable = false,
     matchup_motion_enabled = 0,
-    matchup_matchparen_offscreen = vim.empty_dict()
+    matchup_matchparen_offscreen = vim.empty_dict(),
   }
-  
+
   for name, value in pairs(vars) do
     vim.g[name] = value
   end
@@ -96,13 +96,13 @@ local function set_ui_options()
     number = true,
     relativenumber = true,
     isfname = "@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@",
-    tabstop = 8
+    tabstop = 8,
   }
-  
+
   for name, value in pairs(options) do
     vim.o[name] = value
   end
-  
+
   vim.cmd.color("none")
 end
 
@@ -125,9 +125,9 @@ local function set_global_options()
     joinspaces = false,
     synmaxcol = 300,
     showmatch = true,
-    matchtime = 1
+    matchtime = 1,
   }
-  
+
   for name, value in pairs(options) do
     vim.o[name] = value
   end
@@ -135,43 +135,43 @@ end
 
 local function set_global_mappings()
   local rl_bindings = {
-    {lhs = "<c-a>", rhs = "<home>"},
-    {lhs = "<c-e>", rhs = "<end>"},
-    {lhs = "<c-f>", rhs = "<right>"},
-    {lhs = "<c-b>", rhs = "<left>"},
-    {lhs = "<c-p>", rhs = "<up>"},
-    {lhs = "<c-n>", rhs = "<down>"},
-    {lhs = "<c-d>", rhs = "<del>"},
-    {lhs = "<m-p>", rhs = "<up>"},
-    {lhs = "<m-n>", rhs = "<down>"},
-    {lhs = "<m-b>", rhs = "<s-left>"},
-    {lhs = "<m-f>", rhs = "<s-right>"},
-    {lhs = "<m-d>", rhs = "<s-right><c-w>"}
+    { lhs = "<c-a>", rhs = "<home>" },
+    { lhs = "<c-e>", rhs = "<end>" },
+    { lhs = "<c-f>", rhs = "<right>" },
+    { lhs = "<c-b>", rhs = "<left>" },
+    { lhs = "<c-p>", rhs = "<up>" },
+    { lhs = "<c-n>", rhs = "<down>" },
+    { lhs = "<c-d>", rhs = "<del>" },
+    { lhs = "<m-p>", rhs = "<up>" },
+    { lhs = "<m-n>", rhs = "<down>" },
+    { lhs = "<m-b>", rhs = "<s-left>" },
+    { lhs = "<m-f>", rhs = "<s-right>" },
+    { lhs = "<m-d>", rhs = "<s-right><c-w>" },
   }
-  
+
   local rl_insert_mode_bindings = {
-    {lhs = "<c-f>", rhs = "<right>"},
-    {lhs = "<c-b>", rhs = "<left>"}
+    { lhs = "<c-f>", rhs = "<right>" },
+    { lhs = "<c-b>", rhs = "<left>" },
   }
-  
-  vim.keymap.set({"x", "v"}, "#", "\"my?\\V<C-R>=escape(getreg(\"m\"), \"?\")<CR><CR>", {remap = false})
-  vim.keymap.set({"x", "v"}, "*", "\"my/\\V<C-R>=escape(getreg(\"m\"), \"/\")<CR><CR>", {remap = false})
-  vim.keymap.set({"x", "v"}, "p", "\"_dP", {remap = false})
-  vim.keymap.set({"n"}, "<leader>j", ":cn<CR>", {remap = false})
-  vim.keymap.set({"n"}, "<leader>k", ":cp<CR>", {remap = false})
-  
+
+  vim.keymap.set({ "x", "v" }, "#", '"my?\\V<C-R>=escape(getreg("m"), "?")<CR><CR>', { remap = false })
+  vim.keymap.set({ "x", "v" }, "*", '"my/\\V<C-R>=escape(getreg("m"), "/")<CR><CR>', { remap = false })
+  vim.keymap.set({ "x", "v" }, "p", '"_dP', { remap = false })
+  vim.keymap.set({ "n" }, "<leader>j", ":cn<CR>", { remap = false })
+  vim.keymap.set({ "n" }, "<leader>k", ":cp<CR>", { remap = false })
+
   for _, binding in ipairs(rl_bindings) do
-    vim.keymap.set({"c", "o"}, binding.lhs, binding.rhs, {remap = false})
+    vim.keymap.set({ "c", "o" }, binding.lhs, binding.rhs, { remap = false })
   end
-  
+
   for _, binding in ipairs(rl_insert_mode_bindings) do
-    vim.keymap.set("i", binding.lhs, binding.rhs, {remap = false})
+    vim.keymap.set("i", binding.lhs, binding.rhs, { remap = false })
   end
 end
 
 local function set_global_abbrev()
-  local cabbrevs = {W = "w", ["W!"] = "w!", Q = "q", ["Q!"] = "q!", Qa = "qa", ["Qa!"] = "qa!"}
-  
+  local cabbrevs = { W = "w", ["W!"] = "w!", Q = "q", ["Q!"] = "q!", Qa = "qa", ["Qa!"] = "qa!" }
+
   for lhs, rhs in pairs(cabbrevs) do
     vim.cmd.cnoreabbrev(lhs, rhs)
   end
@@ -179,26 +179,26 @@ end
 
 local function override_builtin_functions()
   local orig_uri_to_fname = vim.uri_to_fname
-  
+
   local function uri_to_fname(uri)
     return vim.fn.fnamemodify(orig_uri_to_fname(uri), ":.")
   end
-  
+
   vim.uri_to_fname = uri_to_fname
   vim.uri_to_bufnr = function(uri)
     return vim.fn.bufadd(uri_to_fname(uri))
   end
-  
+
   vim.ui.select = function(...)
     local popup_picker = require("fsouza.lib.popup-picker")
     return popup_picker["ui-select"](...)
   end
-  
+
   vim.deprecate = function() end
-  
-  local patterns = {"message with no corresponding"}
+
+  local patterns = { "message with no corresponding" }
   local orig_notify = vim.notify
-  
+
   local function notify(msg, level, opts)
     local should_notify = true
     for _, pattern in ipairs(patterns) do
@@ -207,12 +207,12 @@ local function override_builtin_functions()
         break
       end
     end
-    
+
     if should_notify then
       orig_notify(msg, level, opts)
     end
   end
-  
+
   vim.notify = notify
 end
 

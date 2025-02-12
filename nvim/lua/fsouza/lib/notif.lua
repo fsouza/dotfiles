@@ -12,21 +12,21 @@ local function record_message(msg)
   if #messages < 100 then
     table.insert(messages, {
       msg = msg,
-      date = os.date("%b %d, %H:%M:%S")
+      date = os.date("%b %d, %H:%M:%S"),
     })
   end
 end
 
 local function notify(notification)
   record_message(notification.msg)
-  
+
   local msg = notification.msg
   if #msg > MAX_WIDTH then
     msg = trim(msg)
   end
-  
-  last_notification = {msg = msg, age = notification.age}
-  
+
+  last_notification = { msg = msg, age = notification.age }
+
   if timer ~= nil then
     timer:stop()
     timer:close()
@@ -38,7 +38,7 @@ local function get_notification()
   if last_notification then
     local msg = last_notification.msg
     local age = last_notification.age
-    
+
     if timer == nil then
       timer = vim.uv.new_timer()
       timer:start(age, 0, function()
@@ -48,7 +48,7 @@ local function get_notification()
         last_notification = nil
       end)
     end
-    
+
     return msg
   else
     return ""
@@ -65,5 +65,5 @@ end
 return {
   notify = notify,
   get_notification = get_notification,
-  log_messages = log_messages
+  log_messages = log_messages,
 }

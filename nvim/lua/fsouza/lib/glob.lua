@@ -7,9 +7,9 @@ local function escape_literal(literal)
     ["*"] = true,
     ["("] = true,
     [")"] = true,
-    ["@"] = true
+    ["@"] = true,
   }
-  
+
   local result = string.gsub(literal, ".", function(char)
     if special_chars[char] then
       return "\\" .. char
@@ -17,16 +17,16 @@ local function escape_literal(literal)
       return char
     end
   end)
-  
+
   return result
 end
 
 local function make_special(value)
-  return {type = "special", value = value}
+  return { type = "special", value = value }
 end
 
 local function make_literal(value, is_literal)
-  return {type = "literal", value = value, is_literal = is_literal}
+  return { type = "literal", value = value, is_literal = is_literal }
 end
 
 local function startswith(str, prefix)
@@ -56,7 +56,7 @@ local function split_group(group)
   -- split the group into sub-trees. Maybe I should fix the grammar so this
   -- happens automatically?
   local output = {}
-  
+
   for _, node in ipairs(group) do
     if node.type == "special" then
       if node.value == "{" or node.value == "," then
@@ -68,7 +68,7 @@ local function split_group(group)
       table.insert(output[#output], node)
     end
   end
-  
+
   return output
 end
 
@@ -103,7 +103,7 @@ local function compile_to_regex(tree)
   for _, node in ipairs(tree) do
     local node_str
     local node_type = get_node_type(node)
-    
+
     if node_type == "tree" then
       node_str = compile_to_regex(node)
     elseif node_type == "special" then
@@ -111,10 +111,10 @@ local function compile_to_regex(tree)
     elseif node_type == "literal" then
       node_str = compile_literal(node.value, node.is_literal)
     end
-    
+
     regex = regex .. node_str
   end
-  
+
   return regex
 end
 
@@ -125,27 +125,29 @@ local GroupLiteralChar = R("AZ") + R("az") + R("09") + S(" !-+@_~;:./$^")
 local LiteralChar = GroupLiteralChar + S(",}")
 local OneStar = P("*") / make_special
 local QuestionMark = P("?") / make_special
-local TwoStars = (P("**") * (P("/*"))^0) / make_special
+local TwoStars = (P("**") * (P("/*")) ^ 0) / make_special
 local OpenGroup = P("{") / make_special
 local CloseGroup = P("}") / make_special
 local Comma = P(",") / make_special
 local OpenRange = P("[") / make_special
 local CloseRange = P("]") / make_special
 local RangeNegation = P("!") / make_special
-local RangeLiteral = (P(1) - P("]"))^1 / function(x) return make_literal(x, true) end
-local InsideRange = (RangeNegation^-1) * RangeLiteral
+local RangeLiteral = (P(1) - P("]")) ^ 1 / function(x)
+  return make_literal(x, true)
+end
+local InsideRange = (RangeNegation ^ -1) * RangeLiteral
 local Range = OpenRange * InsideRange * CloseRange
-local GroupLiteral = GroupLiteralChar^1 / make_literal
-local Literal = LiteralChar^1 / make_literal
+local GroupLiteral = GroupLiteralChar ^ 1 / make_literal
+local Literal = LiteralChar ^ 1 / make_literal
 
 local glob_parser = P({
-  V"Glob",
-  Glob = Ct(V"Term"^1),
-  Term = TwoStars + OneStar + QuestionMark + V"Group" + Literal + Range,
-  Group = Ct(OpenGroup * V"InsideGroup" * CloseGroup),
-  InsideGroup = V"GroupGlob" * (Comma * V"GroupGlob")^0,
-  GroupGlob = V"GroupTerm"^1,
-  GroupTerm = TwoStars + OneStar + QuestionMark + V"Group" + GroupLiteral + Range
+  V("Glob"),
+  Glob = Ct(V("Term") ^ 1),
+  Term = TwoStars + OneStar + QuestionMark + V("Group") + Literal + Range,
+  Group = Ct(OpenGroup * V("InsideGroup") * CloseGroup),
+  InsideGroup = V("GroupGlob") * (Comma * V("GroupGlob")) ^ 0,
+  GroupGlob = V("GroupTerm") ^ 1,
+  GroupTerm = TwoStars + OneStar + QuestionMark + V("Group") + GroupLiteral + Range,
 })
 
 glob_parser = glob_parser * -1
@@ -163,12 +165,15 @@ local function compile(glob)
     if ok then
       return true, pat_or_err
     else
-      return false, string.format(
-        "internal error compiling glob string '%s' to a regular expression:\n" ..
-        "  generated regex: %s\n" ..
-        "  vim.regex error: %s",
-        glob, re, pat_or_err
-      )
+      return false,
+        string.format(
+          "internal error compiling glob string '%s' to a regular expression:\n"
+            .. "  generated regex: %s\n"
+            .. "  vim.regex error: %s",
+          glob,
+          re,
+          pat_or_err
+        )
     end
   else
     return false, string.format("invalid glob string '%s'", glob)
@@ -191,16 +196,16 @@ local function break_tree(tree)
     return result
   end
 
-  local acc = {""}
+  local acc = { "" }
   for _, node in ipairs(tree) do
     if is_group(node) then
       local trees = split_group(node)
       local broken_trees = {}
-      
+
       for _, t in ipairs(trees) do
         table.insert(broken_trees, break_tree(t))
       end
-      
+
       local result = {}
       for _, nodes_str in ipairs(broken_trees) do
         acc = accumulate(acc, nodes_str)
@@ -213,7 +218,7 @@ local function break_tree(tree)
       acc = new_acc
     end
   end
-  
+
   return acc
 end
 
@@ -225,7 +230,7 @@ local function break_glob(glob)
   local tree = parse(glob)
   if not tree then
     vim.api.nvim_echo({
-      {string.format("invalid glob %s", vim.inspect(glob)), "WarningMsg"}
+      { string.format("invalid glob %s", vim.inspect(glob)), "WarningMsg" },
     }, true, {})
     return nil
   else
@@ -238,5 +243,5 @@ return {
   match = do_match,
   ["break"] = break_glob,
   parse = parse,
-  strip_special = strip_special
+  strip_special = strip_special,
 }

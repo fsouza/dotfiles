@@ -1,6 +1,6 @@
 local function read_buffer(bufnr)
   local lines = table.concat(vim.api.nvim_buf_get_lines(bufnr, 0, -1, true), "\n")
-  
+
   if vim.bo[bufnr].eol then
     return lines .. "\n"
   else
@@ -13,14 +13,14 @@ local function notify_clients(bufnr)
   local params = {
     textDocument = {
       uri = uri,
-      version = vim.api.nvim_buf_get_changedtick(bufnr)
+      version = vim.api.nvim_buf_get_changedtick(bufnr),
     },
     contentChanges = {
-      {text = read_buffer(bufnr)}
-    }
+      { text = read_buffer(bufnr) },
+    },
   }
-  
-  for _, client in pairs(vim.lsp.get_active_clients({bufnr = bufnr})) do
+
+  for _, client in pairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
     client:notify("textDocument/didChange", params)
   end
 end
@@ -33,5 +33,5 @@ end
 
 return {
   notify_clients = notify_clients,
-  sync_all_buffers = sync_all_buffers
+  sync_all_buffers = sync_all_buffers,
 }

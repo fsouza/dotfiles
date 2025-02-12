@@ -3,9 +3,8 @@ configs.setup({
   highlight = {
     enable = true,
     disable = function(lang, bufnr)
-      return lang == "json" and
-             vim.api.nvim_buf_line_count(bufnr) == 1
-    end
+      return lang == "json" and vim.api.nvim_buf_line_count(bufnr) == 1
+    end,
   },
   textobjects = {
     select = {
@@ -19,16 +18,16 @@ configs.setup({
         ["ac"] = "@class.outer",
         ["ic"] = "@class.inner",
         ["a,"] = "@parameter.outer",
-        ["i,"] = "@parameter.inner"
-      }
+        ["i,"] = "@parameter.inner",
+      },
     },
     swap = {
       enable = true,
-      swap_next = {["<leader>a"] = "@parameter.inner"},
-      swap_previous = {["<leader>A"] = "@parameter.inner"}
-    }
+      swap_next = { ["<leader>a"] = "@parameter.inner" },
+      swap_previous = { ["<leader>A"] = "@parameter.inner" },
+    },
   },
   ensure_installed = {},
   auto_install = true,
-  ignore_install = {"phpdoc"}
+  ignore_install = { "phpdoc" },
 })

@@ -11,8 +11,8 @@ servers.start({
       "-C",
       mod_dir,
       "github.com/hashicorp/terraform-ls",
-      "serve"
-    }
+      "serve",
+    },
   },
-  opts = {autofmt = true}
+  opts = { autofmt = true },
 })
