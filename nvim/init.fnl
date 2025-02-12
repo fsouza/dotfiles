@@ -10,17 +10,21 @@
      (tset package :cpath (table.concat [(.. lib-path# :/?.so) package.cpath]
                                         ";"))))
 
-(macro add-opt-packs-to-path []
-  `(let [opt-dir# (vim.fs.joinpath _G.data-dir :site :pack :mr :opt)]
-     (each [entry# type# (vim.fs.dir opt-dir#)]
+(macro configure-vendor-packages []
+  `(let [vendor-path# (vim.fs.joinpath _G.config-dir :vendor)
+         vendor-opt-dir# (vim.fs.joinpath vendor-path# :opt)]
+     (tset vim.o :packpath (.. vim.o.packpath "," vendor-path#))
+     (each [entry# type# (vim.fs.dir vendor-opt-dir#)]
        (when (= type# :directory)
          (tset package :path (table.concat [package.path
-                                            (vim.fs.joinpath opt-dir# entry#
-                                                             :lua :?.lua)
-                                            (vim.fs.joinpath opt-dir# entry#
-                                                             :lua "?" :?.lua)
-                                            (vim.fs.joinpath opt-dir# entry#
-                                                             :lua "?" :init.lua)]
+                                            (vim.fs.joinpath vendor-opt-dir#
+                                                             entry# :lua :?.lua)
+                                            (vim.fs.joinpath vendor-opt-dir#
+                                                             entry# :lua "?"
+                                                             :?.lua)
+                                            (vim.fs.joinpath vendor-opt-dir#
+                                                             entry# :lua "?"
+                                                             :init.lua)]
                                            ";"))))))
 
 (macro initial-mappings []
@@ -175,7 +179,7 @@
   (tset _G :cache-dir (vim.fn.stdpath :cache))
   (tset _G :data-dir (vim.fn.stdpath :data))
   (hererocks)
-  (add-opt-packs-to-path)
+  (configure-vendor-packages)
   (initial-mappings)
   (set-global-options)
   (set-global-mappings)

@@ -27,7 +27,6 @@ func main() {
 	venvDir := filepath.Join(nv.CacheDir, "venv")
 	var g errgroup.Group
 	g.Go(func() error { return ensureVirtualenv(venvDir) })
-	g.Go(func() error { return updateNeovimPlugins(nv) })
 
 	err = g.Wait()
 	if err != nil {
