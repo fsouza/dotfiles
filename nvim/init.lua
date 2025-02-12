@@ -1,5 +1,3 @@
--- Convert Fennel macros to Lua functions
-
 local function hererocks()
   local lua_version = string.gsub(_G._VERSION, "Lua ", "")
   local hererocks_path = _G.cache_dir .. "/hr"

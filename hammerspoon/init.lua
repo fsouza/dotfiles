@@ -1,5 +1,3 @@
--- Convert Fennel macros and functions to Lua
-
 -- Helper function to create hotkeys with key event simulation
 local function make_hotkey(mod, key, mod_target, target)
   return hs.hotkey.new(mod, key,
@@ -22,29 +20,29 @@ local function set_readline_shortcuts(exception_apps)
     if not window then
       return false
     end
-    
+
     local application = window:application()
     local app_name = ""
     if application then
       app_name = application:name()
     end
     app_name = string.lower(app_name)
-    
+
     local function check_app(idx)
       if idx > #exception_apps then
         return false
       end
-      
+
       local app = exception_apps[idx]
       if app == app_name then
         return true
       end
       return check_app(idx + 1)
     end
-    
+
     return check_app(1)
   end
-  
+
   local hks = {
     make_hotkey("ctrl", "n", {}, "down"),
     make_hotkey("ctrl", "p", {}, "up"),
@@ -53,25 +51,25 @@ local function set_readline_shortcuts(exception_apps)
     make_hotkey("ctrl", "w", {"alt"}, hs.keycodes.map.delete),
     make_hotkey("ctrl", "u", {"cmd"}, hs.keycodes.map.delete)
   }
-  
+
   local terminal_filter = hs.window.filter.new(is_terminal)
   local not_terminal_filter = hs.window.filter.new(function(win) return not is_terminal(win) end)
-  
+
   local function enable_hks()
     for _, hk in ipairs(hks) do
       hk:enable()
     end
   end
-  
+
   local function disable_hks()
     for _, hk in ipairs(hks) do
       hk:disable()
     end
   end
-  
+
   terminal_filter:subscribe(hs.window.filter.windowFocused, disable_hks)
   not_terminal_filter:subscribe(hs.window.filter.windowFocused, enable_hks)
-  
+
   if not is_terminal(hs.window.focusedWindow()) then
     enable_hks()
   end
