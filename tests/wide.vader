@@ -1,0 +1,9 @@
+Given (Wide characters):
+  あいうえお かきくけこ さしすせそ
+
+Execute (Move by w):
+  for current in [1, 17, 33, 45]
+    AssertEqual 1, line('.')
+    AssertEqual current, col('.')
+    normal w
+  endfor
