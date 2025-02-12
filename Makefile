@@ -4,7 +4,6 @@ NVIM_CONFIG_DIR := $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("config"))
 NVIM_DATA_DIR := $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("data"))' 2>&1)
 NVIM_STATE_DIR := $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("state"))' 2>&1)
 LUA := $(NVIM_CACHE_DIR)/hr/bin/lua
-FENNEL := $(NVIM_CACHE_DIR)/hr/bin/fennel
 PYTHON ?= python3.12
 
 .PHONY: all
@@ -27,10 +26,8 @@ kill-daemons:
 clear-logs:
 	:> $(NVIM_STATE_DIR)/lsp.log
 
-FNL_FILES := $(shell git ls-files --cached --others -- '*.fnl' | grep -Ev 'scripts/.+\.fnl' | grep -Ev 'macros/.+\.fnl')
-LUA_FILES := $(patsubst %.fnl,build/%.lua,$(FNL_FILES))
-NON_LUA_FILES := $(shell git ls-files --cached --others -- '*.vim' '*.scm' | grep -Ev '^build|vendor/')
-TARGET_NON_LUA_FILES := $(patsubst %,build/%,$(NON_LUA_FILES))
+FILES_TO_INSTALL := $(shell git ls-files --cached --others -- '*.lua' '*.vim' '*.scm' | grep -Ev '^build|nvim/vendor/')
+FILES_INSTALLED := $(patsubst %,build/%,$(FILES_TO_INSTALL))
 
 .PHONY: install
 install: install-nvim-site install-nvim-init.lua install-hammerspoon
@@ -78,10 +75,11 @@ clean-hammerspoon:
 uninstall-nvim-config:
 	rm -rf $(NVIM_CONFIG_DIR)
 
-build: scripts/compile.lua $(LUA_FILES) $(TARGET_NON_LUA_FILES)
+build: $(FILES_TO_INSTALL) $(FILES_INSTALLED)
 
-build/%.lua: %.fnl
-	$(LUA) scripts/compile.lua --output $@ $<
+build/%.lua: %.lua
+	@ mkdir -p $(dir $@)
+	install -C $< $@
 
 build/%.vim: %.vim
 	@ mkdir -p $(dir $@)
@@ -90,12 +88,3 @@ build/%.vim: %.vim
 build/%.scm: %.scm
 	@ mkdir -p $(dir $@)
 	install -C $< $@
-
-scripts/compile.lua: scripts/compile.fnl
-	$(eval TMP_FILE := $(shell mktemp))
-	$(FENNEL) -c $< >$(TMP_FILE)
-	mv $(TMP_FILE) $@
-
-.PHONY: fnlfmt
-fnlfmt:
-	git ls-files -z --cached --others -- '*.fnl' | env PATH="$(NVIM_CACHE_DIR)/hr/bin:${PATH}" xargs -0 -n 1 $(NVIM_CACHE_DIR)/fnlfmt/fnlfmt --fix

@@ -1,0 +1,6 @@
+local various_textobjs = require("various-textobjs")
+
+vim.keymap.set({"o", "x"}, "ii", function() various_textobjs.indentation("inner", "inner") end)
+vim.keymap.set({"o", "x"}, "ai", function() various_textobjs.indentation("outer", "inner") end)
+vim.keymap.set({"o", "x"}, "ir", function() various_textobjs.restOfIndentation("inner") end)
+vim.keymap.set({"o", "x"}, "ar", function() various_textobjs.restOfIndentation("outer") end)
