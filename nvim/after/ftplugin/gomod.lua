@@ -1,2 +1,1 @@
-local gopls = require("fsouza.lsp.servers.gopls")
-gopls.setup()
+require("fsouza.lsp.servers.gopls").setup()

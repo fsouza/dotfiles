@@ -1,2 +1,1 @@
-local efm_ts = require("fsouza.lsp.servers.efm-ts")
-efm_ts.start("typescriptreact")
+require("fsouza.lsp.servers.efm-ts").start("typescriptreact")

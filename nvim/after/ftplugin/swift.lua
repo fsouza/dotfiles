@@ -1,2 +1,1 @@
-local servers = require("fsouza.lsp.servers")
-servers.start({ config = { name = "sourcekit-lsp", cmd = { "sourcekit-lsp" } } })
+require("fsouza.lsp.servers").start({ config = { name = "sourcekit-lsp", cmd = { "sourcekit-lsp" } } })

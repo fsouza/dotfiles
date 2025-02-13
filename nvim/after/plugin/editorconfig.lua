@@ -1,2 +1,1 @@
-local editorconfig = require("fsouza.lib.editorconfig")
-editorconfig.setup()
+require("fsouza.lib.editorconfig").setup()

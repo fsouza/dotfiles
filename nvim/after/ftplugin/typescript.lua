@@ -1,2 +1,1 @@
-local efm_ts = require("fsouza.lsp.servers.efm-ts")
-efm_ts.start("typescript")
+require("fsouza.lsp.servers.efm-ts").start("typescript")
