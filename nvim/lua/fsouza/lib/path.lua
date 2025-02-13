@@ -34,4 +34,9 @@ local function splitext(p)
   end
 end
 
-return { isrel = isrel, mkdir = mkdir, splitext = splitext }
+local function extension(p)
+  local _, ext = splitext(p)
+  return ext
+end
+
+return { extension = extension, isrel = isrel, mkdir = mkdir, splitext = splitext }
