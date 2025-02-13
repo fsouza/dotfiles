@@ -41,7 +41,6 @@ local function set_from_pipenv(cb)
 end
 
 local function set_from_venv_folder(cb)
-  local path = require("fsouza.lib.path")
   local folders = { "venv", ".venv" }
 
   local function test_folder(idx)

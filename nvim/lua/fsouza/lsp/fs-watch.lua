@@ -100,12 +100,10 @@ local once = require("fsouza.lib.nvim-helpers").once
 local start_notifier = once(start_notifier)
 
 local function is_file_open(filepath)
-  local path = require("fsouza.lib.path")
-
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_loaded(bufnr) then
       local bufname = vim.api.nvim_buf_get_name(bufnr)
-      local abs_path = path.abspath(bufname)
+      local abs_path = vim.fs.abspath(bufname)
       if abs_path == filepath then
         return true
       end
@@ -117,7 +115,6 @@ end
 
 local function make_fs_event_handler(root_dir, notify_server)
   local backupext = vim.o.backupext
-  local pl_path = require("fsouza.lib.path")
   local glob = require("fsouza.lib.glob")
 
   local function notify(client_id, reg_id, filepath, events, kind)
@@ -156,7 +153,7 @@ local function make_fs_event_handler(root_dir, notify_server)
       and not vim.startswith(filename, ".hg/")
       and not vim.endswith(filename, "4913")
     then
-      local filepath = pl_path.abspath(pl_path.join(root_dir, filename))
+      local filepath = vim.fs.abspath(vim.fs.joinpath(root_dir, filename))
       local watchers = state[root_dir].watchers
 
       vim.schedule(function()
@@ -223,7 +220,7 @@ local function map_watchers(client, watchers)
   for _, watcher in ipairs(watchers) do
     local pats = glob.break_glob(watcher.globPattern)
     local sample = pats[1]
-    local is_abs = path.isabs(sample)
+    local is_abs = vim.startswith(sample, "/")
 
     for folder, _ in pairs(folders) do
       if path.isrel(sample, folder) then

@@ -3,7 +3,7 @@ local buffer_registry = {}
 local function should_skip_buffer(bufnr)
   local path = require("fsouza.lib.path")
   local file_path = vim.api.nvim_buf_get_name(bufnr)
-  file_path = path.abspath(file_path)
+  file_path = vim.fs.abspath(file_path)
   return not path.isrel(file_path)
 end
 

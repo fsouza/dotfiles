@@ -153,8 +153,7 @@ local function set_config(bufnr)
     and filename ~= ""
     and string.find(filename, "^%a+://") == nil
   then
-    local path = require("fsouza.lib.path")
-    filename = path.abspath(filename)
+    filename = vim.fs.abspath(filename)
     filename = modify_filename_if_needed(filename, bufnr)
 
     vim.system(

@@ -25,7 +25,6 @@ end
 
 local function edit(command, selected, opts)
   local fzf_path = require("fzf-lua.path")
-  local pl_path = require("fsouza.lib.path")
 
   for _, sel in ipairs(selected) do
     local file_info = fzf_path.entry_to_file(sel, opts)
@@ -36,9 +35,9 @@ local function edit(command, selected, opts)
     line = math.max(line, 1)
     col = math.max(col, 1)
 
-    path = pl_path.relpath(path)
+    path = vim.fs.relpath(vim.uv.cwd(), path)
     if vim.startswith(path, ".") then
-      path = pl_path.abspath(path)
+      path = vim.fs.abspath(path)
     end
 
     vim.api.nvim_cmd({
@@ -203,7 +202,6 @@ local fzf_lua = (function()
 end)()
 
 local function send_lsp_items(items, title)
-  local pl_path = require("fsouza.lib.path")
   title = " " .. title .. " "
   local fzf_lua_mod = fzf_lua()
   local config = require("fzf-lua.config")
@@ -215,7 +213,7 @@ local function send_lsp_items(items, title)
   local contents = {}
   for _, item in ipairs(items) do
     if virtual_cwd then
-      item.filename = pl_path.abspath(item.filename)
+      item.filename = vim.fs.abspath(item.filename)
     end
 
     local formatted_item = make_entry.lcol(item, {
@@ -331,8 +329,7 @@ end
 local function handle_repo(run_fzf, cd, selected)
   if #selected == 1 then
     local sel = selected[1]
-    local path_mod = require("fsouza.lib.path")
-    sel = path_mod.abspath(sel)
+    sel = vim.fs.abspath(sel)
 
     if cd then
       vim.api.nvim_set_current_dir(sel)
@@ -383,8 +380,7 @@ local function git_files(opts)
 end
 
 local function set_virtual_cwd_impl(cwd)
-  local path_mod = require("fsouza.lib.path")
-  virtual_cwd = path_mod.abspath(cwd)
+  virtual_cwd = vim.fs.abspath(cwd)
 end
 
 local function pick_cwd()

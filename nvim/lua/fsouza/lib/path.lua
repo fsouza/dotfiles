@@ -1,7 +1,6 @@
-local pl_path = require("pl.path")
-
 local function isrel(path, start)
-  return not vim.startswith(pl_path.relpath(path, start), "../")
+  start = start or vim.uv.cwd()
+  return vim.fs.relpath(start, path) ~= nil
 end
 
 local function mkdir(path, recursive, cb)
@@ -18,12 +17,21 @@ local function mkdir(path, recursive, cb)
   vim.system(cmd, nil, vim.schedule_wrap(handle_result))
 end
 
-local mod = { isrel = isrel, mkdir = mkdir }
+local function splitext(p)
+  local i = #p
+  local ch = p:sub(i, i)
+  while i > 0 and ch ~= "." do
+    if ch == "/" then
+      return p, ""
+    end
+    i = i - 1
+    ch = p:sub(i, i)
+  end
+  if i == 0 then
+    return p, ""
+  else
+    return p:sub(1, i - 1), p:sub(i)
+  end
+end
 
-return setmetatable(mod, {
-  __index = function(table, key)
-    local value = pl_path[key]
-    rawset(table, key, value)
-    return value
-  end,
-})
+return { isrel = isrel, mkdir = mkdir, splitext = splitext }
