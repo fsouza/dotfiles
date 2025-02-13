@@ -89,9 +89,20 @@ local function get_visual_selection_contents()
 end
 
 local function hash_buffer(bufnr)
-  local sha1 = require("sha1")
   local lines = table.concat(vim.api.nvim_buf_get_lines(bufnr, 0, -1, true), "\n")
-  return sha1.sha1(lines)
+  local output = vim
+    .system({ "shasum", "-a", "1" }, {
+      stdin = lines,
+      text = true,
+    })
+    :wait()
+
+  if output.code == 0 then
+    -- Extract just the hash part (before the space)
+    return output.stdout:match("^(%w+)")
+  else
+    error("Failed to calculate buffer checksum: " .. (output.stderr or ""))
+  end
 end
 
 return {
