@@ -35,11 +35,7 @@ local function edit(command, selected, opts)
     line = math.max(line, 1)
     col = math.max(col, 1)
 
-    path = vim.fs.relpath(vim.uv.cwd(), path)
-    if vim.startswith(path, ".") then
-      path = vim.fs.abspath(path)
-    end
-
+    path = vim.fs.relpath(vim.uv.cwd(), path) or vim.fs.abspath(path)
     vim.api.nvim_cmd({
       cmd = command,
       args = { path },
