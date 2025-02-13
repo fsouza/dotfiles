@@ -65,6 +65,7 @@ autoload -U select-word-style
 select-word-style bash
 
 alias bump_dotfiles="git -C ${FSOUZA_DOTFILES_DIR} pull && ${FSOUZA_DOTFILES_DIR}/bootstrap/setup"
+alias git="TZ=UTC command git"
 
 source ${FSOUZA_DOTFILES_DIR}/extra/fzf
 
