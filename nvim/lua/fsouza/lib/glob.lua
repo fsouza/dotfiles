@@ -241,7 +241,7 @@ end
 return {
   compile = compile,
   match = do_match,
-  ["break"] = break_glob,
+  break_glob = break_glob,
   parse = parse,
   strip_special = strip_special,
 }
