@@ -45,9 +45,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	err = setupFnlfmt(nv, hererocksDir)
-	if err != nil {
-		log.Fatal(err)
-	}
 }

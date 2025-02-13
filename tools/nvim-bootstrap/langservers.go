@@ -187,19 +187,3 @@ func installOLS(langserversDir string) error {
 		Cwd: repoDir,
 	})
 }
-
-func setupFnlfmt(nv *Neovim, hererocksDir string) error {
-	repoDir := filepath.Join(nv.CacheDir, "fnlfmt")
-	err := gitCloneOrUpdate("https://git.sr.ht/~technomancy/fnlfmt", repoDir)
-	if err != nil {
-		return err
-	}
-
-	return tools.Run(&tools.RunOptions{
-		Cmd:  "make",
-		Args: []string{"-C", repoDir},
-		Env: map[string]string{
-			"PATH": fmt.Sprintf("%s/bin:%s", hererocksDir, os.Getenv("PATH")),
-		},
-	})
-}
