@@ -1,18 +1,15 @@
 -- Helper function to create hotkeys with key event simulation
 local function make_hotkey(mod, key, mod_target, target)
-  return hs.hotkey.new(mod, key,
-    function()
-      local key_event = hs.eventtap.event.newKeyEvent(mod_target, target, true)
-      key_event:post()
-    end,
-    function()
-      local key_event = hs.eventtap.event.newKeyEvent(mod_target, target, false)
-      key_event:post()
-    end,
-    function()
-      local key_event = hs.eventtap.event.newKeyEvent(mod_target, target, true)
-      key_event:post()
-    end)
+  return hs.hotkey.new(mod, key, function()
+    local key_event = hs.eventtap.event.newKeyEvent(mod_target, target, true)
+    key_event:post()
+  end, function()
+    local key_event = hs.eventtap.event.newKeyEvent(mod_target, target, false)
+    key_event:post()
+  end, function()
+    local key_event = hs.eventtap.event.newKeyEvent(mod_target, target, true)
+    key_event:post()
+  end)
 end
 
 local function set_readline_shortcuts(exception_apps)
@@ -48,12 +45,14 @@ local function set_readline_shortcuts(exception_apps)
     make_hotkey("ctrl", "p", {}, "up"),
     make_hotkey("ctrl", "f", {}, "right"),
     make_hotkey("ctrl", "b", {}, "left"),
-    make_hotkey("ctrl", "w", {"alt"}, hs.keycodes.map.delete),
-    make_hotkey("ctrl", "u", {"cmd"}, hs.keycodes.map.delete)
+    make_hotkey("ctrl", "w", { "alt" }, hs.keycodes.map.delete),
+    make_hotkey("ctrl", "u", { "cmd" }, hs.keycodes.map.delete),
   }
 
   local terminal_filter = hs.window.filter.new(is_terminal)
-  local not_terminal_filter = hs.window.filter.new(function(win) return not is_terminal(win) end)
+  local not_terminal_filter = hs.window.filter.new(function(win)
+    return not is_terminal(win)
+  end)
 
   local function enable_hks()
     for _, hk in ipairs(hks) do
@@ -76,7 +75,7 @@ local function set_readline_shortcuts(exception_apps)
 end
 
 -- Main initialization
-local prefix = {"cmd", "ctrl"}
+local prefix = { "cmd", "ctrl" }
 hs.hotkey.bind(prefix, "R", hs.reload)
 hs.hotkey.bind(prefix, "V", function()
   local pb_content = hs.pasteboard.getContents()
@@ -85,4 +84,4 @@ hs.hotkey.bind(prefix, "V", function()
   end
 end)
 
-set_readline_shortcuts({"alacritty", "terminal", "code", "iterm2"})
+set_readline_shortcuts({ "alacritty", "terminal", "code", "iterm2" })
