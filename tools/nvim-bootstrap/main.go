@@ -33,13 +33,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var hererocksDir string
 	g = errgroup.Group{}
 	g.Go(func() error { setupLangervers(nv, venvDir); return nil })
 	g.Go(func() error {
-		var err error
-		hererocksDir, err = ensureHererocks(nv, venvDir)
-		return err
+		return ensureHererocks(nv, venvDir)
 	})
 	err = g.Wait()
 	if err != nil {
