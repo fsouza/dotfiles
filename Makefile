@@ -79,12 +79,12 @@ build: $(FILES_TO_INSTALL) $(FILES_INSTALLED)
 
 build/%.lua: %.lua
 	@ mkdir -p $(dir $@)
-	install -C $< $@
+	install $< $@
 
 build/%.vim: %.vim
 	@ mkdir -p $(dir $@)
-	install -C $< $@
+	install $< $@
 
 build/%.scm: %.scm
 	@ mkdir -p $(dir $@)
-	install -C $< $@
+	install $< $@
