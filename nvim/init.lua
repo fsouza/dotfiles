@@ -1,21 +1,3 @@
-local function hererocks()
-  local lua_version = string.gsub(_G._VERSION, "Lua ", "")
-  local hererocks_path = _G.cache_dir .. "/hr"
-  local share_path = hererocks_path .. "/share/lua/" .. lua_version
-  local lib_path = hererocks_path .. "/lib/lua/" .. lua_version
-
-  package.path = table.concat({
-    share_path .. "/?.lua",
-    share_path .. "/?/init.lua",
-    package.path,
-  }, ";")
-
-  package.cpath = table.concat({
-    lib_path .. "/?.so",
-    package.cpath,
-  }, ";")
-end
-
 local function configure_vendor_packages()
   local vendor_path = vim.fs.joinpath(_G.config_dir, "vendor")
   local vendor_opt_dir = vim.fs.joinpath(vendor_path, "opt")
@@ -223,7 +205,6 @@ _G.config_dir = dotfiles_dir .. "/nvim"
 _G.cache_dir = vim.fn.stdpath("cache")
 _G.data_dir = vim.fn.stdpath("data")
 
-hererocks()
 configure_vendor_packages()
 initial_mappings()
 set_global_options()

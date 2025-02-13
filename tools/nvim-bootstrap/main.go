@@ -4,8 +4,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-
-	"golang.org/x/sync/errgroup"
 )
 
 var dotfilesDir string
@@ -25,21 +23,10 @@ func main() {
 	}
 
 	venvDir := filepath.Join(nv.CacheDir, "venv")
-	var g errgroup.Group
-	g.Go(func() error { return ensureVirtualenv(venvDir) })
-
-	err = g.Wait()
+	err = ensureVirtualenv(venvDir)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	g = errgroup.Group{}
-	g.Go(func() error { setupLangervers(nv, venvDir); return nil })
-	g.Go(func() error {
-		return ensureHererocks(nv, venvDir)
-	})
-	err = g.Wait()
-	if err != nil {
-		log.Fatal(err)
-	}
+	setupLangervers(nv, venvDir)
 }

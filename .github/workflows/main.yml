@@ -79,13 +79,6 @@ jobs:
         env:
           RUNNER: ${{ runner.os }}
 
-      - name: hererocks cache
-        id: nvim-hererocks-cache
-        uses: actions/cache@v4.2.0
-        with:
-          path: ~/.cache/nvim/hr
-          key: "${{ runner.os }}-${{ steps.os-deployment-target.outputs.arch }}-${{ steps.get-repo-versions.outputs.luajit-version }}-${{ steps.os-deployment-target.outputs.product-version }}-${{ hashFiles('nvim/vimfiles-dev-1.rockspec') }}"
-
       - name: run setup
         run: |
           timeout -k 10s 30m ./bootstrap/setup
