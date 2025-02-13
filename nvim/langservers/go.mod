@@ -1,13 +1,11 @@
 module github.com/fsouza/dotfiles/nvim/langservers
 
-go 1.23.2
+go 1.24.0
 
-toolchain go1.23.3
-
-require (
-	github.com/grafana/jsonnet-language-server v0.15.0
-	github.com/hashicorp/terraform-ls v0.36.4
-	github.com/mattn/efm-langserver v0.0.54
+tool (
+	github.com/grafana/jsonnet-language-server
+	github.com/hashicorp/terraform-ls
+	github.com/mattn/efm-langserver
 )
 
 require (
@@ -38,6 +36,7 @@ require (
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/go-jsonnet v0.20.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
+	github.com/grafana/jsonnet-language-server v0.15.0 // indirect
 	github.com/grafana/tanka v0.31.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
@@ -52,12 +51,14 @@ require (
 	github.com/hashicorp/hcl/v2 v2.23.0 // indirect
 	github.com/hashicorp/terraform-exec v0.21.0 // indirect
 	github.com/hashicorp/terraform-json v0.24.0 // indirect
+	github.com/hashicorp/terraform-ls v0.36.4 // indirect
 	github.com/hashicorp/terraform-registry-address v0.2.4 // indirect
 	github.com/hashicorp/terraform-schema v0.0.0-20250117153811-3c4991466f2c // indirect
 	github.com/hashicorp/terraform-svchost v0.1.1 // indirect
 	github.com/hexops/gotextdiff v1.0.3 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
 	github.com/jdbaldry/go-language-server-protocol v0.0.0-20211013214444-3022da0884b2 // indirect
+	github.com/mattn/efm-langserver v0.0.54 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect

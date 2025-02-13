@@ -6,10 +6,10 @@ servers.start({
     name = "jsonnet-language-server",
     cmd = {
       "go",
-      "run",
+      "tool",
       "-C",
       mod_dir,
-      "github.com/grafana/jsonnet-language-server",
+      "jsonnet-language-server",
       "--lint",
       "--eval-diags",
     },

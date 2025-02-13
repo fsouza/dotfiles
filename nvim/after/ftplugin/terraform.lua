@@ -7,10 +7,10 @@ servers.start({
     name = "terraform-ls",
     cmd = {
       "go",
-      "run",
+      "tool",
       "-C",
       mod_dir,
-      "github.com/hashicorp/terraform-ls",
+      "terraform-ls",
       "serve",
     },
   },

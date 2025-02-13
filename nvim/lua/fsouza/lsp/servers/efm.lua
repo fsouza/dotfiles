@@ -10,10 +10,10 @@ local function start_efm(bufnr, cb)
       name = "efm",
       cmd = {
         "go",
-        "run",
+        "tool",
         "-C",
         mod_dir,
-        "github.com/mattn/efm-langserver",
+        "efm-langserver",
       },
       init_options = { documentFormatting = true },
       settings = {
