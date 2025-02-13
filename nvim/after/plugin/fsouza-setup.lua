@@ -94,9 +94,9 @@ local function setup_browse_command()
 end
 
 local function setup_word_replace()
-  vim.keymap.set("n", "<leader>e", function()
+  vim.keymap.set("n", "<leader>x", function()
     local word = vim.fn.expand("<cword>")
-    vim.api.nvim_input(":%s/\\v<lt>" .. word .. ">//g<left><left>")
+    vim.api.nvim_input(":%s/\\v<lt>" .. word .. ">/" .. word .. "/g<left><left>")
   end)
 end
 

@@ -20,6 +20,12 @@ local function initial_mappings()
   vim.keymap.set("n", "Q", "")
   vim.keymap.set("n", "<Space>", "")
   vim.g.mapleader = " "
+  vim.keymap.set({ "n", "x", "o" }, "<leader>w", "w")
+  vim.keymap.set({ "n", "x", "o" }, "<leader>e", "e")
+  vim.keymap.set({ "n", "x", "o" }, "<leader>b", "b")
+  vim.keymap.set({ "n", "x", "o" }, "<leader>ge", "ge")
+  vim.keymap.set({ "x", "o" }, "a<leader>w", "aw")
+  vim.keymap.set({ "x", "o" }, "i<leader>w", "iw")
 end
 
 local function set_neovim_global_vars()
