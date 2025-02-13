@@ -177,7 +177,7 @@ local function override_builtin_functions()
 
   vim.ui.select = function(...)
     local popup_picker = require("fsouza.lib.popup-picker")
-    return popup_picker["ui-select"](...)
+    return popup_picker.ui_select(...)
   end
 
   vim.deprecate = function() end
