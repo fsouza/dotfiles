@@ -72,29 +72,9 @@ local function maybe_start_ruff_server(bufnr)
   end
 end
 
-local function get_python_tools(cb)
-  local gen_python_tools = vim.fs.joinpath(_G.dotfiles_cache_dir, "bin", "gen-efm-python-tools")
-
-  local function on_finished(result)
-    if result.code ~= 0 then
-      error(result.stderr)
-    else
-      cb(vim.json.decode(result.stdout))
-    end
-  end
-
-  vim.system({ gen_python_tools, "-venv", vim.fs.joinpath(_G.cache_dir, "venv") }, nil, vim.schedule_wrap(on_finished))
-end
-
 local bufnr = vim.api.nvim_get_current_buf()
 local efm = require("fsouza.lsp.servers.efm")
 local detect_interpreter = require("fsouza.lib.python").detect_interpreter
-
-get_python_tools(function(tools)
-  vim.schedule(function()
-    efm.add(bufnr, "python", tools)
-  end)
-end)
 
 detect_interpreter(function(interpreter)
   vim.schedule(function()
