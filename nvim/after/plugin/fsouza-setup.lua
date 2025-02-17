@@ -107,8 +107,25 @@ local function setup_notif()
   end, { force = true })
 end
 
+local function setup_yank_highlight()
+  require("fsouza.lib.nvim-helpers").augroup("yank_highlight", {
+    {
+      events = { "TextYankPost" },
+      targets = { "*" },
+      callback = function()
+        vim.highlight.on_yank({
+          higroup = "HlYank",
+          timeout = 200,
+          on_macro = false,
+        })
+      end,
+    },
+  })
+end
+
 setup_autofmt_commands()
 setup_browse_command()
 setup_word_replace()
 setup_notif()
 setup_fuzzy_mappings()
+setup_yank_highlight()
