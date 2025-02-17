@@ -37,7 +37,7 @@ install-nvim-config:
 	rsync -avr --delete $(NVIM_CONFIG_RSYNC_EXCLUDE) nvim/ $(NVIM_CONFIG_DIR)/
 
 .PHONY: install-hammerspoon
-install-hammerspoon: build
+install-hammerspoon:
 	rsync -avr --delete hammerspoon/ $(HOME)/.hammerspoon/
 
 .PHONY: uninstall
