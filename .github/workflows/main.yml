@@ -52,20 +52,6 @@ jobs:
 
       - uses: actions/checkout@v4.2.2
 
-      - name: get repo versions
-        id: get-repo-versions
-        run: |
-          git ls-remote https://github.com/golang/tools.git master | awk '{print "golang-tools-version=" $1}' >>${GITHUB_OUTPUT}
-          git ls-remote https://github.com/luajit/luajit.git v2.1 | awk '{print "luajit-version=" $1}' >>${GITHUB_OUTPUT}
-
-      - name: langservers cache
-        id: nvim-langservers-cache
-        uses: actions/cache@v4.2.0
-        with:
-          path: ~/.cache/nvim/langservers
-          key: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-${{ steps.get-repo-versions.outputs.golang-tools-version }}"
-          restore-keys: "${{ runner.os }}-${{ hashFiles('tools/nvim-bootstrap/*.go') }}-"
-
       - name: set product-version
         id: os-deployment-target
         run: |
