@@ -2,6 +2,20 @@
 
 set -eu
 
+function install_alacritty_config {
+
+	(
+		local dotfiles_dir=$(cd "$(dirname $0)/.." && pwd -P)
+		local tmp_config=$(mktemp -p "${HOME}/.config")
+		export FSOUZA_DOTFILES_CACHE_DIR=${FSOUZA_DOTFILES_CACHE_DIR-${HOME}/.cache/fsouza-dotfiles}
+		export FSOUZA_DOTFILES_DIR=${FSOUZA_DOTFILES_DIR-${dotfiles_dir}}
+		export SHELL=$(brew --prefix zsh)/bin/zsh
+
+		envsubst '${FSOUZA_DOTFILES_CACHE_DIR} ${FSOUZA_DOTFILES_DIR} ${SHELL}' <"${FSOUZA_DOTFILES_DIR}"/alacritty.toml >${tmp_config}
+		mv "${tmp_config}" "${HOME}/.config/alacritty.toml"
+	)
+}
+
 # Increase window resize speed for Cocoa applications
 defaults write -g NSWindowResizeTime -float 0.001
 
@@ -164,5 +178,5 @@ defaults write com.apple.Spotlight orderedItems -array \
 	'{ enabled = 0; name = "MENU_OTHER"; }' \
 	'{ enabled = 0; name = SOURCE; }'
 
-my_dir=$(cd $(dirname ${0}) && pwd -P)
-${FSOUZA_DOTFILES_CACHE_DIR}/bin/install-alacritty-config
+
+install_alacritty_config

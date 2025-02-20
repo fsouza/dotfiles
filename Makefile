@@ -5,11 +5,7 @@ NVIM_CONFIG_RSYNC_EXCLUDE := --exclude=langservers --exclude=vendor
 PYTHON ?= python3.12
 
 .PHONY: all
-all: bootstrap-nvim install update-treesitter kill-daemons clear-logs
-
-.PHONY: bootstrap-nvim
-bootstrap-nvim:
-	${FSOUZA_DOTFILES_CACHE_DIR}/bin/nvim-bootstrap
+all: install update-treesitter kill-daemons clear-logs
 
 .PHONY: update-treesitter
 update-treesitter:

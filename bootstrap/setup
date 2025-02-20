@@ -22,10 +22,20 @@ function mklink {
 	mv -f ${temp_target} ${target}
 }
 
-function main {
-	local go=${GO:-$(${FSOUZA_DOTFILES_DIR}/bin/__bootstrap_go)}
-	env GOBIN=${FSOUZA_DOTFILES_CACHE_DIR}/bin ${go} -C ${FSOUZA_DOTFILES_DIR}/tools install ./...
+function bootstrap_nvim {
+	# install langservers
+	if command -v fnm &>/dev/null; then
+		(
+			cd "${FSOUZA_DOTFILES_DIR}/nvim/langservers"
+			fnm exec npx --yes yarn install --frozen-lockfile
+		)
+	fi
 
+	# install neovim config
+	env NVIM_DEBUG=1 make -C ${FSOUZA_DOTFILES_DIR}
+}
+
+function main {
 	mkdir -p ${HOME}/.config
 
 	local home_files=(.editorconfig)
@@ -50,7 +60,7 @@ function main {
 	fi
 
 	if command -v nvim &>/dev/null; then
-		env NVIM_DEBUG=1 make -C ${FSOUZA_DOTFILES_DIR}
+		bootstrap_nvim
 	fi
 
 	tic -x ${FSOUZA_DOTFILES_DIR}/tmux/tmux-256color

@@ -1,0 +1,109 @@
+
+[colors.bright]
+black = "#000000"
+blue = "#2c8ef8"
+cyan = "#07a689"
+green = "#23aa00"
+magenta = "#cc4685"
+red = "#f2201f"
+white = "#c7c7c7"
+yellow = "#999902"
+
+[colors.normal]
+black = "#000000"
+blue = "#0225c7"
+cyan = "#00c5c7"
+green = "#00c200"
+magenta = "#c930c6"
+red = "#c91b00"
+white = "#c7c7c7"
+yellow = "#606000"
+
+[colors.primary]
+background = "#f0f0eb"
+foreground = "#000000"
+
+[cursor]
+unfocused_hollow = true
+
+[cursor.style]
+blinking = "Never"
+shape = "Block"
+
+[env]
+FSOUZA_DOTFILES_DIR = "${FSOUZA_DOTFILES_DIR}"
+FSOUZA_DOTFILES_CACHE_DIR = "${FSOUZA_DOTFILES_CACHE_DIR}"
+SHELL = "${SHELL}"
+TERM = "alacritty-direct"
+ZDOTDIR = "${FSOUZA_DOTFILES_DIR}/zsh"
+
+[font]
+size = 12
+
+[font.bold]
+style = "Medium"
+
+[font.normal]
+family = "SauceCodePro Nerd Font Mono"
+style = "Regular"
+
+[[keyboard.bindings]]
+action = "CreateNewWindow"
+key = "N"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u001Bt"
+key = "T"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u001Ba"
+key = "A"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u001Bj"
+key = "J"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u001Bk"
+key = "K"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0000"
+key = "Space"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "None"
+key = "Space"
+mods = "Shift|Control"
+
+[[keyboard.bindings]]
+chars = "\u001E"
+key = "Key6"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u001E"
+key = "Key7"
+mods = "Control"
+
+[scrolling]
+history = 50000
+multiplier = 3
+
+[terminal.shell]
+program = "${SHELL}"
+args = ["--login"]
+
+[window]
+dynamic_padding = true
+option_as_alt = "OnlyLeft"
+
+[window.padding]
+x = 2
+y = 2
