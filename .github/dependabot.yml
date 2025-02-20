@@ -10,19 +10,9 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 99
-  - package-ecosystem: gomod
-    directory: "/tools"
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 99
   - package-ecosystem: npm
     directory: "/nvim/langservers"
     schedule:
       interval: weekly
     open-pull-requests-limit: 99
     versioning-strategy: increase
-  - package-ecosystem: pip
-    directory: "/nvim/langservers"
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 99
