@@ -27,6 +27,7 @@ function bootstrap_nvim {
 	if command -v fnm &>/dev/null; then
 		(
 			cd "${FSOUZA_DOTFILES_DIR}/nvim/langservers"
+			fnm install
 			fnm exec npx --yes yarn install --frozen-lockfile
 		)
 	fi
