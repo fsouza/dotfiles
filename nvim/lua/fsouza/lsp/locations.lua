@@ -69,11 +69,7 @@ local function ts_range(current_buf, loc)
   end
 
   local bufnr = vim.uri_to_bufnr(loc.uri)
-  local start_pos = loc.range.start
-  local end_pos = loc.range["end"]
-
-  vim.bo[bufnr].buflisted = true
-  vim.bo[bufnr].filetype = filetype
+  vim.fn.bufload(bufnr)
 
   local parser = vim.treesitter.get_parser(bufnr, lang)
   local _, tree = next(parser:trees())
@@ -82,6 +78,8 @@ local function ts_range(current_buf, loc)
     return loc
   end
 
+  local start_pos = loc.range.start
+  local end_pos = loc.range["end"]
   local root = tree:root()
   local node = root:named_descendant_for_range(start_pos.line, start_pos.character, end_pos.line, end_pos.character)
 
@@ -126,8 +124,11 @@ end
 
 local function make_lsp_loc_action(method)
   return function()
-    local params = vim.lsp.util.make_position_params()
-    vim.lsp.buf_request(0, method, params, peek_location_callback)
+    local client = vim.lsp.get_clients({ bufnr = 0, method = method })[1]
+    if client then
+      local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
+      vim.lsp.buf_request(0, method, params, peek_location_callback)
+    end
   end
 end
 
