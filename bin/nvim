@@ -1,0 +1,18 @@
+#!/usr/bin/env zsh
+
+set -euo PIPEFAIL
+
+executable=${NEOVIM_INSTALL_PREFIX}/bin/nvim
+if ! [ -x ${executable} ]; then
+	echo >&2 neovim is not installed
+	exit 2
+fi
+
+dotfiles=$(\builtin cd "$(dirname "${0}")/.." && pwd -P)
+
+if [[ ${OSTYPE} == darwin* ]]; then
+	profile="${dotfiles}/neovim.sb"
+	exec sandbox-exec -f "${profile}" "${executable}" "$@"
+else
+	exec unshare --net "${executable}" "$@"
+fi

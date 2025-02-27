@@ -4,10 +4,6 @@ NEOVIM_SRC_DIR=${NEOVIM_SRC_DIR:-${HOME}/Projects/os/3/neovim}
 function __try_use_nvim {
 	local executable=${NEOVIM_INSTALL_PREFIX}/bin/nvim
 	if [ -x ${executable} ]; then
-		if [[ $(which nvim) != ${executable} ]]; then
-			prepend_to_path ${NEOVIM_INSTALL_PREFIX}/bin
-		fi
-
 		function zvim {
 			nvim +'lua require("fsouza.lib.fuzzy").files()' ${@}
 		}
