@@ -1,4 +1,4 @@
-NEOVIM_INSTALL_PREFIX=${NEOVIM_INSTALL_PREFIX:-${HOME}/opt/neovim}
+export NEOVIM_INSTALL_PREFIX=${NEOVIM_INSTALL_PREFIX:-${HOME}/opt/neovim}
 NEOVIM_SRC_DIR=${NEOVIM_SRC_DIR:-${HOME}/Projects/os/3/neovim}
 
 function __try_use_nvim {
