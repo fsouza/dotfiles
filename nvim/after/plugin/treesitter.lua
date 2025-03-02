@@ -30,7 +30,6 @@ local vendored_parsers = {
   json5 = true,
   jsonc = true,
   jsonnet = true,
-  kotlin = true,
   lua = true,
   make = true,
   markdown = true,
@@ -38,7 +37,7 @@ local vendored_parsers = {
   nginx = true,
   nix = true,
   ocaml = true,
-  ocaml_interface = true,
+  ocaml_interface = "ocaml",
   odin = true,
   perl = true,
   promql = true,
@@ -48,7 +47,6 @@ local vendored_parsers = {
   requirements = true,
   ruby = true,
   rust = true,
-  scala = true,
   sql = true,
   starlark = true,
   swift = true,
@@ -71,6 +69,10 @@ for _, parser_key in ipairs(parser_keys) do
   if vendored_parsers[parser_key] == nil then
     parser_configs[parser_key] = nil
   else
+    dir = vendored_parsers[parser_key]
+    if dir == true then
+      dir = parser_key
+    end
     parser_configs[parser_key].install_info.url = vim.fs.joinpath(_G.config_dir, "vendor", "ts-parsers", parser_key)
   end
 end
