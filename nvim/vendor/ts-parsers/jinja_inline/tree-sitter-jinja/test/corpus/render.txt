@@ -1,0 +1,172 @@
+===============
+render
+===============
+
+{{ }}
+{{ "foo" if false }}
+{{ var[42].foo }}
+{{ async_func() + normal_func() }}
+{{ outer("FOO") }}
+{{ users()|selectattr("is_active")|map(attribute="name")|join("|") }}
+
+{%+ if something +%}yay{%+ endif +%}
+{{+ something +}}
+
+--------
+
+(source
+  (definition
+    (words))
+  (definition
+    (render_expression))
+  (definition
+    (words))
+  (definition
+    (render_expression
+      (expression
+        (binary_expression
+          (unary_expression
+            (primary_expression
+              (literal
+                (string_literal))))))
+      (ternary_expression
+        (expression
+          (binary_expression
+            (unary_expression
+              (primary_expression
+                (literal
+                  (boolean_literal)))))))))
+  (definition
+    (words))
+  (definition
+    (render_expression
+      (expression
+        (expression
+          (expression
+            (binary_expression
+              (unary_expression
+                (primary_expression
+                  (identifier)))))
+          (expression
+            (binary_expression
+              (unary_expression
+                (primary_expression
+                  (literal
+                    (number_literal
+                      (dec_literal))))))))
+        (expression
+          (binary_expression
+            (unary_expression
+              (primary_expression
+                (identifier))))))))
+  (definition
+    (words))
+  (definition
+    (render_expression
+      (expression
+        (binary_expression
+          (binary_expression
+            (unary_expression
+              (primary_expression
+                (function_call
+                  (identifier)))))
+          (binary_operator)
+          (unary_expression
+            (primary_expression
+              (function_call
+                (identifier))))))))
+  (definition
+    (words))
+  (definition
+    (render_expression
+      (expression
+        (binary_expression
+          (unary_expression
+            (primary_expression
+              (function_call
+                (identifier)
+                (arg
+                  (expression
+                    (binary_expression
+                      (unary_expression
+                        (primary_expression
+                          (literal
+                            (string_literal))))))))))))))
+  (definition
+    (words))
+  (definition
+    (render_expression
+      (expression
+        (binary_expression
+          (binary_expression
+            (binary_expression
+              (binary_expression
+                (unary_expression
+                  (primary_expression
+                    (function_call
+                      (identifier)))))
+              (binary_operator)
+              (unary_expression
+                (primary_expression
+                  (function_call
+                    (identifier)
+                    (arg
+                      (expression
+                        (binary_expression
+                          (unary_expression
+                            (primary_expression
+                              (literal
+                                (string_literal)))))))))))
+            (binary_operator)
+            (unary_expression
+              (primary_expression
+                (function_call
+                  (identifier)
+                  (arg
+                    (identifier)
+                    (binary_operator)
+                    (expression
+                      (binary_expression
+                        (unary_expression
+                          (primary_expression
+                            (literal
+                              (string_literal)))))))))))
+          (binary_operator)
+          (unary_expression
+            (primary_expression
+              (function_call
+                (identifier)
+                (arg
+                  (expression
+                    (binary_expression
+                      (unary_expression
+                        (primary_expression
+                          (literal
+                            (string_literal))))))))))))))
+  (definition
+    (words))
+  (definition
+    (control
+      (statement
+        (if_expression
+          (expression
+            (binary_expression
+              (unary_expression
+                (primary_expression
+                  (identifier)))))))))
+  (definition
+    (words))
+  (definition
+    (control
+      (statement)))
+  (definition
+    (words))
+  (definition
+    (render_expression
+      (expression
+        (binary_expression
+          (unary_expression
+            (primary_expression
+              (identifier)))))))
+  (definition
+    (words)))

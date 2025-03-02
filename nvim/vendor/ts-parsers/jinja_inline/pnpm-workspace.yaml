@@ -1,0 +1,3 @@
+packages:
+  - tree-sitter-jinja
+  - tree-sitter-jinja_inline
