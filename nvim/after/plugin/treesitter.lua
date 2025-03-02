@@ -1,66 +1,15 @@
-local vendored_parsers = {
-  bash = true,
-  c = true,
-  cmake = true,
-  cpp = true,
-  css = true,
-  cuda = true,
-  diff = true,
-  dockerfile = true,
-  git_config = true,
-  git_rebase = true,
-  gitattributes = true,
-  gitcommit = true,
-  gitignore = true,
-  go = true,
-  gomod = true,
-  gosum = true,
-  gotmpl = true,
-  graphql = true,
-  hcl = true,
-  helm = true,
-  html = true,
-  htmldjango = true,
-  java = true,
-  javascript = true,
-  jinja = true,
-  jinja_inline = true,
-  jq = true,
-  json = true,
-  json5 = true,
-  jsonc = true,
-  jsonnet = true,
-  lua = true,
-  make = true,
-  markdown = true,
-  markdown_inline = true,
-  nginx = true,
-  nix = true,
-  ocaml = true,
-  ocaml_interface = "ocaml",
-  odin = true,
-  perl = true,
-  promql = true,
-  proto = true,
-  python = true,
-  query = true,
-  requirements = true,
-  ruby = true,
-  rust = true,
-  sql = true,
-  starlark = true,
-  swift = true,
-  terraform = true,
-  tmux = true,
-  toml = true,
-  tsx = true,
-  typescript = true,
-  vim = true,
-  vimdoc = true,
-  xml = true,
-  yaml = true,
-  zig = true,
-}
+local vendored_parsers_dir = vim.fs.joinpath(_G.config_dir, "vendor", "ts-parsers")
+local vendored_parsers = {}
+for entry, type in vim.fs.dir(vendored_parsers_dir) do
+  if type == "directory" then
+    vendored_parsers[entry] = vim.fs.joinpath(vendored_parsers_dir, entry)
+  end
+end
+
+local parser_aliases = { ocaml_interface = "ocaml" }
+for parser_name, target in pairs(parser_aliases) do
+  vendored_parsers[parser_name] = vim.fs.joinpath(vendored_parsers_dir, target)
+end
 
 local parsers = require("nvim-treesitter.parsers")
 local parser_configs = parsers.get_parser_configs()
@@ -69,11 +18,7 @@ for _, parser_key in ipairs(parser_keys) do
   if vendored_parsers[parser_key] == nil then
     parser_configs[parser_key] = nil
   else
-    dir = vendored_parsers[parser_key]
-    if dir == true then
-      dir = parser_key
-    end
-    parser_configs[parser_key].install_info.url = vim.fs.joinpath(_G.config_dir, "vendor", "ts-parsers", parser_key)
+    parser_configs[parser_key].install_info.url = vendored_parsers[parser_key]
   end
 end
 
