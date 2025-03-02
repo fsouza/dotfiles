@@ -11,9 +11,7 @@ fi
 dotfiles=$(\builtin cd "$(dirname "${0}")/.." && pwd -P)
 
 if [[ ${OSTYPE} == darwin* ]]; then
-	source_profile="${dotfiles}"/neovim.sb
-	profile="${HOME}"/.cache/nvim/neovim.sb
-	install -C "${source_profile}" "${profile}"
+	profile="${dotfiles}/neovim.sb"
 	exec sandbox-exec -f "${profile}" "${executable}" "$@"
 else
 	exec unshare --net "${executable}" "$@"
