@@ -20,7 +20,12 @@ end
 
 local function make(opts)
   if not vim.g.fennel_ks then
-    vim.system({ "make", "-C", _G.dotfiles_dir, "install" }, nil, vim.schedule_wrap(handle_result))
+    vim.system({ "make", "-C", _G.dotfiles_dir, "install" }, {
+      env = {
+        NVIM_CONFIG_DIR = vim.fn.stdpath("config"),
+        NVIM_STATE_DIR = vim.fn.stdpath("state"),
+      },
+    }, vim.schedule_wrap(handle_result))
   end
 end
 

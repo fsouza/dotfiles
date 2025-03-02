@@ -1,6 +1,6 @@
 SHELL := zsh
-NVIM_CONFIG_DIR := $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("config"))' 2>&1)
-NVIM_STATE_DIR := $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("state"))' 2>&1)
+NVIM_CONFIG_DIR ?= $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("config"))' 2>&1)
+NVIM_STATE_DIR ?= $(shell nvim --clean -l - <<<'print(vim.fn.stdpath("state"))' 2>&1)
 NVIM_CONFIG_RSYNC_EXCLUDE := --exclude=langservers --exclude=vendor
 PYTHON ?= python3.12
 
