@@ -1,0 +1,23 @@
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+  - repo: https://github.com/biomejs/pre-commit
+    rev: "v0.4.0"
+    hooks:
+    - id: biome-check
+      additional_dependencies: ["@biomejs/biome@1.9.4"]
+      exclude: 'CHANGELOG.md'
+
+  - repo: local
+    hooks:
+      - id: clang-format
+        name: clang-format
+        language: system
+        types_or: [c, c++, cuda]
+        entry: clang-format -i --style=file
