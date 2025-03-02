@@ -1,0 +1,44 @@
+# This is a comment, to show how #-prefixed lines are ignored.
+# <- @comment
+
+pytest
+# <- @variable
+
+docopt == 0.6.1
+#      ^^ @operator
+#         ^^^^^ @number
+
+requests [security] >= 2.8.1, == 2.8.* ; python_version < "2.7"
+#        ^ @punctuation.bracket
+#         ^^^^^^^^ @variable.parameter
+#                 ^ @punctuation.bracket
+#                           ^ @punctuation.delimiter
+#                                      ^ @punctuation.delimiter
+#                                        ^^^^^^^^^^^^^^ @attribute
+#                                                         ^^^^^ @string
+
+urllib3 @ https://github.com/urllib3/urllib3/archive/refs/tags/1.26.8.zip
+#       ^ @punctuation.delimiter
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ @markup.link.url
+
+-c constraints.txt
+# <- @function
+#  ^^^^^^^^^^^^^^^ @markup.link
+
+./downloads/numpy-1.9.2-cp34-none-win32.whl
+# <- @markup.link
+
+http://wxpython.org/Phoenix/snapshot-builds/wxPython_Phoenix-3.0.3.dev1820+49a8884-cp34-none-win_amd64.whl
+# <- @markup.link.url
+
+git+https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/user/project.git
+# <- @markup.link.url
+#           ^^ @punctuation.special
+#             ^^^^^^^^^^^ @constant
+#                        ^ @punctuation.special
+#                          ^^ @punctuation.special
+
+FooProject >= 1.2 --global-option="--no-user-cfg"
+#                 ^^^^^^^^^^^^^^^ @function
+#                                ^ @operator
+#                                 ^^^^^^^^^^^^^^^ @string
