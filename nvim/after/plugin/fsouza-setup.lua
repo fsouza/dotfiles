@@ -70,13 +70,6 @@ local function setup_word_replace()
   end)
 end
 
-local function setup_notif()
-  local notif = require("fsouza.lib.notif")
-  vim.api.nvim_create_user_command("Notifications", function()
-    notif.log_messages()
-  end, { force = true })
-end
-
 local function setup_yank_highlight()
   require("fsouza.lib.nvim-helpers").augroup("yank_highlight", {
     {
@@ -96,6 +89,5 @@ end
 setup_autofmt_commands()
 setup_browse_command()
 setup_word_replace()
-setup_notif()
 setup_fuzzy_mappings()
 setup_yank_highlight()

@@ -4,9 +4,8 @@ local function wrap_callback(cb)
       cb(...)
       return nil
     end
-  else
-    return nil
   end
+  return nil
 end
 
 local function augroup(name, commands)
@@ -65,24 +64,6 @@ local function rewrite_wrap(f)
   })
 end
 
-local function get_visual_selection_range()
-  local mode = vim.api.nvim_get_mode().mode
-  local _, srow, scol, _ = unpack(vim.fn.getpos("."))
-  local _, erow, ecol, _ = unpack(vim.fn.getpos("v"))
-
-  if srow < erow then
-    return { srow, scol, erow, ecol }
-  elseif srow > erow then
-    return { erow, ecol, srow, scol }
-  else
-    if scol <= ecol then
-      return { srow, scol, erow, ecol }
-    else
-      return { erow, ecol, srow, scol }
-    end
-  end
-end
-
 local function get_visual_selection_contents()
   local mode = vim.api.nvim_get_mode().mode
   return vim.fn.getregion(vim.fn.getpos("v"), vim.fn.getpos("."), { type = mode })
@@ -113,6 +94,5 @@ return {
   once = once,
   rewrite_wrap = rewrite_wrap,
   get_visual_selection_contents = get_visual_selection_contents,
-  get_visual_selection_range = get_visual_selection_range,
   hash_buffer = hash_buffer,
 }

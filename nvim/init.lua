@@ -74,7 +74,7 @@ local function set_ui_options()
     laststatus = 0,
     showmode = true,
     ruler = true,
-    rulerformat = "%25(%=%{v:lua.require('fsouza.lib.notif').get_notification()}%{v:lua.require('fsouza.lsp.diagnostics').ruler()}   %l,%c%)",
+    rulerformat = "%25(%=%{v:lua.require('fsouza.lsp.diagnostics').ruler()}   %l,%c%)",
     guicursor = "a:block",
     mouse = "",
     shiftround = true,
