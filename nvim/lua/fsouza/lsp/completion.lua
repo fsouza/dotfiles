@@ -87,7 +87,7 @@ local function show_or_update_popup(contents)
     end
 
     local left_col = right and end_col or nil
-    local right_col = right and nil or col
+    local right_col = (not right and col) or nil
 
     local p = require("fsouza.lib.popup")
     local popup_winid, popup_bufnr = p.open({
