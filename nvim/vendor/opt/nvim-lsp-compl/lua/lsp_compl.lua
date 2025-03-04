@@ -13,8 +13,10 @@ completion_ctx = {
   resolved_items = {},
   pending_requests = {},
   cancel_pending = function()
-    for _, cancel in pairs(completion_ctx.pending_requests) do
-      cancel()
+    for _, pair in pairs(completion_ctx.pending_requests) do
+      client = pair[1]
+      request_id = pair[2]
+      client:cancel_request(request_id)
     end
     completion_ctx.pending_requests = {}
   end,
@@ -25,14 +27,14 @@ completion_ctx = {
     completion_ctx.suppress_completeDone = false
     completion_ctx.cancel_pending()
     completion_ctx.resolved_items = {}
-  end
+  end,
 }
 
 local function get_detail(item)
   local max_width = 10
 
   if not item.detail then
-    return ''
+    return ""
   end
 
   if #item.detail <= max_width + 3 then
@@ -43,7 +45,7 @@ local function get_detail(item)
 end
 
 local function extract_completion_items(result)
-  if type(result) == 'table' and result.items then
+  if type(result) == "table" and result.items then
     return result.items
   elseif result ~= nil then
     return result
@@ -59,9 +61,9 @@ function M.text_document_completion_list_to_complete_items(result, prefix, clien
   end
   local matches = {}
   for _, item in pairs(items) do
-    local kind = lsp.protocol.CompletionItemKind[item.kind] or ''
+    local kind = lsp.protocol.CompletionItemKind[item.kind] or ""
     local word
-    if kind == 'Snippet' then
+    if kind == "Snippet" then
       word = item.label
     elseif item.insertTextFormat == SNIPPET then
       if item.textEdit then
@@ -90,8 +92,8 @@ function M.text_document_completion_list_to_complete_items(result, prefix, clien
         equal = 0,
         user_data = {
           item = item,
-          client_id = client_id
-        }
+          client_id = client_id,
+        },
       })
     end
   end
@@ -140,79 +142,76 @@ local function adjust_start_col(lnum, line, items, encoding)
         return nil
       end
 
-      if range.start.character > range['end'].character then
+      if range.start.character > range["end"].character then
         return nil
       end
       min_start_char = range.start.character
     end
   end
   if min_start_char then
-    if encoding == 'utf-8' then
+    if encoding == "utf-8" then
       return min_start_char + 1
     else
-      return vim.str_byteindex(line, min_start_char, encoding == 'utf-16') + 1
+      return vim.str_byteindex(line, min_start_char, encoding == "utf-16") + 1
     end
   else
     return nil
   end
 end
 
-
 function M.trigger_completion(bufnr)
   completion_ctx.cancel_pending()
   local lnum, cursor_pos = unpack(api.nvim_win_get_cursor(0))
   local line = api.nvim_get_current_line()
   local line_to_cursor = line:sub(1, cursor_pos)
-  local col = vim.fn.match(line_to_cursor, '\\k*$') + 1
-  local params = lsp.util.make_position_params()
-  local _, cancel_reqs = vim.lsp.buf_request(bufnr, 'textDocument/completion', params, function(err, result, ctx)
-    local client_id = ctx.client_id
+  local col = vim.fn.match(line_to_cursor, "\\k*$") + 1
+  local client = vim.lsp.get_clients({ bufnr = bufnr, method = "textDocument/completion" })[1]
+  if not client then
+    return
+  end
+
+  local encoding = client.offset_encoding or "utf-16"
+  local params = lsp.util.make_position_params(0, encoding)
+  local _, req_id = client:request("textDocument/completion", params, function(err, result)
     completion_ctx.pending_requests = {}
     assert(not err, vim.inspect(err))
     if not result then
-      print('No completion result')
+      print("No completion result")
       return
     end
     completion_ctx.isIncomplete = result.isIncomplete
     local line_changed = api.nvim_win_get_cursor(0)[1] ~= lnum
-    local mode = api.nvim_get_mode()['mode']
-    if line_changed or not (mode == 'i' or mode == 'ic') then
+    local mode = api.nvim_get_mode()["mode"]
+    if line_changed or not (mode == "i" or mode == "ic") then
       return
     end
-    local client = vim.lsp.get_client_by_id(client_id)
     local items = extract_completion_items(result)
-    local encoding = client and client.offset_encoding or 'utf-16'
     local startbyte = adjust_start_col(lnum, line, items, encoding) or col
     local prefix = line:sub(startbyte, cursor_pos)
-    local matches = M.text_document_completion_list_to_complete_items(result, prefix, client_id)
+    local matches = M.text_document_completion_list_to_complete_items(result, prefix, client.id)
     vim.fn.complete(startbyte, matches)
-  end)
-  if cancel_reqs then
-    table.insert(completion_ctx.pending_requests, cancel_reqs)
+  end, bufnr)
+  if req_id then
+    table.insert(completion_ctx.pending_requests, { client, req_id })
   end
 end
-
 
 local function on_InsertLeave()
   completion_ctx.cursor = nil
   completion_ctx.reset()
 end
 
-
 local function apply_text_edits(bufnr, lnum, text_edits, client)
   -- Text edit in the same line would mess with the cursor position
-  local edits = vim.tbl_filter(
-    function(x) return x.range.start.line ~= lnum end,
-    text_edits or {}
-  )
+  local edits = vim.tbl_filter(function(x)
+    return x.range.start.line ~= lnum
+  end, text_edits or {})
   lsp.util.apply_text_edits(edits, bufnr, client.offset_encoding)
 end
 
-
 M.expand_snippet = function(snippet)
-  require('luasnip').lsp_expand(snippet)
+  require("luasnip").lsp_expand(snippet)
 end
-
 
 local function apply_snippet(item, suffix)
   if item.textEdit then
@@ -229,7 +228,7 @@ local function resolve_item(item, client, cb)
   else
     local resolve_edits = (client.server_capabilities.completionProvider or {}).resolveProvider
     if resolve_edits then
-      local _, req_id = client.request('completionItem/resolve', item, function(err, result)
+      local _, req_id = client:request("completionItem/resolve", item, function(err, result)
         completion_ctx.pending_requests = {}
         assert(not err, vim.inspect(err))
         completion_ctx.resolved_items[key] = result
@@ -252,7 +251,7 @@ local function on_CompleteDone(bufnr)
     completion_ctx.suppress_completeDone = false
     return
   end
-  local completed_item = api.nvim_get_vvar('completed_item')
+  local completed_item = api.nvim_get_vvar("completed_item")
   if not completed_item or not completed_item.user_data or not completed_item.user_data.item then
     return
   end
@@ -268,7 +267,7 @@ local function on_CompleteDone(bufnr)
     local start_char = col - #completed_item.word
     local line = api.nvim_buf_get_lines(bufnr, lnum, lnum + 1, true)[1]
     suffix = line:sub(col + 1)
-    api.nvim_buf_set_text(bufnr, lnum, start_char, lnum, #line, {''})
+    api.nvim_buf_set_text(bufnr, lnum, start_char, lnum, #line, { "" })
   end
   if not client then
     return
@@ -301,8 +300,8 @@ function M.resolve_item(user_data, cb)
 end
 
 local function augroup(bufnr)
-  local name = string.format('lsp_compl_%d', bufnr)
-  return vim.api.nvim_create_augroup(name, {clear=true})
+  local name = string.format("lsp_compl_%d", bufnr)
+  return vim.api.nvim_create_augroup(name, { clear = true })
 end
 
 function M.detach(bufnr)
@@ -312,12 +311,12 @@ end
 function M.attach(bufnr)
   opts = opts or {}
   local group = augroup(bufnr)
-  vim.api.nvim_create_autocmd('InsertLeave', {
+  vim.api.nvim_create_autocmd("InsertLeave", {
     group = group,
     buffer = bufnr,
     callback = on_InsertLeave,
   })
-  vim.api.nvim_create_autocmd('CompleteDone', {
+  vim.api.nvim_create_autocmd("CompleteDone", {
     group = group,
     buffer = bufnr,
     callback = function()
