@@ -8,6 +8,7 @@ brew "fnm"
 brew "fzf"
 brew "gettext"
 brew "git", args: ["overwrite"]
+brew "git-delta"
 brew "gopls"
 brew "ripgrep"
 brew "ruff"

@@ -1,9 +1,7 @@
-function _git_enable_difftastic {
+function _git_enable_delta {
 	local configs=(
-		diff.tool difftastic
-		difftool.prompt false
-		'difftool.difftastic.cmd' 'difft "${LOCAL}" "${REMOTE}"'
-		pager.difftool true
+		core.pager delta
+		interactive.diffFilter "delta --color-only"
 	)
 	local config_idx=${GIT_CONFIG_COUNT:-0}
 
@@ -14,7 +12,7 @@ function _git_enable_difftastic {
 		config_idx=$((config_idx + 1))
 	done
 
-	export GIT_CONFIG_COUNT=${config_idx} DFT_BACKGROUND=light DFT_DISPLAY=inline
+	export GIT_CONFIG_COUNT=${config_idx} DELTA_FEATURES=+side-by-side
 }
 
 declare -A _GIT_HOST_EMAIL
@@ -42,8 +40,8 @@ if [[ -v HOMEBREW_PREFIX ]]; then
 	export PERLLIB=${HOMEBREW_PREFIX}/opt/git/share/perl5:${PERLLIB+:${PERLLIB}}
 fi
 
-if command -v difft &>/dev/null; then
-	_git_enable_difftastic
+if command -v delta &>/dev/null; then
+	_git_enable_delta
 fi
 
 add-zsh-hook chpwd __auto_git_config
