@@ -5,9 +5,6 @@ servers.start({
     cmd = { vim.fs.joinpath(_G.cache_dir, "langservers", "bin", "rust-analyzer") },
     settings = {
       ["rust-analyzer"] = {
-        checkOnSave = {
-          command = "clippy",
-        },
         cargo = {
           extraArgs = { "--offline" },
         },
