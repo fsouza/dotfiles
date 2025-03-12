@@ -1,20 +1,3 @@
-function _git_enable_delta {
-	local configs=(
-		core.pager delta
-		interactive.diffFilter "delta --color-only"
-	)
-	local config_idx=${GIT_CONFIG_COUNT:-0}
-
-	for ((i = 1; i < ${#configs}; i += 2)); do
-		export \
-			GIT_CONFIG_KEY_${config_idx}=${configs[$i]} \
-			GIT_CONFIG_VALUE_${config_idx}=${configs[$((i + 1))]}
-		config_idx=$((config_idx + 1))
-	done
-
-	export GIT_CONFIG_COUNT=${config_idx} DELTA_FEATURES=+side-by-side
-}
-
 declare -A _GIT_HOST_EMAIL
 _GIT_HOST_EMAIL=( [git@github.com:]=108725+fsouza@users.noreply.github.com [https://github.com/]=108725+fsouza@users.noreply.github.com [git@codeberg.org:]=fsouza@noreply.codeberg.org )
 
@@ -38,10 +21,6 @@ function __auto_git_config {
 
 if [[ -v HOMEBREW_PREFIX ]]; then
 	export PERLLIB=${HOMEBREW_PREFIX}/opt/git/share/perl5:${PERLLIB+:${PERLLIB}}
-fi
-
-if command -v delta &>/dev/null; then
-	_git_enable_delta
 fi
 
 add-zsh-hook chpwd __auto_git_config
