@@ -34,17 +34,12 @@ local function set_neovim_global_vars()
     netrw_banner = 0,
     netrw_liststyle = 3,
     surround_no_insert_mappings = true,
-    user_emmet_mode = "i",
-    user_emmet_leader_key = "<C-x>",
     wordmotion_extra = {
       "\\([a-f]\\+[0-9]\\+\\([a-f]\\|[0-9]\\)*\\)\\+",
       "\\([0-9]\\+[a-f]\\+\\([0-9]\\|[a-f]\\)*\\)\\+",
       "\\([A-F]\\+[0-9]\\+\\([A-F]\\|[0-9]\\)*\\)\\+",
       "\\([0-9]\\+[A-F]\\+\\([0-9]\\|[A-F]\\)*\\)\\+",
     },
-    sexp_filetypes = "clojure,dune,fennel,scheme,lisp,timl",
-    sexp_enable_insert_mode_mappings = 0,
-    sexp_no_word_maps = 1,
     loaded_python3_provider = 0,
     loaded_ruby_provider = 0,
     loaded_perl_provider = 0,
@@ -207,7 +202,7 @@ local dotfiles_dir = vim.env.FSOUZA_DOTFILES_DIR or vim.fn.expand("~/.dotfiles")
 vim.loader.enable()
 _G.dotfiles_dir = dotfiles_dir
 _G.dotfiles_cache_dir = vim.env.FSOUZA_DOTFILES_CACHE_DIR or vim.fn.expand("~/.cache/fsouza-dotfiles")
-_G.config_dir = dotfiles_dir .. "/nvim"
+_G.config_dir = vim.fs.joinpath(dotfiles_dir, "nvim")
 _G.cache_dir = vim.fn.stdpath("cache")
 _G.data_dir = vim.fn.stdpath("data")
 
