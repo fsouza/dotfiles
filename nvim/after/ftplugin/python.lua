@@ -27,7 +27,7 @@ local function start_pyright(bufnr, python_interpreter)
       },
     },
     opts = {
-      ["diagnostic_filter"] = function()
+      diagnostic_filter = function()
         local pyright = require("fsouza.lsp.servers.pyright")
         return pyright.valid_diagnostic
       end,
