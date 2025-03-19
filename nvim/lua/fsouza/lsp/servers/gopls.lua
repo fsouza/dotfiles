@@ -9,7 +9,7 @@ local function setup()
   servers.start({
     config = {
       name = "gopls",
-      cmd = { vim.fs.joinpath(_G.cache_dir, "langservers", "bin", "gopls") },
+      cmd = { "gopls" },
       init_options = {
         deepCompletion = false,
         staticcheck = true,
