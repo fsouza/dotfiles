@@ -20,6 +20,7 @@
 [pull]
 	rebase = true
 [rebase]
+	autoSquash = true
 	autoStash = true
 [fetch]
 	prune = true
