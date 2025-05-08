@@ -32,6 +32,13 @@ function bootstrap_nvim {
 		)
 	fi
 
+	if command -v go &>/dev/null; then
+		(
+			cd "${FSOUZA_DOTFILES_DIR}/nvim/langservers"
+			go mod download
+		)
+	fi
+
 	# install neovim config
 	env NVIM_DEBUG=1 make -C ${FSOUZA_DOTFILES_DIR}
 }
