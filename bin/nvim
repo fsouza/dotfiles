@@ -14,5 +14,5 @@ if [[ ${OSTYPE} == darwin* ]]; then
 	profile="${dotfiles}/neovim.sb"
 	exec sandbox-exec -f "${profile}" "${executable}" "$@"
 else
-	exec "${executable}" "$@"
+	exec unshare --net "${executable}" "$@"
 fi
