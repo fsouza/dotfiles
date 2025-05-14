@@ -2,7 +2,7 @@
 
 set -euo PIPEFAIL
 
-executable=${NEOVIM_INSTALL_PREFIX}/bin/nvim
+executable=${FSOUZA_NEOVIM_EXECUTABLE:-${NEOVIM_INSTALL_PREFIX}/bin/nvim}
 if ! [ -x ${executable} ]; then
 	echo >&2 neovim is not installed
 	exit 2
