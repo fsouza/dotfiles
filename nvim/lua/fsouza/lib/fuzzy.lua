@@ -120,7 +120,7 @@ local fzf_lua = (function()
 
     fzf_lua_mod.setup({
       fzf_args = vim.env.FZF_DEFAULT_OPTS,
-      previewers = { builtin = { syntax = false } },
+      previewers = { builtin = { syntax = false, limit_b = 1024 * 1024 } },
       buffers = { file_icons = false, git_icons = false, color_icons = false },
       files = {
         previewer = previewer,
