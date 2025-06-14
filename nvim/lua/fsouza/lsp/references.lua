@@ -14,8 +14,8 @@ local function is_test(fname)
   return false
 end
 
-local function do_filter(items)
-  local lineno = vim.api.nvim_win_get_cursor(0)[1]
+local function do_filter(cursor, items)
+  local lineno = cursor[1]
   local filtered_items = {}
 
   for _, item in ipairs(items) do
@@ -51,10 +51,10 @@ local function do_filter(items)
   end
 end
 
-local function filter_references(items)
+local function filter_references(cursor, items)
   if vim.islist(items) then
     if #items > 1 then
-      return do_filter(items)
+      return do_filter(cursor, items)
     else
       return items
     end
@@ -69,9 +69,9 @@ local function register_test_checker(ext, name, checker)
   test_checkers[ext] = ext_checkers
 end
 
-local function on_list(list)
+local function on_list(cursor, list)
   local fuzzy = require("fsouza.lib.fuzzy")
-  list.items = filter_references(list.items)
+  list.items = filter_references(cursor, list.items)
   fuzzy.lsp_on_list(list)
 end
 
