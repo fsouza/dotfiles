@@ -169,7 +169,7 @@ local method_handlers = (function()
             mode = "n",
             lhs = "<leader>q",
             rhs = function()
-              local cursor = vim.api.nvim_win_get_cursor(0)[1]
+              local cursor = vim.api.nvim_win_get_cursor(0)
               vim.lsp.buf.references(nil, {
                 on_list = function(...)
                   local references = require("fsouza.lsp.references")
