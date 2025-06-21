@@ -1,4 +1,8 @@
 local function fmt_task(task_name, message, percentage)
+  if message == nil then
+    return ""
+  end
+
   local mid = ""
   if percentage then
     mid = string.format(" (%s%%)", percentage)
