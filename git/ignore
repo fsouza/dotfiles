@@ -30,3 +30,5 @@ tags
 
 # random stuff
 .factorypath
+
+**/.claude/settings.local.json
