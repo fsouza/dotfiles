@@ -4,9 +4,23 @@ local function rename(client, bufnr)
     local new_name = vim.fn.input("New name: ", placeholder)
 
     if new_name and new_name ~= "" then
-      local params = vim.lsp.util.make_position_params()
+      local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
       params.newName = new_name
-      client:request("textDocument/rename", params)
+      client:request("textDocument/rename", params, function(err, result, ctx)
+        -- workaround pyright bug by removing annotationId for workspaceEdits
+        -- that don't have changeAnnotations.
+        --
+        -- Tracked here: https://github.com/microsoft/pyright/issues/10671
+        if result and result.changeAnnotations == nil then
+          for _, change in ipairs(result.documentChanges or {}) do
+            for _, edit in ipairs(change.edits or {}) do
+              edit.annotationId = nil
+            end
+          end
+        end
+
+        vim.lsp.handlers[ctx.method](err, result, ctx)
+      end)
     end
   end
 
@@ -35,7 +49,7 @@ local function rename(client, bufnr)
 
   local method = "textDocument/prepareRename"
   if client:supports_method(method) then
-    client:request(method, vim.lsp.util.make_position_params(), prepare_rename_cb, bufnr)
+    client:request(method, vim.lsp.util.make_position_params(0, client.offset_encoding), prepare_rename_cb, bufnr)
   else
     perform_rename()
   end
