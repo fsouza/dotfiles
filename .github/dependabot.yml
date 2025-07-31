@@ -9,10 +9,14 @@ updates:
     directory: "/nvim/langservers"
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 15
     open-pull-requests-limit: 99
   - package-ecosystem: npm
     directory: "/nvim/langservers"
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 15
     open-pull-requests-limit: 99
     versioning-strategy: increase
