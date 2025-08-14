@@ -13,8 +13,7 @@ local function register_capability(_, result, ctx)
       register_method(registration.method, client, bufnr)
 
       if
-        vim.uv.os_uname().sysname == "Darwin"
-        and registration.method == "workspace/didChangeWatchedFiles"
+        registration.method == "workspace/didChangeWatchedFiles"
         and registration.registerOptions
         and registration.registerOptions.watchers
         and registration.id
@@ -35,7 +34,7 @@ local function unregister_capability(_, result, ctx)
     client.dynamic_capabilities:unregister(result.unregisterations)
 
     for _, unregistration in pairs(result.unregisterations) do
-      if vim.uv.os_uname().sysname == "Darwin" and unregistration.method == "workspace/didChangeWatchedFiles" then
+      if unregistration.method == "workspace/didChangeWatchedFiles" then
         fs_watch.unregister(unregistration.id, ctx.client_id)
       end
     end
