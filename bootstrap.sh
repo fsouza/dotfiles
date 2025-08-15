@@ -123,8 +123,6 @@ function setup_nvim {
 source ${FSOUZA_DOTFILES_DIR}/zsh/.zshrc
 
 set -e
-update_neovim
-
 bump_dotfiles
 EOF
 }
