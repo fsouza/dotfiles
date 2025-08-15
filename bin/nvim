@@ -2,7 +2,18 @@
 
 set -euo PIPEFAIL
 
-executable=${FSOUZA_NEOVIM_EXECUTABLE:-${NEOVIM_INSTALL_PREFIX}/bin/nvim}
+THIS_SCRIPT=$(realpath "$0")
+
+function find_nvim {
+	while read p; do
+		if [[ $p != "${THIS_SCRIPT}" ]]; then
+			echo $p
+			return 0
+		fi
+	done <<<$(which -a nvim)
+}
+
+executable=$(find_nvim)
 if ! [ -x ${executable} ]; then
 	echo >&2 neovim is not installed
 	exit 2

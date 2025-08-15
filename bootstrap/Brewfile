@@ -9,6 +9,7 @@ brew "fzf"
 brew "gettext"
 brew "git", args: ["overwrite"]
 brew "gopls"
+brew "neovim"
 brew "ripgrep"
 brew "ruff"
 brew "rust-analyzer"
