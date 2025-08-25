@@ -5,12 +5,12 @@
 	"license": "ISC",
 	"dependencies": {
 		"@fsouza/prettierd": "^0.26.1",
-		"@typescript-eslint/typescript-estree": "^8.38.0",
+		"@typescript-eslint/typescript-estree": "^8.40.0",
 		"eslint_d": "^14.3.0",
 		"postcss-scss": "^4.0.9",
-		"pyright": "^1.1.403",
-		"typescript": "^5.8.3",
-		"typescript-language-server": "^4.3.4",
+		"pyright": "^1.1.404",
+		"typescript": "^5.9.2",
+		"typescript-language-server": "^4.4.0",
 		"vscode-langservers-extracted": "^4.10.0",
 		"yaml-language-server": "^1.18.0"
 	}
