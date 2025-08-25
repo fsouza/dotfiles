@@ -4,7 +4,7 @@
 	"scripts": {},
 	"license": "ISC",
 	"dependencies": {
-		"@fsouza/prettierd": "^0.26.1",
+		"@fsouza/prettierd": "^0.26.2",
 		"@typescript-eslint/typescript-estree": "^8.40.0",
 		"eslint_d": "^14.3.0",
 		"postcss-scss": "^4.0.9",
