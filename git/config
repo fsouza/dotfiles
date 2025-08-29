@@ -44,7 +44,7 @@
 	verbose = true
 [rerere]
 	enabled = true
-[url "https://github"]
-	insteadOf = git://github
 [grep]
+	threads = 0
+[pack]
 	threads = 0
