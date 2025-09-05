@@ -43,7 +43,7 @@ unset extras_skip
 cond_source ${FSOUZA_DOTFILES_DIR}/extra/local-functions
 cond_source ${FSOUZA_DOTFILES_DIR}/extra/"$(uname -s)"-functions
 
-fpath=(${HOMEBREW_PREFIX}/share/zsh-completions ${cache_home}/zsh/zfunc $fpath)
+fpath=(${FSOUZA_DOTFILES_DIR}/vendor/zsh-completions/src ${cache_home}/zsh/zfunc $fpath)
 export ZLE_SPACE_SUFFIX_CHARS=$'|&'
 
 autoload -Uz compinit && compinit -d ${cache_home}/zsh/zcompdump -u
