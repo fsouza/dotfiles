@@ -1,4 +1,3 @@
-export FSOUZA_DOTFILES_CACHE_DIR=${FSOUZA_DOTFILES_CACHE_DIR:-${HOME}/.cache/fsouza-dotfiles}
 export HISTFILE=${HOME}/.cache/zsh/history
 export HISTSIZE=1234567890
 export SAVEHIST=${HISTSIZE}

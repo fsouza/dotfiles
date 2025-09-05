@@ -201,7 +201,6 @@ end
 local dotfiles_dir = vim.env.FSOUZA_DOTFILES_DIR or vim.fn.expand("~/.dotfiles")
 vim.loader.enable()
 _G.dotfiles_dir = dotfiles_dir
-_G.dotfiles_cache_dir = vim.env.FSOUZA_DOTFILES_CACHE_DIR or vim.fn.expand("~/.cache/fsouza-dotfiles")
 _G.config_dir = vim.fs.joinpath(dotfiles_dir, "nvim")
 _G.cache_dir = vim.fn.stdpath("cache")
 _G.data_dir = vim.fn.stdpath("data")

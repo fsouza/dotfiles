@@ -7,11 +7,10 @@ function install_alacritty_config {
 	(
 		local dotfiles_dir=$(cd "$(dirname $0)/.." && pwd -P)
 		local tmp_config=$(mktemp -p "${HOME}/.config")
-		export FSOUZA_DOTFILES_CACHE_DIR=${FSOUZA_DOTFILES_CACHE_DIR-${HOME}/.cache/fsouza-dotfiles}
 		export FSOUZA_DOTFILES_DIR=${FSOUZA_DOTFILES_DIR-${dotfiles_dir}}
 		export SHELL=$(brew --prefix zsh)/bin/zsh
 
-		envsubst '${FSOUZA_DOTFILES_CACHE_DIR} ${FSOUZA_DOTFILES_DIR} ${SHELL}' <"${FSOUZA_DOTFILES_DIR}"/alacritty.toml >${tmp_config}
+		envsubst '${FSOUZA_DOTFILES_DIR} ${SHELL}' <"${FSOUZA_DOTFILES_DIR}"/alacritty.toml >${tmp_config}
 		mv "${tmp_config}" "${HOME}/.config/alacritty.toml"
 	)
 }
