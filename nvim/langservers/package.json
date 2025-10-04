@@ -12,6 +12,6 @@
 		"typescript": "^5.9.2",
 		"typescript-language-server": "^4.4.1",
 		"vscode-langservers-extracted": "^4.10.0",
-		"yaml-language-server": "^1.18.0"
+		"yaml-language-server": "^1.19.0"
 	}
 }
