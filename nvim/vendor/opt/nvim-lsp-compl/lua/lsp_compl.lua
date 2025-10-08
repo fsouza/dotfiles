@@ -13,7 +13,7 @@ completion_ctx = {
   resolved_items = {},
   pending_requests = {},
   cancel_pending = function()
-    for _, pair in pairs(completion_ctx.pending_requests) do
+    for _, pair in ipairs(completion_ctx.pending_requests) do
       client = pair[1]
       request_id = pair[2]
       client:cancel_request(request_id)
