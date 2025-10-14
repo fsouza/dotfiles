@@ -226,11 +226,6 @@
   resolved "https://registry.yarnpkg.com/@vscode/l10n/-/l10n-0.0.18.tgz#916d3a5e960dbab47c1c56f58a7cb5087b135c95"
   integrity sha512-KYSIHVmslkaCDyw013pphY+d7x1qV8IZupYfeIfzNA+nsaWHbn5uPuQRvdRFsa9zFzGeudPuoGoZ1Op4jrJXIQ==
 
-"@vscode/l10n@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@vscode/l10n/-/l10n-0.0.9.tgz#9e8c780b2b9fe0dacfdf9ea48030999cf790d3f9"
-  integrity sha512-unov9NybrIXlIlmbDYzkxwigwLfogYpo4DqE+lb7dd6LoocaUEp0L1ghvqFm2UPYfUGJpUV4iS2osxcJsJNQMw==
-
 acorn-jsx@^5.3.2:
   version "5.3.2"
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.3.2.tgz#7ed5bb55908b3b2f1bc55c6af1653bada7f07937"
@@ -1140,12 +1135,12 @@ word-wrap@^1.2.5:
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.5.tgz#d2c45c6dd4fbce621a66f136cbe328afd0410b34"
   integrity sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==
 
-yaml-language-server@^1.19.0:
-  version "1.19.0"
-  resolved "https://registry.yarnpkg.com/yaml-language-server/-/yaml-language-server-1.19.0.tgz#7e07d55399a2c8084b5d30a22525bd7d41a209ad"
-  integrity sha512-ZKf5swgRYDqyB/Aj6QMShMhO5xuxJbPjBxoOmGqcgLY1w5PdAv93FyZzzm8/DxbEUtsnXe4mF2XoB82sLbdBpA==
+yaml-language-server@^1.19.1:
+  version "1.19.1"
+  resolved "https://registry.yarnpkg.com/yaml-language-server/-/yaml-language-server-1.19.1.tgz#ec69c54e66350ce7583a01e6a00dab47dd35a5b5"
+  integrity sha512-EO07kunMFvRQHnhSmtf9xU0if7yRndhsv9GD4uBYC0nzzSBeb/CkLWN7EjWNJ9+0OysMBx/GnGQiGTyKsnfNFg==
   dependencies:
-    "@vscode/l10n" "^0.0.9"
+    "@vscode/l10n" "^0.0.18"
     ajv "^8.17.1"
     ajv-draft-04 "^1.0.0"
     lodash "4.17.21"
