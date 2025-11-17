@@ -1135,10 +1135,10 @@ word-wrap@^1.2.5:
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.5.tgz#d2c45c6dd4fbce621a66f136cbe328afd0410b34"
   integrity sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==
 
-yaml-language-server@^1.19.1:
-  version "1.19.1"
-  resolved "https://registry.yarnpkg.com/yaml-language-server/-/yaml-language-server-1.19.1.tgz#ec69c54e66350ce7583a01e6a00dab47dd35a5b5"
-  integrity sha512-EO07kunMFvRQHnhSmtf9xU0if7yRndhsv9GD4uBYC0nzzSBeb/CkLWN7EjWNJ9+0OysMBx/GnGQiGTyKsnfNFg==
+yaml-language-server@^1.19.2:
+  version "1.19.2"
+  resolved "https://registry.yarnpkg.com/yaml-language-server/-/yaml-language-server-1.19.2.tgz#55be86aeb5ae56dab5baa0cf44dee3a1effbb514"
+  integrity sha512-9F3myNmJzUN/679jycdMxqtydPSDRAarSj3wPiF7pchEPnO9Dg07Oc+gIYLqXR4L+g+FSEVXXv2+mr54StLFOg==
   dependencies:
     "@vscode/l10n" "^0.0.18"
     ajv "^8.17.1"
