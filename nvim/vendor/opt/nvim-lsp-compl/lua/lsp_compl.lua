@@ -235,9 +235,7 @@ local function resolve_item(item, client, cb)
         cb(result)
       end, bufnr)
       if req_id then
-        table.insert(completion_ctx.pending_requests, function()
-          client.cancel_request(req_id)
-        end)
+        table.insert(completion_ctx.pending_requests, { client, req_id })
       end
     else
       completion_ctx.resolved_items[key] = item
