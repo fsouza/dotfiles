@@ -1,10 +1,17 @@
 local non_focusable_handlers = {}
 
+local function get_fs_watch()
+  if vim.uv.os_uname().sysname == "Linux" then
+    return require("fsouza.lsp.fs-watchman")
+  end
+  return require("fsouza.lsp.fs-watch")
+end
+
 local function register_capability(_, result, ctx)
   local client = vim.lsp.get_client_by_id(ctx.client_id)
   local bufnr = vim.api.nvim_get_current_buf()
   local register_method = require("fsouza.lsp").register_method
-  local fs_watch = require("fsouza.lsp.fs-watch")
+  local fs_watch = get_fs_watch()
 
   if client and result and result.registrations then
     client.dynamic_capabilities:register(result.registrations)
@@ -28,14 +35,14 @@ end
 
 local function unregister_capability(_, result, ctx)
   local client = vim.lsp.get_client_by_id(ctx.client_id)
-  local fs_watch = require("fsouza.lsp.fs-watch")
+  local fs_watch = get_fs_watch()
 
-  if client and result and result.unregistrations then
+  if client and result and result.unregisterations then
     client.dynamic_capabilities:unregister(result.unregisterations)
 
-    for _, unregistration in pairs(result.unregisterations) do
-      if unregistration.method == "workspace/didChangeWatchedFiles" then
-        fs_watch.unregister(unregistration.id, ctx.client_id)
+    for _, unregisteration in pairs(result.unregisterations) do
+      if unregisteration.method == "workspace/didChangeWatchedFiles" then
+        fs_watch.unregister(unregisteration.id, ctx.client_id)
       end
     end
   end
