@@ -120,7 +120,15 @@ local fzf_lua = (function()
 
     fzf_lua_mod.setup({
       fzf_args = vim.env.FZF_DEFAULT_OPTS,
-      previewers = { builtin = { syntax = false, limit_b = 1024 * 1024 } },
+      previewers = {
+        builtin = { syntax = false, limit_b = 1024 * 1024 },
+        git_diff = {
+          pager = "",
+          cmd_deleted = "git diff HEAD --",
+          cmd_modified = "git diff HEAD",
+          cmd_untracked = "git diff --no-index /dev/null",
+        },
+      },
       buffers = { file_icons = false, git_icons = false, color_icons = false },
       files = {
         previewer = previewer,
