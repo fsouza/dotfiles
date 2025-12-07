@@ -48,3 +48,5 @@
 	threads = 0
 [pack]
 	threads = 0
+[checkout]
+	workers = 0
