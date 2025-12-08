@@ -35,8 +35,8 @@ local function start_typescript_language_server(bufnr)
   servers.start({
     bufnr = bufnr,
     config = {
-      name = "typescript-language-server",
-      cmd = { "typescript-language-server", "--stdio" },
+      name = "vtsls",
+      cmd = { "vtsls", "--stdio" },
     },
     cb = function()
       local register_test_checker = require("fsouza.lsp.references").register_test_checker
