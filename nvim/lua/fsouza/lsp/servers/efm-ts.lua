@@ -38,6 +38,9 @@ local function start_typescript_language_server(bufnr)
       name = "vtsls",
       cmd = { "vtsls", "--stdio" },
     },
+    find_root_dir = function(fname)
+      return servers.patterns_with_fallback({ "tsconfig.json", "package.json" }, fname)
+    end,
     cb = function()
       local register_test_checker = require("fsouza.lsp.references").register_test_checker
       local exts = { "js", "jsx", "ts", "tsx" }
