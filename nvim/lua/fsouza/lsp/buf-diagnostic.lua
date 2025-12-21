@@ -28,7 +28,7 @@ local function filter(result, client)
 end
 
 local function buf_clear_all_diagnostics()
-  local all_clients = vim.lsp.get_active_clients()
+  local all_clients = vim.lsp.get_clients()
   for _, client in ipairs(all_clients) do
     vim.diagnostic.hide(vim.lsp.diagnostic.get_namespace(client.id))
   end

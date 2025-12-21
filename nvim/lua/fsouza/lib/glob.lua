@@ -206,7 +206,6 @@ local function break_tree(tree)
         table.insert(broken_trees, break_tree(t))
       end
 
-      local result = {}
       for _, nodes_str in ipairs(broken_trees) do
         acc = accumulate(acc, nodes_str)
       end

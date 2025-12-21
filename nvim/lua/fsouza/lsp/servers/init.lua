@@ -1,5 +1,3 @@
-local disabled_servers = {}
-
 local function fnm_exec(command)
   local node_version = vim.fs.joinpath(_G.config_dir, "langservers", ".node-version")
   local cmd = { "fnm", "exec", "--using", node_version, "--" }
