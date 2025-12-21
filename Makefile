@@ -30,7 +30,9 @@ install-nvim-config:
 
 .PHONY: install-hammerspoon
 install-hammerspoon:
+ifeq ($(shell uname -s),Darwin)
 	rsync -avr --delete hammerspoon/ $(HOME)/.hammerspoon/
+endif
 
 .PHONY: uninstall
 uninstall: uninstall-nvim-config clean-hammerspoon
