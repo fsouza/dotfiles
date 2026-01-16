@@ -191,33 +191,33 @@
   resolved "https://registry.yarnpkg.com/@vscode/l10n/-/l10n-0.0.18.tgz#916d3a5e960dbab47c1c56f58a7cb5087b135c95"
   integrity sha512-KYSIHVmslkaCDyw013pphY+d7x1qV8IZupYfeIfzNA+nsaWHbn5uPuQRvdRFsa9zFzGeudPuoGoZ1Op4jrJXIQ==
 
-"@vtsls/language-server@^0.2.9":
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/@vtsls/language-server/-/language-server-0.2.9.tgz#03581d61be564bf9c8119f7d70b2fb1161658f56"
-  integrity sha512-4RaXUlpg6VPnOLr5fF0uj3vsoteZ17BG04UyFyqVGIg70xbJ8pwy1ZkUXbwUkvXhaYHAtBSbh4P8bJUSmB87eg==
+"@vtsls/language-server@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@vtsls/language-server/-/language-server-0.3.0.tgz#c3ab917f2c1e570036d6fece2fdc426579f5f72e"
+  integrity sha512-EYTkCHNGz3MFSP7z0DZ5+WBQY5CWEH7bCUu53EaDloBTjghoi2vfZqSrS0+7WsRG03MhBhjGG9ifNee/2kixvQ==
   dependencies:
-    "@vtsls/language-service" "0.2.9"
+    "@vtsls/language-service" "0.3.0"
     vscode-languageserver "^9.0.1"
     vscode-uri "^3.1.0"
 
-"@vtsls/language-service@0.2.9":
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/@vtsls/language-service/-/language-service-0.2.9.tgz#c6fe2780f2d2823598f972f60cc9c1e58f2ea776"
-  integrity sha512-w9yJNfsLm9/NPRLmYL3xKzNe7QQRs3ctmuQVMTrVby2A9c+yCrg0f+cKkle2MhZu2RjnewnBBFSgTSIaR5/MIQ==
+"@vtsls/language-service@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@vtsls/language-service/-/language-service-0.3.0.tgz#d8374d238a4e1bbf29011f22f00ac994b8339f8f"
+  integrity sha512-u2Z5oY64953CvG1SdI6Zimlbnaqj7OT/sj9zcw/gr/f6pl3e0ryh8lsa376MeC9T/SW7q+Aw0YMyUZIIIZOyng==
   dependencies:
     "@vscode/l10n" "^0.0.18"
-    "@vtsls/vscode-fuzzy" "0.0.1"
+    "@vtsls/vscode-fuzzy" "0.1.0"
     jsonc-parser "^3.2.0"
     semver "7.5.2"
-    typescript "5.8.3"
+    typescript "5.9.3"
     vscode-languageserver-protocol "^3.17.5"
     vscode-languageserver-textdocument "^1.0.12"
     vscode-uri "^3.1.0"
 
-"@vtsls/vscode-fuzzy@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@vtsls/vscode-fuzzy/-/vscode-fuzzy-0.0.1.tgz#734824b7056ca68e31a9126d312994799e7d1ad4"
-  integrity sha512-2KCtA+/OmPVttsdVggO0WQFXZwM0zbG7G8KRGExe4YeoaHB0fDWyfsNrWnutnFVRlpmu8quVTjTI15YK6KGCFw==
+"@vtsls/vscode-fuzzy@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@vtsls/vscode-fuzzy/-/vscode-fuzzy-0.1.0.tgz#4bda35942ac2940b808b6b64baf14fd1ede222e2"
+  integrity sha512-jpJ6pFyi152BZ65j1D7otCf1YA9xaMqXV6nn2MOF8BNx0mkwIp2lTj26xvGk/mvEtiVvsGN3vMiBNXMxcv6bIA==
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
@@ -903,20 +903,15 @@ type-check@^0.4.0, type-check@~0.4.0:
   dependencies:
     prelude-ls "^1.2.1"
 
-typescript@5.8.3:
-  version "5.8.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.8.3.tgz#92f8a3e5e3cf497356f4178c34cd65a7f5e8440e"
-  integrity sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==
+typescript@5.9.3, typescript@^5.9.3:
+  version "5.9.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.9.3.tgz#5b4f59e15310ab17a216f5d6cf53ee476ede670f"
+  integrity sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==
 
 typescript@^4.0.5:
   version "4.9.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
-
-typescript@^5.9.3:
-  version "5.9.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.9.3.tgz#5b4f59e15310ab17a216f5d6cf53ee476ede670f"
-  integrity sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==
 
 uri-js@^4.2.2:
   version "4.4.1"
