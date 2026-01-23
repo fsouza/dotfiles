@@ -4,3 +4,11 @@ local efm = require("fsouza.lsp.servers.efm")
 efm.add(bufnr, "nix", {
   { formatCommand = "nixfmt --filename ${INPUT}", formatStdin = true },
 })
+
+local servers = require("fsouza.lsp.servers")
+servers.start({
+  config = {
+    name = "nixd",
+    cmd = { "nixd" },
+  },
+})
