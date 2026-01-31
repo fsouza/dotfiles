@@ -2,35 +2,24 @@ local function is_python_test(fname)
   return (string.find(fname, "test_.*%.py$") ~= nil) or (string.find(fname, ".*_test%.py$") ~= nil)
 end
 
-local function start_pyright(bufnr, python_interpreter)
+local function start_ty(bufnr, python_interpreter)
   local servers = require("fsouza.lsp.servers")
   python_interpreter = python_interpreter or vim.fs.joinpath(_G.cache_dir, "venv", "bin", "python3")
 
   servers.start({
     bufnr = bufnr,
     config = {
-      name = "pyright",
-      cmd = { "pyright-langserver", "--stdio" },
-      cmd_env = { NODE_OPTIONS = "--max-old-space-size=16384" },
+      name = "ty",
+      cmd = { "ty", "server" },
       settings = {
-        pyright = {},
-        python = {
-          pythonPath = python_interpreter,
-          analysis = {
-            autoImportCompletions = true,
-            autoSearchPaths = true,
-            diagnosticMode = vim.g.pyright_diagnostic_mode or "workspace",
-            typeCheckingMode = vim.g.pyright_type_checking_mode or "basic",
-            useLibraryCodeForTypes = true,
+        ty = {
+          configuration = {
+            environment = {
+              python = python_interpreter,
+            },
           },
         },
       },
-    },
-    opts = {
-      diagnostic_filter = function()
-        local pyright = require("fsouza.lsp.servers.pyright")
-        return pyright.valid_diagnostic
-      end,
     },
     cb = function()
       local references = require("fsouza.lsp.references")
@@ -78,7 +67,7 @@ local detect_interpreter = require("fsouza.lib.python").detect_interpreter
 
 detect_interpreter(function(interpreter)
   vim.schedule(function()
-    start_pyright(bufnr, interpreter)
+    start_ty(bufnr, interpreter)
   end)
 end)
 
