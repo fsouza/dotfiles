@@ -23,6 +23,5 @@ brew "watchman"
 brew "zoxide"
 
 if OS.mac?
-  cask "claude-code"
   cask "font-sauce-code-pro-nerd-font"
 end
