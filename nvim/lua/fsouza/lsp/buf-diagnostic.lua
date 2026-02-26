@@ -37,7 +37,7 @@ end
 -- This is a workaround because the default lsp client doesn't let us hook into
 -- textDocument/didChange like coc.nvim does.
 local function exec_hooks()
-  for _, f in ipairs(hooks) do
+  for _, f in pairs(hooks) do
     f()
   end
 end
