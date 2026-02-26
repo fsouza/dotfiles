@@ -1,6 +1,6 @@
 local function parse_line(line, map)
-  local col_pattern = "^([a-zA-Z0-9/][^:]+):(%d+):(%d+):(.+)"
-  local line_pattern = "^([a-zA-Z0-9/][^:]+):(%d+):(.+)"
+  local col_pattern = "^([a-zA-Z0-9/.~][^:]+):(%d+):(%d+):(.+)"
+  local line_pattern = "^([a-zA-Z0-9/.~][^:]+):(%d+):(.+)"
   line = vim.trim(line)
 
   local filename, lnum, col, text = string.match(line, col_pattern)
