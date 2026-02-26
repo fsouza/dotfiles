@@ -16,15 +16,16 @@ end
 
 local function do_filter(cursor, items)
   local lineno = cursor[1]
+  local current_file = vim.api.nvim_buf_get_name(0)
   local filtered_items = {}
 
   for _, item in ipairs(items) do
-    if item.lnum ~= lineno then
+    if item.filename ~= current_file or item.lnum ~= lineno then
       table.insert(filtered_items, item)
     end
   end
 
-  if is_test(vim.api.nvim_buf_get_name(0)) then
+  if is_test(current_file) then
     return filtered_items
   else
     local items2 = vim.deepcopy(filtered_items)
