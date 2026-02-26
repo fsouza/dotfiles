@@ -280,7 +280,7 @@ local function send_items(items_or_fzf_cb, title, opts)
     if #items_or_fzf_cb == 0 then
       -- Do nothing
     elseif #items_or_fzf_cb == 1 then
-      actions.enter(items_or_fzf_cb[1])
+      actions.enter({ items_or_fzf_cb[1] })
     else
       send_to_fzf()
     end
