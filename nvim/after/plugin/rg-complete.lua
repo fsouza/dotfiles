@@ -19,7 +19,7 @@ local function complete()
   local compl_pos = find_pos(current_line)
   current_line = vim.trim(current_line)
 
-  if current_line then
+  if current_line ~= "" then
     vim.system(
       {
         "rg",
