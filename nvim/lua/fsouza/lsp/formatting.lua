@@ -9,7 +9,13 @@ end
 
 local function formatting_params(bufnr)
   local et = vim.bo[bufnr].expandtab
-  local tab_size = et and vim.bo[bufnr].softtabstop or vim.bo[bufnr].tabstop
+  local tab_size = vim.bo[bufnr].softtabstop
+  if tab_size <= 0 then
+    tab_size = vim.bo[bufnr].shiftwidth
+  end
+  if tab_size == 0 then
+    tab_size = vim.bo[bufnr].tabstop
+  end
   local opts = { tabSize = tab_size, insertSpaces = et }
 
   return {
