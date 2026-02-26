@@ -135,8 +135,8 @@ local function set_global_mappings()
     { lhs = "<c-b>", rhs = "<left>" },
   }
 
-  vim.keymap.set({ "x", "v" }, "#", '"my?\\V<C-R>=escape(getreg("m"), "?")<CR><CR>', { remap = false })
-  vim.keymap.set({ "x", "v" }, "*", '"my/\\V<C-R>=escape(getreg("m"), "/")<CR><CR>', { remap = false })
+  vim.keymap.set({ "x", "v" }, "#", '"my?\\V<C-R>=escape(getreg("m"), "?\\\\")<CR><CR>', { remap = false })
+  vim.keymap.set({ "x", "v" }, "*", '"my/\\V<C-R>=escape(getreg("m"), "/\\\\")<CR><CR>', { remap = false })
   vim.keymap.set({ "x", "v" }, "p", '"_dP', { remap = false })
   vim.keymap.set({ "n" }, "<leader>j", ":cn<CR>", { remap = false })
   vim.keymap.set({ "n" }, "<leader>k", ":cp<CR>", { remap = false })
