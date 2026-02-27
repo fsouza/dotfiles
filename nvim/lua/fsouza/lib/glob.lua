@@ -8,6 +8,9 @@ local function escape_literal(literal)
     ["("] = true,
     [")"] = true,
     ["@"] = true,
+    ["+"] = true,
+    ["~"] = true,
+    ["}"] = true,
   }
 
   local result = string.gsub(literal, ".", function(char)
@@ -84,6 +87,8 @@ local function compile_to_regex(tree)
       return ")"
     elseif value == "," then
       return "|"
+    elseif value == "!" then
+      return "^"
     elseif startswith(value, "**") then
       return ".*"
     else
@@ -206,9 +211,13 @@ local function break_tree(tree)
         table.insert(broken_trees, break_tree(t))
       end
 
+      local all_nodes = {}
       for _, nodes_str in ipairs(broken_trees) do
-        acc = accumulate(acc, nodes_str)
+        for _, s in ipairs(nodes_str) do
+          table.insert(all_nodes, s)
+        end
       end
+      acc = accumulate(acc, all_nodes)
     else
       local new_acc = {}
       for _, e in ipairs(acc) do
