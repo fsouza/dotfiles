@@ -1,1 +1,1 @@
-require("fsouza.lsp.servers.efm-ts").start("typescript")
+require("fsouza.lsp.servers.efm-ts").start("typescriptreact")
