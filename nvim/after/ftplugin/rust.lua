@@ -10,9 +10,9 @@ servers.start({
         },
       },
     },
-    find_root_dir = function()
-      return servers.patterns_with_fallback({ "Cargo.toml" })
-    end,
   },
+  find_root_dir = function(fname)
+    return servers.patterns_with_fallback({ "Cargo.toml" }, fname)
+  end,
   opts = { autofmt = true },
 })
