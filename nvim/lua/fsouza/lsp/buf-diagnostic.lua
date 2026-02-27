@@ -45,7 +45,7 @@ end
 local function make_handler()
   return function(err, result, context, ...)
     vim.schedule(exec_hooks)
-    pcall(vim.diagnostic.reset, context.client_id, context.bufnr)
+    pcall(vim.diagnostic.reset, vim.lsp.diagnostic.get_namespace(context.client_id), context.bufnr)
 
     local client = vim.lsp.get_client_by_id(context.client_id)
     local filtered_result = filter(result, client)

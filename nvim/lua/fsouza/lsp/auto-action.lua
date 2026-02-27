@@ -9,7 +9,7 @@ end
 
 local function with_diagnostics(client, bufnr, cb)
   local function call_cb()
-    local diagnostics = vim.diagnostic.get(bufnr, { namespace = client.id })
+    local diagnostics = vim.diagnostic.get(bufnr, { namespace = vim.lsp.diagnostic.get_namespace(client.id) })
     cb(diagnostics)
   end
 
