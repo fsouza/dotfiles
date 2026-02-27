@@ -9,7 +9,6 @@ end
 
 local function register_capability(_, result, ctx)
   local client = vim.lsp.get_client_by_id(ctx.client_id)
-  local bufnr = vim.api.nvim_get_current_buf()
   local register_method = require("fsouza.lsp").register_method
   local fs_watch = get_fs_watch()
 
@@ -17,7 +16,9 @@ local function register_capability(_, result, ctx)
     client.dynamic_capabilities:register(result.registrations)
 
     for _, registration in pairs(result.registrations) do
-      register_method(registration.method, client, bufnr)
+      for bufnr, _ in pairs(client.attached_buffers) do
+        register_method(registration.method, client, bufnr)
+      end
 
       if
         registration.method == "workspace/didChangeWatchedFiles"
