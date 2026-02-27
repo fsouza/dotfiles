@@ -13,10 +13,14 @@ local function patch_server_capabilities(client)
 end
 
 local function patch_supports_method(client)
+  if client._fsouza_supports_method_patched then
+    return
+  end
+  client._fsouza_supports_method_patched = true
   local supports_method = client.supports_method
-  client.supports_method = function(client, method)
+  client.supports_method = function(client, method, ...)
     local disabled = disabled_methods[client.name] and disabled_methods[client.name][method] or false
-    return (not disabled) and supports_method(client, method)
+    return (not disabled) and supports_method(client, method, ...)
   end
 end
 
