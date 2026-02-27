@@ -53,25 +53,26 @@ local function normalize_loc(loc)
   return loc
 end
 
-local function ts_range(current_buf, loc)
+local function ts_range(loc)
   loc = normalize_loc(loc)
 
   if not loc.uri then
     return loc
   end
 
+  local bufnr = vim.uri_to_bufnr(loc.uri)
+  vim.fn.bufload(bufnr)
+
   local parsers = require("nvim-treesitter.parsers")
-  local filetype = vim.bo[current_buf].filetype
+  local filetype = vim.bo[bufnr].filetype
   local lang = parsers.ft_to_lang(filetype)
 
   if not lang or lang == "" or not parsers.has_parser(lang) then
     return loc
   end
 
-  local bufnr = vim.uri_to_bufnr(loc.uri)
-  vim.fn.bufload(bufnr)
-
   local parser = vim.treesitter.get_parser(bufnr, lang)
+  parser:parse()
   local _, tree = next(parser:trees())
 
   if not tree then
@@ -82,6 +83,10 @@ local function ts_range(current_buf, loc)
   local end_pos = loc.range["end"]
   local root = tree:root()
   local node = root:named_descendant_for_range(start_pos.line, start_pos.character, end_pos.line, end_pos.character)
+
+  if node == nil then
+    return loc
+  end
 
   local parent_node = node:parent()
   local ts_node
@@ -112,7 +117,7 @@ local function peek_location_callback(_, result, context)
       loc = result
     end
 
-    loc = ts_range(context.bufnr, loc)
+    loc = ts_range(loc)
     local _, winid = vim.lsp.util.preview_location(loc)
 
     if winid then
