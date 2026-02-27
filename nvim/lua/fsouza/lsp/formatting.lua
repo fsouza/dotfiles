@@ -100,10 +100,11 @@ local function autofmt_and_write(bufnr, client_id)
               end)
             end
           end
+          do_autocmd()
         end)
-
-        do_autocmd()
       end)
+    else
+      do_autocmd()
     end
   else
     -- client is gone, let's detach
