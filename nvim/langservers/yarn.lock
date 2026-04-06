@@ -411,10 +411,10 @@ eslint@^10.0.3:
     natural-compare "^1.4.0"
     optionator "^0.9.3"
 
-eslint_d@^15.0.0:
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-15.0.0.tgz#c06929abb0a3faae333bf71143a79cafe1445735"
-  integrity sha512-4GKp4YK4oxTFCNdz7ygOaB+T9+kDR/xY8RdfeB1JFU+IUuHJzXO1CBfNyVjKSy3b12sdrw6e0XA7ku5I2s+ItA==
+eslint_d@^15.0.2:
+  version "15.0.2"
+  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-15.0.2.tgz#95fbe8627fd946fd2bbabf64f3b89b2a1cc4e36e"
+  integrity sha512-08qxnTNAHi6gaOJdixu/5gliLFRQzTAeX/aXxcFK78FPK9RQuCNnvwq2tDzlSmXc/dkK/Q2n3P4nvPhvTQJa2Q==
   dependencies:
     debug "^4.4.3"
     eslint "^10.0.3"
