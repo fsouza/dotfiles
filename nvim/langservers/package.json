@@ -4,8 +4,8 @@
 	"scripts": {},
 	"license": "ISC",
 	"dependencies": {
-		"@fsouza/prettierd": "^0.27.0",
-		"@typescript-eslint/typescript-estree": "^8.59.2",
+		"@fsouza/prettierd": "^0.28.0",
+		"@typescript-eslint/typescript-estree": "^8.60.0",
 		"@vtsls/language-server": "^0.3.0",
 		"eslint_d": "^15.0.2",
 		"postcss-scss": "^4.0.9",
