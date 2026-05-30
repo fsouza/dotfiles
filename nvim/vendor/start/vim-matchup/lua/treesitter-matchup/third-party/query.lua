@@ -207,6 +207,16 @@ function M.iter_prepared_matches(query, qnode, bufnr, start_row, end_row)
 
   local matches = query:iter_matches(qnode, bufnr, start_row, end_row, { all = false })
 
+  -- Newer Neovim versions ignore `{ all = false }` and always return a list of
+  -- nodes for each capture. Reduce those lists back to a single node so the
+  -- rest of the code keeps the old single-node semantics.
+  local function single_node(node, pick_first)
+    if type(node) ~= "table" then
+      return node
+    end
+    return pick_first and node[1] or node[#node]
+  end
+
   local function iterator()
     local pattern, match, metadata = matches()
     if pattern ~= nil then
@@ -217,7 +227,7 @@ function M.iter_prepared_matches(query, qnode, bufnr, start_row, end_row)
         local name = query.captures[id] -- name of the capture in the query
         if name ~= nil then
           local path = split(name .. ".node")
-          insert_to_path(prepared_match, path, node)
+          insert_to_path(prepared_match, path, single_node(node))
           local metadata_path = split(name .. ".metadata")
           insert_to_path(prepared_match, metadata_path, metadata[id])
         end
@@ -237,13 +247,13 @@ function M.iter_prepared_matches(query, qnode, bufnr, start_row, end_row)
             insert_to_path(
               prepared_match,
               split(path .. ".node"),
-              tsrange.TSRange.from_nodes(bufnr, match[pred[3]], match[pred[4]])
+              tsrange.TSRange.from_nodes(bufnr, single_node(match[pred[3]], true), single_node(match[pred[4]]))
             )
           end
           if pred[1] == "offset!" then
             local path = type(pred[2]) == "string" and pred[2] or query.captures[pred[2]]
 
-            local offset_node = match[pred[2]]
+            local offset_node = single_node(match[pred[2]])
             local range = {offset_node:range()}
             local start_row_offset = pred[3] or 0
             local start_col_offset = pred[4] or 0
