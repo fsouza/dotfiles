@@ -2,7 +2,8 @@ function wordmotion#init()
 	let l:_ = {}
 
 	function l:_.get(name, default)
-		let l:spaces = get(g:, a:name, a:default)
+		" copy so we never modify the user's variable in place
+		let l:spaces = copy(get(g:, a:name, a:default))
 		if type(l:spaces) == type('')
 			let l:spaces = split(l:spaces, '\zs')
 		endif
@@ -65,7 +66,9 @@ function wordmotion#init()
 		return '\%(\%('.join(a:000, '\|').'\)\@!'.a:set.'\)'
 	endfunction
 
-	let l:words = get(g:, 'wordmotion_extra', [])
+	" copy so the patterns below don't accumulate in the user's variable
+	" every time this function runs
+	let l:words = copy(get(g:, 'wordmotion_extra', []))
 	call add(l:words, l:u.l:l.'\+')              " CamelCase
 	call add(l:words, l:u.'\+'.l:l.'\@!')        " UPPERCASE
 	call add(l:words, l:l.'\+')                  " lowercase
@@ -217,7 +220,9 @@ function wordmotion#object(count, mode, inner, uppercase)
 	call wordmotion#motion(l:count, 'n', l:flags, a:uppercase, l:extra, a:mode)
 
 	if !a:inner
-		if col('.') == col('$') - 1
+		" compare against the byte index of the start of the last character,
+		" which may be multibyte
+		if col('$') > 1 && col('.') + len(matchstr(getline('.'), '.$')) >= col('$')
 			" at end of line, go back, and consume preceding white spaces
 			let l:backwards = 1
 		endif
@@ -247,7 +252,8 @@ function wordmotion#current(uppercase)
 	let l:end = getpos('.')
 	call wordmotion#motion(1, 'n', 'bc', a:uppercase, [], 'c')
 	let l:start = getpos('.')
-	call cursor(l:cursor)
+	" l:cursor is a getpos() list, which cursor() does not accept
+	call setpos('.', l:cursor)
 	let l:lnum = l:cursor[1]
 	let l:line = getline(l:lnum)
 	let l:space = a:uppercase ? s:us : s:s
