@@ -74,11 +74,9 @@ else
     local results = utils.get_hl_groups_at_position(bufnr, row, col)
     local highlights = {}
     for _, hl in pairs(results) do
-      local line = { "@" .. hl.capture }
-      if hl.priority then
-        table.insert(line, hl.priority)
-      end
-      table.insert(highlights, line)
+      -- only hl-group names here: consumers (e.g. syntax.synID) expect every
+      -- entry to be a group name, so the capture priority must not be added
+      table.insert(highlights, { "@" .. hl.capture })
     end
     return highlights
   end
