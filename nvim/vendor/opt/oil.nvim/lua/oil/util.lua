@@ -244,7 +244,7 @@ M.update_moved_buffers = function(entry_type, src_url, dest_url)
 
     for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
       local bufname = vim.api.nvim_buf_get_name(bufnr)
-      if vim.startswith(bufname, src_url) then
+      if bufname == src_url or vim.startswith(bufname, M.addslash(src_url)) then
         -- Handle oil directory buffers
         vim.api.nvim_buf_set_name(bufnr, dest_url .. bufname:sub(src_url:len() + 1))
       elseif bufname ~= "" and vim.bo[bufnr].buftype == "" then
@@ -257,7 +257,7 @@ M.update_moved_buffers = function(entry_type, src_url, dest_url)
         end
 
         for _, src_buf_name in ipairs(src_buf_names) do
-          if vim.startswith(bufname, src_buf_name) then
+          if bufname == src_buf_name or vim.startswith(bufname, M.addslash(src_buf_name, true)) then
             M.rename_buffer(bufnr, dest_buf_name .. bufname:sub(src_buf_name:len() + 1))
             break
           end
