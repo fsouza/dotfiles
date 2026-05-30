@@ -76,8 +76,8 @@ function! s:extractafter(str)
 endfunction
 
 function! s:fixindent(str,spc)
-  let str = substitute(a:str,'\t',repeat(' ',&sw),'g')
-  let spc = substitute(a:spc,'\t',repeat(' ',&sw),'g')
+  let str = substitute(a:str,'\t',repeat(' ',shiftwidth()),'g')
+  let spc = substitute(a:spc,'\t',repeat(' ',shiftwidth()),'g')
   let str = substitute(str,'\(\n\|\%^\).\@=','\1'.spc,'g')
   if ! &et
     let str = substitute(str,'\s\{'.&ts.'\}',"\t",'g')
