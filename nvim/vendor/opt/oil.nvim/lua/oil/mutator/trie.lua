@@ -110,8 +110,8 @@ function Trie:_dfs(container, ret, filter)
   else
     vim.list_extend(ret, container.values)
   end
-  for _, child in ipairs(container.children) do
-    self:_dfs(child, ret)
+  for _, child in pairs(container.children) do
+    self:_dfs(child, ret, filter)
   end
 end
 
