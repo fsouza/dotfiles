@@ -112,7 +112,6 @@ end
 local fzf_lua = (function()
   local once = require("fsouza.lib.nvim-helpers").once
   return once(function()
-    vim.cmd.packadd("nvim-fzf")
     local actions = file_actions()
     local fzf_lua_mod = require("fzf-lua")
     local f_config = require("fzf-lua.config")
