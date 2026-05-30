@@ -278,6 +278,13 @@ endfunction
 
 " Section: Fugitive :GBrowse support
 
+function! s:path_encode(path) abort
+  " Percent-encode characters that would change the meaning of the URL,
+  " preserving '/' and any %XX sequences that are already encoded.
+  let path = substitute(a:path, '%\(\x\x\)\@!', '%25', 'g')
+  return substitute(path, '[#?[:space:]]', '\=printf("%%%02X", char2nr(submatch(0)))', 'g')
+endfunction
+
 " https://github.com/github/markup
 let s:markup_exts = ['markdown', 'mdown', 'mkdn', 'md', 'textile', 'rdoc', 'org', 'creole', 'mediawiki', 'wiki', 'rst', 'asciidoc', 'adoc', 'asc', 'pod']
 function! rhubarb#FugitiveUrl(...) abort
@@ -290,7 +297,7 @@ function! rhubarb#FugitiveUrl(...) abort
   if empty(root)
     return ''
   endif
-  let path = substitute(opts.path, '^/', '', '')
+  let path = s:path_encode(substitute(opts.path, '^/', '', ''))
   let ref = matchstr(opts.path, '^/\=\.git/\zsrefs/.*')
   if ref =~# '^refs/heads/'
     return root . '/commits/' . ref[11:-1]
