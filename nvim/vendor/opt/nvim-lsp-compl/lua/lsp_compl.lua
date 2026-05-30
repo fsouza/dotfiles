@@ -22,10 +22,12 @@ completion_ctx = {
   end,
   reset = function()
     -- Cursor is not reset here, it needs to survive a `CompleteDone` event
+    -- Pending requests are not cancelled here either: `CompleteDone` issues a
+    -- `completionItem/resolve` request and then resets, and that request must
+    -- be allowed to finish so its additionalTextEdits get applied.
     completion_ctx.expand_snippet = false
     completion_ctx.isIncomplete = false
     completion_ctx.suppress_completeDone = false
-    completion_ctx.cancel_pending()
     completion_ctx.resolved_items = {}
   end,
 }
@@ -201,6 +203,7 @@ end
 
 local function on_InsertLeave()
   completion_ctx.cursor = nil
+  completion_ctx.cancel_pending()
   completion_ctx.reset()
 end
 
