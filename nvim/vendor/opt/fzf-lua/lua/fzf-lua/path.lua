@@ -252,13 +252,17 @@ end
 ---@return string?
 function M.HOME_to_tilde(path)
   if not path then return end
+  local home = M.HOME()
+  local matches
   if utils.__IS_WINDOWS then
-    local home = M.HOME()
-    if path:sub(1, #home):lower() == home:lower() then
-      path = "~" .. path:sub(#home + 1)
-    end
+    matches = path:sub(1, #home):lower() == home:lower()
   else
-    path = path:gsub("^" .. utils.lua_regex_escape(M.HOME()), "~")
+    matches = path:sub(1, #home) == home
+  end
+  -- only rewrite on a path component boundary so that paths merely sharing
+  -- the $HOME prefix (e.g. "/home/foobar" with $HOME=/home/foo) are kept
+  if matches and (#path == #home or M.byte_is_separator(string_byte(path, #home + 1))) then
+    path = "~" .. path:sub(#home + 1)
   end
   return path
 end
@@ -521,7 +525,9 @@ function M.git_cwd(cmd, opts)
         args = args .. ("%s %s "):format(a[2], libuv.shellescape(o[a[1]]))
       end
     end
-    cmd = cmd:gsub("^git ", "git " .. args)
+    -- escape "%" so cwd/git-dir paths containing it aren't mangled by
+    -- gsub's special handling of "%" in the replacement string
+    cmd = cmd:gsub("^git ", "git " .. args:gsub("%%", "%%%%"))
   else
     local idx = 2
     cmd = utils.tbl_deep_clone(cmd)
