@@ -180,25 +180,44 @@ end
 
 local function call_hierarchy_handler(opts, cb, _, result, ctx, _)
   local encoding = vim.lsp.get_client_by_id(ctx.client_id).offset_encoding
+  local locations = {}
   for _, call_hierarchy_call in pairs(result) do
-    --- "from" for incoming calls and "to" for outgoing calls
-    local call_hierarchy_item = call_hierarchy_call.from or call_hierarchy_call.to
-    for _, range in pairs(call_hierarchy_call.fromRanges) do
-      local location = {
-        uri = call_hierarchy_item.uri,
+    if call_hierarchy_call.from then
+      -- incoming calls: "fromRanges" are the call sites within the caller ("from")
+      local caller = call_hierarchy_call.from
+      for _, range in pairs(call_hierarchy_call.fromRanges) do
+        table.insert(locations, {
+          uri = caller.uri,
+          range = range,
+          filename = assert(vim.uri_to_fname(caller.uri)),
+          text = caller.name,
+          lnum = range.start.line + 1,
+          col = range.start.character + 1,
+        })
+      end
+    else
+      -- outgoing calls: "fromRanges" are relative to the caller (the queried item),
+      -- not to the callee ("to"), so use the callee's own location instead
+      local callee = call_hierarchy_call.to
+      local range = callee.selectionRange or callee.range
+      table.insert(locations, {
+        uri = callee.uri,
         range = range,
-        filename = assert(vim.uri_to_fname(call_hierarchy_item.uri)),
-        text = call_hierarchy_item.name,
+        filename = assert(vim.uri_to_fname(callee.uri)),
+        text = callee.name,
         lnum = range.start.line + 1,
         col = range.start.character + 1,
-      }
-      if opts.jump1 and #call_hierarchy_call.fromRanges == 1 then
-        jump_to_location(opts, location, encoding)
-      end
-      local entry = make_entry.lcol(location, opts)
-      entry = make_entry.file(entry, opts)
-      if entry then cb(entry) end
+      })
     end
+  end
+  -- Jump immediately if there is only one location (in total)
+  if opts.jump1 and #locations == 1 then
+    jump_to_location(opts, locations[1], encoding)
+  end
+  for _, location in ipairs(locations) do
+    local entry = make_entry.lcol(location, opts)
+    entry = make_entry.file(entry, opts)
+    if entry then cb(entry) end
   end
 end
 
