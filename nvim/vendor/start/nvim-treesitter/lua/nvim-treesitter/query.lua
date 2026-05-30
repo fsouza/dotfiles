@@ -250,6 +250,19 @@ function M.iter_prepared_matches(query, qnode, bufnr, start_row, end_row)
 
   local matches = query:iter_matches(qnode, bufnr, start_row, end_row, { all = false })
 
+  -- Newer Neovim versions ignore `{ all = false }` and always return a list of
+  -- nodes for each capture. Reduce those lists back to a single node so the
+  -- rest of the code keeps the old single-node semantics.
+  ---@param node TSNode|TSNode[]
+  ---@param pick_first boolean|nil pick the first node instead of the last one
+  ---@return TSNode
+  local function single_node(node, pick_first)
+    if type(node) ~= "table" then
+      return node
+    end
+    return pick_first and node[1] or node[#node]
+  end
+
   local function iterator()
     local pattern, match, metadata = matches()
     if pattern ~= nil then
@@ -260,7 +273,7 @@ function M.iter_prepared_matches(query, qnode, bufnr, start_row, end_row)
         local name = query.captures[id] -- name of the capture in the query
         if name ~= nil then
           local path = split(name .. ".node")
-          M.insert_to_path(prepared_match, path, node)
+          M.insert_to_path(prepared_match, path, single_node(node))
           local metadata_path = split(name .. ".metadata")
           M.insert_to_path(prepared_match, metadata_path, metadata[id])
         end
@@ -279,7 +292,7 @@ function M.iter_prepared_matches(query, qnode, bufnr, start_row, end_row)
             M.insert_to_path(
               prepared_match,
               split(pred[2] .. ".node"),
-              tsrange.TSRange.from_nodes(bufnr, match[pred[3]], match[pred[4]])
+              tsrange.TSRange.from_nodes(bufnr, single_node(match[pred[3]], true), single_node(match[pred[4]]))
             )
           end
         end
