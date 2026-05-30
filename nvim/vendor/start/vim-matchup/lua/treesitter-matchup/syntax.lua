@@ -93,7 +93,7 @@ function M.synID(lnum, col, transparent)
     local id = vim.fn.hlID(group)
     local trans_id = vim.fn.synIDtrans(id)
     if vim.fn.synIDattr(trans_id, 'fg') ~= ''
-        or vim.fn.synIDattr(trans_id, 'fg') ~= '' then
+        or vim.fn.synIDattr(trans_id, 'bg') ~= '' then
       return id
     end
   end
