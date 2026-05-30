@@ -309,7 +309,10 @@ M.recursive_copy = function(entry_type, src_path, dest_path, cb)
             end
           end)
         end
-        poll(cb)
+        poll(function(err)
+          uv.fs_closedir(fd)
+          cb(err)
+        end)
         ---@diagnostic disable-next-line: param-type-mismatch
       end, 10000)
     end)
