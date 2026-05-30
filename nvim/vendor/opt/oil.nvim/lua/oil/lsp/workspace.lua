@@ -169,13 +169,17 @@ local function will_file_operation(method, capability_name, files, options)
       }
       ---@diagnostic disable-next-line: invisible
       local result, err = client.request_sync(method, params, options.timeout_ms or 1000, 0)
-      if result and result.result then
+      local request_err = err or (result and result.err)
+      if request_err then
+        return nil, request_err
+      end
+      -- A null result means this server has no edits to contribute; check the next client
+      local edit = result and result.result
+      if edit and edit ~= vim.NIL then
         if options.apply_edits ~= false then
-          vim.lsp.util.apply_workspace_edit(result.result, client.offset_encoding)
+          vim.lsp.util.apply_workspace_edit(edit, client.offset_encoding)
         end
-        table.insert(edits, { edit = result.result, offset_encoding = client.offset_encoding })
-      else
-        return nil, err or result and result.err
+        table.insert(edits, { edit = edit, offset_encoding = client.offset_encoding })
       end
     end
   end
@@ -283,13 +287,17 @@ function M.will_rename_files(files, options)
       local result, err =
         ---@diagnostic disable-next-line: invisible
         client.request_sync(ms.workspace_willRenameFiles, params, options.timeout_ms or 1000, 0)
-      if result and result.result then
+      local request_err = err or (result and result.err)
+      if request_err then
+        return nil, request_err
+      end
+      -- A null result means this server has no edits to contribute; check the next client
+      local edit = result and result.result
+      if edit and edit ~= vim.NIL then
         if options.apply_edits ~= false then
-          vim.lsp.util.apply_workspace_edit(result.result, client.offset_encoding)
+          vim.lsp.util.apply_workspace_edit(edit, client.offset_encoding)
         end
-        table.insert(edits, { edit = result.result, offset_encoding = client.offset_encoding })
-      else
-        return nil, err or result and result.err
+        table.insert(edits, { edit = edit, offset_encoding = client.offset_encoding })
       end
     end
   end
