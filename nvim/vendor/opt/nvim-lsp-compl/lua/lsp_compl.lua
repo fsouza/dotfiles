@@ -136,8 +136,11 @@ local function adjust_start_col(lnum, line, items, encoding)
   local min_start_char = nil
 
   for _, item in pairs(items) do
-    if item.textEdit and item.textEdit.range.start.line == lnum - 1 then
-      local range = item.textEdit.range
+    -- textEdit can be an InsertReplaceEdit, which has `insert`/`replace`
+    -- ranges instead of `range`. The `insert` range carries the same start
+    -- position semantics.
+    local range = item.textEdit and (item.textEdit.range or item.textEdit.insert)
+    if range and range.start.line == lnum - 1 then
       if min_start_char and min_start_char ~= range.start.character then
         return nil
       end
