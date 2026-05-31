@@ -33,10 +33,16 @@ function TSInjector.setup()
     end
   end
 
-  vim.api.nvim_set_decoration_provider(TSInjector._ns, {
-    on_win = wrap_ts_hl_callback("_on_win"),
-    on_line = wrap_ts_hl_callback("_on_line"),
-  })
+  -- Neovim 0.12 replaced the highlighter's per-line `on_line`/`_on_line`
+  -- callback with `on_range`/`_on_range`; fall back to `_on_line` on older
+  -- versions where `_on_range` does not exist.
+  local provider = { on_win = wrap_ts_hl_callback("_on_win") }
+  if vim.treesitter.highlighter._on_range then
+    provider.on_range = wrap_ts_hl_callback("_on_range")
+  else
+    provider.on_line = wrap_ts_hl_callback("_on_line")
+  end
+  vim.api.nvim_set_decoration_provider(TSInjector._ns, provider)
 
   return true
 end
