@@ -25,6 +25,10 @@ function __setup_brew {
 			export MANPATH=${coreutils_prefix}/libexec/man${MANPATH+:${MANPATH}}
 		fi
 
+		if [ -d ${HOMEBREW_PREFIX}/share/zsh/functions ]; then
+			fpath+=( ${HOMEBREW_PREFIX}/share/zsh/functions )
+		fi
+
 		cond_source ${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh
 	fi
 }
