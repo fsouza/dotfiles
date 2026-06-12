@@ -3,7 +3,7 @@
 set -euo PIPEFAIL
 
 brew update
-brew upgrade
+brew upgrade -y
 
 brew cleanup -s --prune 3
 if [[ ${OSTYPE} == darwin* ]]; then
