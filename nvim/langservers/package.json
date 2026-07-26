@@ -5,11 +5,9 @@
 	"license": "ISC",
 	"dependencies": {
 		"@fsouza/prettierd": "^0.28.0",
-		"@typescript-eslint/typescript-estree": "^8.62.1",
-		"@vtsls/language-server": "^0.3.0",
 		"eslint_d": "^15.0.2",
 		"postcss-scss": "^4.0.9",
-		"typescript": "^6.0.3",
+		"typescript": "^7.0.2",
 		"vscode-langservers-extracted": "^4.10.0",
 		"yaml-language-server": "^1.23.0"
 	}

@@ -35,8 +35,8 @@ local function start_typescript_language_server(bufnr)
   servers.start({
     bufnr = bufnr,
     config = {
-      name = "vtsls",
-      cmd = { "vtsls", "--stdio" },
+      name = "tsc",
+      cmd = { "tsc", "--lsp", "--stdio" },
     },
     find_root_dir = function(fname)
       return servers.patterns_with_fallback({ "tsconfig.json", "package.json" }, fname)
