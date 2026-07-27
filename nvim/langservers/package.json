@@ -9,6 +9,6 @@
 		"postcss-scss": "^4.0.9",
 		"typescript": "^7.0.2",
 		"vscode-langservers-extracted": "^4.10.0",
-		"yaml-language-server": "^1.23.0"
+		"yaml-language-server": "^1.24.0"
 	}
 }
